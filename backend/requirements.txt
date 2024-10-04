@@ -1,0 +1,11 @@
+Flask>=2.0,<3.0            # The core Flask framework
+Flask-SQLAlchemy>=2.5,<3.0 # SQLAlchemy integration for Flask
+Flask-Migrate>=3.1,<4.0    # Database migrations for Flask
+Flask-CORS>=3.0,<4.0       # Cross-Origin Resource Sharing support
+Flask-Login>=0.6,<1.0      # User session management
+python-dotenv>=0.20,<1.0   # Support for .env files
+Flask-JWT-Extended>=4.0,<5.0  # JSON Web Token support for user authentication
+Flask-Security>=3.0,<4.0   # Provides security features for Flask apps
+pytest>=7.0,<8.0           # Testing framework
+Flask-Testing>=0.8,<1.0    # Testing utilities for Flask apps
+Flask-SocketIO>=5.0,<6.0   # Asynchronous capabilities
