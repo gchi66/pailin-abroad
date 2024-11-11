@@ -1,10 +1,15 @@
-import Home from './Home';
-import './App.css';
+import React from "react";
+import Header from './Components/Header';
+import Landing from './Components/Landing';
+import Footer from './Components/Footer'
+import './Styles/App.css';
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <Header />
+      <Landing />
+      <Footer />
     </div>
   );
 }
