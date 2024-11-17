@@ -79,6 +79,7 @@ header .menu .active {
   border: 2px solid #ff5050;
   border-radius: .6vh;
   overflow: hidden;
+  background-color: white;
 }
 
 .search-bar input {
