@@ -13,7 +13,7 @@ const Header = () => {
           <img src="/tiktok.png" alt="TikTok" />
         </div> */}
         <div className="logo">
-          <img src="/logo.png" alt="Logo" />
+          <a href="#home"><img src="/logo.png" alt="Logo" /></a>
         </div>
       </div>
       <nav className="menu-buttons">
