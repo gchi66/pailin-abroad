@@ -3,9 +3,9 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  padding: 2vh 3vh;
   background-color: #d8f1ff;
-  border-bottom: 2px solid #000;
+  border-bottom: 0.25vh solid #000;
 }
 
 header .logo img {
@@ -14,17 +14,17 @@ header .logo img {
 
 header .social-icons {
   display: flex;
-  gap: 10px;
+  gap: 1vh;
 }
 
 header .social-icons img {
-  width: 24px;
-  height: 24px;
+  width: 2.4vh;
+  height: 2.4vh;
 }
 
 header .menu {
   display: flex;
-  gap: 20px;
+  gap: 5vh;
   list-style: none;
 }
 
@@ -52,22 +52,24 @@ header .menu .active {
 .language-toggle {
   display: flex;
   align-items: center;
-  gap: 1vh;
-  font-size: 14px;
+  gap: .1vh;
+  font-size: 1.8vh;
   font-weight: bold;
 }
 
 .language-toggle span {
   cursor: pointer;
   color: #ff5050;
-  padding: .5vh 1vh;
+  padding: .3vh .3vh;
   transition: color 0.2s, background-color 0.2s;
+  line-height: 1;
 }
 
 .language-toggle span.active {
   color: white;
   background-color: #ff5050;
-  border-radius: 3px;
+  border-radius: .6vh;
+  line-height: 1;
 }
 
 /* Search Bar */
@@ -75,54 +77,68 @@ header .menu .active {
   display: flex;
   align-items: center;
   border: 2px solid #ff5050;
-  border-radius: 5px;
+  border-radius: .6vh;
   overflow: hidden;
 }
 
 .search-bar input {
   border: none;
   outline: none;
-  padding: 5px;
-  width: 150px;
+  padding: .6vh;
+  width: 14vh;
 }
 
 .search-bar .search-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ff5050;
+  background-color: white;
   border: none;
-  padding: 5px 10px;
+  padding: .5vh 1vh;
   cursor: pointer;
 }
 
 .search-bar .search-icon img {
-  width: 16px;
-  height: 16px;
+  width: 1.6vh;
+  height: 1.6vh;
 }
 
 /* Auth Buttons */
 .auth-buttons {
   display: flex;
-  gap: 10px;
+  gap: 1.1vh;
 }
 
 .auth-buttons button {
   cursor: pointer;
-  padding: 5px 15px;
-  border: none;
-  border-radius: 5px;
+  padding: .6vh 1.6vh;
+  border: 0.3vh solid transparent;
+  border-radius: .6vh;
   font-weight: bold;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
 .auth-buttons .signup {
   background-color: #ff5050;
   color: #fff;
-  border: none;
+  border-color: transparent;
+}
+
+.auth-buttons .signup:hover {
+  background-color: transparent;
+  color: #ff5050;
+  border-color: #ff5050;
 }
 
 .auth-buttons .login {
   background-color: transparent;
-  border: 2px solid #ff5050;
+  border-color: #ff5050;
   color: #ff5050;
+}
+
+.auth-buttons .login:hover {
+  background-color: #ff5050;
+  color: #fff;
+  border-color: transparent;
 }
