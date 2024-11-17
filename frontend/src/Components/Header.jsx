@@ -2,36 +2,56 @@ import React from "react";
 import "../Styles/Header.css";
 
 const Header = () => {
+  const [language, setLanguage] = React.useState("EN");
   return (
     <header>
       <div className="top-bar">
-        <div className="social-icons">
+        {/* <div className="social-icons">
           <img src="/instagram.png" alt="Instagram" />
           <img src="/facebook.png" alt="Facebook" />
           <img src="/youtube.png" alt="YouTube" />
           <img src="/tiktok.png" alt="TikTok" />
-        </div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search..." />
+        </div> */}
+        <div className="logo">
+          <img src="/logo.png" alt="Logo" />
         </div>
       </div>
-      <nav>
-        <div className="logo">
-          <h1>Pailin Abroad</h1>
-        </div>
+      <nav className="menu-buttons">
         <ul className="menu">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#lessons">Lessons</a></li>
-          <li><a href="#glossary">Glossary</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#home">HOME</a></li>
+          <li><a href="#about">ABOUT</a></li>
+          <li><a href="#lessons">LESSONS</a></li>
+          <li><a href="#glossary">GLOSSARY</a></li>
+          <li><a href="#contact">CONTACT</a></li>
         </ul>
-        <div className="user-actions">
-          <button className="membership">Membership</button>
-          <button>Sign Up</button>
-          <button>Log In</button>
-        </div>
       </nav>
+      <div className="right-side">
+        <div className="language-toggle">
+            <span
+              className={language === "TH" ? "active" : ""}
+              onClick={() => setLanguage("TH")}
+            >
+              TH
+            </span>
+            <span>|</span>
+            <span
+              className={language === "EN" ? "active" : ""}
+              onClick={() => setLanguage("EN")}
+            >
+              EN
+            </span>
+        </div>
+        <div className="search-bar">
+            <input type="text" placeholder="" />
+            <button className="search-icon">
+              <img src="/search-icon.png" alt="Search" />
+            </button>
+        </div>
+        <div className="auth-buttons">
+          <button className="signup">Sign Up</button>
+          <button className="login">Log In</button>
+        </div>
+      </div>
     </header>
   );
 };

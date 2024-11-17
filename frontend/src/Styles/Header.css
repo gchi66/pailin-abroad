@@ -8,6 +8,10 @@ header {
   border-bottom: 2px solid #000;
 }
 
+header .logo img {
+  width: 34vh;
+}
+
 header .social-icons {
   display: flex;
   gap: 10px;
@@ -21,6 +25,7 @@ header .social-icons img {
 header .menu {
   display: flex;
   gap: 20px;
+  list-style: none;
 }
 
 header .menu a {
@@ -29,34 +34,95 @@ header .menu a {
   color: #333;
 }
 
+header .menu li {
+  text-decoration: none;
+}
+
 header .menu .active {
   color: #ff5050;
 }
 
-header .auth-buttons {
+.right-side {
+  display: flex;
+  align-items: center;
+  gap: 2vh;
+}
+
+/* Language Toggle */
+.language-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.language-toggle span {
+  cursor: pointer;
+  color: #ff5050;
+  padding: .5vh 1vh;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.language-toggle span.active {
+  color: white;
+  background-color: #ff5050;
+  border-radius: 3px;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 2px solid #ff5050;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  width: 150px;
+}
+
+.search-bar .search-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff5050;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.search-bar .search-icon img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Auth Buttons */
+.auth-buttons {
   display: flex;
   gap: 10px;
 }
 
-header .auth-buttons button {
+.auth-buttons button {
+  cursor: pointer;
   padding: 5px 15px;
   border: none;
   border-radius: 5px;
   font-weight: bold;
 }
 
-header .auth-buttons .membership {
+.auth-buttons .signup {
   background-color: #ff5050;
   color: #fff;
+  border: none;
 }
 
-header .auth-buttons .signup {
-  background-color: #fff;
+.auth-buttons .login {
+  background-color: transparent;
   border: 2px solid #ff5050;
   color: #ff5050;
-}
-
-header .auth-buttons .login {
-  background-color: transparent;
-  color: #333;
 }
