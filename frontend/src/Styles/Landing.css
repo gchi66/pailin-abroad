@@ -2,8 +2,9 @@
 .landing {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 50px 20px;
+  gap: 15dvh;
   background-color: #fef8f4;
   color: #333;
   font-family: 'Arial', sans-serif;
@@ -11,18 +12,18 @@
 
 /* Pailin Image Section */
 .pailin-image {
-  flex: 1;
+  flex: none;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .pailin-image .profile-pic {
-  width: 300px;
-  height: 300px;
+  width: 38vh;
+  height: 38vh;
   background-color: #4dbdfc;
   border-radius: 50%;
-  background-image: url('/home/gchichester/code/pailin-abroad/frontend/public/logo512.png'); /* Replace with actual image path */
+  background-image: url('/home/gchichester/code/pailin-abroad/frontend/public/Pailin.png'); /* Replace with actual image path */
   background-size: cover;
   background-position: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -30,7 +31,7 @@
 
 /* Landing Content Section */
 .landing-content {
-  flex: 2;
+  flex: none;
   max-width: 600px;
   padding: 20px;
   text-align: left;

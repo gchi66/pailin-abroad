@@ -9,6 +9,7 @@ const Header = () => {
           <img src="/instagram.png" alt="Instagram" />
           <img src="/facebook.png" alt="Facebook" />
           <img src="/youtube.png" alt="YouTube" />
+          <img src="/tiktok.png" alt="TikTok" />
         </div>
         <div className="search-bar">
           <input type="text" placeholder="Search..." />
