@@ -44,7 +44,7 @@ const Header = () => {
         <div className="search-bar">
             <input type="text" placeholder="" />
             <button className="search-icon">
-              <img src="/search-icon.png" alt="Search" />
+              <img src="/glass.png" alt="Search" />
             </button>
         </div>
         <div className="auth-buttons">
