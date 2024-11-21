@@ -6,42 +6,42 @@ const charactersData = [
     name: "Pailin",
     description:
       "I’m Pailin! I’m a 21-year-old girl from Bangkok. I’ll be studying abroad in Los Angeles for a year. I’m easy-going and so excited to try new experiences. I think I’ll fit right in in LA!",
-    image: "pailin.png",
+    image: "Pailin-blue.png",
     color: "#F34254",
   },
   {
-    name: "Character 2",
+    name: "Chloe",
     description:
-      "Hi, I'm Character 2! I bring a unique perspective and love exploring new opportunities.",
-    image: "character2.png",
+      "I'm Chloe, Pailin's new friend in LA. My dad is Thai, and my mom is French, but I grew up in Thailand. I'm outgoing and lots of fun. I can be a bit clumsy and a bit sassy.",
+    image: "Chloe-blue.png",
     color: "#42B4F3",
   },
   {
-    name: "Character 3",
+    name: "Tyler",
     description:
-      "Hello, I'm Character 3! I enjoy meeting new people and sharing my experiences.",
-    image: "character3.png",
+      "I'm Tyler, Pailin's host brother. I'm also a student at UCLA. I can't make up my mind what I want to study - I keep switching my major! I'm a loyal friend who's always up for an adventure.",
+    image: "Tyler-blue.png",
     color: "#42B4F3",
   },
   {
-    name: "Character 4",
+    name: "Emily",
     description:
-      "Hey, I'm Character 4! I’m always up for a challenge and love learning new things.",
-    image: "character4.png",
+      "I'm Emily, Pailin's host sister. I'm a curious 13-year-old, and I'm super chatty. Sometimes I get myself into trouble, but for the most part, I'm very lovable (I think).",
+    image: "Emily-blue.png",
     color: "#42B4F3",
   },
   {
-    name: "Character 5",
+    name: "Sylvie",
     description:
-      "Hi there, I'm Character 5! I’m passionate about traveling and making new connections.",
-    image: "character5.png",
+      "I'm Sylvie, Pailin's host mom. I'm from France, and I'm a wine importer. I enjoy trying new foods, warm days at the beach, and spending time with my family.",
+    image: "Sylvie-blue.png",
     color: "#42B4F3",
   },
   {
-    name: "Character 6",
+    name: "Mark",
     description:
-      "Hi, I’m Character 6! I enjoy creative storytelling and making people laugh.",
-    image: "character6.png",
+      "I'm Mark, Pailin's host dad. I'm a busy lawyer, but when I'm not working, I like training for marathons and reading science-fiction novels.",
+    image: "Mark-blue.png",
     color: "#42B4F3",
   },
 ];
