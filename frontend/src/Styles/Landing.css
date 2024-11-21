@@ -6,7 +6,13 @@
   gap: 13dvh;
   background-color: #fef8f4;
   color: #333;
-  font-family: 'Arial', sans-serif;
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* Pailin Image Section */
@@ -40,12 +46,18 @@
   font-size: 5vh;
   color: #333;
   margin-bottom: 2vh;
+  font-family: "Mitr", sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
 .landing-content p {
   font-size: 2.3vh;
   margin-bottom: 2.5vh;
   color: #666;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
 .landing-content ul {
@@ -58,6 +70,9 @@
   font-size: 1.8vh;
   margin-bottom: 1.5vh;
   color: #444;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
 }
 
 /* Landing Buttons */
@@ -104,4 +119,28 @@
 .landing-buttons .free-lessons:hover {
   background-color: #e64545;
   transform: scale(1.05); /* Slightly enlarges the button on hover */
+}
+
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4dbdfc;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-button:hover {
+  background-color: #3ca3e4;
+}
+
+.chat-button img {
+  width: 20px;
+  height: 20px;
 }

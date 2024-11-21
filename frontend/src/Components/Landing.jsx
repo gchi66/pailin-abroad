@@ -1,7 +1,12 @@
 import React from "react";
 import "../Styles/Landing.css";
 
+
 const Landing = () => {
+  const handleChatClick = () => {
+    alert("Chat feature coming soon!");
+  };
+
   return (
     <section className="landing">
       <div className="pailin-image">
@@ -20,6 +25,9 @@ const Landing = () => {
           <button className="free-lessons">Free Lessons</button>
         </div>
       </div>
+      <button className="chat-button" onClick={handleChatClick}>
+        Let's Chat!
+      </button>
     </section>
   );
 };
