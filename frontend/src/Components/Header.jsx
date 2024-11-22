@@ -13,7 +13,7 @@ const Header = () => {
           <img src="/tiktok.png" alt="TikTok" />
         </div> */}
         <div className="logo">
-          <a href="#home"><img src="/logo.png" alt="Logo" /></a>
+          <a href="#home"><img src="/images/logo.png" alt="Logo" /></a>
         </div>
       </div>
       <nav className="menu-buttons">
@@ -44,7 +44,7 @@ const Header = () => {
         <div className="search-bar">
             <input type="text" placeholder="" />
             <button className="search-icon">
-              <img src="/glass.png" alt="Search" />
+              <img src="/images/glass.png" alt="Search" />
             </button>
         </div>
         <div className="auth-buttons">
