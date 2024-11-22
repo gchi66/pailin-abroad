@@ -7,7 +7,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2vh 3vh;
+  padding: 2vh 5vh;
   background-color: #d8f1ff;
   border-bottom: 0.25vh solid #000;
   font-family: "Poppins", sans-serif;

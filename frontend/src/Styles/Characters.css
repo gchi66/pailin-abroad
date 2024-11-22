@@ -19,13 +19,13 @@
 }
 
 .main-image {
-  width: 25vh;
-  height: 25vh;
+  width: 15rem;
+  height: 15rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2vh;
+  /* margin-bottom: vh; */
   overflow: hidden;
 }
 
