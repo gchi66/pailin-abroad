@@ -137,9 +137,10 @@ header .menu .active {
 }
 
 .auth-buttons .signup:hover {
-  background-color: transparent;
-  color: #ff5050;
-  border-color: #ff5050;
+  /* background-color: transparent; */
+  /* color: #ff5050;
+  border-color: #ff5050; */
+  transform: scale(1.05);
 }
 
 .auth-buttons .login {
@@ -149,7 +150,8 @@ header .menu .active {
 }
 
 .auth-buttons .login:hover {
-  background-color: #ff5050;
+  /* background-color: #ff5050;
   color: #fff;
-  border-color: transparent;
+  border-color: transparent; */
+  transform: scale(1.05);
 }

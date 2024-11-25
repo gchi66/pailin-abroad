@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import "../Styles/Header.css";
+import LanguageToggle from "./LanguageToggle";
+import SearchBar from "./SearchBar";
+import AuthButtons from "./AuthButtons";
 
 const Header = () => {
-  const [language, setLanguage] = React.useState("EN");
+  const [language, setLanguage] = useState("EN");
+
   return (
     <header>
       <div className="top-bar">
-        {/* <div className="social-icons">
-          <img src="/instagram.png" alt="Instagram" />
-          <img src="/facebook.png" alt="Facebook" />
-          <img src="/youtube.png" alt="YouTube" />
-          <img src="/tiktok.png" alt="TikTok" />
-        </div> */}
+        <div className="social-icons">
+          {/* Social icons here */}
+        </div>
         <div className="logo">
           <a href="#home"><img src="/images/logo.png" alt="Logo" /></a>
         </div>
@@ -26,31 +27,9 @@ const Header = () => {
         </ul>
       </nav>
       <div className="right-side">
-        <div className="language-toggle">
-            <span
-              className={language === "TH" ? "active" : ""}
-              onClick={() => setLanguage("TH")}
-            >
-              TH
-            </span>
-            <span>|</span>
-            <span
-              className={language === "EN" ? "active" : ""}
-              onClick={() => setLanguage("EN")}
-            >
-              EN
-            </span>
-        </div>
-        <div className="search-bar">
-            <input type="text" placeholder="" />
-            <button className="search-icon">
-              <img src="/images/glass.png" alt="Search" />
-            </button>
-        </div>
-        <div className="auth-buttons">
-          <button className="signup">Sign Up</button>
-          <button className="login">Log In</button>
-        </div>
+        <LanguageToggle language={language} setLanguage={setLanguage} />
+        <SearchBar />
+        <AuthButtons />
       </div>
     </header>
   );
