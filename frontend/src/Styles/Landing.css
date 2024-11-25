@@ -31,7 +31,7 @@
   background-image: url('/home/gchichester/code/pailin-abroad/frontend/public/images/Pailin.png'); /* Replace with actual image path */
   background-size: cover;
   background-position: center;
-  box-shadow: 0 0.5vh 1.2vh rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0.5vh 1.2vh rgba(0, 0, 0, 0.2); */
 }
 
 /* Landing Content Section */
@@ -88,16 +88,20 @@
   font-size: 1.8vh;
   font-weight: bold;
   cursor: pointer;
-  background-color: #4caf50; /* Green background for Sign Up button */
-  color: #fff;
-  border: none;
+  background-color: transparent;
+  border-color: #ff5050;
+  color: #ff5050;
+  border: 0.3vh solid;
+  /* border-radius: .6vh; */
+  /* color: #fff; */
+  /* border: none; */
   text-transform: uppercase;
-  box-shadow: 0 0.5vh 0.8vh rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0.5vh 0.8vh rgba(0, 0, 0, 0.2); */
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .landing-buttons .sign-up:hover {
-  background-color: #45a049;
+  /* background-color: #ff5050; */
   transform: scale(1.05); /* Slightly enlarges the button on hover */
 }
 
