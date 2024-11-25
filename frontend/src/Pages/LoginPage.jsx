@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../Styles/LoginPage.css"; // We'll add some minimal CSS
+import "../Styles/LoginPage.css";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
