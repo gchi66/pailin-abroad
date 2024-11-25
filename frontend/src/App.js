@@ -1,15 +1,15 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import './Styles/App.css';
 import Header from './Components/Header';
 import Home from "./Pages/Home";
-// import Landing from './Components/Landing';
-// import About from './Components/About'
-// import Reviews from "./Components/Reviews";
-// import Footer from './Components/Footer'
-import './Styles/App.css';
-// import Characters from "./Components/Characters";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
 import SignUpPage from "./Pages/SignUpPage";
+import AboutPage from "./Pages/AboutPage";
+import LessonsIndex from "./Pages/LessonsIndex";
+import Glossary from "./Pages/Glossary";
+import Contact from "./Pages/Contact";
+// import Footer from './Components/Footer'
 
 function App() {
   return (
@@ -18,15 +18,11 @@ function App() {
         <Header />
         <Routes>
           {/* Define the main landing page route */}
-          <Route
-            path="/"
-            element={
-              <>
-                <Home />
-                {/* <Footer /> */}
-              </>
-            }
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/lessons" element={<LessonsIndex />} />
+          <Route path="/glossary" element={<Glossary />} />
+          <Route path="/contact" element={<Contact />} />
           {/* Define standalone routes for login and signup */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />

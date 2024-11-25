@@ -3,6 +3,7 @@ import "../Styles/Header.css";
 import LanguageToggle from "./LanguageToggle";
 import SearchBar from "./SearchBar";
 import AuthButtons from "./AuthButtons";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   const [language, setLanguage] = useState("EN");
@@ -14,16 +15,16 @@ const Header = () => {
           {/* Social icons here */}
         </div>
         <div className="logo">
-          <a href="#home"><img src="/images/logo.png" alt="Logo" /></a>
+          <NavLink to="/"><img src="/images/logo.png" alt="Logo" /></NavLink>
         </div>
       </div>
       <nav className="menu-buttons">
         <ul className="menu">
-          <li><a href="#home">HOME</a></li>
-          <li><a href="#about">ABOUT</a></li>
-          <li><a href="#lessons">LESSONS</a></li>
-          <li><a href="#glossary">GLOSSARY</a></li>
-          <li><a href="#contact">CONTACT</a></li>
+          <li><NavLink to="/">HOME</NavLink></li>
+          <li><NavLink to="/about">ABOUT</NavLink></li>
+          <li><NavLink to="/lessons">LESSONS</NavLink></li>
+          <li><NavLink to="/glossary">GLOSSARY</NavLink></li>
+          <li><NavLink to="/contact">CONTACT</NavLink></li>
         </ul>
       </nav>
       <div className="right-side">
