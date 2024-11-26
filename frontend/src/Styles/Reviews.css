@@ -17,6 +17,7 @@
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
+  background-color: #fef8f4;
 }
 
 .review-card {
