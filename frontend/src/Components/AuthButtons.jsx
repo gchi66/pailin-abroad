@@ -4,8 +4,9 @@ import { useAuth } from "../AuthContext"; // Import the useAuth hook
 import  supabaseClient  from "../supabaseClient"; // Import the Supabase client
 
 const AuthButtons = () => {
-  const navigate = useNavigate();
   const { user } = useAuth(); // Access the user from the AuthContext
+  console.log("AuthButtons user:", user);
+  const navigate = useNavigate();
 
   const handleSignup = () => {
     navigate("/signup");

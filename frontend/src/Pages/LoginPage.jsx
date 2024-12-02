@@ -1,24 +1,49 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import  supabaseClient  from "../supabaseClient"
 import "../Styles/LoginPage.css";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // Handle login form submission
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form behavior
+    e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/login",
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       console.log("Login Success:", response.data);
-      // Redirect or handle successful login here
+
+    // Extract session data from the backend response
+    const { access_token, refresh_token } = response.data.session;
+
+    // Set the session in Supabase client
+    const { data: session, error } = await supabaseClient.auth.setSession({
+      access_token,
+      refresh_token,
+    });
+
+    if (error) {
+      console.error("Error setting session:", error.message);
+    } else {
+      console.log("Session updated in Supabase:", session);
+    }
+
+      // Redirect to home page
+      navigate("/");
     } catch (error) {
-      console.error("Login Error:", error);
-      // Optionally, show an error message
+      console.error("Login Error:", error.response?.data || error.message);
     }
   };
 
