@@ -11,23 +11,29 @@ import Glossary from "./Pages/Glossary";
 import Contact from "./Pages/Contact";
 // import Footer from './Components/Footer'
 
+// Import the AuthProvider from AuthContext
+import { AuthProvider } from './AuthContext'; // Make sure the path matches where your AuthContext.js is located
+
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Header />
-        <Routes>
-          {/* Define the main landing page route */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/lessons" element={<LessonsIndex />} />
-          <Route path="/glossary" element={<Glossary />} />
-          <Route path="/contact" element={<Contact />} />
-          {/* Define standalone routes for login and signup */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-        </Routes>
-      </Router>
+      {/* Wrap the entire Router with AuthProvider */}
+      <AuthProvider>
+        <Router>
+          <Header />
+          <Routes>
+            {/* Define the main landing page route */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/lessons" element={<LessonsIndex />} />
+            <Route path="/glossary" element={<Glossary />} />
+            <Route path="/contact" element={<Contact />} />
+            {/* Define standalone routes for login and signup */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }
