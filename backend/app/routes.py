@@ -7,6 +7,40 @@ routes = Blueprint("routes", __name__)
 def home():
     return {"message": "Welcome to Pailin Abroad!"}, 200
 
+@routes.route('/api/login', methods=['GET', 'POST'])
+def login():
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            return jsonify({"error": "Email and password are required"}), 400
+
+        response = supabase.auth.sign_in_with_password({
+            "email": email,
+            "password": password
+        })
+
+        if hasattr(response, "error") and response.error:
+            return jsonify({"error": str(response.error)}), 400
+
+        session_data = {
+            "access_token": response.session.access_token,
+            "refresh_token": response.session.refresh_token,
+            "user": {
+                "id": response.user.id,
+                "email": response.user.email,
+            }
+        }
+
+        return jsonify({"message": "Login successful!", "session": session_data}), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
 @routes.route('/api/signup', methods=['GET', 'POST'])
 def signup():
     print("Endpoint hit!")

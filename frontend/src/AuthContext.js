@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import supabaseClient from './supabaseClient'; // Import supabase client
+import React, { createContext, useContext, useState, useEffect } from "react";
+import supabaseClient from "./supabaseClient";
 
 const AuthContext = createContext();
 
@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Fetch initial session
     const fetchSession = async () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       setUser(session?.user || null);
@@ -15,16 +16,18 @@ export const AuthProvider = ({ children }) => {
     };
     fetchSession();
 
+    // Listen for session changes
     const { data: authListener } = supabaseClient.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
+      console.log("Auth state changed:", event, session);
+      setUser(session?.user || null); // Update user state
     });
 
-    return () => authListener.subscription.unsubscribe();
+    return () => authListener.subscription.unsubscribe(); // Cleanup listener
   }, []);
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
