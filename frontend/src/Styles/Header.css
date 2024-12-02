@@ -155,3 +155,15 @@ header .menu .active {
   border-color: transparent; */
   transform: scale(1.05);
 }
+
+.auth-buttons .logout {
+  background-color: #007bff;
+  color: #fff;
+  border: 0.3vh solid transparent;
+  border-radius: .6vh;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+.auth-buttons .logout:hover {
+  transform: scale(1.05);
+}
