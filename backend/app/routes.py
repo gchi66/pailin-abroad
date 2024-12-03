@@ -70,3 +70,30 @@ def signup():
         return jsonify({"error": "Sign-up failed. Please try again."}), 400
 
     return jsonify({"message": "Sign-up successful! Please verify your email."}), 200
+
+# @routes.route('/api/delete_account', methods=['DELETE'])
+# def delete_account():
+#     try:
+#         data = request.json
+#         access_token = data.get('access_token')
+
+#         if not access_token:
+#             return jsonify({"error": "Access token is required"}), 400
+
+#         # Authenticate the user by verifying the access token
+#         user = supabase.auth.api.get_user(access_token)
+
+#         if user.error:
+#             return jsonify({"error": "Invalid access token"}), 401
+
+#         # Delete the user account using the Supabase API
+#         delete_response = supabase.auth.api.delete_user(user.id)
+
+#         if delete_response.error:
+#             return jsonify({"error": str(delete_response.error)}), 400
+
+#         return jsonify({"message": "Account deleted successfully."}), 200
+
+#     except Exception as e:
+#         print(f"Error: {e}")
+#         return jsonify({"error": "Internal server error"}), 500

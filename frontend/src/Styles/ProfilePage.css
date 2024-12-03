@@ -1,0 +1,92 @@
+.profile-page {
+  text-align: center;
+  margin-top: 20dvh;
+  padding: 4dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-image-container {
+  position: relative;
+  width: 20dvh;
+  height: 20dvh;
+  margin: 0 auto;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  /* border: 2px solid #ff6b6b; */
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 0.5dvh;
+  cursor: pointer;
+}
+
+.edit-icon:hover {
+  background: #d9534f;
+}
+
+.image-selector {
+  margin-top: 2dvh;
+}
+
+.image-options {
+  display: flex;
+  gap: 2dvh;
+  justify-content: center;
+}
+
+.image-option {
+  width: 10dvh;
+  height: 10dvh;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.image-option:hover {
+  border: 2px solid #ff6b6b;
+}
+
+.logout-btn {
+  margin-top: 4dvh;
+  padding: 1dvh 4dvh;
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.logout-btn:hover {
+  background: #d9534f;
+}
+
+.delete-btn {
+  margin-top: 4dvh;
+  padding: 1dvh 4dvh;
+  background: #f00404;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.delete-btn:hover {
+  background: #d9534f;
+}
