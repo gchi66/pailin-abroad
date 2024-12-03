@@ -40,8 +40,8 @@ const LoginPage = () => {
       console.log("Session updated in Supabase:", session);
     }
 
-      // Redirect to home page
-      navigate("/");
+      // Redirect to profile page
+      navigate("/profile");
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
     }

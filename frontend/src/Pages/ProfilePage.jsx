@@ -22,12 +22,11 @@ const ProfilePage = () => {
   };
 
   const handleLogout = async () => {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) {
-      console.error("Error logging out:", error.message);
-    } else {
-      console.log("User successfully logged out.");
-      navigate("/login");
+    try {
+      await supabaseClient.auth.signOut(); // Log the user out via Supabase
+      navigate("/"); // Redirect to the home page
+    } catch (error) {
+      console.error("Logout Error:", error.message);
     }
   };
 
