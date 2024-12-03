@@ -9,10 +9,10 @@ import AboutPage from "./Pages/AboutPage";
 import LessonsIndex from "./Pages/LessonsIndex";
 import Glossary from "./Pages/Glossary";
 import Contact from "./Pages/Contact";
+import ProfilePage from "./Pages/ProfilePage"; // Import ProfilePage
 // import Footer from './Components/Footer'
-
-// Import the AuthProvider from AuthContext
-import { AuthProvider } from './AuthContext'; // Make sure the path matches where your AuthContext.js is located
+import ProtectedRoute from "./Components/ProtectedRoute";
+import { AuthProvider } from './AuthContext';
 
 function App() {
   return (
@@ -22,7 +22,6 @@ function App() {
         <Router>
           <Header />
           <Routes>
-            {/* Define the main landing page route */}
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/lessons" element={<LessonsIndex />} />
@@ -31,6 +30,14 @@ function App() {
             {/* Define standalone routes for login and signup */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Router>
       </AuthProvider>
