@@ -7,7 +7,7 @@ import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
 
 const Home = () => {
-  const [message, setMessage] = useState(""); // State to store the backend message
+  const [message, setMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleChatClick = () => {

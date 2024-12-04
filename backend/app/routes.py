@@ -71,29 +71,35 @@ def signup():
 
     return jsonify({"message": "Sign-up successful! Please verify your email."}), 200
 
-# @routes.route('/api/delete_account', methods=['DELETE'])
-# def delete_account():
-#     try:
-#         data = request.json
-#         access_token = data.get('access_token')
+@routes.route('/api/delete_account', methods=['DELETE'])
+def delete_account():
+    try:
+        data = request.json
+        access_token = data.get('access_token')
 
-#         if not access_token:
-#             return jsonify({"error": "Access token is required"}), 400
+        if not access_token:
+            return jsonify({"error": "Access token is required"}), 400
 
-#         # Authenticate the user by verifying the access token
-#         user = supabase.auth.api.get_user(access_token)
+        # Fetch the user's details using the access token
+        user_response = supabase.auth.get_user(access_token)
 
-#         if user.error:
-#             return jsonify({"error": "Invalid access token"}), 401
+        if user_response.user is None:
+            return jsonify({"error": "Unable to retrieve user details. User may not exist."}), 401
 
-#         # Delete the user account using the Supabase API
-#         delete_response = supabase.auth.api.delete_user(user.id)
+        user_id = user_response.user.id
 
-#         if delete_response.error:
-#             return jsonify({"error": str(delete_response.error)}), 400
+        # Delete the user using the service role client
+        supabase.auth.admin.delete_user(user_id)
 
-#         return jsonify({"message": "Account deleted successfully."}), 200
+        # # Check if the delete action was successful
+        # if delete_response is None or delete_response.error:
+        #     return jsonify({"error": "Failed to delete the user."}), 400
 
-#     except Exception as e:
-#         print(f"Error: {e}")
-#         return jsonify({"error": "Internal server error"}), 500
+        print("User deleted successfully:", user_id)
+        # Return a success message immediately
+        return jsonify({"message": "Account deleted successfully."}), 200
+
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Internal server error"}), 500
