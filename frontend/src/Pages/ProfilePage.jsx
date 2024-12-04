@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
-import { useAuth } from "../AuthContext";
+// import { useAuth } from "../AuthContext";
 import "../Styles/ProfilePage.css";
 
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const placeholderImage = "/images/Pailin.png";
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const [profileImage, setProfileImage] = useState(placeholderImage);
   const [isImageSelectorOpen, setImageSelectorOpen] = useState(false);
 
