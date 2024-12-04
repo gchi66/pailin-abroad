@@ -5,6 +5,7 @@ import Landing from "../Components/Landing";
 import About from "../Components/About";
 import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
+import CTA from "../Components/CTA";
 
 const Home = () => {
   const [message, setMessage] = useState("");
@@ -42,6 +43,7 @@ const Home = () => {
       <Landing />
       <About />
       <Characters />
+      <CTA />
       <Reviews />
       <button className="chat-button" onClick={handleChatClick}>
         Let's Chat!

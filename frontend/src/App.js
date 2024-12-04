@@ -11,7 +11,7 @@ import Glossary from "./Pages/Glossary";
 import Contact from "./Pages/Contact";
 import Modal from "./Components/Modal";
 import ProfilePage from "./Pages/ProfilePage";
-// import Footer from './Components/Footer'
+import Footer from './Components/Footer'
 import ProtectedRoute from "./Components/ProtectedRoute";
 import RestrictedRoute from "./Components/RestrictedRoute";
 import { AuthProvider } from './AuthContext';
@@ -43,7 +43,6 @@ function App() {
           <Route path="/lessons" element={<LessonsIndex />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/contact" element={<Contact />} />
-
           {/* Restrict login and signup if already logged in */}
           <Route
             path="/login"
@@ -72,6 +71,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer />
       </Router>
     </AuthProvider>
   );
