@@ -65,7 +65,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute openModal={openModal}>
                 <ProfilePage />
               </ProtectedRoute>
             }

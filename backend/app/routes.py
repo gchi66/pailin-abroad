@@ -5,7 +5,7 @@ routes = Blueprint("routes", __name__)
 
 @routes.route("/", methods=["GET"])
 def home():
-    # return {"message": "Welcome to Pailin Abroad!"}, 200
+    return
 
 @routes.route('/api/login', methods=['GET', 'POST'])
 def login():
