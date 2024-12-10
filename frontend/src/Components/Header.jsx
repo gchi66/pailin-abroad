@@ -6,7 +6,7 @@ import AuthButtons from "./AuthButtons";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 
-const Header = () => {
+const Header = ({ toggleLoginModal, toggleSignupModal }) => {
   const [language, setLanguage] = useState("EN");
   const { user } = useAuth();
 
@@ -34,7 +34,7 @@ const Header = () => {
       <div className="right-side">
         <LanguageToggle language={language} setLanguage={setLanguage} />
         <SearchBar />
-        <AuthButtons />
+        <AuthButtons onLogin={toggleLoginModal} onSignup={toggleSignupModal} />
       </div>
     </header>
   );
