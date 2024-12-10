@@ -11,7 +11,7 @@
   z-index: 9999;
 }
 
-.modal-container {
+.modal-content {
   background: #fff;
   padding: 1.5rem;
   border-radius: 8px;
@@ -44,4 +44,8 @@
 
 .modal-close:hover {
   background-color: #0056b3;
+}
+
+.success-message {
+  text-align: center;
 }
