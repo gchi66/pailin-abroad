@@ -5,7 +5,7 @@ routes = Blueprint("routes", __name__)
 
 @routes.route("/", methods=["GET"])
 def home():
-    return
+    return jsonify({}), 204
 
 @routes.route('/api/login', methods=['GET', 'POST'])
 def login():

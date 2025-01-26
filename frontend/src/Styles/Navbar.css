@@ -1,0 +1,139 @@
+/* Navbar Container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff; /* White background */
+  width: 100%; /* Full width of the screen */
+  border-bottom: .15rem solid #050948; /* Navy blue bottom border */
+  position: fixed; /* Fixed at the top */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure it stays above other content */
+  box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+/* Logo */
+.logo img {
+  height: 2.5rem; /* Adjust as needed */
+}
+
+/* Navigation Links */
+.menu ul {
+  display: flex;
+  gap: 2.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu ul li a {
+  color: #1E1E1E; /* Dark gray text */
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700; /* Poppins Bold */
+  font-family: 'Poppins', sans-serif; /* Use Poppins */
+}
+
+.menu ul li a:hover {
+  color: #FF4545; /* Red on hover */
+}
+
+/* Right Side (Language Toggle, Search Bar, Auth Buttons) */
+.right-side {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Auth Buttons */
+.auth-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.auth-buttons button {
+  padding: 0.1rem 1rem;
+  border: .1rem solid #1E1E1E;
+  border-radius: 2.6rem;
+  font-size: 1rem;
+  font-weight: 600; /* Poppins Semi-Bold */
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif; /* Use Poppins */
+}
+
+.auth-buttons .join-button {
+  background-color: #FF4545; /* Red background */
+  color: #ffffff; /* White text */
+}
+
+.auth-buttons .join-button:hover {
+  background-color: #E63E3E; /* Darker red on hover */
+}
+
+.auth-buttons .signin-button {
+  background-color: transparent;
+  color: #1E1E1E;
+}
+
+.auth-buttons .signin-button:hover {
+  background-color: #FF4545; /* Red background on hover */
+  color: #ffffff; /* White text on hover */
+}
+
+/* Language Toggle */
+.language-toggle {
+  display: flex;
+  align-items: center;
+  gap: .1vh;
+  font-size: 1.8vh;
+  font-weight: bold;
+}
+
+.language-toggle span {
+  cursor: pointer;
+  color: #1E1E1E;
+  padding: .3vh .3vh;
+  transition: color 0.2s, background-color 0.2s;
+  line-height: 1;
+}
+
+.language-toggle span.active {
+  color: white;
+  background-color: #1E1E1E;
+  border-radius: .6vh;
+  line-height: 1;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: .1rem solid #1E1E1E;
+  border-radius: 2.6vh;
+  overflow: hidden;
+  background-color: white;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: .6vh;
+  width: 14vh;
+}
+
+.search-bar .search-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: none;
+  padding: .5vh 1vh;
+  cursor: pointer;
+}
+
+.search-bar .search-icon img {
+  width: 1.6vh;
+  height: 1.6vh;
+}

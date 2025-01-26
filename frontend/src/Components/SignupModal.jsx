@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../Styles/Modal.css";
 
-const SignupModal = ({ isOpen, onClose }) => {
+const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +41,7 @@ const SignupModal = ({ isOpen, onClose }) => {
   return (
     <div className="modal">
       <div className="modal-content">
-        <button className="close-button" onClick={onClose}>
+        <button className="modal-close" onClick={onClose}>
           &times;
         </button>
         {success ? (
@@ -51,7 +51,7 @@ const SignupModal = ({ isOpen, onClose }) => {
           </div>
         ) : (
           <>
-            <h2>Sign Up</h2>
+            <h2>Create your account</h2>
             <form onSubmit={handleSignUp}>
               <div className="form-group">
                 <input
@@ -81,6 +81,9 @@ const SignupModal = ({ isOpen, onClose }) => {
                   required
                 />
               </div>
+            <div className="divider">OR</div>
+            <button className="social-button google">Sign up with Google</button>
+            <button className="social-button facebook">Sign up with Facebook</button>
               <button
                 type="submit"
                 className="submit-btn"
@@ -89,6 +92,12 @@ const SignupModal = ({ isOpen, onClose }) => {
                 {loading ? "Signing Up..." : "Sign Up"}
               </button>
             </form>
+            <p className="switch-text">
+              Already a member?{" "}
+              <span className="link" onClick={toggleLoginModal}>
+                Sign in
+              </span>
+            </p>
           </>
         )}
       </div>
