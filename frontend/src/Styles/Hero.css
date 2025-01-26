@@ -1,0 +1,166 @@
+/* General Hero Section */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fef8f4;
+}
+
+/* Hero Card */
+.hero-card {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 8vh 6vh;
+  border-radius: 2vh;
+  border: 3px solid #1E1E1E; /* Adds the dark blue outline */
+  box-shadow: 5px 5px 0px #1E1E1E; /* Creates a solid shadow effect */
+  position: relative;
+  max-width: 60vw;
+  width: 100%;
+  height: auto;
+}
+
+/* Hero Content */
+.hero-content {
+  flex: 1;
+  text-align: left;
+  max-width: 60%;
+}
+
+.title-container {
+  display: inline-block; /* Ensures the SVG aligns with the text */
+  text-align: left; /* Aligns everything to the left */
+  position: relative; /* Needed for absolute positioning of the underline */
+}
+
+.hero-content h2 {
+  font-size: 8vh;
+  color: #1E1E1E;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  margin-top: 0;
+  margin-bottom: .6rem;
+}
+
+.underline {
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 40%;
+  margin-top: .1rem;
+}
+
+/* Ensure text does not overlap the image */
+.hero-content p {
+  font-size: 4vh;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+  font-weight: bold;
+  margin-bottom: 2vh;
+  white-space: normal;
+}
+
+/* Buttons */
+.hero-buttons {
+  display: flex;
+  gap: 2vh;
+}
+
+.hero-buttons .join,
+.hero-buttons .free-lessons {
+  /* padding: 2vh 5vh; Increased padding to make buttons larger */
+  font-size: 2.5vh; /* Increased font size */
+  border-radius: 4vh;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: .3dvh solid #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  min-width: 11rem;
+}
+
+.hero-buttons .join {
+  background-color: #FF4545;
+  color: white;
+}
+
+.hero-buttons .join:hover {
+  transform: scale(1.05);
+}
+
+.hero-buttons .free-lessons {
+  background-color: white;
+  color: #1E1E1E;
+}
+
+.hero-buttons .free-lessons:hover {
+  transform: scale(1.05);
+}
+
+/* Hero Image */
+.hero-image {
+  flex: none;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 15%;
+  bottom: 46%;
+}
+
+.profile-circle {
+  width: 55vh;
+  height: 55vh;
+  background-color: #91CAFF;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  /* bottom: -10%;
+  right: -10%; */
+  box-shadow: 5px 5px 0px #1E1E1E; /* Matches the hero card border */
+}
+
+.profile-pic {
+  width: 95%;
+  height: 95%;
+  object-fit: contain;
+}
+
+
+
+
+
+
+
+
+
+/*
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4dbdfc;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-button:hover {
+  background-color: #3ca3e4;
+}
+
+.chat-button img {
+  width: 20px;
+  height: 20px;
+} */
