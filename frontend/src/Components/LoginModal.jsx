@@ -44,12 +44,12 @@ const LoginModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal">
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>
           &times;
         </button>
-        <h2>Log In</h2>
+        <h2>Sign In</h2>
         <form onSubmit={handleLogin}>
           <div className="form-group">
             <input
@@ -69,10 +69,19 @@ const LoginModal = ({ isOpen, onClose }) => {
               required
             />
           </div>
+          <div className="form-footer">
+            <label>
+              <input type="checkbox" /> Remember me
+            </label>
+            <a href="/" className="forgot-link">Forgot username/password?</a>
+          </div>
           <button type="submit" className="submit-btn">
-            Log In
+            Sign In
           </button>
         </form>
+        <div className="divider">OR</div>
+        <button className="social-button google">Sign in with Google</button>
+        <button className="social-button facebook">Sign in with Facebook</button>
       </div>
     </div>
   );

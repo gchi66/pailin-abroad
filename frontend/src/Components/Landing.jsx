@@ -9,16 +9,16 @@ const Landing = () => {
         <div className="profile-pic"></div>
       </div>
       <div className="landing-content">
-        <h2>I'M PAILIN!</h2>
-        <p>PRACTICE YOUR ENGLISH LISTENING SKILLS WITH ME</p>
+        <h2>PAILIN ABROAD!</h2>
+        <p>EFFECTIVE ENGLISH LEARNING FOR THAI SPEAKERS</p>
         <ul>
           <li>200+ audio lessons</li>
           <li>Content by native English speakers</li>
           <li>Everyday, useful English</li>
         </ul>
         <div className="landing-buttons">
-          <button className="sign-up">Sign Up</button>
-          <button className="free-lessons">Free Lessons</button>
+          <button className="sign-up">JOIN</button>
+          <button className="free-lessons">FREE LESSONS</button>
         </div>
       </div>
     </section>

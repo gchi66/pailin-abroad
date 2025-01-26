@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './Styles/App.css';
-import Header from './Components/Header';
+import Navbar from './Components/Navbar';
 import Home from "./Pages/Home";
 import AboutPage from "./Pages/AboutPage";
 import LessonsIndex from "./Pages/LessonsIndex";
@@ -38,7 +38,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Header
+        <Navbar
         toggleLoginModal={toggleLoginModal}
         toggleSignupModal={toggleSignupModal}
         />
