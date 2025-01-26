@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import supabaseClient from "../supabaseClient";
 import Hero from "../Components/Hero";
+import Features from "../Components/Features";
 import About from "../Components/About";
 import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
@@ -41,6 +42,7 @@ const Home = () => {
   return (
     <div>
       <Hero />
+      <Features  />
       <About />
       <Characters />
       <CTA />
