@@ -90,6 +90,8 @@
 
 .hero-buttons .join:hover {
   transform: scale(1.05);
+  background-color: white;
+  color: #1E1E1E;
 }
 
 .hero-buttons .free-lessons {
@@ -99,6 +101,8 @@
 
 .hero-buttons .free-lessons:hover {
   transform: scale(1.05);
+  background-color: #FF4545;
+  color: white;
 }
 
 /* Hero Image */
