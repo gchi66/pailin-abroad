@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import supabaseClient from "../supabaseClient";
-import Landing from "../Components/Landing";
+import Hero from "../Components/Hero";
 import About from "../Components/About";
 import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
     <div>
-      <Landing />
+      <Hero />
       <About />
       <Characters />
       <CTA />
