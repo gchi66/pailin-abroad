@@ -17,6 +17,7 @@
   flex-direction: row;
   align-items: center;
   text-align: center;
+  max-width: 25vw;
   /* flex: 1; */
 }
 

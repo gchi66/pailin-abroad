@@ -1,0 +1,57 @@
+.method-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fef8f4;
+  padding: 5rem 0rem;
+}
+
+.method-card {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 8vh 0rem 8vh 10rem;
+  border-radius: 2vh;
+  border: .1rem solid #1E1E1E;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
+  position: relative;
+  max-width: 66vw;
+  width: 100%;
+  right: 20%;
+  /* margin-top: 10rem; */
+}
+
+.method-box {
+  background: none;
+  padding: 3rem;
+  max-width: 50vw;
+  border-radius: 1.5rem;
+}
+
+.method-title {
+  font-size: 2.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  text-align: right;
+  color: #0f172a;
+}
+
+.method-text {
+  font-size: 1.2rem;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.graphic-container {
+  position: absolute;
+  right: 10%;
+}
+
+.dialogue-bubbles {
+  max-width: 50vw;
+  height: auto;
+  max-height: 60dvh;
+}
