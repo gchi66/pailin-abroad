@@ -3,6 +3,7 @@ import axios from "axios";
 import supabaseClient from "../supabaseClient";
 import Hero from "../Components/Hero";
 import Features from "../Components/Features";
+import Method from "../Components/Method";
 import About from "../Components/About";
 import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
@@ -43,6 +44,7 @@ const Home = () => {
     <div>
       <Hero />
       <Features  />
+      <Method />
       <About />
       <Characters />
       <CTA />

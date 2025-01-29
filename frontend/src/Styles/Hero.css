@@ -14,8 +14,8 @@
   background: white;
   padding: 8vh 6vh;
   border-radius: 2vh;
-  border: 3px solid #1E1E1E; /* Adds the dark blue outline */
-  box-shadow: 5px 5px 0px #1E1E1E; /* Creates a solid shadow effect */
+  border: .1rem solid #1E1E1E;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
   position: relative;
   max-width: 60vw;
   width: 100%;
@@ -125,6 +125,7 @@
   justify-content: center;
   align-items: center;
   position: absolute;
+  border: .1rem solid #1E1E1E;
   /* bottom: -10%;
   right: -10%; */
   box-shadow: 5px 5px 0px #1E1E1E; /* Matches the hero card border */
