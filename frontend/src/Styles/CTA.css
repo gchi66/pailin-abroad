@@ -1,26 +1,32 @@
 .cta {
-  background-color: #f0f8ff;
+  background: none;
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 0rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
 }
 
 .cta-title {
-  color: #ff4a4a;
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  color: #1e1e1e;
+  font-size: 2.5rem;
   font-weight: 700;
+  margin: 0;
 }
 
 .cta-button {
-  background-color: transparent;
-  color: #ff4a4a;
-  border: 2px solid #ff4a4a;
-  padding: 0.75rem 2rem;
-  border-radius: 5rem;
+  background-color: #FF4545;
+  color: white;
+  border: .3dvh solid #1E1E1E;
+  font-family: "Poppins", sans-serif;
   font-size: 1rem;
   font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 4vh;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  width: 15%;
 }
 
 .cta-button:hover {

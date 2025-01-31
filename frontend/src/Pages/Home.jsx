@@ -45,9 +45,9 @@ const Home = () => {
       <Hero />
       <Features  />
       <Method />
+      <CTA />
       <About />
       <Characters />
-      <CTA />
       <Reviews />
       <button className="chat-button" onClick={handleChatClick}>
         Let's Chat!
