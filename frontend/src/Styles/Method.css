@@ -1,9 +1,8 @@
-.method-container {
+.method-section {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 90vh;
-  background-color: #fef8f4;
   padding: 3rem 0rem 0rem 0rem;
 }
 
@@ -40,7 +39,7 @@
 .method-text {
   font-size: 1.2rem;
   font-family: "Poppins", sans-serif;
-  color: #333;
+  color: #1e1e1e;
   line-height: 1.6;
   text-align: right;
 }
