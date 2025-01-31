@@ -3,7 +3,7 @@ import "../Styles/Method.css";
 
 const Method = () => {
   return (
-    <div className="method-container">
+    <section className="method-section">
       <div className="method-card">
         <div className="method-box">
           <h2 className="method-title">THE METHOD</h2>
@@ -28,7 +28,7 @@ const Method = () => {
           className="dialogue-bubbles"
         />
       </div>
-    </div>
+    </section>
   );
 };
 

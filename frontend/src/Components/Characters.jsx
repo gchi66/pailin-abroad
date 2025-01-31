@@ -51,30 +51,30 @@ const Characters = () => {
 
   return (
     <section className="characters-section">
-      <h2 className="characters-title">MEET THE CHARACTERS</h2>
-      <div className="main-character">
-        <div className="main-image">
+      <div className="character-container">
+        <div className="character-image">
           <img
             src={`images/${selectedCharacter.image}`}
             alt={selectedCharacter.name}
           />
         </div>
-        <div className="main-description">
-          <p>{selectedCharacter.description}</p>
-        </div>
-      </div>
-      <div className="character-thumbnails">
-        {charactersData.map((character, index) => (
-          <div
-            key={index}
-            className={`thumbnail ${
-              character.name === selectedCharacter.name ? "selected" : ""
-            }`}
-            onClick={() => setSelectedCharacter(character)}
-          >
-            <img src={`images/${character.image}`} alt={character.name} />
+        <div className="character-card">
+          <h2 className="characters-title">MEET THE CHARACTERS</h2>
+          <p className="character-description">{selectedCharacter.description}</p>
+          <div className="character-thumbnails">
+            {charactersData.map((character, index) => (
+              <div
+                key={index}
+                className={`thumbnail ${
+                  character.name === selectedCharacter.name ? "selected" : ""
+                }`}
+                onClick={() => setSelectedCharacter(character)}
+              >
+                <img src={`images/${character.image}`} alt={character.name} />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );

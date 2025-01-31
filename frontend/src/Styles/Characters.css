@@ -1,72 +1,96 @@
 .characters-section {
-  text-align: center;
-  background-color: #fef8f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
   padding: 5vh;
 }
 
-.characters-title {
-  font-size: 3.5vh;
-  font-weight: bold;
-  margin-bottom: 4vh;
-  color: #333;
-}
-
-.main-character {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 4vh;
-}
-
-.main-image {
-  width: 15rem;
-  height: 15rem;
-  border-radius: 50%;
+.character-container {
   display: flex;
   align-items: center;
-  justify-content: center;
-  /* margin-bottom: vh; */
-  overflow: hidden;
-}
-
-.main-image img {
-  width: 80%;
+  position: relative;
   height: 80%;
-  object-fit: contain;
 }
 
-.main-description {
-  max-width: 50dvw;
-  font-size: 2.2vh;
-  color: #333;
-  line-height: 1.5;
+.character-card {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  /* align-items: center; */
+  background: white;
+  padding: 8vh 12rem 8vh 10rem;
+  border-radius: 2vh;
+  border: .1rem solid #1E1E1E;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
+  position: relative;
+  max-width: 50vw;
+  width: 90%;
+  left: 25%;
+  /* margin-top: 10rem; */
+}
+
+.characters-title {
+  font-size: 2.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  text-align: left;
+  color: #0f172a;
+  margin: 0;
+}
+
+.character-description {
+  font-size: 1.2rem;
+  font-family: "Poppins", sans-serif;
+  color: #1e1e1e;
+  line-height: 1.6;
+  text-align: left;
 }
 
 .character-thumbnails {
   display: flex;
-  justify-content: center;
-  gap: 2vh;
+  /* justify-content: center; */
+  gap: 1dvh;
 }
 
 .thumbnail {
-  width: 8vh;
-  height: 8vh;
+  /* width: 10rem;
+  height: 10rem; */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  overflow: hidden;
-  background-color: #42b4f3; /* Default blue background */
-  transition: background-color 0.3s ease, opacity 0.3s ease;
+
 }
 
 .thumbnail.selected {
-  background-color: #f34254; /* Red background for selected */
+  border-color: #42b4f3;
 }
 
 .thumbnail img {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* border: .3dvh solid #1E1E1E;
+  transition: border-color 0.3s; */
+}
+.character-image {
+  width: 30rem;
+  height: 30rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: -10dvh;
+  z-index: 1;
+  /* border: .1rem solid #1E1E1E;
+  box-shadow: 5px 5px 0px #1E1E1E; */
+}
+
+.character-image img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
