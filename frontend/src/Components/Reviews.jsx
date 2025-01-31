@@ -26,11 +26,13 @@ const reviews = [
 
 const Reviews = () => {
   return (
-    <section className="reviews">
+    <section className="reviews-section">
       <h2 className="reviews-title">REVIEWS</h2>
       <div className="reviews-container">
         {reviews.map((review, index) => (
           <div key={index} className="review-card">
+            <p className="review-text">{review.text}</p>
+            <div className="photo-name-container">
             <img
               src={`images/${review.image}`}
               alt={`${review.name} - ${review.location}`}
@@ -39,7 +41,7 @@ const Reviews = () => {
             <h3 className="review-name">
               {review.name} · {review.location}
             </h3>
-            <p className="review-text">{review.text}</p>
+            </div>
           </div>
         ))}
       </div>

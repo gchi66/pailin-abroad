@@ -49,9 +49,9 @@ const Home = () => {
       {/* <About /> */}
       <Characters />
       <Reviews />
-      <button className="chat-button" onClick={handleChatClick}>
+      {/* <button className="chat-button" onClick={handleChatClick}>
         Let's Chat!
-      </button>
+      </button> */}
       {message && <p className="backend-message">{message}</p>}
     </div>
   );
