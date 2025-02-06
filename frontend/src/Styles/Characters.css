@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 90vh;
-  padding: 5vh;
+  padding: 10vh;
 }
 
 .character-container {
@@ -54,8 +54,8 @@
 }
 
 .thumbnail {
-  /* width: 10rem;
-  height: 10rem; */
+  width: 10rem;
+  height: 10rem;
   border-radius: 50%;
   display: flex;
   align-items: center;

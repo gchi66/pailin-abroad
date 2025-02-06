@@ -2,15 +2,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh;
-  padding: 3rem 0rem 0rem 0rem;
+  min-height: 90vh;
+  height: auto;
+  padding: 10vh 0vw;
 }
 
 .method-card {
   display: flex;
   align-items: center;
   background: white;
-  padding: 8vh 0rem 8vh 10rem;
+  padding: 5vh 0rem 5vh 10rem;
   border-radius: 2vh;
   border: .1rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0px #1E1E1E;
@@ -52,5 +53,5 @@
 .dialogue-bubbles {
   max-width: 50vw;
   height: auto;
-  max-height: 60dvh;
+  max-height: 50dvh;
 }

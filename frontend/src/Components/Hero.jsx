@@ -17,15 +17,11 @@ const Hero = () => {
           </div>
           <p>Effective English learning for Thai speakers</p>
           <div className="hero-buttons">
-            <button className="join">JOIN</button>
             <button className="free-lessons">FREE LESSONS</button>
+            <button className="placement-test">PLACEMENT TEST</button>
           </div>
         </div>
-        <div className="hero-image">
-          <div className="profile-circle">
-          <img src="/images/Pailin-no-bg.png" alt="Pailin" className="profile-pic" />
-          </div>
-        </div>
+          <img src="/images/characters/pailin-blue-right.png" alt="Pailin" className="profile-pic" />
       </div>
     </section>
   );

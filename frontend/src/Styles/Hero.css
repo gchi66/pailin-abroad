@@ -3,7 +3,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  /* height: 100vh; */
+  padding: 22vh 0vw 10vh 0vw;
   background-color: #fef8f4;
 }
 
@@ -12,14 +13,25 @@
   display: flex;
   align-items: center;
   background: white;
-  padding: 8vh 6vh;
+  padding: 8vh 15vh;
   border-radius: 2vh;
   border: .1rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   position: relative;
   max-width: 60vw;
   width: 100%;
+  max-height: 40vh;
   height: auto;
+  gap: 6vw;
+}
+
+.profile-pic {
+  flex-shrink: 0; /* Prevents the image from affecting the card's height */
+  max-width: 53%; /* Scales with the card size */
+  height: auto;
+  object-fit: contain;
+  position: relative;
+  top: 4vh;
 }
 
 /* Hero Content */
@@ -43,6 +55,9 @@
   position: relative;
   margin-top: 0;
   margin-bottom: .6rem;
+  white-space: nowrap; /* Prevents text from wrapping */
+  max-width: 100%; /* Allow it to take the full width */
+  overflow: hidden; /* Prevents overflow issues */
 }
 
 .underline {
@@ -70,8 +85,8 @@
   gap: 2vh;
 }
 
-.hero-buttons .join,
-.hero-buttons .free-lessons {
+.hero-buttons .free-lessons,
+.hero-buttons .placement-test {
   /* padding: 2vh 5vh; Increased padding to make buttons larger */
   font-size: 2.5vh; /* Increased font size */
   border-radius: 4vh;
@@ -80,62 +95,32 @@
   border: .3dvh solid #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
-  min-width: 11rem;
-}
-
-.hero-buttons .join {
-  background-color: #FF4545;
-  color: white;
-}
-
-.hero-buttons .join:hover {
-  transform: scale(1.05);
-  background-color: white;
-  color: #1E1E1E;
+  min-width: 12rem;
+  padding: .5rem;
 }
 
 .hero-buttons .free-lessons {
-  background-color: white;
-  color: #1E1E1E;
+  background-color: #FF4545;
+  color: white;
 }
 
 .hero-buttons .free-lessons:hover {
   transform: scale(1.05);
+  background-color: white;
+  color: #1E1E1E;
+}
+
+.hero-buttons .placement-test {
+  background-color: white;
+  color: #1E1E1E;
+}
+
+.hero-buttons .placement-test:hover {
+  transform: scale(1.05);
   background-color: #FF4545;
   color: white;
 }
 
-/* Hero Image */
-.hero-image {
-  flex: none;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 15%;
-  bottom: 46%;
-}
-
-.profile-circle {
-  width: 55vh;
-  height: 55vh;
-  background-color: #91CAFF;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  border: .1rem solid #1E1E1E;
-  /* bottom: -10%;
-  right: -10%; */
-  box-shadow: 5px 5px 0px #1E1E1E; /* Matches the hero card border */
-}
-
-.profile-pic {
-  width: 95%;
-  height: 95%;
-  object-fit: contain;
-}
 
 
 
