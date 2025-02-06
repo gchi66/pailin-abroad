@@ -23,8 +23,8 @@ const Method = () => {
       </div>
       <div className="graphic-container">
         <img
-          src="/images/Dialogue-bubbles.png"
-          alt="Dialogue Bubbles"
+          src="/images/method-speech-bubbles.webp"
+          alt="Speech Bubbles"
           className="dialogue-bubbles"
         />
       </div>

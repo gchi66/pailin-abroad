@@ -4,7 +4,7 @@ import supabaseClient from "../supabaseClient";
 import Hero from "../Components/Hero";
 import Features from "../Components/Features";
 import Method from "../Components/Method";
-import About from "../Components/About";
+// import About from "../Components/About";
 import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
 import CTA from "../Components/CTA";
@@ -13,9 +13,9 @@ const Home = () => {
   const [message, setMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleChatClick = () => {
-    alert("Chat feature coming soon!");
-  };
+  // const handleChatClick = () => {
+  //   alert("Chat feature coming soon!");
+  // };
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -1,20 +1,27 @@
 .reviews-section {
-  text-align: center;
-  padding: 4rem 2rem;
+  padding: 10vh 2rem;
+}
+
+.reviews-container {
   background: white;
   border-top: 0.15rem solid #1E1E1E;
   border-bottom: 0.15rem solid #1E1E1E;
+  padding: 6vh 0vw 10vh 0vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5vh;
 }
 
 .reviews-title {
   font-family: "Poppins", sans-serif;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 2rem;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: #1e1e1e;
 }
 
-.reviews-container {
+.review-cards-container {
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -24,40 +31,62 @@
 
 .review-card {
   max-width: 18.75rem;
-  text-align: center;
+  text-align: left;
   background-color: #FDF7F4;
-  border-radius: 0.625rem;
+  border-radius: 2.25rem;
   border: .1rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+
 }
 
 .review-text {
   font-family: "Poppins", sans-serif;
-  font-size: 1rem;
-  color: #333;
+  font-weight: 500;
+  font-size: .9rem;
+  color: #1E1E1E;
   line-height: 1.5;
+  min-height: 20vh;
 }
 
 .photo-name-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   gap: 1rem;
 }
 
 .review-image {
-  width: 2rem;
-  height: 2rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   object-fit: cover;
 }
+.name-location-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  gap: .5vh;
+}
+
 
 .review-name {
   font-family: "Poppins", sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
-  color: #f8485e;
+  color: #1E1E1E;
   margin: 0;
+  line-height: 1;
+}
+
+.review-location {
+  font-family: "Poppins", sans-serif;
+  color: #1e1e1ea1;
+  font-size: .8rem;
+  margin: 0;
+  line-height: 1;
 }

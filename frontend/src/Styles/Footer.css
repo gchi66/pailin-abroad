@@ -1,82 +1,92 @@
-
 .footer {
-  background-color: #f0f8ff;
-  padding: 3rem 2rem;
-  color: #333;
+  width: 100%;
+  margin-top: 2rem;
+  font-family: sans-serif;
+  border-top: 1vh;
+  border-color: #1e1e1e
 }
 
+/* Top portion (black) */
+.footer-top {
+  background-color: #ffffff;
+  color: #1e1e1e;
+  padding: 2rem 1rem;
+  border-top: .15rem solid #1e1e1e; /* Adds top border */
+  border-bottom: .15rem solid #1e1e1e; /* Adds bottom border */
+}
+
+/* Container to manage columns */
 .footer-container {
+  max-width: 75rem;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 2rem;
+  justify-content: center;
 }
 
+/* Each column */
 .footer-column {
   flex: 1;
-  min-width: 200px;
+  /* 150px -> 9.375rem (150 / 16) */
+  min-width: 9.375rem;
+  margin: 1rem 0;
+  text-align: left;
 }
 
+/* Titles */
 .footer-title {
-  color: #ff4a4a;
-  font-weight: 700;
   margin-bottom: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
+/* List styling */
 .footer-column ul {
-  list-style: none;
+  list-style-type: none;
+  margin: 0;
   padding: 0;
 }
 
-.footer-column ul li {
+.footer-column li {
   margin-bottom: 0.5rem;
-  font-size: 1rem;
+  cursor: pointer;
+}
+
+.footer-column li:hover {
+  text-decoration: underline;
+}
+
+/* Follow Us column */
+.follow-us {
+  /* text-align: left; */
 }
 
 .footer-logo {
-  width: 4rem;
-  height: auto;
-  margin-bottom: 1rem;
+  /* 100px -> 6.25rem (100 / 16) */
+  max-width: 6.25rem;
+  margin: 1rem 0;
 }
 
+/* Social icons wrapper */
 .social-icons {
   display: flex;
+  justify-content: left;
+
   gap: 1rem;
+  margin-top: 1rem;
 }
 
-.social-icons i {
-  font-size: 1.5rem;
-  color: #333;
+/* Adjust icon size as needed: 24px -> 1.5rem */
+.social-icon-link img {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
+/* Bottom bar (blue) */
 .footer-bottom {
+  background-color: #91caff;
   text-align: center;
-  margin-top: 2rem;
-  font-size: 0.875rem;
-  color: #666;
+  padding: .5rem;
+  color: #1e1e1e; /* black text on the blue background */
+  font-weight: 500;
 }
-
-/* Footer Chat Button */
-/* .chat-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #4dbdfc;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.chat-button:hover {
-  background-color: #3ca3e4;
-}
-
-.chat-button img {
-  width: 20px;
-  height: 20px;
-} */
