@@ -69,7 +69,7 @@ const Footer = () => {
 
       {/* Bottom bar in #91CAFF */}
       <div className="footer-bottom">
-        <span>Copyright © 2024, Pailin Abroad</span>
+        <span>Copyright © {new Date().getFullYear()}, Pailin Abroad</span>
       </div>
     </footer>
   );
