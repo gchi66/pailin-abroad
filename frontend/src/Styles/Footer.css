@@ -58,7 +58,7 @@
 
 /* Follow Us column */
 .follow-us {
-  /* text-align: left; */
+  text-align: left;
 }
 
 .footer-logo {
@@ -71,7 +71,6 @@
 .social-icons {
   display: flex;
   justify-content: left;
-
   gap: 1rem;
   margin-top: 1rem;
 }
