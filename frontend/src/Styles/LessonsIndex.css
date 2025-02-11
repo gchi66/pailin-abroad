@@ -1,8 +1,10 @@
 .page-container {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   background-color: none;
   padding: 18vh 0 0 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-header {
@@ -34,4 +36,155 @@
 .header-image {
   height: 50vh;
   width: auto;
+}
+
+/* Lesson Library Page Styles */
+.lesson-library {
+  min-width: 80%;
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  /* min-height: 100vh; */
+  justify-content: space-between;
+  flex-grow: 1;
+  font-family: "Poppins", sans-serif;
+}
+
+.lesson-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.lesson-subtitle {
+  font-size: 1.2rem;
+  color: #1e1e1e;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.lesson-subtitle a {
+  color: #1e1e1e;
+  font-weight: bold;
+}
+
+.lesson-levels {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.level-btn {
+  background: white;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
+  padding: 1rem 2rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e1e1e;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  min-width: 20vw;
+}
+
+.level-btn:hover {
+  background: #91CAFF;
+}
+
+.lesson-btns {
+  display: flex;
+  justify-content: left;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab-btn {
+  background: white;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
+  padding: 1rem 2rem;
+  font-family: "Poppins", sans-serif;
+  font-size: .7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  min-width: 10vw;
+}
+
+.tab-btn:hover {
+  background: #91CAFF;
+}
+
+.tab-btn.active {
+  background: #1E1E1E;
+  color: white;
+}
+
+.lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex-grow: 1;
+}
+
+.lesson-item {
+  background: #fff;
+  border: 0.2rem solid #ddd;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  text-align: left;
+  transition: transform 0.2s ease-in-out;
+}
+
+.lesson-item:hover {
+  transform: scale(1.02);
+}
+
+.lesson-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.lesson-desc {
+  font-size: 1rem;
+  color: #777;
+}
+
+/* Collapsible Level Section */
+.level-container {
+  border: 0.2rem solid #ddd;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  background: #f9f9f9;
+}
+
+.level-header {
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #e6e6e6;
+  border-radius: 1rem;
+}
+
+.level-content {
+  display: none;
+  padding: 1rem;
+}
+
+.level-container.open .level-content {
+  display: block;
 }
