@@ -16,7 +16,7 @@
 
 /* Logo */
 .logo img {
-  height: 2.5rem; /* Adjust as needed */
+  height: 1.7rem; /* Adjust as needed */
 }
 
 /* Navigation Links */
@@ -38,6 +38,10 @@
 
 .menu ul li a:hover {
   color: #FF4545; /* Red on hover */
+}
+
+.menu ul li.pricing a {
+  color: #FF4545;
 }
 
 /* Right Side (Language Toggle, Search Bar, Auth Buttons) */

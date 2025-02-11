@@ -15,7 +15,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
       {/* Logo */}
       <div className="logo">
         <NavLink to="/">
-          <img src="/images/logo.png" alt="Logo" />
+          <img src="/images/full-logo.webp" alt="Pailin Abroad Logo" />
         </NavLink>
       </div>
 
@@ -37,12 +37,9 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
           <li>
             <NavLink to="/contact">CONTACT</NavLink>
           </li>
-          {/* Display PROFILE link if the user is logged in */}
-          {user && (
-            <li>
-              <NavLink to="/profile">PROFILE</NavLink>
-            </li>
-          )}
+          <li className="pricing">
+            <NavLink to="/contact">PRICING</NavLink>
+          </li>
         </ul>
       </nav>
 
