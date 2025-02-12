@@ -25,7 +25,7 @@ const LessonsIndex = () => {
   return (
     <div className="page-container">
       <header className="page-header">
-        <h1 className="header-text">LESSON LIBRARY</h1>
+        <h1 className="page-header-text">LESSON LIBRARY</h1>
         <img src="/images/books-lesson-library.webp" alt="Library Books" className="header-image" />
       </header>
       <div className="lesson-library">
@@ -47,19 +47,32 @@ const LessonsIndex = () => {
           <button className="tab-btn">LEVEL 4</button>
         </div>
 
-        <div className={`level-container ${isLevelOpen ? "open" : ""}`}>
+        {/* <div className={`level-container ${isLevelOpen ? "open" : ""}`}>
           <div className="level-header" onClick={() => setIsLevelOpen(!isLevelOpen)}>
             Level 1
             <span>{isLevelOpen ? "▲" : "▼"}</span>
-          </div>
-          <div className="level-content">
-            <div className="lesson-list">
-              {lessons.map((lesson) => (
-                <div key={lesson.id} className="lesson-item">
-                  <h2 className="lesson-name">{lesson.title}</h2>
-                  <p className="lesson-desc">{lesson.subtitle}</p>
-                </div>
-              ))}
+          </div> */}
+        <div className="level-wrapper">
+          <div className="level-container">
+            <div className="level-header">
+              <div className="level-text-graphic">
+                <span className="level-header-text">LEVEL 1</span>
+                <img src="/images/red-level-icon-clipboard.webp" alt="Red Clipboard" className="level-header-image" />
+              </div>
+              <div className="backstory-arrow-group">
+                <span className="backstory-header-text">VIEW BACKSTORY</span>
+                <span className="backstory-arrow">▲</span>
+              </div>
+            </div>
+            <div className="level-content">
+              <div className="lesson-list">
+                {lessons.map((lesson) => (
+                  <div key={lesson.id} className="lesson-item">
+                    <h2 className="lesson-name">{lesson.title}</h2>
+                    <p className="lesson-desc">{lesson.subtitle}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
