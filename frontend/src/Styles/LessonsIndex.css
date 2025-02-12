@@ -38,43 +38,48 @@
   width: auto;
 }
 
-/* Lesson Library Page Styles */
+/* Overall wrapper for stuff below the header  */
 .lesson-library {
-  min-width: 80%;
+  width: 90%;
   max-width: 90%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  justify-content: space-between;
+  gap: 5vh;
+  align-items: center;
+  /* text-align: center; */
+  /* justify-content: space-between; */
   flex-grow: 1;
   font-family: "Poppins", sans-serif;
 }
 
-.lesson-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+/* Level buttons and Placement Test header  */
+
+.level-btns-and-subtitle {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem 0rem 2rem 0rem;
 }
 
 .lesson-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: #1e1e1e;
   text-align: left;
-  margin-bottom: 2rem;
+  margin: 0;
 }
 
 .lesson-subtitle a {
   color: #1e1e1e;
-  font-weight: bold;
 }
+
 
 .lesson-levels {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 2rem;
 }
 
 .level-btn {
@@ -85,7 +90,7 @@
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 1rem 2rem;
   font-family: "Poppins", sans-serif;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #1e1e1e;
   cursor: pointer;
@@ -99,9 +104,8 @@
 
 .lesson-btns {
   display: flex;
-  justify-content: left;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  justify-content: flex-start;
+  gap: 2rem;
 }
 
 .tab-btn {
@@ -112,11 +116,16 @@
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 1rem 2rem;
   font-family: "Poppins", sans-serif;
-  font-size: .7rem;
+  font-size: .9rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
-  min-width: 10vw;
+  min-width: 13vw;
+  height: 3.5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .tab-btn:hover {
@@ -129,11 +138,10 @@
 }
 
 
-
 /* Level Section */
 .level-wrapper {
   display: flex;
-  justify-content: center; /* Centers the level-container */
+  justify-content: center;
   width: 100%;
 }
 
@@ -144,16 +152,17 @@
   border-radius: 1rem;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   /* padding: 1rem; */
-  width: 90%;
-
+  width: 85%;
+  max-width: 85%;
 }
 
 .level-header {
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  border-bottom: 0.075rem solid #1E1E1E;
-  padding: 1.5rem 3rem;
+  /* border-bottom: 0.075rem solid #1E1E1E; */
+  padding: 2rem 3rem;
+  transition: all 0.5s ease-in-out;
 }
 
 .level-text-graphic {
@@ -163,8 +172,8 @@
   gap: 2vw;
 }
 .level-header-text {
-  font-size: 2.8rem;
-  font-weight: 500;
+  font-size: 2.5rem;
+  font-weight: 600;
 }
 
 .level-header-image {
@@ -176,18 +185,63 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 2vw;
+  gap: 1vw;
 }
 
 .backstory-header-text  {
   font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .level-content {
   padding: 0
 }
+
+/* Backstory stuff */
+
+
+
+.level-backstory {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 0.075rem solid #1E1E1E;
+  transition: all 0.3s ease-in-out;
+}
+
+.backstory-arrow-icon {
+  height: 3vh;
+  width: auto;
+}
+
+.backstory-container {
+  width: 90%;
+  margin: 0 auto;
+  text-align: left;
+  transition: all 0.3s ease-in-out;
+}
+
+.backstory-content {
+  text-align: left;
+  padding: 2rem 0rem;
+  font-size: 1.3rem;
+  line-height: 5vh;
+  font-family: "Poppins", sans-serif;
+  color: #1e1e1e;
+  transition: all 0.3s ease-in-out;
+  margin: 0;
+}
+
+.level-header.backstory-open {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.backstory-container.open {
+  border-top: none;
+}
+
+
 
 
 /* Lessons Section */
@@ -211,6 +265,7 @@
   background: white;
   border-top: 0.075rem solid #1E1E1E;
   border-bottom: 0.075rem solid #1E1E1E;
+  padding: 1.5rem 4rem;
 }
 
 .lesson-item:hover {

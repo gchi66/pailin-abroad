@@ -3,7 +3,7 @@ import "../Styles/LessonsIndex.css";
 
 
 const LessonsIndex = () => {
-  const [isLevelOpen, setIsLevelOpen] = useState(true);
+  const [isBackstoryOpen, setIsBackstoryOpen] = useState(false);
   const lessons = [
     { id: 1, title: "Hi, I'm Pailin", subtitle: "Learn how to greet someone" },
     { id: 2, title: "It's nice to meet you", subtitle: "What to say when meeting someone for the first time" },
@@ -29,41 +29,56 @@ const LessonsIndex = () => {
         <img src="/images/books-lesson-library.webp" alt="Library Books" className="header-image" />
       </header>
       <div className="lesson-library">
-        <p className="lesson-subtitle">
-          Not sure where to start? Take our <a href="#">Free Placement Test</a>.
-        </p>
+        {/* The level buttons and placement test header */}
+        <div className="level-btns-and-subtitle">
+          <p className="lesson-subtitle">
+            Not sure where to start? Take our <a href="#">Free Placement Test</a>.
+          </p>
 
-        <div className="lesson-levels">
-          <button className="level-btn">BEGINNER</button>
-          <button className="level-btn">LOWER INTERMEDIATE</button>
-          <button className="level-btn">UPPER INTERMEDIATE</button>
-          <button className="level-btn">ADVANCED</button>
+          <div className="lesson-levels">
+            <button className="level-btn">BEGINNER</button>
+            <button className="level-btn">LOWER INTERMEDIATE</button>
+            <button className="level-btn">UPPER INTERMEDIATE</button>
+            <button className="level-btn">ADVANCED</button>
+          </div>
+
+          <div className="lesson-btns">
+            <button className="tab-btn">LEVEL 1</button>
+            <button className="tab-btn">LEVEL 2</button>
+            <button className="tab-btn">LEVEL 3</button>
+            <button className="tab-btn">LEVEL 4</button>
+          </div>
+
         </div>
 
-        <div className="lesson-btns">
-          <button className="tab-btn">LEVEL 1</button>
-          <button className="tab-btn">LEVEL 2</button>
-          <button className="tab-btn">LEVEL 3</button>
-          <button className="tab-btn">LEVEL 4</button>
-        </div>
-
-        {/* <div className={`level-container ${isLevelOpen ? "open" : ""}`}>
-          <div className="level-header" onClick={() => setIsLevelOpen(!isLevelOpen)}>
-            Level 1
-            <span>{isLevelOpen ? "▲" : "▼"}</span>
-          </div> */}
         <div className="level-wrapper">
           <div className="level-container">
-            <div className="level-header">
-              <div className="level-text-graphic">
-                <span className="level-header-text">LEVEL 1</span>
-                <img src="/images/red-level-icon-clipboard.webp" alt="Red Clipboard" className="level-header-image" />
+            <section className="level-backstory">
+            <div className={`level-header ${isBackstoryOpen ? "backstory-open" : ""}`} onClick={() => setIsBackstoryOpen(!isBackstoryOpen)}>
+                <div className="level-text-graphic">
+                  <span className="level-header-text">LEVEL 1</span>
+                  <img src="/images/red-level-icon-clipboard.webp" alt="Red Clipboard" className="level-header-image" />
+                </div>
+
+                <div className="backstory-arrow-group">
+                  <span className="backstory-header-text">{isBackstoryOpen ? "HIDE BACKSTORY" : "VIEW BACKSTORY"}</span>
+                  <img
+                    src={isBackstoryOpen ? "/images/collapse-collapsible-box.webp" : "/images/expand-collapsible-box.webp"}
+                    alt={isBackstoryOpen ? "Collapse backstory" : "Expand backstory"}
+                    className="backstory-arrow-icon"
+                  />
+                </div>
               </div>
-              <div className="backstory-arrow-group">
-                <span className="backstory-header-text">VIEW BACKSTORY</span>
-                <span className="backstory-arrow">▲</span>
+
+              <div className={`backstory-container ${isBackstoryOpen ? "open" : ""}`}>
+                {isBackstoryOpen && (
+                  <div className="backstory-content">
+                    <span>Pailin has just moved from Bangkok to Los Angeles. She's at a summer orientation for foreign exchange students at University of California, Los Angeles, where she will be meeting other foreign exchange students and will be learning more about the program.</span>
+                  </div>
+                )}
               </div>
-            </div>
+
+            </section>
             <div className="level-content">
               <div className="lesson-list">
                 {lessons.map((lesson) => (
