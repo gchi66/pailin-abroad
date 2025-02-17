@@ -5,7 +5,7 @@ import Navbar from './Components/Navbar';
 import Home from "./Pages/Home";
 import AboutPage from "./Pages/AboutPage";
 import LessonsIndex from "./Pages/LessonsIndex";
-import Glossary from "./Pages/Glossary";
+import Resources from "./Pages/Resources";
 import Contact from "./Pages/Contact";
 import Modal from "./Components/Modal";
 import ProfilePage from "./Pages/ProfilePage";
@@ -55,7 +55,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/lessons" element={<LessonsIndex />} />
-          <Route path="/glossary" element={<Glossary />} />
+          <Route path="/resources" element={<Resources />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/membership" element={<Membership />} />
           {/* Protect profile page */}
