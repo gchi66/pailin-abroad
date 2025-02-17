@@ -38,7 +38,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
             <NavLink to="/contact">CONTACT</NavLink>
           </li>
           <li className="pricing">
-            <NavLink to="/contact">PRICING</NavLink>
+            <NavLink to="/membership">PRICING</NavLink>
           </li>
         </ul>
       </nav>
