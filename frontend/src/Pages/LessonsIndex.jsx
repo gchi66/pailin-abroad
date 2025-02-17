@@ -1,123 +1,74 @@
-import React, { useState }  from "react";
+import React, { useState, useEffect, useRef } from "react";
+import supabaseClient from "../supabaseClient";
 import "../Styles/LessonsIndex.css";
-
 
 const LessonsIndex = () => {
   const [isBackstoryOpen, setIsBackstoryOpen] = useState(false);
-  const lessons = [
-    {
-      id: 1,
-      title: "Hi, I'm Pailin",
-      title_th: "สวัสดี ฉันชื่อไพลิน",
-      subtitle: "Learn how to greet someone",
-      subtitle_th: "เรียนรู้วิธีทักทายใครสักคน"
-    },
-    {
-      id: 2,
-      title: "It's nice to meet you",
-      title_th: "ยินดีที่ได้รู้จัก",
-      subtitle: "What to say when meeting someone for the first time",
-      subtitle_th: "จะพูดอะไรเมื่อเจอใครครั้งแรก"
-    },
-    {
-      id: 3,
-      title: "How are you?",
-      title_th: "คุณเป็นอย่างไร",
-      subtitle: "How to ask how someone is doing",
-      subtitle_th: "วิธีที่จะถามว่าใครบางคนเป็นอย่างไรบ้าง"
-    },
-    {
-      id: 4,
-      title: "Good morning, Joey!",
-      title_th: "สวัสดีตอนเช้า, โจอี้!",
-      subtitle: "How to greet someone in the morning",
-      subtitle_th: "วิธีทักทายใครสักคนในตอนเช้า"
-    },
-    {
-      id: 5,
-      title: "What's your name?",
-      title_th: "คุณชื่ออะไร",
-      subtitle: "How to ask someone's name politely",
-      subtitle_th: "วิธีถามชื่อของใครบางคนอย่างสุภาพ"
-    },
-    {
-      id: 6,
-      title: "I'm excited!",
-      title_th: "ฉันตื่นเต้น!",
-      subtitle: "How to express excitement",
-      subtitle_th: "วิธีแสดงความตื่นเต้น"
-    },
-    {
-      id: 7,
-      title: "How old are you?",
-      title_th: "คุณอายุเท่าไหร่",
-      subtitle: "How to ask someone’s age",
-      subtitle_th: "วิธีถามอายุของใครบางคน"
-    },
-    {
-      id: 8,
-      title: "Thanks, I made it!",
-      title_th: "ขอบคุณ ฉันทำเอง!",
-      subtitle: "How to respond to compliments",
-      subtitle_th: "วิธีตอบรับคำชม"
-    },
-    {
-      id: 9,
-      title: "You're a good cook",
-      title_th: "คุณทำอาหารเก่ง",
-      subtitle: "How to compliment someone's cooking",
-      subtitle_th: "วิธีชมฝีมือทำอาหารของใครบางคน"
-    },
-    {
-      id: 10,
-      title: "Chiang Mai is a beautiful city",
-      title_th: "เชียงใหม่เป็นเมืองที่สวยงาม",
-      subtitle: "How to describe a place",
-      subtitle_th: "วิธีบรรยายสถานที่"
-    },
-    {
-      id: 11,
-      title: "Where are you from?",
-      title_th: "คุณมาจากที่ไหน",
-      subtitle: "How to ask about someone's hometown",
-      subtitle_th: "วิธีถามเกี่ยวกับบ้านเกิดของใครบางคน"
-    },
-    {
-      id: 12,
-      title: "Do you like Thai food?",
-      title_th: "คุณชอบอาหารไทยไหม",
-      subtitle: "How to ask about food preferences",
-      subtitle_th: "วิธีถามเกี่ยวกับความชอบอาหาร"
-    },
-    {
-      id: 13,
-      title: "This is my family",
-      title_th: "นี่คือครอบครัวของฉัน",
-      subtitle: "How to introduce family members",
-      subtitle_th: "วิธีแนะนำสมาชิกในครอบครัว"
-    },
-    {
-      id: 14,
-      title: "What do you do?",
-      title_th: "คุณทำงานอะไร",
-      subtitle: "How to ask about someone's job",
-      subtitle_th: "วิธีถามเกี่ยวกับอาชีพของใครบางคน"
-    },
-    {
-      id: 15,
-      title: "I love traveling!",
-      title_th: "ฉันรักการเดินทาง!",
-      subtitle: "How to talk about travel experiences",
-      subtitle_th: "วิธีพูดเกี่ยวกับประสบการณ์การเดินทาง"
-    },
-    {
-      id: 16,
-      title: "Level 1 Checkpoint",
-      title_th: "ฉันรักการเดินทาง!",
-      subtitle: "How to greet someone in the morning",
-      subtitle_th: "วิธีพูดเกี่ยวกับประสบการณ์การเดินทาง"
-    }
-  ];
+  const [lessons, setLessons] = useState([]);
+  const [levels, setLevels] = useState([]);
+  const [selectedStage, setSelectedStage] = useState("Beginner");
+  const [selectedLevel, setSelectedLevel] = useState(1);
+
+  // Track whether the stage has just changed
+  const isStageChanged = useRef(false);
+
+  // Fetch levels for the selected stage
+  useEffect(() => {
+    const fetchLevels = async () => {
+      try {
+        const { data, error } = await supabaseClient
+          .from("lessons")
+          .select("level")
+          .eq("stage", selectedStage)
+          .order("level", { ascending: true });
+
+        if (error) throw error;
+
+        // Extract unique levels for the selected stage
+        const uniqueLevels = [...new Set(data.map((lesson) => lesson.level))];
+        setLevels(uniqueLevels);
+
+        // Automatically select the first level ONLY when the stage changes
+        if (uniqueLevels.length > 0 && isStageChanged.current) {
+          setSelectedLevel(uniqueLevels[0]); // Set the first level of the new stage
+          isStageChanged.current = false; // Reset the flag
+        }
+      } catch (error) {
+        console.error("Error fetching levels:", error.message);
+      }
+    };
+
+    fetchLevels();
+  }, [selectedStage]); // Fetch levels whenever selectedStage changes
+
+  // Fetch lessons for the selected stage and level
+  useEffect(() => {
+    const fetchLessons = async () => {
+      if (!selectedLevel) return; // Don't fetch if no level is selected
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("lessons")
+          .select("*")
+          .eq("stage", selectedStage)
+          .eq("level", selectedLevel)
+          .order("lesson_order", { ascending: true });
+
+        if (error) throw error;
+        setLessons(data || []);
+      } catch (error) {
+        console.error("Error fetching lessons:", error.message);
+      }
+    };
+
+    fetchLessons();
+  }, [selectedStage, selectedLevel]); // Fetch lessons whenever selectedStage or selectedLevel changes
+
+  // Handle stage change
+  const handleStageChange = (stage) => {
+    setSelectedStage(stage);
+    isStageChanged.current = true; // Set the flag to indicate a stage change
+  };
 
   return (
     <div className="page-container">
@@ -127,33 +78,59 @@ const LessonsIndex = () => {
       </header>
       <div className="lesson-library">
         {/* The level buttons and placement test header */}
-        <div className="level-btns-and-subtitle">
+        <div className="stages-levels-subtitle">
           <p className="lesson-subtitle">
             Not sure where to start? Take our <a href="#">Free Placement Test</a>.
           </p>
 
-          <div className="lesson-levels">
-            <button className="level-btn">BEGINNER</button>
-            <button className="level-btn">LOWER INTERMEDIATE</button>
-            <button className="level-btn">UPPER INTERMEDIATE</button>
-            <button className="level-btn">ADVANCED</button>
+          <div className="lesson-stages">
+            <button
+              className={`stage-btn ${selectedStage === "Beginner" ? "active" : ""}`}
+              onClick={() => handleStageChange("Beginner")}
+            >
+              BEGINNER
+            </button>
+            <button
+              className={`stage-btn ${selectedStage === "Lower Intermediate" ? "active" : ""}`}
+              onClick={() => handleStageChange("Lower Intermediate")}
+            >
+              LOWER INTERMEDIATE
+            </button>
+            <button
+              className={`stage-btn ${selectedStage === "Upper Intermediate" ? "active" : ""}`}
+              onClick={() => handleStageChange("Upper Intermediate")}
+            >
+              UPPER INTERMEDIATE
+            </button>
+            <button
+              className={`stage-btn ${selectedStage === "Advanced" ? "active" : ""}`}
+              onClick={() => handleStageChange("Advanced")}
+            >
+              ADVANCED
+            </button>
           </div>
 
-          <div className="lesson-btns">
-            <button className="tab-btn">LEVEL 1</button>
-            <button className="tab-btn">LEVEL 2</button>
-            <button className="tab-btn">LEVEL 3</button>
-            <button className="tab-btn">LEVEL 4</button>
+          {/* Level buttons */}
+          <div className="level-btns">
+            {levels.map((lvl) => (
+              <button
+                key={lvl}
+                className={`level-btn ${selectedLevel === lvl ? "active" : ""}`}
+                onClick={() => setSelectedLevel(lvl)}
+              >
+                LEVEL {lvl}
+              </button>
+            ))}
           </div>
-
         </div>
 
+        {/* Render lessons */}
         <div className="level-wrapper">
           <div className="level-container">
             <section className="level-backstory">
-            <div className={`level-header ${isBackstoryOpen ? "backstory-open" : ""}`} onClick={() => setIsBackstoryOpen(!isBackstoryOpen)}>
+              <div className={`level-header ${isBackstoryOpen ? "backstory-open" : ""}`} onClick={() => setIsBackstoryOpen(!isBackstoryOpen)}>
                 <div className="level-text-graphic">
-                  <span className="level-header-text">LEVEL 1</span>
+                  <span className="level-header-text">LEVEL {selectedLevel}</span>
                   <img src="/images/red-level-icon-clipboard.webp" alt="Red Clipboard" className="level-header-image" />
                 </div>
 
@@ -177,15 +154,14 @@ const LessonsIndex = () => {
             </section>
 
             <div className="level-content">
-
               <div className="lesson-list">
-                {lessons.map((lesson, index) => (
+                {lessons.map((lesson) => (
                   <div key={lesson.id} className="lesson-item">
                     <div className="lesson-item-left">
-                      {index === lessons.length - 1 ? (
+                      {lesson.lesson_order === Math.max(...lessons.map(l => l.lesson_order)) ? (
                         <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
                       ) : (
-                        <span className="lesson-number">{index + 1}</span>
+                        <span className="lesson-number">{lesson.lesson_order}</span>
                       )}
                       <div className="name-desc-container">
                         <span className="lesson-name">
@@ -197,19 +173,18 @@ const LessonsIndex = () => {
                       </div>
                     </div>
                     <div className="lesson-item-right">
-                    <img src="/images/CheckCircle.png" alt="Unfilled Checkmark" className="checkmark-img" />
+                      <img src="/images/CheckCircle.png" alt="Unfilled Checkmark" className="checkmark-img" />
                     </div>
                   </div>
                 ))}
-              </div> {/* lesson-list */}
+              </div>
               <div className="mark-finished-row">
                 <span className="mark-finished-content">
-                  <span className="mark-finished-text">MARK LEVEL 1 AS FINISHED</span>
+                  <span className="mark-finished-text">MARK LEVEL {selectedLevel} AS FINISHED</span>
                   <img src="/images/CheckCircle.png" alt="Unfilled Checkmark" className="checkmark-img" />
                 </span>
               </div>
-            </div> {/* level-content */}
-
+            </div>
           </div>
         </div>
       </div>
