@@ -7,6 +7,7 @@
   flex-direction: column;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
+  gap: 8vh;
 }
 
 /* header  */
@@ -41,19 +42,23 @@
   width: auto;
 }
 
-/* join cards header */
-.join-cards-header {
-  padding: 2rem 22rem;
+/* subheader */
+.subheader-container {
+  /* padding: 0rem 22rem; */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.join-cards-header-text {
+.subheader-text {
   font-size: 4dvh;
   font-weight: 600;
   text-align: center;
+  width: 45%;
 }
+
+
 
 /* join cards */
 .join-cards-container {
@@ -107,4 +112,51 @@
   font-family: 'Poppins', sans-serif;
   background-color: #FF4545;
   color: white;
+}
+
+
+/* guarantee */
+.guarantee-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guarantee-subcontainer {
+  /* position: relative; */
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3vh;
+}
+
+.guarantee-header {
+  position: relative;
+  font-size: 6vh;
+  color: #1E1E1E;
+  font-weight: 600;
+  /* display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start; */
+}
+
+.guarantee-underline {
+  display: block;
+  position: absolute;
+  width: 68%;
+  /* align-self: flex-end; */
+  /* margin-top: .1rem; */
+  right: 0;
+  transform: translateY(-70%);
+}
+
+.guarantee-text {
+  font-size: 2.5vh;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #1e1e1e;
+  text-align: center;
 }
