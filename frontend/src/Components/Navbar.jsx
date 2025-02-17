@@ -32,7 +32,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
             <NavLink to="/lessons">LESSONS</NavLink>
           </li>
           <li>
-            <NavLink to="/glossary">RESOURCES</NavLink>
+            <NavLink to="/resources">RESOURCES</NavLink>
           </li>
           <li>
             <NavLink to="/contact">CONTACT</NavLink>
