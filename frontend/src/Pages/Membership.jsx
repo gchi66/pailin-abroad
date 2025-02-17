@@ -12,11 +12,13 @@ const Membership = () => {
       </header>
 
       {/* join cards header */}
-      <section className="join-cards-header">
-        <span className="join-cards-header-text">
+      <section className="subheader-container">
+        <span className="subheader-text">
           For the price of one private English lesson, get a whole month of Pailin Abroad!
         </span>
       </section>
+
+      <MembershipFeatures />
 
       {/* cards */}
       <section className="join-cards-container">
@@ -40,7 +42,20 @@ const Membership = () => {
         </div>
       </section>
 
-      <MembershipFeatures />
+      <section className="guarantee-container">
+        <div className="guarantee-subcontainer">
+          <span className="guarantee-header">
+            JOIN RISK FREE!
+            <svg className="guarantee-underline" viewBox="0 0 150 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20 Q75 12, 145 20" stroke="#FF4545" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span className="guarantee-text">
+            We’re confident you’ll love Pailin Abroad. However, if for any reason you’re not completely satisfied with your membership, we offer a 100% money-back guarantee within 60 days of your purchase.
+          </span>
+        </div>
+      </section>
+
     </div>
   );
 };

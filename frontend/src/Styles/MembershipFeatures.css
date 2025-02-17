@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh;
+  /* min-height: 90vh; */
   height: auto;
-  padding: 10vh 0;
+  padding: 0 0;
   flex-direction: row-reverse; /* Mirrors the layout */
 }
 
