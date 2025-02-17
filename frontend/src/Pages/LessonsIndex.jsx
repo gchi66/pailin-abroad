@@ -111,7 +111,7 @@ const LessonsIndex = () => {
           </div>
 
           {/* Level buttons */}
-          <div className="level-btns">
+          <div className={`level-btns-${selectedStage.replace(/\s+/g, "")}`}>
             {levels.map((lvl) => (
               <button
                 key={lvl}

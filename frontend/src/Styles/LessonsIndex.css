@@ -106,11 +106,32 @@
   background: #91CAFF;
 }
 
-.level-btns {
+.level-btns-Beginner {
   display: flex;
   justify-content: flex-start;
   gap: 2rem;
 }
+
+.level-btns-LowerIntermediate {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  transform: translateX(-10%)
+}
+
+.level-btns-UpperIntermediate {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  transform: translateX(10%);
+}
+
+.level-btns-Advanced {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+
 
 .level-btn {
   background: white;
