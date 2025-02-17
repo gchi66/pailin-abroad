@@ -9,6 +9,7 @@ import Glossary from "./Pages/Glossary";
 import Contact from "./Pages/Contact";
 import Modal from "./Components/Modal";
 import ProfilePage from "./Pages/ProfilePage";
+import Membership from "./Pages/Membership";
 import Footer from './Components/Footer'
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
@@ -56,6 +57,7 @@ function App() {
           <Route path="/lessons" element={<LessonsIndex />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/membership" element={<Membership />} />
           {/* Protect profile page */}
           <Route
             path="/profile"
