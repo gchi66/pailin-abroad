@@ -3,10 +3,11 @@
   min-height: 100vh;
   background-color: none;
   padding: 18vh 0 0 0;
-  display: flex;
-  flex-direction: column;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
+  display: flex;
+  flex-direction: column;
+  /* gap: 10vh; */
 }
 
 /* header  */
@@ -39,4 +40,57 @@
 .about-header-image {
   height: 35vh;
   width: auto;
+}
+
+
+/* Section buttons  */
+.section-btns-container {
+  display: flex;
+  justify-content: center;
+  gap: 4vw;
+  padding: 10vh 0vw 0vh 0vw;
+}
+
+.section-btn {
+  background: white;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
+  padding: 1rem 2rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e1e1e;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  min-width: 18vw;
+}
+
+.section-btn.active {
+  background: #91CAFF;
+}
+
+.section-btn:hover {
+  background: #91CAFF;
+}
+
+
+/* method  */
+.about-method-section {
+  display: none;
+}
+
+.about-method-section.visible {
+  display: block;
+}
+
+/* our team */
+
+.team-section {
+  display: none;
+}
+
+.team-section.visible {
+  display: block;
 }

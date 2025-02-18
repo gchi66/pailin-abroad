@@ -18,7 +18,7 @@ const MembershipFeatures = () => {
           </ul>
         </div>
       </div>
-      <div className="graphic-container">
+      <div className="membership-graphic-container">
         <img
           src="/images/stars-membership-features.webp"
           alt="Stars Graphic"

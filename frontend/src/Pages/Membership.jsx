@@ -18,7 +18,6 @@ const Membership = () => {
         </span>
       </section>
 
-      <MembershipFeatures />
 
       {/* cards */}
       <section className="join-cards-container">
@@ -42,6 +41,10 @@ const Membership = () => {
         </div>
       </section>
 
+      {/* features */}
+      <MembershipFeatures />
+
+      {/* guarantee */}
       <section className="guarantee-container">
         <div className="guarantee-subcontainer">
           <span className="guarantee-header">

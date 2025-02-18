@@ -45,7 +45,7 @@
   text-align: left; /* Changed from right */
 }
 
-.graphic-container {
+.membership-graphic-container {
   position: absolute;
   left: 10%; /* Moved to the left */
 }
