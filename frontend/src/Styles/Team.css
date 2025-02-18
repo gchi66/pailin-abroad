@@ -1,0 +1,67 @@
+.team-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5vh;
+  padding: 10vh 0vw;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+}
+
+.team-member-card {
+  background: white;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 1rem;
+  border-radius: 2.25rem;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
+  padding: 3rem 2.5rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e1e1e;
+  width: 65%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2vw;
+}
+
+.team-member-image {
+  width: 13rem;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.team-member-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+.member-name {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1E1E1E;
+}
+.member-location {
+  font-size: 1rem;
+  color: #1E1E1E;
+  font-style: italic;
+}
+
+.team-underline {
+  width: 35%; /* Ensure it spans the full width */
+  height: 0.2vh;
+  background-color: #FD6969;;
+  margin: 0.5vh 0;
+  border: none; /* Remove default border */
+}
+
+.description {
+  font-size: 1rem;
+  margin-top: 2vh;
+  color: #1e1e1e;
+  line-height: 1.5rem;
+}
