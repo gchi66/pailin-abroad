@@ -17,7 +17,7 @@ const teamMembers = [
       "I'm passionate about teaching English to non-native speakers and creating engaging, accessible resources on my ESL education website. I focus on quality, clarity, and inclusivity, offering free lessons and placement tests to guide learners on their journey. With thoughtful design and messaging."
   },
   {
-    name: "ROSE",
+    name: "LEEH",
     location: "Bangkok, Thailand",
     image: "/images/rose.webp",
     description:
