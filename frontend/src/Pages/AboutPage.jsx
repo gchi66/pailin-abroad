@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../Styles/AboutPage.css";
-import Method from "../Components/Method";
+import AboutMethod from "../Components/AboutMethod";
 import Team from "../Components/Team";
 
 const AboutPage = () => {
@@ -40,7 +40,7 @@ const AboutPage = () => {
         </button>
       </div>
       <div className={`about-method-section ${selectedSection === "The Method" ? "visible" : ""}`}>
-        <Method />
+        <AboutMethod />
       </div>
       <div className={`about-method-section ${selectedSection === "Our Team" ? "visible" : ""}`}>
         <Team />
