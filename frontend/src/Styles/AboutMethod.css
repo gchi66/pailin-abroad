@@ -22,8 +22,9 @@
   color: #1e1e1e;
   width: 65%;
   display: flex;
-  align-items: center;
+  align-items: top;
   gap: 2vw;
+  min-height: 10vh;
 }
 
 .method-card-left {
@@ -38,18 +39,18 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #1E1E1E;
+  line-height: 2rem;
 }
 
 .method-card-text {
   font-size: 1rem;
-  margin-top: 2vh;
   color: #1e1e1e;
   line-height: 1.5rem;
 }
 
 .method-card-left .method-card-header {
   text-align: right;
-  width: 50%;
+  width: 80%;
 }
 
 .method-card-left .method-card-text {
@@ -58,7 +59,7 @@
 
 .method-card-right .method-card-header {
   text-align: left;
-  width: 100%;
+  width: 200%;
 }
 
 .method-card-left .method-card-text {
@@ -66,9 +67,10 @@
 }
 
 .method-card-line {
-  width: 0.2vh;
-  height: 90%;
-  background-color: #FD6969;;
-  margin: 0.5vh 0;
+  width: 0.2vw;
+  background-color: #FD6969 !important;
   border: none;
+  align-self: stretch;
+  margin: -.2rem 0;
+  flex-shrink: 0;
 }
