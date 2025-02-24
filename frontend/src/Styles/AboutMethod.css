@@ -43,14 +43,14 @@
 }
 
 .method-card-text {
-  font-size: 1rem;
+  font-size: .95rem;
   color: #1e1e1e;
-  line-height: 1.5rem;
+  line-height: 1.55rem;
 }
 
 .method-card-left .method-card-header {
   text-align: right;
-  width: 80%;
+  width: 95%;
 }
 
 .method-card-left .method-card-text {
@@ -72,5 +72,15 @@
   border: none;
   align-self: stretch;
   margin: -.2rem 0;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
+}
+
+.pailin-and-header-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.im-pailin-pic {
+  width: 18vw;
+  height: auto;
 }
