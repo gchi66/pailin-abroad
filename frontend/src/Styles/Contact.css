@@ -7,6 +7,7 @@
   flex-direction: column;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
+
 }
 
 /* header  */
@@ -39,4 +40,88 @@
 .contact-header-image {
   height: 32vh;
   width: auto;
+}
+
+
+/* card  */
+.contact-elements-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5vh;
+  padding: 10vh 0vw;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+}
+
+.contact-card {
+  background: white;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 1rem;
+  border-radius: 2.25rem;
+  box-shadow: .2rem .2rem 0px #1E1E1E;
+  padding: 3rem 2.5rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e1e1e;
+  width: 65%;
+  display: flex;
+  align-items: flex-start;
+  gap: 2vw;
+  min-height: 10vh;
+}
+
+/* form */
+.form-container {
+  width: 100%;
+  max-width: 60%; /* adjust as desired */
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Form styling */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Submit button styling */
+.contact-form button {
+  background-color: #f95b67; /* a soft red/pink */
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start; /* keep button left-aligned */
+  transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+  background-color: #fa3a4c; /* slightly darker shade on hover */
+}
+
+
+
+/* Pailin image */
+.contact-pailin-image {
+  width: 20vw;
+  height: auto;
 }
