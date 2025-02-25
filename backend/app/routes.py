@@ -1,5 +1,9 @@
 from flask import Blueprint, request, jsonify
 from app.supabase_client import supabase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
+from app.config import Config
 
 routes = Blueprint("routes", __name__)
 
@@ -103,3 +107,40 @@ def delete_account():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route("/contact", methods=["POST"])
+def contact():
+    data = request.get_json()
+    name = data.get("name")
+    email = data.get("email")
+    message = data.get("message")
+
+    if not (name and email and message):
+        return jsonify({"message": "Missing required fields"}), 400
+
+    # Build the message
+    msg = MIMEMultipart()
+    msg["From"] = Config.EMAIL_ADDRESS
+    msg["To"] = Config.RECIPIENT_EMAIL
+    msg["Subject"] = "New Contact Form Submission"
+
+    body = f"""
+    You have a new message from your contact form:
+
+    Name: {name}
+    Email: {email}
+
+    Message:
+    {message}
+    """
+    msg.attach(MIMEText(body, "plain"))
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(Config.EMAIL_ADDRESS, Config.EMAIL_PASSWORD)
+            server.send_message(msg)
+        return jsonify({"message": "Email sent successfully!"}), 200
+    except Exception as e:
+        print("Error sending email:", e)
+        return jsonify({"message": "Failed to send email."}), 500
