@@ -1,0 +1,89 @@
+/* --- banner container --- */
+.lesson-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;         /* center items vertically */
+  gap: 2vw;                    /* reduced gap between text & image */
+  background: #E9F4FF;         /* banner blue-tint background */
+  border: 0.2rem solid #1E1E1E;
+  border-left: none;           /* remove left border */
+  padding: 10vh 6vw;           /* increased padding */
+  position: relative;
+  right: 25vw;                 /* push it left by 25vw */
+  width: 100%;                /* maintain original width */
+  box-sizing: border-box;     /* include padding in width calculation */
+  margin-left: 10vw;          /* keep left side 10vw from screen edge */
+  overflow: visible;          /* allow content to overflow */
+}
+
+/* --- left column --- */
+.banner-left {
+  max-width: 48ch;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  margin-left: 20vw;          /* push content further right */
+  position: relative;          /* add position relative for absolute positioning context */
+}
+
+.back-link {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+  color: #1E1E1E;
+  text-decoration: none;
+  position: absolute;          /* position absolutely */
+  top: -7vh;                  /* move up above padding */
+  left: -10vw;                /* align with left edge, accounting for banner-left margin */
+}
+
+.lesson-number {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1E1E1E;
+  letter-spacing: 0.03rem;
+}
+
+.lesson-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1E1E1E;
+}
+
+.lesson-subtitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1E1E1E;
+}
+
+.thai-line {
+  font-size: 1.8rem;
+  line-height: 1.4;
+  margin: 2vh 0 0;
+  color: #1E1E1E;
+}
+
+/* --- right column --- */
+.banner-right {
+  flex: 0 0 35vw;              /* increased fixed width */
+  display: flex;
+  justify-content: flex-end;   /* align to the right edge */
+  position: relative;
+  z-index: 1;                  /* ensure it stays above banner */
+  align-items: center;         /* center vertically */
+  height: 100%;               /* take full height */
+}
+
+.character-panel {
+  width: 35vw;                /* fixed width */
+  aspect-ratio: 1.6 / 1;       /* ~589 × 365 */
+  border-radius: 3.6rem;       /* corner radius 36 in Figma */
+  background: #99CEFF;         /* mid-blue placeholder */
+  border: 0.2rem solid #1E1E1E;
+  position: absolute;          /* position absolutely */
+  right: -30%;                /* overflow by 25% */
+  top: 50%;                   /* center vertically */
+  transform: translateY(-50%); /* center vertically */
+}

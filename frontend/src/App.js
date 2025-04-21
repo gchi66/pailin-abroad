@@ -5,6 +5,7 @@ import Navbar from './Components/Navbar';
 import Home from "./Pages/Home";
 import AboutPage from "./Pages/AboutPage";
 import LessonsIndex from "./Pages/LessonsIndex";
+import Lesson from "./Pages/Lesson";
 import Resources from "./Pages/Resources";
 import Contact from "./Pages/Contact";
 import Modal from "./Components/Modal";
@@ -55,6 +56,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/lessons" element={<LessonsIndex />} />
+          <Route path="/lesson/:id" element={<Lesson />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/membership" element={<Membership />} />

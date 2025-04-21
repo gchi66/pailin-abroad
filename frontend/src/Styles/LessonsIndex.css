@@ -2,9 +2,13 @@
   position: relative;
   min-height: 100vh;
   background-color: none;
-  padding: 18vh 0 0 0;
+  padding: 30vh 0 0 0;
   display: flex;
   flex-direction: column;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+  z-index: 1;
+  margin-top: -18vh; /* Counteract the padding to prevent double spacing */
 }
 
 .page-header {
@@ -294,6 +298,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  text-decoration: none;
+  color: inherit;
 }
 
 .lesson-item:hover {
@@ -341,7 +347,7 @@
 .lesson-name-th, .lesson-desc-th {
   font-size: 0.9rem;
   font-weight: normal;
-  color: #666;
+  color: #1e1e1e;
 }
 
 
