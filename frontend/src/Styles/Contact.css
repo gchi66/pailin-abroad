@@ -84,11 +84,15 @@
 .contact-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .contact-form label {
   margin-bottom: 0.5rem;
   font-weight: 600;
+  text-align: left;
+  width: 100%;
+  display: block;
 }
 
 .contact-form input[type="text"],
@@ -97,25 +101,34 @@
   margin-bottom: 1rem;
   padding: 0.75rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 0.8rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Submit button styling */
 .contact-form button {
-  background-color: #f95b67; /* a soft red/pink */
+  background-color: #FF4545;
   color: #fff;
   font-size: 1rem;
-  padding: 0.75rem 1.25rem;
-  border: none;
-  border-radius: 4px;
+  padding: 0.5rem 2rem;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 2.6rem;
   cursor: pointer;
-  align-self: flex-start; /* keep button left-aligned */
-  transition: background-color 0.3s ease;
+  width: 50%;
+  margin-top: 1.5rem;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0.2rem 0.2rem 0px #1E1E1E;
 }
 
 .contact-form button:hover {
-  background-color: #fa3a4c; /* slightly darker shade on hover */
+  background-color: #E63E3E;
+  transform: translate(0.1rem, 0.1rem);
+  box-shadow: 0.1rem 0.1rem 0px #1E1E1E;
 }
 
 

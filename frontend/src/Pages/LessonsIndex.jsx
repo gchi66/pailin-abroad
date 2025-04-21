@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import supabaseClient from "../supabaseClient";
+import { Link } from "react-router-dom";
 import "../Styles/LessonsIndex.css";
 
 const LessonsIndex = () => {
@@ -156,7 +157,7 @@ const LessonsIndex = () => {
             <div className="level-content">
               <div className="lesson-list">
                 {lessons.map((lesson) => (
-                  <div key={lesson.id} className="lesson-item">
+                  <Link to={`/lesson/${lesson.id}`} key={lesson.id} className="lesson-item">
                     <div className="lesson-item-left">
                       {lesson.lesson_order === Math.max(...lessons.map(l => l.lesson_order)) ? (
                         <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
@@ -175,7 +176,7 @@ const LessonsIndex = () => {
                     <div className="lesson-item-right">
                       <img src="/images/CheckCircle.png" alt="Unfilled Checkmark" className="checkmark-img" />
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
               <div className="mark-finished-row">
