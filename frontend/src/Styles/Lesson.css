@@ -2,9 +2,10 @@
   position: relative;
   min-height: 100vh;
   background-color: none;
-  padding-top: 15vh;
+  padding-top: 18vh;
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
   margin-top: -18vh;

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import "../Styles/Lesson.css";
 import LessonHeader from "../Components/LessonHeader";
+import AudioBar from "../Components/AudioBar";
 import supabaseClient from "../supabaseClient";
 
 export default function Lesson() {
@@ -36,7 +37,7 @@ export default function Lesson() {
   return (
     <main>
       <div className="lesson-page-container">
-        <LessonHeader 
+        <LessonHeader
           level={lesson.level}
           lessonOrder={lesson.lesson_order}
           title={lesson.title}
@@ -45,6 +46,10 @@ export default function Lesson() {
           subtitleTh={lesson.subtitle_th}
         />
         {/* …rest of the lesson body goes here… */}
+        <AudioBar
+          audioSrc="/4.7_conversation.mp3"
+          description={lesson.backstory}
+        />
       </div>
     </main>
   );

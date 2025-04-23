@@ -18,7 +18,7 @@
 
 /* --- left column --- */
 .banner-left {
-  max-width: 48ch;
+  max-width: 60ch;
   display: flex;
   flex-direction: column;
   gap: 2vh;
