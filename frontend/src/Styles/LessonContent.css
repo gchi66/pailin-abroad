@@ -1,0 +1,90 @@
+.lc-card {
+  background: #ffffff;
+  border: 0.2rem solid #1e1e1e;
+  border-radius: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 60vh;
+}
+
+/* top bar */
+.lc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem;
+  border-bottom: 0.2rem solid #1e1e1e;
+}
+
+.lc-head-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Language Toggle */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border: 0.2rem solid #1e1e1e;
+  border-radius: 0.8rem;
+  padding: 0.2rem;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.lang-btn.active {
+  background: #1e1e1e;
+  color: #ffffff;
+}
+
+.lang-separator {
+  color: #1e1e1e;
+  font-weight: 400;
+}
+
+
+/* head */
+.lc-head-title {
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.lc-head-title-th {
+  font-size: 1.4rem;
+  margin-left: 0.8rem;
+  color: #6b7280;
+}
+
+/* comprehension questions */
+.comp-list {
+  list-style-type: decimal;
+  margin: 0 0 2rem 1.6rem;
+  padding: .2rem 2rem;
+  color: #1e1e1e;
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+
+.comp-list-item {
+  margin-bottom: 1.2rem;
+}
+
+
+/* body that scrolls if overflow */
+.lc-body {
+  padding: 2rem 2.4rem;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  overflow-y: auto;
+}

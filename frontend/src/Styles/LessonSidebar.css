@@ -1,0 +1,48 @@
+.ls-sidebar {
+  background: #ffffff;
+  border: 0.2rem solid #1e1e1e;
+  border-radius: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ls-header {
+  font-weight: 700;
+  font-size: 1.4rem;
+  padding: 1.6rem;
+  border-bottom: 0.2rem solid #1e1e1e;
+}
+
+.ls-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.6rem;
+  cursor: pointer;
+  border-bottom: 0.1rem solid #e5e7eb;
+  font-size: 1.4rem;
+}
+
+.ls-row:hover {
+  background: #f5f9ff;
+}
+
+.ls-active {
+  background: #e9f4ff;
+  font-weight: 600;
+}
+
+.ls-row-label {
+  pointer-events: none;
+}
+
+.ls-row-check {
+  color: #1e1e1e;
+}

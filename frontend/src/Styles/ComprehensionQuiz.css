@@ -1,0 +1,60 @@
+.cq-questions {
+  list-style-type: decimal;
+  margin: 0 0 2rem 1.6rem;  /* indent the numbers */
+  padding: 2rem;
+}
+
+/* each question gets some breathing room */
+.cq-question-item {
+  margin-bottom: 2rem;
+}
+
+/* question prompt styling */
+.cq-prompt {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* options container */
+.cq-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* each option: letter + text */
+.cq-option-item {
+  display: flex;
+  align-items: center;
+}
+
+/* the A/B/C button */
+.cq-letter {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 0.1rem solid #1e1e1e;
+  border-radius: 50%;
+  background: transparent;
+  color: #1e1e1e;
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+/* grey when selected */
+.cq-letter.selected {
+  background: #6b7280;
+  color: white;
+}
+
+/* option text */
+.cq-option-text {
+  font-size: 1.6rem;
+  line-height: 1.4;
+}

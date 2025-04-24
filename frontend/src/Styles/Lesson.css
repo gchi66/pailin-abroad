@@ -14,3 +14,11 @@
 .lesson-banner {
   margin-top: 18vh;
 }
+
+.lesson-body {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  padding: 0 4rem;
+  align-items: start;
+}
