@@ -37,31 +37,30 @@ const Footer = () => {
           <div className="footer-column follow-us">
             <h3 className="footer-title">FOLLOW US</h3>
             <div className="social-icons">
-              {/* Replace # with actual links as needed */}
-              <a href="#" className="social-icon-link">
+              <button className="social-icon-link">
                 <img
                   src="images/instagram-icon-black.png"
                   alt="Instagram"
                 />
-              </a>
-              <a href="#" className="social-icon-link">
+              </button>
+              <button className="social-icon-link">
                 <img
                   src="images/youtube-icon-black.png"
                   alt="YouTube"
                 />
-              </a>
-              <a href="#" className="social-icon-link">
+              </button>
+              <button className="social-icon-link">
                 <img
                   src="images/tiktok-icon-black.png"
                   alt="TikTok"
                 />
-              </a>
-              <a href="#" className="social-icon-link">
+              </button>
+              <button className="social-icon-link">
                 <img
                   src="images/facebook-icon-black.png"
                   alt="Facebook"
                 />
-              </a>
+              </button>
             </div>
           </div>
         </div>
