@@ -1,0 +1,137 @@
+[
+  {
+  "lesson": {
+    "external_id": "3.3",
+    "stage": "Beginner",
+    "level": 3,
+    "lesson_order": 3,
+    "title": "Can I see your IDs, please?",
+    "subtitle": "How to use the modal verb ‘can’",
+    "focus": "How to use the modal verb ‘can’",
+    "backstory": "Pailin and her classmate Enzo are about to enter Jameson's Pub, a bar near UCLA."
+  },
+  "transcript": [
+    { "sort_order": 1, "speaker": "Host",   "line_text": "Hi guys, can I see your IDs, please?" },
+    { "sort_order": 2, "speaker": "Pailin", "line_text": "Sure, here you go." },
+    { "sort_order": 3, "speaker": "Host",   "line_text": "Thanks. Would you like to sit inside or outside?" },
+    { "sort_order": 4, "speaker": "Pailin", "line_text": "Can we sit outside? It’s a bit loud inside." },
+    { "sort_order": 5, "speaker": "Host",   "line_text": "Sure, you can sit at the table over there in the corner." },
+    { "sort_order": 6, "speaker": "Server", "line_text": "Hi, what can I get for you tonight?" },
+    { "sort_order": 7, "speaker": "Pailin", "line_text": "Umm, do you want any appetizers, Enzo?" },
+    { "sort_order": 8, "speaker": "Enzo",   "line_text": "I don’t have my glasses, so I can’t read the menu. But I am a little hungry." },
+    { "sort_order": 9, "speaker": "Pailin", "line_text": "Do you want to share the chips and salsa?" },
+    { "sort_order": 10, "speaker": "Enzo",  "line_text": "I can’t eat the salsa. I’m allergic to tomatoes. But I can snack on the chips." },
+    { "sort_order": 11, "speaker": "Pailin", "line_text": "Okay! Can we have the chips and salsa and two Heinekens, please? Thank you!" }
+  ],
+  "comprehension_questions": [
+    {
+      "sort_order": 1,
+      "prompt": "Why does Pailin want to sit outside?",
+      "options": [
+        "A. It's loud inside.",
+        "B. It's crowded inside.",
+        "C. It's hot inside."
+      ],
+      "answer_key": ["A"]
+    },
+    {
+      "sort_order": 2,
+      "prompt": "What will Pailin and Enzo order? (select all that apply)",
+      "options": [
+        "A. French fries",
+        "B. Chips",
+        "C. Salsa",
+        "D. One Heineken beer",
+        "E. Two Heineken beers"
+      ],
+      "answer_key": ["B", "E"]
+    },
+    {
+      "sort_order": 3,
+      "prompt": "Why can't Enzo eat the salsa?",
+      "options": [
+        "A. He's allergic to tomatoes.",
+        "B. He doesn't like tomatoes.",
+        "C. He's not hungry."
+      ],
+      "answer_key": ["A"]
+    }
+  ],
+  "sections": [
+    {
+      "type": "apply",
+      "sort_order": 4,
+      "content_md": "In the conversation, Pailin orders drinks and food with the server. Imagine you're ordering food at a Thai restaurant. Ask for a dish in the same way that Pailin ordered her food."
+    },
+    {
+      "type": "understand",
+      "sort_order": 5,
+      "content_md": "### Lesson focus: How to use the modal verb ‘can’  \n\nYou will use the verb **can** often in English. It has simple grammar and has two main uses: to show **permission** and **ability**. These lines from the conversation demonstrate both:\n\n- **You can** sit at the table over there in the corner.  \n  _Permission: The host is allowing Pailin and Enzo to sit at that specific table._\n\n- **I can** snack on the chips.  \n  _Ability: Enzo is unable to eat the salsa because he’s allergic, but he’s able to eat the chips._\n\nWhile Thai might use different words to demonstrate permission and ability, English uses **can** for both. The best part? The grammar is simple! The structure stays the same no matter what the subject of the sentence is.\n\n```\n(Subject) can (verb)\n```\n\n**Examples showing permission:**\n- You can borrow my pen.\n- We can park our car on the street.\n- You can bring a guest to the party.\n\n**Examples showing ability:**\n- Chloe can speak three languages.\n- My dad can sing really well.\n- I can run a mile in 6 minutes.\n\n---\n\n## Negative sentences\n\nThe following negative sentences from the conversation demonstrate ability, or rather lack of ability, by using the word **can’t**:\n\n> I don’t have my glasses, so **I can’t read** the menu.  \n> I **can’t eat** the salsa. I’m allergic to tomatoes.\n\nEnzo is unable to read the menu without his glasses, and he’s unable to eat salsa because he’s allergic to tomatoes.\n\nThe structure of negative sentences is also simple:\n```\n(Subject) can’t (verb)\n```\n**‘Can’t’** is a contraction of **cannot**. Because **can** and **can’t** sound so similar, they are easy words to misunderstand, even for native English speakers! Don’t be afraid to ask someone for clarification if you’re unsure whether they said **can** or **can’t**. While you can say the full word **cannot** if you’re worried about being misunderstood, it’s still much more common to say **can’t**.\n\n**Examples showing lack of permission:**\n- We can’t take photos in the museum.\n- You can’t park your car here. You’ll get a ticket.\n- I can’t use my phone at work. My boss will get angry.\n\n**Examples showing lack of ability:**\n- I can’t speak Spanish.\n- He can’t hear anything. It’s too noisy.\n- Emily can’t focus on her work. She’s distracted.\n\n---\n\n## Making questions\n\nTake a look at these questions from the conversation that use **can**:\n\n- Can I see your IDs, please?\n- Can we sit outside? It’s a bit loud inside.\n- Can we have the chips and salsa and two Heinekens, please?\n\nThese questions all demonstrate permission. The host is requesting permission to see their IDs. Pailin is asking if they’re allowed to sit outside. Pailin is requesting chips and salsa and two beers from the waiter.\n\nLook at this question from the conversation:\n\n> What can I get for you tonight?\n\nThis one is a little different. While it hints at ability, it’s really an offer of service and is a common phrase used by servers for taking orders.\n\nTo form questions, simply switch the position of the subject and **can**:\n\n```\nCan (subject) (verb)?\n```\n\n**Examples requesting permission:**\n- Can I use your phone?\n- Can we sit here?\n- Can I try on these shoes?\n\n**Examples asking about ability:**\n- Can you swim?\n- Can she speak Korean?\n- Can you finish the project by Friday?\n\n---\n\n## ‘Can’ is a modal verb\n\n‘Can’ is a type of verb called a **modal verb**, which you can think of as a ‘helping’ verb. Modal verbs ‘help’ the main verb of a sentence by adding extra meaning or context. For example:\n\n> I can snack on the chips.  \n> **Can** = modal (helping) verb  \n> **Snack** = main verb\n\nWithout the modal verb **can**, the sentence ‘I snack on chips’ would imply a regular activity or routine (present simple). **Can** alters the meaning by suggesting ability or permission.\n\nThe verb **will** is another modal verb you learned about in Lesson 3.12. Other common modal verbs include:\n- could\n- should\n- would\n- might\n- must\n\nThe great thing about modal verbs is their grammar is simple: modals never change form based on the subject."
+    },
+    {
+      "type": "extra_tip",
+      "sort_order": 6,
+      "content_md": "**Short-form answers** keep conversations flowing. Use **can** or **can’t** directly:\n\n> A: Can you play the guitar?  \n> B: Yeah, **I can**.\n\n> A: Can I park here?  \n> B: No, **you can’t**.\n\n> A: Can Jack read Japanese?  \n> B: No, **he can’t**."
+    },
+    {
+      "type": "common_mistake",
+      "sort_order": 7,
+      "content_md": "**Omitting the subject** is a common error in short-form ‘can’ answers:\n\n> A: Can you wash the dishes?  \n> B: Yes, can. _(✗)_  \n> B: Yes, **I can**. _(✓)_\n\n> A: Can you give me a discount, please?  \n> B: No, cannot. _(✗)_  \n> B: No, **I can’t**. _(✓)_\n\nAlso avoid saying simply ‘Can do.’ It lacks a subject:\n\n> A: Can you help me carry these boxes?  \n> B: Yes, can do. _(✗)_  \n> B: Yes, **I can**. _(✓)_"
+    },
+    {
+      "type": "phrases_verbs",
+      "sort_order": 8,
+      "items": [
+        {
+          "phrase": "Here you go",
+          "translation_th": "นี่ค่ะ/ครับ",
+          "notes": "said when you are passing something to someone"
+        },
+        {
+          "phrase": "Umm",
+          "translation_th": "เอิ่ม/อืม",
+          "notes": "a thinking sound"
+        },
+        {
+          "phrase": "Allergic to",
+          "translation_th": "แพ้ (อาหาร/สารบางชนิด)"
+        },
+        {
+          "phrase": "Snack on",
+          "translation_th": "ทานเล่น"
+        }
+      ]
+    },
+    {
+      "type": "culture_note",
+      "sort_order": 9,
+      "content_md": "**Legal drinking age**\n\nThe legal drinking age in the US is **21** and strictly enforced. Businesses like grocery stores, restaurants, bars, and clubs will always ask to see an ID to avoid penalties for selling alcohol to minors, even when the customer is clearly over 21.\n\nAlthough the legal drinking age is 21, the age of legal adulthood is 18. This means that at 18, you can vote, join the military, get married, and move out of your parents’ home, but you can’t buy alcohol or cigarettes until 21."
+    },
+    {
+      "type": "practice",
+      "sort_order": 10,
+      "content_md": "#### Practice Making Questions\nChange the following sentences into questions beginning with **can**:\n\n1. She can speak Russian.\n2. Your brother can come with us.\n3. You can play the piano.\n4. Emily can go camping.\n5. I can have a piece of gum.\n\n#### Practice Affirmative & Negative\nAnswer the following questions with a full sentence, using either **can** or **can’t** in your answer depending on your own ability. For example:\n\n> Q: Can you drive a motorbike?  \n> A: No, I can’t drive a motorbike.\n\n1. Can you speak Japanese?\n2. Can you drive a car?\n3. Can you swim?\n4. Can you run fast?\n5. Can you play an instrument?\n\n#### Correct or Incorrect\nDetermine if the grammar is correct or not. If incorrect, write the correct sentence.\n\n1. He can't driving a car.\n2. Chloe's mom can speak three languages.\n3. Can I borrow your pen?\n4. I can't helping you tonight.\n5. We can see the movie tomorrow.\n\n#### Open-Ended Practice\nWrite 4 things you **can** do:\n1. \n2. \n3. \n4. \n\nWrite 4 things you **can’t** do:\n1. \n2. \n3. \n4."
+    },
+    {
+      "type": "pinned_comment",
+      "sort_order": 11,
+      "content_md": "Can you cook well? What dishes can you cook well?"
+    }
+  ],
+  "tags": [
+    "modal verbs",
+    "can",
+    "cannot",
+    "can’t",
+    "ability",
+    "permission",
+    "drinking",
+    "bar",
+    "restaurant",
+    "waiter",
+    "server",
+    "ordering food",
+    "ordering drinks"
+  ]
+  }
+  ]
