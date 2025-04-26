@@ -1,0 +1,40 @@
+/* container */
+.understand-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* details / summary styling */
+.understand-item {
+  border: 0.1rem solid #e5e7eb;
+  border-radius: 0.6rem;
+  background: #fafafa;
+  padding: 0.4rem 1rem;
+}
+
+.understand-summary {
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;          /* remove default arrow for Chrome */
+}
+
+.understand-summary::-webkit-details-marker {
+  display: none;             /* …and Safari */
+}
+
+/* add your own arrow indicator */
+.understand-summary::after {
+  content: "▸";
+  float: right;
+  transition: transform 0.2s;
+}
+.understand-item[open] .understand-summary::after {
+  transform: rotate(90deg);
+}
+
+/* markdown body */
+.understand-item > :not(summary) {
+  padding-top: 0.6rem;
+}

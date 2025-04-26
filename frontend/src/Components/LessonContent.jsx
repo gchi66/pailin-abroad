@@ -1,8 +1,10 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import LanguageToggle from "./LanguageToggle";
-import "../Styles/LessonContent.css";
 import ComprehensionQuiz from "./ComprehensionQuiz";
+import ApplySection from "./ApplySection";
+import UnderstandSection from "./UnderstandSection";
+import "../Styles/LessonContent.css";
 
 export default function LessonContent({
   sections = [],
@@ -12,7 +14,9 @@ export default function LessonContent({
   uiLang = "en",
   setUiLang,
 }) {
-  // 1) Comprehension view
+  /* ===============================================================
+     1) Comprehension view
+  =============================================================== */
   if (activeId === "comprehension") {
     return (
       <article className="lc-card">
@@ -24,12 +28,15 @@ export default function LessonContent({
             <LanguageToggle language={uiLang} setLanguage={setUiLang} />
           </div>
         </header>
+
         <ComprehensionQuiz questions={questions} uiLang={uiLang} />
       </article>
     );
   }
 
-  // 2) Transcript view
+  /* ===============================================================
+     2) Transcript view
+  =============================================================== */
   if (activeId === "transcript") {
     return (
       <article className="lc-card">
@@ -41,6 +48,7 @@ export default function LessonContent({
             <LanguageToggle language={uiLang} setLanguage={setUiLang} />
           </div>
         </header>
+
         <ul className="transcript-list">
           {transcript.map((line) => (
             <li key={line.id}>
@@ -57,17 +65,57 @@ export default function LessonContent({
     );
   }
 
-  // 3) Regular lesson section
+  /* ===============================================================
+     3) Regular lesson sections (markdown or apply)
+  =============================================================== */
   const section = sections.find((s) => s.id === activeId);
   if (!section) {
     return <article className="lc-card">Select a section</article>;
   }
 
+  /* choose Thai or English copy */
   const contentText =
     uiLang === "th" && section.content_th
       ? section.content_th
       : section.content;
 
+  /* ------------------ APPLY SECTION ------------------ */
+  if (section.type === "apply") {
+    return (
+      <article className="lc-card">
+        <header className="lc-head">
+          <div className="lc-head-left">
+            <span className="lc-head-title">APPLY</span>
+          </div>
+          <div className="lc-head-right">
+            <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+          </div>
+        </header>
+
+        {/* custom component with textarea + submit button */}
+        <ApplySection content={contentText} uiLang={uiLang} />
+      </article>
+    );
+  }
+    /* ------------------ UNDERSTAND SECTION ------------------ */
+  if (section.type === "understand") {
+    return (
+      <article className="lc-card">
+        <header className="lc-head">
+          <div className="lc-head-left">
+            <span className="lc-head-title">UNDERSTAND</span>
+          </div>
+          <div className="lc-head-right">
+            <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+          </div>
+        </header>
+
+        <UnderstandSection markdown={contentText} />
+      </article>
+    );
+  }
+
+  /* ------------------ DEFAULT MARKDOWN SECTION -------- */
   return (
     <article className="lc-card">
       <header className="lc-head">
