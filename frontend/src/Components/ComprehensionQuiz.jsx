@@ -110,7 +110,6 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en" }) {
         type="button"
         className="cq-check-btn"
         onClick={checkAnswers}
-        disabled={checked}
       >
         Check answers
       </button>

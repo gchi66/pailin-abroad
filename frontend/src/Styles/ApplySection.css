@@ -1,0 +1,43 @@
+.apply-section {
+  margin: 2rem 0;
+  padding: 2rem;
+  border: 0.1rem solid #e5e7eb;   /* light grey outline */
+  border-radius: 0.6rem;
+  background: #fafafa;
+}
+
+.apply-prompt {
+  font-size: 1.6rem;
+  line-height: 1.5;
+  margin-bottom: 1.4rem;
+}
+
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.apply-input {
+  padding: 0.8rem;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  border: 0.1rem solid #1e1e1e;
+  border-radius: 0.4rem;
+  resize: vertical;               /* user can expand if they wish */
+}
+
+.apply-submit {
+  align-self: flex-start;         /* left-align like other buttons */
+  padding: 0.6rem 1.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border: 0.1rem solid #1e1e1e;
+  background: #f5f5f5;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.apply-submit:hover {
+  background: #e5e7eb;
+}

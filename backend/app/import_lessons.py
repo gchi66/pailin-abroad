@@ -122,26 +122,47 @@ def upsert_phrases(lesson_id, sections, dry_run=False):
     for sec in sections:
         if sec["type"] != "phrases_verbs":
             continue
+
         for idx, item in enumerate(sec.get("items", []), start=1):
             phrase_record = {
-                "phrase": item.get("phrase"),
-                "translation": item.get("translation_th"),
-                "notes": item.get("notes"),
-                "phrase_th": item.get("phrase_th"),
-                "notes_th": item.get("notes_th"),
+                "phrase":       item.get("phrase"),
+                "translation":  item.get("translation_th"),
+                "notes":        item.get("notes"),
+                "phrase_th":    item.get("phrase_th"),
+                "notes_th":     item.get("notes_th"),
             }
+
             if dry_run:
-                print(f"[DRY RUN] Upsert phrase: {phrase_record}")
+                print("[DRY RUN] Upsert phrase:", phrase_record)
                 phrase_id = None
             else:
-                pr = supabase.table("phrases") \
-                    .upsert(phrase_record) \
+                res = (
+                    supabase.table("phrases")
+                    .upsert(
+                        phrase_record,
+                        on_conflict="phrase",            # unique column
+                        returning="representation"       # ask for the row back
+                    )
                     .execute()
-                phrase_id = pr.data[0]["id"]
+                )
+
+                # If the row already existed, fetch its id
+                if res.data:
+                    phrase_id = res.data[0]["id"]
+                else:
+                    phrase_id = (
+                        supabase.table("phrases")
+                        .select("id")
+                        .eq("phrase", phrase_record["phrase"])
+                        .single()
+                        .execute()
+                        .data["id"]
+                    )
 
             link = {"lesson_id": lesson_id, "phrase_id": phrase_id, "sort_order": idx}
+
             if dry_run:
-                print(f"[DRY RUN] Upsert lesson_phrases: {link}")
+                print("[DRY RUN] Upsert lesson_phrases:", link)
             else:
                 supabase.table("lesson_phrases") \
                     .upsert(link, on_conflict="lesson_id,phrase_id") \

@@ -11,7 +11,7 @@ import "../Styles/AudioBar.css";
 export default function AudioBar({
   audioSrc = "/audio/sample.mp3",
   description = "",
-  tipsOnClick = () => alert("TODO: open tips modal"),
+  // tipsOnClick = () => alert("TODO: open tips modal"),
 }) {
   const audio = useRef(null);
 
@@ -124,12 +124,13 @@ export default function AudioBar({
           {rate}x
         </button>
       </div>
-
-      {/* listening tips */}
+{/*
+      listening tips
       <button className="tips-row" onClick={tipsOnClick}>
         <span className="tips-icon">💡</span>
         <span className="tips-text">LISTENING TIPS</span>
-      </button>
+      </button> */}
+
     </section>
   );
 }
