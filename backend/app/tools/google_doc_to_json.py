@@ -190,28 +190,79 @@ def parse_comprehension(lines: List[str]) -> List[Dict]:
 
     return qs
 
-
 def build_section(section_name: str, lines: List[str], order: int) -> Dict:
+    cleaned_lines = []
+    i = 0
+    while i < len(lines):
+        line = lines[i].rstrip()  # Only strip trailing whitespace
+
+        # Skip separator lines but preserve other whitespace
+        if re.match(r'^_{5,}$', line.strip()):
+            i += 1
+            continue
+
+        # Robust heading detection
+        is_heading = False
+        raw_line = line.strip()
+
+        # Case 1: Standard ALL-CAPS headings
+        if (raw_line.upper() == raw_line and
+            any(c.isalpha() for c in raw_line) and
+            2 <= len(raw_line.split()) <= 5 and
+            not raw_line.startswith(('* ', '- ', '> '))):
+            is_heading = True
+
+        # Case 2: Special pattern headings (like "A VS. AN")
+        elif (re.match(r'^[A-Z][A-Z0-9\s\'"&.\-()]+$', raw_line) and
+              len(raw_line) <= 50 and
+              len(raw_line.split()) <= 5 and
+              not raw_line.endswith('.')):
+            is_heading = True
+
+        # Case 3: Lesson Focus special case
+        elif raw_line.upper() in ("LESSON FOCUS", "FOCUS"):
+            is_heading = True
+
+        if is_heading:
+            # Look ahead for blank line
+            if i+1 < len(lines) and not lines[i+1].strip():
+                i += 1  # Skip the blank line after heading
+            cleaned_lines.append(f"## {raw_line}")
+            i += 1
+        else:
+            # Preserve original line exactly (with leading whitespace)
+            cleaned_lines.append(line)
+            i += 1
+
+    # Join with proper newlines and ensure exactly two newlines between sections
+    content_md = '\n'.join(cleaned_lines)
+    content_md = re.sub(r'\n{3,}', '\n\n', content_md)  # Normalize newlines
+
+    # Handle special section types
     if section_name == "PHRASES & VERBS":
         items = []
-        for ln in lines:
+        for ln in cleaned_lines:
             if "=" not in ln:
                 continue
             phrase, rest = ln.split("=", 1)
             translation, *notes = rest.split("(")
-            item = {"phrase": phrase.strip(), "translation_th": translation.strip()}
+            item = {
+                "phrase": phrase.strip(),
+                "translation_th": translation.strip()
+            }
             if notes:
                 item["notes"] = notes[0].rstrip(") ").strip()
             items.append(item)
-        return {"type": "phrases_verbs", "sort_order": order, "items": items}
+        return {
+            "type": "phrases_verbs",
+            "sort_order": order,
+            "items": items
+        }
 
-    mapped = SECTION_TYPE_MAP.get(section_name)
-    if not mapped:
-        return {}
     return {
-        "type": mapped,
+        "type": SECTION_TYPE_MAP.get(section_name, section_name.lower()),
         "sort_order": order,
-        "content_md": "\n".join(lines).strip(),
+        "content_md": content_md.strip()
     }
 
 

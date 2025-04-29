@@ -2,27 +2,28 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import "../Styles/UnderstandSection.css";
 
-/**
- * Splits a single markdown string into an array of {title, bodyMarkdown}
- * using H2/H3/etc. headings as boundaries.
- */
-function splitByHeadings(md) {
-  const lines = md.split("\n");
-  const parts = [];
-  let current = { title: "Overview", body: [] };   // fallback section
+function splitByHeadings(markdown) {
+  const sections = [];
+  let currentSection = null;
 
-  lines.forEach((line) => {
-    const headingMatch = line.match(/^(#{2,6})\s+(.*)/);   // ## Heading
-    if (headingMatch) {
-      // push the previous chunk before starting a new one
-      if (current.body.length) parts.push(current);
-      current = { title: headingMatch[2].trim(), body: [] };
-    } else {
-      current.body.push(line);
+  // Split by double newlines to preserve paragraphs
+  const paragraphs = markdown.split(/\n\s*\n/);
+
+  paragraphs.forEach(paragraph => {
+    if (paragraph.startsWith('## ')) {
+      if (currentSection) sections.push(currentSection);
+      currentSection = {
+        title: paragraph.replace('## ', '').trim(),
+        body: []
+      };
+    } else if (currentSection) {
+      // Preserve all Markdown formatting in body
+      currentSection.body.push(paragraph);
     }
   });
-  if (current.body.length) parts.push(current);
-  return parts;
+
+  if (currentSection) sections.push(currentSection);
+  return sections;
 }
 
 export default function UnderstandSection({ markdown = "" }) {
@@ -33,9 +34,13 @@ export default function UnderstandSection({ markdown = "" }) {
       {sections.map(({ title, body }, idx) => (
         <details key={idx} className="understand-item" open={idx === 0}>
           <summary className="understand-summary">{title}</summary>
-          <ReactMarkdown>
-            {body.join("\n")}
-          </ReactMarkdown>
+          <div className="markdown-content">
+            {body.map((paragraph, i) => (
+              <ReactMarkdown key={i}>
+                {paragraph}
+              </ReactMarkdown>
+            ))}
+          </div>
         </details>
       ))}
     </div>
