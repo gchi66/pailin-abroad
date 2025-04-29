@@ -36,9 +36,9 @@ from typing import Dict, List, Tuple
 
 # ───────────────────────────── regex helpers
 HEADING_RE = re.compile(r"^([A-Z][A-Z &']+)(?::\s*(.*))?$", re.I)
-QUESTION_NUM_RE = re.compile(r"^(\d+)\.\s+(.*)")
-OPTION_RE = re.compile(r"^([A-Z])\.\s+(.*)")
-ANSWER_KEY_RE = re.compile(r"^Answer key:\s*(.*)", re.I)
+QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
+OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
+ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
 LESSON_ID_RE = re.compile(r"^Lesson\s+(\d+)\.(\d+)", re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
 
@@ -135,20 +135,24 @@ def parse_conversation(lines: List[str]) -> List[Dict]:
         )
     return transcript
 
-
 def parse_comprehension(lines: List[str]) -> List[Dict]:
     qs = []
     i = 0
     while i < len(lines):
+        # 1) Find question prompt
         m_q = QUESTION_NUM_RE.match(lines[i])
         if not m_q:
             i += 1
             continue
-        prompt = m_q.group(2).strip()
+        prompt = m_q.group(1).strip()
         i += 1
+
+        # 2) Jump to "Options"
         while i < len(lines) and not lines[i].strip().lower().startswith("options"):
             i += 1
-        i += 1
+        i += 1  # skip the "Options" line
+
+        # 3) Collect options
         opts = []
         while i < len(lines):
             m_opt = OPTION_RE.match(lines[i])
@@ -156,20 +160,34 @@ def parse_comprehension(lines: List[str]) -> List[Dict]:
                 break
             opts.append(f"{m_opt.group(1)}. {m_opt.group(2).strip()}")
             i += 1
+
+        # 4) Skip any blank lines, then look for the "Answer key" header
         ans = []
+        # ← insert this blank‐line skipper:
+        while i < len(lines) and not lines[i].strip():
+            i += 1
+
         if i < len(lines):
             m_ans = ANSWER_KEY_RE.match(lines[i])
             if m_ans:
-                ans = [a.strip() for a in re.split(r",\s*", m_ans.group(1)) if a.strip()]
-            i += 1
-        qs.append(
-            {
-                "sort_order": len(qs) + 1,
-                "prompt": prompt,
-                "options": opts,
-                "answer_key": ans,
-            }
-        )
+                key_text = m_ans.group(1).strip()
+                # if the header itself has no letters after the colon,
+                # pull the next non‐blank line instead
+                if not key_text:
+                    i += 1
+                    while i < len(lines) and not lines[i].strip():
+                        i += 1
+                    key_text = lines[i].strip()
+                ans = [a.strip() for a in key_text.split(',') if a.strip()]
+                i += 1
+
+        qs.append({
+            "sort_order": len(qs) + 1,
+            "prompt":     prompt,
+            "options":    opts,
+            "answer_key": ans,
+        })
+
     return qs
 
 
