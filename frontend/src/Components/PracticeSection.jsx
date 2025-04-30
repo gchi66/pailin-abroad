@@ -10,7 +10,7 @@ const kindToComponent = {
   fill_blank:          FillBlankExercise,
   multiple_choice:     MultipleChoiceExercise,
   open:                OpenEndedExercise,
-  sentence_transform:  SentenceTransformExercise,   // NEW
+  sentence_transform:  SentenceTransformExercise   // NEW
 };
 
 export default function PracticeSection({ exercises = [], uiLang = "en" }) {
@@ -20,6 +20,7 @@ export default function PracticeSection({ exercises = [], uiLang = "en" }) {
 
   return (
     <div className="ps-container">
+      {exercises.map((ex) => console.log(ex.kind, ex.title))}
       {exercises.map((ex, idx) => {
         const Renderer = kindToComponent[ex.kind];
         if (!Renderer) return null;
