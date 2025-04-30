@@ -271,69 +271,78 @@ def parse_tags(lines: List[str]) -> List[str]:
     return [t.strip() for t in re.split(r",|\n", " ".join(lines)) if t.strip()]
 
 
-def parse_practice(lines):
-    """Return a list of practice-exercise dicts.
-
-    The author format looks like:
-
-        TYPE: multiple_choice
-        PROMPT:
-        real question …
-
-        OPTIONS:
-        1) ...
-        2) ...
-
-        ANSWER_KEYS:
-        1) B
-        2) A
-
-    Another TYPE line starts a new exercise.
+def parse_practice(lines: List[str]) -> List[Dict]:
     """
-
+    Parse the NEW standardized format with clear item/answer pairing
+    Example:
+        TYPE: fill_blank
+        ITEM: 1
+        TEXT: ___ (miss) your call.
+        ANSWER: Sorry for missing
+    """
     exercises = []
-    i = 0
-    while i < len(lines):
-        ln = lines[i].rstrip()
-        if not ln.upper().startswith("TYPE:"):
-            i += 1
+    current_exercise = None
+    current_item = None
+
+    for line in lines:
+        line = line.strip()
+        if not line:
             continue
 
-        kind = ln.split(":", 1)[1].strip().lower()
-        block = {"kind": kind}
+        # Start new exercise
+        if line.upper().startswith("TYPE:"):
+            if current_exercise:
+                exercises.append(current_exercise)
+            current_exercise = {
+                "kind": line.split(":", 1)[1].strip().lower(),
+                "prompt": "",
+                "items": [],
+                "sort_order": len(exercises) + 1
+            }
 
-        # PROMPT
-        i += 1
-        prompt_lines = []
-        while i < len(lines) and not lines[i].upper().startswith(("OPTIONS:", "TYPE:", "ANSWER_KEYS:")):
-            prompt_lines.append(lines[i].rstrip())
-            i += 1
-        block["prompt"] = "\n".join(prompt_lines).strip()
+        # Exercise-level prompt
+        elif line.upper().startswith("PROMPT:"):
+            if current_exercise:
+                current_exercise["prompt"] = line.split(":", 1)[1].strip()
 
-        # OPTIONS
-        if i < len(lines) and lines[i].upper().startswith("OPTIONS"):
-            i += 1
-            option_lines = []
-            while i < len(lines) and not lines[i].upper().startswith(("ANSWER_KEYS:", "TYPE:")):
-                option_lines.append(lines[i].rstrip())
-                i += 1
-            block["options"] = option_lines
+        # Start new item/question
+        elif line.upper().startswith(("ITEM:", "QUESTION:")):
+            if current_exercise:
+                current_item = {
+                    "number": line.split(":", 1)[1].strip(),
+                    "text": "",
+                    "options": [],
+                    "answer": ""
+                }
+                current_exercise["items"].append(current_item)
 
-        # ANSWER_KEYS  (optional)
-        if i < len(lines) and lines[i].upper().startswith("ANSWER_KEYS"):
-            i += 1
-            answer_lines = []
-            while i < len(lines) and not lines[i].upper().startswith("TYPE:"):
-                if lines[i].strip():
-                    answer_lines.append(lines[i].strip())
-                i += 1
-            block["answer_key"] = answer_lines
+        # Item text/prompt
+        elif line.upper().startswith(("TEXT:", "PROMPT:")):
+            if current_item:
+                current_item["text"] = line.split(":", 1)[1].strip()
 
-        exercises.append(block)
+        # Options (for MC)
+        elif line.upper().startswith("OPTIONS:"):
+            pass  # Options handled in next lines
 
-    # Add sort_order for stable ordering
-    for idx, ex in enumerate(exercises, 1):
-        ex["sort_order"] = idx
+        # Individual option
+        elif line and current_item and re.match(r'^[A-Z]\.', line):
+            current_item["options"].append(line)
+
+        # Answer
+        elif line.upper().startswith("ANSWER:"):
+            if current_item:
+                current_item["answer"] = line.split(":", 1)[1].strip()
+
+        # Keywords (for open-ended)
+        elif line.upper().startswith("KEYWORDS:"):
+            if current_item:
+                current_item["keywords"] = line.split(":", 1)[1].strip()
+
+    # Add the last exercise
+    if current_exercise:
+        exercises.append(current_exercise)
+
     return exercises
 
 # ───────────────────────────── convert one lesson chunk

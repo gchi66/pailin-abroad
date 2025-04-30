@@ -333,110 +333,87 @@ In instances like these, ‘sorry’ is more of a polite filler word than a real
 
 PRACTICE
 
-
-PRACTICE SORRY + VERB-ING
-
+### FILL IN THE BLANK EXERCISE
 TYPE: fill_blank
-PROMPT: Fill in the blanks with “Sorry for (verb-ing)” or “Sorry for not (verb-ing)” according to the verb in (parenthesis).
+PROMPT: Fill in the blanks with "Sorry for (verb-ing)" or "Sorry for not (verb-ing)" according to the verb in (parenthesis).
 
+ITEM: 1
+TEXT: ___ (miss) your call.
+ANSWER: Sorry for missing
 
+ITEM: 2
+TEXT: ___ (break) your plate.
+ANSWER: Sorry for breaking
+
+ITEM: 3
+TEXT: ___ (make) so much noise.
+ANSWER: Sorry for making
+
+ITEM: 4
+TEXT: ___ (say) that.
+ANSWER: Sorry for saying
+
+ITEM: 5
+TEXT: ___ (not respond) to your text.
+ANSWER: Sorry for not responding
+
+### POLITE WORDS MULTIPLE CHOICE
+TYPE: multiple_choice
+
+QUESTION: 1
+PROMPT: You're at a crowded bookstore and someone is blocking the book you want. What do you say?
 OPTIONS:
-1) ___ (miss) your call.
-2) ___ (break) your plate.
-3) ___ (make) so much noise.
-4) ___ (say) that.
-5) ___ (not respond) to your text.
-
-
-ANSWER_KEY:
-1) Sorry for missing
-2) Sorry for breaking
-3) Sorry for making
-4) Sorry for saying
-5) Sorry for not responding
-
-
-________________
-
-
-
-
-POLITE WORDS PRACTICE
-
-
-Prompt
-1. You’re at a crowded bookstore and someone is blocking the book you want. What do you say?
-Options
 A. Please.
 B. Excuse me.
 C. Sorry.
+ANSWER: B
 
-
-Prompt
-2. You’re ordering a coffee and want a specific type of milk. What do you say?
-Options
+QUESTION: 2
+PROMPT: You're ordering a coffee and want a specific type of milk. What do you say?
+OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
+ANSWER: A
 
-
-Prompt
-3. You arrive 20 minutes late to lunch. What do you say?
-Options
+QUESTION: 3
+PROMPT: You arrive 20 minutes late to lunch. What do you say?
+OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
+ANSWER: C
 
-
-Prompt
-4. You’d like to borrow your friend’s pen for a moment. What do you say?
-Options
+QUESTION: 4
+PROMPT: You'd like to borrow your friend's pen for a moment. What do you say?
+OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
+ANSWER: A
 
-
-Prompt
-5. You can’t attend a friend’s party because you’re feeling unwell. What do you say?
-Options
+QUESTION: 5
+PROMPT: You can't attend a friend's party because you're feeling unwell. What do you say?
+OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
+ANSWER: C
 
-
-ANSWER KEYS:
-1) B
-2) A
-3) C
-4) A
-5) C
-
-
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
+### OPEN-ENDED PRACTICE
 TYPE: open
-PROMPT:
-Answer each question in one or two sentences. Use the word “sorry”.
 
+QUESTION: 1
+PROMPT: Your friend invited you to her wedding, but you can't go. What could you say to apologize to her?
+KEYWORDS: sorry
 
-OPTIONS:
-1) Your friend invited you to her wedding, but you can’t go. What could you say to apologize to her? {keywords: sorry}
+QUESTION: 2
+PROMPT: You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss?
+KEYWORDS: sorry
 
-
-2) You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss? {keywords: sorry}
-
-
-3) You accidentally spill water all over your friend’s table. What could you say to apologize to her? {keywords: sorry}
-
-
+QUESTION: 3
+PROMPT: You accidentally spill water all over your friend's table. What could you say to apologize to her?
+KEYWORDS: sorry
 
 
 
