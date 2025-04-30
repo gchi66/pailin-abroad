@@ -46,7 +46,7 @@ Answer key: B
 APPLY
 
 
-In the conversation, Mark apologizes to his family because they arrived late for lunch. Pretend you lost your friend’s phone charger while you were traveling together. How can you apologize to him? 
+In the conversation, Mark apologizes to his family because they arrived late for lunch. Pretend you lost your friend’s phone charger while you were traveling together. How can you apologize to him?
 UNDERSTAND
 
 
@@ -72,7 +72,7 @@ SORRY
 * I’m so sorry.
 
 
-'Sorry’ can be used for all sorts of situations! 
+'Sorry’ can be used for all sorts of situations!
 
 
 Minor incident:
@@ -117,7 +117,7 @@ SORRY + REASON
 
 
 A simple way to apologize is:
-        
+
 Sorry + (reason you’re sorry).
 
 
@@ -175,7 +175,7 @@ In Luke’s apology, the base verb is ‘drop’, but -ing is added so it become
 * I’m sorry for not paying attention. (pay)
 
 
-You can use ‘sorry for (verb-ing),’ or you can use ‘sorry + reason’ and the meaning is the same! You can choose whichever one you want to use. 
+You can use ‘sorry for (verb-ing),’ or you can use ‘sorry + reason’ and the meaning is the same! You can choose whichever one you want to use.
 
 
 ________________
@@ -205,7 +205,7 @@ You can also say:
 * No worries!
 
 
-The above four phrases are best used for minor inconveniences. 
+The above four phrases are best used for minor inconveniences.
 
 
 Here are other ways to respond to ‘sorry’:
@@ -290,7 +290,7 @@ For example:
 
 
 * Pailin: Do you have any change for the parking meter?
-Luke: No, sorry. 
+Luke: No, sorry.
 
 
 * Pailin: Excuse me, do you know where the metro station is?
@@ -336,15 +336,24 @@ PRACTICE
 
 PRACTICE SORRY + VERB-ING
 
+TYPE: fill_blank
+PROMPT: Fill in the blanks with “Sorry for (verb-ing)” or “Sorry for not (verb-ing)” according to the verb in (parenthesis).
 
-Fill in the blanks with ‘Sorry for (verb-ing)’ or ‘Sorry for not (verb-ing)’ according to the verb in (parenthesis).
+
+OPTIONS:
+1) ___ (miss) your call.
+2) ___ (break) your plate.
+3) ___ (make) so much noise.
+4) ___ (say) that.
+5) ___ (not respond) to your text.
 
 
-1. ___ (miss) your call.
-2. ___ (break) your plate.
-3. ___ (make) so much noise.
-4. ___ (say) that.
-5. ___ (not respond) to your text.
+ANSWER_KEY:
+1) Sorry for missing
+2) Sorry for breaking
+3) Sorry for making
+4) Sorry for saying
+5) Sorry for not responding
 
 
 ________________
@@ -355,14 +364,54 @@ ________________
 POLITE WORDS PRACTICE
 
 
-Determine if the best word to use in these situations is 'please,' 'excuse me,' or 'sorry.'
+Prompt
+1. You’re at a crowded bookstore and someone is blocking the book you want. What do you say?
+Options
+A. Please.
+B. Excuse me.
+C. Sorry.
 
 
-1. You're at a crowded bookstore, and someone is standing directly in front of the book you want to reach for. You want to ask them to move slightly.
-2. You're ordering a coffee at a coffee shop and want to be polite when asking for a specific type of milk.
-3. You're meeting a friend for lunch, but you arrive 20 minutes late because of unexpected traffic.
-4. You're asking to borrow your friend's pen for a moment.
-5. You're unable to attend a friend's party because you're feeling unwell.
+Prompt
+2. You’re ordering a coffee and want a specific type of milk. What do you say?
+Options
+A. Please.
+B. Excuse me.
+C. Sorry.
+
+
+Prompt
+3. You arrive 20 minutes late to lunch. What do you say?
+Options
+A. Please.
+B. Excuse me.
+C. Sorry.
+
+
+Prompt
+4. You’d like to borrow your friend’s pen for a moment. What do you say?
+Options
+A. Please.
+B. Excuse me.
+C. Sorry.
+
+
+Prompt
+5. You can’t attend a friend’s party because you’re feeling unwell. What do you say?
+Options
+A. Please.
+B. Excuse me.
+C. Sorry.
+
+
+ANSWER KEYS:
+1) B
+2) A
+3) C
+4) A
+5) C
+
+
 
 
 ________________
@@ -373,18 +422,26 @@ ________________
 OPEN-ENDED PRACTICE
 
 
-Answer the questions using ‘sorry’ in your responses.
+TYPE: open
+PROMPT:
+Answer each question in one or two sentences. Use the word “sorry”.
 
 
-1. Your friend invited you to her wedding, but you can’t go. What could you say to apologize to her?
-2. You arrived late to work because there was a big accident on the freeway. What could you say to apologize to him?
-3. You accidentally spill water all over your friend’s table. What could you say to apologize to her?
+OPTIONS:
+1) Your friend invited you to her wedding, but you can’t go. What could you say to apologize to her? {keywords: sorry}
+
+
+2) You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss? {keywords: sorry}
+
+
+3) You accidentally spill water all over your friend’s table. What could you say to apologize to her? {keywords: sorry}
+
 
 
 
 
 PINNED COMMENT
-        
+
 Are you usually early, on time, or late for events?
 
 
@@ -413,7 +470,7 @@ Pailin: Luke, are you a student at UCLA too?
 Luke: Yep! What's your major?
 Pailin: I'm an Art History major. How about you?
 Luke: I'm an Engineering major, but I don't like my classes. I want to change my major.
-Pailin: You don't want to be an engineer? 
+Pailin: You don't want to be an engineer?
 Luke: No, I don't. But my dad doesn't want me to change my major. I want to try Psychology.
 Pailin: My friend is a Psychology major, but he doesn't like it very much.
 Luke: Really? I think the classes are so interesting.
@@ -480,7 +537,7 @@ So far, you’ve learned how to make affirmative sentences in present simple ten
 
 
 Compare these two sentences from the conversation:
-        
+
 * I don't like my classes.
 * He doesn't like it very much.
 
@@ -551,7 +608,7 @@ It
 * She doesn’t exercise often.
 * It doesn’t work.
 * Enzo doesn’t cook well.
-	
+
 
 Quick Practice: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).
 
@@ -627,11 +684,11 @@ Make the affirmative sentences into negative sentences by using ‘don’t’ or
 3. She lives in an apartment
 4. We drink red wine.
 5. It smells good.
-   
+
 ________________
 
 
-     
+
 CORRECT OR INCORRECT
 
 
@@ -670,7 +727,7 @@ Write two things that members of your family don’t do often. For example: My s
 
 
 PINNED COMMENT
-        
+
 If you went to university, what was your major?
 
 
@@ -775,7 +832,7 @@ In the conversation, Pailin and her host family discuss what they usually have f
 UNDERSTAND
 
 
-LESSON FOCUS 
+LESSON FOCUS
 
 
 How to use articles (a · an) before a noun
@@ -837,7 +894,7 @@ One sentence uses ‘a,’ and the other uses ‘an.’ Deciding which to use de
         a (the next word begins with a non-vowel sound - called ‘consonants’)
 
 
-What’s the first sound in the word ‘banana?’ ‘Buh!’ Because ‘buh’ is a consonant sound, you need to use the article ‘a’ before this word. What about the first sound in ‘orange?’ It’s ‘oh!’ That’s a vowel sound, so ‘an’ would come before it. 
+What’s the first sound in the word ‘banana?’ ‘Buh!’ Because ‘buh’ is a consonant sound, you need to use the article ‘a’ before this word. What about the first sound in ‘orange?’ It’s ‘oh!’ That’s a vowel sound, so ‘an’ would come before it.
 
 
 The reason ‘an’ is used before vowel sounds is for flow and ease of pronunciation - saying ‘a orange’ is awkward compared to saying ‘an orange.’ You can see this in more examples from the conversation:
@@ -919,6 +976,9 @@ That's why the rules for using 'a · an' focus on the first sound of the next wo
 COMMON MISTAKES
 
 
+FORGOTTEN ARTICLES
+
+
 Since articles aren’t a grammar concept that exists in Thai, they’re easily forgotten. However, they will make your speech sound natural and fluent when used correctly. Take a look at the incorrect sentences below and how to fix them.
 
 
@@ -931,7 +991,7 @@ He has old dog. (X)
 
 
 Try listening to the correct sentences and repeating after the audio, making sure you include the articles.
- 
+
 CULTURE NOTE
 
 
@@ -1002,7 +1062,7 @@ Describe four things you see in your room. Use ‘a’ or ‘an’ in your answe
 
 
 PINNED COMMENT
-        
+
 What do you usually have for breakfast?
 
 
@@ -1035,7 +1095,7 @@ Luke: It’s on the fridge. Check the yellow paper.
 Pailin: Oh, I see it. Thanks!
 Luke: The internet is super slow today.
 Pailin: Oh no. I want to send a job application.
-Luke: The coffee shop down the street has good Wi-Fi. The library is also nearby. You can walk to both. 
+Luke: The coffee shop down the street has good Wi-Fi. The library is also nearby. You can walk to both.
 
 
 COMPREHENSION
@@ -1349,7 +1409,7 @@ Describe four things around you. Use ‘the’ in your answers. For example: The
 
 
 PINNED COMMENT
-        
+
 What are some places in your neighborhood that you go to often?
 
 
@@ -1508,7 +1568,7 @@ SINGULAR NOUN
 	dollars
 	vase
 	vases
-	
+
 
 
 
@@ -1578,7 +1638,7 @@ SINGULAR NOUN
 	feet
 	a tooth
 	teeth
-	
+
 
 EXTRA TIPS
 
@@ -1614,7 +1674,7 @@ doesn’t (verb)
 * The bus was crowded.
 * My dog loves the dog park.
 * That woman doesn’t eat pork.
-	
+
 
 
 
@@ -1667,6 +1727,9 @@ Here are more examples:
 COMMON MISTAKES
 
 
+THE -S SOUND
+
+
 Thai people often omit the -s sound at the end of plural nouns. Although remembering to use plural nouns can be difficult, pronouncing the -s will make you sound more like a native speaker! Try developing good habits now. See how to fix the incorrect sentence below:
 
 
@@ -1692,6 +1755,9 @@ Check out our comprehensive list of common mistakes made by Thai learners.
 
 
 PHRASES & VERBS
+
+
+OH
 
 
 Oh = (said when you realize something that you didn’t notice or forgot about)
@@ -1774,7 +1840,7 @@ Answer the following questions. Try using plural nouns in your answers.
 
 
 PINNED COMMENT
-        
+
 How many siblings do you have?
 
 
@@ -1925,6 +1991,9 @@ Just note that excessively stacking these words can get confusing for listeners.
 COMMON MISTAKES
 
 
+THE -S SOUND
+
+
 Thai students often omit the -'s sound when describing ownership. Take a look at the incorrect sentences and how to fix them:
 
 
@@ -1954,21 +2023,16 @@ Remember that adding the -s sound at the end of words is a good habit to build n
 PHRASES & VERBS
 
 
-Wow
+WOW
 
 
-Cool
+COOL
 
 
+GREAT IDEA
 Great idea = (said to show enthusiastic approval of a suggestion or plan)
 * Luke: Oh, it’s happy hour at Jay’s Bar. Should we go there?
 Pailin: Yeah, great idea!
-
-
-CULTURE NOTE
-
-
-SORRY!
 
 
 PRACTICE
@@ -2029,7 +2093,7 @@ Answer the following questions using a full sentence. Use the possessive 'apostr
 
 
 PINNED COMMENT
-        
+
 Do you have any family keepsakes? What are they?
 
 
@@ -2100,7 +2164,7 @@ In the conversation, Anthony suggests that they meet at an ice cream shop in Hol
 UNDERSTAND
 
 
-LESSON FOCUS 
+LESSON FOCUS
 
 
 How to use 'Let's (verb)'
@@ -2199,6 +2263,9 @@ Luke: Let’s go!
 COMMON MISTAKES
 
 
+THE -S SOUND
+
+
 Thai students often omit the -s sound in 'Let's'. Take a look at the incorrect sentences and how to fix them:
 
 
@@ -2216,16 +2283,23 @@ Try listening to the correct sentences and repeating after the audio, making sur
 PHRASES & VERBS
 
 
+MEET UP
+
+
 Meet up = (to plan an informal and casual meeting)
 * Let’s meet up for coffee this week.
 * We’re going to meet up with friends tonight.
 
 
+        THAT SOUNDS FUN
 
 
 That sounds fun = (used to show that someone’s proposal is a good one)
 * Pailin: Do you wanna play mini-golf with us tonight?
 Luke: Sure, that sounds fun.
+
+
+OF COURSE
 
 
 Of course = แน่นอน
@@ -2234,6 +2308,9 @@ Of course = แน่นอน
 
 * Pailin: Can I make myself another cup of coffee?
 Luke: Of course! Go ahead.
+
+
+IN TOWN
 
 
 In town = (said when a person is in your specific city or location for a short stay)
@@ -2292,7 +2369,7 @@ Look at the following situations and make suggestions using 'let's.'
 
 
 PINNED COMMENT
-        
+
 Where do you like to take your friends who are visiting you from out of town?
 
 
@@ -2448,7 +2525,7 @@ Remember that any gender can use the terms 'you guys' or 'guys.' A woman can say
 In larger group settings, you can also use the word 'everyone.' This is a more gender-neutral term and is more formal than 'guys.' For example, a teacher on a field trip with her students might say:
 
 
-* Everyone, follow me! 
+* Everyone, follow me!
 
 
 ________________
@@ -2472,6 +2549,9 @@ If you invited a male friend to your house party, he might ask this to find out 
 COMMON MISTAKES
 
 
+THE -S SOUND
+
+
 Thai students often omit the -s sound in 'guys'. Take a look at the incorrect sentences and how to fix them:
 
 
@@ -2489,24 +2569,25 @@ Try listening to the correct sentences and repeating after the audio, making sur
 PHRASES & VERBS
 
 
-Let's see
+LET’S SEE
 
 
+IT’S MY TREAT
 It’s my treat = (เลี้ยง)
 * Let’s get coffee. Don’t worry, it’s my treat.
 * Since you’re visiting, the tickets are my treat.
 
 
-Wow
+WOW
 
 
 CULTURE NOTE
 
 
-'YOU ALL' AS A GENDER-NEUTRAL PHRASE
+'Y’ALL' AS A GENDER-NEUTRAL PHRASE
 
 
-While 'you guys' is widely used to address groups, some argue that it carries a gender bias. They suggest using a gender-neutral alternative, like 'you all.' In the southern US, 'y'all' is a common colloquialism, which is a contraction of 'you all.' However, it isn't used widely in other regions.
+While 'you guys' is widely used to address groups, some argue that it carries a gender bias. They suggest using a gender-neutral alternative, like 'you all.' In the southern US, 'y'all' is a common colloquialism, which is a contraction of 'you all.' It’s also become popular to use by young people.
 
 
 Although 'you all' is considered more politically correct, 'you guys' remains prevalent in informal speech, even when addressing groups of women.
@@ -2565,7 +2646,7 @@ Imagine your two friends are visiting you. Ask them three things about what they
 
 
 PINNED COMMENT
-        
+
 What's your favorite flavor of ice cream?
 
 
@@ -2760,7 +2841,7 @@ it
 * Does she play the piano?
 * Does it snow in Thailand?
 * Does Sophia drive a car?
-	
+
 
 
 
@@ -3003,7 +3084,7 @@ Imagine you are with a close friend. His mom, dad, and sister are coming to visi
 
 
 PINNED COMMENT
-        
+
 Do you think Chloe should send a message to Anthony? Or should she wait and see if he messages her first?
 
 
@@ -3046,7 +3127,7 @@ Prompt
 1. What does Luke say about the school gym's pool? (select all that apply)
 Options
 A. It's nice.
-B. It's huge. 
+B. It's huge.
 C. It's busy.
 D. It's never busy.
 
@@ -3163,6 +3244,9 @@ Pailin: No, he not have. (X)
 PHRASES & VERBS
 
 
+MAN
+
+
 Man = (very informal expression used for disappointment)
 * Aw, some birds pooped all over my car! Man, and I just got a car wash, too.
 
@@ -3170,9 +3254,10 @@ Man = (very informal expression used for disappointment)
 See more uses of 'Man'
 
 
+COOL
 Cool
 
-
+CHECK OUT
 Check out
 
 
@@ -3230,7 +3315,7 @@ Answer the questions using 'have' or 'has' in your responses.
 
 
 PINNED COMMENT
-        
+
 What do you do for exercise?
 
 
@@ -3443,6 +3528,9 @@ Whew! That was a lot. Now you see how common it is to have -s endings for verbs 
 COMMON MISTAKES
 
 
+ADDING ‘S
+
+
 It's totally understandable that 3rd person verb conjugation can be challenging for ESL learners, as adding an -s doesn't change the sentence's core meaning. However, applying the -s ending is a key step towards making your English sound more natural! See the incorrect sentences below and how to fix them with an -s ending:
 
 
@@ -3577,7 +3665,7 @@ Write 4 things about your best friend. Use 3rd person verb conjugation in each s
 
 
 PINNED COMMENT
-        
+
 Tell us about the people in your family.
 
 
@@ -3836,7 +3924,7 @@ It
 * She'll call you later today.
 * It'll rain soon.
 * The train will leave at midnight.
-	
+
 
 ________________
 
@@ -3853,7 +3941,7 @@ In the conversation, Pailin says:
 won't = will not
 
 
-Pailin says that she will not be available until 1PM, a time in the future. So, she uses 'will not' in her sentence. Note that 'will not' becomes 'won't' when contracted, not 'willn't.' 
+Pailin says that she will not be available until 1PM, a time in the future. So, she uses 'will not' in her sentence. Note that 'will not' becomes 'won't' when contracted, not 'willn't.'
 
 
 Negative sentences in future simple tense are mostly used for:
@@ -3878,7 +3966,7 @@ Negative sentences in future simple tense are mostly used for:
 Pailin's line 'I won't be free until 1PM' is an example of future unavailability.
 
 
-Here is the structure of negative future simple tense sentences. 
+Here is the structure of negative future simple tense sentences.
 
 
 
@@ -3907,9 +3995,9 @@ It
 * She won't lend me money.
 * It won't snow tomorrow.
 * The bus won't arrive on time.
-	
 
-        
+
+
 ________________
 
 
@@ -3980,7 +4068,7 @@ it
 * Will she call me later?
 * Will it be sunny tomorrow?
 * Will the store be open on Sunday?
-	
+
 
 
 
@@ -4018,6 +4106,9 @@ Luke: No, he won't.
 COMMON MISTAKES
 
 
+WILL CONTRACTION
+
+
 Thai people often forget to contract the subject with 'will' in affirmative sentences. There is nothing wrong with this, but your speech will sound more natural by using contractions. For example:
 
 
@@ -4036,21 +4127,22 @@ This is fine to say, but it sounds better as:
 PHRASES & VERBS
 
 
+RUN ERRANDS
 Run errands = (to go out and do small tasks on your to-do list)
 * I’m exhausted. I’ve been running errands all morning.
 * I’ll be back in about 2 hours. I’ve gotta run some errands.
 
-
+        DROP OFF
 Drop off (someone or something) / Drop (someone or something) off = (to take someone or something to a particular place and leave them there)
 * I’ll drop off the kids at soccer practice on my way to work.
 * Could you drop these letters off at the post office for me?
 
-
+        PICK UP
 Pick up (someone or something) / Pick (someone or something) up = (to go somewhere to collect a person or a thing)
 * I have to pick my daughter up from daycare by 6PM.
-* I’ll be leaving the airport soon. I’m just waiting to pick up my suitcase. 
+* I’ll be leaving the airport soon. I’m just waiting to pick up my suitcase.
 
-
+        PERFECT
 Perfect = (said when everything works out well)
 * Pailin: I’m off work at 5. How about you?
 Luke: Perfect, I’m off at 5, too. Let’s meet at the subway station at 5:30.
@@ -4060,10 +4152,10 @@ Luke: Perfect, I’m off at 5, too. Let’s meet at the subway station at 5:30.
 Pailin: That’s perfect. I’ll be at your place at 6 then.
 
 
-Good idea
+GOOD IDEA
 
 
-Cool
+COOL
 
 
 CULTURE NOTE
@@ -4172,7 +4264,7 @@ Answer the questions using future simple tense in your responses.
 
 
 PINNED COMMENT
-        
+
 What will you do this weekend?
 
 
@@ -4202,7 +4294,7 @@ Chloe: What time is it?
 Pailin: It’s almost 10.
 Chloe: Wow, it’s so late! I should sleep soon.
 Pailin: Me too. We have a big day tomorrow.
-Chloe: I know! I'm so nervous for the first day of school. 
+Chloe: I know! I'm so nervous for the first day of school.
 Pailin: Don't be nervous! It'll be fun.
 Chloe: *laughs* You're right. What time will you wake up tomorrow morning?
 Pailin: Probably around 8. How about you?
@@ -4359,9 +4451,10 @@ TAKE CARE!
 PHRASES & VERBS
 
 
-Wow
+WOW
 
 
+I KNOW
 I know = (can be said to agree with what someone says)
 * Pailin: That movie was so good!
 Luke: I know! The acting was incredible.
@@ -4374,6 +4467,7 @@ Luke: I know, it makes me depressed.
 See more uses of ‘I know’
 
 
+        WAKE UP
 Wake up / wake (someone) up = ตื่น / ปลุก
 * I keep waking up in the middle of the night.
 * My kids woke me up this morning.
@@ -4406,7 +4500,7 @@ B. Bye Mom, see you later!
 4. You're a server at a restaurant, and it's almost 9PM, so you're about to close the place. As the last customer is leaving, what could you say to them?
 A. Bye, have a good day!
 B. Bye, good night!
-        
+
 ________________
 
 
@@ -4426,7 +4520,7 @@ It's 11AM, and you're saying goodbye to your friend who was hanging out at your 
 
 
 PINNED COMMENT
-        
+
 What time do you normally go to bed? What time do you normally wake up?
 
 
@@ -4444,7 +4538,7 @@ CHECKPOINT 3
 
 
 BACKSTORY
-It's Pailin's first day of school at UCLA! She's sitting in a large lecture hall for her first class of the day, East Asian Art. Her professor walks in and begins speaking to the class. 
+It's Pailin's first day of school at UCLA! She's sitting in a large lecture hall for her first class of the day, East Asian Art. Her professor walks in and begins speaking to the class.
 
 
 CONVERSATION
@@ -4517,6 +4611,7 @@ Answer key: A
 PHRASES & VERBS
 
 
+        JOIN IN
 Join in = (to participate in an activity)
 * Everyone was dancing, so I decided to join in.
 * We’re playing volleyball, do you want to join in?

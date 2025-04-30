@@ -1,0 +1,76 @@
+.markdown-section {
+  margin-block-start: 2vh;          /* top space */
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;                         /* space between items */
+}
+
+/* individual item “card” */
+.markdown-item {
+  border-block-end: 0.1rem solid var(--border-light, #e6e6e6);
+  padding-block-end: 1.2vh;
+  padding-inline: 0;
+  background: var(--surface, #fff);
+  border-radius: 1rem;
+  box-shadow: 0 .2rem .4rem rgba(0 0 0 / 0.05);
+  overflow: hidden;                /* keeps radius when open */
+}
+
+/* accordion header */
+.markdown-summary {
+  list-style: none;                /* remove default arrow */
+  cursor: pointer;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+  color: var(--primary-color);
+  padding: 1.2vh 1.4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* title left / icon right */
+  user-select: none;
+  transition: color .2s ease;
+}
+
+.markdown-summary:hover {
+  color: var(--primary-dark);
+}
+
+/* custom arrow ─ rotates when open */
+.markdown-summary::after {
+  content: "▸";
+  font-size: 1.2em;
+  transition: transform .25s ease;
+}
+
+/* details[open] summary => arrow down */
+details[open] > .markdown-summary::after {
+  transform: rotate(90deg);
+}
+
+/* chrom-only arrow removal (belt-and-suspenders) */
+.markdown-summary::-webkit-details-marker {
+  display: none;
+}
+
+/* main body */
+.markdown-content {
+  padding: 0 1.4vw 1.2vh;          /* side + bottom padding */
+  line-height: 1.6;
+  animation: fadeIn .25s ease;
+}
+
+.markdown-content p {
+  margin-block-end: 1em;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  padding-inline-start: 1.8em;
+  margin-block-end: 1em;
+}
+
+/* ---------- tiny fade-in on open ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; translate: 0 -.5rem; }
+  to   { opacity: 1; translate: 0 0; }
+}

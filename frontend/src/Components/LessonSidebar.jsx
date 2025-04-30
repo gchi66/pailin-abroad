@@ -30,6 +30,7 @@ export default function LessonSidebar({
   sections = [],
   questions = [],
   transcript = [],
+  practiceExercises = [],
   activeId,
   onSelect,
 }) {
@@ -41,6 +42,9 @@ export default function LessonSidebar({
       }
       if (type === "transcript" && transcript.length) {
         return { id: "transcript", type };
+      }
+      if (type === "practice" && practiceExercises.length) {   // ②  PRACTICE GATE
+        return { id: "practice", type };
       }
       const sec = sections.find((s) => s.type === type);
       return sec ? { id: sec.id, type } : null;

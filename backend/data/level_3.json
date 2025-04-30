@@ -80,6 +80,115 @@
         ]
       }
     ],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "prompt": "PROMPT: Fill in the blanks with “Sorry for (verb-ing)” or “Sorry for not (verb-ing)” according to the verb in (parenthesis).",
+        "options": [
+          "1) ___ (miss) your call.",
+          "2) ___ (break) your plate.",
+          "3) ___ (make) so much noise.",
+          "4) ___ (say) that.",
+          "5) ___ (not respond) to your text.",
+          "",
+          "",
+          "ANSWER_KEY:",
+          "1) Sorry for missing",
+          "2) Sorry for breaking",
+          "3) Sorry for making",
+          "4) Sorry for saying",
+          "5) Sorry for not responding",
+          "",
+          "",
+          "________________",
+          "",
+          "",
+          "",
+          "",
+          "POLITE WORDS PRACTICE",
+          "",
+          "",
+          "Prompt",
+          "1. You’re at a crowded bookstore and someone is blocking the book you want. What do you say?",
+          "Options",
+          "A. Please.",
+          "B. Excuse me.",
+          "C. Sorry.",
+          "",
+          "",
+          "Prompt",
+          "2. You’re ordering a coffee and want a specific type of milk. What do you say?",
+          "Options",
+          "A. Please.",
+          "B. Excuse me.",
+          "C. Sorry.",
+          "",
+          "",
+          "Prompt",
+          "3. You arrive 20 minutes late to lunch. What do you say?",
+          "Options",
+          "A. Please.",
+          "B. Excuse me.",
+          "C. Sorry.",
+          "",
+          "",
+          "Prompt",
+          "4. You’d like to borrow your friend’s pen for a moment. What do you say?",
+          "Options",
+          "A. Please.",
+          "B. Excuse me.",
+          "C. Sorry.",
+          "",
+          "",
+          "Prompt",
+          "5. You can’t attend a friend’s party because you’re feeling unwell. What do you say?",
+          "Options",
+          "A. Please.",
+          "B. Excuse me.",
+          "C. Sorry.",
+          "",
+          "",
+          "ANSWER KEYS:",
+          "1) B",
+          "2) A",
+          "3) C",
+          "4) A",
+          "5) C",
+          "",
+          "",
+          "",
+          "",
+          "________________",
+          "",
+          "",
+          "",
+          "",
+          "OPEN-ENDED PRACTICE",
+          "",
+          ""
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "prompt": "PROMPT:\nAnswer each question in one or two sentences. Use the word “sorry”.",
+        "options": [
+          "1) Your friend invited you to her wedding, but you can’t go. What could you say to apologize to her? {keywords: sorry}",
+          "",
+          "",
+          "2) You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss? {keywords: sorry}",
+          "",
+          "",
+          "3) You accidentally spill water all over your friend’s table. What could you say to apologize to her? {keywords: sorry}",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "sort_order": 2
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -89,12 +198,12 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to use the word ‘sorry’\n\n## SORRY\n\n‘Sorry’ is a very important word to know. It’s used to apologize for a wide range of situations, from small inconveniences to major incidents. It can be said by itself or as part of a sentence. You can add the word ‘so’ before sorry to make it stronger.\n\n* Sorry.\n* I’m sorry.\n* I’m so sorry.\n\n'Sorry’ can be used for all sorts of situations!\n\nMinor incident:\n\nYou bump into someone:\n* Oops, sorry!\n\nYou ask someone a question, but realize that you interrupted a conversation:\n* Sorry, I’ll ask you my question later.\n\nAccidents:\n\nYou broke your friend’s mug:\n* So sorry, Sylvie, but I broke your mug when I was washing it.\n\nYou spilled wine on your friend’s nice jacket.\n* I’m so sorry. Let me try to wash the stain out now.\n\nDeep regret:\n\nYou and your brother had a huge argument earlier, and you want to apologize for the hurtful things you said.\n* I’m so sorry about what I said. I crossed a line.\n\nYou promised your friend you would help her move out, but you can’t come anymore because you got called into work.\n* I’m so sorry, but I can’t help you move today. I just got called into work.\n\n## SORRY + REASON\n\nA simple way to apologize is:\n\nSorry + (reason you’re sorry).\n\nThe reason should be a complete sentence. Here are examples from the conversation:\n\n* Sorry we’re late!\nWe're late! = the reason Mark is sorry\n\n* Sorry the house is a little messy.\nThe house is a little messy = the reason Sylvie is sorry\n\nYou can also apologize for someone else’s mishap. When Emily asks Pailin a rather personal question, Sylvie apologies for Emily’s behavior:\n\n* Sorry, she's so rude.\n\nHere are more examples of using 'sorry' in this way:\n\n* I'm so sorry I said that to you.\n* Sorry I forgot your birthday.\n* I'm sorry I wasn't paying attention.\n\n## SORRY FOR (VERB-ING)\n\nNotice how Luke apologizes to Pailin when he accidentally drops her suitcase:\n\n* I'm so sorry for dropping your suitcase!\n\nHe gives a specific reason for his apology, but he uses a different structure:\n\nSorry for (verb-ing)\nSorry for not (verb-ing)\n\nIn Luke’s apology, the base verb is ‘drop’, but -ing is added so it becomes ‘dropping’ in this sentence. Here are examples of the three sentences from the section above, but using this structure. The base verb is shown in (parenthesis):\n\n* I’m so sorry for saying that to you. (say)\n* Sorry for forgetting your birthday. (forget)\n* I’m sorry for not paying attention. (pay)\n\nYou can use ‘sorry for (verb-ing),’ or you can use ‘sorry + reason’ and the meaning is the same! You can choose whichever one you want to use.\n\n## THAT’S OKAY\n\nThere are several ways to respond to someone who has apologized to you. In the conversation, Sylvie apologizes to Pailin for Emily's embarrassing question. Also, Luke apologizes for dropping Pailin's suitcase. Pailin responds with:\n\n* That's okay!\n* It's okay!\n\nThese are typical ways to respond if an incident or inconvenience isn’t a big deal. Then, when Sylvie apologizes to Pailin about the house being a little messy, Pailin reassures Sylvie by saying:\n\n* Don't worry!\n\nYou can also say:\n\n* No worries!\n\nThe above four phrases are best used for minor inconveniences.\n\nHere are other ways to respond to ‘sorry’:\n\n* I understand.\nYou can say this when someone gives you a valid excuse for why they can’t help you or do something for you. When you tell them, 'I understand,' it shows empathy and acknowledges their situation.\n\n* Adam: Sorry I can’t come to your birthday party. I want to go, but I promised my sister I would babysit her kids.\nChloe: It’s okay, I understand.\n\n* Don’t be sorry.\nYou can say this when someone is overly apologetic about something small and you don’t want them to feel guilty.\n\n* Pailin: I’m so sorry I lost your shirt. I don’t know where it could be.\nTyler: Don’t be sorry. It was an old shirt."
+        "content_md": "## LESSON FOCUS\n\nHow to use the word ‘sorry’\n\n## SORRY\n\n‘Sorry’ is a very important word to know. It’s used to apologize for a wide range of situations, from small inconveniences to major incidents. It can be said by itself or as part of a sentence. You can add the word ‘so’ before sorry to make it stronger.\n\n* Sorry.\n* I’m sorry.\n* I’m so sorry.\n\n'Sorry’ can be used for all sorts of situations!\n\nMinor incident:\n\nYou bump into someone:\n* Oops, sorry!\n\nYou ask someone a question, but realize that you interrupted a conversation:\n* Sorry, I’ll ask you my question later.\n\nAccidents:\n\nYou broke your friend’s mug:\n* So sorry, Sylvie, but I broke your mug when I was washing it.\n\nYou spilled wine on your friend’s nice jacket.\n* I’m so sorry. Let me try to wash the stain out now.\n\nDeep regret:\n\nYou and your brother had a huge argument earlier, and you want to apologize for the hurtful things you said.\n* I’m so sorry about what I said. I crossed a line.\n\nYou promised your friend you would help her move out, but you can’t come anymore because you got called into work.\n* I’m so sorry, but I can’t help you move today. I just got called into work.\n\nSORRY + REASON\n\nA simple way to apologize is:\n\nSorry + (reason you’re sorry).\n\nThe reason should be a complete sentence. Here are examples from the conversation:\n\n* Sorry we’re late!\nWe're late! = the reason Mark is sorry\n\n* Sorry the house is a little messy.\nThe house is a little messy = the reason Sylvie is sorry\n\nYou can also apologize for someone else’s mishap. When Emily asks Pailin a rather personal question, Sylvie apologies for Emily’s behavior:\n\n* Sorry, she's so rude.\n\nHere are more examples of using 'sorry' in this way:\n\n* I'm so sorry I said that to you.\n* Sorry I forgot your birthday.\n* I'm sorry I wasn't paying attention.\n\n## SORRY FOR (VERB-ING)\n\nNotice how Luke apologizes to Pailin when he accidentally drops her suitcase:\n\n* I'm so sorry for dropping your suitcase!\n\nHe gives a specific reason for his apology, but he uses a different structure:\n\nSorry for (verb-ing)\nSorry for not (verb-ing)\n\nIn Luke’s apology, the base verb is ‘drop’, but -ing is added so it becomes ‘dropping’ in this sentence. Here are examples of the three sentences from the section above, but using this structure. The base verb is shown in (parenthesis):\n\n* I’m so sorry for saying that to you. (say)\n* Sorry for forgetting your birthday. (forget)\n* I’m sorry for not paying attention. (pay)\n\nYou can use ‘sorry for (verb-ing),’ or you can use ‘sorry + reason’ and the meaning is the same! You can choose whichever one you want to use.\n\nTHAT’S OKAY\n\nThere are several ways to respond to someone who has apologized to you. In the conversation, Sylvie apologizes to Pailin for Emily's embarrassing question. Also, Luke apologizes for dropping Pailin's suitcase. Pailin responds with:\n\n* That's okay!\n* It's okay!\n\nThese are typical ways to respond if an incident or inconvenience isn’t a big deal. Then, when Sylvie apologizes to Pailin about the house being a little messy, Pailin reassures Sylvie by saying:\n\n* Don't worry!\n\nYou can also say:\n\n* No worries!\n\nThe above four phrases are best used for minor inconveniences.\n\nHere are other ways to respond to ‘sorry’:\n\n* I understand.\nYou can say this when someone gives you a valid excuse for why they can’t help you or do something for you. When you tell them, 'I understand,' it shows empathy and acknowledges their situation.\n\n* Adam: Sorry I can’t come to your birthday party. I want to go, but I promised my sister I would babysit her kids.\nChloe: It’s okay, I understand.\n\n* Don’t be sorry.\nYou can say this when someone is overly apologetic about something small and you don’t want them to feel guilty.\n\n* Pailin: I’m so sorry I lost your shirt. I don’t know where it could be.\nTyler: Don’t be sorry. It was an old shirt."
       },
       {
         "type": "extra_tip",
         "sort_order": 3,
-        "content_md": "## SORRY TO SHOW SYMPATHY\n\nWhen someone is experiencing hardship or misfortune, you can say 'I'm so sorry' to show empathy and acknowledge their pain. This expression is used to offer support during difficult times, such as the death of a loved one, health issues, a divorce or breakup, or any other challenging life circumstances. For example:\n\n* I'm so sorry for your loss.\n* I'm so sorry you're going through this.\n\nNote that this use of 'sorry' expresses sympathy, not responsibility for the other person's situation.\n\n## APOLOGIZING FOR FUTURE EVENTS\n\nTo apologize for something that might happen in the future and potentially cause inconvenience or discomfort, you can follow this structure:\n\nSorry if (reason you’re sorry).\n\nThe reason should be a complete sentence in present simple tense, even though the event would potentially happen in the future. For example:\n\n* Sorry if I wake you up in the morning.\nI wake you up in the morning = the reason you're sorry\n\n* Sorry if I come late. There’s so much traffic today.\n* Sorry if I forget your name. I’m so bad with names.\n* Sorry if my phone rings during the meeting. I’m expecting a call.\n\n## NO, SORRY\n\nWhen you're unable to fulfill a simple request or answer a question, you can respond with:\n\n* No, sorry.\n* I don't know, sorry.\n\nAdding ‘sorry’ is a polite way to acknowledge the minor inconvenience.\n\nFor example:\n\n* Pailin: Do you have any change for the parking meter?\nLuke: No, sorry.\n\n* Pailin: Excuse me, do you know where the metro station is?\nStranger: I don’t know, sorry. I’m not from around here."
+        "content_md": "## SORRY TO SHOW SYMPATHY\n\nWhen someone is experiencing hardship or misfortune, you can say 'I'm so sorry' to show empathy and acknowledge their pain. This expression is used to offer support during difficult times, such as the death of a loved one, health issues, a divorce or breakup, or any other challenging life circumstances. For example:\n\n* I'm so sorry for your loss.\n* I'm so sorry you're going through this.\n\nNote that this use of 'sorry' expresses sympathy, not responsibility for the other person's situation.\n\n## APOLOGIZING FOR FUTURE EVENTS\n\nTo apologize for something that might happen in the future and potentially cause inconvenience or discomfort, you can follow this structure:\n\nSorry if (reason you’re sorry).\n\nThe reason should be a complete sentence in present simple tense, even though the event would potentially happen in the future. For example:\n\n* Sorry if I wake you up in the morning.\nI wake you up in the morning = the reason you're sorry\n\n* Sorry if I come late. There’s so much traffic today.\n* Sorry if I forget your name. I’m so bad with names.\n* Sorry if my phone rings during the meeting. I’m expecting a call.\n\nNO, SORRY\n\nWhen you're unable to fulfill a simple request or answer a question, you can respond with:\n\n* No, sorry.\n* I don't know, sorry.\n\nAdding ‘sorry’ is a polite way to acknowledge the minor inconvenience.\n\nFor example:\n\n* Pailin: Do you have any change for the parking meter?\nLuke: No, sorry.\n\n* Pailin: Excuse me, do you know where the metro station is?\nStranger: I don’t know, sorry. I’m not from around here."
       },
       {
         "type": "phrases_verbs",
@@ -115,16 +224,11 @@
       {
         "type": "culture_note",
         "sort_order": 5,
-        "content_md": "SORRY!\n\nUnlike ขอโทษ, 'sorry' is used for a broader range of situations. It covers serious apologies for causing harm, but also light, everyday interactions where others might find it unnecessary to apologize.\n\nFor example, say a server at a restaurant mistakenly brings you a salad. You might say, ‘Sorry, I actually ordered a burger’ even though it’s the server’s mistake.\n\nCanadians are particularly known for reflexively saying ‘sorry’ all the time, even when they’ve done nothing wrong. Like if someone steps on their foot, they might say ‘Sorry!’ even though the other person is at fault.\n\nIn instances like these, ‘sorry’ is more of a polite filler word than a real apology."
-      },
-      {
-        "type": "practice",
-        "sort_order": 6,
-        "content_md": "## PRACTICE SORRY + VERB-ING\n\nFill in the blanks with ‘Sorry for (verb-ing)’ or ‘Sorry for not (verb-ing)’ according to the verb in (parenthesis).\n\n1. ___ (miss) your call.\n2. ___ (break) your plate.\n3. ___ (make) so much noise.\n4. ___ (say) that.\n5. ___ (not respond) to your text.\n\n## POLITE WORDS PRACTICE\n\nDetermine if the best word to use in these situations is 'please,' 'excuse me,' or 'sorry.'\n\n1. You're at a crowded bookstore, and someone is standing directly in front of the book you want to reach for. You want to ask them to move slightly.\n2. You're ordering a coffee at a coffee shop and want to be polite when asking for a specific type of milk.\n3. You're meeting a friend for lunch, but you arrive 20 minutes late because of unexpected traffic.\n4. You're asking to borrow your friend's pen for a moment.\n5. You're unable to attend a friend's party because you're feeling unwell.\n\n## OPEN-ENDED PRACTICE\n\nAnswer the questions using ‘sorry’ in your responses.\n\n1. Your friend invited you to her wedding, but you can’t go. What could you say to apologize to her?\n2. You arrived late to work because there was a big accident on the freeway. What could you say to apologize to him?\n3. You accidentally spill water all over your friend’s table. What could you say to apologize to her?"
+        "content_md": "## SORRY!\n\nUnlike ขอโทษ, 'sorry' is used for a broader range of situations. It covers serious apologies for causing harm, but also light, everyday interactions where others might find it unnecessary to apologize.\n\nFor example, say a server at a restaurant mistakenly brings you a salad. You might say, ‘Sorry, I actually ordered a burger’ even though it’s the server’s mistake.\n\nCanadians are particularly known for reflexively saying ‘sorry’ all the time, even when they’ve done nothing wrong. Like if someone steps on their foot, they might say ‘Sorry!’ even though the other person is at fault.\n\nIn instances like these, ‘sorry’ is more of a polite filler word than a real apology."
       },
       {
         "type": "pinned_comment",
-        "sort_order": 7,
+        "sort_order": 6,
         "content_md": "Are you usually early, on time, or late for events?"
       }
     ],
@@ -230,6 +334,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -239,21 +344,16 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to make negative sentences with ‘don’t’ and ‘doesn’t’\nVerb tense: Present simple tense\n\n## NEGATIVE SENTENCES\n\nSo far, you’ve learned how to make affirmative sentences in present simple tense (I drink coffee every morning). In this lesson, you’ll learn how to make those sentences negative using the words ‘don’t’ and ‘doesn’t.’\n\nCompare these two sentences from the conversation:\n\n* I don't like my classes.\n* He doesn't like it very much.\n\nIn Lesson 1.16, you learned that ‘not’ is used to negate ALL verbs in English. The two sentences above contain the word ‘not,’ although it may not be obvious at first glance. That’s because ‘not’ is contracted with the auxiliary verb ‘do’ or ‘does’.\n\ndon’t = do not\ndoesn’t = does not\n\nThese two words make present simple tense sentences negative. Notice their position in the sentences. They come after the subject and before the main verb:\n\n(Subject) don’t (verb)\n(Subject) doesn’t (verb)\n\nNow take a look at the main verb in these lines from the conversation:\n\n* My friend wants to try Engineering.\n* My dad doesn't want me to change my major.\n\nIn the first sentence, -s is added to the end of verb ‘want’ because it follows ‘he · she · it · noun.’ What do you notice about the second sentence? The verb ‘want’ doesn’t have an -s even though the subject is ‘he’. Instead, the negative auxiliary verb ‘do not’ takes the -s to become ‘does not,’ while the main verb ‘want’ stays in its base form.\n\n## USES & STRUCTURE\n\nRemember that present simple tense is used to talk about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, negative present simple tense is used to describe things that don’t happen regularly, or for things you don’t know, feel, or believe.\n\nHere is the structure of ‘don’t’ and ‘doesn’t in a sentence with some examples.\n\n## SUBJECT\n\t(-)\n## VERB\n## EXAMPLE SENTENCES\n\tI\nYou\nWe\nThey\n2+ Nouns\n\tdon’t\n\t(verb)\n\t* I don’t drive.\n* You don’t travel often.\n* We don’t know the answer.\n* They don’t see you.\n* My parents don’t live in Florida.\n\tHe\nShe\nIt\n1 Noun\n\tdoesn’t\n\t(verb)\n\t* He doesn’t drink coffee.\n* She doesn’t exercise often.\n* It doesn’t work.\n* Enzo doesn’t cook well.\n\nQuick Practice: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).\n\n1. I watch scary movies.\n2. Pete goes to the gym often.\n3. We like cats.\n4. She takes the bus to work.\n5. My brother lives in San Francisco.\n\n+ Submit to Show Answers"
+        "content_md": "## LESSON FOCUS\n\nHow to make negative sentences with ‘don’t’ and ‘doesn’t’\nVerb tense: Present simple tense\n\n## NEGATIVE SENTENCES\n\nSo far, you’ve learned how to make affirmative sentences in present simple tense (I drink coffee every morning). In this lesson, you’ll learn how to make those sentences negative using the words ‘don’t’ and ‘doesn’t.’\n\nCompare these two sentences from the conversation:\n\n* I don't like my classes.\n* He doesn't like it very much.\n\nIn Lesson 1.16, you learned that ‘not’ is used to negate ALL verbs in English. The two sentences above contain the word ‘not,’ although it may not be obvious at first glance. That’s because ‘not’ is contracted with the auxiliary verb ‘do’ or ‘does’.\n\ndon’t = do not\ndoesn’t = does not\n\nThese two words make present simple tense sentences negative. Notice their position in the sentences. They come after the subject and before the main verb:\n\n(Subject) don’t (verb)\n(Subject) doesn’t (verb)\n\nNow take a look at the main verb in these lines from the conversation:\n\n* My friend wants to try Engineering.\n* My dad doesn't want me to change my major.\n\nIn the first sentence, -s is added to the end of verb ‘want’ because it follows ‘he · she · it · noun.’ What do you notice about the second sentence? The verb ‘want’ doesn’t have an -s even though the subject is ‘he’. Instead, the negative auxiliary verb ‘do not’ takes the -s to become ‘does not,’ while the main verb ‘want’ stays in its base form.\n\n## USES & STRUCTURE\n\nRemember that present simple tense is used to talk about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, negative present simple tense is used to describe things that don’t happen regularly, or for things you don’t know, feel, or believe.\n\nHere is the structure of ‘don’t’ and ‘doesn’t in a sentence with some examples.\n\n## SUBJECT\n\t(-)\n## VERB\n## EXAMPLE SENTENCES\n## I\nYou\nWe\nThey\n2+ Nouns\n\tdon’t\n\t(verb)\n\t* I don’t drive.\n* You don’t travel often.\n* We don’t know the answer.\n* They don’t see you.\n* My parents don’t live in Florida.\n\tHe\nShe\nIt\n1 Noun\n\tdoesn’t\n\t(verb)\n\t* He doesn’t drink coffee.\n* She doesn’t exercise often.\n* It doesn’t work.\n* Enzo doesn’t cook well.\n\nQuick Practice: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).\n\n1. I watch scary movies.\n2. Pete goes to the gym often.\n3. We like cats.\n4. She takes the bus to work.\n5. My brother lives in San Francisco.\n\n+ Submit to Show Answers"
       },
       {
         "type": "common_mistake",
         "sort_order": 3,
-        "content_md": "## MISTAKE #1\n\nThai people often only use the word ‘not’ to make a sentence negative. Remember that ‘not’ is always used in conjunction with another verb to make a sentence negative, like in ‘It isn’t hot’ or ‘She doesn’t eat spicy food.’\n\nTake a look at the incorrect sentences below and how to fix them:\n\nI not have a dog. (X)\n* I don’t have a dog. (✓)\n\nThey not eat fish. (X)\n* They don’t eat fish. (✓)\n\nHe not like spicy food. (X)\n* He doesn’t like spicy food. (✓)\n\n## MISTAKE #2\n\nIt’s also common for Thai people to mistakenly use ‘don’t’ in negative sentences when they should use ‘doesn’t.' Building the habit of using both correctly will make your English more accurate and fluent. Take a look at the corrections below:\n\nShe don’t drink beer. (X)\n* She doesn’t drink beer. (✓)\n\nHe don’t work there. (X)\n* He doesn’t work there. (✓)\n\nIt don’t smell bad. (X)\n* It doesn’t smell bad. (✓)"
-      },
-      {
-        "type": "practice",
-        "sort_order": 4,
-        "content_md": "## PRACTICE NEGATIVE SENTENCES\n\nMake the affirmative sentences into negative sentences by using ‘don’t’ or ‘doesn’t.’\n\n1. I speak Korean.\n2. Adam eats seafood.\n3. She lives in an apartment\n4. We drink red wine.\n5. It smells good.\n\n## CORRECT OR INCORRECT\n\nDetermine if the grammar of the negative sentences is correct or not. If incorrect, enter the correct sentence into the box.\n\n1. She don’t work on the weekends.\n2. They not live in Bangkok.\n3. He doesn’t know Sarah.\n4. Dara not want kids.\n5. It don’t rain often.\n\n## OPEN-ENDED PRACTICE\n\nWrite two things that you don’t do often.\n\n1.\n2.\n\nWrite two things that members of your family don’t do often. For example: My son doesn’t watch TV often.\n\n1.\n2."
+        "content_md": "MISTAKE #1\n\nThai people often only use the word ‘not’ to make a sentence negative. Remember that ‘not’ is always used in conjunction with another verb to make a sentence negative, like in ‘It isn’t hot’ or ‘She doesn’t eat spicy food.’\n\nTake a look at the incorrect sentences below and how to fix them:\n\nI not have a dog. (X)\n* I don’t have a dog. (✓)\n\nThey not eat fish. (X)\n* They don’t eat fish. (✓)\n\nHe not like spicy food. (X)\n* He doesn’t like spicy food. (✓)\n\nMISTAKE #2\n\nIt’s also common for Thai people to mistakenly use ‘don’t’ in negative sentences when they should use ‘doesn’t.' Building the habit of using both correctly will make your English more accurate and fluent. Take a look at the corrections below:\n\nShe don’t drink beer. (X)\n* She doesn’t drink beer. (✓)\n\nHe don’t work there. (X)\n* He doesn’t work there. (✓)\n\nIt don’t smell bad. (X)\n* It doesn’t smell bad. (✓)"
       },
       {
         "type": "pinned_comment",
-        "sort_order": 5,
+        "sort_order": 4,
         "content_md": "If you went to university, what was your major?"
       }
     ],
@@ -398,6 +498,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -407,7 +508,7 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to use articles (a · an) before a noun\n\nEnglish uses 'articles,' which are small words that come before nouns. There are no articles at all in Thai! The three articles are: a, an, the. This lesson focuses on ‘a’ and ‘an.’\n\n## ARTICLES 'A’ & ‘AN'\n\nTake a look at the underlined nouns in these lines:\n\n* Sometimes I make a sandwich.\n* I usually just have a cup of coffee and an apple in the morning.\n* I need a big breakfast.\n\nNotice the small words that come before these nouns: ‘a’ and ‘an.’ These words are called ‘articles’ and are used very often in English. Although they’re small and don’t add meaning to a sentence, they’re very important for fluency. For example, saying ‘I need big breakfast’ sounds incomplete compared to ‘I need a big breakfast.’\n\n‘A’ and ‘an’ come before a singular, non-specific noun.\n\n‘Singular’ means there is only one noun. You can think of ‘a · an’ as meaning ‘one.’ In Thai, you would specify if there’s ‘one’ noun only if it’s important to the conversation’s context, for example: ฉันมีหมาหนึ่งตัว แต่พี่ชายมีสองตัว. But in English, the use of articles means it’s always clear if you are referring to one item or more than one item. When you say, ‘I ate a banana,’ it’s clear you ate one banana.\n\n‘Non-specific’ means you are not talking about a specific item. Another article (the) is used for this, which you’ll learn about in the next lesson. For example, if you say ‘I saw a dog,’ this means you saw any dog, while if you say ‘I saw Jane’s dog,’ you are referring to a specific dog.\n\nThese concepts will become clearer as you see more examples.\n\n## A VS. AN\n\nTake a look at these lines from the conversation:\n\n* I eat a banana...\n* But sometimes I eat an orange, too.\n\nOne sentence uses ‘a,’ and the other uses ‘an.’ Deciding which to use depends on the first sound of the word after the article.\n\n        an (the next word begins with a vowel sound – a, e, i, o, u)\n        a (the next word begins with a non-vowel sound - called ‘consonants’)\n\nWhat’s the first sound in the word ‘banana?’ ‘Buh!’ Because ‘buh’ is a consonant sound, you need to use the article ‘a’ before this word. What about the first sound in ‘orange?’ It’s ‘oh!’ That’s a vowel sound, so ‘an’ would come before it.\n\nThe reason ‘an’ is used before vowel sounds is for flow and ease of pronunciation - saying ‘a orange’ is awkward compared to saying ‘an orange.’ You can see this in more examples from the conversation:\n\n* Usually an egg and bacon sandwich.\n* You sound like an old man.\n\nPronunciation note: ‘a’ as an article isn’t pronounced like the letter ‘A’, but is pronounced more like ‘uh.’\n\n## NOUNS & NOUN PHRASES\n\nThe articles ‘a’ and ‘an’ come before nouns, but they also come before noun phrases, which is an adjective + noun. In a noun phrase, choosing ‘a’ and ‘an’ depends on the first letter of the adjective, not the noun. Note that articles never come before adjectives alone - only adjectives that are followed by a noun.\n\nIn the conversation, Sylvie tells Mark:\n\n* You sound like an old man.\n\nIn this line, 'old man' is the noun phrase.\nOld = adjective\nMan = noun\n\nYou must use 'an' since the next word starts with the letter 'o', which is a vowel.\n\nHere are more examples of ‘a’ before nouns and noun phrases:\n\n* Emily wants a dog. (noun)\n* I’d like a glass of water, please. (noun)\n* Pailin goes to a good school. (noun phrase)\n* That was a bad movie. (noun phrase)\n\nAnd here are more examples of ‘an’ before nouns and noun phrases:\n\n* I have an idea. (noun)\n* Do you have an umbrella? (noun)\n* It’s an easy task. (noun phrase)\n* I’m wearing an orange shirt. (noun phrase)"
+        "content_md": "## LESSON FOCUS\n\nHow to use articles (a · an) before a noun\n\nEnglish uses 'articles,' which are small words that come before nouns. There are no articles at all in Thai! The three articles are: a, an, the. This lesson focuses on ‘a’ and ‘an.’\n\nARTICLES 'A’ & ‘AN'\n\nTake a look at the underlined nouns in these lines:\n\n* Sometimes I make a sandwich.\n* I usually just have a cup of coffee and an apple in the morning.\n* I need a big breakfast.\n\nNotice the small words that come before these nouns: ‘a’ and ‘an.’ These words are called ‘articles’ and are used very often in English. Although they’re small and don’t add meaning to a sentence, they’re very important for fluency. For example, saying ‘I need big breakfast’ sounds incomplete compared to ‘I need a big breakfast.’\n\n‘A’ and ‘an’ come before a singular, non-specific noun.\n\n‘Singular’ means there is only one noun. You can think of ‘a · an’ as meaning ‘one.’ In Thai, you would specify if there’s ‘one’ noun only if it’s important to the conversation’s context, for example: ฉันมีหมาหนึ่งตัว แต่พี่ชายมีสองตัว. But in English, the use of articles means it’s always clear if you are referring to one item or more than one item. When you say, ‘I ate a banana,’ it’s clear you ate one banana.\n\n‘Non-specific’ means you are not talking about a specific item. Another article (the) is used for this, which you’ll learn about in the next lesson. For example, if you say ‘I saw a dog,’ this means you saw any dog, while if you say ‘I saw Jane’s dog,’ you are referring to a specific dog.\n\nThese concepts will become clearer as you see more examples.\n\n## A VS. AN\n\nTake a look at these lines from the conversation:\n\n* I eat a banana...\n* But sometimes I eat an orange, too.\n\nOne sentence uses ‘a,’ and the other uses ‘an.’ Deciding which to use depends on the first sound of the word after the article.\n\n        an (the next word begins with a vowel sound – a, e, i, o, u)\n        a (the next word begins with a non-vowel sound - called ‘consonants’)\n\nWhat’s the first sound in the word ‘banana?’ ‘Buh!’ Because ‘buh’ is a consonant sound, you need to use the article ‘a’ before this word. What about the first sound in ‘orange?’ It’s ‘oh!’ That’s a vowel sound, so ‘an’ would come before it.\n\nThe reason ‘an’ is used before vowel sounds is for flow and ease of pronunciation - saying ‘a orange’ is awkward compared to saying ‘an orange.’ You can see this in more examples from the conversation:\n\n* Usually an egg and bacon sandwich.\n* You sound like an old man.\n\nPronunciation note: ‘a’ as an article isn’t pronounced like the letter ‘A’, but is pronounced more like ‘uh.’\n\n## NOUNS & NOUN PHRASES\n\nThe articles ‘a’ and ‘an’ come before nouns, but they also come before noun phrases, which is an adjective + noun. In a noun phrase, choosing ‘a’ and ‘an’ depends on the first letter of the adjective, not the noun. Note that articles never come before adjectives alone - only adjectives that are followed by a noun.\n\nIn the conversation, Sylvie tells Mark:\n\n* You sound like an old man.\n\nIn this line, 'old man' is the noun phrase.\nOld = adjective\nMan = noun\n\nYou must use 'an' since the next word starts with the letter 'o', which is a vowel.\n\nHere are more examples of ‘a’ before nouns and noun phrases:\n\n* Emily wants a dog. (noun)\n* I’d like a glass of water, please. (noun)\n* Pailin goes to a good school. (noun phrase)\n* That was a bad movie. (noun phrase)\n\nAnd here are more examples of ‘an’ before nouns and noun phrases:\n\n* I have an idea. (noun)\n* Do you have an umbrella? (noun)\n* It’s an easy task. (noun phrase)\n* I’m wearing an orange shirt. (noun phrase)"
       },
       {
         "type": "extra_tip",
@@ -417,7 +518,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "Since articles aren’t a grammar concept that exists in Thai, they’re easily forgotten. However, they will make your speech sound natural and fluent when used correctly. Take a look at the incorrect sentences below and how to fix them.\n\nI read book before bed. (X)\n* I read a book before bed. (✓)\n\nHe has old dog. (X)\n* He has an old dog. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you include the articles."
+        "content_md": "## FORGOTTEN ARTICLES\n\nSince articles aren’t a grammar concept that exists in Thai, they’re easily forgotten. However, they will make your speech sound natural and fluent when used correctly. Take a look at the incorrect sentences below and how to fix them.\n\nI read book before bed. (X)\n* I read a book before bed. (✓)\n\nHe has old dog. (X)\n* He has an old dog. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you include the articles."
       },
       {
         "type": "culture_note",
@@ -425,13 +526,8 @@
         "content_md": "## BREAKFAST FOODS\n\nAmerican breakfasts are often centered around convenience and tend to be sweet. Popular options are cereal, yogurt, toast, eggs, or oatmeal. While pancakes, waffles, and French toast are iconic American breakfast foods, they aren't eaten on a daily basis, but rather might be eaten one day a week with the family.\n\nIn contrast, Thai breakfasts are generally hearty meals and tend to be savory. A cooked meal of rice or sticky rice served with meat is common, showing a preference for substantial, flavorful breakfasts. This contrasts with the American tendency to eat quick, sugary, and easily prepared foods to start the day."
       },
       {
-        "type": "practice",
-        "sort_order": 6,
-        "content_md": "## PRACTICE USING ARTICLES\n\nEnter ‘a’ or ‘an’ in the sentences.\n\n1. Do you have __ job?\n2. __ old man is outside our door.\n3. It’s __ funny movie.\n4. He rides __ bike to work.\n5. Emily has __ lot of homework.\n\n## CORRECT OR INCORRECT\n\nDetermine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.\n\n1. I got a email.\n2. We live in an big house.\n3. She has an appointment.\n4. That’s a excellent idea.\n5. She has cat.\n\n## OPEN-ENDED PRACTICE\n\nDescribe four things you see in your room. Use ‘a’ or ‘an’ in your answers. For example: I see a blue desk.\n\n1.\n2.\n3.\n4."
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 7,
+        "sort_order": 6,
         "content_md": "What do you usually have for breakfast?"
       }
     ],
@@ -512,6 +608,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -521,7 +618,7 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to use the article ‘the’ before a noun\n\nIn the previous lesson, you learned about the two articles ‘a’ and ‘an.’ There is one more article: the.\n\nFun fact: ‘The’ is the most commonly used word in the English language.\n\n## ‘THE’ FOR SPECIFIC THINGS\n\nRecall that ‘articles’ are small words that come before nouns. There are three articles: a, an, the. The key difference between ‘a · an’ and ‘the’ is:\n\na · an - used for non-specific things\nthe - used for specific things\n\nTake a look at this line from the conversation with the noun of focus underlined:\n\n* Check the yellow paper.\n\nLuke tells Pailin that she can find the Wi-Fi password on a specific yellow paper that's on the fridge. Because he is being specific, it is incorrect to say 'Check a yellow paper.' Then, Luke says to Pailin:\n\n* The coffee shop down the street has good Wi-Fi.\n\nAgain, he is referring to one specific coffee shop - the one down the street. Contrast this with a sentence like, 'A coffee shop will have good Wi-Fi.' If Luke said this, it means that any coffee shop will have good internet, so he would use 'a' instead of 'the.' But he wants to direct Pailin to a specific coffee shop nearby, so he says 'the coffee shop.'\n\nSee more explanations of the lines from the conversation below:\n\n* What’s the WIFI password?\nThere is only one specific WIFI password that Pailin is asking for.\n\n* It's on the fridge.\nMost homes have only one refrigerator, making it a specific object.\n\n* The internet is super slow today.\nA household typically has one internet service, and Luke is referring to that specific internet connection.\n\n* The library is also nearby.\nIn a neighborhood, there's usually one main library that everyone is familiar with. Luke is referring to the one that's closest to their home.\n\n## ‘THE’ FOR UNIQUE ITEMS\n\nTake a look at this line from the conversation:\n\n* The internet is super slow today.\n\nAlthough Luke is referring to the internet connection specifically in their home, 'the internet' in general is unique since there is only one internet. ‘An internet’ is never said because the idea of multiple internets doesn’t exist.\n\nSo for nouns that are unique, ‘the’ is the article used before, not ‘a · an.’ There are many different ‘unique nouns,’ so here are some select examples where ‘the’ should come before:\n\nPhysical environment: the stars, the moon, the grass, the ocean, the weather\nSystems and services: the police, the news, the electricity, the government\nGovernment positions: the Queen, the president\nConcepts: the economy, the future, the world\n\n‘THE’ FOR SPECIFIC THINGS ALREADY MENTIONED\n\nWhen you mention an item for the first time in a conversation, you should use ‘a’ or ‘an’ because it’s new information for the listener. However, after that item is mentioned, you should say ‘the’ because now it’s something that is known to both the speaker and listener. ‘The’ shows that the item is now a particular or familiar thing that everyone in the conversation is aware of.Here is an example:\n\n* Pailin: I saw a good movie yesterday.\nLuke: What was the movie about?\nPailin: The movie was about a man who traveled around the world.\n\nIn the beginning, Pailin says 'a good movie' because she's introducing the movie for the first time. She's not referring to a specific movie that Luke already knows about. It's a general introduction.  Then, once the 'good movie' is introduced into the conversation, Luke and Pailin can refer to it as 'the movie' because they both know which movie they're referring to. It's now specific.\n\nHere is another example referencing a person:\n\n* Mark: We have a new employee on the team.\nAssistant: Is the employee starting work this week?\nMark: I think so.\n\nAt first, Mark uses ‘a’ because he is introducing the employee into the conversation for the first time. The employee is unknown to the assistant. She doesn’t know who the new employee is or any details about them.\n\nBut once Mark introduces this employee into the conversation, the employee becomes known to both people in the conversation. Now they are both talking about the same person. So, the assistant uses ‘the’ because she is referring to the specific employee that Mark just mentioned. Later in the day, if the assistant wants to ask Mark more questions about this new employee, she will continue to say ‘the employee,’ rather than ‘a new employee.’\n\nThere are several more ways to use ‘the,’ which you can learn about in the Extra Tips section.\n\n'THE' BEFORE SINGULAR & PLURAL NOUNS\n\nYou learned in the previous lesson that 'a · an' is used before singular nouns only, meaning there is only one item or person. However, 'the' can be used before any quantity of people or things. For example:\n\n* The book is about a woman who becomes a chef.\n* The books on the shelf are old.\n\n* Can I eat the last cookie?\n* I ate all the cookies you baked.\n\nThe words ‘books’ and ‘cookies’ refer to more than one book and more than one cookie, yet ‘the’ can still be used."
+        "content_md": "## LESSON FOCUS\n\nHow to use the article ‘the’ before a noun\n\nIn the previous lesson, you learned about the two articles ‘a’ and ‘an.’ There is one more article: the.\n\nFun fact: ‘The’ is the most commonly used word in the English language.\n\n‘THE’ FOR SPECIFIC THINGS\n\nRecall that ‘articles’ are small words that come before nouns. There are three articles: a, an, the. The key difference between ‘a · an’ and ‘the’ is:\n\na · an - used for non-specific things\nthe - used for specific things\n\nTake a look at this line from the conversation with the noun of focus underlined:\n\n* Check the yellow paper.\n\nLuke tells Pailin that she can find the Wi-Fi password on a specific yellow paper that's on the fridge. Because he is being specific, it is incorrect to say 'Check a yellow paper.' Then, Luke says to Pailin:\n\n* The coffee shop down the street has good Wi-Fi.\n\nAgain, he is referring to one specific coffee shop - the one down the street. Contrast this with a sentence like, 'A coffee shop will have good Wi-Fi.' If Luke said this, it means that any coffee shop will have good internet, so he would use 'a' instead of 'the.' But he wants to direct Pailin to a specific coffee shop nearby, so he says 'the coffee shop.'\n\nSee more explanations of the lines from the conversation below:\n\n* What’s the WIFI password?\nThere is only one specific WIFI password that Pailin is asking for.\n\n* It's on the fridge.\nMost homes have only one refrigerator, making it a specific object.\n\n* The internet is super slow today.\nA household typically has one internet service, and Luke is referring to that specific internet connection.\n\n* The library is also nearby.\nIn a neighborhood, there's usually one main library that everyone is familiar with. Luke is referring to the one that's closest to their home.\n\n‘THE’ FOR UNIQUE ITEMS\n\nTake a look at this line from the conversation:\n\n* The internet is super slow today.\n\nAlthough Luke is referring to the internet connection specifically in their home, 'the internet' in general is unique since there is only one internet. ‘An internet’ is never said because the idea of multiple internets doesn’t exist.\n\nSo for nouns that are unique, ‘the’ is the article used before, not ‘a · an.’ There are many different ‘unique nouns,’ so here are some select examples where ‘the’ should come before:\n\nPhysical environment: the stars, the moon, the grass, the ocean, the weather\nSystems and services: the police, the news, the electricity, the government\nGovernment positions: the Queen, the president\nConcepts: the economy, the future, the world\n\n‘THE’ FOR SPECIFIC THINGS ALREADY MENTIONED\n\nWhen you mention an item for the first time in a conversation, you should use ‘a’ or ‘an’ because it’s new information for the listener. However, after that item is mentioned, you should say ‘the’ because now it’s something that is known to both the speaker and listener. ‘The’ shows that the item is now a particular or familiar thing that everyone in the conversation is aware of.Here is an example:\n\n* Pailin: I saw a good movie yesterday.\nLuke: What was the movie about?\nPailin: The movie was about a man who traveled around the world.\n\nIn the beginning, Pailin says 'a good movie' because she's introducing the movie for the first time. She's not referring to a specific movie that Luke already knows about. It's a general introduction.  Then, once the 'good movie' is introduced into the conversation, Luke and Pailin can refer to it as 'the movie' because they both know which movie they're referring to. It's now specific.\n\nHere is another example referencing a person:\n\n* Mark: We have a new employee on the team.\nAssistant: Is the employee starting work this week?\nMark: I think so.\n\nAt first, Mark uses ‘a’ because he is introducing the employee into the conversation for the first time. The employee is unknown to the assistant. She doesn’t know who the new employee is or any details about them.\n\nBut once Mark introduces this employee into the conversation, the employee becomes known to both people in the conversation. Now they are both talking about the same person. So, the assistant uses ‘the’ because she is referring to the specific employee that Mark just mentioned. Later in the day, if the assistant wants to ask Mark more questions about this new employee, she will continue to say ‘the employee,’ rather than ‘a new employee.’\n\nThere are several more ways to use ‘the,’ which you can learn about in the Extra Tips section.\n\n'THE' BEFORE SINGULAR & PLURAL NOUNS\n\nYou learned in the previous lesson that 'a · an' is used before singular nouns only, meaning there is only one item or person. However, 'the' can be used before any quantity of people or things. For example:\n\n* The book is about a woman who becomes a chef.\n* The books on the shelf are old.\n\n* Can I eat the last cookie?\n* I ate all the cookies you baked.\n\nThe words ‘books’ and ‘cookies’ refer to more than one book and more than one cookie, yet ‘the’ can still be used."
       },
       {
         "type": "extra_tip",
@@ -534,13 +631,8 @@
         "items": []
       },
       {
-        "type": "practice",
-        "sort_order": 5,
-        "content_md": "## 'THE' VS 'A · AN'\n\nDecide if the article before the noun should be 'the,' 'an', or 'a.'\n\nYesterday, I went to (the / a) pet store. I saw (a) parrot. (The) parrot was very colorful. I also saw (a) small puppy. (The) puppy was sleeping in (a) cage. I asked (an / the) employee about (the) price for (the) puppy. She told me it's quite expensive. So I bought (a) bag of cat food for my cat instead.\n\n## CORRECT OR INCORRECT\n\nDetermine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.\n\n1. I went to a beach yesterday.\n2. She wants to get a new car.\n3. Pailin is an university student.\n4. Where are the keys?\n5. A house next door is blue.\n\n## OPEN-ENDED PRACTICE\n\nDescribe four things around you. Use ‘the’ in your answers. For example: The door is white. The kids outside are noisy.\n\n1.\n2.\n3.\n4."
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 6,
+        "sort_order": 5,
         "content_md": "What are some places in your neighborhood that you go to often?"
       }
     ],
@@ -639,6 +731,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -658,7 +751,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "Thai people often omit the -s sound at the end of plural nouns. Although remembering to use plural nouns can be difficult, pronouncing the -s will make you sound more like a native speaker! Try developing good habits now. See how to fix the incorrect sentence below:\n\nI brought some orange. (X)\n* I brought some oranges. (✓)\n\nShe has two brother. (X)\n* She has two brothers. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.\n\nCheck out our comprehensive list of common mistakes made by Thai learners."
+        "content_md": "## THE -S SOUND\n\nThai people often omit the -s sound at the end of plural nouns. Although remembering to use plural nouns can be difficult, pronouncing the -s will make you sound more like a native speaker! Try developing good habits now. See how to fix the incorrect sentence below:\n\nI brought some orange. (X)\n* I brought some oranges. (✓)\n\nShe has two brother. (X)\n* She has two brothers. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.\n\nCheck out our comprehensive list of common mistakes made by Thai learners."
       },
       {
         "type": "phrases_verbs",
@@ -672,13 +765,8 @@
         ]
       },
       {
-        "type": "practice",
-        "sort_order": 6,
-        "content_md": "## SINGULAR TO PLURAL NOUN\n\nChange the amount in the following sentences from 'one' to 'two.' Don't forget to update the singular noun into a plural noun. Type the full sentence into the answer box. For example: She owns two cars.\n\n1. He wants one cupcake.\n2. We have one child.\n3. I wrote one book.\n4. They brought one camera.\n5. I saw one person.\n\n## PLURAL NOUNS VS SINGULAR NOUNS\n\nThe noun in (parenthesis) should either be a singular noun or a plural noun in the following sentences. Use context clues to determine which is correct to use.\n\n1. Do you have any ____ (sibling)?\n2. Our home has a ____ (yard).\n3. The ____ (student) are in the classroom.\n4. He sang many ____ (song).\n5. I bought three ____ (ticket).\n\n## CORRECT OR INCORRECT\n\nThese sentences should all use plural nouns. Determine if the plural noun is used correctly or not. If incorrect, enter the correct sentence into the box.\n\n1. I have three sister.\n2. The bag is ten dollars.\n3. She lives with two person.\n4. Chloe has some book.\n5. We don't have any blanket.\n\n## OPEN-ENDED PRACTICE\n\nAnswer the following questions. Try using plural nouns in your answers.\n\n1. What are some things in your fridge right now?\n2. How many people do you work with?\n3. How many movies or TV shows have you watched this past month?"
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 7,
+        "sort_order": 6,
         "content_md": "How many siblings do you have?"
       }
     ],
@@ -778,6 +866,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -797,7 +886,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "Thai students often omit the -'s sound when describing ownership. Take a look at the incorrect sentences and how to fix them:\n\nThis is my mom car. (X)\n* This is my mom's car. (✓)\n\nSarah daughter is a student here. (X)\n* Sarah's daughter is a student here. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.\n\nYou've now learned four key uses of adding an -s to the end of a word:\n\nContracting 'is' to a subject (It's hot.)\n3rd person verb conjugation (He works at Google.)\nPlural nouns (Do you like burgers?)\nPossessive 's (These are Emily's paintings.)\n\nRemember that adding the -s sound at the end of words is a good habit to build now, as a beginner. It'll significantly help you sound more fluent as your English progresses!"
+        "content_md": "## THE -S SOUND\n\nThai students often omit the -'s sound when describing ownership. Take a look at the incorrect sentences and how to fix them:\n\nThis is my mom car. (X)\n* This is my mom's car. (✓)\n\nSarah daughter is a student here. (X)\n* Sarah's daughter is a student here. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.\n\nYou've now learned four key uses of adding an -s to the end of a word:\n\nContracting 'is' to a subject (It's hot.)\n3rd person verb conjugation (He works at Google.)\nPlural nouns (Do you like burgers?)\nPossessive 's (These are Emily's paintings.)\n\nRemember that adding the -s sound at the end of words is a good habit to build now, as a beginner. It'll significantly help you sound more fluent as your English progresses!"
       },
       {
         "type": "phrases_verbs",
@@ -811,18 +900,8 @@
         ]
       },
       {
-        "type": "culture_note",
-        "sort_order": 6,
-        "content_md": "SORRY!"
-      },
-      {
-        "type": "practice",
-        "sort_order": 7,
-        "content_md": "## PRACTICE APOSTROPHE -S\n\nCombine the two sentences to form one sentence. Make sure to add -'s when applicable. For example: My dad has a car. His car is green. --> My dad's car is green.\n\n1. Jill has a friend. Her friend is Thai.\n(Jill's friend is Thai.)\n2. My friend has a dog. The dog's name is Max.\n(My friend's dog's name is Max.)\n3. My boss has an office. The office is large.\n(My boss's office is large.)\n4. His family has a house. The house is by the lake.\n(His family's house is by the lake.)\n5. Ethan has a job. His job is stressful.\n(Ethan's job is stressful.)\n\n## CORRECT OR INCORRECT\n\nDetermine if the possessive form is used in the sentences correctly. If incorrect, enter the correct sentence into the box.\n\n1. Mark car is white.\n2. My uncle's cat is friendly.\n3. I've never met my brother wife.\n4. This is Adam's phone.\n5. Your grandma necklace is beautiful.\n\n## OPEN-ENDED PRACTICE\n\nAnswer the following questions using a full sentence. Use the possessive 'apostrophe -s' in your answers.\n\n1. What is your best friend's name?\n2. What is your friend's favorite TV show?\n3. What city are your mom's parents from?"
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 8,
+        "sort_order": 6,
         "content_md": "Do you have any family keepsakes? What are they?"
       }
     ],
@@ -927,6 +1006,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -946,7 +1026,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "Thai students often omit the -s sound in 'Let's'. Take a look at the incorrect sentences and how to fix them:\n\nLet go to the mall. (X)\n* Let's go to the mall. (✓)\n\nLet get some food. (X)\n* Let's get some food. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound."
+        "content_md": "## THE -S SOUND\n\nThai students often omit the -s sound in 'Let's'. Take a look at the incorrect sentences and how to fix them:\n\nLet go to the mall. (X)\n* Let's go to the mall. (✓)\n\nLet get some food. (X)\n* Let's get some food. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound."
       },
       {
         "type": "phrases_verbs",
@@ -974,13 +1054,8 @@
         ]
       },
       {
-        "type": "practice",
-        "sort_order": 6,
-        "content_md": "## PRACTICE 'LET'S'\n\nRewrite these sentences using 'let's.'\n\n1. We should go to the store.\n2. We should watch the basketball game.\n3. We should leave soon.\n4. We should try that new coffee shop.\n5. We should listen to some music.\n\n## CORRECT OR INCORRECT\n\nDetermine if the word 'let's' is used in the sentences correctly. If incorrect, enter the correct sentence into the box.\n\n1. Let's go on a hike.\n2. Let watch a movie.\n3. Let's meet in an hour.\n4. Let take the subway.\n5. Let finish this.\n\n## OPEN-ENDED PRACTICE\n\nLook at the following situations and make suggestions using 'let's.'\n\n1. You and your friend are bored.\n2. You and your friend are hungry.\n3. The weather is nice outside.\n4. Your friend is sad and you want to cheer them up.\n5. You and your friend want to do something fun this weekend."
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 7,
+        "sort_order": 6,
         "content_md": "Where do you like to take your friends who are visiting you from out of town?"
       }
     ],
@@ -1086,6 +1161,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -1105,7 +1181,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "Thai students often omit the -s sound in 'guys'. Take a look at the incorrect sentences and how to fix them:\n\nAre you guy tired? (X)\n* Are you guys tired? (✓)\n\nI'll pick you guy up. (X)\n* I'll pick you guys up. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound."
+        "content_md": "## THE -S SOUND\n\nThai students often omit the -s sound in 'guys'. Take a look at the incorrect sentences and how to fix them:\n\nAre you guy tired? (X)\n* Are you guys tired? (✓)\n\nI'll pick you guy up. (X)\n* I'll pick you guys up. (✓)\n\nTry listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound."
       },
       {
         "type": "phrases_verbs",
@@ -1121,16 +1197,11 @@
       {
         "type": "culture_note",
         "sort_order": 6,
-        "content_md": "'YOU ALL' AS A GENDER-NEUTRAL PHRASE\n\nWhile 'you guys' is widely used to address groups, some argue that it carries a gender bias. They suggest using a gender-neutral alternative, like 'you all.' In the southern US, 'y'all' is a common colloquialism, which is a contraction of 'you all.' However, it isn't used widely in other regions.\n\nAlthough 'you all' is considered more politically correct, 'you guys' remains prevalent in informal speech, even when addressing groups of women."
-      },
-      {
-        "type": "practice",
-        "sort_order": 7,
-        "content_md": "## PRACTICE 'YOU GUYS'\n\nChange the subject in these sentences to 'you guys.'\n\n1. They are so funny.\n2. Are you sleepy?\n3. We don't drink coffee.\n4. Do they live in Bangkok?\n5. We're bringing food.\n\n## CORRECT OR INCORRECT\n\nDetermine if the verb conjugation is correct in these sentences. If incorrect, enter the correct sentence into the box.\n\n1. Is you guys hungry?\n2. You guys was late.\n3. Do you guys like wine?\n4. You guys is doing a great job.\n5. Does you guys play soccer?\n\n## OPEN-ENDED PRACTICE\n\nImagine your two friends are visiting you. Ask them three things about what they like or what they might want to do in your city using 'you guys.'\n\n1.\n2.\n3."
+        "content_md": "'Y’ALL' AS A GENDER-NEUTRAL PHRASE\n\nWhile 'you guys' is widely used to address groups, some argue that it carries a gender bias. They suggest using a gender-neutral alternative, like 'you all.' In the southern US, 'y'all' is a common colloquialism, which is a contraction of 'you all.' It’s also become popular to use by young people.\n\nAlthough 'you all' is considered more politically correct, 'you guys' remains prevalent in informal speech, even when addressing groups of women."
       },
       {
         "type": "pinned_comment",
-        "sort_order": 8,
+        "sort_order": 7,
         "content_md": "What's your favorite flavor of ice cream?"
       }
     ],
@@ -1238,6 +1309,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -1247,7 +1319,7 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to make questions with 'Do...?' and 'Does...?’\n\nVerb tense: Present simple tense\n\nIn Lesson 2.4, you learned how to ask simple questions to get to know someone, such as 'Do you like tacos?' or 'Do you have siblings?' In this lesson, you’ll learn how to ask any question in present simple tense using 'Do...?' or 'Does...?'\n\nDO...?\n\nIn the conversation, Chloe asks Pailin about Anthony and his sister:\n\n* Do they talk often?\n\nThe question is made by adding ‘Do’ to the beginning of the present simple tense sentence ‘They talk often.’ So, ‘Do’ changes a statement into a yes/no question.\n\nHere are more examples:\n\n* Do I speak English well?\n* Do we have homework?\n* Do your parents live in England?\n\nKeep in mind that ‘Do’ is used for these subjects: I, you, we, they, 2+ nouns\n\nDOES...?\n\nCompare these two questions from the conversation:\n\n* Do they talk often?\n* Does he come to LA often?\n\nNotice how the first word changed in the question from 'Do' to 'Does.' This is because the subject is different. When making questions with the subjects 'he · she · it · noun,' the question must begin with 'Does.'\n\nNow take a look at the main verb that's underlined in these two lines:\n\n* His sister lives in LA.\n* Does he drive a motorcycle?\n\nIn the first sentence, -s is added to the end of verb because it follows ‘he · she · it · noun.’ What do you notice about the second line? The verb doesn’t have an -s even though the subject is ‘he’. Instead, the questioning auxiliary verb ‘Do’ takes the -s to become ‘Does,’ while the main verb ‘drive’ stays in its base form.\n\nYou might remember that the same rule applies to negative present simple tense sentences:\n\n* He drives a motorcycle.\n* He doesn’t drive a motorcycle.\n\nThe negative auxiliary verb ‘does not’ takes the -s, while the main verb ‘drive’ stays in its base form.\n\n## USES & STRUCTURE\n\nRecall that present simple tense is used when talking about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, questions in present simple tense are used to ask about things that happen regularly, or for asking about how someone feels.\n\nHere is a breakdown of forming questions using present simple tense.\n\n## AUXILIARY VERB\n## SUBJECT\n## VERB\n## EXAMPLE SENTENCES\n\tDo\n\tI\nyou\nwe\nthey\n2+ nouns\n\t(verb)\n\t* Do I look okay?\n* Do you watch scary movies?\n* Do we need anything?\n* Do they live here?\n* Do Mark and Sylvie work together?\n\tDoes\n\the\nshe\nit\n1 noun\n\t(verb)\n\t* Does he speak Spanish?\n* Does she play the piano?\n* Does it snow in Thailand?\n* Does Sophia drive a car?\n\nQuick Practice: Change the affirmative sentences into questions.\n\n1. You eat breakfast every morning.\n2. Pete goes to the gym often.\n3. They take the bus to work.\n4. She visits Chicago every year.\n5. Your brother works from home.\n\n+ Submit to Show Answers"
+        "content_md": "## LESSON FOCUS\n\nHow to make questions with 'Do...?' and 'Does...?’\n\nVerb tense: Present simple tense\n\nIn Lesson 2.4, you learned how to ask simple questions to get to know someone, such as 'Do you like tacos?' or 'Do you have siblings?' In this lesson, you’ll learn how to ask any question in present simple tense using 'Do...?' or 'Does...?'\n\n## DO...?\n\nIn the conversation, Chloe asks Pailin about Anthony and his sister:\n\n* Do they talk often?\n\nThe question is made by adding ‘Do’ to the beginning of the present simple tense sentence ‘They talk often.’ So, ‘Do’ changes a statement into a yes/no question.\n\nHere are more examples:\n\n* Do I speak English well?\n* Do we have homework?\n* Do your parents live in England?\n\nKeep in mind that ‘Do’ is used for these subjects: I, you, we, they, 2+ nouns\n\n## DOES...?\n\nCompare these two questions from the conversation:\n\n* Do they talk often?\n* Does he come to LA often?\n\nNotice how the first word changed in the question from 'Do' to 'Does.' This is because the subject is different. When making questions with the subjects 'he · she · it · noun,' the question must begin with 'Does.'\n\nNow take a look at the main verb that's underlined in these two lines:\n\n* His sister lives in LA.\n* Does he drive a motorcycle?\n\nIn the first sentence, -s is added to the end of verb because it follows ‘he · she · it · noun.’ What do you notice about the second line? The verb doesn’t have an -s even though the subject is ‘he’. Instead, the questioning auxiliary verb ‘Do’ takes the -s to become ‘Does,’ while the main verb ‘drive’ stays in its base form.\n\nYou might remember that the same rule applies to negative present simple tense sentences:\n\n* He drives a motorcycle.\n* He doesn’t drive a motorcycle.\n\nThe negative auxiliary verb ‘does not’ takes the -s, while the main verb ‘drive’ stays in its base form.\n\n## USES & STRUCTURE\n\nRecall that present simple tense is used when talking about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, questions in present simple tense are used to ask about things that happen regularly, or for asking about how someone feels.\n\nHere is a breakdown of forming questions using present simple tense.\n\n## AUXILIARY VERB\n## SUBJECT\n## VERB\n## EXAMPLE SENTENCES\n\tDo\n## I\nyou\nwe\nthey\n2+ nouns\n\t(verb)\n\t* Do I look okay?\n* Do you watch scary movies?\n* Do we need anything?\n* Do they live here?\n* Do Mark and Sylvie work together?\n\tDoes\n\the\nshe\nit\n1 noun\n\t(verb)\n\t* Does he speak Spanish?\n* Does she play the piano?\n* Does it snow in Thailand?\n* Does Sophia drive a car?\n\nQuick Practice: Change the affirmative sentences into questions.\n\n1. You eat breakfast every morning.\n2. Pete goes to the gym often.\n3. They take the bus to work.\n4. She visits Chicago every year.\n5. Your brother works from home.\n\n+ Submit to Show Answers"
       },
       {
         "type": "extra_tip",
@@ -1257,7 +1329,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "## MISTAKE #1\n\nThai people often answer these yes/no questions in the following incorrect way:\n\nA: Does she speak English?\nB: Yes, she speak. (X)\n\nA: Do they eat meat?\nB: Yes, they eat. (X)\n\nA: Does he want kids?\nB: No, he not want. (X)\n\nThey incorrectly respond with the main verb of the sentence. This is because that’s how the sentence would be answered in Thai, for example:\n\n## A: แม่คุณเล่นเทนนิสไหมคะ\n## B: เล่นครับ\n\nRemember that the auxiliary verbs ‘do · don't' or 'does · doesn't’ should be used in these answers, NOT the main verb.\n\n* A: Does she speak English?\nB: Yes, she does. (✓)\n\n* A: Do they eat meat?\nB: Yes, they do. (✓)\n\n* A: Does he want kids?\nB: No, he doesn't. (✓)\n\n## MISTAKE #2\n\nIt’s common for Thai people to omit the question words ‘do’ or 'does' and simply ask:\n\nThey drink coffee? (X)\nShe live in Japan? (X)\n\nAlthough you can ask questions in this way (see Lesson 2.10), remember that this style of question is mainly used to confirm something you already suspect to be true. For general questions, it's important to begin your questions with 'Do' or 'Does,' so they become:\n\n* Do they drink coffee? (✓)\n* Does she live in Japan? (✓)\n\nCheck out our comprehensive list of common mistakes made by Thai learners"
+        "content_md": "MISTAKE #1\n\nThai people often answer these yes/no questions in the following incorrect way:\n\nA: Does she speak English?\nB: Yes, she speak. (X)\n\nA: Do they eat meat?\nB: Yes, they eat. (X)\n\nA: Does he want kids?\nB: No, he not want. (X)\n\nThey incorrectly respond with the main verb of the sentence. This is because that’s how the sentence would be answered in Thai, for example:\n\nA: แม่คุณเล่นเทนนิสไหมคะ\nB: เล่นครับ\n\nRemember that the auxiliary verbs ‘do · don't' or 'does · doesn't’ should be used in these answers, NOT the main verb.\n\n* A: Does she speak English?\nB: Yes, she does. (✓)\n\n* A: Do they eat meat?\nB: Yes, they do. (✓)\n\n* A: Does he want kids?\nB: No, he doesn't. (✓)\n\nMISTAKE #2\n\nIt’s common for Thai people to omit the question words ‘do’ or 'does' and simply ask:\n\nThey drink coffee? (X)\nShe live in Japan? (X)\n\nAlthough you can ask questions in this way (see Lesson 2.10), remember that this style of question is mainly used to confirm something you already suspect to be true. For general questions, it's important to begin your questions with 'Do' or 'Does,' so they become:\n\n* Do they drink coffee? (✓)\n* Does she live in Japan? (✓)\n\nCheck out our comprehensive list of common mistakes made by Thai learners"
       },
       {
         "type": "phrases_verbs",
@@ -1279,13 +1351,8 @@
         ]
       },
       {
-        "type": "practice",
-        "sort_order": 6,
-        "content_md": "## 'DO' VS 'DOES'\n\nFill in the blanks with either 'Do' or 'Does' to make the question correct.\n\n1. ____ he like to cook?\n2. ____ they read every day?\n3. ____ you run at the park?\n4. ____ Pete have a car?\n5. ____ your parents live in Bangkok?\n\n## PRACTICE MAKING QUESTIONS\n\nChange the affirmative sentences into questions.\n\n1. They play football after school.\n2. Your dad works in a bank.\n3. Your cat sleeps in your bed.\n4. The store opens at 9AM.\n5. You guys need help.\n\n## CORRECT OR INCORRECT\n\nDetermine if 'Do' or 'Does' is the correct word to use in these questions. If incorrect, enter the correct sentence into the box.\n\n1. Do she speak Thai?\n2. Does it rain often?\n3. Do your brother play the guitar?\n4. Does they have any pets?\n5. Does Chloe and Alex work tonight?\n\n## SHORT FORM ANSWERS\n\nFill in the blanks with the correct pronoun and 'do · don't · does · doesn't' to create short form answers. For example:\n\nA: Do Diego and Jerald know each other?\nB: No, they don't.\n\n1. A: Do your parents like to travel?\nB: Yeah, (they do).\n2. A: Does Emily play softball?\nB: No, (she doesn't).\n3. A: Do you guys live together?\nB: No, (we don't).\n4. A: Does your dad work in an office?\nB: Yeah, (he does).\n5. A: Do you need to buy groceries?\nB: Yeah, (I do).\n\n## OPEN-ENDED PRACTICE\n\nImagine you are with a close friend. His mom, dad, and sister are coming to visit. Write 5 questions you could ask him about his family. Make the questions using present simple tense.\n\n1.\n2.\n3.\n4.\n5."
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 7,
+        "sort_order": 6,
         "content_md": "Do you think Chloe should send a message to Anthony? Or should she wait and see if he messages her first?"
       }
     ],
@@ -1378,6 +1445,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -1406,13 +1474,8 @@
         ]
       },
       {
-        "type": "practice",
-        "sort_order": 5,
-        "content_md": "## 'HAVE' VS 'HAS'\n\nFill in the blanks with either 'have' or 'has' to make the sentences correct.\n\n1. I ____ a meeting at 3PM.\n2. They ____ many friends.\n3. This restaurant ____ great reviews.\n4. Our house ____ a big garden.\n5. My dog ____ a long tail.\n\n## CORRECT OR INCORRECT\n\nDetermine if 'have' or 'has' is used correctly in these sentences. If incorrect, enter the correct sentence into the box.\n\n1. He have a new car.\n2. We has a lot of homework.\n3. Does she have a good job?\n4. Marcus doesn't has his phone.\n5. Our teacher have blonde hair.\n\n## OPEN-ENDED PRACTICE\n\nAnswer the questions using 'have' or 'has' in your responses.\n\n1. What siblings does your mom have?\n2. What siblings does your dad have?\n3. Why do you like your house or apartment? What things does it have?\n4. Describe what your best friend looks like."
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 6,
+        "sort_order": 5,
         "content_md": "What do you do for exercise?"
       }
     ],
@@ -1543,6 +1606,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -1557,7 +1621,7 @@
       {
         "type": "common_mistake",
         "sort_order": 3,
-        "content_md": "It's totally understandable that 3rd person verb conjugation can be challenging for ESL learners, as adding an -s doesn't change the sentence's core meaning. However, applying the -s ending is a key step towards making your English sound more natural! See the incorrect sentences below and how to fix them with an -s ending:\n\nShe are at school. (X)\nShe at school. (X)\n* She's at school. (✓)\n\nHe were a good student. (X)\n* He was a good student. (✓)\n\nIt rain here often. (X)\n* It rains here often. (✓)\n\nMy friend have a dog. (X)\n* My friend has a dog. (✓)\n\nShe don't like spicy food. (X)\n* She doesn't like spicy food. (✓)\n\nDo Jake drive a car? (X)\n* Does Jake drive a car? (✓)"
+        "content_md": "ADDING ‘S\n\nIt's totally understandable that 3rd person verb conjugation can be challenging for ESL learners, as adding an -s doesn't change the sentence's core meaning. However, applying the -s ending is a key step towards making your English sound more natural! See the incorrect sentences below and how to fix them with an -s ending:\n\nShe are at school. (X)\nShe at school. (X)\n* She's at school. (✓)\n\nHe were a good student. (X)\n* He was a good student. (✓)\n\nIt rain here often. (X)\n* It rains here often. (✓)\n\nMy friend have a dog. (X)\n* My friend has a dog. (✓)\n\nShe don't like spicy food. (X)\n* She doesn't like spicy food. (✓)\n\nDo Jake drive a car? (X)\n* Does Jake drive a car? (✓)"
       },
       {
         "type": "phrases_verbs",
@@ -1586,13 +1650,8 @@
         "content_md": "## TRADER JOE'S\n\nTrader Joe's is a unique grocery store chain in the US known for its affordable yet high-quality products. It has a laid-back, friendly atmosphere that'll transport you to a beach in Hawaii. The workers are known for being relaxed and friendly, and the prices often beat other grocery stores. While they aren't as large as regular grocery stores and may not carry every product, every visit to Trader Joe's will feel like a treasure hunt where you'll leave with way more goodies than you expected to get.\n\nTheir focus on exclusive items, coupled with reasonable prices and cheerful staff, sets them apart from traditional supermarkets."
       },
       {
-        "type": "practice",
-        "sort_order": 6,
-        "content_md": "## MIXED PRACTICE\n\nChange the subject of these sentences to become 'Pailin', and change the verb so that it's conjugated properly. Enter the full sentence in the box. For example:\n\nWe sleep at midnight. --> Pailin sleeps at midnight.\n\n1. They don't speak Spanish.\n2. You were hungry.\n3. I'm not from Canada.\n4. They're hungry.\n5. I work at a bookstore.\n6. Do you take the metro to work?\n7. They weren't at the park.\n8. We have an exam today.\n9. You like Japanese food.\n10. We do the dishes every night.\n\n## CORRECT OR INCORRECT\n\nDetermine if the verb is conjugated correctly in these sentences. If incorrect, enter the correct sentence into the box.\n\n1. The movie were interesting.\n2. Chloe is half French.\n3. My uncle live with my grandparents.\n4. He has a flight tomorrow.\n5. His boss like him.\n6. She isn't at home.\n7. Do Pete ride a bike to school?\n8. Dara don't have any kids.\n9. Were Alex late to work?\n10. My mom doesn't like tea.\n\n## OPEN-ENDED PRACTICE\n\nWrite 4 things about your favorite place, like a favorite country, city, or attraction. Use 3rd person verb conjugation in each sentence.\n\n1.\n2.\n3.\n4.\n\nWrite 4 things about your best friend. Use 3rd person verb conjugation in each sentence.\n\n1.\n2.\n3.\n4."
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 7,
+        "sort_order": 6,
         "content_md": "Tell us about the people in your family."
       }
     ],
@@ -1725,6 +1784,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -1734,7 +1794,7 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\nHow to talk about the future with 'will'\nVerb tense: Future simple tense\n\n## FUTURE SIMPLE TENSE\n\nFuture simple tense is used to talk about actions or events that will happen in the future. In the conversation, Pailin and Chloe use this tense to plan their trip to the Hollywood Walk of Fame and Amoeba Music:\n\n* My host mom will drop me off.\n* I'll get some vinyls for my parents.\n* I'll bring my camera.\n* It'll be fun!\n\nAre they at the Hollywood Walk of Fame right now? Nope! They will go there later, after 1PM. Unlike present simple tense (used for routines and current feelings) and present continuous tense (used for things happening right now), future simple tense is used for events that haven’t happened yet.\n\nUSES OF FUTURE SIMPLE TENSE FOR AFFIRMATIVE SENTENCES\n\nMore specifically, affirmative future simple tense sentences are used for:\n\n1. Intentions or plans made for the future:\n* I'll finish the report by Friday.\n\n2. Decisions made at the moment of speaking:\n* *doorbell rings* I'll get it!\n\n3. Predictions for things you believe will happen:\n* It'll rain tomorrow.\n\n4. Promises you will commit to doing:\n* I'll help you with your job application when I finish work.\n\n5. Offers to help someone:\n* Those bags look heavy. I'll carry them for you.\n\nTake a look at what the affirmative sentences from the conversation demonstrate:\n\n* I'll run some errands first.\nAn intention or plan\n\n* I'll ask her to pick you up.\nAn offer or promise\n\n* I'll get some vinyls for my parents.\nA plan or intention\n\n* They'll love that.\nA prediction\n\n* I'll bring my camera.\nA decision made at the moment of speaking\n\n* It'll be fun!\nA prediction\n\n* I'll text you when we leave the house.\nA promise\n\n## AFFIRMATIVE SENTENCE STRUCTURE\n\nIn these three sentences, take a look at the main verb:\n\n* I'll get some vinyls for my parents.\n* I'll bring my camera.\n* I'll text you when we leave the house.\n\nNotice that 'I'll' comes before each verb:\n\nI'll = I will\n\nThe full sentences are:\n\nI will get some vinyls for my parents.\nI will bring my camera.\nI will text you when we leave the house.\n\nThe word 'will' is an auxiliary verb that indicates you are speaking about the future. However, you should contract the subject with 'will' when speaking, as 'I'll' is easier and quicker to say than 'I will.'\n\nNow take a look at this line that also uses future simple tense:\n\nMy host mom will drop me off.\n\nAlthough 'my host mom' is a 3rd person subject, neither the auxiliary verb 'will' nor the main verb 'drop' has an -s ending! Lucky for you, the grammar of future simple tense sentences is straightforward. The sentence structure is the same for all subjects!\n\nHere is the structure of affirmative future simple tense sentences. Note that you can contract pronouns with 'will,' but you can't do this with subjects like 'My host mom' or 'The store.'\n\n## SUBJECT\n## AUXILIARY VERB\n## VERB\n## EXAMPLE SENTENCES\n\tI\nYou\nWe\nThey\n2+ Nouns\nHe\nShe\nIt\n1 Noun\n\twill\n\t(verb)\n\t* I'll quit my job next month.\n* You'll like the movie tonight.\n* We'll have a meeting tomorrow.\n* They'll arrive at 5PM.\n* My kids will have tennis lessons tonight.\n* He'll finish the project by Friday.\n* She'll call you later today.\n* It'll rain soon.\n* The train will leave at midnight.\n\n## NEGATIVE SENTENCE STRUCTURE AND USES\n\nIn the conversation, Pailin says:\n\n* I won't be free until 1PM.\nwon't = will not\n\nPailin says that she will not be available until 1PM, a time in the future. So, she uses 'will not' in her sentence. Note that 'will not' becomes 'won't' when contracted, not 'willn't.'\n\nNegative sentences in future simple tense are mostly used for:\n\n1. Predictions for things you expect will not happen in the future:\n* They won't win the game.\n\n2. Refusals for things you are unwilling to do:\n* I won't go to the party if you don't go.\n\n3. Promises for things you will refrain from doing:\n* I won't tell anyone your secret.\n\n4. Showing a future absence, closure, or unavailability:\n* The store won't be open tomorrow, since it's a holiday.\n\nPailin's line 'I won't be free until 1PM' is an example of future unavailability.\n\nHere is the structure of negative future simple tense sentences.\n\n## SUBJECT\n\t(-)\n## VERB\n## EXAMPLE SENTENCES\n\tI\nYou\nWe\nThey\n2+ Nouns\nHe\nShe\nIt\n1 Noun\n\twon’t\n\t(verb)\n\t* I won't be at work tomorrow.\n* You won't finish the project on time.\n* We won't go to the party.\n* They won't take the train.\n* My parents won't come for Christmas.\n* He won't do the dishes.\n* She won't lend me money.\n* It won't snow tomorrow.\n* The bus won't arrive on time.\n\n## QUESTION STRUCTURE AND USES\n\nIn the conversation, Pailin asks Chloe:\n\n* Will you take the metro to the Walk of Fame?\n\nCompare this to the affirmative sentence:\n\n* You will take the metro to the Walk of Fame.\n\nTo form questions in future simple tense, simply switch the position of the subject and the auxiliary verb 'will.'\n\nQuestions in future simple tense are mostly used for:\n\n1. Requests to politely ask someone to do something in the future:\n* Will you help me organize the closet after dinner?\n\n2. Asking about future plans, intentions, or events:\n* Will you take the bus to work?\n\n3. Asking about future predictions and outcomes:\n* Will it rain tomorrow?\n\nPailin's question 'Will you take the metro to the Walk of Fame?' is an example of asking about Chloe's future plans.\n\nHere is the structure of future simple tense questions.\n\n## AUXILIARY VERB\n## SUBJECT\n## VERB\n## EXAMPLE SENTENCES\n\tWill\n\tI\nyou\nwe\nthey\n2+ nouns\nhe\nshe\nit\n1 noun\n\t(verb)\n\t* Will I see you at the meeting tomorrow?\n* Will you go to the store later?\n* Will we be late?\n* Will they come to the wedding?\n* Will your parents retire this year?\n* Will he finish the report on time?\n* Will she call me later?\n* Will it be sunny tomorrow?\n* Will the store be open on Sunday?"
+        "content_md": "## LESSON FOCUS\nHow to talk about the future with 'will'\nVerb tense: Future simple tense\n\n## FUTURE SIMPLE TENSE\n\nFuture simple tense is used to talk about actions or events that will happen in the future. In the conversation, Pailin and Chloe use this tense to plan their trip to the Hollywood Walk of Fame and Amoeba Music:\n\n* My host mom will drop me off.\n* I'll get some vinyls for my parents.\n* I'll bring my camera.\n* It'll be fun!\n\nAre they at the Hollywood Walk of Fame right now? Nope! They will go there later, after 1PM. Unlike present simple tense (used for routines and current feelings) and present continuous tense (used for things happening right now), future simple tense is used for events that haven’t happened yet.\n\nUSES OF FUTURE SIMPLE TENSE FOR AFFIRMATIVE SENTENCES\n\nMore specifically, affirmative future simple tense sentences are used for:\n\n1. Intentions or plans made for the future:\n* I'll finish the report by Friday.\n\n2. Decisions made at the moment of speaking:\n* *doorbell rings* I'll get it!\n\n3. Predictions for things you believe will happen:\n* It'll rain tomorrow.\n\n4. Promises you will commit to doing:\n* I'll help you with your job application when I finish work.\n\n5. Offers to help someone:\n* Those bags look heavy. I'll carry them for you.\n\nTake a look at what the affirmative sentences from the conversation demonstrate:\n\n* I'll run some errands first.\nAn intention or plan\n\n* I'll ask her to pick you up.\nAn offer or promise\n\n* I'll get some vinyls for my parents.\nA plan or intention\n\n* They'll love that.\nA prediction\n\n* I'll bring my camera.\nA decision made at the moment of speaking\n\n* It'll be fun!\nA prediction\n\n* I'll text you when we leave the house.\nA promise\n\n## AFFIRMATIVE SENTENCE STRUCTURE\n\nIn these three sentences, take a look at the main verb:\n\n* I'll get some vinyls for my parents.\n* I'll bring my camera.\n* I'll text you when we leave the house.\n\nNotice that 'I'll' comes before each verb:\n\nI'll = I will\n\nThe full sentences are:\n\nI will get some vinyls for my parents.\nI will bring my camera.\nI will text you when we leave the house.\n\nThe word 'will' is an auxiliary verb that indicates you are speaking about the future. However, you should contract the subject with 'will' when speaking, as 'I'll' is easier and quicker to say than 'I will.'\n\nNow take a look at this line that also uses future simple tense:\n\nMy host mom will drop me off.\n\nAlthough 'my host mom' is a 3rd person subject, neither the auxiliary verb 'will' nor the main verb 'drop' has an -s ending! Lucky for you, the grammar of future simple tense sentences is straightforward. The sentence structure is the same for all subjects!\n\nHere is the structure of affirmative future simple tense sentences. Note that you can contract pronouns with 'will,' but you can't do this with subjects like 'My host mom' or 'The store.'\n\n## SUBJECT\n## AUXILIARY VERB\n## VERB\n## EXAMPLE SENTENCES\n## I\nYou\nWe\nThey\n2+ Nouns\nHe\nShe\nIt\n1 Noun\n\twill\n\t(verb)\n\t* I'll quit my job next month.\n* You'll like the movie tonight.\n* We'll have a meeting tomorrow.\n* They'll arrive at 5PM.\n* My kids will have tennis lessons tonight.\n* He'll finish the project by Friday.\n* She'll call you later today.\n* It'll rain soon.\n* The train will leave at midnight.\n\n## NEGATIVE SENTENCE STRUCTURE AND USES\n\nIn the conversation, Pailin says:\n\n* I won't be free until 1PM.\nwon't = will not\n\nPailin says that she will not be available until 1PM, a time in the future. So, she uses 'will not' in her sentence. Note that 'will not' becomes 'won't' when contracted, not 'willn't.'\n\nNegative sentences in future simple tense are mostly used for:\n\n1. Predictions for things you expect will not happen in the future:\n* They won't win the game.\n\n2. Refusals for things you are unwilling to do:\n* I won't go to the party if you don't go.\n\n3. Promises for things you will refrain from doing:\n* I won't tell anyone your secret.\n\n4. Showing a future absence, closure, or unavailability:\n* The store won't be open tomorrow, since it's a holiday.\n\nPailin's line 'I won't be free until 1PM' is an example of future unavailability.\n\nHere is the structure of negative future simple tense sentences.\n\n## SUBJECT\n\t(-)\n## VERB\n## EXAMPLE SENTENCES\n## I\nYou\nWe\nThey\n2+ Nouns\nHe\nShe\nIt\n1 Noun\n\twon’t\n\t(verb)\n\t* I won't be at work tomorrow.\n* You won't finish the project on time.\n* We won't go to the party.\n* They won't take the train.\n* My parents won't come for Christmas.\n* He won't do the dishes.\n* She won't lend me money.\n* It won't snow tomorrow.\n* The bus won't arrive on time.\n\n## QUESTION STRUCTURE AND USES\n\nIn the conversation, Pailin asks Chloe:\n\n* Will you take the metro to the Walk of Fame?\n\nCompare this to the affirmative sentence:\n\n* You will take the metro to the Walk of Fame.\n\nTo form questions in future simple tense, simply switch the position of the subject and the auxiliary verb 'will.'\n\nQuestions in future simple tense are mostly used for:\n\n1. Requests to politely ask someone to do something in the future:\n* Will you help me organize the closet after dinner?\n\n2. Asking about future plans, intentions, or events:\n* Will you take the bus to work?\n\n3. Asking about future predictions and outcomes:\n* Will it rain tomorrow?\n\nPailin's question 'Will you take the metro to the Walk of Fame?' is an example of asking about Chloe's future plans.\n\nHere is the structure of future simple tense questions.\n\n## AUXILIARY VERB\n## SUBJECT\n## VERB\n## EXAMPLE SENTENCES\n\tWill\n## I\nyou\nwe\nthey\n2+ nouns\nhe\nshe\nit\n1 noun\n\t(verb)\n\t* Will I see you at the meeting tomorrow?\n* Will you go to the store later?\n* Will we be late?\n* Will they come to the wedding?\n* Will your parents retire this year?\n* Will he finish the report on time?\n* Will she call me later?\n* Will it be sunny tomorrow?\n* Will the store be open on Sunday?"
       },
       {
         "type": "extra_tip",
@@ -1744,7 +1804,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "Thai people often forget to contract the subject with 'will' in affirmative sentences. There is nothing wrong with this, but your speech will sound more natural by using contractions. For example:\n\nI will go to the store after work.\nThis is fine to say, but it sounds better as:\n* I'll go to the store after work. (✓)\n\nWe will be late if we take the train.\nThis is fine to say, but it sounds better as:\n* We'll be late if we take the train. (✓)"
+        "content_md": "## WILL CONTRACTION\n\nThai people often forget to contract the subject with 'will' in affirmative sentences. There is nothing wrong with this, but your speech will sound more natural by using contractions. For example:\n\nI will go to the store after work.\nThis is fine to say, but it sounds better as:\n* I'll go to the store after work. (✓)\n\nWe will be late if we take the train.\nThis is fine to say, but it sounds better as:\n* We'll be late if we take the train. (✓)"
       },
       {
         "type": "phrases_verbs",
@@ -1775,16 +1835,11 @@
       {
         "type": "culture_note",
         "sort_order": 6,
-        "content_md": "SORRY!"
-      },
-      {
-        "type": "practice",
-        "sort_order": 7,
-        "content_md": "## PRACTICE AFFIRMATIVE SENTENCES\n\nChange the sentences into future simple tense sentences. Use contractions when applicable.\n\n1. We travel to Hawaii next month.\n2. I do the laundry after work.\n3. She visits her parents tomorrow.\n4. Pailin and Chloe take lots of pictures.\n5. They arrive at 5PM.\n\n## PRACTICE NEGATIVE SENTENCES\n\nChange the sentences from affirmative to negative future simple tense sentences.\n\n1. I'll wait in that line.\n2. He'll like the movie.\n3. Pailin will finish her homework on time.\n4. They'll get in trouble.\n5. The car will start.\n\n## PRACTICE MAKING QUESTIONS\n\nChange the sentences into future simple tense questions.\n\n1. You'll buy groceries on your way home.\n2. She'll call me later.\n3. Jerald will be angry if I'm late.\n4. It'll rain tomorrow.\n5. You'll go to Disneyland.\n\n## SHORT FORM ANSWERS\n\nFill in the blanks with the correct pronoun and 'will' or 'won't' to create short form answers. For example:\n\nA: Will they be late?\nB: No, they won't.\n\n1. A: Will she help us decorate?\nB: Yeah, (she will).\n2. A: Will they win the game?\nB: No, (they won't).\n3. A: Will you move in with them?\nB: No, (I won't).\n4. A: Will he apply for a job there?\nB: Yeah, (he will).\n5. A: Will the market be open tomorrow?\nB: Yeah, (it will).\n\n## OPEN-ENDED PRACTICE\n\nAnswer the questions using future simple tense in your responses.\n\n1. What will you do this weekend?\n2. What time will you go to sleep tonight?\n3. What cities or countries will you visit this year?\n4. How will you celebrate your next birthday?\n5. What is something you won't do this weekend?"
+        "content_md": "## SORRY!"
       },
       {
         "type": "pinned_comment",
-        "sort_order": 8,
+        "sort_order": 7,
         "content_md": "What will you do this weekend?"
       }
     ],
@@ -1985,6 +2040,7 @@
         ]
       }
     ],
+    "practice_exercises": [],
     "sections": [
       {
         "type": "apply",
@@ -1994,7 +2050,7 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to say goodbye\n\nBYE!\n\nThere are several ways to say goodbye to someone. In the conversation, when Chloe and Pailin are parting ways, Chloe says:\n\n* Bye!\n\nYou can say this to anyone - friends, family, co-workers, and acquaintances. It’s a shortened version of ‘goodbye,’ which you can also say, but it can sound stiff and robotic. You can also end a phone conversation with ‘Bye!’\n\n## SEE YOU!\n\nPailin and Chloe also exchange these phrases:\n\n* See you!\n* See you in the morning!\n\n‘See you!’ is a friendly and casual way to say goodbye. It implies that you expect to see the other person again in the near future, like within the next week. So you could say it to your co-workers, since you see them throughout the week, but you wouldn’t say it to a client who you meet with once a year.\n\nYou can add a time phrase at the end, as Pailin does in ‘See you in the morning!’ If you know when you’ll see the person again, you could use that time phrase, such as:\n\n* See you later!\n* See you tonight!\n* See you tomorrow!\n* See you on Friday!\n\n## HAVE A GOOD NIGHT!\n\nChloe says to Pailin:\n\n* Have a good night!\n\nThis is a polite way to wish that someone will enjoy the rest of their night. If it’s still daytime, you could say:\n\n* Have a good day!\n\nBoth phrases are often used by service workers, such as cashiers, servers, or baristas, when a customer is leaving.\n\n## GOOD NIGHT!\n\nLastly, Pailin ends the conversation with:\n\n* Good night!\n\nAlthough this is usually said right before going to sleep in your home, you can also say it to others when parting ways at night.\n\nAs you can see, there are several closing phrases for saying goodbye to someone. You don’t need to use every phrase, but saying one or some of them helps to end a conversation naturally and avoid an abrupt ending."
+        "content_md": "## LESSON FOCUS\n\nHow to say goodbye\n\n## BYE!\n\nThere are several ways to say goodbye to someone. In the conversation, when Chloe and Pailin are parting ways, Chloe says:\n\n* Bye!\n\nYou can say this to anyone - friends, family, co-workers, and acquaintances. It’s a shortened version of ‘goodbye,’ which you can also say, but it can sound stiff and robotic. You can also end a phone conversation with ‘Bye!’\n\n## SEE YOU!\n\nPailin and Chloe also exchange these phrases:\n\n* See you!\n* See you in the morning!\n\n‘See you!’ is a friendly and casual way to say goodbye. It implies that you expect to see the other person again in the near future, like within the next week. So you could say it to your co-workers, since you see them throughout the week, but you wouldn’t say it to a client who you meet with once a year.\n\nYou can add a time phrase at the end, as Pailin does in ‘See you in the morning!’ If you know when you’ll see the person again, you could use that time phrase, such as:\n\n* See you later!\n* See you tonight!\n* See you tomorrow!\n* See you on Friday!\n\n## HAVE A GOOD NIGHT!\n\nChloe says to Pailin:\n\n* Have a good night!\n\nThis is a polite way to wish that someone will enjoy the rest of their night. If it’s still daytime, you could say:\n\n* Have a good day!\n\nBoth phrases are often used by service workers, such as cashiers, servers, or baristas, when a customer is leaving.\n\n## GOOD NIGHT!\n\nLastly, Pailin ends the conversation with:\n\n* Good night!\n\nAlthough this is usually said right before going to sleep in your home, you can also say it to others when parting ways at night.\n\nAs you can see, there are several closing phrases for saying goodbye to someone. You don’t need to use every phrase, but saying one or some of them helps to end a conversation naturally and avoid an abrupt ending."
       },
       {
         "type": "extra_tip",
@@ -2022,13 +2078,8 @@
         ]
       },
       {
-        "type": "practice",
-        "sort_order": 5,
-        "content_md": "## PRACTICE SAYING GOODBYE\n\nChoose the best way to say goodbye for the situation.\n\n1. Your aunt and uncle are leaving your house. You see them only twice a year. How can you say goodbye?\nA. Bye, take care!\nB. Bye, see you later!\n\n2. You and your best friend have just finished eating lunch at a restaurant. You need to go back to work. How can you say goodbye?\nA. See you, have a good day!\nB. See you, have a good night!\n\n3. You're on the phone with your mom. You will see her tonight. How can you say goodbye?\nA. Goodbye, take care!\nB. Bye Mom, see you later!\n\n4. You're a server at a restaurant, and it's almost 9PM, so you're about to close the place. As the last customer is leaving, what could you say to them?\nA. Bye, have a good day!\nB. Bye, good night!\n\n## OPEN-ENDED PRACTICE\n\nIt's 11AM, and you're saying goodbye to your friend who was hanging out at your house. You'll get breakfast with him tomorrow morning. What are three things you could say to him as he's leaving?\n\n1.\n2.\n3."
-      },
-      {
         "type": "pinned_comment",
-        "sort_order": 6,
+        "sort_order": 5,
         "content_md": "What time do you normally go to bed? What time do you normally wake up?\n\n        What were your favorite subjects to study in school?"
       }
     ],
