@@ -3,13 +3,15 @@ import ReactMarkdown from "react-markdown";
 import LanguageToggle from "./LanguageToggle";
 import ComprehensionQuiz from "./ComprehensionQuiz";
 import ApplySection from "./ApplySection";
-import UnderstandSection from "./UnderstandSection";
+import MarkdownSection from "./MarkdownSection";
+import PracticeSection from "./PracticeSection";
 import "../Styles/LessonContent.css";
 
 export default function LessonContent({
   sections = [],
   questions = [],
   transcript = [],
+  practiceExercises = [],
   activeId,
   uiLang = "en",
   setUiLang,
@@ -97,23 +99,51 @@ export default function LessonContent({
       </article>
     );
   }
-    /* ------------------ UNDERSTAND SECTION ------------------ */
-  if (section.type === "understand") {
-    return (
-      <article className="lc-card">
-        <header className="lc-head">
-          <div className="lc-head-left">
-            <span className="lc-head-title">UNDERSTAND</span>
-          </div>
-          <div className="lc-head-right">
-            <LanguageToggle language={uiLang} setLanguage={setUiLang} />
-          </div>
-        </header>
+    /* ------------------ COLLAPSIBLE MARKDOWN SECTION ------------------ */
+    if (["understand", "extra_tip", "culture_note", "common_mistake"].includes(section.type)) {
+      return (
+        <article className="lc-card">
+          <header className="lc-head">
+            <div className="lc-head-left">
+              <span className="lc-head-title">
+                {section.type.replace("_", " ").toUpperCase()}
+              </span>
+              {section.title_th && (
+                <span className="lc-head-title-th">{section.title_th}</span>
+              )}
+            </div>
+            <div className="lc-head-right">
+              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+            </div>
+          </header>
 
-        <UnderstandSection markdown={contentText} />
-      </article>
-    );
-  }
+          <MarkdownSection
+            markdown={contentText}
+            defaultOpenFirst={section.type === "understand"}
+          />
+        </article>
+      );
+    }
+    /* ------------------ PRACTICE SECTION------------------ */
+    if (activeId === "practice") {
+      return (
+        <article className="lc-card">
+          <header className="lc-head">
+            <div className="lc-head-left">
+              <span className="lc-head-title">PRACTICE</span>
+            </div>
+            <div className="lc-head-right">
+              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+            </div>
+          </header>
+
+          <PracticeSection
+            exercises={practiceExercises}
+            uiLang={uiLang}
+          />
+        </article>
+      );
+    }
 
   /* ------------------ DEFAULT MARKDOWN SECTION -------- */
   return (

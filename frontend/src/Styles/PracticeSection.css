@@ -1,0 +1,5 @@
+.st-row      { margin-bottom: 1rem; }
+.st-stem     { margin: 0 0 .4rem 0; font-weight: 600; }
+.st-mark.correct { color: green; }
+.st-mark.wrong   { color: red; }
+.st-btn, .fb-btn, .mc-btn, .oe-btn { margin-top: .6rem; }

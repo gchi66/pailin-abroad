@@ -7,6 +7,7 @@ import AudioBar       from "../Components/AudioBar";
 import LessonSidebar  from "../Components/LessonSidebar";
 import LessonContent  from "../Components/LessonContent";
 
+
 import "../Styles/Lesson.css";
 
 export default function Lesson() {
@@ -19,6 +20,7 @@ export default function Lesson() {
   const [sections,  setSections]  = useState([]);
   const [questions, setQuestions] = useState([]);
   const [transcript, setTranscript] = useState([]);
+  const [practiceExercises, setPracticeExercises] = useState([]);
 
   // UI state
   const [activeId, setActiveId] = useState(null);
@@ -32,6 +34,7 @@ export default function Lesson() {
         { data: secs, error: e2 },
         { data: qs,   error: e3 },
         { data: tr,   error: e4 },
+        { data: pe,   error: e5 },
       ] = await Promise.all([
         supabaseClient
           .from("lessons")
@@ -53,10 +56,15 @@ export default function Lesson() {
           .select("*")
           .eq("lesson_id", id)
           .order("sort_order"),
+        supabaseClient
+          .from("practice_exercises")
+          .select("*")
+          .eq("lesson_id", id)
+          .order("sort_order"),
       ]);
 
-      if (e1 || e2 || e3 || e4) {
-        console.error(e1, e2, e3, e4);
+      if (e1 || e2 || e3 || e4 || e5) {
+        console.error(e1, e2, e3, e4, e5);
         return;
       }
 
@@ -64,6 +72,7 @@ export default function Lesson() {
       setSections(secs);
       setQuestions(qs);
       setTranscript(tr);
+      setPracticeExercises(pe);
 
       // initial active: first section, or fallback to comprehension/transcript
       setActiveId(
@@ -103,6 +112,7 @@ export default function Lesson() {
             sections={sections}
             questions={questions}
             transcript={transcript}
+            practiceExercises={practiceExercises}
             activeId={activeId}
             onSelect={setActiveId}
           />
@@ -110,6 +120,7 @@ export default function Lesson() {
             sections={sections}
             questions={questions}
             transcript={transcript}
+            practiceExercises={practiceExercises}
             activeId={activeId}
             uiLang={uiLang}
             setUiLang={setUiLang}

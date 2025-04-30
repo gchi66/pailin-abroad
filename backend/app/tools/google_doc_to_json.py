@@ -208,8 +208,9 @@ def build_section(section_name: str, lines: List[str], order: int) -> Dict:
         # Case 1: Standard ALL-CAPS headings
         if (raw_line.upper() == raw_line and
             any(c.isalpha() for c in raw_line) and
-            2 <= len(raw_line.split()) <= 5 and
-            not raw_line.startswith(('* ', '- ', '> '))):
+            1 <= len(raw_line.split()) <= 5 and
+            not raw_line.startswith(('* ', '- ', '> ')) and
+            all(c.isupper() or c in " '\"&-.!?()" for c in raw_line)):  # Added !? here
             is_heading = True
 
         # Case 2: Special pattern headings (like "A VS. AN")
@@ -269,6 +270,72 @@ def build_section(section_name: str, lines: List[str], order: int) -> Dict:
 def parse_tags(lines: List[str]) -> List[str]:
     return [t.strip() for t in re.split(r",|\n", " ".join(lines)) if t.strip()]
 
+
+def parse_practice(lines):
+    """Return a list of practice-exercise dicts.
+
+    The author format looks like:
+
+        TYPE: multiple_choice
+        PROMPT:
+        real question …
+
+        OPTIONS:
+        1) ...
+        2) ...
+
+        ANSWER_KEYS:
+        1) B
+        2) A
+
+    Another TYPE line starts a new exercise.
+    """
+
+    exercises = []
+    i = 0
+    while i < len(lines):
+        ln = lines[i].rstrip()
+        if not ln.upper().startswith("TYPE:"):
+            i += 1
+            continue
+
+        kind = ln.split(":", 1)[1].strip().lower()
+        block = {"kind": kind}
+
+        # PROMPT
+        i += 1
+        prompt_lines = []
+        while i < len(lines) and not lines[i].upper().startswith(("OPTIONS:", "TYPE:", "ANSWER_KEYS:")):
+            prompt_lines.append(lines[i].rstrip())
+            i += 1
+        block["prompt"] = "\n".join(prompt_lines).strip()
+
+        # OPTIONS
+        if i < len(lines) and lines[i].upper().startswith("OPTIONS"):
+            i += 1
+            option_lines = []
+            while i < len(lines) and not lines[i].upper().startswith(("ANSWER_KEYS:", "TYPE:")):
+                option_lines.append(lines[i].rstrip())
+                i += 1
+            block["options"] = option_lines
+
+        # ANSWER_KEYS  (optional)
+        if i < len(lines) and lines[i].upper().startswith("ANSWER_KEYS"):
+            i += 1
+            answer_lines = []
+            while i < len(lines) and not lines[i].upper().startswith("TYPE:"):
+                if lines[i].strip():
+                    answer_lines.append(lines[i].strip())
+                i += 1
+            block["answer_key"] = answer_lines
+
+        exercises.append(block)
+
+    # Add sort_order for stable ordering
+    for idx, ex in enumerate(exercises, 1):
+        ex["sort_order"] = idx
+    return exercises
+
 # ───────────────────────────── convert one lesson chunk
 
 def convert_chunk(chunk: str, stage: str) -> Dict:
@@ -282,11 +349,12 @@ def convert_chunk(chunk: str, stage: str) -> Dict:
 
     transcript = parse_conversation(buckets.get("CONVERSATION", []))
     comprehension = parse_comprehension(buckets.get("COMPREHENSION", []))
+    practice_items = parse_practice(buckets.get("PRACTICE", []))
 
     sections = []
     order = 1
     for sec in SECTION_ORDER:
-        if sec in {"FOCUS", "BACKSTORY", "CONVERSATION", "COMPREHENSION", "TAGS"}:
+        if sec in {"FOCUS", "BACKSTORY", "CONVERSATION", "COMPREHENSION", "TAGS", "PRACTICE"}:
             continue
         if sec not in buckets:
             continue
@@ -301,6 +369,7 @@ def convert_chunk(chunk: str, stage: str) -> Dict:
         "lesson": lesson,
         "transcript": transcript,
         "comprehension_questions": comprehension,
+        "practice_exercises": practice_items,
         "sections": sections,
         "tags": tags,
     }
