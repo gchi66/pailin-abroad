@@ -341,7 +341,102 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "Make the sentences negative",
+        "prompt": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I speak Korean.",
+            "correct": null,
+            "answer": "I don’t speak Korean."
+          },
+          {
+            "number": "2",
+            "stem": "Adam eats seafood.",
+            "correct": null,
+            "answer": "Adam doesn’t eat seafood."
+          },
+          {
+            "number": "3",
+            "stem": "She lives in an apartment.",
+            "correct": null,
+            "answer": "She doesn’t live in an apartment."
+          },
+          {
+            "number": "4",
+            "stem": "We drink red wine.",
+            "correct": null,
+            "answer": "We don’t drink red wine."
+          },
+          {
+            "number": "5",
+            "stem": "It smells good.",
+            "correct": null,
+            "answer": "It doesn’t smell good."
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "Correct / Incorrect (rewrite only if wrong)",
+        "prompt": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "She don’t work on the weekends.",
+            "correct": false,
+            "answer": "She doesn’t work on the weekends."
+          },
+          {
+            "number": "2",
+            "stem": "They not live in Bangkok.",
+            "correct": false,
+            "answer": "They don’t live in Bangkok."
+          },
+          {
+            "number": "3",
+            "stem": "He doesn’t know Sarah.",
+            "correct": false,
+            "answer": ""
+          },
+          {
+            "number": "4",
+            "stem": "Dara not want kids.",
+            "correct": false,
+            "answer": "Dara doesn’t want kids."
+          },
+          {
+            "number": "5",
+            "stem": "It don’t rain often.",
+            "correct": false,
+            "answer": "It doesn’t rain often."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "Things we don’t do often",
+        "prompt": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Write two things that you don’t do often. (Give two sentences.)",
+            "keywords": "don't, doesn’t"
+          },
+          {
+            "number": "2",
+            "text": "Write two things that members of your family don’t do often. For example: “My son doesn’t watch TV often.” (Give two sentences.)",
+            "keywords": "don't, doesn’t"
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",

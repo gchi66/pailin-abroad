@@ -654,54 +654,73 @@ PRACTICE
 
 
 PRACTICE NEGATIVE SENTENCES
+TYPE: sentence_transform
+TITLE: Make the sentences negative
 
+QUESTION: 1
+STEM: I speak Korean.
+ANSWER: I don’t speak Korean.
 
-Make the affirmative sentences into negative sentences by using ‘don’t’ or ‘doesn’t.’
+QUESTION: 2
+STEM: Adam eats seafood.
+ANSWER: Adam doesn’t eat seafood.
 
+QUESTION: 3
+STEM: She lives in an apartment.
+ANSWER: She doesn’t live in an apartment.
 
-1. I speak Korean.
-2. Adam eats seafood.
-3. She lives in an apartment
-4. We drink red wine.
-5. It smells good.
+QUESTION: 4
+STEM: We drink red wine.
+ANSWER: We don’t drink red wine.
 
-________________
-
+QUESTION: 5
+STEM: It smells good.
+ANSWER: It doesn’t smell good.
 
 
 CORRECT OR INCORRECT
+TYPE: sentence_transform
+TITLE: Correct / Incorrect (rewrite only if wrong)
+
+QUESTION: 1
+STEM: She don’t work on the weekends.
+CORRECT: no
+ANSWER: She doesn’t work on the weekends.
+
+QUESTION: 2
+STEM: They not live in Bangkok.
+CORRECT: no
+ANSWER: They don’t live in Bangkok.
+
+QUESTION: 3
+STEM: He doesn’t know Sarah.
+CORRECT: yes      ← already correct; learner just checks ✓
+
+QUESTION: 4
+STEM: Dara not want kids.
+CORRECT: no
+ANSWER: Dara doesn’t want kids.
+
+QUESTION: 5
+STEM: It don’t rain often.
+CORRECT: no
+ANSWER: It doesn’t rain often.
 
 
-Determine if the grammar of the negative sentences is correct or not. If incorrect, enter the correct sentence into the box.
 
 
-1. She don’t work on the weekends.
-2. They not live in Bangkok.
-3. He doesn’t know Sarah.
-4. Dara not want kids.
-5. It don’t rain often.
+OPEN‑ENDED PRACTICE
+TYPE: open
+TITLE: Things we don’t do often
 
+QUESTION: 1
+PROMPT: Write two things that you don’t do often. (Give two sentences.)
+KEYWORDS: don't, doesn’t
 
-________________
+QUESTION: 2
+PROMPT: Write two things that members of your family don’t do often. For example: “My son doesn’t watch TV often.” (Give two sentences.)
+KEYWORDS: don't, doesn’t
 
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Write two things that you don’t do often.
-
-
-1.
-2.
-
-
-Write two things that members of your family don’t do often. For example: My son doesn’t watch TV often.
-
-
-1.
-2.
 
 
 

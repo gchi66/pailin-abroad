@@ -1,27 +1,26 @@
 import React, { useState } from "react";
 
 /**
- * Expected exercise structure (example):
+ * Updated SentenceTransformExercise component that works with the new data structure:
  * {
  *   kind: "sentence_transform",
- *   prompt: "Rewrite using 'let's'.",
- *   options: [
- *      "We should go to the store. || Let's go to the store.",
- *      "We should leave soon.      || Let's leave soon."
+ *   title: "Make the sentences negative",
+ *   prompt: "",
+ *   items: [
+ *     {
+ *       number: "1",
+ *       stem: "I speak Korean.",
+ *       correct: null,
+ *       answer: "I don't speak Korean."
+ *     },
+ *     // ...more items
  *   ]
  * }
- *
- * Everything before "||" is the displayed stem; everything after is a model answer.
  */
-export default function SentenceTransformExercise({ exercise }) {
-  const { prompt, options = [] } = exercise;
-  const [answers, setAnswers]   = useState(Array(options.length).fill(""));
-  const [checked, setChecked]   = useState(false);
-
-  const splits = options.map(line => {
-    const [stem, expected = ""] = line.split("||").map(s => s.trim());
-    return { stem, expected };
-  });
+export default function SentenceTransformExercise({ exercise = {} }) {
+  const { title = "", prompt = "", items = [] } = exercise || {};
+  const [answers, setAnswers] = useState(Array(items.length).fill(""));
+  const [checked, setChecked] = useState(false);
 
   const handleChange = (idx, val) => {
     const next = [...answers];
@@ -31,34 +30,60 @@ export default function SentenceTransformExercise({ exercise }) {
 
   const passed = (idx) => {
     if (!checked) return null;
-    const want = splits[idx].expected.toLowerCase().replace(/\s+/g, " ").trim();
-    const got  = answers[idx].toLowerCase().replace(/\s+/g, " ").trim();
+
+    // For already correct sentences (correct === true), the answer should match the stem
+    if (items[idx].correct === true) {
+      const stem = items[idx].stem.toLowerCase().replace(/\s+/g, " ").trim();
+      const got = answers[idx].toLowerCase().replace(/\s+/g, " ").trim();
+      return got === stem;
+    }
+
+    // For sentences that need transformation
+    const want = items[idx].answer.toLowerCase().replace(/\s+/g, " ").trim();
+    const got = answers[idx].toLowerCase().replace(/\s+/g, " ").trim();
     return got === want;
   };
 
+  console.log('Rendering SentenceTransformExercise with:', exercise);
   return (
-    <div className="st-wrap">
-      <p className="st-prompt">{prompt}</p>
+    <div className="bg-gray-50 p-6 rounded-lg">
+      <h3 className="text-xl font-bold mb-4">{title}</h3>
+      {prompt && <p className="mb-6 text-gray-700">{prompt}</p>}
 
-      {splits.map(({ stem }, idx) => (
-        <div key={idx} className="st-row">
-          <p className="st-stem">{stem}</p>
-          <input
-            type="text"
-            value={answers[idx]}
-            onChange={(e) => handleChange(idx, e.target.value)}
-            disabled={checked}
-          />
-          {checked && (
-            <span className={`st-mark ${passed(idx) ? "correct" : "wrong"}`}>
-              {passed(idx) ? "✓" : "✗"}
-            </span>
+      {items.map((item, idx) => (
+        <div key={idx} className="mb-6 border-b pb-4">
+          <p className="mb-2 font-medium">{item.number}. {item.stem}</p>
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              value={answers[idx]}
+              onChange={(e) => handleChange(idx, e.target.value)}
+              disabled={checked}
+              placeholder="Transform the sentence"
+              className="border rounded py-2 px-3 w-full"
+            />
+
+            {checked && (
+              <span className={`flex-shrink-0 font-bold ${passed(idx) ? "text-green-600" : "text-red-600"}`}>
+                {passed(idx) ? "✓" : "✗"}
+              </span>
+            )}
+          </div>
+
+          {checked && !passed(idx) && (
+            <p className="mt-2 text-sm text-gray-600">
+              <span className="font-semibold">Correct answer:</span>{" "}
+              {items[idx].correct === true ? items[idx].stem : items[idx].answer}
+            </p>
           )}
         </div>
       ))}
 
       {!checked && (
-        <button className="st-btn" onClick={() => setChecked(true)}>
+        <button
+          onClick={() => setChecked(true)}
+          className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700"
+        >
           Check
         </button>
       )}

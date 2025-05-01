@@ -48,7 +48,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, dry_run=False):
             "lesson_id": lesson_id,
             "kind": ex["kind"],
             "title": ex.get("title", ""),
-            "prompt_md": ex.get("prompt", ""),
+            "prompt_md": ex.get("prompt") or None,
             "items": ex.get("items", []),
             # Provide default sort_order (0 if not specified)
             "sort_order": ex.get("sort_order", 0),
@@ -62,7 +62,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, dry_run=False):
 
         try:
             supabase.table("practice_exercises") \
-                .upsert(record, on_conflict="lesson_id,sort_order") \
+                .upsert(record, on_conflict="lesson_id, kind, sort_order") \
                 .execute()
         except Exception as e:
             print(f"[ERROR] practice_exercises for lesson {lesson_id}: {e}")
