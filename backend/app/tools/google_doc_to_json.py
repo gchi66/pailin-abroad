@@ -272,79 +272,117 @@ def parse_tags(lines: List[str]) -> List[str]:
 
 
 def parse_practice(lines: List[str]) -> List[Dict]:
-    """
-    Parse the NEW standardized format with clear item/answer pairing
-    Example:
-        TYPE: fill_blank
-        ITEM: 1
-        TEXT: ___ (miss) your call.
-        ANSWER: Sorry for missing
-    """
     exercises = []
     current_exercise = None
     current_item = None
+    collecting_options = False
 
-    for line in lines:
-        line = line.strip()
-        if not line:
+    # Join all lines into one string first to handle section splitting
+    content = "\n".join(lines)
+
+    # Split into exercise sections by "###" headers
+    sections = re.split(r'(?m)^###\s*', content)
+
+    # Skip any intro content before first "###"
+    if not sections[0].strip().upper().startswith("TYPE:"):
+        sections = sections[1:]
+
+    for section in sections:
+        if not section.strip():
             continue
 
-        # Start new exercise
-        if line.upper().startswith("TYPE:"):
-            if current_exercise:
-                exercises.append(current_exercise)
-            current_exercise = {
-                "kind": line.split(":", 1)[1].strip().lower(),
-                "prompt": "",
-                "items": [],
-                "sort_order": len(exercises) + 1
-            }
+        section_lines = section.strip().split("\n")
+        current_exercise = None
+        current_item = None
+        collecting_options = False
 
-        # Exercise-level prompt
-        elif line.upper().startswith("PROMPT:"):
-            if current_exercise:
-                current_exercise["prompt"] = line.split(":", 1)[1].strip()
+        for line in section_lines:
+            line = line.strip()
+            if not line:
+                continue
 
-        # Start new item/question
-        elif line.upper().startswith(("ITEM:", "QUESTION:")):
-            if current_exercise:
-                current_item = {
-                    "number": line.split(":", 1)[1].strip(),
-                    "text": "",
-                    "options": [],
-                    "answer": ""
+            # Start new exercise
+            if line.upper().startswith("TYPE:"):
+                current_exercise = {
+                    "kind": line.split(":", 1)[1].strip().lower(),
+                    "title": "",
+                    "prompt": "",
+                    "items": [],
+                    "sort_order": len(exercises) + 1
                 }
-                current_exercise["items"].append(current_item)
+                exercises.append(current_exercise)
+                collecting_options = False
 
-        # Item text/prompt
-        elif line.upper().startswith(("TEXT:", "PROMPT:")):
-            if current_item:
+            # Exercise title
+            elif line.upper().startswith("TITLE:"):
+                if current_exercise:
+                    current_exercise["title"] = line.split(":", 1)[1].strip()
+
+            # Exercise-level prompt
+            elif line.upper().startswith("PROMPT:") and not current_item:
+                if current_exercise:
+                    current_exercise["prompt"] = line.split(":", 1)[1].strip()
+
+            # Start new item (fill-in-the-blank)
+            elif line.upper().startswith("ITEM:"):
+                if current_exercise and current_exercise["kind"] == "fill_blank":
+                    current_item = {
+                        "number": line.split(":", 1)[1].strip(),
+                        "text": "",
+                        "answer": ""
+                    }
+                    current_exercise["items"].append(current_item)
+                    collecting_options = False
+
+            # Start new question (multiple choice or open-ended)
+            elif line.upper().startswith("QUESTION:"):
+                if current_exercise:
+                    if current_exercise["kind"] == "multiple_choice":
+                        current_item = {
+                            "number": line.split(":", 1)[1].strip(),
+                            "text": "",
+                            "options": [],
+                            "answer": ""
+                        }
+                    elif current_exercise["kind"] == "open":
+                        current_item = {
+                            "number": line.split(":", 1)[1].strip(),
+                            "text": "",
+                            "keywords": ""
+                        }
+                    current_exercise["items"].append(current_item)
+                    collecting_options = False
+
+            # Item text (fill-in-the-blank)
+            elif line.upper().startswith("TEXT:"):
+                if current_item:
+                    current_item["text"] = line.split(":", 1)[1].strip()
+
+            # Question prompt (multiple choice or open-ended)
+            elif line.upper().startswith("PROMPT:") and current_item:
                 current_item["text"] = line.split(":", 1)[1].strip()
 
-        # Options (for MC)
-        elif line.upper().startswith("OPTIONS:"):
-            pass  # Options handled in next lines
+            # Options section marker
+            elif line.upper().startswith("OPTIONS:"):
+                collecting_options = True
+                continue
 
-        # Individual option
-        elif line and current_item and re.match(r'^[A-Z]\.', line):
-            current_item["options"].append(line)
+            # Individual multiple choice option
+            elif collecting_options and current_item and re.match(r'^[A-Z]\.', line):
+                if current_exercise and current_exercise["kind"] == "multiple_choice":
+                    current_item["options"].append(line.strip())
 
-        # Answer
-        elif line.upper().startswith("ANSWER:"):
-            if current_item:
-                current_item["answer"] = line.split(":", 1)[1].strip()
+            # Answer (fill-in-the-blank or multiple choice)
+            elif line.upper().startswith("ANSWER:"):
+                if current_item and "answer" in current_item:
+                    current_item["answer"] = line.split(":", 1)[1].strip()
 
-        # Keywords (for open-ended)
-        elif line.upper().startswith("KEYWORDS:"):
-            if current_item:
-                current_item["keywords"] = line.split(":", 1)[1].strip()
-
-    # Add the last exercise
-    if current_exercise:
-        exercises.append(current_exercise)
+            # Keywords (open-ended)
+            elif line.upper().startswith("KEYWORDS:"):
+                if current_item and current_exercise and current_exercise["kind"] == "open":
+                    current_item["keywords"] = line.split(":", 1)[1].strip()
 
     return exercises
-
 # ───────────────────────────── convert one lesson chunk
 
 def convert_chunk(chunk: str, stage: str) -> Dict:

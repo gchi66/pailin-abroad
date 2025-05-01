@@ -83,36 +83,32 @@
     "practice_exercises": [
       {
         "kind": "fill_blank",
+        "title": "Fill-in-the-Blank Practice",
         "prompt": "Fill in the blanks with \"Sorry for (verb-ing)\" or \"Sorry for not (verb-ing)\" according to the verb in (parenthesis).",
         "items": [
           {
             "number": "1",
             "text": "___ (miss) your call.",
-            "options": [],
             "answer": "Sorry for missing"
           },
           {
             "number": "2",
             "text": "___ (break) your plate.",
-            "options": [],
             "answer": "Sorry for breaking"
           },
           {
             "number": "3",
             "text": "___ (make) so much noise.",
-            "options": [],
             "answer": "Sorry for making"
           },
           {
             "number": "4",
             "text": "___ (say) that.",
-            "options": [],
             "answer": "Sorry for saying"
           },
           {
             "number": "5",
             "text": "___ (not respond) to your text.",
-            "options": [],
             "answer": "Sorry for not responding"
           }
         ],
@@ -120,11 +116,12 @@
       },
       {
         "kind": "multiple_choice",
-        "prompt": "You can't attend a friend's party because you're feeling unwell. What do you say?",
+        "title": "Polite Words Multiple Choice",
+        "prompt": "",
         "items": [
           {
             "number": "1",
-            "text": "",
+            "text": "You're at a crowded bookstore and someone is blocking the book you want. What do you say?",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -134,7 +131,7 @@
           },
           {
             "number": "2",
-            "text": "",
+            "text": "You're ordering a coffee and want a specific type of milk. What do you say?",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -144,7 +141,7 @@
           },
           {
             "number": "3",
-            "text": "",
+            "text": "You arrive 20 minutes late to lunch. What do you say?",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -154,7 +151,7 @@
           },
           {
             "number": "4",
-            "text": "",
+            "text": "You'd like to borrow your friend's pen for a moment. What do you say?",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -164,7 +161,7 @@
           },
           {
             "number": "5",
-            "text": "",
+            "text": "You can't attend a friend's party because you're feeling unwell. What do you say?",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -177,27 +174,22 @@
       },
       {
         "kind": "open",
-        "prompt": "You accidentally spill water all over your friend's table. What could you say to apologize to her?",
+        "title": "Open-Ended Practice",
+        "prompt": "",
         "items": [
           {
             "number": "1",
-            "text": "",
-            "options": [],
-            "answer": "",
+            "text": "Your friend invited you to her wedding, but you can't go. What could you say to apologize to her?",
             "keywords": "sorry"
           },
           {
             "number": "2",
-            "text": "",
-            "options": [],
-            "answer": "",
+            "text": "You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss?",
             "keywords": "sorry"
           },
           {
             "number": "3",
-            "text": "",
-            "options": [],
-            "answer": "",
+            "text": "You accidentally spill water all over your friend's table. What could you say to apologize to her?",
             "keywords": "sorry"
           }
         ],

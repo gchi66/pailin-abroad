@@ -335,6 +335,7 @@ PRACTICE
 
 ### FILL IN THE BLANK EXERCISE
 TYPE: fill_blank
+TITLE: Fill-in-the-Blank Practice
 PROMPT: Fill in the blanks with "Sorry for (verb-ing)" or "Sorry for not (verb-ing)" according to the verb in (parenthesis).
 
 ITEM: 1
@@ -359,6 +360,7 @@ ANSWER: Sorry for not responding
 
 ### POLITE WORDS MULTIPLE CHOICE
 TYPE: multiple_choice
+TITLE: Polite Words Multiple Choice
 
 QUESTION: 1
 PROMPT: You're at a crowded bookstore and someone is blocking the book you want. What do you say?
@@ -402,6 +404,7 @@ ANSWER: C
 
 ### OPEN-ENDED PRACTICE
 TYPE: open
+TITLE: Open-Ended Practice
 
 QUESTION: 1
 PROMPT: Your friend invited you to her wedding, but you can't go. What could you say to apologize to her?

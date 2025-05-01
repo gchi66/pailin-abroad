@@ -67,6 +67,27 @@ export default function LessonContent({
     );
   }
 
+  /* ------------------ PRACTICE SECTION------------------ */
+  if (activeId === "practice") {
+    return (
+      <article className="lc-card">
+        <header className="lc-head">
+          <div className="lc-head-left">
+            <span className="lc-head-title">PRACTICE</span>
+          </div>
+          <div className="lc-head-right">
+            <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+          </div>
+        </header>
+
+        <PracticeSection
+          exercises={practiceExercises}
+          uiLang={uiLang}
+        />
+      </article>
+    );
+  }
+
   /* ===============================================================
      3) Regular lesson sections (markdown or apply)
   =============================================================== */
@@ -80,6 +101,7 @@ export default function LessonContent({
     uiLang === "th" && section.content_th
       ? section.content_th
       : section.content;
+
 
   /* ------------------ APPLY SECTION ------------------ */
   if (section.type === "apply") {
@@ -99,7 +121,7 @@ export default function LessonContent({
       </article>
     );
   }
-    /* ------------------ COLLAPSIBLE MARKDOWN SECTION ------------------ */
+  /* ------------------ COLLAPSIBLE MARKDOWN SECTION ------------------ */
     if (["understand", "extra_tip", "culture_note", "common_mistake"].includes(section.type)) {
       return (
         <article className="lc-card">
@@ -120,27 +142,7 @@ export default function LessonContent({
           <MarkdownSection
             markdown={contentText}
             defaultOpenFirst={section.type === "understand"}
-          />
-        </article>
-      );
-    }
-    /* ------------------ PRACTICE SECTION------------------ */
-    if (activeId === "practice") {
-      return (
-        <article className="lc-card">
-          <header className="lc-head">
-            <div className="lc-head-left">
-              <span className="lc-head-title">PRACTICE</span>
-            </div>
-            <div className="lc-head-right">
-              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
-            </div>
-          </header>
-
-          <PracticeSection
-            exercises={practiceExercises}
-            uiLang={uiLang}
-          />
+            />
         </article>
       );
     }
