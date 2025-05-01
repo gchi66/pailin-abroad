@@ -30,6 +30,42 @@ REQUIRED_KEYS = {
     "tags"
 }
 
+VALID_EXERCISE_KINDS = {
+    'fill_blank',
+    'sentence_transform',
+    'multiple_choice',
+    'open'
+}
+
+def upsert_practice_exercises(lesson_id, practice_exercises, dry_run=False):
+    """Minimal update to handle practice exercises without changing other logic"""
+    for ex in practice_exercises:
+        if ex["kind"] not in VALID_EXERCISE_KINDS:
+            print(f"[WARNING] Skipping invalid exercise kind: {ex['kind']}")
+            continue
+
+        record = {
+            "lesson_id": lesson_id,
+            "kind": ex["kind"],
+            "title": ex.get("title", ""),
+            "prompt_md": ex.get("prompt", ""),
+            "items": ex.get("items", []),
+            # Provide default sort_order (0 if not specified)
+            "sort_order": ex.get("sort_order", 0),
+            # These can be derived from items in components:
+            "options": [],
+            "answer_key": {}
+}
+        if dry_run:
+            print(f"[DRY RUN] Would upsert practice exercise: {record}")
+            continue
+
+        try:
+            supabase.table("practice_exercises") \
+                .upsert(record, on_conflict="lesson_id,sort_order") \
+                .execute()
+        except Exception as e:
+            print(f"[ERROR] practice_exercises for lesson {lesson_id}: {e}")
 
 def upsert_lesson(data, dry_run=False):
     lesson = data["lesson"]
@@ -203,6 +239,7 @@ def process_lesson(data, dry_run=False):
     upsert_comprehension(lesson_id, data.get("comprehension_questions", []), dry_run=dry_run)
     upsert_sections(lesson_id, data.get("sections", []), dry_run=dry_run)
     upsert_phrases(lesson_id, data.get("sections", []), dry_run=dry_run)
+    upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), dry_run=dry_run)
     upsert_tags(lesson_id, data.get("tags", []), dry_run=dry_run)
 
 
