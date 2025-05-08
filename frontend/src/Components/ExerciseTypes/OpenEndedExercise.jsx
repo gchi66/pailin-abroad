@@ -1,83 +1,108 @@
 import React, { useState } from "react";
 
-/**
- * Expected shape
- * {
- *   kind:  "open",
- *   title: "Open‑Ended Practice",
- *   prompt: "Answer the questions …",
- *   items: [
- *     {
- *       text: "You accidentally spill water … What do you say?",
- *       keywords: "sorry, water",
- *       min_chars: 20
- *     },
- *     …
- *   ]
- * }
- */
 export default function OpenEndedExercise({ exercise }) {
   const { title, prompt, items = [] } = exercise;
 
-  const [answers, setAnswers] = useState(Array(items.length).fill(""));
+  // Initialize state for each input for each question
+  // Structure: [question1: [input1], question2: [input1, input2], etc]
+  const [responses, setResponses] = useState(
+    items.map(item => Array((item.inputs || 1)).fill(""))
+  );
   const [checked, setChecked] = useState(false);
 
-  const handleChange = (idx, val) => {
-    const next = [...answers];
-    next[idx] = val;
-    setAnswers(next);
+  const handleChange = (qIdx, inputIdx, val) => {
+    const nextResponses = [...responses];
+    nextResponses[qIdx][inputIdx] = val;
+    setResponses(nextResponses);
   };
 
-  const passed = (idx) => {
+  const passed = (qIdx) => {
     if (!checked) return null;
 
-    const kv = (key) => (items[idx][key] || "").toString().trim();
-    const keywords = kv("keywords").split(",").map((w) => w.trim()).filter(Boolean);
-    const minChars = parseInt(kv("min_chars"), 10) || 20;
+    const item = items[qIdx];
+    const keywords = (item.keywords || "").split(",").map(k => k.trim().toLowerCase()).filter(Boolean);
 
-    const ans = answers[idx].toLowerCase();
-    const hasWords = keywords.every((k) => ans.includes(k.toLowerCase()));
-    return ans.length >= minChars && hasWords;
+    // Check if all inputs for this question contain at least one of the keywords
+    return responses[qIdx].every(response => {
+      const responseLower = response.toLowerCase();
+      return keywords.some(keyword => responseLower.includes(keyword));
+    });
   };
 
   const handleCheck = () => setChecked(true);
   const handleReset = () => {
-    setAnswers(Array(items.length).fill(""));
+    setResponses(items.map(item => Array((item.inputs || 1)).fill("")));
     setChecked(false);
   };
 
+  // Determine if all questions have valid responses
+  const allAnswered = responses.every((questionInputs, qIdx) => {
+    const numInputs = items[qIdx].inputs || 1;
+    return questionInputs.filter(Boolean).length === numInputs;
+  });
+
   return (
     <div className="oe-wrap">
-      {title && <h3 className="oe-title">{title}</h3>}
       {prompt && <p className="oe-prompt">{prompt}</p>}
 
-      {items.map((item, idx) => (
-        <div key={idx} className="oe-question">
-          <p>{item.text}</p>
-          <textarea
-            rows={3}
-            value={answers[idx]}
-            onChange={(e) => handleChange(idx, e.target.value)}
-            disabled={checked}
-            className="oe-textarea"
-          />
-          {checked && (
-            <span className={`oe-mark ${passed(idx) ? "correct" : "wrong"}`}>
-              {passed(idx) ? "✓" : "✗"}
-            </span>
-          )}
-        </div>
-      ))}
+      {items.map((item, qIdx) => {
+        // Extract keywords for this specific item
+        const itemKeywords = (item.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
 
-      {!checked ? (
-        <button className="oe-btn" onClick={handleCheck}>
-          Check
-        </button>
-      ) : (
-        <button className="oe-btn" onClick={handleReset}>
-          Reset
-        </button>
-      )}
+        return (
+          <div key={`question-${qIdx}`} className="oe-question">
+            <p className="oe-question-text">{item.number}. {item.question || item.text}</p>
+
+            {/* Render the appropriate number of input fields */}
+            {Array.from({ length: item.inputs || 1 }).map((_, inputIdx) => (
+              <div key={`input-${qIdx}-${inputIdx}`} className="oe-input-container">
+                <textarea
+                  rows={3}
+                  value={responses[qIdx][inputIdx] || ""}
+                  onChange={(e) => handleChange(qIdx, inputIdx, e.target.value)}
+                  disabled={checked}
+                  className="oe-textarea"
+                  placeholder="Type your answer here"
+                />
+              </div>
+            ))}
+
+            {checked && (
+              <div className="oe-feedback">
+                <span className={`oe-mark ${passed(qIdx) ? "correct" : "wrong"}`}>
+                  {passed(qIdx) ? "✓" : "✗"}
+                </span>
+                {!passed(qIdx) && itemKeywords.length > 0 && (
+                  <p className="oe-hint">
+                    Remember to use these keywords: {itemKeywords.join(", ")}
+                  </p>
+                )}
+                {item.sample_answer && (
+                  <div className="oe-sample-answer">
+                    <p><strong>Sample answer:</strong> {item.sample_answer}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      <div className="oe-buttons">
+        {!checked ? (
+          <button
+            className="oe-btn check"
+            onClick={handleCheck}
+            disabled={!allAnswered}
+          >
+            Check
+          </button>
+        ) : (
+          <button className="oe-btn reset" onClick={handleReset}>
+            Try Again
+          </button>
+        )}
+      </div>
     </div>
   );
 }

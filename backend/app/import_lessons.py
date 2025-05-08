@@ -49,6 +49,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, dry_run=False):
             "kind": ex["kind"],
             "title": ex.get("title", ""),
             "prompt_md": ex.get("prompt") or None,
+            "paragraph": ex.get("paragraph") or None,
             "items": ex.get("items", []),
             # Provide default sort_order (0 if not specified)
             "sort_order": ex.get("sort_order", 0),

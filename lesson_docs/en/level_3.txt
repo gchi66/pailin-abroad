@@ -333,90 +333,130 @@ In instances like these, ‘sorry’ is more of a polite filler word than a real
 
 PRACTICE
 
-### FILL IN THE BLANK EXERCISE
+
+
+
+PRACTICE
+
+
+
+
 TYPE: fill_blank
-TITLE: Fill-in-the-Blank Practice
-PROMPT: Fill in the blanks with "Sorry for (verb-ing)" or "Sorry for not (verb-ing)" according to the verb in (parenthesis).
+
+
+TITLE: PRACTICE SORRY + VERB-ING
+
+
+PROMPT: Fill in the blanks with ‘Sorry for (verb-ing)’ or ‘Sorry for not (verb-ing)’ according to the verb in (parenthesis).
+
+
+
 
 ITEM: 1
 TEXT: ___ (miss) your call.
 ANSWER: Sorry for missing
 
+
+
+
 ITEM: 2
 TEXT: ___ (break) your plate.
 ANSWER: Sorry for breaking
+
 
 ITEM: 3
 TEXT: ___ (make) so much noise.
 ANSWER: Sorry for making
 
+
 ITEM: 4
 TEXT: ___ (say) that.
 ANSWER: Sorry for saying
+
 
 ITEM: 5
 TEXT: ___ (not respond) to your text.
 ANSWER: Sorry for not responding
 
-### POLITE WORDS MULTIPLE CHOICE
+
 TYPE: multiple_choice
-TITLE: Polite Words Multiple Choice
+TITLE: POLITE WORDS PRACTICE
+PROMPT: Determine if the best word to use in these situations is 'please,' 'excuse me,' or 'sorry.'
+
 
 QUESTION: 1
-PROMPT: You're at a crowded bookstore and someone is blocking the book you want. What do you say?
+TEXT: You're at a crowded bookstore, and someone is standing directly in front of the book you want to reach for. You want to ask them to move slightly.
 OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
 ANSWER: B
 
+
 QUESTION: 2
-PROMPT: You're ordering a coffee and want a specific type of milk. What do you say?
+TEXT: You're ordering a coffee at a coffee shop and want to be polite when asking for a specific type of milk.
 OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
 ANSWER: A
 
+
 QUESTION: 3
-PROMPT: You arrive 20 minutes late to lunch. What do you say?
+TEXT: You're meeting a friend for lunch, but you arrive 20 minutes late because of unexpected traffic.
 OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
 ANSWER: C
+
 
 QUESTION: 4
-PROMPT: You'd like to borrow your friend's pen for a moment. What do you say?
+TEXT: You're asking to borrow your friend's pen for a moment.
 OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
 ANSWER: A
 
+
 QUESTION: 5
-PROMPT: You can't attend a friend's party because you're feeling unwell. What do you say?
+TEXT: You're unable to attend a friend's party because you're feeling unwell.
 OPTIONS:
 A. Please.
 B. Excuse me.
 C. Sorry.
 ANSWER: C
 
-### OPEN-ENDED PRACTICE
+
 TYPE: open
-TITLE: Open-Ended Practice
+TITLE: OPEN-ENDED PRACTICE
+PROMPT: Answer the questions using ‘sorry’ in your responses.
+
 
 QUESTION: 1
-PROMPT: Your friend invited you to her wedding, but you can't go. What could you say to apologize to her?
+TEXT: Your friend invited you to her wedding, but you can't go. What could you say to apologize to her?
 KEYWORDS: sorry
+
 
 QUESTION: 2
-PROMPT: You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss?
+TEXT: You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss?
 KEYWORDS: sorry
 
+
 QUESTION: 3
-PROMPT: You accidentally spill water all over your friend's table. What could you say to apologize to her?
+TEXT: You accidentally spill water all over your friend's table. What could you say to apologize to her?
 KEYWORDS: sorry
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -653,53 +693,66 @@ It don’t smell bad. (X)
 PRACTICE
 
 
-PRACTICE NEGATIVE SENTENCES
 TYPE: sentence_transform
-TITLE: Make the sentences negative
+TITLE: PRACTICE NEGATIVE SENTENCES
+PROMPT: Make the affirmative sentences into negative sentences by using ‘don’t’ or ‘doesn’t.’
+
 
 QUESTION: 1
 STEM: I speak Korean.
 ANSWER: I don’t speak Korean.
 
+
+
 QUESTION: 2
 STEM: Adam eats seafood.
 ANSWER: Adam doesn’t eat seafood.
+
 
 QUESTION: 3
 STEM: She lives in an apartment.
 ANSWER: She doesn’t live in an apartment.
 
+
 QUESTION: 4
 STEM: We drink red wine.
 ANSWER: We don’t drink red wine.
+
 
 QUESTION: 5
 STEM: It smells good.
 ANSWER: It doesn’t smell good.
 
 
-CORRECT OR INCORRECT
+
+
 TYPE: sentence_transform
-TITLE: Correct / Incorrect (rewrite only if wrong)
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if the grammar of the negative sentences is correct or not. If incorrect, enter the correct sentence into the box.
+
 
 QUESTION: 1
 STEM: She don’t work on the weekends.
 CORRECT: no
 ANSWER: She doesn’t work on the weekends.
 
+
 QUESTION: 2
 STEM: They not live in Bangkok.
 CORRECT: no
 ANSWER: They don’t live in Bangkok.
 
+
 QUESTION: 3
 STEM: He doesn’t know Sarah.
 CORRECT: yes      ← already correct; learner just checks ✓
+
 
 QUESTION: 4
 STEM: Dara not want kids.
 CORRECT: no
 ANSWER: Dara doesn’t want kids.
+
 
 QUESTION: 5
 STEM: It don’t rain often.
@@ -709,17 +762,32 @@ ANSWER: It doesn’t rain often.
 
 
 
-OPEN‑ENDED PRACTICE
+________________
+
+
+
+
+
+
 TYPE: open
-TITLE: Things we don’t do often
+TITLE: OPEN‑ENDED PRACTICE
+
 
 QUESTION: 1
-PROMPT: Write two things that you don’t do often. (Give two sentences.)
+INPUTS: 2
+TEXT: Write two things that you don’t do often.
 KEYWORDS: don't, doesn’t
 
+
 QUESTION: 2
-PROMPT: Write two things that members of your family don’t do often. For example: “My son doesn’t watch TV often.” (Give two sentences.)
+INPUTS: 2
+TEXT: Write two things that members of your family don’t do often. For example: My son doesn’t watch TV often.
 KEYWORDS: don't, doesn’t
+
+
+
+
+
 
 
 
@@ -1008,54 +1076,64 @@ In contrast, Thai breakfasts are generally hearty meals and tend to be savory. A
 PRACTICE
 
 
-PRACTICE USING ARTICLES
+TYPE: fill_blank
+TITLE: PRACTICE USING ARTICLES
+PROMPT: Enter ‘a’ or ‘an’ in the sentences.
+ITEM: 1
+TEXT: Do you have ___ job?
+ANSWER: a
+ITEM: 2
+TEXT: ___ old man is outside our door.
+ANSWER: An
+ITEM: 3
+TEXT: It's ___ funny movie.
+ANSWER: a
+ITEM: 4
+TEXT: He rides ___ bike to work.
+ANSWER: a
+ITEM: 5
+TEXT: Emily has ___ lot of homework.
+ANSWER: a
 
 
-Enter ‘a’ or ‘an’ in the sentences.
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: I got a email.
+CORRECT: no
+ANSWER: I got an email.
+QUESTION: 2
+STEM: We live in an big house.
+CORRECT: no
+ANSWER: We live in a big house.
+QUESTION: 3
+STEM: She has an appointment.
+CORRECT: yes
+QUESTION: 4
+STEM: That's a excellent idea.
+CORRECT: no
+ANSWER: That's an excellent idea.
+QUESTION: 5
+STEM: She has cat.
+CORRECT: no
+ANSWER: She has a cat.
+TYPE: open
 
 
-1. Do you have __ job?
-2. __ old man is outside our door.
-3. It’s __ funny movie.
-4. He rides __ bike to work.
-5. Emily has __ lot of homework.
+TITLE: OPEN‑ENDED PRACTICE
 
 
-________________
+QUESTION: 1
 
 
+INPUTS: 4
 
 
-CORRECT OR INCORRECT
+TEXT: Describe four things you see in your room. Use 'a' or 'an' in your answers.
 
 
-Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.
-
-
-1. I got a email.
-2. We live in an big house.
-3. She has an appointment.
-4. That’s a excellent idea.
-5. She has cat.
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Describe four things you see in your room. Use ‘a’ or ‘an’ in your answers. For example: I see a blue desk.
-
-
-1.
-2.
-3.
-4.
-
-
+KEYWORDS: a, an
 
 
 
@@ -1361,48 +1439,80 @@ Oh no (to show alarm)
 PRACTICE
 
 
-'THE' VS 'A · AN'
+TYPE: fill_blank
+TITLE: 'THE' VS. 'A · AN'
+PROMPT: Decide if the article before the noun should be 'the,' 'an', or 'a.'
 
 
-Decide if the article before the noun should be 'the,' 'an', or 'a.'
+PARAGRAPH:
+Yesterday, I went to ___1___ pet store. I saw ___2___ parrot. ___3___ parrot was very colorful.
+I also saw ___4___ small puppy. ___5___ puppy was sleeping in ___6___ cage.
+I asked ___7___ employee about ___8___ price for ___9___ puppy.
+She told me it’s quite expensive. So I bought ___10___ bag of cat food for my cat instead.
 
 
-Yesterday, I went to (the / a) pet store. I saw (a) parrot. (The) parrot was very colorful. I also saw (a) small puppy. (The) puppy was sleeping in (a) cage. I asked (an / the) employee about (the) price for (the) puppy. She told me it's quite expensive. So I bought (a) bag of cat food for my cat instead.
+ITEM: 1
+ANSWER: a
+ITEM: 2
+ANSWER: a
+ITEM: 3
+ANSWER: the
+ITEM: 4
+ANSWER: a
+ITEM: 5
+ANSWER: the
+ITEM: 6
+ANSWER: a
+ITEM: 7
+ANSWER: an
+ITEM: 8
+ANSWER: the
+ITEM: 9
+ANSWER: the
+ITEM: 10
+ANSWER: a
 
 
-________________
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: I went to a beach yesterday.
+CORRECT: yes
+QUESTION: 2
+STEM: She wants to get a new car.
+CORRECT: yes
+QUESTION: 3
+STEM: Pailin is an university student.
+CORRECT: no
+ANSWER: Pailin is a university student.
+QUESTION: 4
+STEM: Where are the keys?
+CORRECT: yes
+QUESTION: 5
+STEM: A house next door is blue.
+CORRECT: no
+ANSWER: The house next door is blue.
+TYPE: open
+
+
+TITLE: OPEN‑ENDED PRACTICE
+
+
+QUESTION: 1
+
+
+INPUTS: 4
+
+
+TEXT: Describe four things around you. Use ‘the’ in your answers. For example: The door is white. The kids outside are noisy.
+
+
+KEYWORDS: the
 
 
 
 
-CORRECT OR INCORRECT
-
-
-Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.
-
-
-1. I went to a beach yesterday.
-2. She wants to get a new car.
-3. Pailin is an university student.
-4. Where are the keys?
-5. A house next door is blue.
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Describe four things around you. Use ‘the’ in your answers. For example: The door is white. The kids outside are noisy.
-
-
-1.
-2.
-3.
-4.
 
 
 
@@ -1769,69 +1879,79 @@ See more uses of 'Oh'
 PRACTICE
 
 
-SINGULAR TO PLURAL NOUN
+TYPE: sentence_transform
+TITLE: SINGULAR TO PLURAL NOUN
+PROMPT: Change the amount in the following sentences from 'one' to 'two.' Don't forget to update the singular noun into a plural noun. Type the full sentence into the answer box. For example: She owns two cars.
+QUESTION: 1
+STEM: He wants one cupcake.
+ANSWER: He wants two cupcakes.
+QUESTION: 2
+STEM: We have one child.
+ANSWER: We have two children.
+QUESTION: 3
+STEM: I wrote one book.
+ANSWER: I wrote two books.
+QUESTION: 4
+STEM: They brought one camera.
+ANSWER: They brought two cameras.
+QUESTION: 5
+STEM: I saw one person.
+ANSWER: I saw two people.
+TYPE: fill_blank
+TITLE: PLURAL NOUNS VS. SINGULAR NOUNS
+PROMPT: The noun in (parenthesis) should either be a singular noun or a plural noun in the following sentences. Use context clues to determine which is correct to use.
+ITEM: 1
+TEXT: Do you have any ____ (sibling)?
+ANSWER: siblings
+ITEM: 2
+TEXT: Our home has a ____ (yard).
+ANSWER: yard
+ITEM: 3
+TEXT: The ____ (student) are in the classroom.
+ANSWER: students
+ITEM: 4
+TEXT: He sang many ____ (song).
+ANSWER: songs
+ITEM: 5
+TEXT: I bought three ____ (ticket).
+ANSWER: tickets
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: These sentences should all use plural nouns. Determine if the plural noun is used correctly or not. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: I have three sister.
+CORRECT: no
+ANSWER: I have three sisters.
+QUESTION: 2
+STEM: The bag is ten dollars.
+CORRECT: yes
+QUESTION: 3
+STEM: She lives with two person.
+CORRECT: no
+ANSWER: She lives with two people.
+QUESTION: 4
+STEM: Chloe has some book.
+CORRECT: no
+ANSWER: Chloe has some books.
+QUESTION: 5
+STEM: We don't have any blanket.
+CORRECT: no
+ANSWER: We don't have any blankets.
+TYPE: open
+TITLE: OPEN-ENDED PRACTICE
+
+PROMPT: Answer the following questions. Try using plural nouns in your answers.
+QUESTION: 1
+TEXT: What are some things in your fridge right now?
+KEYWORDS: plural nouns
+QUESTION: 2
+TEXT: How many people do you work with?
+KEYWORDS: plural nouns
+QUESTION: 3
+TEXT: How many movies/TV shows have you watched this month?
+KEYWORDS: plural nouns
 
 
-Change the amount in the following sentences from 'one' to 'two.' Don't forget to update the singular noun into a plural noun. Type the full sentence into the answer box. For example: She owns two cars.
-
-
-1. He wants one cupcake.
-2. We have one child.
-3. I wrote one book.
-4. They brought one camera.
-5. I saw one person.
-
-
-________________
-
-
-
-
-PLURAL NOUNS VS SINGULAR NOUNS
-
-
-The noun in (parenthesis) should either be a singular noun or a plural noun in the following sentences. Use context clues to determine which is correct to use.
-
-
-1. Do you have any ____ (sibling)?
-2. Our home has a ____ (yard).
-3. The ____ (student) are in the classroom.
-4. He sang many ____ (song).
-5. I bought three ____ (ticket).
-
-
-________________
-
-
-
-
-CORRECT OR INCORRECT
-
-
-These sentences should all use plural nouns. Determine if the plural noun is used correctly or not. If incorrect, enter the correct sentence into the box.
-
-
-1. I have three sister.
-2. The bag is ten dollars.
-3. She lives with two person.
-4. Chloe has some book.
-5. We don't have any blanket.
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Answer the following questions. Try using plural nouns in your answers.
-
-
-1. What are some things in your fridge right now?
-2. How many people do you work with?
-3. How many movies or TV shows have you watched this past month?
 
 
 
@@ -2037,56 +2157,59 @@ Pailin: Yeah, great idea!
 PRACTICE
 
 
-PRACTICE APOSTROPHE -S
+TYPE: sentence_transform
+TITLE: PRACTICE APOSTROPHE -S
+PROMPT: Combine the two sentences to form one sentence. Make sure to add -'s when applicable. For example: My dad has a car. His car is green. --> My dad's car is green.
+QUESTION: 1
+STEM: Jill has a friend. Her friend is Thai.
+ANSWER: Jill's friend is Thai.
+QUESTION: 2
+STEM: My friend has a dog. The dog's name is Max.
+ANSWER: My friend's dog's name is Max.
+QUESTION: 3
+STEM: My boss has an office. The office is large.
+ANSWER: My boss's office is large.
+QUESTION: 4
+STEM: His family has a house. The house is by the lake.
+ANSWER: His family's house is by the lake.
+QUESTION: 5
+STEM: Ethan has a job. His job is stressful.
+ANSWER: Ethan's job is stressful.
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if the possessive form is used in the sentences correctly. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: Mark car is white.
+CORRECT: no
+ANSWER: Mark's car is white.
+QUESTION: 2
+STEM: My uncle's cat is friendly.
+CORRECT: yes
+QUESTION: 3
+STEM: I've never met my brother wife.
+CORRECT: no
+ANSWER: I've never met my brother's wife.
+QUESTION: 4
+STEM: This is Adam's phone.
+CORRECT: yes
+QUESTION: 5
+STEM: Your grandma necklace is beautiful.
+CORRECT: no
+ANSWER: Your grandma's necklace is beautiful.
+TYPE: open
+TITLE: OPEN-ENDED PRACTICE
+PROMPT: Answer the following questions using a full sentence. Use the possessive 'apostrophe -s' in your answers.
+QUESTION: 1
+TEXT: What is your best friend's name?
+KEYWORDS: 's
+QUESTION: 2
+TEXT: What is your friend's favorite TV show?
+KEYWORDS: 's
+QUESTION: 3
+TEXT: What city are your mom's parents from?
+KEYWORDS: 's
 
 
-Combine the two sentences to form one sentence. Make sure to add -'s when applicable. For example: My dad has a car. His car is green. --> My dad's car is green.
-
-
-1. Jill has a friend. Her friend is Thai.
-(Jill's friend is Thai.)
-2. My friend has a dog. The dog's name is Max.
-(My friend's dog's name is Max.)
-3. My boss has an office. The office is large.
-(My boss's office is large.)
-4. His family has a house. The house is by the lake.
-(His family's house is by the lake.)
-5. Ethan has a job. His job is stressful.
-(Ethan's job is stressful.)
-
-
-________________
-
-
-
-
-CORRECT OR INCORRECT
-
-
-Determine if the possessive form is used in the sentences correctly. If incorrect, enter the correct sentence into the box.
-
-
-1. Mark car is white.
-2. My uncle's cat is friendly.
-3. I've never met my brother wife.
-4. This is Adam's phone.
-5. Your grandma necklace is beautiful.
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Answer the following questions using a full sentence. Use the possessive 'apostrophe -s' in your answers.
-
-
-1. What is your best friend's name?
-2. What is your friend's favorite TV show?
-3. What city are your mom's parents from?
 
 
 
@@ -2318,53 +2441,65 @@ In town = (said when a person is in your specific city or location for a short s
 PRACTICE
 
 
-PRACTICE 'LET'S'
+TYPE: sentence_transform
+TITLE: PRACTICE ‘LET’S’
+PROMPT: Rewrite these sentences using 'let's.'
+QUESTION: 1
+STEM: We should go to the store.
+ANSWER: Let's go to the store.
+QUESTION: 2
+STEM: We should watch the basketball game.
+ANSWER: Let's watch the basketball game.
+QUESTION: 3
+STEM: We should leave soon.
+ANSWER: Let's leave soon.
+QUESTION: 4
+STEM: We should try that new coffee shop.
+ANSWER: Let's try that new coffee shop.
+QUESTION: 5
+STEM: We should listen to some music.
+ANSWER: Let's listen to some music.
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if the word 'let's' is used in the sentences correctly. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: Let's go on a hike.
+CORRECT: yes
+QUESTION: 2
+STEM: Let watch a movie.
+CORRECT: no
+ANSWER: Let's watch a movie.
+QUESTION: 3
+STEM: Let's meet in an hour.
+CORRECT: yes
+QUESTION: 4
+STEM: Let take the subway.
+CORRECT: no
+ANSWER: Let's take the subway.
+QUESTION: 5
+STEM: Let finish this.
+CORRECT: no
+ANSWER: Let's finish this.
+TYPE: open
+TITLE: OPEN-ENDED PRACTICE
+PROMPT: Look at the following situations and make suggestions using 'let's.'
+QUESTION: 1
+TEXT: You and your friend are bored.
+KEYWORDS: let's
+QUESTION: 2
+TEXT: You and your friend are hungry.
+KEYWORDS: let's
+QUESTION: 3
+TEXT: The weather is nice outside.
+KEYWORDS: let's
+QUESTION: 4
+TEXT: Your friend is sad.
+KEYWORDS: let's
+QUESTION: 5
+TEXT: You want to do something fun this weekend.
+KEYWORDS: let's
 
 
-Rewrite these sentences using 'let's.'
-
-
-1. We should go to the store.
-2. We should watch the basketball game.
-3. We should leave soon.
-4. We should try that new coffee shop.
-5. We should listen to some music.
-
-
-________________
-
-
-
-
-CORRECT OR INCORRECT
-
-
-Determine if the word 'let's' is used in the sentences correctly. If incorrect, enter the correct sentence into the box.
-
-
-1. Let's go on a hike.
-2. Let watch a movie.
-3. Let's meet in an hour.
-4. Let take the subway.
-5. Let finish this.
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Look at the following situations and make suggestions using 'let's.'
-
-
-1. You and your friend are bored.
-2. You and your friend are hungry.
-3. The weather is nice outside.
-4. Your friend is sad and you want to cheer them up.
-5. You and your friend want to do something fun this weekend.
 
 
 PINNED COMMENT
@@ -2595,51 +2730,64 @@ Although 'you all' is considered more politically correct, 'you guys' remains pr
 PRACTICE
 
 
-PRACTICE 'YOU GUYS'
+TYPE: sentence_transform
+TITLE: PRACTICE ‘YOU GUYS’
+PROMPT: Change the subject in these sentences to 'you guys.'
+QUESTION: 1
+STEM: They are so funny.
+ANSWER: You guys are so funny.
+QUESTION: 2
+STEM: Are you sleepy?
+ANSWER: Are you guys sleepy?
+QUESTION: 3
+STEM: We don't drink coffee.
+ANSWER: You guys don't drink coffee.
+QUESTION: 4
+STEM: Do they live in Bangkok?
+ANSWER: Do you guys live in Bangkok?
+QUESTION: 5
+STEM: We're bringing food.
+ANSWER: You guys are bringing food.
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if the verb conjugation is correct in these sentences. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: Is you guys hungry?
+CORRECT: no
+ANSWER: Are you guys hungry?
+QUESTION: 2
+STEM: You guys was late.
+CORRECT: no
+ANSWER: You guys were late.
+QUESTION: 3
+STEM: Do you guys like wine?
+CORRECT: yes
+QUESTION: 4
+STEM: You guys is doing a great job.
+CORRECT: no
+ANSWER: You guys are doing a great job.
+QUESTION: 5
+STEM: Does you guys play soccer?
+CORRECT: no
+ANSWER: Do you guys play soccer?
+TYPE: open
 
 
-Change the subject in these sentences to 'you guys.'
+TITLE: OPEN‑ENDED PRACTICE
 
 
-1. They are so funny.
-2. Are you sleepy?
-3. We don't drink coffee.
-4. Do they live in Bangkok?
-5. We're bringing food.
+QUESTION: 1
 
 
-________________
+INPUTS: 3
 
 
+TEXT: Imagine your two friends are visiting you. Ask them three things about what they like or what they might want to do in your city using 'you guys.'
 
 
-CORRECT OR INCORRECT
+KEYWORDS: you guys
 
 
-Determine if the verb conjugation is correct in these sentences. If incorrect, enter the correct sentence into the box.
-
-
-1. Is you guys hungry?
-2. You guys was late.
-3. Do you guys like wine?
-4. You guys is doing a great job.
-5. Does you guys play soccer?
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Imagine your two friends are visiting you. Ask them three things about what they like or what they might want to do in your city using 'you guys.'
-
-
-1.
-2.
-3.
 
 
 
@@ -2988,98 +3136,106 @@ Follow (social media context) = ติดตาม
 PRACTICE
 
 
-'DO' VS 'DOES'
-
-
-Fill in the blanks with either 'Do' or 'Does' to make the question correct.
-
-
-1. ____ he like to cook?
-2. ____ they read every day?
-3. ____ you run at the park?
-4. ____ Pete have a car?
-5. ____ your parents live in Bangkok?
-
-
-________________
-
-
-
-
-PRACTICE MAKING QUESTIONS
-
-
-Change the affirmative sentences into questions.
-
-
-1. They play football after school.
-2. Your dad works in a bank.
-3. Your cat sleeps in your bed.
-4. The store opens at 9AM.
-5. You guys need help.
-
-
-________________
-
-
-
-
-CORRECT OR INCORRECT
-
-
-Determine if 'Do' or 'Does' is the correct word to use in these questions. If incorrect, enter the correct sentence into the box.
-
-
-1. Do she speak Thai?
-2. Does it rain often?
-3. Do your brother play the guitar?
-4. Does they have any pets?
-5. Does Chloe and Alex work tonight?
-
-
-________________
-
-
-
-
-SHORT FORM ANSWERS
-
-
-Fill in the blanks with the correct pronoun and 'do · don't · does · doesn't' to create short form answers. For example:
-
-
+TYPE: fill_blank
+TITLE: ‘DO’ VS. ‘DOES’
+PROMPT: Fill in the blanks with either 'Do' or 'Does' to make the question correct.
+ITEM: 1
+TEXT: ____ he like to cook?
+ANSWER: Does
+ITEM: 2
+TEXT: ____ they read every day?
+ANSWER: Do
+ITEM: 3
+TEXT: ____ you run at the park?
+ANSWER: Do
+ITEM: 4
+TEXT: ____ Pete have a car?
+ANSWER: Does
+ITEM: 5
+TEXT: ____ your parents live in Bangkok?
+ANSWER: Do
+TYPE: sentence_transform
+TITLE: PRACTICE MAKING QUESTIONS
+PROMPT: Change the affirmative sentences into questions.
+QUESTION: 1
+STEM: They play football after school.
+ANSWER: Do they play football after school?
+QUESTION: 2
+STEM: Your dad works in a bank.
+ANSWER: Does your dad work in a bank?
+QUESTION: 3
+STEM: Your cat sleeps in your bed.
+ANSWER: Does your cat sleep in your bed?
+QUESTION: 4
+STEM: The store opens at 9AM.
+ANSWER: Does the store open at 9AM?
+QUESTION: 5
+STEM: You guys need help.
+ANSWER: Do you guys need help?
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if 'Do' or 'Does' is the correct word to use in these questions. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: Do she speak Thai?
+CORRECT: no
+ANSWER: Does she speak Thai?
+QUESTION: 2
+STEM: Does it rain often?
+CORRECT: yes
+QUESTION: 3
+STEM: Do your brother play the guitar?
+CORRECT: no
+ANSWER: Does your brother play the guitar?
+QUESTION: 4
+STEM: Does they have any pets?
+CORRECT: no
+ANSWER: Do they have any pets?
+QUESTION: 5
+STEM: Does Chloe and Alex work tonight?
+CORRECT: no
+ANSWER: Do Chloe and Alex work tonight?
+TYPE: fill_blank
+TITLE: SHORT FORM ANSWERS
+PROMPT: Fill in the blanks with the correct pronoun and 'do · don't · does · doesn't' to create short form answers. For example:
 A: Do Diego and Jerald know each other?
 B: No, they don't.
 
 
-1. A: Do your parents like to travel?
-B: Yeah, (they do).
-2. A: Does Emily play softball?
-B: No, (she doesn't).
-3. A: Do you guys live together?
-B: No, (we don't).
-4. A: Does your dad work in an office?
-B: Yeah, (he does).
-5. A: Do you need to buy groceries?
-B: Yeah, (I do).
+ITEM: 1
+TEXT: A: Do your parents like to travel? B: Yeah, ____.
+ANSWER: they do
+ITEM: 2
+TEXT: A: Does Emily play softball? B: No, ____.
+ANSWER: she doesn't
+ITEM: 3
+TEXT: A: Do you guys live together? B: No, ____.
+ANSWER: we don't
+ITEM: 4
+TEXT: A: Does your dad work in an office? B: Yeah, ____.
+ANSWER: he does
+ITEM: 5
+TEXT: A: Do you need to buy groceries? B: Yeah, ____.
+ANSWER: I do
+TYPE: open
 
 
-________________
+TITLE: OPEN‑ENDED PRACTICE
+
+
+QUESTION: 1
+
+
+INPUTS: 5
+
+
+TEXT: Imagine you are with a close friend. His mom, dad, and sister are coming to visit. Write 5 questions you could ask him about his family. Make the questions using present simple tense.
+
+
+KEYWORDS: do, does
 
 
 
 
-OPEN-ENDED PRACTICE
-
-
-Imagine you are with a close friend. His mom, dad, and sister are coming to visit. Write 5 questions you could ask him about his family. Make the questions using present simple tense.
-
-
-1.
-2.
-3.
-4.
-5.
 
 
 PINNED COMMENT
@@ -3263,52 +3419,63 @@ Check out
 PRACTICE
 
 
-'HAVE' VS 'HAS'
+TYPE: fill_blank
+TITLE: ‘HAVE’ VS. ‘HAS’
+PROMPT: Fill in the blanks with either 'have' or 'has' to make the sentences correct.
+ITEM: 1
+TEXT: I ____ a meeting at 3PM.
+ANSWER: have
+ITEM: 2
+TEXT: They ____ many friends.
+ANSWER: have
+ITEM: 3
+TEXT: This restaurant ____ great reviews.
+ANSWER: has
+ITEM: 4
+TEXT: Our house ____ a big garden.
+ANSWER: has
+ITEM: 5
+TEXT: My dog ____ a long tail.
+ANSWER: has
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if 'have' or 'has' is used correctly in these sentences. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: He have a new car.
+CORRECT: no
+ANSWER: He has a new car.
+QUESTION: 2
+STEM: We has a lot of homework.
+CORRECT: no
+ANSWER: We have a lot of homework.
+QUESTION: 3
+STEM: Does she have a good job?
+CORRECT: yes
+QUESTION: 4
+STEM: Marcus doesn't has his phone.
+CORRECT: no
+ANSWER: Marcus doesn't have his phone.
+QUESTION: 5
+STEM: Our teacher have blonde hair.
+CORRECT: no
+ANSWER: Our teacher has blonde hair.
+TYPE: open
+TITLE: OPEN-ENDED PRACTICE
+PROMPT: Answer the questions using 'have' or 'has' in your responses.
+QUESTION: 1
+TEXT: What siblings does your mom have?
+KEYWORDS: have, has
+QUESTION: 2
+TEXT: What siblings does your dad have?
+KEYWORDS: have, has
+QUESTION: 3
+TEXT: Why do you like your house/apartment?
+KEYWORDS: have, has
+QUESTION: 4
+TEXT: Describe your best friend's appearance.
+KEYWORDS: have, has
 
 
-Fill in the blanks with either 'have' or 'has' to make the sentences correct.
-
-
-1. I ____ a meeting at 3PM.
-2. They ____ many friends.
-3. This restaurant ____ great reviews.
-4. Our house ____ a big garden.
-5. My dog ____ a long tail.
-
-
-________________
-
-
-
-
-CORRECT OR INCORRECT
-
-
-Determine if 'have' or 'has' is used correctly in these sentences. If incorrect, enter the correct sentence into the box.
-
-
-1. He have a new car.
-2. We has a lot of homework.
-3. Does she have a good job?
-4. Marcus doesn't has his phone.
-5. Our teacher have blonde hair.
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Answer the questions using 'have' or 'has' in your responses.
-
-
-1. What siblings does your mom have?
-2. What siblings does your dad have?
-3. Why do you like your house or apartment? What things does it have?
-4. Describe what your best friend looks like.
 
 
 
@@ -3593,74 +3760,86 @@ Their focus on exclusive items, coupled with reasonable prices and cheerful staf
 PRACTICE
 
 
-MIXED PRACTICE
 
 
-Change the subject of these sentences to become 'Pailin', and change the verb so that it's conjugated properly. Enter the full sentence in the box. For example:
 
 
+TYPE: sentence_transform
+TITLE: MIXED PRACTICE
+PROMPT: Change the subject of these sentences to become 'Pailin', and change the verb so that it's conjugated properly. Enter the full sentence in the box. For example:
 We sleep at midnight. --> Pailin sleeps at midnight.
+QUESTION: 1
+STEM: They don't speak Spanish.
+ANSWER: Pailin doesn't speak Spanish.
+QUESTION: 2
+STEM: You were hungry.
+ANSWER: Pailin was hungry.
+QUESTION: 3
+STEM: I'm not from Canada.
+ANSWER: Pailin isn't from Canada.
+QUESTION: 4
+STEM: They're hungry.
+ANSWER: Pailin is hungry.
+QUESTION: 5
+STEM: I work at a bookstore.
+ANSWER: Pailin works at a bookstore.
+TYPE: sentence_transform
+TITLE: CORRECT OR INCORRECT
+PROMPT: Determine if the verb is conjugated correctly in these sentences. If incorrect, enter the correct sentence into the box.
+QUESTION: 1
+STEM: The movie were interesting.
+CORRECT: no
+ANSWER: The movie was interesting.
+QUESTION: 2
+STEM: Chloe is half French.
+CORRECT: yes
+QUESTION: 3
+STEM: My uncle live with my grandparents.
+CORRECT: no
+ANSWER: My uncle lives with my grandparents.
+QUESTION: 4
+STEM: He has a flight tomorrow.
+CORRECT: yes
+QUESTION: 5
+STEM: His boss like him.
+CORRECT: no
+ANSWER: His boss likes him.
+TYPE: open
 
 
-1. They don't speak Spanish.
-2. You were hungry.
-3. I'm not from Canada.
-4. They're hungry.
-5. I work at a bookstore.
-6. Do you take the metro to work?
-7. They weren't at the park.
-8. We have an exam today.
-9. You like Japanese food.
-10. We do the dishes every night.
+TITLE: OPEN‑ENDED PRACTICE
 
 
-________________
+QUESTION: 1
 
 
+INPUTS: 4
 
 
-CORRECT OR INCORRECT
+TEXT: Write 4 things about your favorite place, like a favorite country, city, or attraction. Use 3rd person verb conjugation in each sentence.
 
 
-Determine if the verb is conjugated correctly in these sentences. If incorrect, enter the correct sentence into the box.
+KEYWORDS: 3rd person verbs
 
 
-1. The movie were interesting.
-2. Chloe is half French.
-3. My uncle live with my grandparents.
-4. He has a flight tomorrow.
-5. His boss like him.
-6. She isn't at home.
-7. Do Pete ride a bike to school?
-8. Dara don't have any kids.
-9. Were Alex late to work?
-10. My mom doesn't like tea.
+QUESTION: 2
 
 
-________________
+INPUTS: 4
+
+
+TEXT: Write 4 things about your best friend. Use 3rd person verb conjugation in each sentence.
+
+
+KEYWORDS: 3rd person verbs
 
 
 
 
-OPEN-ENDED PRACTICE
 
 
-Write 4 things about your favorite place, like a favorite country, city, or attraction. Use 3rd person verb conjugation in each sentence.
 
 
-1.
-2.
-3.
-4.
-
-
-Write 4 things about your best friend. Use 3rd person verb conjugation in each sentence.
-
-
-1.
-2.
-3.
-4.
 
 
 PINNED COMMENT
@@ -4166,98 +4345,100 @@ SORRY!
 PRACTICE
 
 
-PRACTICE AFFIRMATIVE SENTENCES
-
-
-Change the sentences into future simple tense sentences. Use contractions when applicable.
-
-
-1. We travel to Hawaii next month.
-2. I do the laundry after work.
-3. She visits her parents tomorrow.
-4. Pailin and Chloe take lots of pictures.
-5. They arrive at 5PM.
-
-
-________________
-
-
-
-
-PRACTICE NEGATIVE SENTENCES
-
-
-Change the sentences from affirmative to negative future simple tense sentences.
-
-
-1. I'll wait in that line.
-2. He'll like the movie.
-3. Pailin will finish her homework on time.
-4. They'll get in trouble.
-5. The car will start.
-
-
-________________
-
-
-
-
-PRACTICE MAKING QUESTIONS
-
-
-Change the sentences into future simple tense questions.
-
-
-1. You'll buy groceries on your way home.
-2. She'll call me later.
-3. Jerald will be angry if I'm late.
-4. It'll rain tomorrow.
-5. You'll go to Disneyland.
-
-
-________________
-
-
-
-
-SHORT FORM ANSWERS
-
-
-Fill in the blanks with the correct pronoun and 'will' or 'won't' to create short form answers. For example:
-
-
+TYPE: sentence_transform
+TITLE: PRACTICE AFFIRMATIVE SENTENCES
+PROMPT: Change the sentences into future simple tense sentences. Use contractions when applicable.
+QUESTION: 1
+STEM: We travel to Hawaii next month.
+ANSWER: We'll travel to Hawaii next month.
+QUESTION: 2
+STEM: I do the laundry after work.
+ANSWER: I'll do the laundry after work.
+QUESTION: 3
+STEM: She visits her parents tomorrow.
+ANSWER: She'll visit her parents tomorrow.
+QUESTION: 4
+STEM: Pailin and Chloe take lots of pictures.
+ANSWER: Pailin and Chloe will take lots of pictures.
+QUESTION: 5
+STEM: They arrive at 5PM.
+ANSWER: They'll arrive at 5PM.
+TYPE: sentence_transform
+TITLE: PRACTICE NEGATIVE SENTENCES
+PROMPT: Change the sentences from affirmative to negative future simple tense sentences.
+QUESTION: 1
+STEM: I'll wait in that line.
+ANSWER: I won't wait in that line.
+QUESTION: 2
+STEM: He'll like the movie.
+ANSWER: He won't like the movie.
+QUESTION: 3
+STEM: Pailin will finish her homework on time.
+ANSWER: Pailin won't finish her homework on time.
+QUESTION: 4
+STEM: They'll get in trouble.
+ANSWER: They won't get in trouble.
+QUESTION: 5
+STEM: The car will start.
+ANSWER: The car won't start.
+TYPE: sentence_transform
+TITLE: PRACTICE MAKING QUESTIONS
+PROMPT: Change the sentences into future simple tense questions.
+QUESTION: 1
+STEM: You'll buy groceries on your way home.
+ANSWER: Will you buy groceries on your way home?
+QUESTION: 2
+STEM: She'll call me later.
+ANSWER: Will she call me later?
+QUESTION: 3
+STEM: Jerald will be angry if I'm late.
+ANSWER: Will Jerald be angry if I'm late?
+QUESTION: 4
+STEM: It'll rain tomorrow.
+ANSWER: Will it rain tomorrow?
+QUESTION: 5
+STEM: You'll go to Disneyland.
+ANSWER: Will you go to Disneyland?
+TYPE: fill_blank
+TITLE: SHORT FORM ANSWERS
+PROMPT: Fill in the blanks with the correct pronoun and 'will' or 'won't' to create short form answers. For example:
 A: Will they be late?
 B: No, they won't.
+ITEM: 1
+TEXT: A: Will she help us decorate? B: Yeah, ____.
+ANSWER: she will
+ITEM: 2
+TEXT: A: Will they win the game? B: No, ____.
+ANSWER: they won't
+ITEM: 3
+TEXT: A: Will you move in with them? B: No, ____.
+ANSWER: I won't
+ITEM: 4
+TEXT: A: Will he apply for a job there? B: Yeah, ____.
+ANSWER: he will
+ITEM: 5
+TEXT: A: Will the market be open tomorrow? B: Yeah, ____.
+ANSWER: it will
+TYPE: open
+TITLE: OPEN-ENDED PRACTICE
+PROMPT: Answer the questions using future simple tense in your responses.
+QUESTION: 1
+TEXT: What will you do this weekend?
+KEYWORDS: will
+QUESTION: 2
+TEXT: What time will you go to sleep tonight?
+KEYWORDS: will
+QUESTION: 3
+TEXT: What cities/countries will you visit this year?
+KEYWORDS: will
+QUESTION: 4
+TEXT: How will you celebrate your next birthday?
+KEYWORDS: will
+QUESTION: 5
+TEXT: What is something you won't do this weekend?
+KEYWORDS: won't
 
 
-1. A: Will she help us decorate?
-B: Yeah, (she will).
-2. A: Will they win the game?
-B: No, (they won't).
-3. A: Will you move in with them?
-B: No, (I won't).
-4. A: Will he apply for a job there?
-B: Yeah, (he will).
-5. A: Will the market be open tomorrow?
-B: Yeah, (it will).
-
-
-________________
-
-
-
-
-OPEN-ENDED PRACTICE
-
-
-Answer the questions using future simple tense in your responses.
-
-
-1. What will you do this weekend?
-2. What time will you go to sleep tonight?
-3. What cities or countries will you visit this year?
-4. How will you celebrate your next birthday?
-5. What is something you won't do this weekend?
 
 
 
@@ -4478,42 +4659,47 @@ PRACTICE
 PRACTICE SAYING GOODBYE
 
 
-Choose the best way to say goodbye for the situation.
-
-
-1. Your aunt and uncle are leaving your house. You see them only twice a year. How can you say goodbye?
-A. Bye, take care!
-B. Bye, see you later!
-
-
-2. You and your best friend have just finished eating lunch at a restaurant. You need to go back to work. How can you say goodbye?
-A. See you, have a good day!
-B. See you, have a good night!
-
-
-3. You're on the phone with your mom. You will see her tonight. How can you say goodbye?
-A. Goodbye, take care!
-B. Bye Mom, see you later!
-
-
-4. You're a server at a restaurant, and it's almost 9PM, so you're about to close the place. As the last customer is leaving, what could you say to them?
-A. Bye, have a good day!
-B. Bye, good night!
-
-________________
+TYPE: multiple_choice
+TITLE: PRACTICE SAYING GOODBYE
+PROMPT: Choose the best way to say goodbye for the situation.
+QUESTION: 1
+TEXT: Your aunt and uncle are leaving your house. You see them only twice a year. How can you say goodbye?
+OPTIONS: A. Bye, take care! B. Bye, see you later!
+ANSWER: A
+QUESTION: 2
+TEXT: You and your best friend have just finished eating lunch at a restaurant. You need to go back to work. How can you say goodbye?
+OPTIONS: A. See you, have a good day! B. See you, have a good night!
+ANSWER: A
+QUESTION: 3
+TEXT: You're on the phone with your mom. You will see her tonight. How can you say goodbye?
+OPTIONS: A. Goodbye, take care! B. Bye Mom, see you later!
+ANSWER: B
+QUESTION: 4
+TEXT: You're a server at a restaurant, and it's almost 9PM, so you're about to close the place. As the last customer is leaving, what could you say to them?
+OPTIONS: A. Bye, have a good day! B. Bye, good night!
+ANSWER: B
 
 
 
 
-OPEN-ENDED PRACTICE
+TYPE: open
 
 
-It's 11AM, and you're saying goodbye to your friend who was hanging out at your house. You'll get breakfast with him tomorrow morning. What are three things you could say to him as he's leaving?
+TITLE: OPEN‑ENDED PRACTICE
 
 
-1.
-2.
-3.
+QUESTION: 1
+
+
+INPUTS: 3
+
+
+TEXT: It's 11AM, and you're saying goodbye to your friend who was hanging out at your house. You'll get breakfast with him tomorrow morning. What are three things you could say to him as he's leaving?
+
+
+KEYWORDS: see you, tomorrow, morning
+
+
 
 
 

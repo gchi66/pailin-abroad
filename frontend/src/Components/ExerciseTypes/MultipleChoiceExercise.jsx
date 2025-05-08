@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export default function MultipleChoiceExercise({ exercise }) {
-  const { items = [] } = exercise;
+  const { title, prompt, items = [] } = exercise;
   const [choices, setChoices] = useState(Array(items.length).fill(null));
   const [checked, setChecked] = useState(false);
 
@@ -12,51 +12,77 @@ export default function MultipleChoiceExercise({ exercise }) {
   };
 
   const allAnswered = choices.every(c => c);
-  const score =
-    checked ? choices.filter((c, i) => c === items[i].answer).length : null;
+  const score = checked ? choices.filter((c, i) => c === items[i].answer).length : null;
+
+  const resetExercise = () => {
+    setChoices(Array(items.length).fill(null));
+    setChecked(false);
+  };
 
   return (
     <div className="mc-wrap">
+      {prompt && <p className="mc-prompt">{prompt}</p>}
+
       {items.map((q, qIdx) => (
-        <fieldset key={qIdx} className="mc-fieldset">
-          <legend>{q.text}</legend>
+        <div key={`question-${qIdx}`} className="mc-question">
+          <p className="mc-question-text">{q.number}. {q.text}</p>
           <ul className="mc-options">
             {q.options.map((optLine) => {
-              const letter = optLine.match(/^[A-Z]/)?.[0];     // “A”
-              const text   = optLine.replace(/^[A-Z]\.\s*/, ""); // “Please.”
+              const letter = optLine.match(/^[A-Z]/)?.[0];     // "A"
+              const text = optLine.replace(/^[A-Z]\.\s*/, ""); // "Please."
               return (
-                <li key={`${qIdx}-${letter}`}>
-                  <label>
+                <li key={`${qIdx}-${letter}`} className="mc-option">
+                  <label className="mc-label">
                     <input
                       type="radio"
-                      name={`mc-${exercise.id}-${qIdx}`} // unique group
+                      name={`mc-${qIdx}`}
                       value={letter}
                       checked={choices[qIdx] === letter}
                       disabled={checked}
                       onChange={() => pick(qIdx, letter)}
+                      className="mc-radio"
                     />
-                    {letter}. {text}
+                    <span className="mc-option-text">{letter}. {text}</span>
                   </label>
+
+                  {checked && choices[qIdx] === letter && (
+                    <span className={`mc-result ${letter === q.answer ? "correct" : "wrong"}`}>
+                      {letter === q.answer ? "✓" : "✗"}
+                    </span>
+                  )}
                 </li>
               );
             })}
           </ul>
-        </fieldset>
+
+          {checked && choices[qIdx] !== q.answer && (
+            <p className="mc-correct-answer">
+              <span className="mc-label">Correct answer:</span> {q.answer}
+            </p>
+          )}
+        </div>
       ))}
 
-      {!checked ? (
-        <button
-          className="mc-btn"
-          disabled={!allAnswered}
-          onClick={() => setChecked(true)}
-        >
-          Check
-        </button>
-      ) : (
-        <p className="mc-feedback">
-          You got {score} / {items.length} correct.
-        </p>
-      )}
+      <div className="mc-buttons">
+        {!checked ? (
+          <button
+            className="mc-btn check"
+            disabled={!allAnswered}
+            onClick={() => setChecked(true)}
+          >
+            Check
+          </button>
+        ) : (
+          <>
+            <p className="mc-feedback">
+              You got {score} / {items.length} correct.
+            </p>
+            <button className="mc-btn reset" onClick={resetExercise}>
+              Try Again
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
