@@ -83,8 +83,9 @@
     "practice_exercises": [
       {
         "kind": "fill_blank",
-        "title": "Fill-in-the-Blank Practice",
-        "prompt": "Fill in the blanks with \"Sorry for (verb-ing)\" or \"Sorry for not (verb-ing)\" according to the verb in (parenthesis).",
+        "title": "PRACTICE SORRY + VERB-ING",
+        "prompt": "Fill in the blanks with ‘Sorry for (verb-ing)’ or ‘Sorry for not (verb-ing)’ according to the verb in (parenthesis).",
+        "paragraph": "",
         "items": [
           {
             "number": "1",
@@ -116,12 +117,13 @@
       },
       {
         "kind": "multiple_choice",
-        "title": "Polite Words Multiple Choice",
-        "prompt": "",
+        "title": "POLITE WORDS PRACTICE",
+        "prompt": "Determine if the best word to use in these situations is 'please,' 'excuse me,' or 'sorry.'",
+        "paragraph": "",
         "items": [
           {
             "number": "1",
-            "text": "You're at a crowded bookstore and someone is blocking the book you want. What do you say?",
+            "text": "You're at a crowded bookstore, and someone is standing directly in front of the book you want to reach for. You want to ask them to move slightly.",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -131,7 +133,7 @@
           },
           {
             "number": "2",
-            "text": "You're ordering a coffee and want a specific type of milk. What do you say?",
+            "text": "You're ordering a coffee at a coffee shop and want to be polite when asking for a specific type of milk.",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -141,7 +143,7 @@
           },
           {
             "number": "3",
-            "text": "You arrive 20 minutes late to lunch. What do you say?",
+            "text": "You're meeting a friend for lunch, but you arrive 20 minutes late because of unexpected traffic.",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -151,7 +153,7 @@
           },
           {
             "number": "4",
-            "text": "You'd like to borrow your friend's pen for a moment. What do you say?",
+            "text": "You're asking to borrow your friend's pen for a moment.",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -161,7 +163,7 @@
           },
           {
             "number": "5",
-            "text": "You can't attend a friend's party because you're feeling unwell. What do you say?",
+            "text": "You're unable to attend a friend's party because you're feeling unwell.",
             "options": [
               "A. Please.",
               "B. Excuse me.",
@@ -174,8 +176,9 @@
       },
       {
         "kind": "open",
-        "title": "Open-Ended Practice",
-        "prompt": "",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the questions using ‘sorry’ in your responses.",
+        "paragraph": "",
         "items": [
           {
             "number": "1",
@@ -344,8 +347,9 @@
     "practice_exercises": [
       {
         "kind": "sentence_transform",
-        "title": "Make the sentences negative",
-        "prompt": "",
+        "title": "PRACTICE NEGATIVE SENTENCES",
+        "prompt": "Make the affirmative sentences into negative sentences by using ‘don’t’ or ‘doesn’t.’",
+        "paragraph": "",
         "items": [
           {
             "number": "1",
@@ -382,8 +386,9 @@
       },
       {
         "kind": "sentence_transform",
-        "title": "Correct / Incorrect (rewrite only if wrong)",
-        "prompt": "",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the grammar of the negative sentences is correct or not. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
         "items": [
           {
             "number": "1",
@@ -420,18 +425,21 @@
       },
       {
         "kind": "open",
-        "title": "Things we don’t do often",
+        "title": "OPEN‑ENDED PRACTICE",
         "prompt": "",
+        "paragraph": "",
         "items": [
           {
             "number": "1",
-            "text": "Write two things that you don’t do often. (Give two sentences.)",
-            "keywords": "don't, doesn’t"
+            "text": "Write two things that you don’t do often.",
+            "keywords": "don't, doesn’t",
+            "inputs": 2
           },
           {
             "number": "2",
-            "text": "Write two things that members of your family don’t do often. For example: “My son doesn’t watch TV often.” (Give two sentences.)",
-            "keywords": "don't, doesn’t"
+            "text": "Write two things that members of your family don’t do often. For example: My son doesn’t watch TV often.",
+            "keywords": "don't, doesn’t",
+            "inputs": 2
           }
         ],
         "sort_order": 3
@@ -600,7 +608,96 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "title": "PRACTICE USING ARTICLES",
+        "prompt": "Enter ‘a’ or ‘an’ in the sentences.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Do you have ___ job?",
+            "answer": "a"
+          },
+          {
+            "number": "2",
+            "text": "___ old man is outside our door.",
+            "answer": "An"
+          },
+          {
+            "number": "3",
+            "text": "It's ___ funny movie.",
+            "answer": "a"
+          },
+          {
+            "number": "4",
+            "text": "He rides ___ bike to work.",
+            "answer": "a"
+          },
+          {
+            "number": "5",
+            "text": "Emily has ___ lot of homework.",
+            "answer": "a"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I got a email.",
+            "correct": false,
+            "answer": "I got an email."
+          },
+          {
+            "number": "2",
+            "stem": "We live in an big house.",
+            "correct": false,
+            "answer": "We live in a big house."
+          },
+          {
+            "number": "3",
+            "stem": "She has an appointment.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "4",
+            "stem": "That's a excellent idea.",
+            "correct": false,
+            "answer": "That's an excellent idea."
+          },
+          {
+            "number": "5",
+            "stem": "She has cat.",
+            "correct": false,
+            "answer": "She has a cat."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN‑ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Describe four things you see in your room. Use 'a' or 'an' in your answers.",
+            "keywords": "a, an",
+            "inputs": 4
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -710,7 +807,121 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "title": "'THE' VS. 'A · AN'",
+        "prompt": "Decide if the article before the noun should be 'the,' 'an', or 'a.'",
+        "paragraph": "Yesterday, I went to ___1___ pet store. I saw ___2___ parrot. ___3___ parrot was very colorful.\nI also saw ___4___ small puppy. ___5___ puppy was sleeping in ___6___ cage.\nI asked ___7___ employee about ___8___ price for ___9___ puppy.\nShe told me it’s quite expensive. So I bought ___10___ bag of cat food for my cat instead.",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "answer": "a"
+          },
+          {
+            "number": "2",
+            "text": "",
+            "answer": "a"
+          },
+          {
+            "number": "3",
+            "text": "",
+            "answer": "the"
+          },
+          {
+            "number": "4",
+            "text": "",
+            "answer": "a"
+          },
+          {
+            "number": "5",
+            "text": "",
+            "answer": "the"
+          },
+          {
+            "number": "6",
+            "text": "",
+            "answer": "a"
+          },
+          {
+            "number": "7",
+            "text": "",
+            "answer": "an"
+          },
+          {
+            "number": "8",
+            "text": "",
+            "answer": "the"
+          },
+          {
+            "number": "9",
+            "text": "",
+            "answer": "the"
+          },
+          {
+            "number": "10",
+            "text": "",
+            "answer": "a"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I went to a beach yesterday.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "2",
+            "stem": "She wants to get a new car.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "Pailin is an university student.",
+            "correct": false,
+            "answer": "Pailin is a university student."
+          },
+          {
+            "number": "4",
+            "stem": "Where are the keys?",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "5",
+            "stem": "A house next door is blue.",
+            "correct": false,
+            "answer": "The house next door is blue."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN‑ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Describe four things around you. Use ‘the’ in your answers. For example: The door is white. The kids outside are noisy.",
+            "keywords": "the",
+            "inputs": 4
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -833,7 +1044,144 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "SINGULAR TO PLURAL NOUN",
+        "prompt": "Change the amount in the following sentences from 'one' to 'two.' Don't forget to update the singular noun into a plural noun. Type the full sentence into the answer box. For example: She owns two cars.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "He wants one cupcake.",
+            "correct": null,
+            "answer": "He wants two cupcakes."
+          },
+          {
+            "number": "2",
+            "stem": "We have one child.",
+            "correct": null,
+            "answer": "We have two children."
+          },
+          {
+            "number": "3",
+            "stem": "I wrote one book.",
+            "correct": null,
+            "answer": "I wrote two books."
+          },
+          {
+            "number": "4",
+            "stem": "They brought one camera.",
+            "correct": null,
+            "answer": "They brought two cameras."
+          },
+          {
+            "number": "5",
+            "stem": "I saw one person.",
+            "correct": null,
+            "answer": "I saw two people."
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "fill_blank",
+        "title": "PLURAL NOUNS VS. SINGULAR NOUNS",
+        "prompt": "The noun in (parenthesis) should either be a singular noun or a plural noun in the following sentences. Use context clues to determine which is correct to use.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Do you have any ____ (sibling)?",
+            "answer": "siblings"
+          },
+          {
+            "number": "2",
+            "text": "Our home has a ____ (yard).",
+            "answer": "yard"
+          },
+          {
+            "number": "3",
+            "text": "The ____ (student) are in the classroom.",
+            "answer": "students"
+          },
+          {
+            "number": "4",
+            "text": "He sang many ____ (song).",
+            "answer": "songs"
+          },
+          {
+            "number": "5",
+            "text": "I bought three ____ (ticket).",
+            "answer": "tickets"
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "These sentences should all use plural nouns. Determine if the plural noun is used correctly or not. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I have three sister.",
+            "correct": false,
+            "answer": "I have three sisters."
+          },
+          {
+            "number": "2",
+            "stem": "The bag is ten dollars.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "She lives with two person.",
+            "correct": false,
+            "answer": "She lives with two people."
+          },
+          {
+            "number": "4",
+            "stem": "Chloe has some book.",
+            "correct": false,
+            "answer": "Chloe has some books."
+          },
+          {
+            "number": "5",
+            "stem": "We don't have any blanket.",
+            "correct": false,
+            "answer": "We don't have any blankets."
+          }
+        ],
+        "sort_order": 3
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the following questions. Try using plural nouns in your answers.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "What are some things in your fridge right now?",
+            "keywords": "plural nouns"
+          },
+          {
+            "number": "2",
+            "text": "How many people do you work with?",
+            "keywords": "plural nouns"
+          },
+          {
+            "number": "3",
+            "text": "How many movies/TV shows have you watched this month?",
+            "keywords": "plural nouns"
+          }
+        ],
+        "sort_order": 4
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -968,7 +1316,110 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE APOSTROPHE -S",
+        "prompt": "Combine the two sentences to form one sentence. Make sure to add -'s when applicable. For example: My dad has a car. His car is green. --> My dad's car is green.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "Jill has a friend. Her friend is Thai.",
+            "correct": null,
+            "answer": "Jill's friend is Thai."
+          },
+          {
+            "number": "2",
+            "stem": "My friend has a dog. The dog's name is Max.",
+            "correct": null,
+            "answer": "My friend's dog's name is Max."
+          },
+          {
+            "number": "3",
+            "stem": "My boss has an office. The office is large.",
+            "correct": null,
+            "answer": "My boss's office is large."
+          },
+          {
+            "number": "4",
+            "stem": "His family has a house. The house is by the lake.",
+            "correct": null,
+            "answer": "His family's house is by the lake."
+          },
+          {
+            "number": "5",
+            "stem": "Ethan has a job. His job is stressful.",
+            "correct": null,
+            "answer": "Ethan's job is stressful."
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the possessive form is used in the sentences correctly. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "Mark car is white.",
+            "correct": false,
+            "answer": "Mark's car is white."
+          },
+          {
+            "number": "2",
+            "stem": "My uncle's cat is friendly.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "I've never met my brother wife.",
+            "correct": false,
+            "answer": "I've never met my brother's wife."
+          },
+          {
+            "number": "4",
+            "stem": "This is Adam's phone.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "5",
+            "stem": "Your grandma necklace is beautiful.",
+            "correct": false,
+            "answer": "Your grandma's necklace is beautiful."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the following questions using a full sentence. Use the possessive 'apostrophe -s' in your answers.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "What is your best friend's name?",
+            "keywords": "'s"
+          },
+          {
+            "number": "2",
+            "text": "What is your friend's favorite TV show?",
+            "keywords": "'s"
+          },
+          {
+            "number": "3",
+            "text": "What city are your mom's parents from?",
+            "keywords": "'s"
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -1108,7 +1559,120 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘LET’S’",
+        "prompt": "Rewrite these sentences using 'let's.'",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "We should go to the store.",
+            "correct": null,
+            "answer": "Let's go to the store."
+          },
+          {
+            "number": "2",
+            "stem": "We should watch the basketball game.",
+            "correct": null,
+            "answer": "Let's watch the basketball game."
+          },
+          {
+            "number": "3",
+            "stem": "We should leave soon.",
+            "correct": null,
+            "answer": "Let's leave soon."
+          },
+          {
+            "number": "4",
+            "stem": "We should try that new coffee shop.",
+            "correct": null,
+            "answer": "Let's try that new coffee shop."
+          },
+          {
+            "number": "5",
+            "stem": "We should listen to some music.",
+            "correct": null,
+            "answer": "Let's listen to some music."
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the word 'let's' is used in the sentences correctly. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "Let's go on a hike.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "2",
+            "stem": "Let watch a movie.",
+            "correct": false,
+            "answer": "Let's watch a movie."
+          },
+          {
+            "number": "3",
+            "stem": "Let's meet in an hour.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "4",
+            "stem": "Let take the subway.",
+            "correct": false,
+            "answer": "Let's take the subway."
+          },
+          {
+            "number": "5",
+            "stem": "Let finish this.",
+            "correct": false,
+            "answer": "Let's finish this."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Look at the following situations and make suggestions using 'let's.'",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You and your friend are bored.",
+            "keywords": "let's"
+          },
+          {
+            "number": "2",
+            "text": "You and your friend are hungry.",
+            "keywords": "let's"
+          },
+          {
+            "number": "3",
+            "text": "The weather is nice outside.",
+            "keywords": "let's"
+          },
+          {
+            "number": "4",
+            "text": "Your friend is sad.",
+            "keywords": "let's"
+          },
+          {
+            "number": "5",
+            "text": "You want to do something fun this weekend.",
+            "keywords": "let's"
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -1263,7 +1827,101 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘YOU GUYS’",
+        "prompt": "Change the subject in these sentences to 'you guys.'",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "They are so funny.",
+            "correct": null,
+            "answer": "You guys are so funny."
+          },
+          {
+            "number": "2",
+            "stem": "Are you sleepy?",
+            "correct": null,
+            "answer": "Are you guys sleepy?"
+          },
+          {
+            "number": "3",
+            "stem": "We don't drink coffee.",
+            "correct": null,
+            "answer": "You guys don't drink coffee."
+          },
+          {
+            "number": "4",
+            "stem": "Do they live in Bangkok?",
+            "correct": null,
+            "answer": "Do you guys live in Bangkok?"
+          },
+          {
+            "number": "5",
+            "stem": "We're bringing food.",
+            "correct": null,
+            "answer": "You guys are bringing food."
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the verb conjugation is correct in these sentences. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "Is you guys hungry?",
+            "correct": false,
+            "answer": "Are you guys hungry?"
+          },
+          {
+            "number": "2",
+            "stem": "You guys was late.",
+            "correct": false,
+            "answer": "You guys were late."
+          },
+          {
+            "number": "3",
+            "stem": "Do you guys like wine?",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "4",
+            "stem": "You guys is doing a great job.",
+            "correct": false,
+            "answer": "You guys are doing a great job."
+          },
+          {
+            "number": "5",
+            "stem": "Does you guys play soccer?",
+            "correct": false,
+            "answer": "Do you guys play soccer?"
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN‑ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Imagine your two friends are visiting you. Ask them three things about what they like or what they might want to do in your city using 'you guys.'",
+            "keywords": "you guys",
+            "inputs": 3
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -1411,7 +2069,169 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "title": "‘DO’ VS. ‘DOES’",
+        "prompt": "Fill in the blanks with either 'Do' or 'Does' to make the question correct.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "____ he like to cook?",
+            "answer": "Does"
+          },
+          {
+            "number": "2",
+            "text": "____ they read every day?",
+            "answer": "Do"
+          },
+          {
+            "number": "3",
+            "text": "____ you run at the park?",
+            "answer": "Do"
+          },
+          {
+            "number": "4",
+            "text": "____ Pete have a car?",
+            "answer": "Does"
+          },
+          {
+            "number": "5",
+            "text": "____ your parents live in Bangkok?",
+            "answer": "Do"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE MAKING QUESTIONS",
+        "prompt": "Change the affirmative sentences into questions.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "They play football after school.",
+            "correct": null,
+            "answer": "Do they play football after school?"
+          },
+          {
+            "number": "2",
+            "stem": "Your dad works in a bank.",
+            "correct": null,
+            "answer": "Does your dad work in a bank?"
+          },
+          {
+            "number": "3",
+            "stem": "Your cat sleeps in your bed.",
+            "correct": null,
+            "answer": "Does your cat sleep in your bed?"
+          },
+          {
+            "number": "4",
+            "stem": "The store opens at 9AM.",
+            "correct": null,
+            "answer": "Does the store open at 9AM?"
+          },
+          {
+            "number": "5",
+            "stem": "You guys need help.",
+            "correct": null,
+            "answer": "Do you guys need help?"
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if 'Do' or 'Does' is the correct word to use in these questions. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "Do she speak Thai?",
+            "correct": false,
+            "answer": "Does she speak Thai?"
+          },
+          {
+            "number": "2",
+            "stem": "Does it rain often?",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "Do your brother play the guitar?",
+            "correct": false,
+            "answer": "Does your brother play the guitar?"
+          },
+          {
+            "number": "4",
+            "stem": "Does they have any pets?",
+            "correct": false,
+            "answer": "Do they have any pets?"
+          },
+          {
+            "number": "5",
+            "stem": "Does Chloe and Alex work tonight?",
+            "correct": false,
+            "answer": "Do Chloe and Alex work tonight?"
+          }
+        ],
+        "sort_order": 3
+      },
+      {
+        "kind": "fill_blank",
+        "title": "SHORT FORM ANSWERS",
+        "prompt": "Fill in the blanks with the correct pronoun and 'do · don't · does · doesn't' to create short form answers. For example:",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "A: Do your parents like to travel? B: Yeah, ____.",
+            "answer": "they do"
+          },
+          {
+            "number": "2",
+            "text": "A: Does Emily play softball? B: No, ____.",
+            "answer": "she doesn't"
+          },
+          {
+            "number": "3",
+            "text": "A: Do you guys live together? B: No, ____.",
+            "answer": "we don't"
+          },
+          {
+            "number": "4",
+            "text": "A: Does your dad work in an office? B: Yeah, ____.",
+            "answer": "he does"
+          },
+          {
+            "number": "5",
+            "text": "A: Do you need to buy groceries? B: Yeah, ____.",
+            "answer": "I do"
+          }
+        ],
+        "sort_order": 4
+      },
+      {
+        "kind": "open",
+        "title": "OPEN‑ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Imagine you are with a close friend. His mom, dad, and sister are coming to visit. Write 5 questions you could ask him about his family. Make the questions using present simple tense.",
+            "keywords": "do, does",
+            "inputs": 5
+          }
+        ],
+        "sort_order": 5
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -1547,7 +2367,110 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "title": "‘HAVE’ VS. ‘HAS’",
+        "prompt": "Fill in the blanks with either 'have' or 'has' to make the sentences correct.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "I ____ a meeting at 3PM.",
+            "answer": "have"
+          },
+          {
+            "number": "2",
+            "text": "They ____ many friends.",
+            "answer": "have"
+          },
+          {
+            "number": "3",
+            "text": "This restaurant ____ great reviews.",
+            "answer": "has"
+          },
+          {
+            "number": "4",
+            "text": "Our house ____ a big garden.",
+            "answer": "has"
+          },
+          {
+            "number": "5",
+            "text": "My dog ____ a long tail.",
+            "answer": "has"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if 'have' or 'has' is used correctly in these sentences. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "He have a new car.",
+            "correct": false,
+            "answer": "He has a new car."
+          },
+          {
+            "number": "2",
+            "stem": "We has a lot of homework.",
+            "correct": false,
+            "answer": "We have a lot of homework."
+          },
+          {
+            "number": "3",
+            "stem": "Does she have a good job?",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "4",
+            "stem": "Marcus doesn't has his phone.",
+            "correct": false,
+            "answer": "Marcus doesn't have his phone."
+          },
+          {
+            "number": "5",
+            "stem": "Our teacher have blonde hair.",
+            "correct": false,
+            "answer": "Our teacher has blonde hair."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the questions using 'have' or 'has' in your responses.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "What siblings does your mom have?",
+            "keywords": "have, has"
+          },
+          {
+            "number": "2",
+            "text": "What siblings does your dad have?",
+            "keywords": "have, has"
+          },
+          {
+            "number": "3",
+            "text": "Why do you like your house/apartment?",
+            "keywords": "have, has"
+          },
+          {
+            "number": "4",
+            "text": "Describe your best friend's appearance.",
+            "keywords": "have, has"
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -1708,7 +2631,107 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "MIXED PRACTICE",
+        "prompt": "Change the subject of these sentences to become 'Pailin', and change the verb so that it's conjugated properly. Enter the full sentence in the box. For example:",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "They don't speak Spanish.",
+            "correct": null,
+            "answer": "Pailin doesn't speak Spanish."
+          },
+          {
+            "number": "2",
+            "stem": "You were hungry.",
+            "correct": null,
+            "answer": "Pailin was hungry."
+          },
+          {
+            "number": "3",
+            "stem": "I'm not from Canada.",
+            "correct": null,
+            "answer": "Pailin isn't from Canada."
+          },
+          {
+            "number": "4",
+            "stem": "They're hungry.",
+            "correct": null,
+            "answer": "Pailin is hungry."
+          },
+          {
+            "number": "5",
+            "stem": "I work at a bookstore.",
+            "correct": null,
+            "answer": "Pailin works at a bookstore."
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the verb is conjugated correctly in these sentences. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "The movie were interesting.",
+            "correct": false,
+            "answer": "The movie was interesting."
+          },
+          {
+            "number": "2",
+            "stem": "Chloe is half French.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "My uncle live with my grandparents.",
+            "correct": false,
+            "answer": "My uncle lives with my grandparents."
+          },
+          {
+            "number": "4",
+            "stem": "He has a flight tomorrow.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "5",
+            "stem": "His boss like him.",
+            "correct": false,
+            "answer": "His boss likes him."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN‑ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Write 4 things about your favorite place, like a favorite country, city, or attraction. Use 3rd person verb conjugation in each sentence.",
+            "keywords": "3rd person verbs",
+            "inputs": 4
+          },
+          {
+            "number": "2",
+            "text": "Write 4 things about your best friend. Use 3rd person verb conjugation in each sentence.",
+            "keywords": "3rd person verbs",
+            "inputs": 4
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -1886,7 +2909,193 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE AFFIRMATIVE SENTENCES",
+        "prompt": "Change the sentences into future simple tense sentences. Use contractions when applicable.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "We travel to Hawaii next month.",
+            "correct": null,
+            "answer": "We'll travel to Hawaii next month."
+          },
+          {
+            "number": "2",
+            "stem": "I do the laundry after work.",
+            "correct": null,
+            "answer": "I'll do the laundry after work."
+          },
+          {
+            "number": "3",
+            "stem": "She visits her parents tomorrow.",
+            "correct": null,
+            "answer": "She'll visit her parents tomorrow."
+          },
+          {
+            "number": "4",
+            "stem": "Pailin and Chloe take lots of pictures.",
+            "correct": null,
+            "answer": "Pailin and Chloe will take lots of pictures."
+          },
+          {
+            "number": "5",
+            "stem": "They arrive at 5PM.",
+            "correct": null,
+            "answer": "They'll arrive at 5PM."
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE NEGATIVE SENTENCES",
+        "prompt": "Change the sentences from affirmative to negative future simple tense sentences.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I'll wait in that line.",
+            "correct": null,
+            "answer": "I won't wait in that line."
+          },
+          {
+            "number": "2",
+            "stem": "He'll like the movie.",
+            "correct": null,
+            "answer": "He won't like the movie."
+          },
+          {
+            "number": "3",
+            "stem": "Pailin will finish her homework on time.",
+            "correct": null,
+            "answer": "Pailin won't finish her homework on time."
+          },
+          {
+            "number": "4",
+            "stem": "They'll get in trouble.",
+            "correct": null,
+            "answer": "They won't get in trouble."
+          },
+          {
+            "number": "5",
+            "stem": "The car will start.",
+            "correct": null,
+            "answer": "The car won't start."
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE MAKING QUESTIONS",
+        "prompt": "Change the sentences into future simple tense questions.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "You'll buy groceries on your way home.",
+            "correct": null,
+            "answer": "Will you buy groceries on your way home?"
+          },
+          {
+            "number": "2",
+            "stem": "She'll call me later.",
+            "correct": null,
+            "answer": "Will she call me later?"
+          },
+          {
+            "number": "3",
+            "stem": "Jerald will be angry if I'm late.",
+            "correct": null,
+            "answer": "Will Jerald be angry if I'm late?"
+          },
+          {
+            "number": "4",
+            "stem": "It'll rain tomorrow.",
+            "correct": null,
+            "answer": "Will it rain tomorrow?"
+          },
+          {
+            "number": "5",
+            "stem": "You'll go to Disneyland.",
+            "correct": null,
+            "answer": "Will you go to Disneyland?"
+          }
+        ],
+        "sort_order": 3
+      },
+      {
+        "kind": "fill_blank",
+        "title": "SHORT FORM ANSWERS",
+        "prompt": "Fill in the blanks with the correct pronoun and 'will' or 'won't' to create short form answers. For example:",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "A: Will she help us decorate? B: Yeah, ____.",
+            "answer": "she will"
+          },
+          {
+            "number": "2",
+            "text": "A: Will they win the game? B: No, ____.",
+            "answer": "they won't"
+          },
+          {
+            "number": "3",
+            "text": "A: Will you move in with them? B: No, ____.",
+            "answer": "I won't"
+          },
+          {
+            "number": "4",
+            "text": "A: Will he apply for a job there? B: Yeah, ____.",
+            "answer": "he will"
+          },
+          {
+            "number": "5",
+            "text": "A: Will the market be open tomorrow? B: Yeah, ____.",
+            "answer": "it will"
+          }
+        ],
+        "sort_order": 4
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the questions using future simple tense in your responses.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "What will you do this weekend?",
+            "keywords": "will"
+          },
+          {
+            "number": "2",
+            "text": "What time will you go to sleep tonight?",
+            "keywords": "will"
+          },
+          {
+            "number": "3",
+            "text": "What cities/countries will you visit this year?",
+            "keywords": "will"
+          },
+          {
+            "number": "4",
+            "text": "How will you celebrate your next birthday?",
+            "keywords": "will"
+          },
+          {
+            "number": "5",
+            "text": "What is something you won't do this weekend?",
+            "keywords": "won't"
+          }
+        ],
+        "sort_order": 5
+      }
+    ],
     "sections": [
       {
         "type": "apply",
@@ -2142,7 +3351,56 @@
         ]
       }
     ],
-    "practice_exercises": [],
+    "practice_exercises": [
+      {
+        "kind": "multiple_choice",
+        "title": "PRACTICE SAYING GOODBYE",
+        "prompt": "Choose the best way to say goodbye for the situation.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Your aunt and uncle are leaving your house. You see them only twice a year. How can you say goodbye?",
+            "options": [],
+            "answer": "A"
+          },
+          {
+            "number": "2",
+            "text": "You and your best friend have just finished eating lunch at a restaurant. You need to go back to work. How can you say goodbye?",
+            "options": [],
+            "answer": "A"
+          },
+          {
+            "number": "3",
+            "text": "You're on the phone with your mom. You will see her tonight. How can you say goodbye?",
+            "options": [],
+            "answer": "B"
+          },
+          {
+            "number": "4",
+            "text": "You're a server at a restaurant, and it's almost 9PM, so you're about to close the place. As the last customer is leaving, what could you say to them?",
+            "options": [],
+            "answer": "B"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN‑ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "It's 11AM, and you're saying goodbye to your friend who was hanging out at your house. You'll get breakfast with him tomorrow morning. What are three things you could say to him as he's leaving?",
+            "keywords": "see you, tomorrow, morning",
+            "inputs": 3
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
     "sections": [
       {
         "type": "apply",

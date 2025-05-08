@@ -19,7 +19,8 @@ const transformExercise = (dbExercise) => {
     id: dbExercise.id,
     kind: dbExercise.kind,
     prompt: dbExercise.prompt_md || "",
-    title: dbExercise.title || dbExercise.prompt_md || `Exercise ${dbExercise.sort_order ?? ""}`
+    title: dbExercise.title || dbExercise.prompt_md || `Exercise ${dbExercise.sort_order ?? ""}`,
+    paragraph: dbExercise.paragraph || ""
   };
 
   switch(dbExercise.kind) {
