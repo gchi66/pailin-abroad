@@ -1,5 +1,72 @@
-.st-row      { margin-bottom: 1rem; }
-.st-stem     { margin: 0 0 .4rem 0; font-weight: 600; }
-.st-mark.correct { color: green; }
-.st-mark.wrong   { color: red; }
-.st-btn, .fb-btn, .mc-btn, .oe-btn { margin-top: .6rem; }
+/* ───────── shared look & feel ───────── */
+.markdown-section,
+.ps-container {
+  margin-block-start: 2vh;          /* top space */
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;                         /* space between items */
+}
+
+.markdown-item,
+.ps-accordion {
+  border-block-end: 0.1rem solid var(--border-light, #e6e6e6);
+  padding-block-end: 1.2vh;
+  padding-inline: 0;
+  background: var(--surface, #fff);
+  border-radius: 1rem;
+  box-shadow: 0 .2rem .4rem rgba(0 0 0 / 0.05);
+  overflow: hidden;                /* keeps radius when open */
+}
+
+.markdown-summary,
+.ps-summary {
+  list-style: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+  color: var(--primary-color);
+  padding: 1.2vh 1.4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  transition: color .2s ease;
+}
+
+.markdown-summary:hover,
+.ps-summary:hover {
+  color: var(--primary-dark);
+}
+
+/* custom arrow ▸ */
+.markdown-summary::after,
+.ps-summary::after {
+  content: "▸";
+  font-size: 1.2em;
+  transition: transform .25s ease;
+}
+
+/* rotate arrow when open */
+details[open] > .markdown-summary::after,
+details[open] > .ps-summary::after {
+  transform: rotate(90deg);
+}
+
+/* Chrome’s default arrow removal (belt‑and‑suspenders) */
+.markdown-summary::-webkit-details-marker,
+.ps-summary::-webkit-details-marker {
+  display: none;
+}
+
+/* body animation / padding */
+.markdown-content,
+.ps-accordion > *:not(summary) {
+  padding: 0 1.4vw 1.2vh;
+  line-height: 1.6;
+  animation: fadeIn .25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; translate: 0 -.5rem; }
+  to   { opacity: 1; translate: 0 0; }
+}

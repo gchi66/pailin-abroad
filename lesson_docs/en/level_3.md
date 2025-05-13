@@ -1,0 +1,5737 @@
+### **LESSON **3.1**: **Sorry we’re late!
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to use the word ‘sorry’
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin's host dad Mark has just brought Pailin to her host family's home for the first time. She will be staying with them during her school year at UCLA, and they're all welcoming her into their home. Sylvie has just prepared lunch for everyone.
+
+Mark: host dad, lawyer, from the US
+
+Sylvie: host mom, wine distributor, from France
+
+Luke: host brother, 21, also a student at UCLA
+
+Emily: host sister, 13, in high school
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Mark: Guys, we're home! Sorry we're late. The traffic was bad.
+
+Sylvie: Welcome, Pailin! We're so happy you're here!
+
+Pailin: Thank you, it's so nice to meet you all!
+
+Sylvie: Sorry the house is a little messy.
+
+Pailin: Don't worry! Your home is beautiful.
+
+Luke: Hi Pailin, I'm Luke. I'll take your suitcase to your room. *crashing sounds* Oh no! I'm so sorry for dropping your suitcase!
+
+Pailin: That's okay! It's just clothes. Hi, are you Emily?
+
+Emily: Yep, that's me! Pailin, do you have a boyfriend?
+
+Sylvie: Emily! Sorry, she's so rude.
+
+Pailin: *laughs* It's okay! No, I don't have a boyfriend.
+
+Mark: Okay everyone, lunch is ready. Let's eat.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. Why were Mark and Pailin late arriving home?
+
+Options
+
+A. Because there was a car accident.
+
+B. Because the traffic was bad.
+
+C. Because they picked up some food.
+
+Answer key: B
+
+
+#### APPLY
+
+In the conversation, Mark apologizes to his family because they arrived late for lunch. Pretend you lost your friend’s phone charger while you were traveling together. How can you apologize to him?
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to use the word ‘sorry’
+
+
+---
+
+SORRY
+
+‘Sorry’ is a very important word to know. It’s used to apologize for a wide range of situations, from small inconveniences to major incidents. It can be said by itself or as part of a sentence. You can add the word ‘so’ before sorry to make it stronger.
+
+
+
+* Sorry.
+* I’m sorry.
+* I’m so sorry.
+
+'Sorry’ can be used for all sorts of situations!
+
+
+        Minor incident:
+
+
+            You bump into someone:
+
+
+
+* Oops, sorry!
+
+            You ask someone a question, but realize that you interrupted a conversation:
+
+* Sorry, I’ll ask you my question later.
+
+        Accidents:
+
+
+            You broke your friend’s mug:
+
+* So sorry, Sylvie, but I broke your mug when I was washing it.
+
+            You spilled wine on your friend’s nice jacket.
+
+* I’m so sorry. Let me try to wash the stain out now.
+
+        Deep regret:
+
+
+            You and your brother had a huge argument earlier, and you want to apologize for the hurtful things you said.
+
+* I’m so sorry about what I said. I crossed a line.
+
+            You promised your friend you would help her move out, but you can’t come anymore because you got called into work.
+
+* I’m so sorry, but I can’t help you move today. I just got called into work.
+
+
+---
+
+SORRY + REASON
+
+A simple way to apologize is:
+
+
+
+
+        Sorry + (reason you’re sorry).
+
+The reason should be a complete sentence. Here are examples from the conversation:
+
+
+
+* Sorry we’re late!
+
+        We're late! = the reason Mark is sorry
+
+* Sorry the house is a little messy.
+
+        The house is a little messy = the reason Sylvie is sorry
+
+
+You can also apologize for someone else’s mishap. When Emily asks Pailin a rather personal question, Sylvie apologies for Emily’s behavior:
+
+
+
+* Sorry, she's so rude.
+
+Here are more examples of using 'sorry' in this way:
+
+
+
+* I'm so sorry I said that to you.
+* Sorry I forgot your birthday.
+* I'm sorry I wasn't paying attention.
+
+
+---
+
+SORRY FOR (VERB-ING)
+
+Notice how Luke apologizes to Pailin when he accidentally drops her suitcase:
+
+
+
+* I'm so sorry for dropping your suitcase!
+
+He gives a specific reason for his apology, but he uses a different structure:
+
+
+        Sorry for (verb-ing)
+
+
+        Sorry for not (verb-ing)
+
+In Luke’s apology, the base verb is ‘drop’, but -ing is added so it becomes ‘dropping’ in this sentence. Here are examples of the three sentences from the section above, but using this structure. The base verb is shown in (parenthesis):
+
+
+
+* I’m so sorry for saying that to you. (say)
+* Sorry for forgetting your birthday. (forget)
+* I’m sorry for not paying attention. (pay)
+
+You can use ‘sorry for (verb-ing),’ or you can use ‘sorry + reason’ and the meaning is the same! You can choose whichever one you want to use.
+
+
+---
+
+THAT’S OKAY
+
+There are several ways to respond to someone who has apologized to you. In the conversation, Sylvie apologizes to Pailin for Emily's embarrassing question. Also, Luke apologizes for dropping Pailin's suitcase. Pailin responds with:
+
+
+
+* That's okay!
+* It's okay!
+
+These are typical ways to respond if an incident or inconvenience isn’t a big deal. Then, when Sylvie apologizes to Pailin about the house being a little messy, Pailin reassures Sylvie by saying:
+
+
+
+* Don't worry!
+
+You can also say:
+
+
+
+* No worries!
+
+The above four phrases are best used for minor inconveniences.
+
+Here are other ways to respond to ‘sorry’:
+
+
+
+* I understand.
+
+        You can say this when someone gives you a valid excuse for why they can’t help you or do something for you. When you tell them, 'I understand,' it shows empathy and acknowledges their situation.
+
+* Adam: Sorry I can’t come to your birthday party. I want to go, but I promised my sister I would babysit her kids.
+
+            Chloe: It’s okay, I understand.
+
+* Don’t be sorry.
+
+        You can say this when someone is overly apologetic about something small and you don’t want them to feel guilty.
+
+* Pailin: I’m so sorry I lost your shirt. I don’t know where it could be.
+
+            Tyler: Don’t be sorry. It was an old shirt. \
+
+
+
+
+#### EXTRA TIPS
+
+SORRY TO SHOW SYMPATHY
+
+When someone is experiencing hardship or misfortune, you can say 'I'm so sorry' to show empathy and acknowledge their pain. This expression is used to offer support during difficult times, such as the death of a loved one, health issues, a divorce or breakup, or any other challenging life circumstances. For example:
+
+
+
+* I'm so sorry for your loss.
+* I'm so sorry you're going through this.
+
+Note that this use of 'sorry' expresses sympathy, not responsibility for the other person's situation.
+
+
+---
+
+APOLOGIZING FOR FUTURE EVENTS
+
+To apologize for something that might happen in the future and potentially cause inconvenience or discomfort, you can follow this structure:
+
+
+        Sorry if (reason you’re sorry).
+
+The reason should be a complete sentence in present simple tense, even though the event would potentially happen in the future. For example:
+
+
+
+* Sorry if I wake you up in the morning.
+
+        I wake you up in the morning = the reason you're sorry
+
+* Sorry if I come late. There’s so much traffic today.
+* Sorry if I forget your name. I’m so bad with names.
+* Sorry if my phone rings during the meeting. I’m expecting a call.
+
+
+---
+
+NO, SORRY
+
+When you're unable to fulfill a simple request or answer a question, you can respond with:
+
+
+
+* No, sorry.
+* I don't know, sorry.
+
+Adding ‘sorry’ is a polite way to acknowledge the minor inconvenience.
+
+For example:
+
+
+
+* Pailin: Do you have any change for the parking meter?
+
+        Luke: No, sorry.
+
+* Pailin: Excuse me, do you know where the metro station is?
+
+        Stranger: I don’t know, sorry. I’m not from around here.
+
+
+
+#### PHRASES & VERBS
+
+Guys = (an informal, friendly term to address a group of people, regardless of gender)
+
+
+
+* Hey guys, how’s it going?
+* Guys, we’re going to be late if we don’t leave now.
+
+        <span style="text-decoration:underline;">See more uses of ‘Guys’</span>
+
+
+Oh no = (an expression to show alarm or concern, especially when something goes wrong)
+
+
+
+* Oh no. I locked my keys in my car!
+
+        <span style="text-decoration:underline;">See more uses of 'Oh no'</span>
+
+
+
+#### CULTURE NOTE
+
+SORRY!
+
+Unlike ขอโทษ, 'sorry' is used for a broader range of situations. It covers serious apologies for causing harm, but also light, everyday interactions where others might find it unnecessary to apologize.
+
+For example, say a server at a restaurant mistakenly brings you a salad. You might say, ‘Sorry, I actually ordered a burger’ even though it’s the server’s mistake.
+
+Canadians are particularly known for reflexively saying ‘sorry’ all the time, even when they’ve done nothing wrong. Like if someone steps on their foot, they might say ‘Sorry!’ even though the other person is at fault.
+
+In instances like these, ‘sorry’ is more of a polite filler word than a real apology.
+
+
+#### PRACTICE
+
+TYPE: fill_blank
+
+TITLE: PRACTICE SORRY + VERB-ING
+
+PROMPT: Fill in the blanks with ‘Sorry for (verb-ing)’ or ‘Sorry for not (verb-ing)’ according to the verb in (parenthesis).
+
+ITEM: 1
+
+TEXT: ___ (miss) your call.
+
+ANSWER: Sorry for missing
+
+FULL_ANSWER: Sorry for missing your call
+
+__ (miss) your call.
+
+Klsdfjdslfjsflskj (sorry for missing your call)
+
+ITEM: 2
+
+TEXT: ___ (break) your plate.
+
+ANSWER: Sorry for breaking
+
+ITEM: 3
+
+TEXT: ___ (make) so much noise.
+
+ANSWER: Sorry for making
+
+ITEM: 4
+
+TEXT: ___ (say) that.
+
+ANSWER: Sorry for saying
+
+ITEM: 5
+
+TEXT: ___ (not respond) to your text.
+
+ANSWER: Sorry for not responding
+
+TYPE: multiple_choice
+
+TITLE: POLITE WORDS PRACTICE
+
+PROMPT: Determine if the best word to use in these situations is 'please,' 'excuse me,' or 'sorry.'
+
+QUESTION: 1
+
+TEXT: You're at a crowded bookstore, and someone is standing directly in front of the book you want to reach for. You want to ask them to move slightly.
+
+OPTIONS:
+
+A. Please.
+
+B. Excuse me.
+
+C. Sorry.
+
+ANSWER: B
+
+QUESTION: 2
+
+TEXT: You're ordering a coffee at a coffee shop and want to be polite when asking for a specific type of milk.
+
+OPTIONS:
+
+A. Please.
+
+B. Excuse me.
+
+C. Sorry.
+
+ANSWER: A
+
+QUESTION: 3
+
+TEXT: You're meeting a friend for lunch, but you arrive 20 minutes late because of unexpected traffic.
+
+OPTIONS:
+
+A. Please.
+
+B. Excuse me.
+
+C. Sorry.
+
+ANSWER: C
+
+QUESTION: 4
+
+TEXT: You're asking to borrow your friend's pen for a moment.
+
+OPTIONS:
+
+A. Please.
+
+B. Excuse me.
+
+C. Sorry.
+
+ANSWER: A
+
+QUESTION: 5
+
+TEXT: You're unable to attend a friend's party because you're feeling unwell.
+
+OPTIONS:
+
+A. Please.
+
+B. Excuse me.
+
+C. Sorry.
+
+ANSWER: C
+
+TYPE: open
+
+TITLE: **OPEN-ENDED PRACTICE**
+
+PROMPT: **Answer the questions using ‘sorry’ in your responses.**
+
+QUESTION: 1
+
+TEXT: **Your friend invited you to her wedding, but you can't go. What could you say to apologize to her?**
+
+KEYWORDS: sorry
+
+QUESTION: 2
+
+TEXT: **You arrived late to work because there was a big accident on the freeway. What could you say to apologize to your boss?**
+
+KEYWORDS: sorry
+
+QUESTION: 3
+
+TEXT: **You accidentally spill water all over your friend's table. What could you say to apologize to her?**
+
+KEYWORDS: sorry
+
+ \
+
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+Are you usually early, on time, or late for events?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Polite word, useful word, sorry, apologizing
+
+
+### **LESSON **3.2**: **I’m an Art History major
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to make negative sentences with ‘don’t’ and ‘doesn’t’
+
+Verb Tense: Present Simple Tense
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin has just moved into her host family's home. She's getting to know her host brother, Luke.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Pailin: Luke, are you a student at UCLA too?
+
+Luke: Yep! What's your major?
+
+Pailin: I'm an Art History major. How about you?
+
+Luke: I'm an Engineering major, but I don't like my classes. I want to change my major.
+
+Pailin: You don't want to be an engineer?
+
+Luke: No, I don't. But my dad doesn't want me to change my major. I want to try Psychology.
+
+Pailin: My friend is a Psychology major, but he doesn't like it very much.
+
+Luke: Really? I think the classes are so interesting.
+
+Pailin: I agree. Actually, my friend wants to try Engineering.
+
+
+#### <span style="text-decoration:underline;">COMPREHENSION</span>
+
+Prompt
+
+1. What is Pailin's major?
+
+Options
+
+A. She's an Engineering major.
+
+B. She's an Art History major.
+
+C. She's a Psychology major.
+
+Answer key: B
+
+Prompt
+
+2. What is Luke's major?
+
+Options
+
+A. He's an Engineering major.
+
+B. He's an Art History major.
+
+C. He's a Psychology major.
+
+Answer key: A
+
+Prompt
+
+3. What does Luke want to change his major to?
+
+Options
+
+A. He wants to be an Engineering major.
+
+B. He wants to be an Art History major.
+
+C. He wants to be a Psychology major.
+
+Answer key: C
+
+
+#### <span style="text-decoration:underline;">APPLY</span>
+
+In the conversation, Luke says that he doesn't like his engineering classes. What is a subject you don't like?
+
+
+#### <span style="text-decoration:underline;">UNDERSTAND</span>
+
+LESSON FOCUS
+
+How to make negative sentences with ‘don’t’ and ‘doesn’t’
+
+Verb tense: Present simple tense
+
+
+---
+
+NEGATIVE SENTENCES
+
+So far, you’ve learned how to make affirmative sentences in present simple tense (I drink coffee every morning). In this lesson, you’ll learn how to make those sentences negative using the words ‘don’t’ and ‘doesn’t.’
+
+Compare these two sentences from the conversation:
+
+
+
+
+
+* I don't like my classes.
+* He doesn't like it very much.
+
+In Lesson 1.16, you learned that ‘not’ is used to negate ALL verbs in English. The two sentences above contain the word ‘not,’ although it may not be obvious at first glance. That’s because ‘not’ is contracted with the auxiliary verb ‘do’ or ‘does’.
+
+
+        don’t = do not
+
+
+        doesn’t = does not
+
+These two words make present simple tense sentences negative. Notice their position in the sentences. They come after the subject and *before* the main verb:
+
+
+        (Subject) don’t (verb)
+
+
+        (Subject) doesn’t (verb)
+
+Now take a look at the main verb in these lines from the conversation:
+
+
+
+* My friend wants to try Engineering.
+* My dad doesn't want me to change my major.
+
+In the first sentence, -s is added to the end of verb ‘want’ because it follows ‘he · she · it · noun.’ What do you notice about the second sentence? The verb ‘want’ *doesn’t* have an -s even though the subject is ‘he’. Instead, the negative auxiliary verb ‘do not’ takes the -s to become ‘does not,’ while the main verb ‘want’ stays in its base form.
+
+
+---
+
+USES & STRUCTURE
+
+Remember that present simple tense is used to talk about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, negative present simple tense is used to describe things that *don’t* happen regularly, or for things you *don’t* know, feel, or believe.
+
+Here is the structure of ‘don’t’ and ‘doesn’t in a sentence with some examples.
+
+TABLE-1:
+
+
+<table>
+  <tr>
+   <td><strong>SUBJECT</strong>
+   </td>
+   <td><strong>(-)</strong>
+   </td>
+   <td><strong>VERB</strong>
+   </td>
+   <td>
+    <strong>EXAMPLE SENTENCES</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>I
+<p style="text-align: right">
+You
+<p style="text-align: right">
+We
+<p style="text-align: right">
+They
+<p style="text-align: right">
+2+ Nouns
+   </td>
+   <td>don’t
+   </td>
+   <td>(verb)
+   </td>
+   <td>
+<ul>
+
+<li>I don’t drive.</li>
+
+<li>You don’t travel often.</li>
+
+<li>We don’t know the answer.</li>
+
+<li>They don’t see you.</li>
+
+<li>My parents don’t live in Florida.</li>
+</ul>
+   </td>
+  </tr>
+  <tr>
+   <td>He
+<p style="text-align: right">
+She
+<p style="text-align: right">
+It
+<p style="text-align: right">
+1 Noun
+   </td>
+   <td>doesn’t
+   </td>
+   <td>(verb)
+   </td>
+   <td>
+<ul>
+
+<li>He doesn’t drink coffee.</li>
+
+<li>She doesn’t exercise often.</li>
+
+<li>It doesn’t work.</li>
+
+<li>Enzo doesn’t cook well.</li>
+</ul>
+   </td>
+  </tr>
+</table>
+
+
+Quick Practice: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).
+
+1. I watch scary movies.
+
+2. Pete goes to the gym often.
+
+3. We like cats.
+
+4. She takes the bus to work.
+
+5. My brother lives in San Francisco.
+
++ Submit to Show Answers
+
+
+#### COMMON MISTAKES
+
+	MISTAKE #1
+
+Thai people often only use the word ‘not’ to make a sentence negative. Remember that ‘not’ is always used in conjunction with another verb to make a sentence negative, like in ‘It isn’t hot’ or ‘She doesn’t eat spicy food.’
+
+Take a look at the incorrect sentences below and how to fix them:
+
+
+        I not have a dog. (X)
+
+
+
+* I don’t have a dog. (✓)
+
+        They not eat fish. (X)
+
+* They don’t eat fish. (✓)
+
+        He not like spicy food. (X)
+
+* He doesn’t like spicy food. (✓)
+
+
+---
+
+MISTAKE #2
+
+It’s also common for Thai people to mistakenly use ‘don’t’ in negative sentences when they should use ‘doesn’t.' Building the habit of using both correctly will make your English more accurate and fluent. Take a look at the corrections below:
+
+
+        She don’t drink beer. (X)
+
+
+
+* She doesn’t drink beer. (✓)
+
+        He don’t work there. (X)
+
+* He doesn’t work there. (✓)
+
+        It don’t smell bad. (X)
+
+* It doesn’t smell bad. (✓)
+
+
+#### <span style="text-decoration:underline;">PRACTICE</span>
+
+TYPE: sentence_transform
+
+TITLE: PRACTICE NEGATIVE SENTENCES
+
+PROMPT: Make the affirmative sentences into negative sentences by using ‘don’t’ or ‘doesn’t.’
+
+QUESTION: 1
+
+STEM:** I speak Korean.**
+
+ANSWER: I don’t speak
+
+QUESTION: 2
+
+STEM: **Adam eats seafood.**
+
+ANSWER: Adam doesn’t eat seafood
+
+QUESTION: 3
+
+STEM: **She lives in an apartment.**
+
+ANSWER: She doesn’t live
+
+QUESTION: 4
+
+STEM: **We drink red wine.**
+
+ANSWER: We don’t drink
+
+QUESTION: 5
+
+STEM: **It smells good.**
+
+ANSWER: It doesn’t smell
+
+TYPE: sentence_transform
+
+TITLE: **CORRECT OR INCORRECT**
+
+PROMPT: **Determine if the grammar of the negative sentences is correct or not. If incorrect, enter the correct sentence into the box.**
+
+QUESTION: 1
+
+STEM: **She don’t work on the weekends.**
+
+CORRECT: no
+
+ANSWER: She doesn’t work
+
+QUESTION: 2
+
+STEM: They not live in Bangkok.
+
+CORRECT: no
+
+ANSWER: They don’t live
+
+QUESTION: 3
+
+STEM: He doesn’t know Sarah.
+
+CORRECT: yes      ← already correct; learner just checks ✓
+
+QUESTION: 4
+
+STEM: Dara not want kids.
+
+CORRECT: no
+
+ANSWER: Dara doesn’t want kids.
+
+QUESTION: 5
+
+STEM: It don’t rain often.
+
+CORRECT: no
+
+ANSWER: It doesn’t rain often.
+
+
+---
+
+TYPE: open
+
+TITLE: **OPEN‑ENDED PRACTICE**
+
+QUESTION: 1
+
+INPUTS: 2
+
+TEXT: **Write two things that you don’t do often.**
+
+KEYWORDS: don't, doesn’t
+
+QUESTION: 2
+
+INPUTS: 2
+
+TEXT: **Write two things that members of your family don’t do often. For example: My son doesn’t watch TV often.**
+
+KEYWORDS: don't, doesn’t
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+
+
+    If you went to university, what was your major?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+
+    Verb, present simple tense, negative sentence, not, don’t, doesn’t, school, major, study, university, college, student life
+
+
+### **LESSON **3.3**: I **need a big breakfast
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to use articles (a · an) before a noun
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin has recently moved into her host family's home. She's chatting with her host dad Mark, her host mom Sylvie, and her host sister Emily as they eat breakfast.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Mark: So, Pailin, what do you usually eat for breakfast in Thailand?
+
+Pailin: Sometimes I eat a bowl of rice with an omelet, or sometimes I make a sandwich.
+
+Emily: A sandwich for breakfast? What kind?
+
+Pailin: Usually an egg and bacon sandwich.
+
+Sylvie: Oh, that sounds good! I usually just have a cup of coffee and an apple in the morning.
+
+Mark: I need a big breakfast. I always eat a few bowls of cereal. I love bran flakes.
+
+Sylvie: Bran flakes?? You sound like an old man. (jokingly)
+
+Pailin: What do you eat for breakfast, Emily?
+
+Emily: I eat a banana and toast before school. But sometimes I eat an orange, too.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. What does Pailin have for breakfast? (select all that apply)
+
+Options
+
+A. Rice with an omelet
+
+B. An egg and bacon sandwich
+
+C. Coffee
+
+D. An apple
+
+E. Cereal
+
+F. A banana
+
+G. Toast
+
+Answer key: A, B
+
+Prompt
+
+2. What does Sylvie have for breakfast? (select all that apply)
+
+Options
+
+A. Rice with an omelet
+
+B. An egg and bacon sandwich
+
+C. Coffee
+
+D. An apple
+
+E. Cereal
+
+F. A banana
+
+G. Toast
+
+Answer key: C, D
+
+Prompt
+
+3. What does Mark have for breakfast? (select all that apply)
+
+Options
+
+A. Rice with an omelet
+
+B. An egg and bacon sandwich
+
+C. Coffee
+
+D. An apple
+
+E. Cereal
+
+F. A banana
+
+G. Toast
+
+Answer key: E
+
+Prompt
+
+4. What does Emily have for breakfast? (select all that apply)
+
+Options
+
+A. Rice with an omelet
+
+B. An egg and bacon sandwich
+
+C. Coffee
+
+D. An apple
+
+E. Cereal
+
+F. A banana
+
+G. Toast
+
+Answer key: F, G
+
+
+#### APPLY
+
+In the conversation, Pailin and her host family discuss what they usually have for breakfast. What do people in Thailand normally eat for breakfast? Try using the articles 'a' or 'an' in your answer.
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to use articles (a · an) before a noun
+
+English uses 'articles,' which are small words that come before nouns. There are no articles at all in Thai! The three articles are: a, an, the. This lesson focuses on ‘a’ and ‘an.’
+
+
+---
+
+ARTICLES 'A’ & ‘AN'
+
+Take a look at the underlined nouns in these lines:
+
+
+
+* Sometimes I make a <span style="text-decoration:underline;">sandwich</span>.
+* I usually just have a <span style="text-decoration:underline;">cup</span> of coffee and an <span style="text-decoration:underline;">apple</span> in the morning.
+* I need a <span style="text-decoration:underline;">big breakfast</span>.
+
+Notice the small words that come before these nouns: ‘a’ and ‘an.’ These words are called ‘articles’ and are used very often in English. Although they’re small and don’t add meaning to a sentence, they’re very important for fluency. For example, saying ‘I need big breakfast’ sounds incomplete compared to ‘I need a big breakfast.’
+
+
+        ‘A’ and ‘an’ come before a singular, non-specific noun.
+
+‘Singular’ means there is *only one* noun. You can think of ‘a · an’ as meaning ‘one.’ In Thai, you would specify if there’s ‘one’ noun only if it’s important to the conversation’s context, for example: ฉันมีหมาหนึ่งตัว แต่พี่ชายมีสองตัว. But in English, the use of articles means it’s always clear if you are referring to one item or more than one item. When you say, ‘I ate a banana,’ it’s clear you ate one banana.
+
+‘Non-specific’ means you are *not* talking about a specific item. Another article (the) is used for this, which you’ll learn about in the next lesson. For example, if you say ‘I saw a dog,’ this means you saw any dog, while if you say ‘I saw Jane’s dog,’ you are referring to a specific dog.
+
+These concepts will become clearer as you see more examples.
+
+
+---
+
+A VS. AN
+
+Take a look at these lines from the conversation:
+
+
+
+* I eat <span style="text-decoration:underline;">a</span> banana...
+* But sometimes I eat <span style="text-decoration:underline;">an</span> orange, too.
+
+One sentence uses ‘a,’ and the other uses ‘an.’ Deciding which to use depends on the first sound of the word after the article.
+
+        an (the next word begins with a vowel sound – a, e, i, o, u)
+
+        a (the next word begins with a non-vowel sound - called ‘consonants’)
+
+What’s the first sound in the word ‘banana?’ ‘Buh!’ Because ‘buh’ is a consonant sound, you need to use the article ‘a’ before this word. What about the first sound in ‘orange?’ It’s ‘oh!’ That’s a vowel sound, so ‘an’ would come before it.
+
+The reason ‘an’ is used before vowel sounds is for flow and ease of pronunciation - saying ‘a orange’ is awkward compared to saying ‘an orange.’ You can see this in more examples from the conversation:
+
+
+
+* Usually <span style="text-decoration:underline;">an</span> egg and bacon sandwich.
+* You sound like <span style="text-decoration:underline;">an</span> old man.
+
+Pronunciation note: ‘a’ as an article isn’t pronounced like the letter ‘A’, but is pronounced more like ‘uh.’
+
+
+---
+
+NOUNS & NOUN PHRASES
+
+The articles ‘a’ and ‘an’ come before nouns, but they also come before <span style="text-decoration:underline;">noun phrases</span>, which is an adjective + noun. In a noun phrase, choosing ‘a’ and ‘an’ depends on the first letter of the adjective, *not* the noun. Note that articles never come before adjectives alone - only adjectives that are followed by a noun.
+
+In the conversation, Sylvie tells Mark:
+
+
+
+* You sound like an old man.
+
+In this line, 'old man' is the noun phrase.
+
+
+        Old = adjective
+
+
+        Man = noun
+
+You must use 'an' since the next word starts with the letter 'o', which is a vowel.
+
+Here are more examples of ‘a’ before nouns and noun phrases:
+
+
+
+* Emily wants a dog. (noun)
+* I’d like a glass of water, please. (noun)
+* Pailin goes to a good school. (noun phrase)
+* That was a bad movie. (noun phrase)
+
+And here are more examples of ‘an’ before nouns and noun phrases:
+
+
+
+* I have an idea. (noun)
+* Do you have an umbrella? (noun)
+* It’s an easy task. (noun phrase)
+* I’m wearing an orange shirt. (noun phrase)
+
+
+#### EXTRA TIPS
+
+H & U
+
+English spelling can sometimes be misleading. Some words begin with a silent ‘h’, so when they’re pronounced, they actually begin with a vowel sound, like the word ‘hour’ or ‘honest.’ Use ‘an’ before these words. For example:
+
+
+
+* We have an hour for lunch.
+* She's an honest person.
+
+Some words begin with the vowel ‘u’, but when pronounced, it sounds like a ‘y’ sound, like the word ‘university’ or 'European.' Use ‘a’ before these words. For example:
+
+
+
+* My daughter is a university student.
+* That's a European car.
+
+That's why the rules for using 'a · an' focus on the first sound of the next word, not the spelling.
+
+
+#### COMMON MISTAKES
+
+FORGOTTEN ARTICLES
+
+Since articles aren’t a grammar concept that exists in Thai, they’re easily forgotten. However, they will make your speech sound natural and fluent when used correctly. Take a look at the incorrect sentences below and how to fix them.
+
+
+        I read book before bed. (X)
+
+
+
+* I read a book before bed. (✓)
+
+        He has old dog. (X)
+
+* He has an old dog. (✓)
+
+Try listening to the correct sentences and repeating after the audio, making sure you include the articles.
+
+
+
+
+#### CULTURE NOTE
+
+BREAKFAST FOODS
+
+American breakfasts are often centered around convenience and tend to be sweet. Popular options are cereal, yogurt, toast, eggs, or oatmeal. While pancakes, waffles, and French toast are iconic American breakfast foods, they aren't eaten on a daily basis, but rather might be eaten one day a week with the family.
+
+In contrast, Thai breakfasts are generally hearty meals and tend to be savory. A cooked meal of rice or sticky rice served with meat is common, showing a preference for substantial, flavorful breakfasts. This contrasts with the American tendency to eat quick, sugary, and easily prepared foods to start the day.
+
+
+#### PRACTICE
+
+TYPE: fill_blank
+
+TITLE: **PRACTICE USING ARTICLES**
+
+PROMPT: **Enter ‘a’ or ‘an’ in the sentences.**
+
+ITEM: 1
+
+TEXT: **Do you have ___ job?**
+
+ANSWER: a
+
+ITEM: 2
+
+TEXT: **___ old man is outside our door.**
+
+ANSWER: An
+
+ITEM: 3
+
+TEXT: **It's ___ funny movie.**
+
+ANSWER: a
+
+ITEM: 4
+
+TEXT: **He rides ___ bike to work.**
+
+ANSWER: a
+
+ITEM: 5
+
+TEXT: **Emily has ___ lot of homework.**
+
+ANSWER: a
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** I got a email.
+
+**CORRECT:** no
+
+**ANSWER:** I got an email
+
+**QUESTION:** 2
+
+**STEM:** We live in an big house
+
+**CORRECT:** no
+
+**ANSWER:** We live in a big house
+
+**QUESTION:** 3
+
+**STEM:** She has an appointment
+
+**CORRECT:** yes
+
+**QUESTION:** 4
+
+**STEM:** That's a excellent idea.
+
+**CORRECT:** no
+
+**ANSWER:** That's an excellent idea.
+
+**QUESTION:** 5
+
+**STEM:** She has cat.
+
+**CORRECT:** no
+
+**ANSWER:** She has a cat.
+
+**TYPE:** open
+
+**TITLE:** OPEN‑ENDED PRACTICE
+
+**QUESTION:** 1
+
+**INPUTS:** 4
+
+**TEXT:** Describe four things you see in your room. Use 'a' or 'an' in your answers.
+
+**KEYWORDS:** a, an
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+What do you usually have for breakfast?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Articles, food, meals, breakfast
+
+
+### LESSON 3.4: What’s the WIFI password?
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to use the article ‘the’ before a noun
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin has recently moved into her host family's home. She's chatting with her host brother Luke.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Pailin: Luke, what’s the Wi-Fi password?
+
+Luke: It’s on the fridge. Check the yellow paper.
+
+Pailin: Oh, I see it. Thanks!
+
+Luke: The internet is super slow today.
+
+Pailin: Oh no. I want to send a job application.
+
+Luke: The coffee shop down the street has good Wi-Fi. The library is also nearby. You can walk to both.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. Where can Pailin find the Wi-Fi password?
+
+Options
+
+A. On Luke's phone
+
+B. On the fridge
+
+C. At the coffee shop
+
+D. At the library
+
+Answer key: B
+
+Prompt
+
+2. Why does Pailin need to use the internet?
+
+Options
+
+A. She wants to watch a movie.
+
+B. She wants to play a video game.
+
+C. She wants to send a job application.
+
+D. She wants to check her email.
+
+Answer key: C
+
+
+#### APPLY
+
+In the conversation, Pailin asks Luke what the Wi-Fi password is. Pretend you’re traveling in a new city and you’re looking for the nearest subway station. What could you ask someone to find out where it is?
+
+
+#### UNDERSTAND
+
+	LESSON FOCUS
+
+How to use the article ‘the’ before a noun
+
+In the previous lesson, you learned about the two articles ‘a’ and ‘an.’ There is one more article: the.
+
+Fun fact: ‘The’ is the most commonly used word in the English language.
+
+
+---
+
+‘THE’ FOR SPECIFIC THINGS
+
+Recall that ‘articles’ are small words that come before nouns. There are three articles: a, an, the. The key difference between ‘a · an’ and ‘the’ is:
+
+
+        a · an - used for non-specific things
+
+
+        the - used for specific things
+
+Take a look at this line from the conversation with the noun of focus underlined:
+
+
+
+* Check the <span style="text-decoration:underline;">yellow paper.</span>
+
+Luke tells Pailin that she can find the Wi-Fi password on a *specific* yellow paper that's on the fridge. Because he is being specific, it is incorrect to say 'Check a yellow paper.' Then, Luke says to Pailin:
+
+
+
+* The <span style="text-decoration:underline;">coffee shop down the street</span> has good Wi-Fi.
+
+Again, he is referring to one specific coffee shop - the one down the street. Contrast this with a sentence like, 'A coffee shop will have good Wi-Fi.' If Luke said this, it means that *any* coffee shop will have good internet, so he would use 'a' instead of 'the.' But he wants to direct Pailin to a specific coffee shop nearby, so he says 'the coffee shop.'
+
+See more explanations of the lines from the conversation below:
+
+
+
+* What’s the WIFI password?
+
+        There is only one specific WIFI password that Pailin is asking for.
+
+* It's on the fridge.
+
+        Most homes have only one refrigerator, making it a specific object.
+
+* The internet is super slow today.
+
+        A household typically has one internet service, and Luke is referring to that specific internet connection.
+
+* The library is also nearby.
+
+        In a neighborhood, there's usually one main library that everyone is familiar with. Luke is referring to the one that's closest to their home.
+
+
+
+---
+
+‘THE’ FOR UNIQUE ITEMS
+
+Take a look at this line from the conversation:
+
+
+
+* The internet is super slow today.
+
+Although Luke is referring to the internet connection specifically in their home, 'the internet' in general is unique since there is only one internet. ‘An internet’ is never said because the idea of multiple internets doesn’t exist.
+
+So for nouns that are unique, ‘the’ is the article used before, not ‘a · an.’ There are many different ‘unique nouns,’ so here are some select examples where ‘the’ should come before:
+
+
+        Physical environment: the stars, the moon, the grass, the ocean, the weather
+
+
+        Systems and services: the police, the news, the electricity, the government
+
+
+        Government positions: the Queen, the president
+
+
+        Concepts: the economy, the future, the world
+
+
+---
+
+‘THE’ FOR SPECIFIC THINGS ALREADY MENTIONED
+
+When you mention an item for the first time in a conversation, you should use ‘a’ or ‘an’ because it’s new information for the listener. However, after that item is mentioned, you should say ‘the’ because now it’s something that is *known* to both the speaker and listener. ‘The’ shows that the item is now a *particular* or *familiar* thing that everyone in the conversation is aware of.Here is an example:
+
+
+
+* Pailin: I saw <span style="text-decoration:underline;">a good movie</span> yesterday.
+
+        Luke: What was <span style="text-decoration:underline;">the movie</span> about?
+
+
+        Pailin: <span style="text-decoration:underline;">The movie</span> was about a man who traveled around the world.
+
+
+In the beginning, Pailin says 'a good movie' because she's introducing the movie for the first time. She's not referring to a specific movie that Luke already knows about. It's a general introduction.  Then, once the 'good movie' is introduced into the conversation, Luke and Pailin can refer to it as 'the movie' because they both know which movie they're referring to. It's now *specific*.
+
+Here is another example referencing a person:
+
+
+
+* Mark: We have <span style="text-decoration:underline;">a new employee</span> on the team.
+
+        Assistant: Is <span style="text-decoration:underline;">the employee</span> starting work this week?
+
+
+        Mark: I think so.
+
+
+At first, Mark uses ‘a’ because he is introducing the employee into the conversation for the first time. The employee is unknown to the assistant. She doesn’t know who the new employee is or any details about them.
+
+But once Mark introduces this employee into the conversation, the employee becomes known to both people in the conversation. Now they are both talking about the same person. So, the assistant uses ‘the’ because she is referring to the specific employee that Mark just mentioned. Later in the day, if the assistant wants to ask Mark more questions about this new employee, she will continue to say ‘the employee,’ rather than ‘a new employee.’
+
+There are several more ways to use ‘the,’ which you can learn about in the Extra Tips section.
+
+
+---
+
+'THE' BEFORE SINGULAR & PLURAL NOUNS
+
+You learned in the previous lesson that 'a · an' is used before singular nouns only, meaning there is only one item or person. However, 'the' can be used before any quantity of people or things. For example:
+
+
+
+* <span style="text-decoration:underline;">The book</span> is about a woman who becomes a chef.
+* <span style="text-decoration:underline;">The books</span> on the shelf are old.
+* Can I eat <span style="text-decoration:underline;">the last cookie</span>?
+* I ate all <span style="text-decoration:underline;">the cookies</span> you baked.
+
+The words ‘books’ and ‘cookies’ refer to more than one book and more than one cookie, yet ‘the’ can still be used.
+
+
+#### EXTRA TIPS
+
+'THE' FOR SPECIFIC THINGS IN ONE ENVIRONMENT
+
+'The' is used when talking about a specific place that everyone knows is the main one in your surroundings. When Luke refers to 'the library,' he isn't talking about any library. He's referring to the library that is most likely known or understood by Pailin in their current setting. It's the 'default' library, or the one considered the most obvious or accessible. This concept applies to other places you might go to in your neighborhood, such as:
+
+
+        the beach
+
+
+
+* Let's go to <span style="text-decoration:underline;">the beach</span>.
+
+        There are beaches all over the world, but the listener will understand that you want to go to the main beach in your area.
+
+
+        the bathroom
+
+* I need to go to <span style="text-decoration:underline;">the bathroom</span>.
+
+        It's understood that you want to use whichever bathroom is closest.
+
+
+        the park
+
+* My kids are playing at <span style="text-decoration:underline;">the park</span>.
+
+        This implies a park in your neighborhood.
+
+
+More examples:
+
+
+        the hospital
+
+
+        the airport
+
+
+        the museum
+
+
+        the movies
+
+
+        the lake
+
+
+        the post office
+
+
+        the bank
+
+
+        the bus station
+
+
+        the mall
+
+
+---
+
+'THE' BEFORE SUPERLATIVES
+
+'The' is used before words that describe something as the 'most' or 'best' of its kind, like 'the tallest' or 'the fastest.' There can only be one specific thing that's 'the most,' which explains why 'the' is used. These words are called 'superlatives,' which you'll learn about in Lesson 8.11. Here are some example sentences:
+
+
+
+* Sarah is <span style="text-decoration:underline;">the smartest</span> person in our class.
+* This is <span style="text-decoration:underline;">the best</span> Thai restaurant in LA.
+* New Zealand is <span style="text-decoration:underline;">the most beautiful</span> country I've been to.
+
+
+---
+
+'THE' BEFORE TRANSPORTATION & INSTRUMENTS
+
+When referring to a mode of transportation or a musical instrument as a concept, you should use 'the.' For example:
+
+
+
+* I take <span style="text-decoration:underline;">the bus</span> to work.
+* <span style="text-decoration:underline;">The subway</span> is clean and reliable in Tokyo.
+* She plays <span style="text-decoration:underline;">the piano</span> very well.
+* I want to learn how to play <span style="text-decoration:underline;">the guitar</span>.
+
+However, context is important. When referring to a single instrument or vehicle, then 'a · an' might be used instead. For example:
+
+
+
+* We took <span style="text-decoration:underline;">a taxi</span> to the airport.
+* She bought <span style="text-decoration:underline;">a piano</span>.
+
+
+#### PHRASES & VERBS
+
+Oh no (to show alarm)
+
+
+#### PRACTICE
+
+TYPE: fill_blank
+
+TITLE: **'THE' VS. 'A · AN'**
+
+PROMPT: **Decide if the article before the noun should be 'the,' 'an', or 'a.'**
+
+PARAGRAPH:
+
+**Yesterday, I went to ___1___ pet store. I saw ___2___ parrot. ___3___ parrot was very colorful.  **
+
+**I also saw ___4___ small puppy. ___5___ puppy was sleeping in ___6___ cage.  **
+
+**I asked ___7___ employee about ___8___ price for ___9___ puppy.  **
+
+**She told me it’s quite expensive. So I bought ___10___ bag of cat food for my cat instead.**
+
+ITEM: 1
+
+ANSWER: a          # a pet store
+
+ITEM: 2
+
+ANSWER: a          # a parrot
+
+ITEM: 3
+
+ANSWER: the        # the parrot (now specific)
+
+ITEM: 4
+
+ANSWER: a          # a small puppy
+
+ITEM: 5
+
+ANSWER: the        # the puppy (now specific)
+
+ITEM: 6
+
+ANSWER: a          # a cage
+
+ITEM: 7
+
+ANSWER: an         # an employee  (first mention; vowel sound)
+
+ITEM: 8
+
+ANSWER: the        # the price (specific)
+
+ITEM: 9
+
+ANSWER: the        # the puppy (specific)
+
+ITEM: 10
+
+ANSWER: a          # a bag of cat food
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if the correct articles are used in the sentences. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** I went to a beach yesterday.
+
+**CORRECT:** yes
+
+**QUESTION:** 2
+
+**STEM:** She wants to get a new car.
+
+**CORRECT:** yes
+
+**QUESTION:** 3
+
+**STEM:** Pailin is an university student.
+
+**CORRECT:** no
+
+**ANSWER:** Pailin is a university student.
+
+**QUESTION:** 4
+
+**STEM:** Where are the keys?
+
+**CORRECT:** yes
+
+**QUESTION:** 5
+
+**STEM:** A house next door is blue.
+
+**CORRECT:** no
+
+**ANSWER:** The house next door is blue.
+
+**TYPE:** open
+
+**TITLE:** OPEN‑ENDED PRACTICE
+
+**QUESTION:** 1
+
+**INPUTS:** 4
+
+**TEXT:** Describe four things around you. Use ‘the’ in your answers. For example: The door is white. The kids outside are noisy.
+
+**KEYWORDS:** the
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+What are some places in your neighborhood that you go to often?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Articles, the
+
+
+### LESSON 3.5: These roses smell amazing!
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to use plural nouns
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin is at a flower shop with her host mom Sylvie.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Sylvie: These roses smell amazing!
+
+Pailin: They do! The lilies are so beautiful.
+
+Sylvie: Let’s get some flowers for the living room. Excuse me, how much are the lilies?
+
+Worker: It's 3 dollars for 1 lily.
+
+Sylvie: Okay, I'll take 5 lilies, please. My children love lilies. Oh, do you sell vases?
+
+Worker: Yep! The vases are over there.
+
+Sylvie: Hey Pai, which vase do you like?
+
+Pailin: I like the blue vase.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. How much does 1 lily cost?
+
+Options
+
+A. One lily is 1 dollar.
+
+B. One lily is 3 dollars.
+
+C. One lily is 5 dollars.
+
+Answer key: B
+
+Prompt
+
+2. How many lilies does Sylvie want to buy?
+
+Options
+
+A. She wants 1 lily.
+
+B. She wants 3 lilies.
+
+C. She wants 5 lilies.
+
+Answer key: C
+
+Prompt
+
+3. Which vase does Pailin like?
+
+Options
+
+A. She likes the red vase.
+
+B. She likes the blue vase.
+
+C. She likes the white vase.
+
+Answer key: B
+
+
+#### APPLY
+
+In the conversation, Pailin and Sylvie describe the roses and lilies at the flower shop. Imagine you're at the zoo. Describe the things or animals you see in the same way that Pailin and Sylvie describe the flowers.
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to use plural nouns
+
+In Lesson 3.3, you learned what to say before a singular noun: 'a' or 'an'. In this lesson, you'll learn what to say if there is more than one noun. These are called plural nouns.
+
+
+---
+
+PLURAL NOUNS
+
+In the conversation, Sylvie and Pailin are browsing in a flower shop. Sylvie says:
+
+
+
+* These <span style="text-decoration:underline;">roses</span> smell amazing!
+* Let's get some <span style="text-decoration:underline;">flowers</span> for the living room.
+
+Notice that the articles 'a' and 'an' aren’t before the words ‘roses’ and ‘flowers.’ That's because Sylvie is referring to multiple items. There are many roses that Sylvie can see, not just one. Then Sylvie suggests they get 'some' flowers for the living room, not just one flower.
+
+The words ‘roses’ and ‘flowers’ are examples of ‘plural nouns.’ A plural noun represents *multiple *people, places, or things. Just by looking at the words ‘roses’ or ‘flowers,’ you can tell that there is more than one rose or flower because they are in their plural form.
+
+In contrast, a ‘singular noun’ represents *one* person, place, or thing. The words ‘rose’ and ‘flower’ are singular nouns. Just by looking at these words, you can tell that there is only one rose or flower because they are in their singular form. To summarize:
+
+
+        Singular noun: One person, place, or thing
+
+
+        Examples: dog, kid, magazine, house
+
+
+        Plural noun: 2 or more people, places, or things
+
+
+        Examples: dogs, kids, magazines, houses
+
+Note: Remember that the articles ‘a’ and ‘an’ *only* come before singular nouns, while ‘the’ can come before both singular and plural nouns.
+
+
+---
+
+MAKING PLURAL NOUNS
+
+Compare these two lines from the conversation:
+
+
+
+* I like the blue <span style="text-decoration:underline;">vase</span>.
+* The <span style="text-decoration:underline;">vases</span> are over there.
+
+Do you see how the word ‘vase’ changed? It went from ‘vase’ to ‘vases.’ An -s was added to the end of the noun. This is generally how plural nouns are formed. The following lines from the conversation all have plural nouns. See if you can spot them:
+
+
+
+* Let’s get some flowers for the living room.
+* It’s 3 dollars for 1 lily.
+* Do you sell vases?
+
+They are the words ‘flowers,’ ‘dollars,’ and ‘vases.’
+
+TABLE-2:
+
+
+<table>
+  <tr>
+   <td><strong>SINGULAR NOUN</strong>
+   </td>
+   <td><strong>PLURAL NOUN</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>flower
+   </td>
+   <td>flowers
+   </td>
+  </tr>
+  <tr>
+   <td>dollar
+   </td>
+   <td>dollars
+   </td>
+  </tr>
+  <tr>
+   <td>vase
+   </td>
+   <td>vases
+   </td>
+  </tr>
+</table>
+
+
+
+---
+
+APPLYING PLURAL NOUNS
+
+Sometimes, it’s simple to know when to use plural nouns. When specifying a quantity, you would use the singular noun for 1, and the plural noun for amounts of 2 or more. For example:
+
+
+
+* It’s <span style="text-decoration:underline;">3 dollars</span> for <span style="text-decoration:underline;">1 lily</span>.
+* I’ll take <span style="text-decoration:underline;">5 lilies</span>, please.
+
+‘Dollars’ is plural because the worker specifies 3 of them. ‘Lily’ is singular in the first sentence because she specifies 1 of them. In the next line, ‘lilies’ is plural because Sylvie requests 5 of them.
+
+Those are more obvious scenarios. Sometimes, words like ‘some’ or ‘many’ indicate that you should use the plural noun. In other scenarios, using the singular noun versus plural noun depends on the context. Imagine you’re at an electronics store shopping for a new phone. Take a look at when you might use the singular and plural version of ‘phone’:
+
+
+        *You’re looking at a specific phone that you like, when you notice the price:*
+
+
+
+* I like this phone.
+
+        *You should use the singular ‘phone’ because you are referring to only one phone, the one that you’re interested in.*
+
+* These phones are on sale.
+
+        *The plural ‘phones’ should be used if multiple phones are on sale.*
+
+
+Although the meaning of the conversation might not change with singular or plural nouns, they're very important to use correctly if you want to sound like a native speaker.
+
+
+---
+
+IRREGULAR PLURAL NOUNS
+
+In the conversation, Sylvie says:
+
+
+
+* My <span style="text-decoration:underline;">children</span> love lilies.
+
+'Children' is a plural noun, but it doesn't have an -s at the end. Do you know what the singular noun is? It's 'child.' There are some words in English that don't follow the rule of adding -s to become plural, and instead just become a different word. These are called irregular plural nouns. Here are some common irregular plural nouns:
+
+TABLE-3:
+
+
+<table>
+  <tr>
+   <td><strong>SINGULAR NOUN</strong>
+   </td>
+   <td><strong>PLURAL NOUN</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>a man
+   </td>
+   <td>men
+   </td>
+  </tr>
+  <tr>
+   <td>a women
+   </td>
+   <td>women
+   </td>
+  </tr>
+  <tr>
+   <td>a child
+   </td>
+   <td>children
+   </td>
+  </tr>
+  <tr>
+   <td>a person
+   </td>
+   <td>people
+   </td>
+  </tr>
+  <tr>
+   <td>a foot
+   </td>
+   <td>feet
+   </td>
+  </tr>
+  <tr>
+   <td>a tooth
+   </td>
+   <td>teeth
+   </td>
+  </tr>
+</table>
+
+
+
+#### EXTRA TIPS
+
+SUBJECT-VERB AGREEMENT
+
+You've learned that verbs are conjugated differently for subjects of 1 noun or 2+ nouns. Now, you can put a name to these: singular noun and plural nouns. Here is a recap:
+
+TABLE-4:
+
+
+<table>
+  <tr>
+   <td><strong>SUBJECT</strong>
+   </td>
+   <td><strong>VERB</strong>
+   </td>
+   <td><strong>EXAMPLE SENTENCES</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>(Plural noun)
+   </td>
+   <td>are
+<p style="text-align: center">
+were
+<p style="text-align: center">
+(verb)
+<p style="text-align: center">
+don’t (verb)
+   </td>
+   <td>
+<ul>
+
+<li>These boxes are heavy.</li>
+
+<li>The buses were crowded.</li>
+
+<li>My dogs love the dog park.</li>
+
+<li>Those women don’t eat pork.</li>
+</ul>
+   </td>
+  </tr>
+  <tr>
+   <td>(Singular noun)
+   </td>
+   <td>is
+<p style="text-align: center">
+was
+<p style="text-align: center">
+(verbs)
+<p style="text-align: center">
+doesn’t (verb)
+   </td>
+   <td>
+<ul>
+
+<li>This box is heavy.</li>
+
+<li>The bus was crowded.</li>
+
+<li>My dog loves the dog park.</li>
+
+<li>That woman doesn’t eat pork.</li>
+</ul>
+   </td>
+  </tr>
+</table>
+
+
+
+---
+
+WHEN THERE ARE 0 ITEMS
+
+You've learned that singular nouns refer to 1 noun, while plural nouns refer to 2 or more nouns. Interestingly, when there are 0 nouns, the plural noun is used in the sentence! For example:
+
+
+
+* I don't have any sisters.
+* There aren't any dishes in the sink.
+* This shop doesn't sell notebooks.
+* I have no plans for the weekend.
+
+
+---
+
+PLURAL NOUNS FOR GENERAL QUESTIONS
+
+In the conversation, Sylvie asks the worker:
+
+
+
+* Do you sell vases?
+
+She uses the plural noun 'vases' instead of the singular noun 'vase' because she's asking a general question of whether the store sells a category of items. The store potentially sells multiple kinds of vases, so using the plural noun makes her question broader and more inclusive. It would sound unnatural for Sylvie to ask 'Do you sell a vase?'
+
+Here are more examples:
+
+
+
+* How many countries have you visited?
+* Do you like dogs?
+* Are there any restaurants open late?
+
+
+#### COMMON MISTAKES
+
+THE -S SOUND
+
+Thai people often omit the -s sound at the end of plural nouns. Although remembering to use plural nouns can be difficult, pronouncing the -s will make you sound more like a native speaker! Try developing good habits now. See how to fix the incorrect sentence below:
+
+
+        I brought some orange. (X)
+
+
+
+* I brought some oranges. (✓)
+
+        She has two brother. (X)
+
+* She has two brothers. (✓)
+
+Try listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.
+
+
+---
+
+Check out our comprehensive list of common mistakes made by Thai learners.
+
+
+#### PHRASES & VERBS
+
+OH
+
+Oh = (said when you realize something that you didn’t notice or forgot about)
+
+
+
+* I need to get milk from the store. Oh, and I need to get eggs, too.
+
+<span style="text-decoration:underline;">See more uses of 'Oh'</span>
+
+
+#### PRACTICE
+
+TYPE: sentence_transform
+
+TITLE: SINGULAR TO PLURAL NOUN
+
+PROMPT: Change the amount in the following sentences from 'one' to 'two.' Don't forget to update the singular noun into a plural noun. Type the full sentence into the answer box. For example: She owns two cars.
+
+QUESTION: 1
+
+STEM: **He wants one cupcake.**
+
+ANSWER: He wants two cupcakes.
+
+QUESTION: 2
+
+STEM: **We have one child.**
+
+ANSWER: We have two children.
+
+QUESTION: 3
+
+STEM: I wrote one book.
+
+ANSWER: I wrote two books.
+
+QUESTION: 4
+
+STEM: They brought one camera.
+
+**ANSWER:** They brought two cameras.
+
+**QUESTION:** 5
+
+**STEM:** I saw one person.
+
+**ANSWER:** I saw two people.
+
+**TYPE:** fill_blank
+
+**TITLE:** PLURAL NOUNS VS. SINGULAR NOUNS
+
+PROMPT: The noun in (parenthesis) should either be a singular noun or a plural noun in the following sentences. Use context clues to determine which is correct to use.
+
+**ITEM:** 1
+
+**TEXT:** Do you have any ____ (sibling)?
+
+**ANSWER:** siblings
+
+**ITEM:** 2
+
+**TEXT:** Our home has a ____ (yard).
+
+**ANSWER:** yard
+
+**ITEM:** 3
+
+**TEXT:** The ____ (student) are in the classroom.
+
+**ANSWER:** students
+
+**ITEM:** 4
+
+**TEXT:** He sang many ____ (song).
+
+**ANSWER:** songs
+
+**ITEM:** 5
+
+**TEXT:** I bought three ____ (ticket).
+
+**ANSWER:** tickets
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: These sentences should all use plural nouns. Determine if the plural noun is used correctly or not. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** I have three sister.
+
+**CORRECT:** no
+
+**ANSWER:** I have three sisters.
+
+**QUESTION:** 2
+
+**STEM:** The bag is ten dollars.
+
+**CORRECT:** yes
+
+**QUESTION:** 3
+
+**STEM:** She lives with two person.
+
+**CORRECT:** no
+
+**ANSWER:** She lives with two people.
+
+**QUESTION:** 4
+
+**STEM:** Chloe has some book.
+
+**CORRECT:** no
+
+**ANSWER:** Chloe has some books.
+
+**QUESTION:** 5
+
+**STEM:** We don't have any blanket.
+
+**CORRECT:** no
+
+**ANSWER:** We don't have any blankets.
+
+**TYPE:** open
+
+**TITLE:** OPEN-ENDED PRACTICE \
+ \
+PROMPT: Answer the following questions. Try using plural nouns in your answers.
+
+**QUESTION:** 1
+
+**TEXT:** What are some things in your fridge right now?
+
+**KEYWORDS:** plural nouns
+
+**QUESTION:** 2
+
+**TEXT:** How many people do you work with?
+
+**KEYWORDS:** plural nouns
+
+**QUESTION:** 3
+
+**TEXT:** How many movies/TV shows have you watched this month?
+
+**KEYWORDS:** plural nouns
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+How many siblings do you have?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Plural nouns, articles, shopping, flowers, lilies, lily
+
+
+### LESSON 3.6: These are Emily’s paintings
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to show possession with -'s
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin has recently moved into her host family's home. She is in the living room with her host brother Luke. He is showing her some family keepsakes on the shelves.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Luke: Hey Pailin, do you like Emily's paintings?
+
+Pailin: These are Emily's? Wow, she's a talented artist!
+
+Luke: Yeah, she is.
+
+Pailin: What are these beautiful things on the shelves?
+
+Luke: This is my grandpa’s watch. My dad’s friend fixed it last year.
+
+Pailin: Cool! What about this?
+
+Luke: That’s my mom’s jewelry box. It was my grandma’s before that.
+
+Pailin: It's beautiful. And what's this?
+
+Luke: This is my grandma’s cookbook. My grandma's cooking was amazing.
+
+Pailin: Let's try to make one of her recipes.
+
+Luke: Great idea!
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. What things did Luke point out to Pailin? (select all that apply)
+
+Options
+
+A. Emily's paintings
+
+B. His grandma's necklace
+
+C. His grandma's cookbook
+
+D. His mom's jewelry box
+
+E. His grandpa's watch
+
+F. His dad's ring
+
+Answer key: A, C, D, E
+
+
+#### APPLY
+
+In the conversation, Luke shows Pailin his grandpa's watch, his grandma's cookbook, and Emily's paintings. What is something special that belongs to someone in your family? Use the same sentence structure as Luke.
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to show possession with -'s
+
+
+---
+
+APOSTROPHE -S
+
+Take a look at this line from the conversation:
+
+
+
+* This is my grandpa**'s** watch.
+
+Whose watch is it? It's Luke's grandpa's watch. Notice the bolded 'apostrophe -s' added to 'grandpa' indicates that the watch belongs to his grandpa. When spoken, you simply add an -s sound after the owner’s name. Here is the structure:
+
+
+        (the owner)'s (noun)
+
+This possessive form shows a connection between two things, whether it's ownership, a relationship, or a characteristic. There are examples of each in the conversation:
+
+
+
+* Do you like <span style="text-decoration:underline;">Emily's paintings</span>? (ownership)
+* <span style="text-decoration:underline;">My dad's friend</span> fixed it last year. (a relationship)
+* That's <span style="text-decoration:underline;">my mom's jewelry box</span>. (ownership)
+* This is <span style="text-decoration:underline;">my grandma's cookbook</span>. (ownership)
+* <span style="text-decoration:underline;">My grandma's cooking</span> was amazing. (a characteristic)
+
+
+---
+
+OMITTING THE NOUN
+
+Notice there isn’t a noun after ‘Emily’s’ in this sentence:
+
+
+
+* These are Emily**'s**?
+
+Pailin doesn't have to say 'These are Emily's paintings?' because the noun was already mentioned in the previous sentence when Luke asks 'Do you like Emily's paintings?' The same occurs in this line:
+
+
+
+* That's my mom's jewelry box. It was my grandma**'s** before that.
+
+There isn’t a noun after ‘grandma’s’ because the noun ‘jewelry box’ was already mentioned in the previous sentence. So, you can omit the noun when it's clear what you're talking about. This is different from possessive adjectives, which you learned about in Lesson 2.9. Remember that possessive adjectives (my · your · her…) also show possession, but they *must* come before a noun. You cannot omit the noun after it.
+
+
+
+* A: I like this jacket.
+
+        B: Thanks, it’s my jacket. (✓)
+
+
+        B. Thanks, it's my. (X)
+
+
+
+#### EXTRA TIPS
+
+STACKING MULTIPLE NOUNS
+
+Sometimes, you may want to show how several people or things are connected through relationships. This is done by adding -'s to each 'owner' word in the sentence. For example:
+
+
+
+* Jill**'s** boyfriend**'s** dad came to our Christmas party.
+* I've never been to my wife**'s** brother**'s** house.
+* My neighbor**'s** mom**'s** dog was barking all night.
+
+Just note that excessively stacking these words can get confusing for listeners. They might have a hard time following 'So I was at my best friend's dad's new wife's grandma's sister's house the other day...'
+
+
+#### COMMON MISTAKES
+
+THE -S SOUND
+
+Thai students often omit the -'s sound when describing ownership. Take a look at the incorrect sentences and how to fix them:
+
+
+        This is my mom car. (X)
+
+
+
+* This is my mom's car. (✓)
+
+        Sarah daughter is a student here. (X)
+
+* Sarah's daughter is a student here. (✓)
+
+Try listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.
+
+You've now learned four key uses of adding an -s to the end of a word:
+
+
+        Contracting 'is' to a subject (It's hot.)
+
+
+        3rd person verb conjugation (He works at Google.)
+
+
+        Plural nouns (Do you like burgers?)
+
+
+        Possessive 's (These are Emily's paintings.)
+
+Remember that adding the -s sound at the end of words is a good habit to build now, as a beginner. It'll significantly help you sound more fluent as your English progresses!
+
+
+#### PHRASES & VERBS
+
+WOW
+
+COOL
+
+GREAT IDEA
+
+Great idea = (said to show enthusiastic approval of a suggestion or plan)
+
+
+
+* Luke: Oh, it’s happy hour at Jay’s Bar. Should we go there?
+
+        Pailin: Yeah, great idea!
+
+
+
+#### PRACTICE
+
+TYPE: sentence_transform
+
+TITLE: PRACTICE APOSTROPHE -S
+
+PROMPT: Combine the two sentences to form one sentence. Make sure to add -'s when applicable. For example: My dad has a car. His car is green. --> My dad's car is green.
+
+QUESTION: 1
+
+STEM: **Jill has a friend. Her friend is Thai.**
+
+ANSWER: Jill's friend is Thai.
+
+QUESTION: 2
+
+STEM: My friend has a dog. The dog's name is Max.
+
+ANSWER: My friend's dog's name is Max.
+
+QUESTION: 3
+
+STEM: My boss has an office. The office is large.
+
+ANSWER: My boss's office is large.
+
+QUESTION: 4
+
+STEM: His family has a house. The house is by the lake.
+
+**ANSWER:** His family's house is by the lake.
+
+**QUESTION:** 5
+
+**STEM:** Ethan has a job. His job is stressful.
+
+**ANSWER:** Ethan's job is stressful.
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if the possessive form is used in the sentences correctly. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** Mark car is white.
+
+**CORRECT:** no
+
+**ANSWER:** Mark's car is white.
+
+**QUESTION:** 2
+
+**STEM:** My uncle's cat is friendly.
+
+**CORRECT:** yes
+
+**QUESTION:** 3
+
+**STEM:** I've never met my brother wife.
+
+**CORRECT:** no
+
+**ANSWER:** I've never met my brother's wife.
+
+**QUESTION:** 4
+
+**STEM:** This is Adam's phone.
+
+**CORRECT:** yes
+
+**QUESTION:** 5
+
+**STEM:** Your grandma necklace is beautiful.
+
+**CORRECT:** no
+
+**ANSWER:** Your grandma's necklace is beautiful.
+
+**TYPE:** open
+
+**TITLE:** OPEN-ENDED PRACTICE
+
+PROMPT: Answer the following questions using a full sentence. Use the possessive 'apostrophe -s' in your answers.
+
+**QUESTION:** 1
+
+**TEXT:** What is your best friend's name?
+
+**KEYWORDS:** 's
+
+**QUESTION:** 2
+
+**TEXT:** What is your friend's favorite TV show?
+
+**KEYWORDS:** 's
+
+**QUESTION:** 3
+
+**TEXT:** What city are your mom's parents from?
+
+**KEYWORDS:** 's
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+Do you have any family keepsakes? What are they?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Possession, possessive s, apostrophe s, family, possessive adjective
+
+
+### LESSON 3.7: Let’s get ice cream
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to use 'Let's (verb)'
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin is hanging out with her new friend Chloe, who she met at her student orientation, when Pailin's phone starts ringing.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+*phone rings*
+
+Pailin: Hello?
+
+Anthony: Hey Pai!
+
+Pailin: Hi Anthony!
+
+Anthony: I’m in LA for a few days. Let’s meet up.
+
+Pailin: Cool! I’m free now. How about you?
+
+Anthony: I’m free. Let’s try the new ice cream shop in Hollywood.
+
+Pailin: Sounds great. My friend Chloe might join. Is that okay?
+
+Anthony: Of course! Let’s meet there in 20 minutes.
+
+*hangs up phone*
+
+Pailin: Chloe, do you want to get ice cream? My friend Anthony is in town.
+
+Chloe: Yeah! That sounds fun.
+
+Pailin: Okay, let’s go. Let’s take the bus.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. Where does Anthony suggest they meet?
+
+Options
+
+A. At a restaurant
+
+B. At an ice cream shop
+
+C. At a coffee shop
+
+Answer key: B
+
+Prompt
+
+2. How will Pailin and Chloe go meet Anthony?
+
+Options
+
+A. They will walk.
+
+B. They will take a taxi.
+
+C. They will take the bus.
+
+Answer key: C
+
+
+#### APPLY
+
+In the conversation, Anthony suggests that they meet at an ice cream shop in Hollywood. Imagine your friend is in town for a few days and wants to meet up with you. Suggest a place that you two can meet.
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to use 'Let's (verb)'
+
+In the conversation, Pailin gets a phone call from Anthony, an old friend of hers who's in LA for a few days. He suggests a few things to Pailin:
+
+
+
+* Let's meet up.
+* Let's try the new ice cream shop in Hollywood.
+* Let's meet there in 20 minutes.
+
+These sentences are used to casually make suggestions or propose activities that involve the speaker and others in the conversation. They follow this structure:
+
+
+        Let's (verb).
+
+
+        Let's = Let us
+
+There isn't a subject in these sentences because the implied subject is 'we.'
+
+At the end of the conversation, Pailin says to Chloe:
+
+
+
+* Let's go.
+
+This is a useful phrase that you will use often when you are ready to leave a place. Other useful phrases with 'let's' include:
+
+
+
+* Let's eat! (said before you begin eating a meal)
+* Let's begin. (a suggestion to start an activity or meeting)
+* Let's hang out. (a suggestion to meet with a friend casually)
+* Let's take a break. (a suggestion to pause an activity)
+
+
+#### EXTRA TIPS
+
+LET'S SEE
+
+The phrase 'Let's see' has two common uses.
+
+
+        1. 'Let's see' is used as a filler phrase when you are pausing to think or trying to remember something. It's a way to buy time while you think about your response.
+
+
+
+* Luke: What time should we leave for the airport?
+
+            Pailin: Let's see, our flight is at 9, so let's leave around 6.
+
+
+            *Pailin is calculating the time needed to get to their flight on time.*
+
+* Pailin: How many people are coming to your party?
+
+            Luke: There are...let's see, around 30 people coming.
+
+
+            *Luke is trying to count an approximate number.*
+
+
+        2. 'Let's see' is used when you want to observe the outcome of a situation, or want to try something out. It shows curiosity or an attempt to experiment.
+
+* Luke: Someone left a note on my car.
+
+            Pailin: Ooh, let's see what it says.
+
+
+            *Pailin is curious about what is on the note.*
+
+* Pailin: I'm not sure what to order. Everything on the menu looks so good.
+
+            Luke: Let's see what the waiter recommends.
+
+
+            *Luke wants to try the waiter's recommendations, since they can't decide what to order.*
+
+
+
+---
+
+LET'S GO
+
+The phrase ‘Let’s go’ is typically said when you’re ready to leave a place. But it’s also used casually in two more ways:
+
+
+        1. ‘Let’s go!’ can be used to show excitement for something happening now, or to show enthusiasm when your friend shares great news with you. It’s *not* used to talk about actually going to a place when used in this context.
+
+
+
+* Pailin: I won free tickets to the game tonight!
+
+            Luke: Let’s go!
+
+
+        2. ‘Let’s go’ can be used to motivate or encourage a sports team or player, especially when you’re a spectator.
+
+* Let's go Lakers!
+
+
+#### COMMON MISTAKES
+
+THE -S SOUND
+
+Thai students often omit the -s sound in 'Let's'. Take a look at the incorrect sentences and how to fix them:
+
+
+        Let go to the mall. (X)
+
+
+
+* Let's go to the mall. (✓)
+
+        Let get some food. (X)
+
+* Let's get some food. (✓)
+
+Try listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.
+
+
+#### PHRASES & VERBS
+
+MEET UP
+
+Meet up = (to plan an informal and casual meeting)
+
+
+
+* Let’s meet up for coffee this week.
+* We’re going to meet up with friends tonight.
+
+	THAT SOUNDS FUN
+
+That sounds fun = (used to show that someone’s proposal is a good one)
+
+
+
+* Pailin: Do you wanna play mini-golf with us tonight?
+
+        Luke: Sure, that sounds fun.
+
+
+OF COURSE
+
+Of course = แน่นอน
+
+
+
+* Of course you can stay at my place! You don’t even have to ask.
+* Pailin: Can I make myself another cup of coffee?
+
+        Luke: Of course! Go ahead.
+
+
+IN TOWN
+
+In town = (said when a person is in your specific city or location for a short stay)
+
+
+
+* My parents are in town this weekend, so I won’t be free.
+* Since you’re in town, we should catch up.
+
+
+#### PRACTICE
+
+**TYPE:** sentence_transform
+
+**TITLE:** PRACTICE ‘LET’S’
+
+PROMPT: Rewrite these sentences using 'let's.'
+
+**QUESTION:** 1
+
+**STEM:** We should go to the store.
+
+**ANSWER:** Let's go to the store.
+
+**QUESTION:** 2
+
+**STEM:** We should watch the basketball game.
+
+**ANSWER:** Let's watch the basketball game.
+
+**QUESTION:** 3
+
+**STEM:** We should leave soon.
+
+**ANSWER:** Let's leave soon.
+
+**QUESTION:** 4
+
+**STEM:** We should try that new coffee shop.
+
+**ANSWER:** Let's try that new coffee shop.
+
+**QUESTION:** 5
+
+**STEM:** We should listen to some music.
+
+**ANSWER:** Let's listen to some music.
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if the word 'let's' is used in the sentences correctly. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** Let's go on a hike.
+
+**CORRECT:** yes
+
+**QUESTION:** 2
+
+**STEM:** Let watch a movie.
+
+**CORRECT:** no
+
+**ANSWER:** Let's watch a movie.
+
+**QUESTION:** 3
+
+**STEM:** Let's meet in an hour.
+
+**CORRECT:** yes
+
+**QUESTION:** 4
+
+**STEM:** Let take the subway.
+
+**CORRECT:** no
+
+**ANSWER:** Let's take the subway.
+
+**QUESTION:** 5
+
+**STEM:** Let finish this.
+
+**CORRECT:** no
+
+**ANSWER:** Let's finish this.
+
+**TYPE:** open
+
+**TITLE:** OPEN-ENDED PRACTICE
+
+PROMPT: Look at the following situations and make suggestions using 'let's.'
+
+**QUESTION:** 1
+
+**TEXT:** You and your friend are bored.
+
+**KEYWORDS:** let's
+
+**QUESTION:** 2
+
+**TEXT:** You and your friend are hungry.
+
+**KEYWORDS:** let's
+
+**QUESTION:** 3
+
+**TEXT:** The weather is nice outside.
+
+**KEYWORDS:** let's
+
+**QUESTION:** 4
+
+**TEXT:** Your friend is sad.
+
+**KEYWORDS:** let's
+
+**QUESTION:** 5
+
+**TEXT:** You want to do something fun this weekend.
+
+**KEYWORDS:** let's
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+Where do you like to take your friends who are visiting you from out of town?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Let's, suggestion, activity, making plans
+
+
+### LESSON 3.8: Do you guys want some samples?
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to address multiple people with 'you guys'
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin is hanging out with her friend Chloe and her old friend Anthony, who is visiting LA for a few days. Chloe and Anthony have never met before. The three of them are ordering at an ice cream shop in Hollywood.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Worker: Hi! How are you guys today?
+
+Anthony: We’re good, thanks! Let’s see, is the mango ice cream good?
+
+Worker: I like it. Do you guys want some samples?
+
+Anthony: Yes, please. Mmm, that’s good. I’ll get that, please. What flavor do you guys want?
+
+Pailin: I’ll take a scoop of strawberry ice cream.
+
+Chloe: And I’ll have two scoops of the matcha ice cream, please.
+
+Worker: Are you guys paying together or separately?
+
+Anthony: Together. It’s my treat, guys.
+
+Pailin: Wow, thanks Anthony!
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. What flavor ice cream does Anthony get?
+
+Options
+
+A. Matcha ice cream
+
+B. Strawberry ice cream
+
+C. Mango ice cream
+
+Answer key: C
+
+Prompt
+
+2. What flavor ice cream does Pailin get?
+
+Options
+
+A. Matcha ice cream
+
+B. Strawberry ice cream
+
+C. Mango ice cream
+
+Answer key: B
+
+Prompt
+
+3. What flavor ice cream does Chloe get?
+
+Options
+
+A. Matcha ice cream
+
+B. Strawberry ice cream
+
+C. Mango ice cream
+
+Answer key: A
+
+
+#### APPLY
+
+In the conversation, Anthony asks Pailin and Chloe what flavor ice cream they want. Imagine you're with two of your friends at a Thai restaurant. Ask them about an item on the menu that you'd like to share with them. Try using 'you guys' in your question.
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to address multiple people with 'you guys'
+
+YOU GUYS
+
+You've learned about these useful pronouns:
+
+
+        I · you · we · they · he · she · it
+
+But what should you use if you're addressing two or more people? Notice what the worker at the ice cream shop says to Pailin, Chloe, and Anthony:
+
+
+
+* How are you guys today?
+
+He uses the phrase 'you guys.' This is a common and informal way to address 2 or more people. ‘You guys’ is used multiple times in the conversation:
+
+
+
+* Do you guys want some samples?
+* What flavor do you guys want?
+* Are you guys paying together or separately?
+
+While 'guys' traditionally refers to men, it's now widely used in informal speech to address all people, regardless of gender. Anthony says 'you guys' even when talking to two women, Pailin and Chloe.
+
+Notice that 'you guys' follows the same verb conjugation pattern as 'you · we · they,' since it's a plural subject:
+
+
+
+* Are you guys paying together or separately?
+* Are they paying together or separately?
+
+Here are more examples of 'you guys' in a sentence:
+
+
+
+* I'll see you guys later.
+* You guys should try this new restaurant.
+* Where are you guys going on vacation?
+
+ \
+
+
+
+#### EXTRA TIPS
+
+'GUYS' & 'EVERYONE'
+
+In the conversation, Anthony tells Pailin and Chloe:
+
+
+
+* It's my treat, guys.
+
+When getting the attention of 2 or more people, you can address them by 'you guys' or simply 'guys.' For example:
+
+
+
+* Guys, look at this!
+* Come over here, guys!
+* You guys, what time should we leave?
+
+Remember that any gender can use the terms 'you guys' or 'guys.' A woman can say to her two female friends, 'Guys, where should we eat?'
+
+In larger group settings, you can also use the word 'everyone.' This is a more gender-neutral term and is more formal than 'guys.' For example, a teacher on a field trip with her students might say:
+
+
+
+* Everyone, follow me!
+
+
+---
+
+GUYS & GIRLS
+
+You’ve learned that ‘guys’ is a gender-neutral way to address a group of people of any gender. But ‘guys’ can be used to talk specifically about a group of boys or men when you are talking *about* them, not directly *to *them. For example:
+
+
+
+* We have 50 spots for girls and 50 spots for guys.
+* Will there be other guys at the party?
+
+        *If you invited a male friend to your house party, he might ask this to find out if he will be the only man there, or if there will be other men there too.*
+
+
+
+#### COMMON MISTAKES
+
+THE -S SOUND
+
+Thai students often omit the -s sound in 'guys'. Take a look at the incorrect sentences and how to fix them:
+
+
+        Are you guy tired? (X)
+
+
+
+* Are you guys tired? (✓)
+
+        I'll pick you guy up. (X)
+
+* I'll pick you guys up. (✓)
+
+Try listening to the correct sentences and repeating after the audio, making sure you enunciate the -s sound.
+
+
+#### PHRASES & VERBS
+
+LET’S SEE
+
+IT’S MY TREAT
+
+It’s my treat = (เลี้ยง)
+
+
+
+* Let’s get coffee. Don’t worry, it’s my treat.
+* Since you’re visiting, the tickets are my treat.
+
+WOW
+
+
+#### CULTURE NOTE
+
+'Y’ALL' AS A GENDER-NEUTRAL PHRASE
+
+While 'you guys' is widely used to address groups, some argue that it carries a gender bias. They suggest using a gender-neutral alternative, like 'you all.' In the southern US, 'y'all' is a common colloquialism, which is a contraction of 'you all.' It’s also become popular to use by young people.
+
+Although 'you all' is considered more politically correct, 'you guys' remains prevalent in informal speech, even when addressing groups of women.
+
+
+#### PRACTICE
+
+**TYPE:** sentence_transform
+
+**TITLE:** PRACTICE ‘YOU GUYS’
+
+PROMPT: Change the subject in these sentences to 'you guys.'
+
+**QUESTION:** 1
+
+**STEM:** They are so funny.
+
+**ANSWER:** You guys are so funny.
+
+**QUESTION:** 2
+
+**STEM:** Are you sleepy?
+
+**ANSWER:** Are you guys sleepy?
+
+**QUESTION:** 3
+
+**STEM:** We don't drink coffee.
+
+**ANSWER:** You guys don't drink coffee.
+
+**QUESTION:** 4
+
+**STEM:** Do they live in Bangkok?
+
+**ANSWER:** Do you guys live in Bangkok?
+
+**QUESTION:** 5
+
+**STEM:** We're bringing food.
+
+**ANSWER:** You guys are bringing food.
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if the verb conjugation is correct in these sentences. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** Is you guys hungry?
+
+**CORRECT:** no
+
+**ANSWER:** Are you guys hungry?
+
+**QUESTION:** 2
+
+**STEM:** You guys was late.
+
+**CORRECT:** no
+
+**ANSWER:** You guys were late.
+
+**QUESTION:** 3
+
+**STEM:** Do you guys like wine?
+
+**CORRECT:** yes
+
+**QUESTION:** 4
+
+**STEM:** You guys is doing a great job.
+
+**CORRECT:** no
+
+**ANSWER:** You guys are doing a great job.
+
+**QUESTION:** 5
+
+**STEM:** Does you guys play soccer?
+
+**CORRECT:** no
+
+**ANSWER:** Do you guys play soccer?
+
+**TYPE:** open
+
+**TITLE:** OPEN‑ENDED PRACTICE
+
+**QUESTION:** 1
+
+**INPUTS:** 3
+
+**TEXT:** Imagine your two friends are visiting you. Ask them three things about what they like or what they might want to do in your city using 'you guys.'
+
+**KEYWORDS:** you guys
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+What's your favorite flavor of ice cream?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+You guys, pronouns, guys, ordering food, dessert, ice cream
+
+
+### LESSON 3.9: Does he have a girlfriend?
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to ask questions with 'Do...?' and 'Does...?’
+
+Verb Tense: Present Simple Tense
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin and Chloe were hanging out with Pailin's friend Anthony, who's visiting LA for a few days. He had to leave, so Pailin and Chloe are now chatting together.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Chloe: Your friend Anthony is cute. Does he have a girlfriend?
+
+Pailin: No, he doesn’t have one. He thinks you’re cute too!
+
+Chloe: Oh, really? Does he come to LA often?
+
+Pailin: Yeah, I think so. His sister lives in LA.
+
+Chloe: Oh nice! Do they talk often?
+
+Pailin: Yeah, they're very close.
+
+Chloe: So, does Anthony have an Instagram?
+
+Pailin: Yeah, he does. This is his username.
+
+*scrolling*
+
+Chloe: Wow, does he drive a motorcycle?
+
+Pailin: Yeah. Do you want his phone number?
+
+Chloe: It’s okay. I’ll follow him on Instagram.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. What does Chloe think of Anthony?
+
+Options
+
+A. He's interesting.
+
+B. He's boring.
+
+C. He's cute.
+
+D. He's fun.
+
+Answer key: C
+
+Prompt
+
+2. Why does Anthony come to LA often?
+
+Options
+
+A. For work
+
+B. To visit Pailin
+
+C. To visit his mom
+
+D. To visit his sister
+
+Answer key: D
+
+
+#### APPLY
+
+In the conversation, Chloe asks Pailin if Anthony drives a motorcycle. Imagine your friend has just told you that her brother will be coming to town, and you've never met him before. Ask her a question about her brother's interests or lifestyle.
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to make questions with 'Do...?' and 'Does...?’
+
+Verb tense: Present simple tense
+
+In Lesson 2.4, you learned how to ask simple questions to get to know someone, such as 'Do you like tacos?' or 'Do you have siblings?' In this lesson, you’ll learn how to ask any question in present simple tense using 'Do...?' or 'Does...?'
+
+
+---
+
+DO...?
+
+In the conversation, Chloe asks Pailin about Anthony and his sister:
+
+
+
+* Do they talk often?
+
+The question is made by adding ‘Do’ to the beginning of the present simple tense sentence ‘They talk often.’ So, ‘Do’ changes a statement into a yes/no question.
+
+Here are more examples:
+
+
+
+* Do I speak English well?
+* Do we have homework?
+* Do your parents live in England?
+
+Keep in mind that ‘Do’ is used for these subjects: I, you, we, they, 2+ nouns
+
+
+---
+
+DOES...?
+
+Compare these two questions from the conversation:
+
+
+
+* Do they talk often?
+* Does he come to LA often?
+
+Notice how the first word changed in the question from 'Do' to 'Does.' This is because the subject is different. When making questions with the subjects 'he · she · it · noun,' the question must begin with 'Does.'
+
+Now take a look at the main verb that's underlined in these two lines:
+
+
+
+* His sister <span style="text-decoration:underline;">lives</span> in LA.
+* Does he <span style="text-decoration:underline;">drive</span> a motorcycle?
+
+In the first sentence, -s is added to the end of verb because it follows ‘he · she · it · noun.’ What do you notice about the second line? The verb *doesn’t* have an -s even though the subject is ‘he’. Instead, the questioning auxiliary verb ‘Do’ takes the -s to become ‘Does,’ while the main verb ‘drive’ stays in its base form.
+
+You might remember that the same rule applies to negative present simple tense sentences:
+
+
+
+* He <span style="text-decoration:underline;">drives</span> a motorcycle.
+* He <span style="text-decoration:underline;">doesn’t drive</span> a motorcycle.
+
+The negative auxiliary verb ‘does not’ takes the -s, while the main verb ‘drive’ stays in its base form.
+
+
+---
+
+USES & STRUCTURE
+
+Recall that present simple tense is used when talking about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, questions in present simple tense are used to ask about things that happen regularly, or for asking about how someone feels.
+
+Here is a breakdown of forming questions using present simple tense.
+
+TABLE-5:
+
+
+<table>
+  <tr>
+   <td><strong>AUXILIARY VERB</strong>
+   </td>
+   <td><strong>SUBJECT</strong>
+   </td>
+   <td><strong>VERB</strong>
+   </td>
+   <td>
+    <strong>EXAMPLE SENTENCES</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>Do
+   </td>
+   <td>I
+<p style="text-align: center">
+you
+<p style="text-align: center">
+we
+<p style="text-align: center">
+they
+<p style="text-align: center">
+2+ nouns
+   </td>
+   <td>(verb)
+   </td>
+   <td>
+<ul>
+
+<li>Do I look okay?</li>
+
+<li>Do you watch scary movies?</li>
+
+<li>Do we need anything?</li>
+
+<li>Do they live here?</li>
+
+<li>Do Mark and Sylvie work together?</li>
+</ul>
+   </td>
+  </tr>
+  <tr>
+   <td>Does
+   </td>
+   <td>he
+<p style="text-align: center">
+she
+<p style="text-align: center">
+it
+<p style="text-align: center">
+1 noun
+   </td>
+   <td>(verb)
+   </td>
+   <td>
+<ul>
+
+<li>Does he speak Spanish?</li>
+
+<li>Does she play the piano?</li>
+
+<li>Does it snow in Thailand?</li>
+
+<li>Does Sophia drive a car?</li>
+</ul>
+   </td>
+  </tr>
+</table>
+
+
+Quick Practice: Change the affirmative sentences into questions.
+
+
+        1. You eat breakfast every morning.
+
+
+        2. Pete goes to the gym often.
+
+
+        3. They take the bus to work.
+
+
+        4. She visits Chicago every year.
+
+
+        5. Your brother works from home.
+
++ Submit to Show Answers
+
+
+#### EXTRA TIPS
+
+SHORT FORM ANSWERS
+
+Remember that yes/no questions can be answered with a simple ‘Yeah’ or ‘No,’ but sometimes a short form answer is given to maintain the flow of conversation. To answer ‘Do…?’ and 'Does...?' questions, you should use either the words 'do · don't' or 'does · doesn't' in your answers, NOT the main verb.
+
+
+
+* Luke: Do your parents live in Thailand?
+
+        Pailin: Yeah, they do.
+
+* Pailin: Do you have a brother?
+
+        Luke: No, I don't.
+
+* Luke: Does Anthony live in San Francisco?
+
+        Pailin: Yeah, he does.
+
+* Luke: Does she like cats?
+
+        Pailin: No, she doesn't.
+
+
+
+#### COMMON MISTAKES
+
+MISTAKE #1
+
+Thai people often answer these yes/no questions in the following incorrect way:
+
+
+        A: Does she speak English?
+
+
+        B: Yes, she speak. (X)
+
+
+        A: Do they eat meat?
+
+
+        B: Yes, they eat. (X)
+
+
+        A: Does he want kids?
+
+
+        B: No, he not want. (X)
+
+They incorrectly respond with the main verb of the sentence. This is because that’s how the sentence would be answered in Thai, for example:
+
+
+        A: แม่คุณเล่นเทนนิสไหมคะ
+
+
+        B: เล่นครับ
+
+Remember that the auxiliary verbs ‘do · don't' or 'does · doesn't’ should be used in these answers, NOT the main verb.
+
+
+
+* A: Does she speak English?
+
+        B: Yes, she does. (✓)
+
+* A: Do they eat meat?
+
+        B: Yes, they do. (✓)
+
+* A: Does he want kids?
+
+        B: No, he doesn't. (✓)
+
+
+
+---
+
+MISTAKE #2
+
+It’s common for Thai people to omit the question words ‘do’ or 'does' and simply ask:
+
+
+        They drink coffee? (X)
+
+
+        She live in Japan? (X)
+
+Although you can ask questions in this way (see Lesson 2.10), remember that this style of question is mainly used to confirm something you already suspect to be true. For general questions, it's important to begin your questions with 'Do' or 'Does,' so they become:
+
+
+
+* Do they drink coffee? (✓)
+* Does she live in Japan? (✓)
+
+
+---
+
+Check out our comprehensive list of common mistakes made by Thai learners
+
+
+#### PHRASES & VERBS
+
+Oh
+
+I think so = ฉันคิดอย่างนั้น
+
+
+
+* Pailin: Is Sebastian majoring in Psychology?
+
+        Marcus: I think so.
+
+* Chloe: Do you have a band-aid by any chance?
+
+        Pailin: I think so, let me check my bag.
+
+
+Nice!
+
+That’s okay / It’s okay = (these can be said when you’re not bothered by something, or they can be a gentle way to say ‘no’ or to decline something)
+
+
+
+* Luke: Sorry, I forgot to bring you that book you wanted to borrow!
+
+        Pailin: That’s okay, I’m not in a rush to read it.
+
+* Luke: Do you need help carrying that?
+
+        Pailin: It’s okay. It’s not heavy.
+
+
+Follow (social media context) = ติดตาม
+
+
+
+* I’m not following him on Instagram.
+* Do you follow Jeff on TikTok?
+
+
+#### PRACTICE
+
+**TYPE:** fill_blank
+
+**TITLE:** ‘DO’ VS. ‘DOES’
+
+PROMPT: Fill in the blanks with either 'Do' or 'Does' to make the question correct.
+
+**ITEM:** 1
+
+**TEXT:** ____ he like to cook?
+
+**ANSWER:** Does
+
+**ITEM:** 2
+
+**TEXT:** ____ they read every day?
+
+**ANSWER:** Do
+
+**ITEM:** 3
+
+**TEXT:** ____ you run at the park?
+
+**ANSWER:** Do
+
+**ITEM:** 4
+
+**TEXT:** ____ Pete have a car?
+
+**ANSWER:** Does
+
+**ITEM:** 5
+
+**TEXT:** ____ your parents live in Bangkok?
+
+**ANSWER:** Do
+
+**TYPE:** sentence_transform
+
+**TITLE:** PRACTICE MAKING QUESTIONS
+
+PROMPT: Change the affirmative sentences into questions.
+
+**QUESTION:** 1
+
+**STEM:** They play football after school.
+
+**ANSWER:** Do they play football after school?
+
+**QUESTION:** 2
+
+**STEM:** Your dad works in a bank.
+
+**ANSWER:** Does your dad work in a bank?
+
+**QUESTION:** 3
+
+**STEM:** Your cat sleeps in your bed.
+
+**ANSWER:** Does your cat sleep in your bed?
+
+**QUESTION:** 4
+
+**STEM:** The store opens at 9AM.
+
+**ANSWER:** Does the store open at 9AM?
+
+**QUESTION:** 5
+
+**STEM:** You guys need help.
+
+**ANSWER:** Do you guys need help?
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if 'Do' or 'Does' is the correct word to use in these questions. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** Do she speak Thai?
+
+**CORRECT:** no
+
+**ANSWER:** Does she speak Thai?
+
+**QUESTION:** 2
+
+**STEM:** Does it rain often?
+
+**CORRECT:** yes
+
+**QUESTION:** 3
+
+**STEM:** Do your brother play the guitar?
+
+**CORRECT:** no
+
+**ANSWER:** Does your brother play the guitar?
+
+**QUESTION:** 4
+
+**STEM:** Does they have any pets?
+
+**CORRECT:** no
+
+**ANSWER:** Do they have any pets?
+
+**QUESTION:** 5
+
+**STEM:** Does Chloe and Alex work tonight?
+
+**CORRECT:** no
+
+**ANSWER:** Do Chloe and Alex work tonight?
+
+TYPE: fill_blank
+
+TITLE: SHORT FORM ANSWERS
+
+PROMPT: **Fill in the blanks with the correct pronoun and 'do · don't · does · doesn't' to create short form answers. For example:**
+
+**A: Do Diego and Jerald know each other? \
+B: No, they don't.**
+
+ITEM: 1
+
+TEXT: **A: Do your parents like to travel? **B: Yeah, ____.
+
+ANSWER: they do
+
+ITEM: 2
+
+TEXT: **A: Does Emily play softball? **B: No, ____.
+
+ANSWER: she doesn't
+
+ITEM: 3
+
+TEXT: A: Do you guys live together? B: No, ____.
+
+ANSWER: we don't
+
+ITEM: 4
+
+TEXT: A: Does your dad work in an office? B: Yeah, ____.
+
+ANSWER: he does
+
+**ITEM:** 5
+
+**TEXT:** A: Do you need to buy groceries? B: Yeah, ____.
+
+**ANSWER:** I do
+
+**TYPE:** open
+
+**TITLE:** OPEN‑ENDED PRACTICE
+
+**QUESTION:** 1
+
+**INPUTS:** 5
+
+**TEXT:** Imagine you are with a close friend. His mom, dad, and sister are coming to visit. Write 5 questions you could ask him about his family. Make the questions using present simple tense.
+
+**KEYWORDS:** do, does
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+Do you think Chloe should send a message to Anthony? Or should she wait and see if he messages her first?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Present simple tense, making questions, social media, Instagram, flirting
+
+
+### LESSON 3.10: Emily has a yoga mat
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to use 'have' and 'has' in a sentence
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin is chatting with her host brother Luke. They're the same age, and both are students at UCLA. Their first day of school is next week.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Pailin: Luke, does the school gym have a swimming pool?
+
+Luke: Yeah, it has a nice pool, but it's always so busy.
+
+Pailin: Aww man. I love swimming.
+
+Luke: The gym down the street has a huge pool, and it's never busy. And, they have a lot of fun classes.
+
+Pailin: Do they have yoga classes?
+
+Luke: Yeah, they do!
+
+Pailin: Cool, I'll check it out. Do you have a yoga mat?
+
+Luke: I don't have one, but Emily has a yoga mat. You can borrow hers.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. What does Luke say about the school gym's pool? (select all that apply)
+
+Options
+
+A. It's nice.
+
+B. It's huge.
+
+C. It's busy.
+
+D. It's never busy.
+
+Answer key: A, C
+
+Prompt
+
+2. What class is Pailin interested in taking at the nearby gym?
+
+Options
+
+A. Swimming classes
+
+B. Yoga classes
+
+C. Pilates classes
+
+D. Dance classes
+
+Answer key: B
+
+
+#### APPLY
+
+In the conversation, Luke tells Pailin that Emily has a yoga mat. What is something that your friend has, but you don't have?
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to use 'have' and 'has' in a sentence
+
+HAVE AND HAS
+
+You've learned to add -s to verbs that follow 'he · she · it · noun,’ for example:
+
+
+
+* He <span style="text-decoration:underline;">works</span> at a gas station.
+* She <span style="text-decoration:underline;">lives</span> in Los Angeles.
+* It <span style="text-decoration:underline;">looks</span> good.
+
+ But the verb 'have' follows a slightly different pattern. Compare these two lines from the conversation:
+
+
+
+* They <span style="text-decoration:underline;">have</span> a lot of fun classes.
+* Emily <span style="text-decoration:underline;">has</span> a yoga mat.
+
+Notice that 'have' doesn't become 'haves' when it follows the subject 'Emily.' Instead, it becomes the word 'has.' The words 'have' and 'has' are used frequently in English, so it's important to remember this rule.
+
+Here are more sentences with 'has' from the conversation:
+
+
+
+* It <span style="text-decoration:underline;">has</span> a nice pool.
+* The gym down the street <span style="text-decoration:underline;">has</span> a huge pool.
+
+Remember that in questions and negative sentences, the main verb 'have' would not be conjugated, but rather the auxiliary verb 'do' gets conjugated to become 'does.'
+
+
+        Negative Sentences:
+
+
+
+* They don't have a pool.
+* It doesn't have a pool.
+
+        Questions:
+
+* Do they have yoga classes?
+* Does the gym have yoga classes?
+
+
+#### COMMON MISTAKES
+
+SHORT FORM ANSWERS
+
+When asking present simple tense questions with the main verb 'have,' the short form answer should use the words 'do · don't' or 'does · doesn't,' NOT the verb 'have · has.'
+
+For example, in the conversation, when Pailin asks if the gym down the street has yoga classes, Luke responds with:
+
+
+
+* Yeah, they do!
+
+He does NOT say 'Yeah, they have' or 'Yes, have.'
+
+See the incorrect responses below, and how to fix them.
+
+
+
+* Luke: Do you have any siblings?
+
+        Pailin: Yeah, I do. (✓)
+
+
+        Pailin: Yeah, I have. (X)
+
+
+        Pailin: Yeah, have. (X)
+
+* Pailin: Do they have sunglasses?
+
+        Luke: No, they don't. (✓)
+
+
+        Luke: No, they not have. (X)
+
+* Luke: Does she have any roommates?
+
+        Pailin: Yeah, she does. (✓)
+
+
+        Pailin: Yeah, she have. (X)
+
+* Luke: Does your dad have an accent?
+
+        Pailin: No, he doesn't. (✓)
+
+
+        Pailin: No, he not have. (X)
+
+
+
+#### PHRASES & VERBS
+
+MAN
+
+Man = (very informal expression used for disappointment)
+
+
+
+* Aw, some birds pooped all over my car! Man, and I just got a car wash, too.
+
+<span style="text-decoration:underline;">See more uses of 'Man'</span>
+
+COOL
+
+Cool
+
+ \
+CHECK OUT
+
+Check out
+
+
+#### PRACTICE
+
+**TYPE:** fill_blank
+
+**TITLE:** ‘HAVE’ VS. ‘HAS’
+
+PROMPT: Fill in the blanks with either 'have' or 'has' to make the sentences correct.
+
+**ITEM:** 1
+
+**TEXT:** I ____ a meeting at 3PM.
+
+**ANSWER:** have
+
+**ITEM:** 2
+
+**TEXT:** They ____ many friends.
+
+**ANSWER:** have
+
+**ITEM:** 3
+
+**TEXT:** This restaurant ____ great reviews.
+
+**ANSWER:** has
+
+**ITEM:** 4
+
+**TEXT:** Our house ____ a big garden.
+
+**ANSWER:** has
+
+**ITEM:** 5
+
+**TEXT:** My dog ____ a long tail.
+
+**ANSWER:** has
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if 'have' or 'has' is used correctly in these sentences. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** He have a new car.
+
+**CORRECT:** no
+
+**ANSWER:** He has a new car.
+
+**QUESTION:** 2
+
+**STEM:** We has a lot of homework.
+
+**CORRECT:** no
+
+**ANSWER:** We have a lot of homework.
+
+**QUESTION:** 3
+
+**STEM:** Does she have a good job?
+
+**CORRECT:** yes
+
+**QUESTION:** 4
+
+**STEM:** Marcus doesn't has his phone.
+
+**CORRECT:** no
+
+**ANSWER:** Marcus doesn't have his phone.
+
+**QUESTION:** 5
+
+**STEM:** Our teacher have blonde hair.
+
+**CORRECT:** no
+
+**ANSWER:** Our teacher has blonde hair.
+
+**TYPE:** open
+
+**TITLE:** OPEN-ENDED PRACTICE
+
+PROMPT: Answer the questions using 'have' or 'has' in your responses.
+
+**QUESTION:** 1
+
+**TEXT:** What siblings does your mom have?
+
+**KEYWORDS:** have, has
+
+**QUESTION:** 2
+
+**TEXT:** What siblings does your dad have?
+
+**KEYWORDS:** have, has
+
+**QUESTION:** 3
+
+**TEXT:** Why do you like your house/apartment?
+
+**KEYWORDS:** have, has
+
+**QUESTION:** 4
+
+**TEXT:** Describe your best friend's appearance.
+
+**KEYWORDS:** have, has
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+What do you do for exercise?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Have, has, gym, exercise, work out, swimming, hobbies, yoga
+
+
+### LESSON 3.11: My mom has a wine business
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+An overview of 3rd person verb conjugation
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin and her host brother Luke are grocery shopping at Trader Joe's. They're chatting as they browse the aisles.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Pailin: What do your parents do?
+
+Luke: My dad is a lawyer, and my mom has a wine business.
+
+Pailin: Ooh, that's why I saw a lot of wine bottles.
+
+Luke: Yeah. My mom’s family is from France, so she knows a lot about wine. She has a glass of wine every night.
+
+Pailin: Oh, my mom doesn’t drink alcohol, and my dad only drinks on holidays.
+
+Luke: And what do your parents do?
+
+Pailin: My mom is a nurse, and my dad manages a gym.
+
+Luke: Does your dad work out often?
+
+Pailin: Yeah, he does. He was a personal trainer for celebrities in Thailand.
+
+Luke: That’s so cool!
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. What does Luke's dad do?
+
+Options
+
+A. He manages a gym.
+
+B. He's a nurse.
+
+C. He's a lawyer.
+
+D. He has a wine business.
+
+Answer key: C
+
+Prompt
+
+2. What does Luke's mom do?
+
+Options
+
+A. She manages a gym.
+
+B. She's a nurse.
+
+C. She's a lawyer.
+
+D. She has a wine business.
+
+Answer key: D
+
+Prompt
+
+3. What does Pailin's dad do?
+
+Options
+
+A. He manages a gym.
+
+B. He's a nurse.
+
+C. He's a lawyer.
+
+D. He has a wine business.
+
+Answer key: A
+
+Prompt
+
+4. What does Pailin's mom do?
+
+Options
+
+A. She manages a gym.
+
+B. She's a nurse.
+
+C. She's a lawyer.
+
+D. She has a wine business.
+
+Answer key: B
+
+
+#### APPLY
+
+In the conversation, Pailin and Luke tell each other what their parents' jobs are. What do your parents do for work?
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+An overview of 3rd person verb conjugation
+
+So far, you've learned that the subjects 'he · she · it · noun' are followed by verbs conjugated differently from the subjects 'I · you · we · they · 2+ nouns.' This lesson provides an overview of all the conjugations you have learned.
+
+
+---
+
+-S CONJUGATIONS
+
+There is a simple rule you can remember for verbs that follow 'he · she · it · noun':
+
+
+        These verbs often end with -s.
+
+You’ll see this pattern more clearly as you go through this lesson.
+
+
+---
+
+IS & WAS
+
+Take a look at these lines from the conversation:
+
+
+
+* My dad <span style="text-decoration:underline;">is</span> a lawyer.
+* My mom's family <span style="text-decoration:underline;">is</span> from France.
+* My mom <span style="text-decoration:underline;">is</span> a nurse.
+* He <span style="text-decoration:underline;">was</span> a personal trainer for celebrities in Thailand.
+
+The to-be verbs 'is' and 'was' both end in -s, since the subject is 'he · she · it · noun.' Compare the above sentences to those below, where the verb doesn't have an -s ending:
+
+
+
+* They <span style="text-decoration:underline;">are</span> lawyers.
+* We <span style="text-decoration:underline;">are</span> from France.
+* I <span style="text-decoration:underline;">am</span> a nurse.
+* You <span style="text-decoration:underline;">were</span> a personal trainer for celebrities in Thailand.
+
+
+---
+
+PRESENT SIMPLE TENSE VERBS
+
+Take a look at these lines from the conversation:
+
+
+
+* My mom <span style="text-decoration:underline;">has</span> a wine business.
+* She <span style="text-decoration:underline;">knows</span> a lot about wine.
+* She <span style="text-decoration:underline;">has</span> a glass of wine every night.
+* My dad only <span style="text-decoration:underline;">drinks</span> on holidays.
+* My dad <span style="text-decoration:underline;">manages</span> a gym.
+* Yeah, he <span style="text-decoration:underline;">does</span>.
+
+These verbs have -s at the end, since the subject is 'he · she · it · noun.' Remember that 'have' becomes 'has', not 'haves.' Also remember that 'do' becomes 'does', not 'dos.' Compare the above sentences to those below, where the verb doesn't have an -s ending:
+
+
+
+* They <span style="text-decoration:underline;">have</span> a wine business.
+* I <span style="text-decoration:underline;">know</span> a lot about wine.
+* We <span style="text-decoration:underline;">have</span> a glass of wine every night.
+* You only <span style="text-decoration:underline;">drink</span> on holidays.
+* They <span style="text-decoration:underline;">manage</span> a gym.
+* Yeah, we <span style="text-decoration:underline;">do</span>.
+
+
+---
+
+NEGATIVE VERBS & QUESTIONS
+
+Take a look at this line from the conversation:
+
+
+
+* My mom <span style="text-decoration:underline;">doesn't</span> drink alcohol.
+
+Remember that 'do not' becomes 'does not,' which still follows the rule of having an -s ending - it’s just that the auxiliary verb ‘do not’ takes the -s to become ‘does not.’ This goes for questions, too, where the question word ‘Do’ takes the -s to become ‘Does’:
+
+
+
+* <span style="text-decoration:underline;">Does</span> your dad work out often?
+
+Compare the above sentences to those below, where neither the main verb nor the auxiliary verb ‘do’ has an -s ending:
+
+
+
+* They <span style="text-decoration:underline;">don't</span> drink alcohol.
+* <span style="text-decoration:underline;">Do</span> you work out often?
+
+Whew! That was a lot. Now you see how common it is to have -s endings for verbs with the subjects 'he · she · it · noun.' Remember to practice pronouncing that -s sound, and you'll get the hang of it!
+
+
+#### COMMON MISTAKES
+
+ADDING ‘S
+
+It's totally understandable that 3rd person verb conjugation can be challenging for ESL learners, as adding an -s doesn't change the sentence's core meaning. However, applying the -s ending is a key step towards making your English sound more natural! See the incorrect sentences below and how to fix them with an -s ending:
+
+
+        She are at school. (X)
+
+
+        She at school. (X)
+
+
+
+* She's at school. (✓)
+
+        He were a good student. (X)
+
+* He was a good student. (✓)
+
+        It rain here often. (X)
+
+* It rains here often. (✓)
+
+        My friend have a dog. (X)
+
+* My friend has a dog. (✓)
+
+        She don't like spicy food. (X)
+
+* She doesn't like spicy food. (✓)
+
+        Do Jake drive a car? (X)
+
+* Does Jake drive a car? (✓)
+
+
+#### PHRASES & VERBS
+
+What do you do? = (the common way to ask what someone’s job is)
+
+
+
+* So, what do you do in Thailand?
+* What does your sister do?
+
+Drink = (when used by itself as a verb, with no beverage mentioned, it’s often understood that it’s referring to alcohol)
+
+
+
+* My dad drinks too much.
+* Do you drink?
+
+Work out = (to exercise)
+
+
+
+* I like to work out in the morning.
+
+<span style="text-decoration:underline;">See more uses of 'Work out'</span>
+
+
+#### CULTURE NOTE
+
+TRADER JOE'S
+
+Trader Joe's is a unique grocery store chain in the US known for its affordable yet high-quality products. It has a laid-back, friendly atmosphere that'll transport you to a beach in Hawaii. The workers are known for being relaxed and friendly, and the prices often beat other grocery stores. While they aren't as large as regular grocery stores and may not carry every product, every visit to Trader Joe's will feel like a treasure hunt where you'll leave with way more goodies than you expected to get.
+
+Their focus on exclusive items, coupled with reasonable prices and cheerful staff, sets them apart from traditional supermarkets.
+
+
+#### PRACTICE
+
+**TYPE:** sentence_transform
+
+**TITLE:** MIXED PRACTICE
+
+PROMPT: Change the subject of these sentences to become 'Pailin', and change the verb so that it's conjugated properly. Enter the full sentence in the box. For example:
+
+We sleep at midnight. --> Pailin sleeps at midnight.
+
+**QUESTION:** 1
+
+**STEM:** They don't speak Spanish.
+
+**ANSWER:** Pailin doesn't speak Spanish.
+
+**QUESTION:** 2
+
+**STEM:** You were hungry.
+
+**ANSWER:** Pailin was hungry.
+
+**QUESTION:** 3
+
+**STEM:** I'm not from Canada.
+
+**ANSWER:** Pailin isn't from Canada.
+
+**QUESTION:** 4
+
+**STEM:** They're hungry.
+
+**ANSWER:** Pailin is hungry.
+
+**QUESTION:** 5
+
+**STEM:** I work at a bookstore.
+
+**ANSWER:** Pailin works at a bookstore.
+
+**TYPE:** sentence_transform
+
+**TITLE:** CORRECT OR INCORRECT
+
+PROMPT: Determine if the verb is conjugated correctly in these sentences. If incorrect, enter the correct sentence into the box.
+
+**QUESTION:** 1
+
+**STEM:** The movie were interesting.
+
+**CORRECT:** no
+
+**ANSWER:** The movie was interesting.
+
+**QUESTION:** 2
+
+**STEM:** Chloe is half French.
+
+**CORRECT:** yes
+
+**QUESTION:** 3
+
+**STEM:** My uncle live with my grandparents.
+
+**CORRECT:** no
+
+**ANSWER:** My uncle lives with my grandparents.
+
+**QUESTION:** 4
+
+**STEM:** He has a flight tomorrow.
+
+**CORRECT:** yes
+
+**QUESTION:** 5
+
+**STEM:** His boss like him.
+
+**CORRECT:** no
+
+**ANSWER:** His boss likes him.
+
+**TYPE:** open
+
+**TITLE:** OPEN‑ENDED PRACTICE
+
+**QUESTION:** 1
+
+**INPUTS:** 4
+
+**TEXT:** Write 4 things about your favorite place, like a favorite country, city, or attraction. Use 3rd person verb conjugation in each sentence.
+
+**KEYWORDS:** 3rd person verbs
+
+**QUESTION:** 2
+
+**INPUTS:** 4
+
+**TEXT:** Write 4 things about your best friend. Use 3rd person verb conjugation in each sentence.
+
+**KEYWORDS:** 3rd person verbs
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+Tell us about the people in your family.
+
+<span style="text-decoration:underline;">TAGS</span>
+
+3rd person verb conjugation, 3rd person singular subjects, to-be verbs, present simple tense, past simple tense, negative sentences, questions, family, jobs, occupations
+
+
+### LESSON 3.12: The Hollywood Walk of Fame will be fun!
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to talk about the future with 'will'
+
+Verb Tense: Future Simple Tense
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin is at home and gets a phone call from her friend Chloe.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+*phone rings*
+
+Pailin: Hey Chloe!
+
+Chloe: Hey Pai! I want to go to the Hollywood Walk of Fame today. Do you want to come?
+
+Pailin: Yeah! But I won't be free until 1PM.
+
+Chloe: That's okay, I'll run some errands first.
+
+Pailin: Okay great, will you take the metro to the Walk of Fame?
+
+Chloe: No, I won't. My host mom will drop me off. I'll ask her to pick you up.
+
+Pailin: Perfect, thanks! Can we go to Amoeba Music afterwards? It's near the Walk of Fame.
+
+Chloe: Yeah, good idea. I'll get some vinyls for my parents. They'll love that.
+
+Pailin: Cool! I'll bring my camera. It'll be fun!
+
+Chloe: I'm excited! I'll text you when we leave the house.
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. Where does Chloe want to go?
+
+Options
+
+A. Pailin's house
+
+B. The metro station
+
+C. The Hollywood Walk of Fame
+
+D. Amoeba Music
+
+Answer key: C
+
+Prompt
+
+2. What time will Pailin be free?
+
+Options
+
+A. She'll be free after 12PM.
+
+B. She'll be free after 1PM.
+
+C. She'll be free after 2PM.
+
+D. She'll be free after 3PM.
+
+Answer key: B
+
+Prompt
+
+3. How will Chloe get to the Hollywood Walk of Fame?
+
+Options
+
+A. She'll go by metro.
+
+B. She'll go by bus.
+
+C. Her host mom will drop her off.
+
+D. She'll walk there.
+
+Answer key: C
+
+Prompt
+
+4. What does Chloe plan to buy at Amoeba Music?
+
+Options
+
+A. She'll buy CDs.
+
+B. She'll buy vinyls.
+
+C. She'll buy movies.
+
+D. She'll buy books.
+
+Answer key: B
+
+
+#### APPLY
+
+In the conversation, Chloe tells Pailin that her host mom will drop her off at the Hollywood Walk of Fame. How will you get to work tomorrow?
+
+
+#### UNDERSTAND
+
+LESSON FOCUS \
+
+
+How to talk about the future with 'will'
+
+Verb tense: Future simple tense
+
+
+---
+
+FUTURE SIMPLE TENSE
+
+Future simple tense is used to talk about actions or events that will happen in the future. In the conversation, Pailin and Chloe use this tense to plan their trip to the Hollywood Walk of Fame and Amoeba Music:
+
+
+
+* My host mom will drop me off.
+* I'll get some vinyls for my parents.
+* I'll bring my camera.
+* It'll be fun!
+
+Are they at the Hollywood Walk of Fame right now? Nope! They will go there later, after 1PM. Unlike present simple tense (used for routines and current feelings) and present continuous tense (used for things happening right now), future simple tense is used for events that* haven’t happened yet*.
+
+
+---
+
+USES OF FUTURE SIMPLE TENSE FOR AFFIRMATIVE SENTENCES
+
+More specifically, affirmative future simple tense sentences are used for:
+
+
+        1. Intentions or plans made for the future:
+
+
+
+* I'll finish the report by Friday.
+
+        2. Decisions made at the moment of speaking:
+
+* *doorbell rings* I'll get it!
+
+        3. Predictions for things you believe will happen:
+
+* It'll rain tomorrow.
+
+        4. Promises you will commit to doing:
+
+* I'll help you with your job application when I finish work.
+
+        5. Offers to help someone:
+
+* Those bags look heavy. I'll carry them for you.
+
+Take a look at what the affirmative sentences from the conversation demonstrate:
+
+
+
+* I'll run some errands first.
+
+        *An intention or plan*
+
+* I'll ask her to pick you up.
+
+        *An offer or promise*
+
+* I'll get some vinyls for my parents.
+
+        *A plan or intention*
+
+* They'll love that.
+
+        *A prediction*
+
+* I'll bring my camera.
+
+        *A decision made at the moment of speaking*
+
+* It'll be fun!
+
+        *A prediction*
+
+* I'll text you when we leave the house.
+
+        *A promise*
+
+
+
+---
+
+AFFIRMATIVE SENTENCE STRUCTURE
+
+In these three sentences, take a look at the main verb:
+
+
+
+* I'll <span style="text-decoration:underline;">get</span> some vinyls for my parents.
+* I'll <span style="text-decoration:underline;">bring</span> my camera.
+* I'll <span style="text-decoration:underline;">text</span> you when we leave the house.
+
+Notice that 'I'll' comes before each verb:
+
+
+        I'll = I will
+
+The full sentences are:
+
+
+        I will get some vinyls for my parents.
+
+
+        I will bring my camera.
+
+
+        I will text you when we leave the house.
+
+The word 'will' is an auxiliary verb that indicates you are speaking about the future. However, you should contract the subject with 'will' when speaking, as 'I'll' is easier and quicker to say than 'I will.'
+
+Now take a look at this line that also uses future simple tense:
+
+
+        My host mom will drop me off.
+
+Although 'my host mom' is a 3rd person subject, neither the auxiliary verb 'will' nor the main verb 'drop' has an -s ending! Lucky for you, the grammar of future simple tense sentences is straightforward. The sentence structure is the same for all subjects!
+
+Here is the structure of affirmative future simple tense sentences. Note that you can contract pronouns with 'will,' but you can't do this with subjects like 'My host mom' or 'The store.'
+
+TABLE-6:
+
+
+<table>
+  <tr>
+   <td><strong>SUBJECT</strong>
+   </td>
+   <td><strong>AUXILIARY VERB</strong>
+   </td>
+   <td><strong>VERB</strong>
+   </td>
+   <td>
+    <strong>EXAMPLE SENTENCES</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>I
+<p style="text-align: right">
+You
+<p style="text-align: right">
+We
+<p style="text-align: right">
+They
+<p style="text-align: right">
+2+ Nouns
+<p style="text-align: right">
+He
+<p style="text-align: right">
+She
+<p style="text-align: right">
+It
+<p style="text-align: right">
+1 Noun
+   </td>
+   <td>will
+   </td>
+   <td>(verb)
+   </td>
+   <td>
+<ul>
+
+<li>I'll quit my job next month.</li>
+
+<li>You'll like the movie tonight.</li>
+
+<li>We'll have a meeting tomorrow.</li>
+
+<li>They'll arrive at 5PM.</li>
+
+<li>My kids will have tennis lessons tonight.</li>
+
+<li>He'll finish the project by Friday.</li>
+
+<li>She'll call you later today.</li>
+
+<li>It'll rain soon.</li>
+
+<li>The train will leave at midnight.</li>
+</ul>
+   </td>
+  </tr>
+</table>
+
+
+
+---
+
+NEGATIVE SENTENCE STRUCTURE AND USES
+
+In the conversation, Pailin says:
+
+
+
+* I won't be free until 1PM.
+
+        won't = will not
+
+
+Pailin says that she will not be available until 1PM, a time in the future. So, she uses 'will not' in her sentence. Note that 'will not' becomes 'won't' when contracted, not 'willn't.'
+
+Negative sentences in future simple tense are mostly used for:
+
+
+        1. Predictions for things you expect will not happen in the future:
+
+
+
+* They won't win the game.
+
+        2. Refusals for things you are unwilling to do:
+
+* I won't go to the party if you don't go.
+
+        3. Promises for things you will refrain from doing:
+
+* I won't tell anyone your secret.
+
+        4. Showing a future absence, closure, or unavailability:
+
+* The store won't be open tomorrow, since it's a holiday.
+
+Pailin's line 'I won't be free until 1PM' is an example of future unavailability.
+
+Here is the structure of negative future simple tense sentences.
+
+TABLE-7:
+
+
+<table>
+  <tr>
+   <td><strong>SUBJECT</strong>
+   </td>
+   <td><strong>(-)</strong>
+   </td>
+   <td><strong>VERB</strong>
+   </td>
+   <td>
+    <strong>EXAMPLE SENTENCES</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>I
+<p style="text-align: right">
+You
+<p style="text-align: right">
+We
+<p style="text-align: right">
+They
+<p style="text-align: right">
+2+ Nouns
+<p style="text-align: right">
+He
+<p style="text-align: right">
+She
+<p style="text-align: right">
+It
+<p style="text-align: right">
+1 Noun
+   </td>
+   <td>won’t
+   </td>
+   <td>(verb)
+   </td>
+   <td>
+<ul>
+
+<li>I won't be at work tomorrow.</li>
+
+<li>You won't finish the project on time.</li>
+
+<li>We won't go to the party.</li>
+
+<li>They won't take the train.</li>
+
+<li>My parents won't come for Christmas.</li>
+
+<li>He won't do the dishes.</li>
+
+<li>She won't lend me money.</li>
+
+<li>It won't snow tomorrow.</li>
+
+<li>The bus won't arrive on time.</li>
+</ul>
+   </td>
+  </tr>
+</table>
+
+
+
+
+
+---
+
+QUESTION STRUCTURE AND USES
+
+In the conversation, Pailin asks Chloe:
+
+
+
+* Will you take the metro to the Walk of Fame?
+
+Compare this to the affirmative sentence:
+
+
+
+* You will take the metro to the Walk of Fame.
+
+To form questions in future simple tense, simply switch the position of the subject and the auxiliary verb 'will.'
+
+Questions in future simple tense are mostly used for:
+
+
+        1. Requests to politely ask someone to do something in the future:
+
+
+
+* Will you help me organize the closet after dinner?
+
+        2. Asking about future plans, intentions, or events:
+
+* Will you take the bus to work?
+
+        3. Asking about future predictions and outcomes:
+
+* Will it rain tomorrow?
+
+Pailin's question 'Will you take the metro to the Walk of Fame?' is an example of asking about Chloe's future plans.
+
+Here is the structure of future simple tense questions.
+
+TABLE-8:
+
+
+<table>
+  <tr>
+   <td><strong>AUXILIARY VERB</strong>
+   </td>
+   <td><strong>SUBJECT</strong>
+   </td>
+   <td><strong>VERB</strong>
+   </td>
+   <td>
+    <strong>EXAMPLE SENTENCES</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>Will
+   </td>
+   <td>I
+<p style="text-align: center">
+you
+<p style="text-align: center">
+we
+<p style="text-align: center">
+they
+<p style="text-align: center">
+2+ nouns
+<p style="text-align: center">
+he
+<p style="text-align: center">
+she
+<p style="text-align: center">
+it
+<p style="text-align: center">
+1 noun
+   </td>
+   <td>(verb)
+   </td>
+   <td>
+<ul>
+
+<li>Will I see you at the meeting tomorrow?</li>
+
+<li>Will you go to the store later?</li>
+
+<li>Will we be late?</li>
+
+<li>Will they come to the wedding?</li>
+
+<li>Will your parents retire this year?</li>
+
+<li>Will he finish the report on time?</li>
+
+<li>Will she call me later?</li>
+
+<li>Will it be sunny tomorrow?</li>
+
+<li>Will the store be open on Sunday?</li>
+</ul>
+   </td>
+  </tr>
+</table>
+
+
+
+#### EXTRA TIPS
+
+SHORT FORM ANSWERS
+
+Remember that yes/no questions can be answered with a simple ‘Yeah’ or ‘No,’ but sometimes a short form answer is given to maintain the flow of conversation. To answer ‘Will...?' questions, you should use either the words 'will' or 'won't' in your answers, NOT the main verb. Note that you shouldn't contract the subject with 'will' in these answers - it sounds awkward to say 'Yes, I'll,' so remember to stick with 'Yes, I will.'
+
+In the conversation, notice how Chloe answers Pailin's question:
+
+
+
+* Pailin: Will you take the metro to the Walk of Fame?
+
+        Chloe: No, I won't.
+
+
+Here are more examples:
+
+
+
+* Luke: Will the library be open tomorrow?
+
+        Pailin: Yeah, it will.
+
+* Pailin: Will you help me cook dinner tonight?
+
+        Luke: Yeah, I will.
+
+* Pailin: Will Alex take that job offer?
+
+        Luke: No, he won't.
+
+
+
+#### COMMON MISTAKES
+
+WILL CONTRACTION
+
+Thai people often forget to contract the subject with 'will' in affirmative sentences. There is nothing wrong with this, but your speech will sound more natural by using contractions. For example:
+
+
+        I will go to the store after work.
+
+
+        *This is fine to say, but it sounds better as:*
+
+
+
+* I'll go to the store after work. (✓)
+
+        We will be late if we take the train.
+
+
+        *This is fine to say, but it sounds better as:*
+
+* We'll be late if we take the train. (✓)
+
+
+#### PHRASES & VERBS
+
+RUN ERRANDS
+
+Run errands = (to go out and do small tasks on your to-do list)
+
+
+
+* I’m exhausted. I’ve been running errands all morning.
+* I’ll be back in about 2 hours. I’ve gotta run some errands.
+
+
+
+	DROP OFF
+
+Drop off (someone or something) / Drop (someone or something) off = (to take someone or something to a particular place and leave them there)
+
+
+
+* I’ll drop off the kids at soccer practice on my way to work.
+* Could you drop these letters off at the post office for me?
+
+
+
+	PICK UP
+
+Pick up (someone or something) / Pick (someone or something) up = (to go somewhere to collect a person or a thing)
+
+
+
+* I have to pick my daughter up from daycare by 6PM.
+* I’ll be leaving the airport soon. I’m just waiting to pick up my suitcase.
+
+
+
+	PERFECT
+
+Perfect = (said when everything works out well)
+
+
+
+* Pailin: I’m off work at 5. How about you?
+
+        Luke: Perfect, I’m off at 5, too. Let’s meet at the subway station at 5:30.
+
+* Luke: How about I bring the pasta, and you bring the wine.
+
+        Pailin: That’s perfect. I’ll be at your place at 6 then.
+
+
+GOOD IDEA
+
+COOL
+
+
+#### CULTURE NOTE
+
+SORRY!
+
+
+#### PRACTICE
+
+**TYPE:** sentence_transform
+
+**TITLE:** PRACTICE AFFIRMATIVE SENTENCES
+
+PROMPT: Change the sentences into future simple tense sentences. Use contractions when applicable.
+
+**QUESTION:** 1
+
+**STEM:** We travel to Hawaii next month.
+
+**ANSWER:** We'll travel to Hawaii next month.
+
+**QUESTION:** 2
+
+**STEM:** I do the laundry after work.
+
+**ANSWER:** I'll do the laundry after work.
+
+**QUESTION:** 3
+
+**STEM:** She visits her parents tomorrow.
+
+**ANSWER:** She'll visit her parents tomorrow.
+
+**QUESTION:** 4
+
+**STEM:** Pailin and Chloe take lots of pictures.
+
+**ANSWER:** Pailin and Chloe will take lots of pictures.
+
+**QUESTION:** 5
+
+**STEM:** They arrive at 5PM.
+
+**ANSWER:** They'll arrive at 5PM.
+
+**TYPE:** sentence_transform
+
+**TITLE:** PRACTICE NEGATIVE SENTENCES
+
+PROMPT: Change the sentences from affirmative to negative future simple tense sentences.
+
+**QUESTION:** 1
+
+**STEM:** I'll wait in that line.
+
+**ANSWER:** I won't wait in that line.
+
+**QUESTION:** 2
+
+**STEM:** He'll like the movie.
+
+**ANSWER:** He won't like the movie.
+
+**QUESTION:** 3
+
+**STEM:** Pailin will finish her homework on time.
+
+**ANSWER:** Pailin won't finish her homework on time.
+
+**QUESTION:** 4
+
+**STEM:** They'll get in trouble.
+
+**ANSWER:** They won't get in trouble.
+
+**QUESTION:** 5
+
+**STEM:** The car will start.
+
+**ANSWER:** The car won't start.
+
+**TYPE:** sentence_transform
+
+**TITLE:** PRACTICE MAKING QUESTIONS
+
+PROMPT: Change the sentences into future simple tense questions.
+
+**QUESTION:** 1
+
+**STEM:** You'll buy groceries on your way home.
+
+**ANSWER:** Will you buy groceries on your way home?
+
+**QUESTION:** 2
+
+**STEM:** She'll call me later.
+
+**ANSWER:** Will she call me later?
+
+**QUESTION:** 3
+
+**STEM:** Jerald will be angry if I'm late.
+
+**ANSWER:** Will Jerald be angry if I'm late?
+
+**QUESTION:** 4
+
+**STEM:** It'll rain tomorrow.
+
+**ANSWER:** Will it rain tomorrow?
+
+**QUESTION:** 5
+
+**STEM:** You'll go to Disneyland.
+
+**ANSWER:** Will you go to Disneyland?
+
+**TYPE:** fill_blank
+
+**TITLE:** SHORT FORM ANSWERS
+
+PROMPT: Fill in the blanks with the correct pronoun and 'will' or 'won't' to create short form answers. For example:
+
+A: Will they be late? \
+B: No, they won't.
+
+**ITEM:** 1
+
+**TEXT:** A: Will she help us decorate? B: Yeah, ____.
+
+**ANSWER:** she will
+
+**ITEM:** 2
+
+**TEXT:** A: Will they win the game? B: No, ____.
+
+**ANSWER:** they won't
+
+**ITEM:** 3
+
+**TEXT:** A: Will you move in with them? B: No, ____.
+
+**ANSWER:** I won't
+
+**ITEM:** 4
+
+**TEXT:** A: Will he apply for a job there? B: Yeah, ____.
+
+**ANSWER:** he will
+
+**ITEM:** 5
+
+**TEXT:** A: Will the market be open tomorrow? B: Yeah, ____.
+
+**ANSWER:** it will
+
+**TYPE:** open
+
+**TITLE:** OPEN-ENDED PRACTICE
+
+PROMPT: Answer the questions using future simple tense in your responses.
+
+**QUESTION:** 1
+
+**TEXT:** What will you do this weekend?
+
+**KEYWORDS:** will
+
+**QUESTION:** 2
+
+**TEXT:** What time will you go to sleep tonight?
+
+**KEYWORDS:** will
+
+**QUESTION:** 3
+
+**TEXT:** What cities/countries will you visit this year?
+
+**KEYWORDS:** will
+
+**QUESTION:** 4
+
+**TEXT:** How will you celebrate your next birthday?
+
+**KEYWORDS:** will
+
+**QUESTION:** 5
+
+**TEXT:** What is something you won't do this weekend?
+
+**KEYWORDS:** won't
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+What will you do this weekend?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Future simple tense, simple future tense, future indicative tense, will, won't, Hollywood, visiting places
+
+
+### LESSON 3.13: See you in the morning
+
+<span style="text-decoration:underline;">FOCUS</span>
+
+How to say goodbye
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+Pailin spent the day hanging out with her friend Chloe at the Hollywood Walk of Fame. It's getting late, and tomorrow is their first day of school at UCLA, so they should be getting home soon.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+Chloe: What time is it?
+
+Pailin: It’s almost 10.
+
+Chloe: Wow, it’s so late! I should sleep soon.
+
+Pailin: Me too. We have a big day tomorrow.
+
+Chloe: I know! I'm so nervous for the first day of school.
+
+Pailin: Don't be nervous! It'll be fun.
+
+Chloe: *laughs* You're right. What time will you wake up tomorrow morning?
+
+Pailin: Probably around 8. How about you?
+
+Chloe: Same. Let’s get breakfast together.
+
+Pailin: Okay, sounds good. See you in the morning.
+
+Chloe: Bye, have a good night. See you.
+
+Pailin: Good night!
+
+
+#### COMPREHENSION
+
+Prompt
+
+1. What time will Pailin wake up tomorrow?
+
+Options
+
+A. She'll wake up at 7AM.
+
+B. She'll wake up at 8AM.
+
+C. She'll wake up at 9AM.
+
+D. She'll wake up at 10AM.
+
+Answer key: B
+
+Prompt
+
+2. What will Pailin and Chloe do together in the morning?
+
+Options
+
+A. They will go to school together.
+
+B. They will eat breakfast together.
+
+C. They will study together.
+
+D. They will go shopping together.
+
+Answer key: B
+
+
+#### APPLY
+
+In the conversation, Pailin and Chloe are saying goodbye to each other. Imagine you're saying goodbye to a friend who you'll likely see again later this week. Say goodbye to them!
+
+
+#### UNDERSTAND
+
+LESSON FOCUS
+
+How to say goodbye
+
+
+---
+
+BYE!
+
+There are several ways to say goodbye to someone. In the conversation, when Chloe and Pailin are parting ways, Chloe says:
+
+
+
+* Bye!
+
+You can say this to anyone - friends, family, co-workers, and acquaintances. It’s a shortened version of ‘goodbye,’ which you can also say, but it can sound stiff and robotic. You can also end a phone conversation with ‘Bye!’
+
+
+---
+
+SEE YOU!
+
+Pailin and Chloe also exchange these phrases:
+
+
+
+* See you!
+* See you in the morning!
+
+‘See you!’ is a friendly and casual way to say goodbye. It implies that you expect to see the other person again in the near future, like within the next week. So you could say it to your co-workers, since you see them throughout the week, but you wouldn’t say it to a client who you meet with once a year.
+
+You can add a time phrase at the end, as Pailin does in ‘See you in the morning!’ If you know when you’ll see the person again, you could use that time phrase, such as:
+
+
+
+* See you later!
+* See you tonight!
+* See you tomorrow!
+* See you on Friday!
+
+
+---
+
+HAVE A GOOD NIGHT!
+
+Chloe says to Pailin:
+
+
+
+* Have a good night!
+
+This is a polite way to wish that someone will enjoy the rest of their night. If it’s still daytime, you could say:
+
+
+
+* Have a good day!
+
+Both phrases are often used by service workers, such as cashiers, servers, or baristas, when a customer is leaving.
+
+
+---
+
+GOOD NIGHT!
+
+Lastly, Pailin ends the conversation with:
+
+
+
+* Good night!
+
+Although this is usually said right before going to sleep in your home, you can also say it to others when parting ways at night.
+
+As you can see, there are several closing phrases for saying goodbye to someone. You don’t need to use every phrase, but saying one or some of them helps to end a conversation naturally and avoid an abrupt ending.
+
+ \
+
+
+
+#### EXTRA TIPS
+
+TAKE CARE!
+
+'Take care!' is a useful phrase when saying goodbye, especially when you're uncertain when you'll see the other person again. This is what you could say to a client who you meet with only once a year, or you could say it to a family member who you don't see very often. It expresses the hope that they'll be safe and healthy until the next time you see them.
+
+
+
+* Take care!
+
+
+#### PHRASES & VERBS
+
+WOW
+
+I KNOW
+
+I know = (can be said to agree with what someone says)
+
+
+
+* Pailin: That movie was so good!
+
+        Luke: I know! The acting was incredible.
+
+* Pailin: I hate this gloomy weather.
+
+        Luke: I know, it makes me depressed.
+
+
+        <span style="text-decoration:underline;">See more uses of ‘I know’</span>
+
+
+	WAKE UP
+
+Wake up / wake (someone) up = ตื่น / ปลุก
+
+
+
+* I keep waking up in the middle of the night.
+* My kids woke me up this morning.
+
+
+#### PRACTICE
+
+PRACTICE SAYING GOODBYE
+
+**TYPE:** multiple_choice
+
+**TITLE:** PRACTICE SAYING GOODBYE
+
+PROMPT: Choose the best way to say goodbye for the situation.
+
+**QUESTION:** 1
+
+**TEXT:** Your aunt and uncle are leaving your house. You see them only twice a year. How can you say goodbye?
+
+**OPTIONS:** A. Bye, take care! B. Bye, see you later!
+
+**ANSWER:** A
+
+**QUESTION:** 2
+
+**TEXT:** You and your best friend have just finished eating lunch at a restaurant. You need to go back to work. How can you say goodbye?
+
+**OPTIONS:** A. See you, have a good day! B. See you, have a good night!
+
+**ANSWER:** A
+
+**QUESTION:** 3
+
+**TEXT:** You're on the phone with your mom. You will see her tonight. How can you say goodbye?
+
+**OPTIONS:** A. Goodbye, take care! B. Bye Mom, see you later!
+
+**ANSWER:** B
+
+**QUESTION:** 4
+
+**TEXT:** You're a server at a restaurant, and it's almost 9PM, so you're about to close the place. As the last customer is leaving, what could you say to them?
+
+**OPTIONS:** A. Bye, have a good day! B. Bye, good night!
+
+**ANSWER:** B
+
+**TYPE:** open
+
+**TITLE:** OPEN‑ENDED PRACTICE
+
+**QUESTION:** 1
+
+**INPUTS:** 3
+
+**TEXT:** It's 11AM, and you're saying goodbye to your friend who was hanging out at your house. You'll get breakfast with him tomorrow morning. What are three things you could say to him as he's leaving?
+
+**KEYWORDS:** see you, tomorrow, morning
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+
+
+What time do you normally go to bed? What time do you normally wake up?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+Goodbye, greeting, bye, see you, have a good night, have a good day, good night, take care
+
+
+### CHECKPOINT 3
+
+<span style="text-decoration:underline;">BACKSTORY</span>
+
+It's Pailin's first day of school at UCLA! She's sitting in a large lecture hall for her first class of the day, East Asian Art. Her professor walks in and begins speaking to the class.
+
+<span style="text-decoration:underline;">CONVERSATION</span>
+
+ \
+Professor Adams: Is everyone here? Okay, let's get started! I'm Professor Adams, and this class is East Asian Art. You will learn about famous East Asian artists and their artworks. You'll have two exams: the midterm and the final. We will meet every Monday and Wednesday from 10:30 to 11:30. My office hours are from 5-8PM on Mondays and Wednesdays, and my TA's office hours are from 6-9PM every weekday. Her office is next to my office. Does anyone have any questions?
+
+Pailin: Professor, will we have homework assignments?
+
+Professor Adams: No, this course doesn't have any homework. But I will give you reading assignments every class. Please read the articles at home, and we will discuss them in class. Any other questions?
+
+Pailin: Professor, will your lectures be online?
+
+Professor Adams: Ah, yes. Each class is recorded, so you can watch them if you miss a class. But I recommend coming to class to join in on the discussions. Any more questions? No? Okay, well I think everyone will enjoy this class very much! Okay, let's begin with Hokusai.
+
+
+#### COMPREHENSION \
+
+
+Prompt
+
+1. How many exams will the class have?
+
+Options
+
+A. There will be one exam.
+
+B. There will be two exams.
+
+C. There will be three exams.
+
+Answer key: B
+
+Prompt
+
+2. What days will the class meet? (select all that apply)
+
+Options
+
+A. Mondays
+
+B. Tuesdays
+
+C. Wednesdays
+
+D. Thursdays
+
+E. Fridays
+
+Answer key: A, C
+
+Prompt
+
+3. What time will the class meet?
+
+Options
+
+A. 10 to 11
+
+B. 10:30 to 11:30
+
+C. 5 to 8
+
+D. 6 to 9
+
+Answer key: B
+
+Prompt
+
+4. Will there be homework assignments?
+
+Options
+
+A. Yes
+
+B. No
+
+Answer key: B
+
+Prompt
+
+5. Will the classes be recorded online?
+
+Options
+
+A. Yes
+
+B. No
+
+Answer key: A
+
+
+#### PHRASES & VERBS
+
+	JOIN IN
+
+Join in = (to participate in an activity)
+
+
+
+* Everyone was dancing, so I decided to join in.
+* We’re playing volleyball, do you want to join in?
+
+<span style="text-decoration:underline;">PINNED COMMENT</span>
+
+	What were your favorite subjects to study in school?
+
+<span style="text-decoration:underline;">TAGS</span>
+
+University, school, first day of school, professor, lecture, homework, art, art history, assignments, office hours

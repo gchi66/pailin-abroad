@@ -46,7 +46,7 @@ Answer key: B
 APPLY
 
 
-In the conversation, Mark apologizes to his family because they arrived late for lunch. Pretend you lost your friend’s phone charger while you were traveling together. How can you apologize to him?
+In the conversation, Mark apologizes to his family because they arrived late for lunch. Pretend you lost your friend’s phone charger while you were traveling together. How can you apologize to him? 
 UNDERSTAND
 
 
@@ -72,7 +72,7 @@ SORRY
 * I’m so sorry.
 
 
-'Sorry’ can be used for all sorts of situations!
+'Sorry’ can be used for all sorts of situations! 
 
 
 Minor incident:
@@ -117,7 +117,7 @@ SORRY + REASON
 
 
 A simple way to apologize is:
-
+        
 Sorry + (reason you’re sorry).
 
 
@@ -175,7 +175,7 @@ In Luke’s apology, the base verb is ‘drop’, but -ing is added so it become
 * I’m sorry for not paying attention. (pay)
 
 
-You can use ‘sorry for (verb-ing),’ or you can use ‘sorry + reason’ and the meaning is the same! You can choose whichever one you want to use.
+You can use ‘sorry for (verb-ing),’ or you can use ‘sorry + reason’ and the meaning is the same! You can choose whichever one you want to use. 
 
 
 ________________
@@ -205,7 +205,7 @@ You can also say:
 * No worries!
 
 
-The above four phrases are best used for minor inconveniences.
+The above four phrases are best used for minor inconveniences. 
 
 
 Here are other ways to respond to ‘sorry’:
@@ -290,7 +290,7 @@ For example:
 
 
 * Pailin: Do you have any change for the parking meter?
-Luke: No, sorry.
+Luke: No, sorry. 
 
 
 * Pailin: Excuse me, do you know where the metro station is?
@@ -336,11 +336,6 @@ PRACTICE
 
 
 
-PRACTICE
-
-
-
-
 TYPE: fill_blank
 
 
@@ -355,6 +350,11 @@ PROMPT: Fill in the blanks with ‘Sorry for (verb-ing)’ or ‘Sorry for not (
 ITEM: 1
 TEXT: ___ (miss) your call.
 ANSWER: Sorry for missing
+FULL_ANSWER: Sorry for missing your call
+
+
+__ (miss) your call.
+Klsdfjdslfjsflskj (sorry for missing your call)
 
 
 
@@ -461,7 +461,7 @@ KEYWORDS: sorry
 
 
 PINNED COMMENT
-
+        
 Are you usually early, on time, or late for events?
 
 
@@ -490,7 +490,7 @@ Pailin: Luke, are you a student at UCLA too?
 Luke: Yep! What's your major?
 Pailin: I'm an Art History major. How about you?
 Luke: I'm an Engineering major, but I don't like my classes. I want to change my major.
-Pailin: You don't want to be an engineer?
+Pailin: You don't want to be an engineer? 
 Luke: No, I don't. But my dad doesn't want me to change my major. I want to try Psychology.
 Pailin: My friend is a Psychology major, but he doesn't like it very much.
 Luke: Really? I think the classes are so interesting.
@@ -557,7 +557,7 @@ So far, you’ve learned how to make affirmative sentences in present simple ten
 
 
 Compare these two sentences from the conversation:
-
+        
 * I don't like my classes.
 * He doesn't like it very much.
 
@@ -600,6 +600,7 @@ Remember that present simple tense is used to talk about routines, habits, feeli
 Here is the structure of ‘don’t’ and ‘doesn’t in a sentence with some examples.
 
 
+TABLE-1:
 
 
 SUBJECT
@@ -628,7 +629,7 @@ It
 * She doesn’t exercise often.
 * It doesn’t work.
 * Enzo doesn’t cook well.
-
+	
 
 Quick Practice: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).
 
@@ -699,29 +700,28 @@ PROMPT: Make the affirmative sentences into negative sentences by using ‘don�
 
 
 QUESTION: 1
-STEM: I speak Korean.
-ANSWER: I don’t speak Korean.
-
+STEM: I speak Korean.[a]
+ANSWER: I don’t speak 
 
 
 QUESTION: 2
 STEM: Adam eats seafood.
-ANSWER: Adam doesn’t eat seafood.
+ANSWER: Adam doesn’t eat seafood
 
 
 QUESTION: 3
 STEM: She lives in an apartment.
-ANSWER: She doesn’t live in an apartment.
+ANSWER: She doesn’t live 
 
 
 QUESTION: 4
 STEM: We drink red wine.
-ANSWER: We don’t drink red wine.
+ANSWER: We don’t drink 
 
 
 QUESTION: 5
 STEM: It smells good.
-ANSWER: It doesn’t smell good.
+ANSWER: It doesn’t smell
 
 
 
@@ -732,15 +732,15 @@ PROMPT: Determine if the grammar of the negative sentences is correct or not. If
 
 
 QUESTION: 1
-STEM: She don’t work on the weekends.
+STEM: She don’t work on the weekends.[b][c]
 CORRECT: no
-ANSWER: She doesn’t work on the weekends.
+ANSWER: She doesn’t work
 
 
 QUESTION: 2
 STEM: They not live in Bangkok.
 CORRECT: no
-ANSWER: They don’t live in Bangkok.
+ANSWER: They don’t live 
 
 
 QUESTION: 3
@@ -776,7 +776,7 @@ TITLE: OPEN‑ENDED PRACTICE
 QUESTION: 1
 INPUTS: 2
 TEXT: Write two things that you don’t do often.
-KEYWORDS: don't, doesn’t
+KEYWORDS: don't, doesn’t         
 
 
 QUESTION: 2
@@ -794,7 +794,7 @@ KEYWORDS: don't, doesn’t
 
 
 PINNED COMMENT
-
+        
 If you went to university, what was your major?
 
 
@@ -899,7 +899,7 @@ In the conversation, Pailin and her host family discuss what they usually have f
 UNDERSTAND
 
 
-LESSON FOCUS
+LESSON FOCUS 
 
 
 How to use articles (a · an) before a noun
@@ -961,7 +961,7 @@ One sentence uses ‘a,’ and the other uses ‘an.’ Deciding which to use de
         a (the next word begins with a non-vowel sound - called ‘consonants’)
 
 
-What’s the first sound in the word ‘banana?’ ‘Buh!’ Because ‘buh’ is a consonant sound, you need to use the article ‘a’ before this word. What about the first sound in ‘orange?’ It’s ‘oh!’ That’s a vowel sound, so ‘an’ would come before it.
+What’s the first sound in the word ‘banana?’ ‘Buh!’ Because ‘buh’ is a consonant sound, you need to use the article ‘a’ before this word. What about the first sound in ‘orange?’ It’s ‘oh!’ That’s a vowel sound, so ‘an’ would come before it. 
 
 
 The reason ‘an’ is used before vowel sounds is for flow and ease of pronunciation - saying ‘a orange’ is awkward compared to saying ‘an orange.’ You can see this in more examples from the conversation:
@@ -1058,7 +1058,7 @@ He has old dog. (X)
 
 
 Try listening to the correct sentences and repeating after the audio, making sure you include the articles.
-
+ 
 CULTURE NOTE
 
 
@@ -1080,7 +1080,7 @@ TYPE: fill_blank
 TITLE: PRACTICE USING ARTICLES
 PROMPT: Enter ‘a’ or ‘an’ in the sentences.
 ITEM: 1
-TEXT: Do you have ___ job?
+TEXT: Do you have ___ job?[d]
 ANSWER: a
 ITEM: 2
 TEXT: ___ old man is outside our door.
@@ -1102,13 +1102,13 @@ PROMPT: Determine if the correct articles are used in the sentences. If incorrec
 QUESTION: 1
 STEM: I got a email.
 CORRECT: no
-ANSWER: I got an email.
+ANSWER: I got an email
 QUESTION: 2
-STEM: We live in an big house.
+STEM: We live in an big house
 CORRECT: no
-ANSWER: We live in a big house.
+ANSWER: We live in a big house
 QUESTION: 3
-STEM: She has an appointment.
+STEM: She has an appointment
 CORRECT: yes
 QUESTION: 4
 STEM: That's a excellent idea.
@@ -1124,6 +1124,8 @@ TYPE: open
 TITLE: OPEN‑ENDED PRACTICE
 
 
+
+
 QUESTION: 1
 
 
@@ -1133,13 +1135,13 @@ INPUTS: 4
 TEXT: Describe four things you see in your room. Use 'a' or 'an' in your answers.
 
 
-KEYWORDS: a, an
+KEYWORDS: a, an        
 
 
 
 
 PINNED COMMENT
-
+        
 What do you usually have for breakfast?
 
 
@@ -1172,7 +1174,7 @@ Luke: It’s on the fridge. Check the yellow paper.
 Pailin: Oh, I see it. Thanks!
 Luke: The internet is super slow today.
 Pailin: Oh no. I want to send a job application.
-Luke: The coffee shop down the street has good Wi-Fi. The library is also nearby. You can walk to both.
+Luke: The coffee shop down the street has good Wi-Fi. The library is also nearby. You can walk to both. 
 
 
 COMPREHENSION
@@ -1445,32 +1447,32 @@ PROMPT: Decide if the article before the noun should be 'the,' 'an', or 'a.'
 
 
 PARAGRAPH:
-Yesterday, I went to ___1___ pet store. I saw ___2___ parrot. ___3___ parrot was very colorful.
-I also saw ___4___ small puppy. ___5___ puppy was sleeping in ___6___ cage.
-I asked ___7___ employee about ___8___ price for ___9___ puppy.
-She told me it’s quite expensive. So I bought ___10___ bag of cat food for my cat instead.
+Yesterday, I went to ___1___ pet store. I saw ___2___ parrot. ___3___ parrot was very colorful.  
+I also saw ___4___ small puppy. ___5___ puppy was sleeping in ___6___ cage.  
+I asked ___7___ employee about ___8___ price for ___9___ puppy.  
+She told me it’s quite expensive. So I bought ___10___ bag of cat food for my cat instead.[e]
 
 
 ITEM: 1
-ANSWER: a
+ANSWER: a          # a pet store
 ITEM: 2
-ANSWER: a
+ANSWER: a          # a parrot
 ITEM: 3
-ANSWER: the
+ANSWER: the        # the parrot (now specific)
 ITEM: 4
-ANSWER: a
+ANSWER: a          # a small puppy
 ITEM: 5
-ANSWER: the
+ANSWER: the        # the puppy (now specific)
 ITEM: 6
-ANSWER: a
+ANSWER: a          # a cage
 ITEM: 7
-ANSWER: an
+ANSWER: an         # an employee  (first mention; vowel sound)
 ITEM: 8
-ANSWER: the
+ANSWER: the        # the price (specific)
 ITEM: 9
-ANSWER: the
+ANSWER: the        # the puppy (specific)
 ITEM: 10
-ANSWER: a
+ANSWER: a          # a bag of cat food
 
 
 TYPE: sentence_transform
@@ -1508,7 +1510,7 @@ INPUTS: 4
 TEXT: Describe four things around you. Use ‘the’ in your answers. For example: The door is white. The kids outside are noisy.
 
 
-KEYWORDS: the
+KEYWORDS: the      
 
 
 
@@ -1518,7 +1520,7 @@ KEYWORDS: the
 
 
 PINNED COMMENT
-
+        
 What are some places in your neighborhood that you go to often?
 
 
@@ -1667,6 +1669,7 @@ Do you see how the word ‘vase’ changed? It went from ‘vase’ to ‘vases.
 They are the words ‘flowers,’ ‘dollars,’ and ‘vases.’
 
 
+TABLE-2:
 
 
 SINGULAR NOUN
@@ -1677,7 +1680,7 @@ SINGULAR NOUN
 	dollars
 	vase
 	vases
-
+	
 
 
 
@@ -1731,6 +1734,9 @@ In the conversation, Sylvie says:
 'Children' is a plural noun, but it doesn't have an -s at the end. Do you know what the singular noun is? It's 'child.' There are some words in English that don't follow the rule of adding -s to become plural, and instead just become a different word. These are called irregular plural nouns. Here are some common irregular plural nouns:
 
 
+TABLE-3:
+
+
 
 
 SINGULAR NOUN
@@ -1747,7 +1753,7 @@ SINGULAR NOUN
 	feet
 	a tooth
 	teeth
-
+	
 
 EXTRA TIPS
 
@@ -1758,8 +1764,7 @@ SUBJECT-VERB AGREEMENT
 You've learned that verbs are conjugated differently for subjects of 1 noun or 2+ nouns. Now, you can put a name to these: singular noun and plural nouns. Here is a recap:
 
 
-
-
+TABLE-4:
 
 
 SUBJECT
@@ -1783,7 +1788,7 @@ doesn’t (verb)
 * The bus was crowded.
 * My dog loves the dog park.
 * That woman doesn’t eat pork.
-
+	
 
 
 
@@ -1959,7 +1964,7 @@ KEYWORDS: plural nouns
 
 
 PINNED COMMENT
-
+        
 How many siblings do you have?
 
 
@@ -2148,7 +2153,7 @@ WOW
 COOL
 
 
-GREAT IDEA
+GREAT IDEA 
 Great idea = (said to show enthusiastic approval of a suggestion or plan)
 * Luke: Oh, it’s happy hour at Jay’s Bar. Should we go there?
 Pailin: Yeah, great idea!
@@ -2215,7 +2220,7 @@ KEYWORDS: 's
 
 
 PINNED COMMENT
-
+        
 Do you have any family keepsakes? What are they?
 
 
@@ -2286,7 +2291,7 @@ In the conversation, Anthony suggests that they meet at an ice cream shop in Hol
 UNDERSTAND
 
 
-LESSON FOCUS
+LESSON FOCUS 
 
 
 How to use 'Let's (verb)'
@@ -2413,7 +2418,7 @@ Meet up = (to plan an informal and casual meeting)
 * We’re going to meet up with friends tonight.
 
 
-        THAT SOUNDS FUN
+        THAT SOUNDS FUN 
 
 
 That sounds fun = (used to show that someone’s proposal is a good one)
@@ -2421,7 +2426,7 @@ That sounds fun = (used to show that someone’s proposal is a good one)
 Luke: Sure, that sounds fun.
 
 
-OF COURSE
+OF COURSE 
 
 
 Of course = แน่นอน
@@ -2432,7 +2437,7 @@ Of course = แน่นอน
 Luke: Of course! Go ahead.
 
 
-IN TOWN
+IN TOWN 
 
 
 In town = (said when a person is in your specific city or location for a short stay)
@@ -2503,7 +2508,7 @@ KEYWORDS: let's
 
 
 PINNED COMMENT
-
+        
 Where do you like to take your friends who are visiting you from out of town?
 
 
@@ -2659,7 +2664,7 @@ Remember that any gender can use the terms 'you guys' or 'guys.' A woman can say
 In larger group settings, you can also use the word 'everyone.' This is a more gender-neutral term and is more formal than 'guys.' For example, a teacher on a field trip with her students might say:
 
 
-* Everyone, follow me!
+* Everyone, follow me! 
 
 
 ________________
@@ -2683,7 +2688,7 @@ If you invited a male friend to your house party, he might ask this to find out 
 COMMON MISTAKES
 
 
-THE -S SOUND
+THE -S SOUND 
 
 
 Thai students often omit the -s sound in 'guys'. Take a look at the incorrect sentences and how to fix them:
@@ -2706,7 +2711,7 @@ PHRASES & VERBS
 LET’S SEE
 
 
-IT’S MY TREAT
+IT’S MY TREAT 
 It’s my treat = (เลี้ยง)
 * Let’s get coffee. Don’t worry, it’s my treat.
 * Since you’re visiting, the tickets are my treat.
@@ -2785,7 +2790,7 @@ INPUTS: 3
 TEXT: Imagine your two friends are visiting you. Ask them three things about what they like or what they might want to do in your city using 'you guys.'
 
 
-KEYWORDS: you guys
+KEYWORDS: you guys    
 
 
 
@@ -2793,7 +2798,7 @@ KEYWORDS: you guys
 
 
 PINNED COMMENT
-
+        
 What's your favorite flavor of ice cream?
 
 
@@ -2962,6 +2967,9 @@ Recall that present simple tense is used when talking about routines, habits, fe
 Here is a breakdown of forming questions using present simple tense.
 
 
+TABLE-5:
+
+
 AUXILIARY VERB
 	SUBJECT
 	VERB
@@ -2988,7 +2996,7 @@ it
 * Does she play the piano?
 * Does it snow in Thailand?
 * Does Sophia drive a car?
-
+	
 
 
 
@@ -3198,7 +3206,7 @@ TYPE: fill_blank
 TITLE: SHORT FORM ANSWERS
 PROMPT: Fill in the blanks with the correct pronoun and 'do · don't · does · doesn't' to create short form answers. For example:
 A: Do Diego and Jerald know each other?
-B: No, they don't.
+B: No, they don't.[f]
 
 
 ITEM: 1
@@ -3239,7 +3247,7 @@ KEYWORDS: do, does
 
 
 PINNED COMMENT
-
+        
 Do you think Chloe should send a message to Anthony? Or should she wait and see if he messages her first?
 
 
@@ -3282,7 +3290,7 @@ Prompt
 1. What does Luke say about the school gym's pool? (select all that apply)
 Options
 A. It's nice.
-B. It's huge.
+B. It's huge. 
 C. It's busy.
 D. It's never busy.
 
@@ -3399,7 +3407,7 @@ Pailin: No, he not have. (X)
 PHRASES & VERBS
 
 
-MAN
+MAN 
 
 
 Man = (very informal expression used for disappointment)
@@ -3409,7 +3417,7 @@ Man = (very informal expression used for disappointment)
 See more uses of 'Man'
 
 
-COOL
+COOL 
 Cool
 
 CHECK OUT
@@ -3481,7 +3489,7 @@ KEYWORDS: have, has
 
 
 PINNED COMMENT
-
+        
 What do you do for exercise?
 
 
@@ -3843,7 +3851,7 @@ KEYWORDS: 3rd person verbs
 
 
 PINNED COMMENT
-
+        
 Tell us about the people in your family.
 
 
@@ -4076,6 +4084,7 @@ Although 'my host mom' is a 3rd person subject, neither the auxiliary verb 'will
 Here is the structure of affirmative future simple tense sentences. Note that you can contract pronouns with 'will,' but you can't do this with subjects like 'My host mom' or 'The store.'
 
 
+TABLE-6:
 
 
 SUBJECT
@@ -4102,7 +4111,7 @@ It
 * She'll call you later today.
 * It'll rain soon.
 * The train will leave at midnight.
-
+	
 
 ________________
 
@@ -4119,7 +4128,7 @@ In the conversation, Pailin says:
 won't = will not
 
 
-Pailin says that she will not be available until 1PM, a time in the future. So, she uses 'will not' in her sentence. Note that 'will not' becomes 'won't' when contracted, not 'willn't.'
+Pailin says that she will not be available until 1PM, a time in the future. So, she uses 'will not' in her sentence. Note that 'will not' becomes 'won't' when contracted, not 'willn't.' 
 
 
 Negative sentences in future simple tense are mostly used for:
@@ -4144,7 +4153,10 @@ Negative sentences in future simple tense are mostly used for:
 Pailin's line 'I won't be free until 1PM' is an example of future unavailability.
 
 
-Here is the structure of negative future simple tense sentences.
+Here is the structure of negative future simple tense sentences. 
+
+
+TABLE-7:
 
 
 
@@ -4173,9 +4185,9 @@ It
 * She won't lend me money.
 * It won't snow tomorrow.
 * The bus won't arrive on time.
+	
 
-
-
+        
 ________________
 
 
@@ -4220,6 +4232,9 @@ Pailin's question 'Will you take the metro to the Walk of Fame?' is an example o
 Here is the structure of future simple tense questions.
 
 
+TABLE-8:
+
+
 
 
 AUXILIARY VERB
@@ -4246,7 +4261,7 @@ it
 * Will she call me later?
 * Will it be sunny tomorrow?
 * Will the store be open on Sunday?
-
+	
 
 
 
@@ -4284,7 +4299,7 @@ Luke: No, he won't.
 COMMON MISTAKES
 
 
-WILL CONTRACTION
+WILL CONTRACTION 
 
 
 Thai people often forget to contract the subject with 'will' in affirmative sentences. There is nothing wrong with this, but your speech will sound more natural by using contractions. For example:
@@ -4309,17 +4324,17 @@ RUN ERRANDS
 Run errands = (to go out and do small tasks on your to-do list)
 * I’m exhausted. I’ve been running errands all morning.
 * I’ll be back in about 2 hours. I’ve gotta run some errands.
-
+        
         DROP OFF
 Drop off (someone or something) / Drop (someone or something) off = (to take someone or something to a particular place and leave them there)
 * I’ll drop off the kids at soccer practice on my way to work.
 * Could you drop these letters off at the post office for me?
-
+        
         PICK UP
 Pick up (someone or something) / Pick (someone or something) up = (to go somewhere to collect a person or a thing)
 * I have to pick my daughter up from daycare by 6PM.
-* I’ll be leaving the airport soon. I’m just waiting to pick up my suitcase.
-
+* I’ll be leaving the airport soon. I’m just waiting to pick up my suitcase. 
+        
         PERFECT
 Perfect = (said when everything works out well)
 * Pailin: I’m off work at 5. How about you?
@@ -4444,7 +4459,7 @@ KEYWORDS: won't
 
 
 PINNED COMMENT
-
+        
 What will you do this weekend?
 
 
@@ -4474,7 +4489,7 @@ Chloe: What time is it?
 Pailin: It’s almost 10.
 Chloe: Wow, it’s so late! I should sleep soon.
 Pailin: Me too. We have a big day tomorrow.
-Chloe: I know! I'm so nervous for the first day of school.
+Chloe: I know! I'm so nervous for the first day of school. 
 Pailin: Don't be nervous! It'll be fun.
 Chloe: *laughs* You're right. What time will you wake up tomorrow morning?
 Pailin: Probably around 8. How about you?
@@ -4705,7 +4720,7 @@ KEYWORDS: see you, tomorrow, morning
 
 
 PINNED COMMENT
-
+        
 What time do you normally go to bed? What time do you normally wake up?
 
 
@@ -4723,7 +4738,7 @@ CHECKPOINT 3
 
 
 BACKSTORY
-It's Pailin's first day of school at UCLA! She's sitting in a large lecture hall for her first class of the day, East Asian Art. Her professor walks in and begins speaking to the class.
+It's Pailin's first day of school at UCLA! She's sitting in a large lecture hall for her first class of the day, East Asian Art. Her professor walks in and begins speaking to the class. 
 
 
 CONVERSATION
@@ -4796,7 +4811,7 @@ Answer key: A
 PHRASES & VERBS
 
 
-        JOIN IN
+        JOIN IN 
 Join in = (to participate in an activity)
 * Everyone was dancing, so I decided to join in.
 * We’re playing volleyball, do you want to join in?
@@ -4814,3 +4829,11 @@ TAGS
 
 
 University, school, first day of school, professor, lecture, homework, art, art history, assignments, office hours
+
+
+[a]Leave english on thai translation
+[b]Leave English on Thai translation
+[c]see if Leeh can translate this
+[d]keep eng when click thai translate button
+[e]figure it out bozo
+[f]ask leeh if should be translated

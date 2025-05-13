@@ -1,9 +1,9 @@
-"""google_doc_to_lesson_json.py  (v2 – multi‑lesson)
+"""google_doc_to_json.py  (v2 – multi‑lesson)
 ────────────────────────────────────────────────────
 Convert a *plain‑text* Google‑Doc export into **one or more** lesson JSON
 objects ready for Supabase import.
 
-If the file contains several lessons (e.g. "Lesson 3.1", "Lesson 3.2" …)
+If the file contains several lessons (e.g. "Lesson 3.1", "Lesson 3.2" …)
 this script will emit **an array** of lesson blobs; a single‑lesson file
 still emits a single object.
 
@@ -11,16 +11,18 @@ Usage
 -----
 # single or multi‑lesson doc
 python google_doc_to_lesson_json.py lesson_docs/en/level_3.txt \
-       --stage Beginner > backend/data/level_3.json
+       --stage Beginner \
+       --md lesson_docs/en/level_3.md \
+       > backend/data/level_3.json
 
 # stdout will contain either
 { "lesson": { … } }                # one lesson
-# or
+# or
 [ { "lesson": { … } }, … ]          # many lessons
 
 Importer tip
 ------------
-Your `import_lessons.py` should accept both:
+Your import_lessons.py should accept both:
     payload = json.load(fp)
     lessons = payload if isinstance(payload, list) else [payload]
 
@@ -31,17 +33,31 @@ import argparse
 import json
 import re
 import sys
+import logging
 from pathlib import Path
 from typing import Dict, List, Tuple
+
+# Import the markdown_utils functions
+try:
+    from .markdown_utils import extract_tables, markdown_to_html
+    MARKDOWN_IT_AVAILABLE = True
+except ImportError:
+    MARKDOWN_IT_AVAILABLE = False
+    logging.warning("markdown_utils module not found. Tables will remain in markdown format.")
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # ───────────────────────────── regex helpers
 HEADING_RE = re.compile(r"^([A-Z][A-Z &']+)(?::\s*(.*))?$", re.I)
 QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
 OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
-LESSON_ID_RE = re.compile(r"^Lesson\s+(\d+)\.(\d+)", re.I)
+# Updated to be more flexible with case and whitespace
+LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
 TITLE_RE = re.compile(r'^#{1,6}\s+(.*)$')
+TABLE_TOKEN_RE = re.compile(r"^\s*TABLE(?:-(\d+))?:\s*$", re.I)
 
 SECTION_ORDER = [
     "FOCUS",
@@ -101,11 +117,27 @@ def chunk_by_headings(lines: List[str]) -> Dict[str, List[str]]:
     return buckets
 
 def parse_lesson_header(raw_header: str, stage: str) -> Tuple[Dict, str]:
-    m = LESSON_ID_RE.search(raw_header)
+    # Debug the raw header
+    logger.debug(f"Parsing header: '{raw_header}'")
+
+    # More flexible pattern matching for the lesson ID
+    m = re.search(r'(?:LESSON|Lesson)\s+(\d+)\.(\d+)', raw_header, re.I)
     if not m:
+        logger.error(f"Header pattern match failed for: '{raw_header}'")
         raise ValueError("Missing 'Lesson X.Y' header: " + raw_header)
+
     level, order = int(m.group(1)), int(m.group(2))
-    title = raw_header.split(":", 1)[1].strip() if ":" in raw_header else raw_header
+
+    # Extract title more flexibly, looking for a colon
+    title_match = re.search(r'(?:LESSON|Lesson)\s+\d+\.\d+\s*:\s*(.*)', raw_header, re.I)
+    if title_match:
+        title = title_match.group(1).strip()
+    else:
+        # Fallback to the original behavior
+        title = raw_header.split(":", 1)[1].strip() if ":" in raw_header else raw_header
+
+    logger.debug(f"Extracted level={level}, order={order}, title='{title}'")
+
     return (
         {
             "external_id": f"{level}.{order}",
@@ -173,7 +205,7 @@ def parse_comprehension(lines: List[str]) -> List[Dict]:
             if m_ans:
                 key_text = m_ans.group(1).strip()
                 # if the header itself has no letters after the colon,
-                # pull the next non‐blank line instead
+                # pull the next non‑blank line instead
                 if not key_text:
                     i += 1
                     while i < len(lines) and not lines[i].strip():
@@ -191,81 +223,129 @@ def parse_comprehension(lines: List[str]) -> List[Dict]:
 
     return qs
 
-def build_section(section_name: str, lines: List[str], order: int) -> Dict:
-    cleaned_lines = []
-    i = 0
-    while i < len(lines):
-        line = lines[i].rstrip()  # Only strip trailing whitespace
+def extract_html_tables(md_path: str) -> List[str]:
+    """
+    Return every <table>…</table> block from the markdown file.
+    Uses markdown_utils.extract_tables, which already gives HTML strings.
+    """
+    if not md_path or not Path(md_path).exists():
+        logger.error("Markdown file not found: %s", md_path)
+        return []
 
-        # Skip separator lines but preserve other whitespace
-        if re.match(r'^_{5,}$', line.strip()):
+    content = Path(md_path).read_text(encoding="utf-8")
+
+    if MARKDOWN_IT_AVAILABLE:
+        html_tables = extract_tables(content)   # ← your existing helper
+        logger.info("Found %d HTML tables", len(html_tables))
+        return html_tables
+    else:
+        logger.warning("markdown_utils not available—no tables extracted")
+        return []
+
+def build_section(section_name: str,
+                  lines: List[str],
+                  order: int,
+                  html_tables: List[str] = None) -> Dict:
+    """
+    Build one section and replace any line that matches TABLE tokens with the appropriate HTML table.
+
+    Supports both simple "TABLE:" tokens (sequential) and indexed "TABLE-N:" tokens (direct access).
+    """
+    out_lines = []
+    i = 0
+    table_counter = 0  # For sequential TABLE: tokens without number
+
+    while i < len(lines):
+        raw = lines[i].rstrip()
+
+ # ────────────────── 1) TABLE token?  ─────────────────────────────
+        m = TABLE_TOKEN_RE.match(raw)
+        if m:
+            # Which table should we insert?
+            if m.group(1):                         #  TABLE‑N:
+                try:
+                    table_index = int(m.group(1)) - 1   # 0‑based
+                except ValueError:
+                    table_index = -1
+            else:                                  #  plain TABLE:
+                table_index = table_counter
+                table_counter += 1
+
+            # Drop the HTML table into the output
+            if html_tables and 0 <= table_index < len(html_tables):
+                out_lines.append(html_tables[table_index])
+            else:
+                out_lines.append(f"<!-- TABLE {table_index+1} MISSING -->")
+
+            # ── swallow the *raw* table that follows ────────────────────
+            i += 1  # move to the line after TABLE:
+            # 1) skip any leading blank lines
+            while i < len(lines) and not lines[i].strip():
+                i += 1
+            # 2) now skip the contiguous block of non‑blank lines
+            while i < len(lines) and lines[i].strip():
+                i += 1
+            # control returns to main loop (which will handle the blank line)
+            continue
+
+        # ────────────────── 2) heading detection (unchanged) ─────────────
+        stripped = raw.strip()
+        is_heading = False
+
+        # ─── skip visual separator lines like "_______" or "-----" ───
+        if re.match(r'^[_\-]{3,}$', stripped):
             i += 1
             continue
 
-        # Robust heading detection
-        is_heading = False
-        raw_line = line.strip()
-
-        # Case 1: Standard ALL-CAPS headings
-        if (raw_line.upper() == raw_line and
-            any(c.isalpha() for c in raw_line) and
-            1 <= len(raw_line.split()) <= 5 and
-            not raw_line.startswith(('* ', '- ', '> ')) and
-            all(c.isupper() or c in " '\"&-.!?()" for c in raw_line)):  # Added !? here
+        if (stripped.upper() == stripped and
+            any(c.isalpha() for c in stripped) and
+            1 <= len(stripped.split()) <= 5 and
+            not stripped.startswith(('* ', '- ', '> ')) and
+            all(c.isupper() or c in " '\"&-.!?()" for c in stripped)):
             is_heading = True
-
-        # Case 2: Special pattern headings (like "A VS. AN")
-        elif (re.match(r'^[A-Z][A-Z0-9\s\'"&.\-()]+$', raw_line) and
-              len(raw_line) <= 50 and
-              len(raw_line.split()) <= 5 and
-              not raw_line.endswith('.')):
+        elif (re.match(r'^[A-Z][A-Z0-9\s\'"&.\-()]+$', stripped) and
+              len(stripped) <= 50 and
+              len(stripped.split()) <= 5 and
+              not stripped.endswith('.')):
             is_heading = True
-
-        # Case 3: Lesson Focus special case
-        elif raw_line.upper() in ("LESSON FOCUS", "FOCUS"):
+        elif stripped.upper() in ("LESSON FOCUS", "FOCUS"):
             is_heading = True
 
         if is_heading:
-            # Look ahead for blank line
-            if i+1 < len(lines) and not lines[i+1].strip():
-                i += 1  # Skip the blank line after heading
-            cleaned_lines.append(f"## {raw_line}")
-            i += 1
+            # consume a blank line after the heading if present
+            if i + 1 < len(lines) and not lines[i + 1].strip():
+                i += 1
+            out_lines.append(f"## {stripped}")
         else:
-            # Preserve original line exactly (with leading whitespace)
-            cleaned_lines.append(line)
-            i += 1
+            out_lines.append(raw)
 
-    # Join with proper newlines and ensure exactly two newlines between sections
-    content_md = '\n'.join(cleaned_lines)
-    content_md = re.sub(r'\n{3,}', '\n\n', content_md)  # Normalize newlines
+        i += 1
 
-    # Handle special section types
+    # collapse runs of 3+ blank lines
+    content_md = re.sub(r'\n{3,}', '\n\n', "\n".join(out_lines)).strip()
+
+    # ────────────────── special "phrases & verbs" type ──────────────────
     if section_name == "PHRASES & VERBS":
         items = []
-        for ln in cleaned_lines:
+        for ln in out_lines:
             if "=" not in ln:
                 continue
             phrase, rest = ln.split("=", 1)
             translation, *notes = rest.split("(")
-            item = {
-                "phrase": phrase.strip(),
-                "translation_th": translation.strip()
-            }
+            item = {"phrase": phrase.strip(),
+                    "translation_th": translation.strip()}
             if notes:
                 item["notes"] = notes[0].rstrip(") ").strip()
             items.append(item)
-        return {
-            "type": "phrases_verbs",
-            "sort_order": order,
-            "items": items
-        }
+        return {"type": "phrases_verbs",
+                "sort_order": order,
+                "items": items}
 
-    return {
-        "type": SECTION_TYPE_MAP.get(section_name, section_name.lower()),
-        "sort_order": order,
-        "content_md": content_md.strip()
-    }
+    # normal section
+    return {"type": SECTION_TYPE_MAP.get(section_name, section_name.lower()),
+            "sort_order": order,
+            "content_md": content_md}
+
 
 
 def parse_tags(lines: List[str]) -> List[str]:
@@ -436,10 +516,33 @@ def parse_practice(lines: List[str]) -> List[Dict]:
     return exercises
 # ───────────────────────────── convert one lesson chunk
 
-def convert_chunk(chunk: str, stage: str) -> Dict:
+def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
+    """
+    Convert a chunk of text into a lesson object.
+    Now passing in the full list of HTML tables instead of an iterator.
+    """
     lines = [ln.rstrip() for ln in chunk.splitlines()]
+
+    # Debug the first few lines to help identify formatting issues
+    for i, line in enumerate(lines[:10]):
+        logger.debug(f"Line {i}: '{line}'")
+
     buckets = chunk_by_headings(lines)
-    header_line = next((ln for ln in lines if ln.lstrip().upper().startswith("LESSON")), "")
+
+    # Find header line more reliably - look for any line containing lesson X.Y pattern
+    header_line = ""
+    for ln in lines:
+        if re.search(r'(?:LESSON|Lesson)\s+\d+\.\d+', ln, re.I):
+            header_line = ln
+            logger.debug(f"Found lesson header: '{header_line}'")
+            break
+
+    if not header_line:
+        logger.error("No lesson header found in chunk")
+        # Sample of the chunk for debugging
+        logger.error(f"Chunk starts with: {chunk[:200]}")
+        raise ValueError("Missing 'Lesson X.Y' header in document chunk")
+
     lesson, _ = parse_lesson_header(header_line, stage)
 
     lesson["focus"] = "\n".join(buckets.get("FOCUS", [])).strip()
@@ -456,7 +559,8 @@ def convert_chunk(chunk: str, stage: str) -> Dict:
             continue
         if sec not in buckets:
             continue
-        built = build_section(sec, buckets[sec], order)
+        # Pass the full list of tables, not an iterator
+        built = build_section(sec, buckets[sec], order, html_tables)
         if built:
             sections.append(built)
             order += 1
@@ -472,34 +576,59 @@ def convert_chunk(chunk: str, stage: str) -> Dict:
         "tags": tags,
     }
 
-# ───────────────────────────── main converter
+def convert(doc_text: str, stage: str, html_tables: List[str]):
+    # Updated regex to handle both "Lesson" and "LESSON" case variants
+    chunks = re.split(r"(?=^\s*(?:LESSON|Lesson)\s+\d+\.\d+)", doc_text, flags=re.M | re.I)
 
-def convert(doc_text: str, stage: str):
-    # Split on every Lesson header (lookahead keeps delimiter)
-    chunks = re.split(r"(?=^\s*Lesson\s+\d+\.\d+)", doc_text, flags=re.M | re.I)
-    lessons = [convert_chunk(chunk, stage) for chunk in chunks if chunk.strip()]
+    # Debug: Print chunk information
+    logger.debug(f"Split document into {len(chunks)} chunks")
+    for i, chunk in enumerate(chunks):
+        if chunk.strip():
+            logger.debug(f"Chunk {i} starts with: {chunk.strip()[:50]}...")
+
+    # Pass the full list of tables to each chunk instead of an iterator
+    lessons = [convert_chunk(chunk, stage, html_tables) for chunk in chunks if chunk.strip()]
+    logger.debug(f"Processed {len(lessons)} lessons")
+
+    # One lesson or multiple?
     return lessons[0] if len(lessons) == 1 else lessons
 
-# ───────────────────────────── CLI entry‑point
-
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Google Doc → lesson JSON converter")
-    parser.add_argument("input", type=Path, help="Plain‑text file exported from Google Docs")
-    parser.add_argument("--stage", default="", help="Stage (e.g. Beginner)")
-    args = parser.parse_args()
-
     try:
-        text = args.input.read_text(encoding="utf-8-sig")
-    except Exception as exc:
-        sys.exit(f"Error reading {args.input}: {exc}")
+        logger.info("Starting document conversion")
+        parser = argparse.ArgumentParser()
+        parser.add_argument("input", help="Input text file")
+        parser.add_argument("--stage", required=True, help="Lesson stage")
+        parser.add_argument("--md", default="", help="Markdown file path")
+        args = parser.parse_args()
 
-    try:
-        result = convert(text, stage=args.stage)
-    except Exception as exc:
-        sys.exit(f"Parsing error: {exc}")
+        logger.debug(f"Args: {args}")
 
-    json.dump(result, sys.stdout, ensure_ascii=False, indent=2)
-    sys.stdout.write("")
+        if not Path(args.input).exists():
+            logger.error(f"Input file not found: {args.input}")
+            sys.exit(1)
+
+        text = Path(args.input).read_text(encoding='utf-8')
+        logger.debug(f"Read {len(text)} chars from {args.input}")
+        html_tables = extract_html_tables(args.md) if args.md else []
+
+        result = convert(text, stage=args.stage, html_tables=html_tables)
+
+        # Get count of transcript lines, handling both single and multi-lesson formats
+        if isinstance(result, list):
+            transcript_count = sum(len(lesson.get('transcript', [])) for lesson in result)
+            lesson_count = len(result)
+            logger.info(f"Converted {lesson_count} lessons with total {transcript_count} transcript lines")
+        else:
+            transcript_count = len(result.get('transcript', []))
+            logger.info(f"Converted 1 lesson with {transcript_count} transcript lines")
+
+        json.dump(result, sys.stdout, ensure_ascii=False, indent=2)
+        logger.info("Successfully wrote JSON output")
+
+    except Exception as e:
+        logger.critical(f"Fatal error: {str(e)}", exc_info=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
