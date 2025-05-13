@@ -74,3 +74,47 @@ details[open] > .markdown-summary::after {
   from { opacity: 0; translate: 0 -.5rem; }
   to   { opacity: 1; translate: 0 0; }
 }
+
+
+/* table  */
+
+/* 1) Wrapper – lets the table scroll horizontally on small screens */
+.lesson-table-wrapper {
+  overflow-x: auto;
+  margin-block: 1rem;              /* top / bottom breathing room   */
+}
+
+/* 2) The table itself */
+.lesson-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;              /* a touch smaller than body copy */
+}
+
+/* 3) Header cells */
+.lesson-table thead th {
+  background: var(--primary-color, #0f609b);
+  color: #fff;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-light, #e6e6e6);
+  white-space: nowrap;
+}
+
+/* 4) Body cells */
+.lesson-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-light, #e6e6e6);
+  vertical-align: top;
+}
+
+/* 5) Zebra striping for readability */
+.lesson-table tbody tr:nth-child(odd) {
+  background: rgba(0, 0, 0, 0.025);
+}
+
+/* 6) Make long words wrap instead of overflowing */
+.lesson-table th,
+.lesson-table td {
+  word-break: break-word;
+}

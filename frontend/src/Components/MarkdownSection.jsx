@@ -1,33 +1,35 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw   from "rehype-raw";   // ⬅︎ allow raw HTML (tables) in markdown
+import remarkGfm   from "remark-gfm";   // ⬅︎ lists, strikethrough, tables, etc.
 import "../Styles/MarkdownSection.css";
 
-/**
- * Splits markdown into collapsible sections based on ## headings
- */
+/* ------------------------------------------------------------
+   Split markdown into collapsible “cards” by `##` sub‑headings
+------------------------------------------------------------ */
 function splitByHeadings(markdown) {
   const sections = [];
-  let currentSection = null;
+  let current = null;
 
-  markdown.split('\n').forEach(line => {
-    if (line.startsWith('## ')) {
-      if (currentSection) sections.push(currentSection);
-      currentSection = {
-        title: line.slice(3).trim(),
-        body: []
-      };
-    } else if (currentSection) {
-      currentSection.body.push(line);
+  markdown.split("\n").forEach((line) => {
+    if (line.startsWith("## ")) {
+      if (current) sections.push(current);
+      current = { title: line.slice(3).trim(), body: [] };
+    } else if (current) {
+      current.body.push(line);
     }
   });
 
-  if (currentSection) sections.push(currentSection);
+  if (current) sections.push(current);
   return sections;
 }
 
+/* ------------------------------------------------------------
+   Collapsible Markdown section
+------------------------------------------------------------ */
 export default function MarkdownSection({
   markdown = "",
-  defaultOpenFirst = true
+  defaultOpenFirst = true,
 }) {
   const sections = splitByHeadings(markdown);
 
@@ -42,9 +44,21 @@ export default function MarkdownSection({
           <summary className="markdown-summary">
             {title || "More Information"}
           </summary>
+
           <div className="markdown-content">
-            <ReactMarkdown>
-              {body.join('\n').trim()}
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}   /* GitHub‑flavoured markdown */
+              rehypePlugins={[rehypeRaw]}   /* enable raw HTML tables    */
+              components={{
+                /* Custom table wrapper for styling / responsiveness */
+                table: ({ node, ...props }) => (
+                  <div className="lesson-table-wrapper">
+                    <table className="lesson-table" {...props} />
+                  </div>
+                ),
+              }}
+            >
+              {body.join("\n").trim()}
             </ReactMarkdown>
           </div>
         </details>
