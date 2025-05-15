@@ -631,17 +631,34 @@ It
 * Enzo doesn’t cook well.
 	
 
-Quick Practice: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).
 
 
-1. I watch scary movies.
-2. Pete goes to the gym often.
-3. We like cats.
-4. She takes the bus to work.
-5. My brother lives in San Francisco.
+TYPE: sentence_transform
+TITLE: QUICK PRACTICE
+PROMPT: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).
+QUESTION: 1
+STEM: I watch scary movies.
+ANSWER: I don’t watch
 
 
-+ Submit to Show Answers
+QUESTION: 2
+STEM: Pete goes to the gym often.
+ANSWER: Pete doesn’t go
+
+QUESTION: 3
+STEM: We like cats.
+ANSWER: We don’t like
+
+QUESTION: 4
+STEM: She takes the bus to work.
+ANSWER: She doesn’t take
+
+QUESTION: 5
+STEM: My brother lives in San Francisco.
+ANSWER: My brother doesn’t live
+
+
+
 
 
 COMMON MISTAKES
@@ -3000,17 +3017,26 @@ it
 
 
 
-Quick Practice: Change the affirmative sentences into questions.
+TYPE: sentence_transform
+TITLE: QUICK PRACTICE
+PROMPT: Change the affirmative sentences into questions using “Do/Does (subject) (verb)?”
+QUESTION: 1
+STEM: You eat breakfast every morning.
+ANSWER: Do you eat
+QUESTION: 2
+STEM: Pete goes to the gym often.
+ANSWER: Does Pete go
+QUESTION: 3
+STEM: They take the bus to work.
+ANSWER: Do they take
+QUESTION: 4
+STEM: She visits Chicago every year.
+ANSWER: Does she visit
+QUESTION: 5
+STEM: Your brother works from home.
+ANSWER: Does your brother work
 
 
-1. You eat breakfast every morning.
-2. Pete goes to the gym often.
-3. They take the bus to work.
-4. She visits Chicago every year.
-5. Your brother works from home.
-
-
-+ Submit to Show Answers
 EXTRA TIPS
 
 
