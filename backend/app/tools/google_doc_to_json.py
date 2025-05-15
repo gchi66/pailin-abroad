@@ -58,6 +58,11 @@ LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
 TITLE_RE = re.compile(r'^#{1,6}\s+(.*)$')
 TABLE_TOKEN_RE = re.compile(r"^\s*TABLE(?:-(\d+))?:\s*$", re.I)
+PRACTICE_DIRECTIVE_RE = re.compile(
+    r'^\s*(TYPE|TITLE|PROMPT|PARAGRAPH|ITEM|QUESTION|TEXT|STEM|CORRECT|'
+    r'ANSWER|OPTIONS|KEYWORDS|INPUTS)\s*:',
+    re.I
+)
 
 SECTION_ORDER = [
     "FOCUS",
@@ -148,6 +153,23 @@ def parse_lesson_header(raw_header: str, stage: str) -> Tuple[Dict, str]:
         },
         title,
     )
+
+# ______________Quick practice stuff___________
+
+def strip_practice_directives(lines: list[str]) -> list[str]:
+    """
+    Return a *new* list that stops before the first practice directive
+    (TYPE:, TITLE:, QUESTION:, etc.).  Everything from that line to the
+    end is dropped, blank lines included.
+    """
+    out = []
+    skipping = False
+    for ln in lines:
+        if not skipping and PRACTICE_DIRECTIVE_RE.match(ln):
+            skipping = True        # start discarding
+        if not skipping:
+            out.append(ln)
+    return out
 
 
 def parse_conversation(lines: List[str]) -> List[Dict]:
@@ -303,7 +325,7 @@ def build_section(section_name: str,
             not stripped.startswith(('* ', '- ', '> ')) and
             all(c.isupper() or c in " '\"&-.!?()" for c in stripped)):
             is_heading = True
-        elif (re.match(r'^[A-Z][A-Z0-9\s\'"&.\-()]+$', stripped) and
+        elif (re.match(r'^[A-Z][A-Z0-9#\s\'"&.\-()]+$', stripped) and
               len(stripped) <= 50 and
               len(stripped.split()) <= 5 and
               not stripped.endswith('.')):
@@ -550,8 +572,26 @@ def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
 
     transcript = parse_conversation(buckets.get("CONVERSATION", []))
     comprehension = parse_comprehension(buckets.get("COMPREHENSION", []))
+
+    # 1. parse the normal PRACTICE bucket once
     practice_items = parse_practice(buckets.get("PRACTICE", []))
 
+    # 2. harvest any embedded Quick‑Practice from UNDERSTAND
+    embedded_practice = parse_practice(buckets.get("UNDERSTAND", []))
+
+    if embedded_practice:
+        # give embedded rows sequential sort_order after regular practice
+        for ex in embedded_practice:
+            ex["sort_order"] = len(practice_items) + 1
+            practice_items.append(ex)
+
+        # 3. scrub directive lines so they don't show in UNDERSTAND markdown
+        buckets["UNDERSTAND"] = strip_practice_directives(buckets["UNDERSTAND"])
+
+
+
+    # Build the section
+    tags = parse_tags(buckets.get("TAGS", []))
     sections = []
     order = 1
     for sec in SECTION_ORDER:
@@ -565,7 +605,6 @@ def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
             sections.append(built)
             order += 1
 
-    tags = parse_tags(buckets.get("TAGS", []))
 
     return {
         "lesson": lesson,

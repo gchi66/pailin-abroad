@@ -443,6 +443,45 @@
           }
         ],
         "sort_order": 3
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "QUICK PRACTICE",
+        "prompt": "Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I watch scary movies.",
+            "correct": null,
+            "answer": "I don’t watch"
+          },
+          {
+            "number": "2",
+            "stem": "Pete goes to the gym often.",
+            "correct": null,
+            "answer": "Pete doesn’t go"
+          },
+          {
+            "number": "3",
+            "stem": "We like cats.",
+            "correct": null,
+            "answer": "We don’t like"
+          },
+          {
+            "number": "4",
+            "stem": "She takes the bus to work.",
+            "correct": null,
+            "answer": "She doesn’t take"
+          },
+          {
+            "number": "5",
+            "stem": "My brother lives in San Francisco.",
+            "correct": null,
+            "answer": "My brother doesn’t live"
+          }
+        ],
+        "sort_order": 4
       }
     ],
     "sections": [
@@ -454,12 +493,12 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to make negative sentences with ‘don’t’ and ‘doesn’t’\nVerb tense: Present simple tense\n\n## NEGATIVE SENTENCES\n\nSo far, you’ve learned how to make affirmative sentences in present simple tense (I drink coffee every morning). In this lesson, you’ll learn how to make those sentences negative using the words ‘don’t’ and ‘doesn’t.’\n\nCompare these two sentences from the conversation:\n\n* I don't like my classes.\n* He doesn't like it very much.\n\nIn Lesson 1.16, you learned that ‘not’ is used to negate ALL verbs in English. The two sentences above contain the word ‘not,’ although it may not be obvious at first glance. That’s because ‘not’ is contracted with the auxiliary verb ‘do’ or ‘does’.\n\ndon’t = do not\ndoesn’t = does not\n\nThese two words make present simple tense sentences negative. Notice their position in the sentences. They come after the subject and before the main verb:\n\n(Subject) don’t (verb)\n(Subject) doesn’t (verb)\n\nNow take a look at the main verb in these lines from the conversation:\n\n* My friend wants to try Engineering.\n* My dad doesn't want me to change my major.\n\nIn the first sentence, -s is added to the end of verb ‘want’ because it follows ‘he · she · it · noun.’ What do you notice about the second sentence? The verb ‘want’ doesn’t have an -s even though the subject is ‘he’. Instead, the negative auxiliary verb ‘do not’ takes the -s to become ‘does not,’ while the main verb ‘want’ stays in its base form.\n\n## USES & STRUCTURE\n\nRemember that present simple tense is used to talk about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, negative present simple tense is used to describe things that don’t happen regularly, or for things you don’t know, feel, or believe.\n\nHere is the structure of ‘don’t’ and ‘doesn’t in a sentence with some examples.\n\n<table>\n  <tr>\n   <td><strong>SUBJECT</strong>\n   </td>\n   <td><strong>(-)</strong>\n   </td>\n   <td><strong>VERB</strong>\n   </td>\n   <td>\n    <strong>EXAMPLE SENTENCES</strong>\n   </td>\n  </tr>\n  <tr>\n   <td>I\n<p style=\"text-align: right\">\nYou\n<p style=\"text-align: right\">\nWe\n<p style=\"text-align: right\">\nThey\n<p style=\"text-align: right\">\n2+ Nouns\n   </td>\n   <td>don’t\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>I don’t drive.</li>\n<li>You don’t travel often.</li>\n<li>We don’t know the answer.</li>\n<li>They don’t see you.</li>\n<li>My parents don’t live in Florida.</li>\n</ul>\n   </td>\n  </tr>\n  <tr>\n   <td>He\n<p style=\"text-align: right\">\nShe\n<p style=\"text-align: right\">\nIt\n<p style=\"text-align: right\">\n1 Noun\n   </td>\n   <td>doesn’t\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>He doesn’t drink coffee.</li>\n<li>She doesn’t exercise often.</li>\n<li>It doesn’t work.</li>\n<li>Enzo doesn’t cook well.</li>\n</ul>\n   </td>\n  </tr>\n</table>\n\nQuick Practice: Change the sentences from affirmative to negative by entering ‘don’t/doesn’t (verb).\n\n1. I watch scary movies.\n2. Pete goes to the gym often.\n3. We like cats.\n4. She takes the bus to work.\n5. My brother lives in San Francisco.\n\n+ Submit to Show Answers"
+        "content_md": "## LESSON FOCUS\n\nHow to make negative sentences with ‘don’t’ and ‘doesn’t’\nVerb tense: Present simple tense\n\n## NEGATIVE SENTENCES\n\nSo far, you’ve learned how to make affirmative sentences in present simple tense (I drink coffee every morning). In this lesson, you’ll learn how to make those sentences negative using the words ‘don’t’ and ‘doesn’t.’\n\nCompare these two sentences from the conversation:\n\n* I don't like my classes.\n* He doesn't like it very much.\n\nIn Lesson 1.16, you learned that ‘not’ is used to negate ALL verbs in English. The two sentences above contain the word ‘not,’ although it may not be obvious at first glance. That’s because ‘not’ is contracted with the auxiliary verb ‘do’ or ‘does’.\n\ndon’t = do not\ndoesn’t = does not\n\nThese two words make present simple tense sentences negative. Notice their position in the sentences. They come after the subject and before the main verb:\n\n(Subject) don’t (verb)\n(Subject) doesn’t (verb)\n\nNow take a look at the main verb in these lines from the conversation:\n\n* My friend wants to try Engineering.\n* My dad doesn't want me to change my major.\n\nIn the first sentence, -s is added to the end of verb ‘want’ because it follows ‘he · she · it · noun.’ What do you notice about the second sentence? The verb ‘want’ doesn’t have an -s even though the subject is ‘he’. Instead, the negative auxiliary verb ‘do not’ takes the -s to become ‘does not,’ while the main verb ‘want’ stays in its base form.\n\n## USES & STRUCTURE\n\nRemember that present simple tense is used to talk about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, negative present simple tense is used to describe things that don’t happen regularly, or for things you don’t know, feel, or believe.\n\nHere is the structure of ‘don’t’ and ‘doesn’t in a sentence with some examples.\n\n<table>\n  <tr>\n   <td><strong>SUBJECT</strong>\n   </td>\n   <td><strong>(-)</strong>\n   </td>\n   <td><strong>VERB</strong>\n   </td>\n   <td>\n    <strong>EXAMPLE SENTENCES</strong>\n   </td>\n  </tr>\n  <tr>\n   <td>I\n<p style=\"text-align: right\">\nYou\n<p style=\"text-align: right\">\nWe\n<p style=\"text-align: right\">\nThey\n<p style=\"text-align: right\">\n2+ Nouns\n   </td>\n   <td>don’t\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>I don’t drive.</li>\n<li>You don’t travel often.</li>\n<li>We don’t know the answer.</li>\n<li>They don’t see you.</li>\n<li>My parents don’t live in Florida.</li>\n</ul>\n   </td>\n  </tr>\n  <tr>\n   <td>He\n<p style=\"text-align: right\">\nShe\n<p style=\"text-align: right\">\nIt\n<p style=\"text-align: right\">\n1 Noun\n   </td>\n   <td>doesn’t\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>He doesn’t drink coffee.</li>\n<li>She doesn’t exercise often.</li>\n<li>It doesn’t work.</li>\n<li>Enzo doesn’t cook well.</li>\n</ul>\n   </td>\n  </tr>\n</table>"
       },
       {
         "type": "common_mistake",
         "sort_order": 3,
-        "content_md": "MISTAKE #1\n\nThai people often only use the word ‘not’ to make a sentence negative. Remember that ‘not’ is always used in conjunction with another verb to make a sentence negative, like in ‘It isn’t hot’ or ‘She doesn’t eat spicy food.’\n\nTake a look at the incorrect sentences below and how to fix them:\n\nI not have a dog. (X)\n* I don’t have a dog. (✓)\n\nThey not eat fish. (X)\n* They don’t eat fish. (✓)\n\nHe not like spicy food. (X)\n* He doesn’t like spicy food. (✓)\n\nMISTAKE #2\n\nIt’s also common for Thai people to mistakenly use ‘don’t’ in negative sentences when they should use ‘doesn’t.' Building the habit of using both correctly will make your English more accurate and fluent. Take a look at the corrections below:\n\nShe don’t drink beer. (X)\n* She doesn’t drink beer. (✓)\n\nHe don’t work there. (X)\n* He doesn’t work there. (✓)\n\nIt don’t smell bad. (X)\n* It doesn’t smell bad. (✓)"
+        "content_md": "## MISTAKE #1\n\nThai people often only use the word ‘not’ to make a sentence negative. Remember that ‘not’ is always used in conjunction with another verb to make a sentence negative, like in ‘It isn’t hot’ or ‘She doesn’t eat spicy food.’\n\nTake a look at the incorrect sentences below and how to fix them:\n\nI not have a dog. (X)\n* I don’t have a dog. (✓)\n\nThey not eat fish. (X)\n* They don’t eat fish. (✓)\n\nHe not like spicy food. (X)\n* He doesn’t like spicy food. (✓)\n\n## MISTAKE #2\n\nIt’s also common for Thai people to mistakenly use ‘don’t’ in negative sentences when they should use ‘doesn’t.' Building the habit of using both correctly will make your English more accurate and fluent. Take a look at the corrections below:\n\nShe don’t drink beer. (X)\n* She doesn’t drink beer. (✓)\n\nHe don’t work there. (X)\n* He doesn’t work there. (✓)\n\nIt don’t smell bad. (X)\n* It doesn’t smell bad. (✓)"
       },
       {
         "type": "pinned_comment",
@@ -2230,6 +2269,45 @@
           }
         ],
         "sort_order": 5
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "QUICK PRACTICE",
+        "prompt": "Change the affirmative sentences into questions using “Do/Does (subject) (verb)?”",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "You eat breakfast every morning.",
+            "correct": null,
+            "answer": "Do you eat"
+          },
+          {
+            "number": "2",
+            "stem": "Pete goes to the gym often.",
+            "correct": null,
+            "answer": "Does Pete go"
+          },
+          {
+            "number": "3",
+            "stem": "They take the bus to work.",
+            "correct": null,
+            "answer": "Do they take"
+          },
+          {
+            "number": "4",
+            "stem": "She visits Chicago every year.",
+            "correct": null,
+            "answer": "Does she visit"
+          },
+          {
+            "number": "5",
+            "stem": "Your brother works from home.",
+            "correct": null,
+            "answer": "Does your brother work"
+          }
+        ],
+        "sort_order": 6
       }
     ],
     "sections": [
@@ -2241,7 +2319,7 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to make questions with 'Do...?' and 'Does...?’\n\nVerb tense: Present simple tense\n\nIn Lesson 2.4, you learned how to ask simple questions to get to know someone, such as 'Do you like tacos?' or 'Do you have siblings?' In this lesson, you’ll learn how to ask any question in present simple tense using 'Do...?' or 'Does...?'\n\n## DO...?\n\nIn the conversation, Chloe asks Pailin about Anthony and his sister:\n\n* Do they talk often?\n\nThe question is made by adding ‘Do’ to the beginning of the present simple tense sentence ‘They talk often.’ So, ‘Do’ changes a statement into a yes/no question.\n\nHere are more examples:\n\n* Do I speak English well?\n* Do we have homework?\n* Do your parents live in England?\n\nKeep in mind that ‘Do’ is used for these subjects: I, you, we, they, 2+ nouns\n\n## DOES...?\n\nCompare these two questions from the conversation:\n\n* Do they talk often?\n* Does he come to LA often?\n\nNotice how the first word changed in the question from 'Do' to 'Does.' This is because the subject is different. When making questions with the subjects 'he · she · it · noun,' the question must begin with 'Does.'\n\nNow take a look at the main verb that's underlined in these two lines:\n\n* His sister lives in LA.\n* Does he drive a motorcycle?\n\nIn the first sentence, -s is added to the end of verb because it follows ‘he · she · it · noun.’ What do you notice about the second line? The verb doesn’t have an -s even though the subject is ‘he’. Instead, the questioning auxiliary verb ‘Do’ takes the -s to become ‘Does,’ while the main verb ‘drive’ stays in its base form.\n\nYou might remember that the same rule applies to negative present simple tense sentences:\n\n* He drives a motorcycle.\n* He doesn’t drive a motorcycle.\n\nThe negative auxiliary verb ‘does not’ takes the -s, while the main verb ‘drive’ stays in its base form.\n\n## USES & STRUCTURE\n\nRecall that present simple tense is used when talking about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, questions in present simple tense are used to ask about things that happen regularly, or for asking about how someone feels.\n\nHere is a breakdown of forming questions using present simple tense.\n\n<table>\n  <tr>\n   <td><strong>AUXILIARY VERB</strong>\n   </td>\n   <td><strong>SUBJECT</strong>\n   </td>\n   <td><strong>VERB</strong>\n   </td>\n   <td>\n    <strong>EXAMPLE SENTENCES</strong>\n   </td>\n  </tr>\n  <tr>\n   <td>Do\n   </td>\n   <td>I\n<p style=\"text-align: center\">\nyou\n<p style=\"text-align: center\">\nwe\n<p style=\"text-align: center\">\nthey\n<p style=\"text-align: center\">\n2+ nouns\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>Do I look okay?</li>\n<li>Do you watch scary movies?</li>\n<li>Do we need anything?</li>\n<li>Do they live here?</li>\n<li>Do Mark and Sylvie work together?</li>\n</ul>\n   </td>\n  </tr>\n  <tr>\n   <td>Does\n   </td>\n   <td>he\n<p style=\"text-align: center\">\nshe\n<p style=\"text-align: center\">\nit\n<p style=\"text-align: center\">\n1 noun\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>Does he speak Spanish?</li>\n<li>Does she play the piano?</li>\n<li>Does it snow in Thailand?</li>\n<li>Does Sophia drive a car?</li>\n</ul>\n   </td>\n  </tr>\n</table>\n\nQuick Practice: Change the affirmative sentences into questions.\n\n1. You eat breakfast every morning.\n2. Pete goes to the gym often.\n3. They take the bus to work.\n4. She visits Chicago every year.\n5. Your brother works from home.\n\n+ Submit to Show Answers"
+        "content_md": "## LESSON FOCUS\n\nHow to make questions with 'Do...?' and 'Does...?’\n\nVerb tense: Present simple tense\n\nIn Lesson 2.4, you learned how to ask simple questions to get to know someone, such as 'Do you like tacos?' or 'Do you have siblings?' In this lesson, you’ll learn how to ask any question in present simple tense using 'Do...?' or 'Does...?'\n\n## DO...?\n\nIn the conversation, Chloe asks Pailin about Anthony and his sister:\n\n* Do they talk often?\n\nThe question is made by adding ‘Do’ to the beginning of the present simple tense sentence ‘They talk often.’ So, ‘Do’ changes a statement into a yes/no question.\n\nHere are more examples:\n\n* Do I speak English well?\n* Do we have homework?\n* Do your parents live in England?\n\nKeep in mind that ‘Do’ is used for these subjects: I, you, we, they, 2+ nouns\n\n## DOES...?\n\nCompare these two questions from the conversation:\n\n* Do they talk often?\n* Does he come to LA often?\n\nNotice how the first word changed in the question from 'Do' to 'Does.' This is because the subject is different. When making questions with the subjects 'he · she · it · noun,' the question must begin with 'Does.'\n\nNow take a look at the main verb that's underlined in these two lines:\n\n* His sister lives in LA.\n* Does he drive a motorcycle?\n\nIn the first sentence, -s is added to the end of verb because it follows ‘he · she · it · noun.’ What do you notice about the second line? The verb doesn’t have an -s even though the subject is ‘he’. Instead, the questioning auxiliary verb ‘Do’ takes the -s to become ‘Does,’ while the main verb ‘drive’ stays in its base form.\n\nYou might remember that the same rule applies to negative present simple tense sentences:\n\n* He drives a motorcycle.\n* He doesn’t drive a motorcycle.\n\nThe negative auxiliary verb ‘does not’ takes the -s, while the main verb ‘drive’ stays in its base form.\n\n## USES & STRUCTURE\n\nRecall that present simple tense is used when talking about routines, habits, feelings, and general knowledge, like facts and widely accepted truths. In the same way, questions in present simple tense are used to ask about things that happen regularly, or for asking about how someone feels.\n\nHere is a breakdown of forming questions using present simple tense.\n\n<table>\n  <tr>\n   <td><strong>AUXILIARY VERB</strong>\n   </td>\n   <td><strong>SUBJECT</strong>\n   </td>\n   <td><strong>VERB</strong>\n   </td>\n   <td>\n    <strong>EXAMPLE SENTENCES</strong>\n   </td>\n  </tr>\n  <tr>\n   <td>Do\n   </td>\n   <td>I\n<p style=\"text-align: center\">\nyou\n<p style=\"text-align: center\">\nwe\n<p style=\"text-align: center\">\nthey\n<p style=\"text-align: center\">\n2+ nouns\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>Do I look okay?</li>\n<li>Do you watch scary movies?</li>\n<li>Do we need anything?</li>\n<li>Do they live here?</li>\n<li>Do Mark and Sylvie work together?</li>\n</ul>\n   </td>\n  </tr>\n  <tr>\n   <td>Does\n   </td>\n   <td>he\n<p style=\"text-align: center\">\nshe\n<p style=\"text-align: center\">\nit\n<p style=\"text-align: center\">\n1 noun\n   </td>\n   <td>(verb)\n   </td>\n   <td>\n<ul>\n<li>Does he speak Spanish?</li>\n<li>Does she play the piano?</li>\n<li>Does it snow in Thailand?</li>\n<li>Does Sophia drive a car?</li>\n</ul>\n   </td>\n  </tr>\n</table>"
       },
       {
         "type": "extra_tip",
@@ -2251,7 +2329,7 @@
       {
         "type": "common_mistake",
         "sort_order": 4,
-        "content_md": "MISTAKE #1\n\nThai people often answer these yes/no questions in the following incorrect way:\n\nA: Does she speak English?\nB: Yes, she speak. (X)\n\nA: Do they eat meat?\nB: Yes, they eat. (X)\n\nA: Does he want kids?\nB: No, he not want. (X)\n\nThey incorrectly respond with the main verb of the sentence. This is because that’s how the sentence would be answered in Thai, for example:\n\nA: แม่คุณเล่นเทนนิสไหมคะ\nB: เล่นครับ\n\nRemember that the auxiliary verbs ‘do · don't' or 'does · doesn't’ should be used in these answers, NOT the main verb.\n\n* A: Does she speak English?\nB: Yes, she does. (✓)\n\n* A: Do they eat meat?\nB: Yes, they do. (✓)\n\n* A: Does he want kids?\nB: No, he doesn't. (✓)\n\nMISTAKE #2\n\nIt’s common for Thai people to omit the question words ‘do’ or 'does' and simply ask:\n\nThey drink coffee? (X)\nShe live in Japan? (X)\n\nAlthough you can ask questions in this way (see Lesson 2.10), remember that this style of question is mainly used to confirm something you already suspect to be true. For general questions, it's important to begin your questions with 'Do' or 'Does,' so they become:\n\n* Do they drink coffee? (✓)\n* Does she live in Japan? (✓)\n\nCheck out our comprehensive list of common mistakes made by Thai learners"
+        "content_md": "## MISTAKE #1\n\nThai people often answer these yes/no questions in the following incorrect way:\n\nA: Does she speak English?\nB: Yes, she speak. (X)\n\nA: Do they eat meat?\nB: Yes, they eat. (X)\n\nA: Does he want kids?\nB: No, he not want. (X)\n\nThey incorrectly respond with the main verb of the sentence. This is because that’s how the sentence would be answered in Thai, for example:\n\nA: แม่คุณเล่นเทนนิสไหมคะ\nB: เล่นครับ\n\nRemember that the auxiliary verbs ‘do · don't' or 'does · doesn't’ should be used in these answers, NOT the main verb.\n\n* A: Does she speak English?\nB: Yes, she does. (✓)\n\n* A: Do they eat meat?\nB: Yes, they do. (✓)\n\n* A: Does he want kids?\nB: No, he doesn't. (✓)\n\n## MISTAKE #2\n\nIt’s common for Thai people to omit the question words ‘do’ or 'does' and simply ask:\n\nThey drink coffee? (X)\nShe live in Japan? (X)\n\nAlthough you can ask questions in this way (see Lesson 2.10), remember that this style of question is mainly used to confirm something you already suspect to be true. For general questions, it's important to begin your questions with 'Do' or 'Does,' so they become:\n\n* Do they drink coffee? (✓)\n* Does she live in Japan? (✓)\n\nCheck out our comprehensive list of common mistakes made by Thai learners"
       },
       {
         "type": "phrases_verbs",

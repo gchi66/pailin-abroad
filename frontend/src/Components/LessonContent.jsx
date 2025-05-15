@@ -5,6 +5,7 @@ import ComprehensionQuiz from "./ComprehensionQuiz";
 import ApplySection from "./ApplySection";
 import MarkdownSection from "./MarkdownSection";
 import PracticeSection from "./PracticeSection";
+
 import "../Styles/LessonContent.css";
 
 export default function LessonContent({
@@ -17,7 +18,7 @@ export default function LessonContent({
   setUiLang,
 }) {
   /* ===============================================================
-     1) Comprehension view
+     1) COMPREHENSION VIEW
   =============================================================== */
   if (activeId === "comprehension") {
     return (
@@ -37,7 +38,7 @@ export default function LessonContent({
   }
 
   /* ===============================================================
-     2) Transcript view
+     2) TRANSCRIPT VIEW
   =============================================================== */
   if (activeId === "transcript") {
     return (
@@ -67,7 +68,9 @@ export default function LessonContent({
     );
   }
 
-  /* ------------------ PRACTICE SECTION------------------ */
+  /* ===============================================================
+     3) PRACTICE PAGE
+  =============================================================== */
   if (activeId === "practice") {
     return (
       <article className="lc-card">
@@ -80,16 +83,13 @@ export default function LessonContent({
           </div>
         </header>
 
-        <PracticeSection
-          exercises={practiceExercises}
-          uiLang={uiLang}
-        />
+        <PracticeSection exercises={practiceExercises} uiLang={uiLang} />
       </article>
     );
   }
 
   /* ===============================================================
-     3) Regular lesson sections (markdown or apply)
+     4) REGULAR LESSON SECTIONS (markdown or apply)
   =============================================================== */
   const section = sections.find((s) => s.id === activeId);
   if (!section) {
@@ -101,7 +101,6 @@ export default function LessonContent({
     uiLang === "th" && section.content_th
       ? section.content_th
       : section.content;
-
 
   /* ------------------ APPLY SECTION ------------------ */
   if (section.type === "apply") {
@@ -116,36 +115,74 @@ export default function LessonContent({
           </div>
         </header>
 
-        {/* custom component with textarea + submit button */}
         <ApplySection content={contentText} uiLang={uiLang} />
       </article>
     );
   }
-  /* ------------------ COLLAPSIBLE MARKDOWN SECTION ------------------ */
-    if (["understand", "extra_tip", "culture_note", "common_mistake"].includes(section.type)) {
-      return (
-        <article className="lc-card">
-          <header className="lc-head">
-            <div className="lc-head-left">
-              <span className="lc-head-title">
-                {section.type.replace("_", " ").toUpperCase()}
-              </span>
-              {section.title_th && (
-                <span className="lc-head-title-th">{section.title_th}</span>
-              )}
-            </div>
-            <div className="lc-head-right">
-              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
-            </div>
-          </header>
 
-          <MarkdownSection
-            markdown={contentText}
-            defaultOpenFirst={section.type === "understand"}
-            />
-        </article>
+  /* ------------------ COLLAPSIBLE MARKDOWN SECTION ------------------ */
+  if (
+    ["understand", "extra_tip", "culture_note", "common_mistake"].includes(
+      section.type
+    )
+  ) {
+    /* Only get quick practice exercises if we're in the understand section */
+    let extraSections = [];
+
+    /* Only add quick practices to the understand section */
+    if (section.type === "understand") {
+      /* 1. pull any Quick Practice rows for this lesson */
+      const quickExercises = practiceExercises.filter(
+        (ex) =>
+          (ex.title || "").toLowerCase().startsWith("quick practice") &&
+          ex.sort_order // Ensure it's not already displayed elsewhere
       );
+
+
+      /* 2. build an extra accordion card if we found any */
+      extraSections = quickExercises.length
+        ? [
+            {
+              key: "quick-practice",
+              title: "QUICK PRACTICE",
+              body: (
+                <PracticeSection
+                  exercises={quickExercises}
+                  uiLang={uiLang}
+                  hideQuick={false}
+                  wrapInDetails={false}
+                />
+              ),
+            },
+          ]
+        : [];
     }
+
+    return (
+      <article className="lc-card">
+        <header className="lc-head">
+          <div className="lc-head-left">
+            <span className="lc-head-title">
+              {section.type.replace("_", " ").toUpperCase()}
+            </span>
+            {section.title_th && (
+              <span className="lc-head-title-th">{section.title_th}</span>
+            )}
+          </div>
+          <div className="lc-head-right">
+            <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+          </div>
+        </header>
+
+        <MarkdownSection
+          markdown={contentText}
+          defaultOpenFirst={section.type === "understand"}
+          extraSections={extraSections}
+          sectionType={section.type}
+        />
+      </article>
+    );
+  }
 
   /* ------------------ DEFAULT MARKDOWN SECTION -------- */
   return (

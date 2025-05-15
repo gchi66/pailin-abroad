@@ -1,48 +1,71 @@
-import React from "react";
-import ReactMarkdown from "react-markdown";
-import "../Styles/UnderstandSection.css";
+import { useEffect, useState } from "react";
+import supabaseClient from "../supabaseClient";
+import MarkdownSection    from "./MarkdownSection";
+import FillBlankExercise  from "./exercises/FillBlankExercise";
+import SentenceTransform  from "./exercises/SentenceTransformExercise";
+import MultipleChoice     from "./exercises/MultipleChoiceExercise";
+import OpenEnded          from "./exercises/OpenEndedExercise";
 
-function splitByHeadings(markdown) {
-  const sections = [];
-  let currentSection = null;
+/* handy lookup so we don’t need a switch every render */
+const COMPONENT_FOR_KIND = {
+  fill_blank:        FillBlankExercise,
+  sentence_transform: SentenceTransform,
+  multiple_choice:   MultipleChoice,
+  open:              OpenEnded,
+};
 
-  // Split by double newlines to preserve paragraphs
-  const paragraphs = markdown.split(/\n\s*\n/);
+export default function UnderstandSection({ lessonId }) {
+  const [markdown,  setMarkdown]  = useState("");
+  const [quick,     setQuick]     = useState([]);   // array of exercise rows
 
-  paragraphs.forEach(paragraph => {
-    if (paragraph.startsWith('## ')) {
-      if (currentSection) sections.push(currentSection);
-      currentSection = {
-        title: paragraph.replace('## ', '').trim(),
-        body: []
-      };
-    } else if (currentSection) {
-      // Preserve all Markdown formatting in body
-      currentSection.body.push(paragraph);
-    }
-  });
+  /* ── 1. fetch the UNDERSTAND markdown ───────────────────────── */
+  useEffect(() => {
+    supabaseClient
+      .from("lesson_sections")
+      .select("content")
+      .eq("lesson_id", lessonId)
+      .eq("type", "understand")
+      .single()
+      .then(({ data, error }) => {
+        if (!error) setMarkdown(data.content || "");
+      });
+  }, [lessonId]);
 
-  if (currentSection) sections.push(currentSection);
-  return sections;
-}
+  /* ── 2. fetch any “Quick Practice” exercises for this lesson ── */
+  useEffect(() => {
+    supabaseClient
+      .from("practice_exercises")
+      .select("*")                 // you already control column list
+      .eq("lesson_id", lessonId)
+      .ilike("title", "quick practice%")
+      .order("sort_order")
+      .then(({ data, error }) => {
+        if (!error) setQuick(data || []);
+      });
+  }, [lessonId]);
 
-export default function UnderstandSection({ markdown = "" }) {
-  const sections = splitByHeadings(markdown);
+  if (!markdown) return null;      // or a spinner
+
+  /* ── 3. build extra accordion cards for each practice row ───── */
+  const extras = quick.map((ex) => {
+    const Comp = COMPONENT_FOR_KIND[ex.kind];
+    if (!Comp) return null;
+    return {
+      key:   `qp-${ex.id}`,
+      title: ex.title || "Quick Practice",
+      body:  (                        // JSX, not markdown
+        <>
+          {ex.prompt_md && <p className="fb-prompt">{ex.prompt_md}</p>}
+          <Comp exercise={ex} />
+        </>
+      ),
+    };
+  }).filter(Boolean);
 
   return (
-    <div className="understand-wrap">
-      {sections.map(({ title, body }, idx) => (
-        <details key={idx} className="understand-item" open={idx === 0}>
-          <summary className="understand-summary">{title}</summary>
-          <div className="markdown-content">
-            {body.map((paragraph, i) => (
-              <ReactMarkdown key={i}>
-                {paragraph}
-              </ReactMarkdown>
-            ))}
-          </div>
-        </details>
-      ))}
-    </div>
+    <MarkdownSection
+      markdown={markdown}
+      extraSections={extras}   /* new prop, see next step */
+    />
   );
 }
