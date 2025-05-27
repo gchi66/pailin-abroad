@@ -71,6 +71,11 @@ const LessonsIndex = () => {
     isStageChanged.current = true; // Set the flag to indicate a stage change
   };
 
+  const sortedLessons = [
+    ...lessons.filter((l) => !(l.title || "").toLowerCase().includes("checkpoint")),
+    ...lessons.filter((l) => (l.title || "").toLowerCase().includes("checkpoint")),
+  ];
+
   return (
     <div className="page-container">
       <header className="page-header">
@@ -156,10 +161,10 @@ const LessonsIndex = () => {
 
             <div className="level-content">
               <div className="lesson-list">
-                {lessons.map((lesson) => (
+                {sortedLessons.map((lesson) => (
                   <Link to={`/lesson/${lesson.id}`} key={lesson.id} className="lesson-item">
                     <div className="lesson-item-left">
-                      {lesson.lesson_order === Math.max(...lessons.map(l => l.lesson_order)) ? (
+                      {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
                         <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
                       ) : (
                         <span className="lesson-number">{lesson.lesson_order}</span>

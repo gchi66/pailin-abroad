@@ -403,7 +403,8 @@ def parse_practice(lines: List[str]) -> List[Dict]:
     current_exercise = None
     current_item = None
     collecting_options = False
-    collecting_paragraph = False  # <-- NEW
+    collecting_paragraph = False
+    seen = set()  # (kind, prompt) within this lesson
 
     # Flatten into one big string so we can split by headers
     content = "\n".join(lines)
@@ -443,11 +444,20 @@ def parse_practice(lines: List[str]) -> List[Dict]:
                     "kind": line.split(":", 1)[1].strip().lower(),
                     "title": "",
                     "prompt": "",
-                    "paragraph": "",      # <-- always present; may stay empty
+                    "paragraph": "",
                     "items": [],
                     "sort_order": len(exercises) + 1
                 }
                 exercises.append(current_exercise)
+
+                # ---- Duplicate prompt check ----
+                prompt = current_exercise["prompt"] or ""
+                key = (current_exercise["kind"], prompt)
+                if key in seen:
+                    # make it unique without changing meaning
+                    current_exercise["prompt"] = f"{prompt} – #{current_exercise['sort_order']}"
+                seen.add((current_exercise["kind"], current_exercise["prompt"]))
+
                 current_item = None
                 collecting_options = False
                 continue
