@@ -1,0 +1,3182 @@
+[
+  {
+    "lesson": {
+      "external_id": "1.1",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 1,
+      "title": "Hi, I’m Pailin",
+      "focus": "How to greet someone",
+      "backstory": "Pailin is a 21-year-old girl from Thailand who will be studying abroad at the University of California, Los Angeles (UCLA) for one year. She’ll be staying with a host family who she hasn’t met yet. She’s at her study-abroad program’s orientation in Los Angeles, and she’s meeting her student advisor for the first time."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Advisor",
+        "line_text": "Hi, I’m Frank. I’m your student advisor."
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "Hi, Frank. I’m Pailin."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What is the man’s name?",
+        "options": [
+          "A. His name is Fank.",
+          "B. His name is Bank.",
+          "C. His name is Frank.",
+          "D. His name is Hank."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "multiple_choice",
+        "title": "PRACTICE GREETING SOMEONE[a]",
+        "prompt": "According to the relationship and setting, choose which greeting is best to use.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You’ve just woken up at your apartment. You can greet your roommate with:",
+            "options": [
+              "A. Hey",
+              "B. Hello"
+            ],
+            "answer": "A"
+          },
+          {
+            "number": "2",
+            "text": "You’re meeting a colleague for the first time. You can greet them with:",
+            "options": [
+              "A. Hi",
+              "B. Hey"
+            ],
+            "answer": "A"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Introduce yourself to a person you’re meeting for the first time. Greet them and tell them your name.",
+            "keywords": "i am, i’m"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin says 'Hi' to Frank and introduces herself. Imagine you are meeting someone for the first time. Say 'Hi' and introduce yourself to them."
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to greet people\n\nIn the conversation, Frank says to Pailin:\n\n* Hi\n\nThis is a standard and friendly way to greet anyone - strangers, acquaintances, friends, and family. Notice that Pailin also responds with 'Hi' to Frank. 'Hi' is said in both casual and formal settings.\n\nAnother casual and friendly way to greet people is:\n\n* Hey\n\nThis works with family, friends, and acquaintances, but is very casual and shouldn't be used in formal settings.\n\nYou've likely learned to use this greeting:\n\n* Hello\n\nThis can also be used to greet anyone, although it's most natural to say it to strangers. It sounds a bit formal and polite, so it isn't used as often in everyday conversation, especially with friends and family.\n\nThe three greetings above can be said at any time of day. If you're unsure which greeting to use, it's best to stick with 'Hi' as it's the most appropriate greeting for any circumstance."
+      },
+      {
+        "type": "culture_note",
+        "sort_order": 3,
+        "content_md": "## GREETINGS IN THE US\n\nWhile the Thai 'wai' is a standard greeting in Thailand, common greetings in the US usually involve physical touch, either with a handshake or a hug.\n\nShaking hands is the most common way to greet someone you're meeting for the first time. It creates a polite and sometimes professional connection. Just as foreigners should practice how to 'wai' when visiting Thailand, you should practice your handshake - it should be firm, but not too strong. Shaking hands is common in these settings:\n\n- At work or professional settings\n- Introducing yourself to a stranger, like a neighbor\n- Meeting a friend of a friend for the first time, regardless of gender\n\nHugging has become a common greeting that shows warmth, friendliness, and a more personal connection than a handshake. Deciding whether to hug someone or give them a handshake often depends on the relationship and context:\n\n- Casual first meetings. For women meeting a new acquaintance (especially another woman) in a casual setting, a light hug is common. When a woman casually meets a new acquaintance who's a man, either a handshake OR a hug might be appropriate\n- With friends. Hugging is very common among friends, particularly women, even if they see each other often\n- Family: Hugs are the standard greeting for family members, including aunts, uncles, and grandparents\n\nThere is one more greeting: the 'bro hug.' Men sometimes greet each other with a casual 'bro hug,' which is more personable than a formal handshake. The 'bro hug' starts with a handshake, then becomes a brief pat on the back or hug with the left hand. This is common for:\n\n- A man meeting a male friend of a friend for the first time\n- Guy friends greeting each other\n- Note: Women typically don't do this with each other or with men. You should also avoid doing the 'bro hug' in professional settings\n\nAmerican greetings usually involve physical touch. If you're uncomfortable with this, you can simply wave and say 'Hi' when meeting someone for the first time."
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 4,
+        "content_md": "Hi everyone! Nice to meet you all. Introduce yourselves in the comments below!"
+      }
+    ],
+    "tags": [
+      "greeting",
+      "introduction",
+      "meeting new people",
+      "hi",
+      "hello",
+      "hey"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.2",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 2,
+      "title": "What’s your name?",
+      "focus": "How to introduce yourself",
+      "backstory": "Pailin is a 21-year-old girl from Thailand who will be studying abroad at the University of California, Los Angeles (UCLA) for one year. She’s at her orientation, where new students can meet and get to know each other. She starts talking to another student."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Student",
+        "line_text": "Hi! What’s your name?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "I’m Pailin, and you?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Student",
+        "line_text": "I’m Chloe."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What is the girl’s name?",
+        "options": [
+          "A. Her name is Joey.",
+          "B. Her name is Claire.",
+          "C. Her name is Chloe.",
+          "D. Her name is Coco."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "multiple_choice",
+        "title": "INTRODUCTIONS PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Choose the correct way to ask for someone’s name.",
+            "options": [
+              "A. Hi, what your name?",
+              "B. Hi, what you name?",
+              "C. Hi, what’s your name?",
+              "D. Hi, what name you?"
+            ],
+            "answer": "C"
+          },
+          {
+            "number": "2",
+            "text": "Choose the correct way for Golf to introduce himself.",
+            "options": [
+              "A. Hi, I Golf.",
+              "B. Hi, my name Golf.",
+              "C. Hi, me Golf.",
+              "D. Hi, I’m Golf."
+            ],
+            "answer": "D"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "What’s your name? What’s your nickname? Make sure to use full sentences.",
+            "keywords": "name, nickname"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Chloe asks Pailin for her name. Imagine you are meeting someone for the first time. Try asking for their name."
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to introduce yourself\n\nIn the conversation, a girl at Pailin's student orientation asks her:\n\n* What's your name?\nWhat's = What is\n\nThis is the typical way to ask for someone's name.\n\nPailin responds with:\n\n* I'm Pailin.\n\nThis is the typical way to respond, although she could have also responded simply with:\n\n* Pailin.\n\n        Or she could have given a longer answer:\n\n* My name is Pailin.\n\n        Notice she adds the question 'and you?' to return the question to Chloe."
+      },
+      {
+        "type": "extra_tip",
+        "sort_order": 3,
+        "content_md": "## WHAT'S YOUR NAME AGAIN?\n\nDo you forget people's names easily? Here's how you can ask for someone's name again when they've already introduced themselves to you:\n\n* Sorry, what's your name again?\n\nThe word 'again' at the end of the sentence acknowledges that you've already asked for their name, but you've forgotten it."
+      },
+      {
+        "type": "culture_note",
+        "sort_order": 4,
+        "content_md": "## NICKNAMES\n\nMost Thais have an official first and last name, as well as a short nickname used in everyday life. These Thai nicknames are often distinct and unrelated to a person's official first name. But while first and last names are standard in English-speaking countries, nicknames are less common and are usually shortened versions of a first name.\n\nHere are some examples of common English nicknames:\nAmanda → Mandy\nElizabeth → Liz\nJillian → Jill\nPenelope → Penny\nChristopher → Chris\nDaniel → Danny\nJeffrey → Jeff\nJoseph → Joey, Joe\nThomas → Tom\n\nSince not everyone has or uses a nickname, it's best to refer to someone by the name they use when introducing themselves."
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 5,
+        "content_md": "What's your name? What's your nickname?"
+      }
+    ],
+    "tags": [
+      "greeting",
+      "introduction",
+      "meeting new people",
+      "name",
+      "nickname",
+      "what’s your name",
+      "my name is",
+      "introducing yourself",
+      "introduce yourself"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.3",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 3,
+      "title": "Nice to meet you",
+      "focus": "How to use ‘It’s nice to meet you’",
+      "backstory": "Pailin is a 21-year-old girl from Thailand who will be studying abroad at the University of California, Los Angeles (UCLA) for one year. She has just met another girl in her program named Chloe. Pailin and Chloe are at their orientation, where new students can meet and get to know each other. They start talking to another student."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "Hi! What’s your name?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Student",
+        "line_text": "I’m Steven, and you?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "I’m Pailin. It’s nice to meet you."
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Student",
+        "line_text": "It’s nice to meet you too. And what’s your name?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Chloe",
+        "line_text": "I’m Chloe, nice to meet you."
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Student",
+        "line_text": "Hi Chloe, nice to meet you too."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What is the boy’s name?",
+        "options": [
+          "A. His name is Steven.",
+          "B. His name is Steve.",
+          "C. His name is Chloe.",
+          "D. His name is Trevor."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "multiple_choice",
+        "title": "PRACTICE GREETING SOMEONE",
+        "prompt": "Choose the best greeting for the situation.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You’re on a walk with a friend. Your friend Jeff sees a friend of his who you have never met or heard of. What can you say to Jeff’s friend?",
+            "options": [
+              "A. It’s nice to meet you!",
+              "B. It’s nice to finally meet you!"
+            ],
+            "answer": "A"
+          },
+          {
+            "number": "2",
+            "text": "You’re visiting your hometown, where you haven’t been in 5 years. You meet up with an old friend for coffee. What can you say to her when you meet up with her?",
+            "options": [
+              "A. It’s so nice to meet you!",
+              "B. It’s so nice to see you!"
+            ],
+            "answer": "B"
+          },
+          {
+            "number": "3",
+            "text": "You meet a friend of a friend for the first time. He says to you, ‘It’s nice to meet you.’ What can you say back?",
+            "options": [
+              "A. Nice to meet you, too.",
+              "B. Nice to see you, too."
+            ],
+            "answer": "A"
+          },
+          {
+            "number": "4",
+            "text": "What can you say when you meet your friend’s sister for the first time after hearing great things about her?",
+            "options": [
+              "A. Nice to finally meet you!",
+              "B. Nice to see you!"
+            ],
+            "answer": "A"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You’re meeting your good friend’s brother for the first time after hearing so much about him. Introduce yourself to him.",
+            "keywords": "introduction, meeting"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin tells Steven that it's nice to meet him. Imagine you are meeting someone for the first time. After you've introduced yourself to them, what can you say to them?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to use 'It's nice to meet you'\n\nIn the conversation, Pailin says to Steven:\n\n* It's nice to meet you.\n\nThis is a standard phrase to acknowledge meeting someone for the first time. You can say this in all contexts, both casual and formal. You can also omit the word 'It's':\n\n* Nice to meet you.\nChloe says this in the conversation.\n\nIn response, you can say:\n\n* It's nice to meet you too.\n* Nice to meet you too.\nSteven responds with both of these in the conversation.\n\nThe word 'too' shows that you're returning the feeling."
+      },
+      {
+        "type": "extra_tip",
+        "sort_order": 3,
+        "content_md": "## SO NICE TO MEET YOU\n\n        If you are genuinely excited or happy to meet someone, you can say:\n\n* It's so nice to meet you.\n\nThe word 'so' makes the feeling more enthusiastic.\n\n## NICE TO FINALLY MEET YOU\n\nWhen you've been hearing good things about someone from a mutual friend, and you now get the chance to meet them in person, you can say:\n\n* It's nice to finally meet you.\n\n        'Finally' shows that you've been waiting to meet them for a long time.\n\n## NICE TO SEE YOU\n\nYou can only say 'It's nice to meet you' when meeting someone for the first time. If you meet a friend or someone you already know after not seeing them for a while, you would say this instead:\n\n* It's nice to see you!\n* It's so nice to see you!"
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 4,
+        "content_md": "Who would you be very excited to meet?"
+      }
+    ],
+    "tags": [
+      "greeting",
+      "introduction",
+      "meeting new people",
+      "nice to meet you",
+      "nice to see you"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.4",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 4,
+      "title": "How are you?",
+      "focus": "How to ask how someone is doing",
+      "backstory": "Pailin is a 21-year-old girl from Thailand who will be studying abroad at the University of California, Los Angeles (UCLA) for one year. She’s at her orientation, where new students can meet and get to know each other."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "Hi, I’m Pailin. What’s your name?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Student",
+        "line_text": "I’m Kevin, nice to meet you."
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Nice to meet you too."
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Student",
+        "line_text": "How are you?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Pailin",
+        "line_text": "I’m great, thanks, and you?"
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Student",
+        "line_text": "I’m good!"
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "How is Kevin doing?",
+        "options": [
+          "A. He’s good.",
+          "B. He’s okay.",
+          "C. He’s great.",
+          "D. He’s fine."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "multiple_choice",
+        "title": "PRACTICE GREETING SOMEONE",
+        "prompt": "Choose the best greeting for the situation.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You are a server at a restaurant. Which one should you say to a customer that has just entered the restaurant?",
+            "options": [
+              "A. Hey, what’s up?",
+              "B. Hi, how’re you?"
+            ],
+            "answer": "B"
+          },
+          {
+            "number": "2",
+            "text": "An old friend calls you to catch up. You haven’t spoken to each other in a few months. What can you say to him on the phone?",
+            "options": [
+              "A. Hey, how’s everything?",
+              "B. Hey, what’s up?"
+            ],
+            "answer": "A"
+          },
+          {
+            "number": "3",
+            "text": "Your friend is introducing you to his brother. What should you say?",
+            "options": [
+              "A. Hi, how’ve you been?",
+              "B. Hi, how are you?"
+            ],
+            "answer": "B"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You’re meeting a co-worker for the first time. He asks you, ‘How are you?’ How can you respond?",
+            "keywords": "greeting, response"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin asks Kevin, 'How are you?' Imagine someone just asked you this. How can you respond? Tip: Try not to use the word 'fine.'"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to ask how someone is doing\n\nIn the conversation, Kevin asks Pailin:\n\n* How are you?\n\nThis is a common and friendly greeting question for any context, whether casual or professional. While it is a question, it's more of a social formality that's used to begin a conversation.\n\nPailin responds to Kevin's question with:\n\n* I'm great, thanks, and you?\n\nThis is a standard response. Notice that it's very brief and positive, and she doesn't go into detail of how she's actually feeling. Even if she isn't feeling great, she keeps the response positive and light. Other typical responses include:\n\n* I'm good.\nCan be shortened to 'Good!'\n\n* I'm great.\nCan be shortened to 'Great!'\n\n* I'm alright.\nCan be shortened to 'Alright.'\n\nDo you notice a response that's not shown above? 'I'm fine.' While this is a perfectly good response, it sounds less friendly and natural than the ones above.\n\nPailin adds 'thanks' to her sentence for added politeness. It's like saying 'Thanks for asking.'\n\nLastly, she finishes with 'and you?' to return the question back to Kevin.\n\nHere's another example of this kind of exchange:\n\n* Pailin: How are you?\nKevin: Good! And you?\nPailin: Great, thanks."
+      },
+      {
+        "type": "extra_tip",
+        "sort_order": 3,
+        "content_md": "## ALTERNATIVE PHRASES\n\nThere are several ways to ask 'How are you?' in English. Some common examples and their appropriate responses are listed below:\n\n* How's it going?\nYou can say this to anyone in any context. Restaurant and store employees will often say this to customers. It sounds relaxed, casual, and friendly.\n\n* Store Clerk: How's it going?\nPailin: Good!\n*'Well!' is the correct response grammatically, but in casual spoken English, most people respond with 'Good!'\n\n* How've you been?\nYou can say this to friends or acquaintances you haven't seen in a while.\n\n* Chai: How've you been?\nPailin: I've been great!\n\n* How's everything?\nYou can also say this to friends or acquaintances you haven't seen in a while.\n\n* Lek: How's everything?\nPailin: Everything is good!\n\n* What's up?\nThis is very casual and should only be said to friends you see on a regular basis. Notice the standard response of 'Good!' or 'Great!' can't be used to answer this question.\n\n* Pailin: What's up?\nPete: Not much."
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 4,
+        "content_md": "## MISTAKE #1\n\nTry to avoid responding to 'How are you?' with 'I'm fine, thank you, and you?' You probably learned this response in English class at school, but it can sound robotic and unnatural in casual conversation."
+      },
+      {
+        "type": "culture_note",
+        "sort_order": 5,
+        "content_md": "## HAVE YOU EATEN?\n\n'How are you?' is similar to asking 'Have you eaten?' in Thailand. It's more of a greeting than a serious question. If an acquaintance asks you 'How are you?' you should answer with something positive, even if you've had a bad day, such as one of these responses:\n\n* Good, thanks.\n* I'm okay.\n\nBut if a close friend or family member asks how you're doing, you can of course give a more in-depth answer, whether your day was great or bad. See the example conversations below:\n\n* Pailin: How are you?\nDara: Not too good, I just got fired from my job.\nPailin: Oh, I'm sorry to hear that!\n\n* Chloe: How are you?\nPailin: A bit tired. I didn't sleep well. How about you?\nChloe: I'm good, thanks.\n\n## FRIENDLY EMPLOYEES\n\nIn Thailand, it's not typical for store or restaurant staff to ask customers สบายดีไหมครับ or เป็นยังไงบ้างครับ. These questions roughly translate to 'How are you?' and are usually said between people who know each other or are meeting on a personal level. But in the US, it's very common for employees to greet customers with 'How are you?' or similar phrases. You may have noticed foreign travelers in Thailand sometimes ask สบายดีไหมครับ to servers. This is because it's the cultural norm to have this type of interaction with employees."
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 6,
+        "content_md": "How are you today?"
+      }
+    ],
+    "tags": [
+      "greeting",
+      "introduction",
+      "meeting new people",
+      "how are you",
+      "i’m fine"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.5",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 5,
+      "title": "Good morning, Joey!",
+      "focus": "How to use greeting phrases",
+      "backstory": "Pailin is at an orientation in Los Angeles for her study-abroad program in the morning. She sees Joey, someone she met yesterday at her orientation."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "Good morning, Joey!"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Joey",
+        "line_text": "Morning! How’s it going?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Good, and you?"
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Joey",
+        "line_text": "Great, thanks! Did you have breakfast?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Pailin",
+        "line_text": "No, not yet.[b]"
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "Has Pailin eaten breakfast yet?",
+        "options": [
+          "A. Yes, she has.",
+          "B. No, she hasn’t."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "multiple_choice",
+        "title": "PRACTICE GREETING PHRASES",
+        "prompt": "Read the scenario and select all the answers that apply.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You’re at work in the morning. You’re meeting a new co-worker for the first time. Which of these greeting phrases can you say to her?",
+            "options": [
+              "A. Hi",
+              "B. It’s nice to meet you",
+              "C. It’s nice to see you",
+              "D. How are you?",
+              "E. How’ve you been?",
+              "F. Good morning.",
+              "G. What’s your name?",
+              "H. What’s your name again?"
+            ],
+            "answer": "A, B, D, F, G"
+          },
+          {
+            "number": "2",
+            "text": "It’s 5PM. It’s your second time meeting your friend’s brother. You met him a few months ago. Which of these greeting phrases can you say to him?",
+            "options": [
+              "A. Hi",
+              "B. It’s nice to meet you",
+              "C. It’s nice to see you",
+              "D. How are you?",
+              "E. How’ve you been?",
+              "F. Good morning.",
+              "G. What’s your name?",
+              "H. What’s your name again?"
+            ],
+            "answer": "A, C, D, E, H"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You are going for a walk around your neighborhood. It’s 9AM. You see your neighbor, Jonny, watering his garden. What’s an appropriate phrase to greet him?",
+            "keywords": "greeting, neighbor"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin greets her new friend Joey. Imagine you've just woken up and you see your roommate in the living room. How can you greet him?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to use greeting phrases\n\nIn the conversation, Pailin says to her new friend Joey:\n\n   * Good morning!\n\nJoey responds with a simple:\n\n   * Morning!\n\nThese greetings are common in the morning, typically until around 10AM or 11AM. They can be said to anyone - family, neighbors, friends, co-workers, and service staff, like a barista or cashier. Of course, 'Hi' or 'Hey' are also perfectly acceptable greetings in the morning.\n\nYou may have learned these four greeting phrases already:\n\n   * Good morning\n   * Good afternoon\n   * Good evening\n   * Good night\n\n'Good morning' and 'good night' are the most frequently used in everyday conversation. 'Good afternoon' and 'Good evening' sound quite formal and are hardly used in casual settings. You're more likely to hear them in formal situations, like with a server greeting customers, hotel staff greeting a guest, or a speaker addressing an audience."
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 3,
+        "content_md": "Did you eat breakfast today?"
+      }
+    ],
+    "tags": [
+      "Greeting",
+      "introduction",
+      "meeting new people",
+      "good morning",
+      "good night",
+      "salutations"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.6",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 6,
+      "title": "I’m excited!",
+      "focus": "How to use the to-be verb ‘am’",
+      "backstory": "Pailin is at her orientation in Los Angeles for her study-abroad program. She has just met another girl in her program named Chloe. Pailin and Chloe are talking with their student advisor, Frank."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Frank",
+        "line_text": "Good morning! You will meet your host families on Saturday. Are you excited?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "I’m so nervous!"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Chloe",
+        "line_text": "I’m nervous too, but I’m excited!"
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "How does Pailin feel about meeting her host family?",
+        "options": [
+          "A. She’s nervous.",
+          "B. She’s excited."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "How does Chloe feel?",
+        "options": [
+          "A. She’s scared.",
+          "B. She’s excited."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "open",
+        "title": "PRACTICE MAKING SENTENCES",
+        "prompt": "Make sentences about the pictures using ‘I’m.’ For example: I’m angry.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "5",
+            "text": "",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the grammar of the sentences is correct or not. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I late.[e]",
+            "correct": false,
+            "answer": "I'm late."
+          },
+          {
+            "number": "2",
+            "stem": "I’m cold.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "I from Thailand.",
+            "correct": false,
+            "answer": "I'm from Thailand."
+          },
+          {
+            "number": "4",
+            "stem": "I excited.",
+            "correct": false,
+            "answer": "I'm excited."
+          },
+          {
+            "number": "5",
+            "stem": "I’m at home.",
+            "correct": true,
+            "answer": ""
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the questions. Use ‘I’m’ in your responses.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Where are you right now?",
+            "keywords": "location, I'm"
+          },
+          {
+            "number": "2",
+            "text": "How do you feel right now?",
+            "keywords": "feelings, I'm"
+          },
+          {
+            "number": "3",
+            "text": "Are you an outgoing person or a shy person?",
+            "keywords": "personality, I'm"
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin says she is nervous about meeting her host family. How do you feel right now?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "Lesson focus: How to use the to-be verb 'am'\n\n## STRUCTURE OF 'AM'\n\nWhen Frank asks Pailin and Chloe if they're excited to meet their host families, Pailin says:\n\n   * I'm so nervous!\n\nShe is describing how she feels right now. Chloe also describes her feelings:\n\n   * I'm nervous, but I'm excited!\n\nNotice that they both use 'I'm' in their sentences.\n\nI'm = I am\n\nThe phrase 'I am' is said so often in English that it's almost always shortened to 'I'm.' The verb 'am' is called a 'to-be' verb, and it is one of three to-be verbs. They are:\n\nam · are · is\n\nYou will learn about the to-be verbs 'are' and 'is' in future lessons. This lesson focuses on 'am.'\n\n'Am' is ONLY used after the subject 'I,' as in 'I am' or more commonly 'I'm.'\n\n## USES OF 'AM'\n\nThere are three basic ways to use 'I'm' in a sentence:\n\n1. I'm (adjective).\n'Adjectives' are words that describe nouns.\nExamples: funny, tall, smart, sick\n\n2. I'm (prepositional phrase).\nA 'prepositional phrase' begins with a preposition word, such as 'in · at · on · near,' followed by a place. It describes your relationship to a location.\nExamples: in school, at work, on the train, near the bank\n\n3. I'm (noun OR noun phrase).\nA 'noun' is a person, place, thing, or idea. A 'noun phrase' is an 'adjective + noun.'\nExamples: a doctor, an engineer, a good friend, a fast learner\n\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\n\nThe lines from the conversation demonstrate 'I'm (adjective)' because the words 'nervous' and 'excited' are adjectives. It's important to note that 'I'm' indicates the present state you are in (right now), not the past or future. This will make more sense as you progress through the levels.\n\n## EXAMPLE SENTENCES\n\nNow that you understand the usage and structure of 'am' in a sentence, take a look at these example sentences. Notice the contracted version 'I'm' is always used:\n\n   1. I'm (adjective).\n   * I'm hungry.\n   * I'm sleepy.\n   * I'm smart.\n   * I'm Thai.\n\n      2. I'm (prepositional phrase).\n      * I'm at the market.\n      * I'm in New York.\n      * I'm from Thailand.\n      * I'm by the river.\n\n      3. I'm (noun OR noun phrase).\n      * I'm a lawyer.\n      * I'm a good cook.\n      * I'm a quiet person.\n      * I'm a student.\n\n## THAI TO-BE VERBS\n\nThai also has three to-be verbs:\n\nเป็น · คือ · อยู่\n\nBut while the Thai to-be verbs are used in different contexts, English to-be verbs are used in the same contexts but with different subjects. This will become clearer in later lessons."
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 3,
+        "content_md": "## MISTAKE #1\n\nThai people often omit the word 'am' in a sentence, for example 'I tired' or 'I hungry.' This is likely because they are translating a sentence directly from Thai to English. Take a look at these two sentences in Thai from the conversation:\n\nฉันกังวล\nฉันตื่นเต้น\n\nThere is no verb in these sentences. When translated into English word for word, they become:\n\nฉันกังวล\nI nervous. (X)\n\nฉันตื่นเต้น\nI excited. (X)\n\nThese are incorrect because they don't have a verb. In English, every sentence must have a verb. The sentences above must be:\n\n      * I'm nervous. (✓)\n      * I'm excited. (✓)\n\n## MISTAKE #2\n\nAnother common error is leaving out the subject of a sentence. This is because in Thai, the subject of a sentence is usually omitted when it's clear from the context who the subject is. For example:\n\nหิวค่ะ\n\nTranslated directly, this would just be 'Hungry.' The sentence makes sense in Thai because the subject is understood from the context. But in English, every sentence must have a subject AND a verb! So the sentence above must be:\n\n      * I'm hungry.\n\nRemember to always use the word 'I' when talking about yourself.\n\n## MISTAKE #3\n\nIn this conversation, you saw two adjectives - 'excited' and 'nervous' - which learners sometimes confuse.\n\n'Excited' means you feel a lot of energy, but in a happy or positive way. For example:\n\n      * I'm excited to go to Disneyland!\n\n'Nervous' also means you have a lot of energy, but it's a more negative feeling of worry or unease. For example:\n\n      * I'm nervous about meeting my boyfriend's parents."
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 4,
+        "content_md": "Where are you right now?"
+      }
+    ],
+    "tags": [
+      "verb",
+      "to-be verb",
+      "feelings",
+      "emotions",
+      "am",
+      "I’m"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.7",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 7,
+      "title": "How old are you?",
+      "focus": "How to ask about someone’s age",
+      "backstory": "Pailin is at her orientation in Los Angeles for her study-abroad program. She is talking with Chloe, a girl in her program who she just met."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Chloe",
+        "line_text": "How old are you, Pailin?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "I’m 21. How about you?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Chloe",
+        "line_text": "I’m 23."
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Pailin",
+        "line_text": "Oh! My big sister is also 23."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "How old is Pailin?",
+        "options": [
+          "A. Pailin is 21.",
+          "B. Pailin is 22.",
+          "C. Pailin is 23."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "How old is Chloe?",
+        "options": [
+          "A. Chloe is 21.",
+          "B. Chloe is 22.",
+          "C. Chloe is 23."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "open",
+        "title": "PRACTICE NUMBERS",
+        "prompt": "Listen to each audio and type the age that is spoken as a number. For example: 25",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "(Audio of '12')",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "(Audio of '25')",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "(Audio of '38')",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "(Audio of '44')",
+            "keywords": ""
+          },
+          {
+            "number": "5",
+            "text": "(Audio of '51')",
+            "keywords": ""
+          },
+          {
+            "number": "6",
+            "text": "(Audio of '63')",
+            "keywords": ""
+          },
+          {
+            "number": "7",
+            "text": "(Audio of '19')",
+            "keywords": ""
+          },
+          {
+            "number": "8",
+            "text": "(Audio of '70')",
+            "keywords": ""
+          },
+          {
+            "number": "9",
+            "text": "(Audio of '29')",
+            "keywords": ""
+          },
+          {
+            "number": "10",
+            "text": "(Audio of '33')",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You are talking with a new friend about your favorite singers when you were younger. You’re not sure if they are close in age to you. How can you ask what their age is?",
+            "keywords": "asking age, polite"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin tells Chloe how old she is. Imagine you've just met someone. What can you ask to find out their age?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to ask someone's age\n\nIn the conversation, Chloe asks Pailin:\n\n      * How old are you?\n\nThis is the typical way to ask what someone's age is. Take a look at how Pailin and Chloe tell each other their ages:\n\n      * I'm 21.\n      * I'm 23.\n\nThey use this structure:\n\nI'm (number).\n\nThe full way to reply is:\n\nI'm (number) years old.\n      * I'm 34 years old.\n\nBut in casual conversation, you can leave out 'years old' for simplicity. Saying 'I'm 27' sounds more natural than saying the full sentence 'I'm 27 years old.'"
+      },
+      {
+        "type": "phrases_verbs",
+        "sort_order": 3,
+        "items": [
+          {
+            "phrase": "Oh!",
+            "translation_th": "",
+            "notes": "said when you are pleasantly surprised about something"
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 4,
+        "content_md": "How old are you?"
+      }
+    ],
+    "tags": [
+      "greeting",
+      "introduction",
+      "meeting new people",
+      "age",
+      "numbers"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.8",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 8,
+      "title": "Thanks, I made it",
+      "focus": "How to thank someone",
+      "backstory": "Pailin is at an orientation in Los Angeles for her study-abroad program. She’s talking with Chloe, a girl in her program who she just met."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "I like your bracelet, Chloe."
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Chloe",
+        "line_text": "Thank you! I made it. Here, you can have it. I have more in my bag."
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Really? Thank you so much!"
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Chloe",
+        "line_text": "You’re welcome!"
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What did Chloe give to Pailin?",
+        "options": [
+          "A. Chloe gave Pailin a necklace.",
+          "B. Chloe gave Pailin a bracelet.",
+          "C. Chloe gave Pailin a bag."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "open",
+        "title": "PRACTICE GIVING THANKS",
+        "prompt": "Your friend has given you the items in the pictures. Thank her for each item. For example: Thanks for the pen.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "(picture of a book)",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "(picture of flowers)",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "(picture of chocolate)",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "(picture of socks)",
+            "keywords": ""
+          },
+          {
+            "number": "5",
+            "text": "(picture of earrings)",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the questions.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Your spouse gave you flowers for Valentine’s Day. What could you say to thank them?",
+            "keywords": "thanking, spouse, flowers"
+          },
+          {
+            "number": "2",
+            "text": "Your co-worker gave you a coffee mug as a gift. What could you say to thank them?",
+            "keywords": "thanking, co-worker, gift"
+          },
+          {
+            "number": "3",
+            "text": "You dropped off your brother at the airport. He says to you, ‘Thanks for dropping me off at the airport!’ How can you respond to him?",
+            "keywords": "responding to thanks, brother"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin thanks Chloe for the bracelet she gave to her. Imagine someone just gave you a gift for your birthday. What can you say to them to show appreciation?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to thank someone\n\nIn the conversation, when Pailin compliments Chloe's bracelet, Chloe says:\n\n      * Thank you!\n\nThis is perhaps the most important phrase you should know in English. You can say it to anyone and in all contexts.\n\nThere are variations of 'Thank you' which range from casual to deep appreciation, listed below:\n\n      * Thanks!\nA casual way to show appreciation.\n\n      * Thanks so much!\nA more heartfelt way to say thank you.\n\n      * Thank you so much!\nA strong way to show deep appreciation. Notice Pailin says this when Chloe gives her the bracelet.\n\nAfter Pailin thanks Chloe for the bracelet, Chloe responds with:\n\n      * You're welcome!\n(Means 'You are welcome')\n\nThis is the most standard polite response to 'Thank you' in both informal and formal settings. Here are more casual ways to respond:\n\n      * No problem!\nA casual response indicating it wasn't a big deal.\n\n      * No worries!\nA friendly, informal response.\n\n      * Anytime.\nA relaxed way of showing you're happy to help again.\n\n      * Of course!\nA casual and positive response showing your willingness to help.\n\nThe above responses to 'Thank you' are appropriate for when you help someone or give them something. But if someone says 'thank you' after you give them a compliment, the only suitable response would be 'You're welcome!' or 'Of course!'"
+      },
+      {
+        "type": "extra_tip",
+        "sort_order": 3,
+        "content_md": "## GIVING THANKS FOR SPECIFIC REASONS\n\nHere are two ways to give thanks for specific reasons:\n\n        Thank you for (noun).\n      * Thank you for the gift.\n      * Thanks for your help.\n      * Thank you so much for the bracelet. (Pailin could have said this to Chloe)\n\n                Thank you for (verb-ing).\n      * Thank you for coming.\n      * Thanks for driving me to the airport.\n      * Thanks so much for helping me."
+      },
+      {
+        "type": "phrases_verbs",
+        "sort_order": 4,
+        "items": [
+          {
+            "phrase": "Here",
+            "translation_th": "",
+            "notes": "used to offer something to someone, like 'Take this'"
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 5,
+        "content_md": "Think of the last gift you received. How can you thank the giver?"
+      }
+    ],
+    "tags": [
+      "important phrase",
+      "useful phrase",
+      "thanks",
+      "thank you",
+      "appreciation",
+      "gift",
+      "you’re welcome"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.9",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 9,
+      "title": "You’re a great cook",
+      "focus": "How to use the to-be verb ‘are’",
+      "backstory": "Pailin is at an orientation in Los Angeles for her study-abroad program. Breakfast has been served to the students. She’s talking with one of the cooks."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "These pancakes are so good! You’re a great cook."
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Cook",
+        "line_text": "Thank you! You’re so kind."
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Are they chocolate pancakes?"
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Cook",
+        "line_text": "No, they’re blueberry pancakes. The chocolate pancakes are on that table."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "Are the pancakes chocolate or blueberry?",
+        "options": [
+          "A. They’re chocolate pancakes.",
+          "B. They’re blueberry pancakes."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "title": "PRACTICE MAKING SENTENCES",
+        "prompt": "Enter either ‘am’ or ‘are’ to make the sentences complete.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "They __ from Bangkok.",
+            "answer": "are"
+          },
+          {
+            "number": "2",
+            "text": "I __ a nurse.",
+            "answer": "am"
+          },
+          {
+            "number": "3",
+            "text": "Jack and Maria __ nice people.",
+            "answer": "are"
+          },
+          {
+            "number": "4",
+            "text": "We __ at the park.",
+            "answer": "are"
+          },
+          {
+            "number": "5",
+            "text": "You __ funny.",
+            "answer": "are"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the grammar of the sentences is correct or not. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "They so funny.",
+            "correct": false,
+            "answer": "they are so funny, theyre so funny"
+          },
+          {
+            "number": "2",
+            "stem": "We at the park.",
+            "correct": false,
+            "answer": "we are at the park, were at the park"
+          },
+          {
+            "number": "3",
+            "stem": "My cats are black.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "4",
+            "stem": "They from Bangkok.",
+            "correct": false,
+            "answer": "they are from bangkok, theyre from bangkok"
+          },
+          {
+            "number": "5",
+            "stem": "You’re my best friend.",
+            "correct": true,
+            "answer": ""
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Describe these things using ‘are.’ For example: Airplanes are big.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Thai people",
+            "keywords": "thai people are"
+          },
+          {
+            "number": "2",
+            "text": "Iphones",
+            "keywords": "iphones are"
+          },
+          {
+            "number": "3",
+            "text": "Dogs",
+            "keywords": "dogs are"
+          },
+          {
+            "number": "4",
+            "text": "Thai beaches",
+            "keywords": "thai beaches are"
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin compliments the cook by telling him he's a great cook. Imagine your best friend is feeling sad. What compliments could you say to make them feel good about themselves?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to use the to-be verb 'are'\n\nYou've already learned about the to-be verb 'am' in Lesson 1.6. Now you'll learn about the second to-be verb, 'are.'\n\n## USES OF 'ARE'\n\nTake a look at these sentences from the conversation:\n\n         * These pancakes are so good!\n         * You're a great cook.\n         * You're so kind.\n         * They're blueberry pancakes.\n         * The chocolate pancakes are on that table.\n\nAll of these sentences use 'are.' You may not notice this at first because 'are' is often contracted with the subject. For example:\n\nYou're a great cook. = You are a great cook.\nThey're blueberry pancakes. = They are blueberry pancakes.\n\nDo you remember the three ways that 'am' is used? 'Are' is used in the same three ways:\n\n         1. are (adjective)\n'Adjectives' are words that describe nouns.\nExamples: big, green, sad, loud\n\n         2. are (prepositional phrase)\nA 'prepositional phrase' begins with a preposition word, such as 'in · at · on · near,' followed by a place. It describes your relationship to a location.\nExamples: in the car, at work, on the table, near the river\n\n         3. are (noun OR noun phrase).\nA 'noun' is a person, place, thing, or idea. A 'noun phrase' is an 'adjective + noun.'\nExamples: doctors, books, a good friend, a tall woman\n\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\n\nTry to identify how 'are' is used in the conversation. They're shown below:\n\nThese pancakes are so good! (adjective)\nYou're a great cook. (noun phrase)\nYou're so kind. (adjective)\nThey're blueberry pancakes. (noun phrase)\nThe chocolate pancakes are on that table. (prepositional phrase)\n\n## SUBJECTS WITH 'ARE'\n\nWhile 'am' can only follow the subject 'I,' the verb 'are' follows these subjects:\n\n        You are\n        We are\n        They are\n        (2+ nouns) are\n\n'2+ nouns' refers to a 'plural noun.' This means more than one person or thing. In the conversation, 'these pancakes' and 'The chocolate pancakes' are examples because they refer to multiple pancakes. Plural nouns will be explored more in Lesson 3.5. For now, a simple way to recognize a plural noun is that it often ends in -s, like 'pancakes,' 'books,' or 'dogs.' You can see more examples of (2+ nouns) in the section below.\n\nNotice that the pronouns 'we' and 'they' are also plural because they refer to more than one person.\n\nThe subject and 'are' are usually contracted to form one word.\n\nYou are = You're\nWe are = We're\nThey are = We're\n\nNote that you can't contract (2+ nouns) and 'are.'\n\nMy mom and dad're (X)\nMy mom and dad are (✓)\n\n## EXAMPLE SENTENCES\n\nNow that you understand the usage and structure of 'are' in a sentence, take a look at these example sentences. Notice the contractions are used when possible:\n\n         1. are (adjective)\n         * You're cute.\n         * We're tired.\n         * Your mom and dad are tall. (this is an example of 2+ nouns)\n\n            2. are (prepositional phrase)\n            * We're at home.\n            * They're on a boat.\n            * My kids are at school. (this is an example of 2+ nouns)\n\n            3. are (noun OR noun phrase)\n            * You're an engineer.\n            * We're doctors.\n            * Those men are waiters. (this is an example of 2+ nouns)"
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 3,
+        "content_md": "## MISTAKE #1\n\nStudents often omit the word 'are' in a sentence, for example 'You beautiful' or 'They hungry.' This is likely because they are translating a sentence directly from Thai to English. Take a look at these sentences in Thai from the conversation:\n\nแพนเค้กเหล่านี้อร่อยมาก\nคุณใจดีมาก\n\nThere are no verbs in these sentences. When translated into English word for word, they become:\n\n        แพนเค้กเหล่านี้อร่อยมาก\n        These pancakes so good. (X)\n\nคุณใจดีมาก\nYou so kind. (X)\n\nThese are incorrect because there is no verb. In English, every sentence must have a verb. The sentences above must be:\n\n            * These pancakes are so good. (✓)\n            * You're so kind. (✓)"
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 4,
+        "content_md": "Where are your parents from?"
+      }
+    ],
+    "tags": [
+      "verb",
+      "to-be verb",
+      "food",
+      "breakfast",
+      "are",
+      "you’re"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.10",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 10,
+      "title": "He’s a student at USC",
+      "focus": "How to use the to-be verb ‘is’",
+      "backstory": "Pailin is at an orientation in Los Angeles for her study-abroad program. She is talking with Steven, another boy in her program who she just met."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "Do you have any siblings?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Steven",
+        "line_text": "I have an older brother."
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "How old is he?"
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Steven",
+        "line_text": "He’s 22. He’s in LA, too. He’s a student at USC."
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Pailin",
+        "line_text": "Nice! It’s a good school."
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Steven",
+        "line_text": "It is. He’s very smart."
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Pailin",
+        "line_text": "What’s his major?"
+      },
+      {
+        "sort_order": 8,
+        "speaker": "Steven",
+        "line_text": "He’s a nursing major, so his classes are hard."
+      },
+      {
+        "sort_order": 9,
+        "speaker": "Pailin",
+        "line_text": "Oh, my mom’s a nurse."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "How old is Steven’s brother?",
+        "options": [
+          "A. He’s 21.",
+          "B. He’s 22.",
+          "C. He’s 23."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "What does Pailin’s mom do?",
+        "options": [
+          "A. She’s a student.",
+          "B. She’s a teacher.",
+          "C. She’s a nurse."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "title": "PRACTICE MAKING SENTENCES",
+        "prompt": "Enter either ‘are’ or ‘is’ to make the sentences complete.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "He __ my teacher.",
+            "answer": "is"
+          },
+          {
+            "number": "2",
+            "text": "They __ at the store.",
+            "answer": "are"
+          },
+          {
+            "number": "3",
+            "text": "She __ an actor.",
+            "answer": "is"
+          },
+          {
+            "number": "4",
+            "text": "Joey __ in his room.",
+            "answer": "is"
+          },
+          {
+            "number": "5",
+            "text": "You __ Thai.",
+            "answer": "are"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "fill_blank",
+        "title": "ARE VS. IS",
+        "prompt": "Enter either ‘are’ or ‘is’ to make the sentences complete.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "The book __ on the table.",
+            "answer": "is"
+          },
+          {
+            "number": "2",
+            "text": "My dogs __ cute.",
+            "answer": "are"
+          },
+          {
+            "number": "3",
+            "text": "Your phone __ in my bag.",
+            "answer": "is"
+          },
+          {
+            "number": "4",
+            "text": "The cars __ red.",
+            "answer": "are"
+          },
+          {
+            "number": "5",
+            "text": "My parents __ in New York.",
+            "answer": "are"
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the grammar of the sentences is correct or not. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "She at home.",
+            "correct": false,
+            "answer": "she is at home, shes at home"
+          },
+          {
+            "number": "2",
+            "stem": "Tyler from LA.",
+            "correct": false,
+            "answer": "tyler is from la, tylers from la"
+          },
+          {
+            "number": "3",
+            "stem": "He’s hungry.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "4",
+            "stem": "It on the desk.",
+            "correct": false,
+            "answer": "it is on the desk, its on the desk"
+          },
+          {
+            "number": "5",
+            "stem": "It’s a camera.",
+            "correct": true,
+            "answer": ""
+          }
+        ],
+        "sort_order": 3
+      },
+      {
+        "kind": "fill_blank",
+        "title": "MIXED PRACTICE",
+        "prompt": "Fill in the blanks with the correct to-be verb (am · are · is).",
+        "paragraph": "I __1__ Frank. My family __2__ from Germany, but they __3__ in LA now. Germany __4__ too cold for them. My dad __5__ a journalist, and my mom __6__ a stay-at-home-mom. My little brother and sister __7__ twins, and they __8__ only 7 years old. We __9__ a close family, and I __10__ glad that they live in LA with me.[f]",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "answer": "am"
+          },
+          {
+            "number": "2",
+            "text": "",
+            "answer": "is"
+          },
+          {
+            "number": "3",
+            "text": "",
+            "answer": "are"
+          },
+          {
+            "number": "4",
+            "text": "",
+            "answer": "is"
+          },
+          {
+            "number": "5",
+            "text": "",
+            "answer": "is"
+          },
+          {
+            "number": "6",
+            "text": "",
+            "answer": "is"
+          },
+          {
+            "number": "7",
+            "text": "",
+            "answer": "are"
+          },
+          {
+            "number": "8",
+            "text": "",
+            "answer": "are"
+          },
+          {
+            "number": "9",
+            "text": "",
+            "answer": "are"
+          },
+          {
+            "number": "10",
+            "text": "",
+            "answer": "am"
+          }
+        ],
+        "sort_order": 4
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the questions. Use ‘is’ in your responses.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "What is your best friend’s job?",
+            "keywords": "job, is"
+          },
+          {
+            "number": "2",
+            "text": "Where is your mom right now?",
+            "keywords": "location, is"
+          },
+          {
+            "number": "3",
+            "text": "What color is your shirt?",
+            "keywords": "color, is"
+          },
+          {
+            "number": "4",
+            "text": "How old is your dad?",
+            "keywords": "age, is"
+          }
+        ],
+        "sort_order": 5
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin says that her mom is a nurse. What is your mom or dad's job?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to use the to-be verb 'is'\n\nYou've already learned about the to-be verbs 'am' and 'are.' Now you'll learn about the last to-be verb, 'is.'\n\n## USES OF 'IS'\n\nTake a look at these sentences from the conversation:\n\n            * He's in LA.\n            * It's a good school.\n            * He's very smart.\n            * My mom's a nurse.\n\nAll of these sentences use 'is.' You may not notice this at first because 'is' is usually contracted with the subject. For example:\n\nHe's in LA. = He is in LA.\nIt's a good school. = It is a good school.\n\nDo you remember the three ways that 'am' and 'are' are used? 'Is' is used in the same three ways:\n\n            1. is (adjective)\n'Adjectives' are words that describe nouns.\nExamples: hot, tired, yellow, heavy\n\n            2. is (prepositional phrase)\nA 'prepositional phrase' begins with a preposition word, such as 'in · at · on · near,' followed by a place. It describes your relationship to a location.\nExamples: in the kitchen, at the store, on the desk, near the post office\n\n            3. is (noun OR noun phrase).\nA 'noun' is a person, place, thing, or idea. A 'noun phrase' is an 'adjective + noun.'\nExamples: a nurse, a phone, a talented singer, a brown dog\n\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\n\nTry to identify how 'is' is used in the conversation. They're shown below:\n\nHe's in LA. (prepositional phrase)\nIt's a good school. (noun phrase)\nHe's very smart. (adjective)\nMy mom's a nurse. (noun)\n\n## SUBJECTS WITH 'IS'\n\nYou've learned that 'am' only follows 'I', and 'are' follows 'you · we · they · 2+ nouns.' The verb 'is' follows these subjects:\n\nHe is\nShe is\nIt is\n(Noun) is\n\n'Noun' refers to just one noun, called a 'singular noun.' In the conversation, 'my mom' is an example of this because she is just one person. A singular noun doesn't have to be a person - it can be an item, such as 'The key' or 'My house.' Notice that 'he,' 'she,' and 'it' also refer to a single person or thing, so they are 'singular nouns.' You can see examples of singular nouns and plural nouns in the Extra Tips section.\n\nThe subject and 'is' are usually contracted to form one word.\n\nHe is = He's\nShe is = She's\nIt is = It's\n(Noun) is = (Noun)'s\n\nRemember, contractions make a sentence smoother and sound more natural. The line 'My mom's a nurse' flows better than 'My mom is a nurse.'\n\n## EXAMPLE SENTENCES\n\nTake a look at these example sentences. Notice the contractions are used when possible:\n\n            1. is (adjective)\n            * He's funny.\n            * She's smart.\n            * Joey's tired. (this is an example of a singular noun)\n\n               2. is (prepositional phrase)\n               * It's in the box.\n               * She's at the post office.\n               * My dog's outside. (this is an example of a singular noun)\n\n               3. is (noun OR noun phrase)\n               * He's a good soccer player.\n               * It's a scary movie.\n               * Mark is a lawyer. (this is an example of a singular noun)"
+      },
+      {
+        "type": "extra_tip",
+        "sort_order": 3,
+        "content_md": "## SINGULAR VS. PLURAL NOUNS\n\nNow you've learned these rules:\n\n(Noun) is\n(2+ nouns) are\n\nWithout going in-depth, remember that an easy way to spot a plural noun (2+ nouns) is that it often ends in -s, like 'pancakes,' 'books,' or 'dogs.' Take a look at this line from the conversation:\n\n               * His classes are hard.\n\nThe word 'class' has -es added to the end, so the sentence refers to multiple classes. This is why 'are' is used. Compare that with this sentence:\n\n               * His class is hard.\n\n'Class' refers to a single class, so 'is' is used. 'Class' is the singular noun, while 'classes' is the plural noun. You will learn more about these in Lesson 3.5."
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 4,
+        "content_md": "## MISTAKE #1\n\nJust as with 'am' and 'are,' Thai people often omit the word 'is' from a sentence. Try to avoid translating sentences from Thai to English, because this can cause important words to be omitted. Take a look at this sentence from the conversation in Thai:\n\nเขาฉลาดมาก\n\nThere is no verb in this sentence. When translated into English word for word, it becomes:\n\n        เขาฉลาดมาก\n        He very smart. (X)\n\nThis is incorrect because there is no verb. As emphasized before, every sentence must have a verb in English. The sentence above must be:\n\n               * He's very smart. (✓)"
+      },
+      {
+        "type": "phrases_verbs",
+        "sort_order": 5,
+        "items": [
+          {
+            "phrase": "Nice!",
+            "translation_th": "",
+            "notes": "a positive expression to show enthusiasm or approval"
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 6,
+        "content_md": "Describe the members of your family."
+      }
+    ],
+    "tags": [
+      "verb",
+      "to-be verb",
+      "is",
+      "siblings",
+      "brother"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.11",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 11,
+      "title": "Where are you from?",
+      "focus": "How to ask where someone is from",
+      "backstory": "Pailin is at an orientation in Los Angeles for her study-abroad program. She’s talking with Chloe, a girl in her program who she just met."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Chloe",
+        "line_text": "Pailin, where are you from?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "I’m from Thailand. How about you?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Chloe",
+        "line_text": "I’m from Thailand too!"
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Pailin",
+        "line_text": "Really?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Chloe",
+        "line_text": "Yeah. My dad is from Thailand and my mom is from France."
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Pailin",
+        "line_text": "Wow, cool! Are you from Bangkok?"
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Chloe",
+        "line_text": "No, I’m from Chiang Mai. Where are you from?"
+      },
+      {
+        "sort_order": 8,
+        "speaker": "Pailin",
+        "line_text": "I’m from Bangkok."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "Where is Chloe from?",
+        "options": [
+          "A. Chloe is from Bangkok.",
+          "B. Chloe is from France.",
+          "C. Chloe is from Chiang Mai."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "Where is Chloe’s mom from?",
+        "options": [
+          "A. Chloe’s mom is from Bangkok.",
+          "B. Chloe’s mom is from France.",
+          "C. Chloe’s mom is from Chiang Mai."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      },
+      {
+        "sort_order": 3,
+        "prompt": "Where is Pailin from?",
+        "options": [
+          "A. Pailin is from Bangkok.",
+          "B. Pailin is from France.",
+          "C. Pailin is from Chiang Mai."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "open",
+        "title": "PRACTICE COUNTRIES",
+        "prompt": "Look at the flag and type what the country is using the sentence structure ‘I’m from (country).’",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "(Picture of Korea flag)",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "(Picture of USA flag)",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "(Picture of Japan flag)",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "(Picture of Thailand flag)",
+            "keywords": ""
+          },
+          {
+            "number": "5",
+            "text": "(Picture of China flag)",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "You are talking with an acquaintance and are curious what country they’re from. What can you ask them to find out?",
+            "keywords": "country, question"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Chloe tells Pailin that she's from Chiang Mai. Which part of Thailand are you from?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to ask where someone is from and how to respond\n\nIn the conversation, Chloe asks Pailin:\n\n               * Where are you from?\n\nThis is the typical way to ask where someone is from. It's a useful introductory question.\n\nTake a look at these responses from the conversation:\n\nI'm from (country).\n               * I'm from Thailand.\n\n                I'm from (city).\n               * I'm from Chiang Mai.\n\nThis is not limited to country and city - you can respond with a region or a state, or any geographical location that resonates with the listener. For example:\n\n                I'm from (place).\n               * I'm from the north of Thailand.\n               * I'm from Isaan.\n               * I'm from Texas.\n               * I'm from the Bay.\n\nNotice that these responses use 'I'm (prepositional phrase)', as the word 'from' is a preposition."
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 3,
+        "content_md": "## MISTAKE #1\n\nThai learners often ask คุณมาจากไหน like this:\n\n        Where you come from? (X)\n\nThis is a direct translation from Thai, but it is incorrect in English. Remember the correct way to ask is:\n\n        Where are you from? (✓)\n\n## MISTAKE #2\n\nThai students often incorrectly say 'I'm from Thai' instead of 'I'm from Thailand.' This is because in Thai language, the country of Thailand is called ประเทศไทย.\n\nTake note of these three things:\n\n        Country: Thailand\n               * I'm from Thailand.\n\n        Nationality: Thai\n               * I'm Thai.\n\n        Language: Thai\n               * I speak Thai."
+      },
+      {
+        "type": "phrases_verbs",
+        "sort_order": 4,
+        "items": [
+          {
+            "phrase": "Wow",
+            "translation_th": "",
+            "notes": "used to show surprise or admiration"
+          },
+          {
+            "phrase": "Cool!",
+            "translation_th": "",
+            "notes": "an informal way of saying 'That's great'"
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 5,
+        "content_md": "What city are you from in Thailand?"
+      }
+    ],
+    "tags": [
+      "greeting",
+      "introduction",
+      "meeting new people",
+      "country",
+      "language",
+      "nationality"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.12",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 12,
+      "title": "This is your student ID",
+      "focus": "How to say ‘This is (something)’",
+      "backstory": "Pailin is at the orientation for her study-abroad program in Los Angeles. She is talking with Frank, her student advisor."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Frank",
+        "line_text": "Pailin, these things are for you. This is your student ID, and this is a welcome bag."
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "Thanks! And what’s this?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Frank",
+        "line_text": "This is a map of the city. This is the university, and this is your host family’s home, right here. They live near the beach."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What did Frank give to Pailin? (select all that apply)",
+        "options": [
+          "A. Map",
+          "B. Mug",
+          "C. ID",
+          "D. Bag",
+          "E. T-shirt"
+        ],
+        "answer_key": [
+          "A",
+          "C",
+          "D"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "fill_blank",
+        "title": "PRACTICE NAMING THINGS",
+        "prompt": "Take a look at the pictures and answer the question ‘What’s this?’ using the sentence structure ‘This is (a noun).’",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "answer": "rose apple"
+          },
+          {
+            "number": "2",
+            "text": "",
+            "answer": "green curry"
+          },
+          {
+            "number": "3",
+            "text": "",
+            "answer": "papaya"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "PRACTICE INTRODUCING PEOPLE",
+        "prompt": "Take a look at Pailin’s family picture. Introduce the people in the picture based on her relationship with them and their name. Use the structure ‘This is (person), (name).’ For example: This is my cousin, Pailin.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Imagine you’re at a craft market in the US. You see an unfamiliar item. What can you ask the vendor to find out what the item is?",
+            "keywords": "asking about object, unfamiliar"
+          }
+        ],
+        "sort_order": 3
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Frank presents different items to Pailin. Imagine you're at a market in Thailand with an American. What might be new or interesting to them? How can you identify these things? Use 'This is...' in your sentences."
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to say 'This is (something)'\n\nIn the conversation, Frank gives different items to Pailin. He hands her something, and she asks him:\n\n                  * What's this?\nWhat's = What is\n\nThis is a useful question to ask when you want to know what something is.\n\nTake a look at what Frank says as he offers different items to her:\n\n                  * This is your student ID.\n                  * This is a welcome bag.\n                  * This is a map of the city.\n\nYou can follow this structure when explaining what something is:\n\nThis is (a noun).\n\nFor example:\n\nPailin walks into a grocery store in the US with her friend and sees an unfamiliar food.\n                  * Pailin: What's this?\nTom: This is cheesecake.\n\nPailin is at a friend's house and sees some beautiful fabric.\n                  * Pailin: What's this?\nAngie: This is my mom's favorite scarf. It's from Japan.\n\nYou can also use this sentence structure to introduce someone. In this case, the structure is:\n\nThis is (a person).\n\n                  * This is my friend, Chloe.\n                  * This is Adam.\n                  * This is my mom."
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 3,
+        "content_md": "## MISTAKE #1\n\nIt's common for Thai students to omit the -s sound in 'What's' in the question 'What's this?' Take a look at the fix below:\n\nWhat this? (X)\n                  * What's this? (✓)\n\nEnglish pronunciation often involves more tongue movement than Thai. This can cause learners to simplify sounds. However, it's beneficial to practice pronouncing all the sounds in each word, especially as a beginner. This helps build strong pronunciation habits. Your tongue might feel a little tired at first, but this practice will pay off in the long run!"
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 4,
+        "content_md": "What are some of your favorite Thai fruits?"
+      }
+    ],
+    "tags": [
+      "useful question",
+      "useful phrase",
+      "gift",
+      "present",
+      "what’s this"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.13",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 13,
+      "title": "It’s beautiful in Los Angeles",
+      "focus": "How to describe things",
+      "backstory": "Pailin is at the orientation for her study-abroad program in Los Angeles. She’s talking on the phone with her mom, who is in Thailand."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "Hi Mom."
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Mom",
+        "line_text": "Is everything okay over there?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Yep! Everything is great."
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Mom",
+        "line_text": "So, how’s the weather in LA?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Pailin",
+        "line_text": "It’s sunny and beautiful, but it’s really dry."
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Mom",
+        "line_text": "Oh, it’s rainy now in Bangkok. Is the food okay at the hotel?"
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Pailin",
+        "line_text": "It’s okay, it’s a bit bland. There’s a Thai restaurant nearby, but it’s so expensive."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "How is the weather in LA? (select all that apply)",
+        "options": [
+          "A. It’s sunny.",
+          "B. It’s cloudy.",
+          "C. It's humid.",
+          "D. It’s dry."
+        ],
+        "answer_key": [
+          "A",
+          "D"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "How is the weather in Bangkok?",
+        "options": [
+          "A. It’s hot.",
+          "B. It’s rainy.",
+          "C. It’s cold.",
+          "D. It’s windy."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "open",
+        "title": "PRACTICE DESCRIBING THINGS",
+        "prompt": "Take a look at the pictures and describe them using ‘It’s (adjective).’",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "",
+            "keywords": ""
+          },
+          {
+            "number": "5",
+            "text": "",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Your friend has never been to Thailand. Give two sentences to describe what it’s like to him using ‘It’s (adjective).’",
+            "keywords": "describing place, adjective"
+          }
+        ],
+        "sort_order": 2
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin's mom says that it's rainy in Bangkok. How is the weather now in your area?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to describe things\n\nTake a look at these sentences from the conversation:\n\n                  * It's sunny and beautiful.\n                  * It's really dry.\n                  * It's rainy now in Bangkok.\n                  * It's okay.\n                  * It's a bit bland.\n                  * It's so expensive.\n\nThese sentences follow a pattern:\n\nIt's (adjective).\n\nThis is a very useful sentence structure. You can use it to describe almost anything! Think of different adjectives and practice using them in this structure. The more you practice, the more natural it will become.\n\nNotice that in Thai, this sentence doesn't have a subject:\n\nแพงมาก\n\nSince every sentence in English must have a subject, 'It's' would be a typical subject for a descriptive sentence like this. So instead of just saying 'Expensive!' you must say 'It's expensive!'\n\nIn the conversation, the structure 'It's (adjective)' is used to discuss the weather, the food, and pricing, but it can be used to describe anything! Take a look at these descriptive sentences below:\n\n                  * It's late.\n                  * It's difficult.\n                  * It's important.\n                  * It's blue.\n                  * It's nice to meet you."
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 3,
+        "content_md": "## MISTAKE #1\n\nIt's common for Thai students to omit the -s sound in the phrase 'It's.' Take a look at the fix below:\n\nIt red. (X)\n                  * It's red. (✓)\n\nAs mentioned in the previous lesson, it'll be beneficial to practice pronouncing all the sounds in a word, especially the -s sounds at the end of words. Your tongue might feel a little tired at first, but this practice will pay off in the long run!"
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 4,
+        "content_md": "How is the weather in your area now?"
+      }
+    ],
+    "tags": [
+      "useful phrase",
+      "weather",
+      "food",
+      "describing things"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.14",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 14,
+      "title": "My wallet isn’t red",
+      "focus": "How to use ‘not’ in a sentence",
+      "backstory": "Pailin is at an orientation in Los Angeles for her study-abroad program. It’s morning time. She is talking to Frank, her student advisor."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "I can’t find my jacket."
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Frank",
+        "line_text": "Is this your jacket?"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "No, my jacket isn’t blue. It’s black."
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Frank",
+        "line_text": "Is it in your hotel room?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Pailin",
+        "line_text": "No, it isn’t there. I wore it this morning."
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Frank",
+        "line_text": "Here, you can borrow my jacket."
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Pailin",
+        "line_text": "It’s okay. It’s not a big deal. I’m not cold. I’ll look for it later."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What color is Pailin’s jacket?",
+        "options": [
+          "A. Her jacket is black.",
+          "B. Her jacket is blue.",
+          "C. Her jacket is brown.",
+          "D. Her jacket is green."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘AM NOT’",
+        "prompt": "Make the affirmative sentences into negative sentences. Use contractions when possible.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I’m tall.",
+            "correct": null,
+            "answer": "im not tall, i am not tall"
+          },
+          {
+            "number": "2",
+            "stem": "I’m at the park.",
+            "correct": null,
+            "answer": "im not at the park, i am not at the park"
+          },
+          {
+            "number": "3",
+            "stem": "I’m a pilot.",
+            "correct": null,
+            "answer": "im not a pilot, i am not a pilot"
+          },
+          {
+            "number": "4",
+            "stem": "I’m sleepy.",
+            "correct": null,
+            "answer": "im not sleepy, i am not sleepy"
+          },
+          {
+            "number": "5",
+            "stem": "I’m downstairs.",
+            "correct": null,
+            "answer": "im not downstairs, i am not downstairs"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘ARE NOT’",
+        "prompt": "Make the affirmative sentences into negative sentences. Use contractions when possible - either form is fine.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "You’re lazy.",
+            "correct": null,
+            "answer": "you are not lazy, you arent lazy, youre not lazy"
+          },
+          {
+            "number": "2",
+            "stem": "We’re from Mexico.",
+            "correct": null,
+            "answer": "we are not from mexico, we arent from mexico, were not from mexico"
+          },
+          {
+            "number": "3",
+            "stem": "They’re twins.",
+            "correct": null,
+            "answer": "they are not twins, they arent twins, theyre not twins"
+          },
+          {
+            "number": "4",
+            "stem": "Dara and Lek are singers.",
+            "correct": null,
+            "answer": "dara and lek are not singers, dara and lek arent singers"
+          },
+          {
+            "number": "5",
+            "stem": "The kids are outside.",
+            "correct": null,
+            "answer": "the kids are not outside, the kids arent outside"
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘IS NOT’",
+        "prompt": "Make the affirmative sentences into negative sentences. Use contractions when possible - either form is fine.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "He’s good at soccer.",
+            "correct": null,
+            "answer": "he is not good at soccer, he isnt good at soccer, hes not good at soccer"
+          },
+          {
+            "number": "2",
+            "stem": "She’s at the store.",
+            "correct": null,
+            "answer": "she is not at the store, she isnt at the store, shes not at the store"
+          },
+          {
+            "number": "3",
+            "stem": "It’s a camera.",
+            "correct": null,
+            "answer": "it is not a camera, it isnt a camera, its not a camera"
+          },
+          {
+            "number": "4",
+            "stem": "Frank’s funny.",
+            "correct": null,
+            "answer": "frank is not funny, frank isnt funny, franks not funny"
+          },
+          {
+            "number": "5",
+            "stem": "My sister’s at work.",
+            "correct": null,
+            "answer": "my sister is not at work, my sister isnt at work, my sisters not at work"
+          }
+        ],
+        "sort_order": 3
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the grammar of the negative sentences is correct or not. If incorrect, enter the correct sentence into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "She not at work.",
+            "correct": false,
+            "answer": "she is not at work, she isnt at work, shes not at work"
+          },
+          {
+            "number": "2",
+            "stem": "I’m not hungry.",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "You not old.",
+            "correct": false,
+            "answer": "you are not old, you arent old, youre not old"
+          },
+          {
+            "number": "4",
+            "stem": "We not from Canada.",
+            "correct": false,
+            "answer": "we are not from canada, we arent from canada, were not from canada"
+          },
+          {
+            "number": "5",
+            "stem": "Chloe not here.",
+            "correct": false,
+            "answer": "chloe is not here, chloe isnt here, chloes not here"
+          }
+        ],
+        "sort_order": 4
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "Answer the following questions using ‘not’ in your sentence. Use a full sentence to answer. For example:",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "keywords": "no my parents are not from, no my parents arent from"
+          },
+          {
+            "number": "2",
+            "text": "Are you from Germany?",
+            "keywords": "no i am not from, no im not from"
+          },
+          {
+            "number": "3",
+            "text": "Is it snowy today?",
+            "keywords": "no it is not, no it isnt, no its not"
+          },
+          {
+            "number": "4",
+            "text": "Is American food spicy?",
+            "keywords": "no american food is not, no american food isnt"
+          },
+          {
+            "number": "5",
+            "text": "Are cookies healthy?",
+            "keywords": "no cookies are not, no cookies arent"
+          },
+          {
+            "number": "6",
+            "text": "Are you on an airplane?",
+            "keywords": "no i am not, no im not"
+          }
+        ],
+        "sort_order": 5
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Pailin says she's not cold. What is something you DON'T feel right now?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to use 'not' in a sentence\n\nSo far, you've learned how to make affirmative sentences with the to-be verbs 'am · are · is.' In this lesson, you'll learn how to make those sentences negative using the word 'not.'\n\n## NEGATIVE SENTENCES\n\nIn the conversation, Pailin says to Frank:\n\n                  * I'm not cold.\n\nWhile the affirmative sentence would be 'I'm cold,' adding 'not' changes the sentence into a negative sentence.\n\n'Not' is used to negate ALL verbs in English. This lesson will focus on negating simple sentences that use to-be verbs.\n\nTake a look at these sentences from the conversation:\n\n                  * My jacket isn't blue.\n                  * It isn't there.\n                  * It's not a big deal.\n                  * I'm not cold.\n\nIn the first two sentences, you can't see the word 'not.' This is because it's combined with the to-be verb to form a negative contraction:\n\nIt isn't there. = It is not there.\n\nThese will be explained more below.\n\n## STRUCTURE\n\n        Notice where the word 'not' comes in a sentence. Is it before or after the to-be verb?\n\nMy jacket isn't blue.\nMy jacket is not blue.\n\n'Not' comes after the to-be verb, so it will always follow this pattern:\n\nam not\nare not\nis not\n\nRemember that contractions are key in English because they help shorten your speech and make it sound natural. There is only one way to contract 'I am not':\n\n        I'm not\n\nBut there are two ways to contract 'are not' and 'is not' in a sentence, as you can see from these lines in the conversation:\n\nIt isn't there.\nIt's not a big deal.\n\n'It is not' can become:\n\nIt isn't\nIt's not\n\n'They are not' can become either:\n\nThey aren't\nThey're not\n\nBoth forms are frequently used, so it's important to know both. Here is a breakdown of 'are' and 'is' in negative sentences:\n\n<table>\n  <tr>\n   <td><strong>ARE NOT</strong>\n   </td>\n   <td><strong>IS NOT</strong>\n   </td>\n  </tr>\n  <tr>\n   <td>You’re not = You aren’t\n<p style=\"text-align: center\">\nWe’re not = We aren’t\n<p style=\"text-align: center\">\nThey’re not = They aren’t\n   </td>\n   <td>He’s not = He isn’t\n<p style=\"text-align: center\">\nShe’s not = She isn’t\n<p style=\"text-align: center\">\nIt’s not = It isn’t\n   </td>\n  </tr>\n</table>\n\nSingular noun subjects can also be contracted in both ways:\n\n(Noun)'s not = (Noun) isn't\nMy mom's not = My mom isn't\nFrank's not = Frank isn't\n\nBut for subjects of 2+ nouns, only one contraction can be used:\n\n(2+ nouns) aren't\nMy mom and dad aren't\nThe kids aren't\n\n## EXAMPLES\n\nRemember that to-be verbs can come before these three things:\n\nadjectives\nprepositional phrases\nnouns OR noun phrases\n\nThe same applies to negative to-be verbs. Here are examples of negative sentences. Notice that both forms of contractions are used for 'are not' and 'is not.'\n\n## AM NOT\n                  * I'm not hungry. (adjective)\n                  * I'm not from China. (prepositional phrase)\n                  * I'm not a good cook. (noun phrase)\n\n## ARE NOT\n                  * You aren't sick. (adjective)\n                  * We're not at home. (prepositional phrase)\n                  * They aren't fun people. (noun phrase)\n                  * Pailin and Chloe aren't sisters. (noun)\n\n## IS NOT\n                  * He isn't ready. (adjective)\n                  * She's not in the garage. (prepositional phrase)\n                  * It isn't a toy. (noun)\n                  * Frank's not tired. (adjective)\n                  * My friend isn't here. (prepositional phrase)"
+      },
+      {
+        "type": "common_mistake",
+        "sort_order": 3,
+        "content_md": "## MISTAKE #1\n\nThai people often omit the to-be verb in negative sentences and only use 'not' to make a sentence negative. Take a look at the incorrect sentences below and how to fix them:\n\n        I not thirsty. (X)\n                  * I'm not thirsty. (✓)\n\n                We not scared. (X)\n                  * We're not scared. (✓)\n\n                He not at home. (X)\n                  * He's not at home. (✓)"
+      },
+      {
+        "type": "phrases_verbs",
+        "sort_order": 4,
+        "items": [
+          {
+            "phrase": "Look for",
+            "translation_th": "",
+            "notes": "to try to find or search for something"
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 5,
+        "content_md": "Share with us something you're not good at."
+      }
+    ],
+    "tags": [
+      "verb",
+      "to-be verb",
+      "negative sentence",
+      "not",
+      "isn’t",
+      "aren’t",
+      "I’m not"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.15",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 15,
+      "title": "What time is it?",
+      "focus": "How to talk about the time",
+      "backstory": "Pailin is at the orientation for her study-abroad program in Los Angeles. She’s talking with her student advisor Frank and her new friend Chloe."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Frank",
+        "line_text": "What time is it?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "Let’s see, it’s…11:05."
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Frank",
+        "line_text": "Okay, it’s time for lunch. You have one hour for lunch. Please come back at 12:00."
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Pailin",
+        "line_text": "Chloe, are you hungry?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Chloe",
+        "line_text": "Yes, I’m so hungry!"
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Pailin",
+        "line_text": "Do you want to eat lunch with me?"
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Chloe",
+        "line_text": "Sure! My favorite restaurant is around here. They open at 11:30."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What time is it right now?",
+        "options": [
+          "A. It’s 11:05.",
+          "B. It’s 11:15.",
+          "C. It’s 11:30.",
+          "D. It’s 12:00."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "What time does Chloe’s favorite restaurant open?",
+        "options": [
+          "A. They open at 11:05.",
+          "B. They open at 11:15.",
+          "C. They open at 11:30.",
+          "D. They open at 12:00."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "open",
+        "title": "PRACTICE TELLING THE TIME",
+        "prompt": "Look at the clock and type the time. Add AM or PM based on if there’s a sun or moon.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "(picture of clock showing 10:00 with a moon)",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "(picture of clock showing 11:35 with a sun)",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "(picture of clock showing 12:05 with a sun)",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "(picture of clock showing 3:15 with a moon)",
+            "keywords": ""
+          },
+          {
+            "number": "5",
+            "text": "(picture of clock showing 9:40 with a moon)",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "open",
+        "title": "LISTENING PRACTICE",
+        "prompt": "Listen to the audio and type the time as (hour):(minute). For example: 4:58",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "(Audio of '2:06')",
+            "keywords": ""
+          },
+          {
+            "number": "2",
+            "text": "(Audio of '4:00')",
+            "keywords": ""
+          },
+          {
+            "number": "3",
+            "text": "(Audio of '8:10')",
+            "keywords": ""
+          },
+          {
+            "number": "4",
+            "text": "(Audio of '12:55')",
+            "keywords": ""
+          },
+          {
+            "number": "5",
+            "text": "(Audio of '6:30')",
+            "keywords": ""
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Imagine you’re at the pool. You don’t have your watch or phone with you. How can you ask a stranger for the time?",
+            "keywords": "asking time, stranger"
+          }
+        ],
+        "sort_order": 3
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "QUICK PRACTICE 1",
+        "prompt": "Type out how these times should be said.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "8:03",
+            "correct": null,
+            "answer": "eight oh three"
+          },
+          {
+            "number": "2",
+            "stem": "10:08",
+            "correct": null,
+            "answer": "ten oh eight"
+          },
+          {
+            "number": "3",
+            "stem": "1:06",
+            "correct": null,
+            "answer": "one oh six"
+          }
+        ],
+        "sort_order": 4
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "QUICK PRACTICE 2",
+        "prompt": "Type out how these times should be said.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "2:35",
+            "correct": null,
+            "answer": "two thirty five"
+          },
+          {
+            "number": "2",
+            "stem": "7:18",
+            "correct": null,
+            "answer": "seven eighteen"
+          },
+          {
+            "number": "3",
+            "stem": "9:56",
+            "correct": null,
+            "answer": "nine fifty six"
+          }
+        ],
+        "sort_order": 5
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Frank tells Pailin and Chloe to come back at 12:00. What time do you usually wake up?"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to talk about the time\n\n## TELLING THE TIME\n\nIn the conversation, Frank asks the girls:\n\n                  * What time is it?\n\nThis is the typical way to ask for the current time. Pailin responds by saying:\n\n                  * It's 11:05.\n\n        The sentence structure to tell the time is:\n\n                It's (time).\n\n        Telling the time is pretty straight-forward, although there are a few things to note.\n\n## O'CLOCK\n\nIn the conversation, Frank tells the girls:\n\n                  * Please come back at 12:00.\n\n        On the hour, the time can be read as:\n\n                (#) o'clock\n                  * 5 o'clock = 5:00\n\n        Often, 'o'clock' is omitted. Frank could have also said:\n\n                  * Please come back at 12.\n\n## TELLING TIME WITH '0' 12:01 - 12:09\n\nDid you notice how Pailin said the time 11:05? She didn't say 'eleven five' or 'eleven zero five.' She said:\n\n                  * 11:05 = eleven-o-five\n\n        The 0 is pronounced as the letter 'O' or 'oh.'\n\n## TELLING TIME WITHOUT '0' 12:10 - 12:59\n\nAll other times are read as two numbers - the hour, the minutes. In the conversation, Chloe says that her favorite restaurant opens at:\n\n                  * 11:30 = eleven thirty\n\n## AM & PM\n\nTelling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:\n\n                  * AM = midnight (12:00) to lunchtime (11:59)\n                  * PM = lunchtime (12:00) to midnight (11:59)\n\nThe hours go from 1 to 12. Frank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?\n\nIt would be 12PM. This time can be referred to as 'noon.' Meanwhile, 12AM is often referred to as 'midnight.' For example:\n\n                  * Let's meet at the park at noon.\n                  * I always sleep at midnight.\n\nWhile many countries use military time (a 24-hour clock instead of the 12-hour clock), it's not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o'clock)."
+      },
+      {
+        "type": "extra_tip",
+        "sort_order": 3,
+        "content_md": "## HALF PAST & QUARTER TIL\n\nYou may have learned time phrases such as these:\n\n        It's quarter past 6. (6:15)\n        It's half past 11. (11:30)\n        It's quarter til 3. (2:45)\n\nWhile time phrases like these are more widely used in the UK and other English-speaking countries, they're not used often in the US. It's more common to simply refer to the times as:\n\n                  * It's 6:15.\n                  * It's 11:30.\n                  * It's 2:45."
+      },
+      {
+        "type": "phrases_verbs",
+        "sort_order": 4,
+        "items": [
+          {
+            "phrase": "Let's see",
+            "translation_th": "",
+            "notes": "said when you're trying to remember something or are thinking carefully"
+          },
+          {
+            "phrase": "Come back",
+            "translation_th": "",
+            "notes": "to return"
+          },
+          {
+            "phrase": "Sure!",
+            "translation_th": "",
+            "notes": "an enthusiastic way of saying 'Yes'"
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 5,
+        "content_md": "What time is it right now for you?"
+      }
+    ],
+    "tags": [
+      "telling time",
+      "time",
+      "clock",
+      "numbers",
+      "what time is it?"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.16",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 16,
+      "title": "Is In-N-Out near the hotel?",
+      "focus": "How to ask questions with to-be verbs",
+      "backstory": "Pailin has just finished her last day of student orientation in Los Angeles. She’s chatting with Frank, her student advisor.\n\n\nPailin has finished her last day of orientation in Los Angeles for her study-abroad program. She’s relaxing in her hotel room when her phone rings. Pailin’s dad is calling her from Thailand, so she answers the phone."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Frank",
+        "line_text": "Pailin, are you excited for the weekend?"
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "Yeah, I am! I'm excited to check out the city. *yawn*"
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Frank",
+        "line_text": "Are you tired?"
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Pailin",
+        "line_text": "No, I'm not tired. I'm a little hungry. Is In-N-Out near the hotel?"
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Frank",
+        "line_text": "Yep, it's down the street."
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Pailin",
+        "line_text": "Is it usually busy?"
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Frank",
+        "line_text": "Yeah, it's always busy. But it's so good!"
+      },
+      {
+        "sort_order": 8,
+        "speaker": "Dad",
+        "line_text": "Morning, Pai."
+      },
+      {
+        "sort_order": 9,
+        "speaker": "Pailin",
+        "line_text": "Hi, Dad. It’s not morning in LA."
+      },
+      {
+        "sort_order": 10,
+        "speaker": "Dad",
+        "line_text": "Oh, what time is it now?"
+      },
+      {
+        "sort_order": 11,
+        "speaker": "Pailin",
+        "line_text": "It’s…6PM."
+      },
+      {
+        "sort_order": 12,
+        "speaker": "Dad",
+        "line_text": "Oh, it’s morning in Bangkok. So, how are you?"
+      },
+      {
+        "sort_order": 13,
+        "speaker": "Pailin",
+        "line_text": "I’m great! How are you and Mom?"
+      },
+      {
+        "sort_order": 14,
+        "speaker": "Dad",
+        "line_text": "We’re good. We miss you already. Are you at the hotel?"
+      },
+      {
+        "sort_order": 15,
+        "speaker": "Pailin",
+        "line_text": "Yep, I'm in my room."
+      },
+      {
+        "sort_order": 16,
+        "speaker": "Dad",
+        "line_text": "I see. Is it hot in LA?"
+      },
+      {
+        "sort_order": 17,
+        "speaker": "Pailin",
+        "line_text": "It’s warm outside, but my AC is on."
+      },
+      {
+        "sort_order": 18,
+        "speaker": "Dad",
+        "line_text": "Good. Is orientation over?"
+      },
+      {
+        "sort_order": 19,
+        "speaker": "Pailin",
+        "line_text": "Yep, it's over. I have a new friend. She’s from Thailand."
+      },
+      {
+        "sort_order": 20,
+        "speaker": "Dad",
+        "line_text": "Great! What’s her name?"
+      },
+      {
+        "sort_order": 21,
+        "speaker": "Pailin",
+        "line_text": "Her name is Chloe."
+      },
+      {
+        "sort_order": 22,
+        "speaker": "Dad",
+        "line_text": "Oh, and how old is she?"
+      },
+      {
+        "sort_order": 23,
+        "speaker": "Pailin",
+        "line_text": "She’s 23. She’s cool! Is Mom awake?"
+      },
+      {
+        "sort_order": 24,
+        "speaker": "Dad",
+        "line_text": "No, she's not awake yet. Okay, I'm going to work now. Love you Pai."
+      },
+      {
+        "sort_order": 25,
+        "speaker": "Pailin",
+        "line_text": "Love you Dad. Bye."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "How does Pailin feel?",
+        "options": [
+          "A. She’s tired.",
+          "B. She’s hungry.",
+          "C. She’s hot.",
+          "D. She’s excited."
+        ],
+        "answer_key": [
+          "B"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "What time is it in LA?",
+        "options": [
+          "A. It’s 6AM.",
+          "B. It’s 5PM.",
+          "C. It’s 6PM.",
+          "D. It’s 6:30PM."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      },
+      {
+        "sort_order": 3,
+        "prompt": "Is it morning or night in Thailand?",
+        "options": [
+          "A. It’s morning in Thailand.",
+          "B. It’s night in Thailand."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 4,
+        "prompt": "How is the weather in LA now?",
+        "options": [
+          "A. It’s warm.",
+          "B. It’s hot.",
+          "C. It’s cool."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 5,
+        "prompt": "Is Pailin’s mom asleep or awake?",
+        "options": [
+          "A. Her mom is asleep.",
+          "B. Her mom is awake."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      }
+    ],
+    "practice_exercises": [
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘AM…?’ QUESTIONS",
+        "prompt": "Make the affirmative sentences into questions.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "I’m tall.",
+            "correct": null,
+            "answer": "am i tall"
+          },
+          {
+            "number": "2",
+            "stem": "I’m at your house.",
+            "correct": null,
+            "answer": "am i at your house"
+          },
+          {
+            "number": "3",
+            "stem": "I’m a good singer.",
+            "correct": null,
+            "answer": "am i a good singer"
+          },
+          {
+            "number": "4",
+            "stem": "I’m funny.",
+            "correct": null,
+            "answer": "am i funny"
+          },
+          {
+            "number": "5",
+            "stem": "I’m stinky.",
+            "correct": null,
+            "answer": "am i stinky"
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘ARE…?’ QUESTIONS",
+        "prompt": "Make the affirmative sentences into questions.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "You’re inside.",
+            "correct": null,
+            "answer": "are you inside"
+          },
+          {
+            "number": "2",
+            "stem": "We’re late.",
+            "correct": null,
+            "answer": "are we late"
+          },
+          {
+            "number": "3",
+            "stem": "They’re friends.",
+            "correct": null,
+            "answer": "are they friends"
+          },
+          {
+            "number": "4",
+            "stem": "Pailin and Dara are from Bangkok.",
+            "correct": null,
+            "answer": "are pailin and dara"
+          },
+          {
+            "number": "5",
+            "stem": "The kids are at the park.",
+            "correct": null,
+            "answer": "are the kids"
+          }
+        ],
+        "sort_order": 2
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "PRACTICE ‘IS…?’",
+        "prompt": "Make the affirmative sentences into questions.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "He’s in the car.",
+            "correct": null,
+            "answer": "is he in the car"
+          },
+          {
+            "number": "2",
+            "stem": "She’s ready.",
+            "correct": null,
+            "answer": "is she ready"
+          },
+          {
+            "number": "3",
+            "stem": "It’s cold outside.",
+            "correct": null,
+            "answer": "is it cold outside"
+          },
+          {
+            "number": "4",
+            "stem": "Frank’s at the library.",
+            "correct": null,
+            "answer": "is frank at the library"
+          },
+          {
+            "number": "5",
+            "stem": "My sister’s smart.",
+            "correct": null,
+            "answer": "is my sister smart"
+          }
+        ],
+        "sort_order": 3
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "CORRECT OR INCORRECT",
+        "prompt": "Determine if the grammar of the questions is correct or not. If incorrect, enter the correct question into the box.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "Is you an actor?",
+            "correct": false,
+            "answer": "are you an actor"
+          },
+          {
+            "number": "2",
+            "stem": "Are they from Italy?",
+            "correct": true,
+            "answer": ""
+          },
+          {
+            "number": "3",
+            "stem": "Are she sleepy?",
+            "correct": false,
+            "answer": "is she sleepy"
+          },
+          {
+            "number": "4",
+            "stem": "Is we on time?",
+            "correct": false,
+            "answer": "are we on time"
+          },
+          {
+            "number": "5",
+            "stem": "Is Mark in Hawaii?",
+            "correct": true,
+            "answer": ""
+          }
+        ],
+        "sort_order": 4
+      },
+      {
+        "kind": "fill_blank",
+        "title": "SHORT FORM ANSWERS",
+        "prompt": "Fill in the blanks with the correct pronoun and to-be verb to create short form answers. Based on the answer ‘yeah’ or ‘no,’ decide if ‘not’ should be in your answer. For example:",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "",
+            "answer": "they are"
+          },
+          {
+            "number": "2",
+            "text": "",
+            "answer": "she's not"
+          },
+          {
+            "number": "3",
+            "text": "",
+            "answer": "we're not"
+          },
+          {
+            "number": "4",
+            "text": "",
+            "answer": "I am"
+          },
+          {
+            "number": "5",
+            "text": "",
+            "answer": "he is"
+          }
+        ],
+        "sort_order": 5
+      },
+      {
+        "kind": "open",
+        "title": "OPEN-ENDED PRACTICE",
+        "prompt": "",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "text": "Imagine you are on a date. Write 4 questions you could ask your date to get to know them better. Try using ‘Are you…?’ or ‘Is…?’ questions.",
+            "keywords": "questions, date, getting to know you",
+            "inputs": 4
+          }
+        ],
+        "sort_order": 6
+      }
+    ],
+    "sections": [
+      {
+        "type": "apply",
+        "sort_order": 1,
+        "content_md": "In the conversation, Frank asks Pailin if she's tired. Imagine you've just finished exercising with a friend. It's around lunchtime. What can you ask her? Begin your question with 'Are you...?'"
+      },
+      {
+        "type": "understand",
+        "sort_order": 2,
+        "content_md": "## LESSON FOCUS\n\nHow to ask questions with to-be verbs\n\nSo far, you've learned how to make affirmative and negative sentences using the to-be verbs 'am · are · is.' In this lesson, you'll learn how to make questions with these verbs.\n\n## TO-BE VERB QUESTIONS\n\nIn the conversation, Frank asks Pailin:\n\n                  * Are you tired?\n\nCompare the question with this related affirmative sentence:\n\n                  * You are tired.\n\nDo you see how the position of the words changed? The subject 'you' and the to-be verb 'are' swapped places to form a question. All to-be verb questions follow this pattern:\n\n(To-be verb) (subject) (object).\n\nAs you might recall, the 'object' of the sentence can be one of these three things:\n\nadjectives\nprepositional phrases\nnoun OR noun phrases\n\nTake a look at all the 'to-be' questions from the conversation:\n\n                  * Are you excited for the weekend? (adjective)\n                  * Are you tired? (adjective)\n                  * Is In-N-Out near the hotel? (prepositional phrase)\n                  * Is it usually busy? (adjective)\n\nEach of these questions follows the pattern above. For example:\n\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\n\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\n\n                  * You are excited for the weekend.\n                  * You are tired.\n                  * In-N-Out is near the hotel.\n                  * It is usually busy.\n\n## STRUCTURE\n\nRemember that in questions, the to-be verb comes first. Here is the structure of questions using 'am · are · is', with examples:\n\n<table>\n  <tr>\n   <td><strong>ARE NOT</strong>\n   </td>\n   <td><strong>IS NOT</strong>\n   </td>\n  </tr>\n  <tr>\n   <td>You’re not = You aren’t\n<p style=\"text-align: center\">\nWe’re not = We aren’t\n<p style=\"text-align: center\">\nThey’re not = They aren’t\n   </td>\n   <td>He’s not = He isn’t\n<p style=\"text-align: center\">\nShe’s not = She isn’t\n<p style=\"text-align: center\">\nIt’s not = It isn’t\n   </td>\n  </tr>\n</table>\n\nYES/NO QUESTIONS\n\nA question like 'Are you tired?' is called a 'yes/no question.' That means you can answer it with a simple 'Yes' or 'No' answer.\n\n'Yes' is an affirmative answer, but in casual conversation, either of these words is used more often:\n\n                  * Yeah\n                  * Yep\n\n'No' is a negative answer. Either of these words can be used in casual conversation, although 'no' is used the most often by far:\n\n                  * No\n                  * Nope\n\nRelisten to the conversation and take note of the responses:\n\n                  * Frank: Are you excited for the weekend?\nPailin: Yeah!\n\n                  * Frank: Are you tired?\nPailin: No.\n\n                  * Pailin: Is In-N-Out near the hotel?\nFrank: Yep.\n\n                  * Pailin: Is it usually busy?\nFrank: Yeah.\n\n'Yeah,' 'yep,' and 'no' are the responses used, as they sound the most natural in everyday conversation. 'Yes' is perfectly fine, but it can sound a bit stiff in informal settings."
+      },
+      {
+        "type": "extra_tip",
+        "sort_order": 3,
+        "content_md": "## SHORT FORM ANSWERS\n\n'Yes/no' questions require only a simple 'yes' or 'no' response. But these are short and abrupt one-word answers, so to keep the conversation flowing, sometimes a slightly longer 'short answer' will be given. Take a look at this exchange from the conversation:\n\nFrank: Are you excited for the weekend?\nPailin: Yeah, I am!\n\nA simple 'Yeah' would have been fine, but this short form answer offers a natural flow to the conversation. To answer these to-be verb questions with short form, you can use this structure:\n\nYeah, (subject) (to-be verb).\nNo, (subject) (negative to-be verb).\n\n        For example:\n\n                  * Pailin: Are you at the market?\nTyler: Yeah, I am.\n\n                  * Pailin: Is she tired?\nTyler: No, she's not. (or 'No, she isn't.')\n\n                  * Pailin: Are they Thai?\nTyler: Yep, they are.\n\n                  * Pailin: Am I fat?\nTyler: No, you aren't! (or 'No, you're not!')"
+      },
+      {
+        "type": "phrases_verbs",
+        "sort_order": 4,
+        "items": [
+          {
+            "phrase": "Check out (something) / check (something) out",
+            "translation_th": "",
+            "notes": "to look at or examine a person or thing that seems interesting or attractive"
+          },
+          {
+            "phrase": "I see",
+            "translation_th": "",
+            "notes": "I understand"
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 5,
+        "content_md": "What's a quick and easy food you like to eat when you're hungry?\n\n        What's your best friend's name? How old is he or she?"
+      }
+    ],
+    "tags": [
+      "verb",
+      "to-be verb",
+      "questions",
+      "yes no questions    CHECKPOINT 1             time",
+      "weather",
+      "phone call",
+      "family",
+      "friends",
+      "parents"
+    ]
+  }
+]

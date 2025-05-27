@@ -34,6 +34,7 @@ import json
 import re
 import sys
 import logging
+import unicodedata as ud
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -49,7 +50,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # ───────────────────────────── regex helpers
-HEADING_RE = re.compile(r"^([A-Z][A-Z &']+)(?::\s*(.*))?$", re.I)
+HEADING_RE = re.compile(r"^([A-Z][A-Z &'’‘]+)(?::\s*(.*))?$", re.I)
 QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
 OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
@@ -96,7 +97,8 @@ def chunk_by_headings(lines: List[str]) -> Dict[str, List[str]]:
     buckets: Dict[str, List[str]] = {}
     current = None
     for ln in lines:
-        m = HEADING_RE.match(ln)
+        ln_clean = ln.strip()
+        m = HEADING_RE.match(ln_clean)
         if not m:
             # not a heading → normal content
             if current is not None:
@@ -158,18 +160,15 @@ def parse_lesson_header(raw_header: str, stage: str) -> Tuple[Dict, str]:
 
 def strip_practice_directives(lines: list[str]) -> list[str]:
     """
-    Return a *new* list that stops before the first practice directive
-    (TYPE:, TITLE:, QUESTION:, etc.).  Everything from that line to the
-    end is dropped, blank lines included.
+    Return a *new* list with every directive line (TYPE:, TITLE:, …)
+    removed, but leave all the surrounding explanatory text intact.
     """
-    out = []
-    skipping = False
+    cleaned = []
     for ln in lines:
-        if not skipping and PRACTICE_DIRECTIVE_RE.match(ln):
-            skipping = True        # start discarding
-        if not skipping:
-            out.append(ln)
-    return out
+        if PRACTICE_DIRECTIVE_RE.match(ln.lstrip()):
+            continue            # zap the directive
+        cleaned.append(ln)
+    return cleaned
 
 
 def parse_conversation(lines: List[str]) -> List[Dict]:
@@ -278,8 +277,12 @@ def build_section(section_name: str,
     table_counter = 0  # For sequential TABLE: tokens without number
 
     while i < len(lines):
-        raw = lines[i].rstrip()
-
+        # raw = lines[i].rstrip()
+        raw = ud.normalize('NFKD', lines[i]).translate({
+            0x2018: ord("'"), 0x2019: ord("'"),   # ‘ ’  → '
+            0x201C: ord('"'), 0x201D: ord('"'),   # “ ”  → "
+            0x00A0: ord(' '), 0x200B: None        # NBSP, ZWSP → space / remove
+        }).rstrip()
  # ────────────────── 1) TABLE token?  ─────────────────────────────
         m = TABLE_TOKEN_RE.match(raw)
         if m:
@@ -323,11 +326,11 @@ def build_section(section_name: str,
             any(c.isalpha() for c in stripped) and
             1 <= len(stripped.split()) <= 5 and
             not stripped.startswith(('* ', '- ', '> ')) and
-            all(c.isupper() or c in " '\"&-.!?()" for c in stripped)):
+            all(c.isupper() or c in " '’‘\"&-.!?();:" for c in stripped)):
             is_heading = True
-        elif (re.match(r'^[A-Z][A-Z0-9#\s\'"&.\-()]+$', stripped) and
+        elif (re.match(r'^[A-Z][A-Z0-9#\s\'’‘"&.\-();:]+$', stripped) and
               len(stripped) <= 50 and
-              len(stripped.split()) <= 5 and
+              len(stripped.split()) <= 10 and
               not stripped.endswith('.')):
             is_heading = True
         elif stripped.upper() in ("LESSON FOCUS", "FOCUS"):
@@ -414,7 +417,7 @@ def parse_practice(lines: List[str]) -> List[Dict]:
         collecting_paragraph = False
 
         for raw_line in section_lines:
-            line = raw_line.rstrip()
+            line = raw_line.strip()
 
             if not line:
                 continue
