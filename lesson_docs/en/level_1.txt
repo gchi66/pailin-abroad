@@ -2470,7 +2470,7 @@ B. Chloe is from France.
 C. Chloe is from Chiang Mai.
 
 
-Answer key: A
+Answer key: C
 
 
 Prompt
