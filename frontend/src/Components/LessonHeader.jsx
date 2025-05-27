@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import "../Styles/LessonHeader.css";
 
 export default function LessonHeader({ level, lessonOrder, title, subtitle, titleTh, subtitleTh }) {
+  // Check if this is a checkpoint lesson
+  const isCheckpoint = (title || "").toLowerCase().includes("checkpoint");
+
   return (
     <section className="lesson-banner">
       {/* left column */}
@@ -11,7 +14,11 @@ export default function LessonHeader({ level, lessonOrder, title, subtitle, titl
           &lt; BACK TO LESSON LIBRARY
         </Link>
 
-        <span className="lesson-number">LESSON {level}.{lessonOrder}</span>
+        <span className="lesson-number">
+          {isCheckpoint
+            ? `LESSON ${level} CHECKPOINT`
+            : `LESSON ${level}.${lessonOrder}`}
+        </span>
         <h1 className="lesson-title">{title}</h1>
         <h2 className="lesson-subtitle">{subtitle}</h2>
 
