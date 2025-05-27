@@ -127,6 +127,21 @@ def parse_lesson_header(raw_header: str, stage: str) -> Tuple[Dict, str]:
     # Debug the raw header
     logger.debug(f"Parsing header: '{raw_header}'")
 
+    # CHECKPOINT?
+    m_chp = re.match(r'\s*CHECKPOINT\s+(\d+)', raw_header, re.I)
+    if m_chp:
+        level = int(m_chp.group(1))
+        return (
+            {
+                "external_id": f"{level}.chp",
+                "stage": stage,
+                "level": level,
+                "lesson_order": 0,
+                "title": f"Level {level} Checkpoint",
+            },
+            f"Level {level} Checkpoint",
+        )
+
     # More flexible pattern matching for the lesson ID
     m = re.search(r'(?:LESSON|Lesson)\s+(\d+)\.(\d+)', raw_header, re.I)
     if not m:
@@ -561,6 +576,9 @@ def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
             header_line = ln
             logger.debug(f"Found lesson header: '{header_line}'")
             break
+        if re.match(r'\s*CHECKPOINT\s+\d+', ln, re.I):   # checkpoint header checker
+            header_line = ln
+            break
 
     if not header_line:
         logger.error("No lesson header found in chunk")
@@ -619,9 +637,12 @@ def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
     }
 
 def convert(doc_text: str, stage: str, html_tables: List[str]):
-    # Updated regex to handle both "Lesson" and "LESSON" case variants
-    chunks = re.split(r"(?=^\s*(?:LESSON|Lesson)\s+\d+\.\d+)", doc_text, flags=re.M | re.I)
-
+    # Handles Lesson X.Y and Checkpoint X headers
+    chunks = re.split(
+        r"(?=^\s*(?:LESSON|Lesson)\s+\d+\.\d+|CHECKPOINT\s+\d+)",
+        doc_text,
+        flags=re.M | re.I
+    )
     # Debug: Print chunk information
     logger.debug(f"Split document into {len(chunks)} chunks")
     for i, chunk in enumerate(chunks):

@@ -1733,7 +1733,7 @@
           "C. Chloe is from Chiang Mai."
         ],
         "answer_key": [
-          "A"
+          "C"
         ]
       },
       {
@@ -2731,7 +2731,7 @@
       "lesson_order": 16,
       "title": "Is In-N-Out near the hotel?",
       "focus": "How to ask questions with to-be verbs",
-      "backstory": "Pailin has just finished her last day of student orientation in Los Angeles. She’s chatting with Frank, her student advisor.\n\n\nPailin has finished her last day of orientation in Los Angeles for her study-abroad program. She’s relaxing in her hotel room when her phone rings. Pailin’s dad is calling her from Thailand, so she answers the phone."
+      "backstory": "Pailin has just finished her last day of student orientation in Los Angeles. She’s chatting with Frank, her student advisor."
     },
     "transcript": [
       {
@@ -2768,96 +2768,6 @@
         "sort_order": 7,
         "speaker": "Frank",
         "line_text": "Yeah, it's always busy. But it's so good!"
-      },
-      {
-        "sort_order": 8,
-        "speaker": "Dad",
-        "line_text": "Morning, Pai."
-      },
-      {
-        "sort_order": 9,
-        "speaker": "Pailin",
-        "line_text": "Hi, Dad. It’s not morning in LA."
-      },
-      {
-        "sort_order": 10,
-        "speaker": "Dad",
-        "line_text": "Oh, what time is it now?"
-      },
-      {
-        "sort_order": 11,
-        "speaker": "Pailin",
-        "line_text": "It’s…6PM."
-      },
-      {
-        "sort_order": 12,
-        "speaker": "Dad",
-        "line_text": "Oh, it’s morning in Bangkok. So, how are you?"
-      },
-      {
-        "sort_order": 13,
-        "speaker": "Pailin",
-        "line_text": "I’m great! How are you and Mom?"
-      },
-      {
-        "sort_order": 14,
-        "speaker": "Dad",
-        "line_text": "We’re good. We miss you already. Are you at the hotel?"
-      },
-      {
-        "sort_order": 15,
-        "speaker": "Pailin",
-        "line_text": "Yep, I'm in my room."
-      },
-      {
-        "sort_order": 16,
-        "speaker": "Dad",
-        "line_text": "I see. Is it hot in LA?"
-      },
-      {
-        "sort_order": 17,
-        "speaker": "Pailin",
-        "line_text": "It’s warm outside, but my AC is on."
-      },
-      {
-        "sort_order": 18,
-        "speaker": "Dad",
-        "line_text": "Good. Is orientation over?"
-      },
-      {
-        "sort_order": 19,
-        "speaker": "Pailin",
-        "line_text": "Yep, it's over. I have a new friend. She’s from Thailand."
-      },
-      {
-        "sort_order": 20,
-        "speaker": "Dad",
-        "line_text": "Great! What’s her name?"
-      },
-      {
-        "sort_order": 21,
-        "speaker": "Pailin",
-        "line_text": "Her name is Chloe."
-      },
-      {
-        "sort_order": 22,
-        "speaker": "Dad",
-        "line_text": "Oh, and how old is she?"
-      },
-      {
-        "sort_order": 23,
-        "speaker": "Pailin",
-        "line_text": "She’s 23. She’s cool! Is Mom awake?"
-      },
-      {
-        "sort_order": 24,
-        "speaker": "Dad",
-        "line_text": "No, she's not awake yet. Okay, I'm going to work now. Love you Pai."
-      },
-      {
-        "sort_order": 25,
-        "speaker": "Pailin",
-        "line_text": "Love you Dad. Bye."
       }
     ],
     "comprehension_questions": [
@@ -2872,53 +2782,6 @@
         ],
         "answer_key": [
           "B"
-        ]
-      },
-      {
-        "sort_order": 2,
-        "prompt": "What time is it in LA?",
-        "options": [
-          "A. It’s 6AM.",
-          "B. It’s 5PM.",
-          "C. It’s 6PM.",
-          "D. It’s 6:30PM."
-        ],
-        "answer_key": [
-          "C"
-        ]
-      },
-      {
-        "sort_order": 3,
-        "prompt": "Is it morning or night in Thailand?",
-        "options": [
-          "A. It’s morning in Thailand.",
-          "B. It’s night in Thailand."
-        ],
-        "answer_key": [
-          "A"
-        ]
-      },
-      {
-        "sort_order": 4,
-        "prompt": "How is the weather in LA now?",
-        "options": [
-          "A. It’s warm.",
-          "B. It’s hot.",
-          "C. It’s cool."
-        ],
-        "answer_key": [
-          "A"
-        ]
-      },
-      {
-        "sort_order": 5,
-        "prompt": "Is Pailin’s mom asleep or awake?",
-        "options": [
-          "A. Her mom is asleep.",
-          "B. Her mom is awake."
-        ],
-        "answer_key": [
-          "A"
         ]
       }
     ],
@@ -3153,7 +3016,179 @@
             "phrase": "Check out (something) / check (something) out",
             "translation_th": "",
             "notes": "to look at or examine a person or thing that seems interesting or attractive"
-          },
+          }
+        ]
+      },
+      {
+        "type": "pinned_comment",
+        "sort_order": 5,
+        "content_md": "What's a quick and easy food you like to eat when you're hungry?"
+      }
+    ],
+    "tags": [
+      "verb",
+      "to-be verb",
+      "questions",
+      "yes no questions"
+    ]
+  },
+  {
+    "lesson": {
+      "external_id": "1.chp",
+      "stage": "Beginner",
+      "level": 1,
+      "lesson_order": 0,
+      "title": "Level 1 Checkpoint",
+      "focus": "",
+      "backstory": "Pailin has finished her last day of orientation in Los Angeles for her study-abroad program. She’s relaxing in her hotel room when her phone rings. Pailin’s dad is calling her from Thailand, so she answers the phone."
+    },
+    "transcript": [
+      {
+        "sort_order": 1,
+        "speaker": "Dad",
+        "line_text": "Morning, Pai."
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "Hi, Dad. It’s not morning in LA."
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Dad",
+        "line_text": "Oh, what time is it now?"
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Pailin",
+        "line_text": "It’s…6PM."
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Dad",
+        "line_text": "Oh, it’s morning in Bangkok. So, how are you?"
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Pailin",
+        "line_text": "I’m great! How are you and Mom?"
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Dad",
+        "line_text": "We’re good. We miss you already. Are you at the hotel?"
+      },
+      {
+        "sort_order": 8,
+        "speaker": "Pailin",
+        "line_text": "Yep, I'm in my room."
+      },
+      {
+        "sort_order": 9,
+        "speaker": "Dad",
+        "line_text": "I see. Is it hot in LA?"
+      },
+      {
+        "sort_order": 10,
+        "speaker": "Pailin",
+        "line_text": "It’s warm outside, but my AC is on."
+      },
+      {
+        "sort_order": 11,
+        "speaker": "Dad",
+        "line_text": "Good. Is orientation over?"
+      },
+      {
+        "sort_order": 12,
+        "speaker": "Pailin",
+        "line_text": "Yep, it's over. I have a new friend. She’s from Thailand."
+      },
+      {
+        "sort_order": 13,
+        "speaker": "Dad",
+        "line_text": "Great! What’s her name?"
+      },
+      {
+        "sort_order": 14,
+        "speaker": "Pailin",
+        "line_text": "Her name is Chloe."
+      },
+      {
+        "sort_order": 15,
+        "speaker": "Dad",
+        "line_text": "Oh, and how old is she?"
+      },
+      {
+        "sort_order": 16,
+        "speaker": "Pailin",
+        "line_text": "She’s 23. She’s cool! Is Mom awake?"
+      },
+      {
+        "sort_order": 17,
+        "speaker": "Dad",
+        "line_text": "No, she's not awake yet. Okay, I'm going to work now. Love you Pai."
+      },
+      {
+        "sort_order": 18,
+        "speaker": "Pailin",
+        "line_text": "Love you Dad. Bye."
+      }
+    ],
+    "comprehension_questions": [
+      {
+        "sort_order": 1,
+        "prompt": "What time is it in LA?",
+        "options": [
+          "A. It’s 6AM.",
+          "B. It’s 5PM.",
+          "C. It’s 6PM.",
+          "D. It’s 6:30PM."
+        ],
+        "answer_key": [
+          "C"
+        ]
+      },
+      {
+        "sort_order": 2,
+        "prompt": "Is it morning or night in Thailand?",
+        "options": [
+          "A. It’s morning in Thailand.",
+          "B. It’s night in Thailand."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 3,
+        "prompt": "How is the weather in LA now?",
+        "options": [
+          "A. It’s warm.",
+          "B. It’s hot.",
+          "C. It’s cool."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      },
+      {
+        "sort_order": 4,
+        "prompt": "Is Pailin’s mom asleep or awake?",
+        "options": [
+          "A. Her mom is asleep.",
+          "B. Her mom is awake."
+        ],
+        "answer_key": [
+          "A"
+        ]
+      }
+    ],
+    "practice_exercises": [],
+    "sections": [
+      {
+        "type": "phrases_verbs",
+        "sort_order": 1,
+        "items": [
           {
             "phrase": "I see",
             "translation_th": "",
@@ -3163,15 +3198,12 @@
       },
       {
         "type": "pinned_comment",
-        "sort_order": 5,
-        "content_md": "What's a quick and easy food you like to eat when you're hungry?\n\n        What's your best friend's name? How old is he or she?"
+        "sort_order": 2,
+        "content_md": "What's your best friend's name? How old is he or she?"
       }
     ],
     "tags": [
-      "verb",
-      "to-be verb",
-      "questions",
-      "yes no questions    CHECKPOINT 1             time",
+      "time",
       "weather",
       "phone call",
       "family",
