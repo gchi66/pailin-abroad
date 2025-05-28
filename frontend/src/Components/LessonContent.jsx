@@ -126,36 +126,28 @@ export default function LessonContent({
       section.type
     )
   ) {
-    /* Only get quick practice exercises if we're in the understand section */
+    // Only build extraSections for "understand"
     let extraSections = [];
-
-    /* Only add quick practices to the understand section */
     if (section.type === "understand") {
-      /* 1. pull any Quick Practice rows for this lesson */
       const quickExercises = practiceExercises.filter(
         (ex) =>
           (ex.title || "").toLowerCase().startsWith("quick practice") &&
-          ex.sort_order // Ensure it's not already displayed elsewhere
+          ex.sort_order
       );
-
-
-      /* 2. build an extra accordion card if we found any */
-      extraSections = quickExercises.length
-        ? [
-            {
-              key: "quick-practice",
-              title: "QUICK PRACTICE",
-              body: (
-                <PracticeSection
-                  exercises={quickExercises}
-                  uiLang={uiLang}
-                  hideQuick={false}
-                  wrapInDetails={false}
-                />
-              ),
-            },
-          ]
-        : [];
+      extraSections = quickExercises.map((ex, idx) => ({
+        key: `quick-practice-${idx}`,
+        title: ex.title || "Quick Practice",
+        body: (
+          <PracticeSection
+            exercises={[ex]}
+            uiLang={uiLang}
+            hideQuick={false}
+            wrapInDetails={false}
+          />
+        ),
+        preRendered: true,
+        marker: `[[QUICK_PRACTICE_${idx + 1}]]`,
+      }));
     }
 
     return (
@@ -173,7 +165,7 @@ export default function LessonContent({
             <LanguageToggle language={uiLang} setLanguage={setUiLang} />
           </div>
         </header>
-
+        {console.log('UNDERSTAND markdown ↓↓↓\n', contentText)};
         <MarkdownSection
           markdown={contentText}
           defaultOpenFirst={section.type === "understand"}
