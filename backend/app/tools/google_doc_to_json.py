@@ -282,23 +282,26 @@ def build_section(section_name: str,
                   lines: List[str],
                   order: int,
                   html_tables: List[str] = None) -> Dict:
-    """
-    Build one section and replace any line that matches TABLE tokens with the appropriate HTML table.
-
-    Supports both simple "TABLE:" tokens (sequential) and indexed "TABLE-N:" tokens (direct access).
-    """
     out_lines = []
     i = 0
-    table_counter = 0  # For sequential TABLE: tokens without number
+    table_counter = 0
+    quick_practice_count = 1  # Counter for quick practice placeholders
 
     while i < len(lines):
-        # raw = lines[i].rstrip()
         raw = ud.normalize('NFKD', lines[i]).translate({
-            0x2018: ord("'"), 0x2019: ord("'"),   # ‘ ’  → '
-            0x201C: ord('"'), 0x201D: ord('"'),   # “ ”  → "
-            0x00A0: ord(' '), 0x200B: None        # NBSP, ZWSP → space / remove
+            0x2018: ord("'"), 0x2019: ord("'"),
+            0x201C: ord('"'), 0x201D: ord('"'),
+            0x00A0: ord(' '), 0x200B: None
         }).rstrip()
- # ────────────────── 1) TABLE token?  ─────────────────────────────
+
+        # --- Insert Quick Practice placeholder if TITLE: QUICK PRACTICE detected ---
+        if raw.strip().upper().startswith("QUICK PRACTICE"):
+            out_lines.append(f"[[QUICK_PRACTICE_{quick_practice_count}]]")
+            quick_practice_count += 1
+            i += 1
+            continue
+
+# ────────────────── 1) TABLE token?  ─────────────────────────────
         m = TABLE_TOKEN_RE.match(raw)
         if m:
             # Which table should we insert?
@@ -361,7 +364,6 @@ def build_section(section_name: str,
 
         i += 1
 
-    # collapse runs of 3+ blank lines
     content_md = re.sub(r'\n{3,}', '\n\n', "\n".join(out_lines)).strip()
 
     # ────────────────── special "phrases & verbs" type ──────────────────

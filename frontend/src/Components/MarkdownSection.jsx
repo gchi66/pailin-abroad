@@ -49,25 +49,16 @@ function splitByHeadings(markdown) {
 export default function MarkdownSection({
   markdown = "",
   defaultOpenFirst = true,
-  extraSections = [],          // [{ key?, title, body (JSX or string) }, …]
-  sectionType = "",            // Add this parameter to know the current section type
+  extraSections = [],
+  sectionType = "",
 }) {
   // 1. split the incoming markdown by `##` headings
   const sections = splitByHeadings(markdown);
 
-  // 2. Only add extra sections (like Quick Practice) if this is exactly the understand section
+  // 2. Insert extra sections at marker positions for "understand"
   let allSections = [...sections];
-
-  // Only add extraSections if we're in the "understand" section (exact match)
   if (sectionType === "understand" && extraSections.length > 0) {
-    extraSections.forEach((ex) =>
-      allSections.push({
-        key: ex.key ?? `extra-${sections.length}`,
-        title: ex.title || "Extra",
-        body: ex.body,
-        preRendered: true,       // flag so we don't send through MD parser
-      })
-    );
+    allSections = insertExtraSections(sections, extraSections);
   }
 
   return (
@@ -119,4 +110,62 @@ export default function MarkdownSection({
       )}
     </div>
   );
+}
+
+/* ------------------------------------------------------------
+   Utility: insert extra sections based on markers
+------------------------------------------------------------ */
+function insertExtraSections(sections, extraSections) {
+  if (!extraSections || extraSections.length === 0) return sections;
+
+  let newSections = [];
+
+  sections.forEach((sec) => {
+    let body = Array.isArray(sec.body) ? sec.body.join("\n") : sec.body;
+    let workingBody = body;
+    let lastTitle = sec.title;
+
+    // Create a copy of extraSections to avoid mutating the original
+    let availableExtras = [...extraSections];
+
+    // Insert all extras whose marker is found in this section, in order
+    while (true) {
+      // Find the first extra whose marker is in the body
+      const idx = availableExtras.findIndex((ex) => workingBody.includes(ex.marker));
+      if (idx === -1) break;
+
+      const ex = availableExtras[idx];
+      const [before, after] = workingBody.split(ex.marker, 2);
+
+      // Add the part before the marker as a section (if not empty)
+      if (before && before.trim()) {
+        newSections.push({
+          ...sec,
+          body: before,
+          title: lastTitle,
+        });
+        lastTitle = sec.title + " (cont.)";
+      }
+
+      // Add the extra section
+      newSections.push(ex);
+
+      // Continue with the part after the marker
+      workingBody = after;
+
+      // Remove this extra from our working copy so it's not used again
+      availableExtras.splice(idx, 1);
+    }
+
+    // Add any remaining body as a section
+    if (workingBody && workingBody.trim()) {
+      newSections.push({
+        ...sec,
+        body: workingBody,
+        title: lastTitle,
+      });
+    }
+  });
+
+  return newSections;
 }

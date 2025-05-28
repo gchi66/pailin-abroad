@@ -3628,7 +3628,7 @@ Did you notice how Pailin said the time 11:05? She didn’t say ‘eleven five�
 
         The 0 is pronounced as the letter ‘O’ or ‘oh.’
 
-
+QUICK PRACTICE
 TYPE: sentence_transform
 TITLE: QUICK PRACTICE 1
 PROMPT: Type out how these times should be said.
@@ -3663,7 +3663,8 @@ All other times are read as two numbers - the hour, the minutes. In the conversa
                   * 11:30 = eleven thirty
 
 
-        TYPE: sentence_transform
+QUICK PRACTICE
+TYPE: sentence_transform
 TITLE: QUICK PRACTICE 2
 PROMPT: Type out how these times should be said.
 
