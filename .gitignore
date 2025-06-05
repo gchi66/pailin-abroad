@@ -7,6 +7,7 @@ backend/.env
 backend/venv/
 
 .env
+frontend/.env
 
 
 # Dependencies
