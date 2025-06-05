@@ -7,7 +7,6 @@ import AudioBar       from "../Components/AudioBar";
 import LessonSidebar  from "../Components/LessonSidebar";
 import LessonContent  from "../Components/LessonContent";
 
-
 import "../Styles/Lesson.css";
 
 export default function Lesson() {
@@ -25,6 +24,9 @@ export default function Lesson() {
   // UI state
   const [activeId, setActiveId] = useState(null);
   const [uiLang,   setUiLang]   = useState("en");
+
+  // Audio URL state
+  const [audioUrl, setAudioUrl] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -80,8 +82,49 @@ export default function Lesson() {
         || (qs.length ? "comprehension" : null)
         || (tr.length ? "transcript" : null)
       );
-    })();
-  }, [id]);
+
+      // Fetch audio URL if present
+      const bucket = "lesson-audio";
+      console.log("Lesson data:", lsn); // Debug log
+
+      if (lsn && lsn.conversation_audio_url) {
+        console.log("Attempting to fetch audio for path:", lsn.conversation_audio_url);
+
+        // First, try to check if the file exists
+        const { data: fileList, error: listError } = await supabaseClient
+          .storage
+          .from(bucket)
+          .list(lsn.conversation_audio_url.split('/').slice(0, -1).join('/'));
+
+        if (listError) {
+          console.error("Error listing files:", listError);
+        } else {
+          console.log("Files in directory:", fileList);
+          const fileName = lsn.conversation_audio_url.split('/').pop();
+          const fileExists = fileList.some(file => file.name === fileName);
+          console.log(`File ${fileName} exists:`, fileExists);
+        }
+
+        // Try to create signed URL
+        const { data, error } = await supabaseClient
+          .storage
+          .from(bucket)
+          .createSignedUrl(lsn.conversation_audio_url, 2 * 60 * 60);
+
+        if (error) {
+          console.error("Audio signed URL error:", error);
+          console.error("Full error details:", JSON.stringify(error, null, 2));
+          setAudioUrl(null);
+        } else {
+          console.log("Successfully created signed URL:", data.signedUrl);
+          setAudioUrl(data.signedUrl);
+        }
+      } else {
+        console.log("No audio URL found in lesson data");
+        setAudioUrl(null);
+      }
+    })(); // <-- closes the async IIFE
+  }, [id]); // <-- closes useEffect
 
   if (!lesson) {
     return <div style={{ padding: "10vh", textAlign: "center" }}>Loading…</div>;
@@ -102,7 +145,7 @@ export default function Lesson() {
 
         {/* audio card */}
         <AudioBar
-          audioSrc="/4.7_conversation.mp3"
+          audioSrc={audioUrl}
           description={lesson.backstory}
         />
 
