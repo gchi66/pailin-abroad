@@ -90,21 +90,6 @@ export default function Lesson() {
       if (lsn && lsn.conversation_audio_url) {
         console.log("Attempting to fetch audio for path:", lsn.conversation_audio_url);
 
-        // First, try to check if the file exists
-        const { data: fileList, error: listError } = await supabaseClient
-          .storage
-          .from(bucket)
-          .list(lsn.conversation_audio_url.split('/').slice(0, -1).join('/'));
-
-        if (listError) {
-          console.error("Error listing files:", listError);
-        } else {
-          console.log("Files in directory:", fileList);
-          const fileName = lsn.conversation_audio_url.split('/').pop();
-          const fileExists = fileList.some(file => file.name === fileName);
-          console.log(`File ${fileName} exists:`, fileExists);
-        }
-
         // Try to create signed URL
         const { data, error } = await supabaseClient
           .storage
