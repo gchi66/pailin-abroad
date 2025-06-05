@@ -2,3 +2,8 @@
 rclone-v*/
 rclone-v*.*-osx-64.zip
 rclone-v*
+
+backend/.env
+backend/venv/
+
+.env
