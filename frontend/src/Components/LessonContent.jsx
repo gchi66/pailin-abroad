@@ -13,6 +13,7 @@ export default function LessonContent({
   questions = [],
   transcript = [],
   practiceExercises = [],
+  lessonPhrases = [],
   activeId,
   uiLang = "en",
   setUiLang,
@@ -89,7 +90,42 @@ export default function LessonContent({
   }
 
   /* ===============================================================
-     4) REGULAR LESSON SECTIONS (markdown or apply)
+     4) PHRASES & VERBS VIEW
+  =============================================================== */
+  if (activeId === "phrases_verbs" && lessonPhrases.length > 0) {
+    return (
+      <article className="lc-card">
+        <header className="lc-head">
+          <div className="lc-head-left">
+            <span className="lc-head-title">PHRASES & VERBS</span>
+          </div>
+          <div className="lc-head-right">
+            <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+          </div>
+        </header>
+        <div className="lc-body">
+          <ul className="phrases-verbs-list">
+            {lessonPhrases.map((item, idx) => (
+              <li key={item.id || idx}>
+                <strong>{item.phrase}</strong>
+                {item.translation && (
+                  <span> &mdash; {item.translation}</span>
+                )}
+                {item.notes && (
+                  <div className="phrase-notes" style={{ fontSize: "0.95em", color: "#666" }}>
+                    {item.notes}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    );
+  }
+
+  /* ===============================================================
+     5) REGULAR LESSON SECTIONS (markdown or apply)
   =============================================================== */
   const section = sections.find((s) => s.id === activeId);
   if (!section) {
@@ -165,7 +201,6 @@ export default function LessonContent({
             <LanguageToggle language={uiLang} setLanguage={setUiLang} />
           </div>
         </header>
-        {console.log('UNDERSTAND markdown ↓↓↓\n', contentText)};
         <MarkdownSection
           markdown={contentText}
           defaultOpenFirst={section.type === "understand"}

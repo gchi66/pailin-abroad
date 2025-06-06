@@ -31,6 +31,7 @@ export default function LessonSidebar({
   questions = [],
   transcript = [],
   practiceExercises = [],
+  lessonPhrases = [],
   activeId,
   onSelect,
 }) {
@@ -45,6 +46,10 @@ export default function LessonSidebar({
       }
       if (type === "practice" && practiceExercises.length) {   // ②  PRACTICE GATE
         return { id: "practice", type };
+      }
+      if (type === "phrases_verbs" && lessonPhrases.length) {
+        // <-- Add this block
+        return { id: "phrases_verbs", type };
       }
       const sec = sections.find((s) => s.type === type);
       return sec ? { id: sec.id, type } : null;

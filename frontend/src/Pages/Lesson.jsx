@@ -20,6 +20,7 @@ export default function Lesson() {
   const [questions, setQuestions] = useState([]);
   const [transcript, setTranscript] = useState([]);
   const [practiceExercises, setPracticeExercises] = useState([]);
+  const [lessonPhrases, setLessonPhrases] = useState([]);
 
   // UI state
   const [activeId, setActiveId] = useState(null);
@@ -108,6 +109,20 @@ export default function Lesson() {
         console.log("No audio URL found in lesson data");
         setAudioUrl(null);
       }
+
+      // Fetch phrases for this lesson
+      const { data: phraseLinks, error: phraseError } = await supabaseClient
+        .from("lesson_phrases")
+        .select("sort_order, phrases(*)")
+        .eq("lesson_id", id)
+        .order("sort_order");
+
+      if (phraseError) {
+        console.error("Error fetching lesson phrases:", phraseError);
+        setLessonPhrases([]);
+      } else {
+        setLessonPhrases(phraseLinks.map(row => row.phrases));
+      }
     })(); // <-- closes the async IIFE
   }, [id]); // <-- closes useEffect
 
@@ -141,6 +156,7 @@ export default function Lesson() {
             questions={questions}
             transcript={transcript}
             practiceExercises={practiceExercises}
+            lessonPhrases={lessonPhrases}
             activeId={activeId}
             onSelect={setActiveId}
           />
@@ -149,6 +165,7 @@ export default function Lesson() {
             questions={questions}
             transcript={transcript}
             practiceExercises={practiceExercises}
+            lessonPhrases={lessonPhrases}
             activeId={activeId}
             uiLang={uiLang}
             setUiLang={setUiLang}
