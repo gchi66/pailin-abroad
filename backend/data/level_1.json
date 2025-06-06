@@ -996,9 +996,8 @@
         "sort_order": 3,
         "items": [
           {
-            "phrase": "Oh!",
-            "translation_th": "",
-            "notes": "said when you are pleasantly surprised about something"
+            "phrase": "OH!",
+            "content_md": "Oh! = (said when you are pleasantly surprised about something)\n      * Pailin: I baked this cake for you.\nLuke: Oh, it looks so good! Thank you!\n\n\n        See more uses of 'Oh'"
           }
         ]
       },
@@ -1148,9 +1147,8 @@
         "sort_order": 4,
         "items": [
           {
-            "phrase": "Here",
-            "translation_th": "",
-            "notes": "used to offer something to someone, like 'Take this'"
+            "phrase": "HERE",
+            "content_md": "Here = (used to offer something to someone, like 'Take this')\n      * Luke: My breath stinks.\nPailin: Here, I have some gum.\n\n      * Pailin: I can't find my blue pen.\nLuke: Here, you can use mine."
           }
         ]
       },
@@ -1656,9 +1654,13 @@
         "sort_order": 5,
         "items": [
           {
-            "phrase": "Nice!",
+            "phrase": "NICE!",
             "translation_th": "",
-            "notes": "a positive expression to show enthusiasm or approval"
+            "content_md": "Nice! = (a positive expression to show enthusiasm or approval)\n               * Luke: I applied for a few jobs today.\nChloe: Nice! I'm sure you'll get one.\n\n\n               * Luke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I'll take a look at them."
+          },
+          {
+            "phrase": "OH!",
+            "content_md": ""
           }
         ]
       },
@@ -1738,7 +1740,7 @@
           "C. Chloe is from Chiang Mai."
         ],
         "answer_key": [
-          "C"
+          "B"
         ]
       },
       {
@@ -1837,14 +1839,13 @@
         "sort_order": 4,
         "items": [
           {
-            "phrase": "Wow",
+            "phrase": "WOW",
             "translation_th": "",
-            "notes": "used to show surprise or admiration"
+            "content_md": "Wow = (used to show surprise or admiration)\n               * Wow! This cake is beautiful. Did you make it all by yourself?\n\n\n        See more uses of 'Wow'"
           },
           {
-            "phrase": "Cool!",
-            "translation_th": "",
-            "notes": "an informal way of saying 'That's great'"
+            "phrase": "COOL!",
+            "content_md": "Cool! = (an informal way of saying 'That's great')\n               * Luke: I just got tickets to the concert!\nPailin: Cool! I'm so excited.\n\n               * Pailin: We're bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?"
           }
         ]
       },
@@ -2442,9 +2443,13 @@
         "sort_order": 4,
         "items": [
           {
-            "phrase": "Look for",
+            "phrase": "HERE",
             "translation_th": "",
-            "notes": "to try to find or search for something"
+            "content_md": ""
+          },
+          {
+            "phrase": "LOOK FOR",
+            "content_md": "Look for = (to try to find or search for something)\n                  * I've been looking for a new job, but not many places are hiring.\n                  * I'm looking for my keys. Have you seen them?"
           }
         ]
       },
@@ -2698,19 +2703,18 @@
         "sort_order": 4,
         "items": [
           {
-            "phrase": "Let's see",
+            "phrase": "LET'S SEE",
             "translation_th": "",
-            "notes": "said when you're trying to remember something or are thinking carefully"
+            "content_md": "Let's see = (said when you're trying to remember something or are thinking carefully)\n                  * Next Sunday, let's see, I've got to pick up my sister from the airport.\n                  * Let's see, how long did it take to get to Vegas last time?"
           },
           {
-            "phrase": "Come back",
+            "phrase": "COME BACK",
             "translation_th": "",
-            "notes": "to return"
+            "content_md": "Come back = (to return)\n                  * I want to come back to Thailand next year.\n                  * What time did you come back last night?"
           },
           {
-            "phrase": "Sure!",
-            "translation_th": "",
-            "notes": "an enthusiastic way of saying 'Yes'"
+            "phrase": "SURE!",
+            "content_md": "Sure! = (an enthusiastic way of saying 'Yes')\n                  * Luke: Could you help me translate these sentences into Thai?\nPailin: Sure!\n\n\nSee more uses of 'Sure'"
           }
         ]
       },
@@ -3006,7 +3010,7 @@
       {
         "type": "understand",
         "sort_order": 2,
-        "content_md": "## LESSON FOCUS\n\nHow to ask questions with to-be verbs\n\nSo far, you've learned how to make affirmative and negative sentences using the to-be verbs 'am · are · is.' In this lesson, you'll learn how to make questions with these verbs.\n\n## TO-BE VERB QUESTIONS\n\nIn the conversation, Frank asks Pailin:\n\n                  * Are you tired?\n\nCompare the question with this related affirmative sentence:\n\n                  * You are tired.\n\nDo you see how the position of the words changed? The subject 'you' and the to-be verb 'are' swapped places to form a question. All to-be verb questions follow this pattern:\n\n(To-be verb) (subject) (object).\n\nAs you might recall, the 'object' of the sentence can be one of these three things:\n\nadjectives\nprepositional phrases\nnoun OR noun phrases\n\nTake a look at all the 'to-be' questions from the conversation:\n\n                  * Are you excited for the weekend? (adjective)\n                  * Are you tired? (adjective)\n                  * Is In-N-Out near the hotel? (prepositional phrase)\n                  * Is it usually busy? (adjective)\n\nEach of these questions follows the pattern above. For example:\n\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\n\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\n\n                  * You are excited for the weekend.\n                  * You are tired.\n                  * In-N-Out is near the hotel.\n                  * It is usually busy.\n\n## STRUCTURE\n\nRemember that in questions, the to-be verb comes first. Here is the structure of questions using 'am · are · is', with examples:\n\n<!-- TABLE 1 MISSING -->\n\nYES/NO QUESTIONS\n\nA question like 'Are you tired?' is called a 'yes/no question.' That means you can answer it with a simple 'Yes' or 'No' answer.\n\n'Yes' is an affirmative answer, but in casual conversation, either of these words is used more often:\n\n                  * Yeah\n                  * Yep\n\n'No' is a negative answer. Either of these words can be used in casual conversation, although 'no' is used the most often by far:\n\n                  * No\n                  * Nope\n\nRelisten to the conversation and take note of the responses:\n\n                  * Frank: Are you excited for the weekend?\nPailin: Yeah!\n\n                  * Frank: Are you tired?\nPailin: No.\n\n                  * Pailin: Is In-N-Out near the hotel?\nFrank: Yep.\n\n                  * Pailin: Is it usually busy?\nFrank: Yeah.\n\n'Yeah,' 'yep,' and 'no' are the responses used, as they sound the most natural in everyday conversation. 'Yes' is perfectly fine, but it can sound a bit stiff in informal settings."
+        "content_md": "## LESSON FOCUS\n\nHow to ask questions with to-be verbs\n\nSo far, you've learned how to make affirmative and negative sentences using the to-be verbs 'am · are · is.' In this lesson, you'll learn how to make questions with these verbs.\n\n## TO-BE VERB QUESTIONS\n\nIn the conversation, Frank asks Pailin:\n\n                  * Are you tired?\n\nCompare the question with this related affirmative sentence:\n\n                  * You are tired.\n\nDo you see how the position of the words changed? The subject 'you' and the to-be verb 'are' swapped places to form a question. All to-be verb questions follow this pattern:\n\n(To-be verb) (subject) (object).\n\nAs you might recall, the 'object' of the sentence can be one of these three things:\n\nadjectives\nprepositional phrases\nnoun OR noun phrases\n\nTake a look at all the 'to-be' questions from the conversation:\n\n                  * Are you excited for the weekend? (adjective)\n                  * Are you tired? (adjective)\n                  * Is In-N-Out near the hotel? (prepositional phrase)\n                  * Is it usually busy? (adjective)\n\nEach of these questions follows the pattern above. For example:\n\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\n\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\n\n                  * You are excited for the weekend.\n                  * You are tired.\n                  * In-N-Out is near the hotel.\n                  * It is usually busy.\n\n## STRUCTURE\n\nRemember that in questions, the to-be verb comes first. Here is the structure of questions using 'am · are · is', with examples:\n\n<!-- TABLE 2 MISSING -->\n\nYES/NO QUESTIONS\n\nA question like 'Are you tired?' is called a 'yes/no question.' That means you can answer it with a simple 'Yes' or 'No' answer.\n\n'Yes' is an affirmative answer, but in casual conversation, either of these words is used more often:\n\n                  * Yeah\n                  * Yep\n\n'No' is a negative answer. Either of these words can be used in casual conversation, although 'no' is used the most often by far:\n\n                  * No\n                  * Nope\n\nRelisten to the conversation and take note of the responses:\n\n                  * Frank: Are you excited for the weekend?\nPailin: Yeah!\n\n                  * Frank: Are you tired?\nPailin: No.\n\n                  * Pailin: Is In-N-Out near the hotel?\nFrank: Yep.\n\n                  * Pailin: Is it usually busy?\nFrank: Yeah.\n\n'Yeah,' 'yep,' and 'no' are the responses used, as they sound the most natural in everyday conversation. 'Yes' is perfectly fine, but it can sound a bit stiff in informal settings."
       },
       {
         "type": "extra_tip",
@@ -3018,9 +3022,8 @@
         "sort_order": 4,
         "items": [
           {
-            "phrase": "Check out (something) / check (something) out",
-            "translation_th": "",
-            "notes": "to look at or examine a person or thing that seems interesting or attractive"
+            "phrase": "CHECK OUT",
+            "content_md": "Check out (something) / check (something) out = (to look at or examine a person or thing that seems interesting or attractive)\n                  * Do you wanna check out this new cafe that just opened down the street?\n                  * Emily, check it out. This camera can take photos underwater!\n\n\n        See more uses of 'Check out'"
           }
         ]
       },
@@ -3195,9 +3198,8 @@
         "sort_order": 1,
         "items": [
           {
-            "phrase": "I see",
-            "translation_th": "",
-            "notes": "I understand"
+            "phrase": "I SEE",
+            "content_md": "I see = (I understand)\n                  * Pailin: How did you know I work here?\nLuke: You told me the last time I saw you.\nPailin: Oh, I see.\n\n\n                  * Luke: The reason your electricity isn't working is because someone turned off your circuit breaker.\nPailin: Oh, okay I see."
           }
         ]
       },
@@ -3213,7 +3215,12 @@
       "phone call",
       "family",
       "friends",
-      "parents"
+      "parents   [a]Leeh - for all of these ones NOT highlighted",
+      "please replace the english text with the thai text [b]put each thai line under each english line [c]your translations don't need (parenthesis)",
+      "i just put them there for our own purposes [d]these will be the accessibility text for the images",
+      "in case the user has a disability and uses a screen reader [e]Leeh - please replace this with the Thai sentence (but with the correct grammar in Thai",
+      "of course) [f]leeh - please replace this with thai in paragraph format",
+      "but with no underlines or anything"
     ]
   }
 ]

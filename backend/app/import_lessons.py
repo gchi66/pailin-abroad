@@ -163,7 +163,7 @@ def upsert_phrases(lesson_id, sections, dry_run=False):
         for idx, item in enumerate(sec.get("items", []), start=1):
             phrase_record = {
                 "phrase":       item.get("phrase"),
-                "translation":  item.get("translation_th"),
+                "translation":  item.get("translation_th") or "",
                 "notes":        item.get("notes"),
                 "phrase_th":    item.get("phrase_th"),
                 "notes_th":     item.get("notes_th"),

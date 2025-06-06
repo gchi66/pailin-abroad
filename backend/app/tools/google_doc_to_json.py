@@ -278,6 +278,44 @@ def extract_html_tables(md_path: str) -> List[str]:
         logger.warning("markdown_utils not available—no tables extracted")
         return []
 
+def parse_phrases_verbs_items(lines):
+    """
+    Parse PHRASES & VERBS section into an items array:
+    Each ALL CAPS line is a phrase, and all lines under it (until next ALL CAPS or end) are content_md.
+    """
+    items = []
+    current_phrase = None
+    current_content = []
+
+    def is_all_caps_header(ln):
+        stripped = ln.strip()
+        return (
+            stripped
+            and stripped.upper() == stripped
+            and any(c.isalpha() for c in stripped)
+            and not stripped.startswith(("*", "-", ">"))
+            and 1 <= len(stripped.split()) <= 5
+        )
+
+    for ln in lines:
+        if is_all_caps_header(ln):
+            if current_phrase:
+                items.append({
+                    "phrase": current_phrase,
+                    "translation_th": "",
+                    "content_md": "\n".join(current_content).strip()
+                })
+            current_phrase = ln.strip().lstrip("#").strip()
+            current_content = []
+        else:
+            current_content.append(ln)
+    if current_phrase:
+        items.append({
+            "phrase": current_phrase,
+            "content_md": "\n".join(current_content).strip()
+        })
+    return items
+
 def build_section(section_name: str,
                   lines: List[str],
                   order: int,
@@ -368,20 +406,12 @@ def build_section(section_name: str,
 
     # ────────────────── special "phrases & verbs" type ──────────────────
     if section_name == "PHRASES & VERBS":
-        items = []
-        for ln in out_lines:
-            if "=" not in ln:
-                continue
-            phrase, rest = ln.split("=", 1)
-            translation, *notes = rest.split("(")
-            item = {"phrase": phrase.strip(),
-                    "translation_th": translation.strip()}
-            if notes:
-                item["notes"] = notes[0].rstrip(") ").strip()
-            items.append(item)
-        return {"type": "phrases_verbs",
-                "sort_order": order,
-                "items": items}
+        items = parse_phrases_verbs_items(out_lines)
+        return {
+            "type": "phrases_verbs",
+            "sort_order": order,
+            "items": items
+        }
 
     # normal section
     return {"type": SECTION_TYPE_MAP.get(section_name, section_name.lower()),

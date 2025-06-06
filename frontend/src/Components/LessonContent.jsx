@@ -93,6 +93,14 @@ export default function LessonContent({
      4) PHRASES & VERBS VIEW
   =============================================================== */
   if (activeId === "phrases_verbs" && lessonPhrases.length > 0) {
+    // Build a markdown string with each phrase as a heading
+    const phrasesMarkdown = lessonPhrases
+      .map(
+        (item) =>
+          `## ${item.phrase}\n${item.content_md ? item.content_md.trim() : ""}`
+      )
+      .join("\n\n");
+
     return (
       <article className="lc-card">
         <header className="lc-head">
@@ -103,23 +111,11 @@ export default function LessonContent({
             <LanguageToggle language={uiLang} setLanguage={setUiLang} />
           </div>
         </header>
-        <div className="lc-body">
-          <ul className="phrases-verbs-list">
-            {lessonPhrases.map((item, idx) => (
-              <li key={item.id || idx}>
-                <strong>{item.phrase}</strong>
-                {item.translation && (
-                  <span> &mdash; {item.translation}</span>
-                )}
-                {item.notes && (
-                  <div className="phrase-notes" style={{ fontSize: "0.95em", color: "#666" }}>
-                    {item.notes}
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <MarkdownSection
+          markdown={phrasesMarkdown}
+          defaultOpenFirst={false}
+          sectionType="phrases_verbs"
+        />
       </article>
     );
   }

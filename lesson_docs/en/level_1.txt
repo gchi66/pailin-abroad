@@ -1357,6 +1357,7 @@ But in casual conversation, you can leave out ‘years old’ for simplicity. Sa
 PHRASES & VERBS
 
 
+OH!
 Oh! = (said when you are pleasantly surprised about something)
       * Pailin: I baked this cake for you.
 Luke: Oh, it looks so good! Thank you!
@@ -1585,6 +1586,7 @@ Here are two ways to give thanks for specific reasons:
 PHRASES & VERBS
 
 
+HERE
 Here = (used to offer something to someone, like ‘Take this’)
       * Luke: My breath stinks.
 Pailin: Here, I have some gum.
@@ -2214,6 +2216,7 @@ This is incorrect because there is no verb. As emphasized before, every sentence
 PHRASES & VERBS
 
 
+NICE!
 Nice! = (a positive expression to show enthusiasm or approval)
                * Luke: I applied for a few jobs today.
 Chloe: Nice! I’m sure you’ll get one.
@@ -2225,7 +2228,7 @@ Pailin: Nice! Send them to me and I’ll take a look at them.
 
 
 
-Oh! (pleasant surprise)
+OH!
 PRACTICE
 
 
@@ -2470,7 +2473,7 @@ B. Chloe is from France.
 C. Chloe is from Chiang Mai.
 
 
-Answer key: C
+Answer key: B
 
 
 Prompt
@@ -2586,6 +2589,7 @@ Take note of these three things:
 PHRASES & VERBS
 
 
+WOW
 Wow = (used to show surprise or admiration)
                * Wow! This cake is beautiful. Did you make it all by yourself?
 
@@ -2595,6 +2599,7 @@ Wow = (used to show surprise or admiration)
 
 
 
+COOL!
 Cool! = (an informal way of saying ‘That’s great’)
                * Luke: I just got tickets to the concert!
 Pailin: Cool! I’m so excited.
@@ -3285,9 +3290,10 @@ Thai people often omit the to-be verb in negative sentences and only use ‘not�
 PHRASES & VERBS
 
 
-Here
+HERE
 
 
+LOOK FOR
 Look for = (to try to find or search for something)
                   * I’ve been looking for a new job, but not many places are hiring.
                   * I’m looking for my keys. Have you seen them?
@@ -3628,7 +3634,7 @@ Did you notice how Pailin said the time 11:05? She didn’t say ‘eleven five�
 
         The 0 is pronounced as the letter ‘O’ or ‘oh.’
 
-QUICK PRACTICE
+        QUICK PRACTICE
 TYPE: sentence_transform
 TITLE: QUICK PRACTICE 1
 PROMPT: Type out how these times should be said.
@@ -3663,8 +3669,9 @@ All other times are read as two numbers - the hour, the minutes. In the conversa
                   * 11:30 = eleven thirty
 
 
-QUICK PRACTICE
-TYPE: sentence_transform
+
+        QUICK PRACTICE
+        TYPE: sentence_transform
 TITLE: QUICK PRACTICE 2
 PROMPT: Type out how these times should be said.
 
@@ -3736,16 +3743,19 @@ While time phrases like these are more widely used in the UK and other English-s
 PHRASES & VERBS
 
 
+LET’S SEE
 Let’s see = (said when you’re trying to remember something or are thinking carefully)
                   * Next Sunday, let’s see, I’ve got to pick up my sister from the airport.
                   * Let’s see, how long did it take to get to Vegas last time?
 
 
+COME BACK
 Come back = (to return)
                   * I want to come back to Thailand next year.
                   * What time did you come back last night?
 
 
+SURE!
 Sure! = (an enthusiastic way of saying ‘Yes’)
                   * Luke: Could you help me translate these sentences into Thai?
 Pailin: Sure!
@@ -3976,7 +3986,7 @@ ________________
 Remember that in questions, the to-be verb comes first. Here is the structure of questions using ‘am · are · is’, with examples:
 
 
-TABLE-1:
+TABLE-2:
 
 
 TO-BE VERB
@@ -4100,6 +4110,7 @@ Tyler: No, you aren’t! (or ‘No, you’re not!’)
 PHRASES & VERBS
 
 
+CHECK OUT
 Check out (something) / check (something) out = (to look at or examine a person or thing that seems interesting or attractive)
                   * Do you wanna check out this new cafe that just opened down the street?
                   * Emily, check it out. This camera can take photos underwater!
@@ -4405,6 +4416,7 @@ Answer key: A
 PHRASES & VERBS
 
 
+I SEE
 I see = (I understand)
                   * Pailin: How did you know I work here?
 Luke: You told me the last time I saw you.
@@ -4427,3 +4439,11 @@ TAGS
 
 
         time, weather, phone call, family, friends, parents
+
+
+[a]Leeh - for all of these ones NOT highlighted, please replace the english text with the thai text
+[b]put each thai line under each english line
+[c]your translations don't need (parenthesis), i just put them there for our own purposes
+[d]these will be the accessibility text for the images, in case the user has a disability and uses a screen reader
+[e]Leeh - please replace this with the Thai sentence (but with the correct grammar in Thai, of course)
+[f]leeh - please replace this with thai in paragraph format, but with no underlines or anything
