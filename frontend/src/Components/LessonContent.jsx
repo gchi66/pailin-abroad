@@ -93,8 +93,30 @@ export default function LessonContent({
      4) PHRASES & VERBS VIEW
   =============================================================== */
   if (activeId === "phrases_verbs" && lessonPhrases.length > 0) {
-    // Build a markdown string with each phrase as a heading
-    const phrasesMarkdown = lessonPhrases
+    // Only include phrases with non-empty content_md
+    const filteredPhrases = lessonPhrases.filter(
+      (item) => item.content_md && item.content_md.trim() !== ""
+    );
+
+    if (filteredPhrases.length === 0) {
+      return (
+        <article className="lc-card">
+          <header className="lc-head">
+            <div className="lc-head-left">
+              <span className="lc-head-title">PHRASES & VERBS</span>
+            </div>
+            <div className="lc-head-right">
+              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+            </div>
+          </header>
+          <div className="lc-body">
+            <em>No phrases or verbs to display.</em>
+          </div>
+        </article>
+      );
+    }
+
+    const phrasesMarkdown = filteredPhrases
       .map(
         (item) =>
           `## ${item.phrase}\n${item.content_md ? item.content_md.trim() : ""}`

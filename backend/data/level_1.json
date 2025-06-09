@@ -997,6 +997,8 @@
         "items": [
           {
             "phrase": "OH!",
+            "variant": 1,
+            "translation_th": "",
             "content_md": "Oh! = (said when you are pleasantly surprised about something)\n      * Pailin: I baked this cake for you.\nLuke: Oh, it looks so good! Thank you!\n\n\n        See more uses of 'Oh'"
           }
         ]
@@ -1148,6 +1150,8 @@
         "items": [
           {
             "phrase": "HERE",
+            "variant": 1,
+            "translation_th": "",
             "content_md": "Here = (used to offer something to someone, like 'Take this')\n      * Luke: My breath stinks.\nPailin: Here, I have some gum.\n\n      * Pailin: I can't find my blue pen.\nLuke: Here, you can use mine."
           }
         ]
@@ -1655,12 +1659,15 @@
         "items": [
           {
             "phrase": "NICE!",
+            "variant": 1,
             "translation_th": "",
             "content_md": "Nice! = (a positive expression to show enthusiasm or approval)\n               * Luke: I applied for a few jobs today.\nChloe: Nice! I'm sure you'll get one.\n\n\n               * Luke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I'll take a look at them."
           },
           {
             "phrase": "OH!",
-            "content_md": ""
+            "variant": 1,
+            "translation_th": "",
+            "reference": true
           }
         ]
       },
@@ -1840,11 +1847,14 @@
         "items": [
           {
             "phrase": "WOW",
+            "variant": 1,
             "translation_th": "",
             "content_md": "Wow = (used to show surprise or admiration)\n               * Wow! This cake is beautiful. Did you make it all by yourself?\n\n\n        See more uses of 'Wow'"
           },
           {
             "phrase": "COOL!",
+            "variant": 1,
+            "translation_th": "",
             "content_md": "Cool! = (an informal way of saying 'That's great')\n               * Luke: I just got tickets to the concert!\nPailin: Cool! I'm so excited.\n\n               * Pailin: We're bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?"
           }
         ]
@@ -2444,11 +2454,14 @@
         "items": [
           {
             "phrase": "HERE",
+            "variant": 1,
             "translation_th": "",
-            "content_md": ""
+            "reference": true
           },
           {
             "phrase": "LOOK FOR",
+            "variant": 1,
+            "translation_th": "",
             "content_md": "Look for = (to try to find or search for something)\n                  * I've been looking for a new job, but not many places are hiring.\n                  * I'm looking for my keys. Have you seen them?"
           }
         ]
@@ -2704,16 +2717,20 @@
         "items": [
           {
             "phrase": "LET'S SEE",
+            "variant": 1,
             "translation_th": "",
             "content_md": "Let's see = (said when you're trying to remember something or are thinking carefully)\n                  * Next Sunday, let's see, I've got to pick up my sister from the airport.\n                  * Let's see, how long did it take to get to Vegas last time?"
           },
           {
             "phrase": "COME BACK",
+            "variant": 1,
             "translation_th": "",
             "content_md": "Come back = (to return)\n                  * I want to come back to Thailand next year.\n                  * What time did you come back last night?"
           },
           {
             "phrase": "SURE!",
+            "variant": 1,
+            "translation_th": "",
             "content_md": "Sure! = (an enthusiastic way of saying 'Yes')\n                  * Luke: Could you help me translate these sentences into Thai?\nPailin: Sure!\n\n\nSee more uses of 'Sure'"
           }
         ]
@@ -3023,6 +3040,8 @@
         "items": [
           {
             "phrase": "CHECK OUT",
+            "variant": 1,
+            "translation_th": "",
             "content_md": "Check out (something) / check (something) out = (to look at or examine a person or thing that seems interesting or attractive)\n                  * Do you wanna check out this new cafe that just opened down the street?\n                  * Emily, check it out. This camera can take photos underwater!\n\n\n        See more uses of 'Check out'"
           }
         ]
@@ -3199,6 +3218,8 @@
         "items": [
           {
             "phrase": "I SEE",
+            "variant": 1,
+            "translation_th": "",
             "content_md": "I see = (I understand)\n                  * Pailin: How did you know I work here?\nLuke: You told me the last time I saw you.\nPailin: Oh, I see.\n\n\n                  * Luke: The reason your electricity isn't working is because someone turned off your circuit breaker.\nPailin: Oh, okay I see."
           }
         ]

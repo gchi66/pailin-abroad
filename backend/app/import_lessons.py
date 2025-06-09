@@ -161,49 +161,65 @@ def upsert_phrases(lesson_id, sections, dry_run=False):
             continue
 
         for idx, item in enumerate(sec.get("items", []), start=1):
-            phrase_record = {
-                "phrase":       item.get("phrase"),
-                "translation":  item.get("translation_th") or "",
-                "notes":        item.get("notes"),
-                "phrase_th":    item.get("phrase_th"),
-                "notes_th":     item.get("notes_th"),
-            }
-
-            if dry_run:
-                print("[DRY RUN] Upsert phrase:", phrase_record)
-                phrase_id = None
-            else:
+            # If this is a reference, just link to the existing phrase+variant
+            if item.get("reference"):
+                # Find the phrase by phrase+variant
                 res = (
                     supabase.table("phrases")
-                    .upsert(
-                        phrase_record,
-                        on_conflict="phrase",            # unique column
-                        returning="representation"       # ask for the row back
-                    )
+                    .select("id")
+                    .eq("phrase", item["phrase"])
+                    .eq("variant", item.get("variant", 1))
+                    .single()
                     .execute()
                 )
+                if not res.data:
+                    print(f"[ERROR] Reference to missing phrase: {item['phrase']} variant {item.get('variant', 1)}")
+                    continue
+                phrase_id = res.data["id"]
+            else:
+                phrase_record = {
+                    "phrase":       item.get("phrase"),
+                    "variant":      item.get("variant", 1),
+                    "translation":  item.get("translation_th") or "",
+                    "content_md":   item.get("content_md") or "",
+                    "notes":        item.get("notes"),
+                    "phrase_th":    item.get("phrase_th"),
+                    "notes_th":     item.get("notes_th"),
+                }
 
-                # If the row already existed, fetch its id
-                if res.data:
-                    phrase_id = res.data[0]["id"]
+                if dry_run:
+                    print("[DRY RUN] Upsert phrase:", phrase_record)
+                    phrase_id = None
                 else:
-                    phrase_id = (
+                    res = (
                         supabase.table("phrases")
-                        .select("id")
-                        .eq("phrase", phrase_record["phrase"])
-                        .single()
+                        .upsert(
+                            phrase_record,
+                            on_conflict="phrase,variant",  # unique key is phrase+variant
+                            returning="representation"
+                        )
                         .execute()
-                        .data["id"]
                     )
 
-            link = {"lesson_id": lesson_id, "phrase_id": phrase_id, "sort_order": idx}
+                    if res.data:
+                        phrase_id = res.data[0]["id"]
+                    else:
+                        phrase_id = (
+                            supabase.table("phrases")
+                            .select("id")
+                            .eq("phrase", phrase_record["phrase"])
+                            .eq("variant", phrase_record["variant"])
+                            .single()
+                            .execute()
+                            .data["id"]
+                        )
 
-            if dry_run:
-                print("[DRY RUN] Upsert lesson_phrases:", link)
-            else:
-                supabase.table("lesson_phrases") \
-                    .upsert(link, on_conflict="lesson_id,phrase_id") \
-                    .execute()
+            if phrase_id:
+                link = {"lesson_id": lesson_id, "phrase_id": phrase_id, "sort_order": idx}
+                if dry_run:
+                    print("[DRY RUN] Link lesson to phrase:", link)
+                else:
+                    supabase.table("lesson_phrases").upsert(link, on_conflict="lesson_id,phrase_id").execute()
 
 
 def upsert_tags(lesson_id, tags, dry_run=False):

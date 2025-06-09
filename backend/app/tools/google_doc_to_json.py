@@ -282,10 +282,16 @@ def parse_phrases_verbs_items(lines):
     """
     Parse PHRASES & VERBS section into an items array:
     Each ALL CAPS line is a phrase, and all lines under it (until next ALL CAPS or end) are content_md.
+    Supports variants: e.g., OH! [2] → phrase="OH!", variant=2; defaults to variant=1.
+    If a header is present with no content, treat as a reference.
     """
     items = []
     current_phrase = None
+    current_variant = 1
     current_content = []
+
+    # Regex to match: PHRASE [n] or PHRASE[n]
+    header_re = re.compile(r"^(.*?)(?:\s*\[(\d+)\])?$")
 
     def is_all_caps_header(ln):
         stripped = ln.strip()
@@ -299,21 +305,42 @@ def parse_phrases_verbs_items(lines):
 
     for ln in lines:
         if is_all_caps_header(ln):
-            if current_phrase:
-                items.append({
+            if current_phrase is not None:
+                # If content is empty, treat as reference
+                content = "\n".join(current_content).strip()
+                item = {
                     "phrase": current_phrase,
+                    "variant": current_variant,
                     "translation_th": "",
-                    "content_md": "\n".join(current_content).strip()
-                })
-            current_phrase = ln.strip().lstrip("#").strip()
+                }
+                if content:
+                    item["content_md"] = content
+                else:
+                    item["reference"] = True
+                items.append(item)
+            # Extract phrase and variant
+            match = header_re.match(ln.strip().lstrip("#").strip())
+            if match:
+                current_phrase = match.group(1).strip()
+                current_variant = int(match.group(2)) if match.group(2) else 1
+            else:
+                current_phrase = ln.strip().lstrip("#").strip()
+                current_variant = 1
             current_content = []
         else:
             current_content.append(ln)
     if current_phrase:
-        items.append({
+        content = "\n".join(current_content).strip()
+        item = {
             "phrase": current_phrase,
-            "content_md": "\n".join(current_content).strip()
-        })
+            "variant": current_variant,
+            "translation_th": "",
+        }
+        if content:
+            item["content_md"] = content
+        else:
+            item["reference"] = True
+        items.append(item)
     return items
 
 def build_section(section_name: str,
