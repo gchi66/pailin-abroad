@@ -64,6 +64,7 @@ PRACTICE_DIRECTIVE_RE = re.compile(
     r'ANSWER|OPTIONS|KEYWORDS|INPUTS)\s*:',
     re.I
 )
+BULLET_CHARS = "•◦‣▪–—"        # common GDoc bullets / dashes
 
 SECTION_ORDER = [
     "FOCUS",
@@ -123,23 +124,34 @@ def chunk_by_headings(lines: List[str]) -> Dict[str, List[str]]:
 
     return buckets
 
-def fix_leading_spaces(lines):
-    """
-    Remove 4 or more leading spaces from all lines (to prevent accidental code blocks),
-    but preserve up to 3 spaces for visual alignment.
-    """
-    fixed = []
-    for ln in lines:
-        # If line starts with 4+ spaces, remove only those 4 (or more)
-        if re.match(r' {4,}', ln):
-            fixed.append(ln.lstrip(' '))  # Remove all leading spaces
-        else:
-            fixed.append(ln)
-    return fixed
 
-def fix_bullet_lines(lines):
-    # (kept for backward compatibility, but now unused)
-    return lines
+def normalise_markdown_line(ln: str) -> str:
+    """
+    • Keep original indentation *unless* the line looks like a bullet.
+    • If it *is* a bullet (lots of spaces + bullet char / dash / asterisk),
+      shrink the indent to max 3 spaces and convert the lead-in to '- '.
+    """
+    m = re.match(r'^(\s{0,})([' + re.escape(BULLET_CHARS) + r'\-*])\s+(.*)$', ln)
+    if not m:
+        # Non-bullet line: return untouched
+        return ln
+
+    indent, marker, rest = m.groups()
+
+    # Collapse any indent > 3 down to exactly 2 spaces
+    new_indent = '  ' if len(indent) > 2 else indent
+    return f"{new_indent}- {rest}"
+
+def fix_leading_spaces(lines: list[str]) -> list[str]:
+    """
+    Backwards-compatible helper used throughout the script.
+    Applies normalise_markdown_line() to every line in the block.
+    """
+    return [normalise_markdown_line(ln) for ln in lines]
+
+def normalise_block(lines: List[str]) -> List[str]:
+    """Apply normalise_markdown_line() to every line in a block."""
+    return [normalise_markdown_line(ln) for ln in lines]
 
 def parse_lesson_header(raw_header: str, stage: str) -> Tuple[Dict, str]:
     # Debug the raw header
@@ -448,7 +460,7 @@ def build_section(section_name: str,
         i += 1
 
     # Remove leading spaces from all lines before joining
-    out_lines = fix_leading_spaces(out_lines)
+    out_lines = normalise_block(out_lines)
     content_md = re.sub(r'\n{3,}', '\n\n', "\n".join(out_lines)).strip()
 
     # ────────────────── special "phrases & verbs" type ──────────────────

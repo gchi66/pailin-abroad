@@ -8,13 +8,8 @@ except ImportError:
     MARKDOWN_IT_AVAILABLE = False
 
 def extract_tables(md_content: str) -> List[str]:
-    """Extract HTML tables from markdown content"""
-    if not MARKDOWN_IT_AVAILABLE:
-        return []
-
-    md = MarkdownIt()
-    html = md.render(md_content)
-    return re.findall(r"<table.*?>.*?</table>", html, re.DOTALL)
+    """Extract HTML tables directly from markdown content (not rendered HTML)"""
+    return re.findall(r"<table.*?>.*?</table>", md_content, re.DOTALL | re.IGNORECASE)
 
 def markdown_to_html(md_content: str) -> str:
     """Convert full markdown to HTML"""

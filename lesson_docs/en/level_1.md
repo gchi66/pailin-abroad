@@ -4272,7 +4272,7 @@ Try changing the questions above into affirmative sentences by swapping the to-b
 
 Remember that in questions, the to-be verb comes first. Here is the structure of questions using ‘am · are · is’, with examples:
 
-TABLE-1:
+TABLE-2:
 
 
 <table>
