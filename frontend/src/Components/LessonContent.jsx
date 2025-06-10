@@ -247,9 +247,11 @@ export default function LessonContent({
         </div>
       </header>
 
-      <div className="lc-body">
-        <ReactMarkdown>{contentText}</ReactMarkdown>
-      </div>
+      <MarkdownSection
+        markdown={contentText}
+        defaultOpenFirst={true}      // open immediately (no accordion needed)
+        sectionType={section.type}   // keeps future-proof options
+      />
     </article>
   );
 }

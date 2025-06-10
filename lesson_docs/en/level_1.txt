@@ -1588,6 +1588,7 @@ PHRASES & VERBS
 
 HERE
 Here = (used to offer something to someone, like ‘Take this’)
+
       * Luke: My breath stinks.
 Pailin: Here, I have some gum.
 

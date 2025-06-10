@@ -123,6 +123,24 @@ def chunk_by_headings(lines: List[str]) -> Dict[str, List[str]]:
 
     return buckets
 
+def fix_leading_spaces(lines):
+    """
+    Remove 4 or more leading spaces from all lines (to prevent accidental code blocks),
+    but preserve up to 3 spaces for visual alignment.
+    """
+    fixed = []
+    for ln in lines:
+        # If line starts with 4+ spaces, remove only those 4 (or more)
+        if re.match(r' {4,}', ln):
+            fixed.append(ln.lstrip(' '))  # Remove all leading spaces
+        else:
+            fixed.append(ln)
+    return fixed
+
+def fix_bullet_lines(lines):
+    # (kept for backward compatibility, but now unused)
+    return lines
+
 def parse_lesson_header(raw_header: str, stage: str) -> Tuple[Dict, str]:
     # Debug the raw header
     logger.debug(f"Parsing header: '{raw_header}'")
@@ -306,14 +324,14 @@ def parse_phrases_verbs_items(lines):
     for ln in lines:
         if is_all_caps_header(ln):
             if current_phrase is not None:
-                # If content is empty, treat as reference
-                content = "\n".join(current_content).strip()
+                # Remove leading spaces from all lines before joining
+                content = "\n".join(fix_leading_spaces(current_content))
                 item = {
                     "phrase": current_phrase,
                     "variant": current_variant,
                     "translation_th": "",
                 }
-                if content:
+                if content.strip():
                     item["content_md"] = content
                 else:
                     item["reference"] = True
@@ -330,13 +348,13 @@ def parse_phrases_verbs_items(lines):
         else:
             current_content.append(ln)
     if current_phrase:
-        content = "\n".join(current_content).strip()
+        content = "\n".join(fix_leading_spaces(current_content))
         item = {
             "phrase": current_phrase,
             "variant": current_variant,
             "translation_th": "",
         }
-        if content:
+        if content.strip():
             item["content_md"] = content
         else:
             item["reference"] = True
@@ -366,7 +384,7 @@ def build_section(section_name: str,
             i += 1
             continue
 
-# ────────────────── 1) TABLE token?  ─────────────────────────────
+        # ────────────────── 1) TABLE token?  ─────────────────────────────
         m = TABLE_TOKEN_RE.match(raw)
         if m:
             # Which table should we insert?
@@ -429,6 +447,8 @@ def build_section(section_name: str,
 
         i += 1
 
+    # Remove leading spaces from all lines before joining
+    out_lines = fix_leading_spaces(out_lines)
     content_md = re.sub(r'\n{3,}', '\n\n', "\n".join(out_lines)).strip()
 
     # ────────────────── special "phrases & verbs" type ──────────────────
