@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "@supabase/supabase-js": "^2.46.2",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "regex": "^6.0.1"
   },
   "devDependencies": {
     "supabase": "^2.24.3"

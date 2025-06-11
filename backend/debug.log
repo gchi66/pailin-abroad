@@ -1,0 +1,746 @@
+2025-06-11 15:02:46,745 - INFO - Starting document conversion
+2025-06-11 15:02:46,746 - DEBUG - Read 85647 chars from ../lesson_docs/en/level_1.txt
+2025-06-11 15:02:46,746 - INFO - Found 2 HTML tables
+2025-06-11 15:02:46,749 - DEBUG - Processing 171 markdown lines
+2025-06-11 15:02:46,750 - DEBUG - Markdown buckets: ['COMPREHENSION', 'APPLY', 'UNDERSTAND', 'CULTURE NOTE', 'PRACTICE']
+2025-06-11 15:02:46,750 - DEBUG - Bucket COMPREHENSION: 17 lines
+2025-06-11 15:02:46,750 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,750 - DEBUG -   Line 1: 'Prompt'
+2025-06-11 15:02:46,750 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,750 - DEBUG - Bucket APPLY: 4 lines
+2025-06-11 15:02:46,750 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,750 - DEBUG -   Line 1: 'In the conversation, Pailin says ‘Hi’ to Frank and introduces herself. Imagine you are meeting someone for the first time. Say ‘Hi’ and introduce yourself to them.'
+2025-06-11 15:02:46,750 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,750 - DEBUG - Bucket UNDERSTAND: 32 lines
+2025-06-11 15:02:46,750 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,750 - DEBUG -   Line 1: 'LESSON FOCUS'
+2025-06-11 15:02:46,750 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,750 - DEBUG - Bucket CULTURE NOTE: 41 lines
+2025-06-11 15:02:46,750 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,750 - DEBUG -   Line 1: '\u200b\u200bGREETINGS IN THE US'
+2025-06-11 15:02:46,750 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,750 - DEBUG - Bucket PRACTICE: 55 lines
+2025-06-11 15:02:46,750 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,750 - DEBUG -   Line 1: 'TYPE: multiple_choice'
+2025-06-11 15:02:46,750 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,750 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,750 - DEBUG - Line 0: '﻿LESSON 1.1: Hi, I’m Pailin'
+2025-06-11 15:02:46,750 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,750 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,750 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,750 - DEBUG - Line 4: 'How to greet someone'
+2025-06-11 15:02:46,750 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,750 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,750 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,750 - DEBUG - Line 8: ''
+2025-06-11 15:02:46,750 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,750 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'CULTURE NOTE', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,750 - DEBUG - Found lesson header: '﻿LESSON 1.1: Hi, I’m Pailin'
+2025-06-11 15:02:46,750 - DEBUG - Parsing header: '﻿LESSON 1.1: Hi, I’m Pailin'
+2025-06-11 15:02:46,750 - DEBUG - Extracted level=1, order=1, title='Hi, I’m Pailin'
+2025-06-11 15:02:46,751 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,751 - DEBUG - Plain text content: In the conversation, Pailin says 'Hi' to Frank and introduces herself. Imagine you are meeting someo...
+2025-06-11 15:02:46,751 - DEBUG - Markdown content: In the conversation, Pailin says ‘Hi’ to Frank and introduces herself. Imagine you are meeting someo...
+2025-06-11 15:02:46,751 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,751 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to greet people
+
+
+In the conversation, Frank says to Pailin:
+
+
+- Hi
+
+
+This is a...
+2025-06-11 15:02:46,751 - DEBUG - Markdown content: LESSON FOCUS
+
+How to greet people
+
+In the conversation, Frank says to Pailin:
+
+
+
+* Hi
+
+This is a sta...
+2025-06-11 15:02:46,752 - DEBUG - Section: CULTURE NOTE
+2025-06-11 15:02:46,752 - DEBUG - Plain text content: ## GREETINGS IN THE US
+
+While the Thai 'wai' is a standard greeting in Thailand, common greetings in...
+2025-06-11 15:02:46,752 - DEBUG - Markdown content: ​​GREETINGS IN THE US
+
+While the Thai 'wai' is a standard greeting in Thailand, common greetings in ...
+2025-06-11 15:02:46,752 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,752 - DEBUG - Plain text content: Hi everyone! Nice to meet you all. Introduce yourselves in the comments below!...
+2025-06-11 15:02:46,752 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,752 - DEBUG - Processing 488 markdown lines
+2025-06-11 15:02:46,752 - DEBUG - Markdown buckets: ['COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'COMMON MISTAKES', 'PHRASES & VERBS', 'PRACTICE']
+2025-06-11 15:02:46,752 - DEBUG - Bucket COMPREHENSION: 30 lines
+2025-06-11 15:02:46,752 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,752 - DEBUG -   Line 1: 'Prompt'
+2025-06-11 15:02:46,752 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - Bucket APPLY: 4 lines
+2025-06-11 15:02:46,752 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,752 - DEBUG -   Line 1: 'In the conversation, Pailin says that her mom is a nurse. What is your mom or dad’s job?'
+2025-06-11 15:02:46,752 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - Bucket UNDERSTAND: 132 lines
+2025-06-11 15:02:46,752 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,752 - DEBUG -   Line 1: 'LESSON FOCUS'
+2025-06-11 15:02:46,752 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - Bucket EXTRA TIPS: 26 lines
+2025-06-11 15:02:46,752 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,752 - DEBUG -   Line 1: 'SINGULAR VS. PLURAL NOUNS'
+2025-06-11 15:02:46,752 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - Bucket COMMON MISTAKES: 21 lines
+2025-06-11 15:02:46,752 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,752 - DEBUG -   Line 1: 'MISTAKE #1'
+2025-06-11 15:02:46,752 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - Bucket PHRASES & VERBS: 17 lines
+2025-06-11 15:02:46,752 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,752 - DEBUG -   Line 1: 'Nice! = (a positive expression to show enthusiasm or approval)'
+2025-06-11 15:02:46,752 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - Bucket PRACTICE: 220 lines
+2025-06-11 15:02:46,752 - DEBUG -   Line 0: ''
+2025-06-11 15:02:46,752 - DEBUG -   Line 1: 'TYPE: fill_blank'
+2025-06-11 15:02:46,752 - DEBUG -   Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,752 - DEBUG - Line 0: 'LESSON 1.2: What’s your name?'
+2025-06-11 15:02:46,752 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,752 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,752 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,752 - DEBUG - Line 4: 'How to introduce yourself'
+2025-06-11 15:02:46,752 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,752 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,752 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,752 - DEBUG - Line 8: 'Pailin is a 21-year-old girl from Thailand who will be studying abroad at the University of California, Los Angeles (UCLA) for one year. She’s at her orientation, where new students can meet and get to know each other. She starts talking to another student.'
+2025-06-11 15:02:46,752 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,753 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'CULTURE NOTE', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,753 - DEBUG - Found lesson header: 'LESSON 1.2: What’s your name?'
+2025-06-11 15:02:46,753 - DEBUG - Parsing header: 'LESSON 1.2: What’s your name?'
+2025-06-11 15:02:46,753 - DEBUG - Extracted level=1, order=2, title='What’s your name?'
+2025-06-11 15:02:46,753 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,753 - DEBUG - Plain text content: In the conversation, Chloe asks Pailin for her name. Imagine you are meeting someone for the first t...
+2025-06-11 15:02:46,753 - DEBUG - Markdown content: In the conversation, Pailin says that her mom is a nurse. What is your mom or dad’s job?...
+2025-06-11 15:02:46,753 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,753 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to introduce yourself
+
+
+In the conversation, a girl at Pailin's student orienta...
+2025-06-11 15:02:46,753 - DEBUG - Markdown content: LESSON FOCUS
+
+How to use the to-be verb ‘is’
+
+You’ve already learned about the to-be verbs ‘am’ and ...
+2025-06-11 15:02:46,753 - DEBUG - Section: EXTRA TIPS
+2025-06-11 15:02:46,753 - DEBUG - Plain text content: ## WHAT'S YOUR NAME AGAIN?
+
+Do you forget people's names easily? Here's how you can ask for someone'...
+2025-06-11 15:02:46,753 - DEBUG - Markdown content: SINGULAR VS. PLURAL NOUNS
+
+Now you’ve learned these rules:
+
+
+        (Noun) is
+
+
+        (2+ nouns) ...
+2025-06-11 15:02:46,753 - DEBUG - Section: CULTURE NOTE
+2025-06-11 15:02:46,753 - DEBUG - Plain text content: ## NICKNAMES
+
+Most Thais have an official first and last name, as well as a short nickname used in e...
+2025-06-11 15:02:46,753 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,753 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,753 - DEBUG - Plain text content: What's your name? What's your nickname?...
+2025-06-11 15:02:46,753 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,753 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,753 - DEBUG - Line 0: 'LESSON 1.3: Nice to meet you'
+2025-06-11 15:02:46,753 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,753 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,753 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,753 - DEBUG - Line 4: 'How to use ‘It’s nice to meet you’'
+2025-06-11 15:02:46,753 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,753 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,753 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,753 - DEBUG - Line 8: 'Pailin is a 21-year-old girl from Thailand who will be studying abroad at the University of California, Los Angeles (UCLA) for one year. She has just met another girl in her program named Chloe. Pailin and Chloe are at their orientation, where new students can meet and get to know each other. They start talking to another student.'
+2025-06-11 15:02:46,753 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,754 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,754 - DEBUG - Found lesson header: 'LESSON 1.3: Nice to meet you'
+2025-06-11 15:02:46,754 - DEBUG - Parsing header: 'LESSON 1.3: Nice to meet you'
+2025-06-11 15:02:46,754 - DEBUG - Extracted level=1, order=3, title='Nice to meet you'
+2025-06-11 15:02:46,754 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,754 - DEBUG - Plain text content: In the conversation, Pailin tells Steven that it's nice to meet him. Imagine you are meeting someone...
+2025-06-11 15:02:46,754 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,754 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,754 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to use 'It's nice to meet you'
+
+
+In the conversation, Pailin says to Steven:
+
+-...
+2025-06-11 15:02:46,754 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,754 - DEBUG - Section: EXTRA TIPS
+2025-06-11 15:02:46,754 - DEBUG - Plain text content: ## SO NICE TO MEET YOU
+
+        If you are genuinely excited or happy to meet someone, you can say:
+...
+2025-06-11 15:02:46,754 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,754 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,754 - DEBUG - Plain text content: Who would you be very excited to meet?...
+2025-06-11 15:02:46,754 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,754 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,754 - DEBUG - Line 0: 'LESSON 1.4: How are you?'
+2025-06-11 15:02:46,754 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,754 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,754 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,754 - DEBUG - Line 4: 'How to ask how someone is doing'
+2025-06-11 15:02:46,754 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,754 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,754 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,754 - DEBUG - Line 8: 'Pailin is a 21-year-old girl from Thailand who will be studying abroad at the University of California, Los Angeles (UCLA) for one year. She’s at her orientation, where new students can meet and get to know each other.'
+2025-06-11 15:02:46,754 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,754 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'COMMON MISTAKES', 'CULTURE NOTE', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,754 - DEBUG - Found lesson header: 'LESSON 1.4: How are you?'
+2025-06-11 15:02:46,755 - DEBUG - Parsing header: 'LESSON 1.4: How are you?'
+2025-06-11 15:02:46,755 - DEBUG - Extracted level=1, order=4, title='How are you?'
+2025-06-11 15:02:46,755 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,755 - DEBUG - Plain text content: In the conversation, Pailin asks Kevin, 'How are you?' Imagine someone just asked you this. How can ...
+2025-06-11 15:02:46,755 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,755 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,755 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to ask how someone is doing
+
+
+## HOW IS SOMEONE DOING?
+In the conversation, Kev...
+2025-06-11 15:02:46,755 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,755 - DEBUG - Section: EXTRA TIPS
+2025-06-11 15:02:46,755 - DEBUG - Plain text content: ## ALTERNATIVE PHRASES
+
+There are several ways to ask 'How are you?' in English. Some common example...
+2025-06-11 15:02:46,755 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,755 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,755 - DEBUG - Plain text content: ## MISTAKE #1
+
+Try to avoid responding to 'How are you?' with 'I'm fine, thank you, and you?' You pr...
+2025-06-11 15:02:46,755 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,755 - DEBUG - Section: CULTURE NOTE
+2025-06-11 15:02:46,755 - DEBUG - Plain text content: ## HAVE YOU EATEN?
+
+'How are you?' is similar to asking 'Have you eaten?' in Thailand. It's more of ...
+2025-06-11 15:02:46,755 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,756 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,756 - DEBUG - Plain text content: How are you today?...
+2025-06-11 15:02:46,756 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,756 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,756 - DEBUG - Line 0: 'LESSON 1.5: Good morning, Joey!'
+2025-06-11 15:02:46,756 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,756 - DEBUG - Line 4: 'How to use greeting phrases'
+2025-06-11 15:02:46,756 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,756 - DEBUG - Line 8: 'Pailin is at an orientation in Los Angeles for her study-abroad program in the morning. She sees Joey, someone she met yesterday at her orientation.'
+2025-06-11 15:02:46,756 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,756 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,756 - DEBUG - Found lesson header: 'LESSON 1.5: Good morning, Joey!'
+2025-06-11 15:02:46,756 - DEBUG - Parsing header: 'LESSON 1.5: Good morning, Joey!'
+2025-06-11 15:02:46,756 - DEBUG - Extracted level=1, order=5, title='Good morning, Joey!'
+2025-06-11 15:02:46,756 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,756 - DEBUG - Plain text content: In the conversation, Pailin greets her new friend Joey. Imagine you've just woken up and you see you...
+2025-06-11 15:02:46,756 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,756 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,756 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to use greeting phrases
+
+
+In the conversation, Pailin says to her new friend Jo...
+2025-06-11 15:02:46,756 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,756 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,756 - DEBUG - Plain text content: Did you eat breakfast today?...
+2025-06-11 15:02:46,756 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,756 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,756 - DEBUG - Line 0: 'LESSON 1.6: I’m excited!'
+2025-06-11 15:02:46,756 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,756 - DEBUG - Line 4: 'How to use the to-be verb ‘am’'
+2025-06-11 15:02:46,756 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,756 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,756 - DEBUG - Line 8: 'Pailin is at her orientation in Los Angeles for her study-abroad program. She has just met another girl in her program named Chloe. Pailin and Chloe are talking with their student advisor, Frank.'
+2025-06-11 15:02:46,756 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,757 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'COMMON MISTAKES', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,757 - DEBUG - Found lesson header: 'LESSON 1.6: I’m excited!'
+2025-06-11 15:02:46,757 - DEBUG - Parsing header: 'LESSON 1.6: I’m excited!'
+2025-06-11 15:02:46,757 - DEBUG - Extracted level=1, order=6, title='I’m excited!'
+2025-06-11 15:02:46,757 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,757 - DEBUG - Plain text content: In the conversation, Pailin says she is nervous about meeting her host family. How do you feel right...
+2025-06-11 15:02:46,757 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,757 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,757 - DEBUG - Plain text content: Lesson focus: How to use the to-be verb 'am'
+
+
+
+
+
+
+## STRUCTURE OF 'AM'
+
+When Frank asks Pailin and ...
+2025-06-11 15:02:46,757 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,758 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,758 - DEBUG - Plain text content: ## MISTAKE #1
+
+Thai people often omit the word 'am' in a sentence, for example 'I tired' or 'I hungr...
+2025-06-11 15:02:46,758 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,758 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,758 - DEBUG - Plain text content: Where are you right now?...
+2025-06-11 15:02:46,758 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,758 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,758 - DEBUG - Line 0: 'LESSON 1.7: How old are you?'
+2025-06-11 15:02:46,758 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,758 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,758 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,758 - DEBUG - Line 4: 'How to ask about someone’s age'
+2025-06-11 15:02:46,758 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,758 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,758 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,758 - DEBUG - Line 8: ''
+2025-06-11 15:02:46,758 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,758 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'PHRASES & VERBS', 'CULTURE NOTE', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,758 - DEBUG - Found lesson header: 'LESSON 1.7: How old are you?'
+2025-06-11 15:02:46,758 - DEBUG - Parsing header: 'LESSON 1.7: How old are you?'
+2025-06-11 15:02:46,758 - DEBUG - Extracted level=1, order=7, title='How old are you?'
+2025-06-11 15:02:46,758 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,758 - DEBUG - Plain text content: In the conversation, Pailin tells Chloe how old she is. Imagine you've just met someone. What can yo...
+2025-06-11 15:02:46,758 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,758 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,758 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to ask someone's age
+
+
+In the conversation, Chloe asks Pailin:
+
+  - How old are...
+2025-06-11 15:02:46,758 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,758 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,758 - DEBUG - Plain text content: ## OH!
+Oh! = (said when you are pleasantly surprised about something)
+  - Pailin: I baked this cake ...
+2025-06-11 15:02:46,759 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,759 - DEBUG - Section: CULTURE NOTE
+2025-06-11 15:02:46,759 - DEBUG - Plain text content: ## AGE & RESPECT
+
+Age plays a significant role in Thai culture, as it affects how you talk to someon...
+2025-06-11 15:02:46,759 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,759 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,759 - DEBUG - Plain text content: How old are you?...
+2025-06-11 15:02:46,759 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,759 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,759 - DEBUG - Line 0: 'LESSON 1.8: Thanks, I made it'
+2025-06-11 15:02:46,759 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,759 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,759 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,759 - DEBUG - Line 4: 'How to thank someone'
+2025-06-11 15:02:46,759 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,759 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,759 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,759 - DEBUG - Line 8: 'Pailin is at an orientation in Los Angeles for her study-abroad program. She’s talking with Chloe, a girl in her program who she just met.'
+2025-06-11 15:02:46,759 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,759 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'PHRASES & VERBS', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,759 - DEBUG - Found lesson header: 'LESSON 1.8: Thanks, I made it'
+2025-06-11 15:02:46,759 - DEBUG - Parsing header: 'LESSON 1.8: Thanks, I made it'
+2025-06-11 15:02:46,759 - DEBUG - Extracted level=1, order=8, title='Thanks, I made it'
+2025-06-11 15:02:46,759 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,759 - DEBUG - Plain text content: In the conversation, Pailin thanks Chloe for the bracelet she gave to her. Imagine someone just gave...
+2025-06-11 15:02:46,759 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,760 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,760 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to thank someone
+
+
+In the conversation, when Pailin compliments Chloe's bracele...
+2025-06-11 15:02:46,760 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,760 - DEBUG - Section: EXTRA TIPS
+2025-06-11 15:02:46,760 - DEBUG - Plain text content: ## GIVING THANKS FOR SPECIFIC REASONS
+
+Here are two ways to give thanks for specific reasons:
+
+
+    ...
+2025-06-11 15:02:46,760 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,760 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,760 - DEBUG - Plain text content: ## HERE
+Here = (used to offer something to someone, like 'Take this')
+
+  - Luke: My breath stinks.
+P...
+2025-06-11 15:02:46,760 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,760 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,760 - DEBUG - Plain text content: Think of the last gift you received. How can you thank the giver?...
+2025-06-11 15:02:46,760 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,760 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,760 - DEBUG - Line 0: 'LESSON 1.9: You’re a great cook'
+2025-06-11 15:02:46,760 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,760 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,760 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,760 - DEBUG - Line 4: 'How to use the to-be verb ‘are’'
+2025-06-11 15:02:46,760 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,760 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,760 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,760 - DEBUG - Line 8: 'Pailin is at an orientation in Los Angeles for her study-abroad program. Breakfast has been served to the students. She’s talking with one of the cooks.'
+2025-06-11 15:02:46,760 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,761 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'COMMON MISTAKES', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,761 - DEBUG - Found lesson header: 'LESSON 1.9: You’re a great cook'
+2025-06-11 15:02:46,761 - DEBUG - Parsing header: 'LESSON 1.9: You’re a great cook'
+2025-06-11 15:02:46,761 - DEBUG - Extracted level=1, order=9, title='You’re a great cook'
+2025-06-11 15:02:46,761 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,761 - DEBUG - Plain text content: In the conversation, Pailin compliments the cook by telling him he's a great cook. Imagine your best...
+2025-06-11 15:02:46,761 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,762 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,762 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to use the to-be verb 'are'
+
+
+You've already learned about the to-be verb 'am' ...
+2025-06-11 15:02:46,762 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,762 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,762 - DEBUG - Plain text content: ## MISTAKE #1
+
+Students often omit the word 'are' in a sentence, for example 'You beautiful' or 'The...
+2025-06-11 15:02:46,762 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,762 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,762 - DEBUG - Plain text content: Where are your parents from?...
+2025-06-11 15:02:46,762 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,762 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,762 - DEBUG - Line 0: 'LESSON 1.10: He’s a student at USC'
+2025-06-11 15:02:46,762 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,762 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,762 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,762 - DEBUG - Line 4: 'How to use the to-be verb ‘is’'
+2025-06-11 15:02:46,762 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,762 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,762 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,762 - DEBUG - Line 8: 'Pailin is at an orientation in Los Angeles for her study-abroad program. She is talking with Steven, another boy in her program who she just met.'
+2025-06-11 15:02:46,762 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,762 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'COMMON MISTAKES', 'PHRASES & VERBS', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,762 - DEBUG - Found lesson header: 'LESSON 1.10: He’s a student at USC'
+2025-06-11 15:02:46,762 - DEBUG - Parsing header: 'LESSON 1.10: He’s a student at USC'
+2025-06-11 15:02:46,762 - DEBUG - Extracted level=1, order=10, title='He’s a student at USC'
+2025-06-11 15:02:46,763 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,763 - DEBUG - Plain text content: In the conversation, Pailin says that her mom is a nurse. What is your mom or dad's job?...
+2025-06-11 15:02:46,763 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,763 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,763 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to use the to-be verb 'is'
+
+
+You've already learned about the to-be verbs 'am' ...
+2025-06-11 15:02:46,763 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,763 - DEBUG - Section: EXTRA TIPS
+2025-06-11 15:02:46,763 - DEBUG - Plain text content: ## SINGULAR VS. PLURAL NOUNS
+
+Now you've learned these rules:
+
+
+(Noun) is
+(2+ nouns) are
+
+
+Without g...
+2025-06-11 15:02:46,763 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,764 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,764 - DEBUG - Plain text content: ## MISTAKE #1
+
+Just as with 'am' and 'are,' Thai people often omit the word 'is' from a sentence. Tr...
+2025-06-11 15:02:46,764 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,764 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,764 - DEBUG - Plain text content: ## NICE!
+Nice! = (a positive expression to show enthusiasm or approval)
+  - Luke: I applied for a fe...
+2025-06-11 15:02:46,764 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,764 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,764 - DEBUG - Plain text content: Describe the members of your family....
+2025-06-11 15:02:46,764 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,764 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,764 - DEBUG - Line 0: 'LESSON 1.11: Where are you from?'
+2025-06-11 15:02:46,764 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,764 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,764 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,764 - DEBUG - Line 4: 'How to ask where someone is from'
+2025-06-11 15:02:46,764 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,764 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,764 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,764 - DEBUG - Line 8: 'Pailin is at an orientation in Los Angeles for her study-abroad program. She’s talking with Chloe, a girl in her program who she just met.'
+2025-06-11 15:02:46,764 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,764 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'COMMON MISTAKES', 'PHRASES & VERBS', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,764 - DEBUG - Found lesson header: 'LESSON 1.11: Where are you from?'
+2025-06-11 15:02:46,764 - DEBUG - Parsing header: 'LESSON 1.11: Where are you from?'
+2025-06-11 15:02:46,764 - DEBUG - Extracted level=1, order=11, title='Where are you from?'
+2025-06-11 15:02:46,765 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,765 - DEBUG - Plain text content: In the conversation, Chloe tells Pailin that she's from Chiang Mai. Which part of Thailand are you f...
+2025-06-11 15:02:46,765 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,765 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,765 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to ask where someone is from and how to respond
+
+
+In the conversation, Chloe as...
+2025-06-11 15:02:46,765 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,765 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,765 - DEBUG - Plain text content: ## MISTAKE #1
+
+Thai learners often ask คุณมาจากไหน like this:
+
+
+        Where you come from? (X)
+
+
+T...
+2025-06-11 15:02:46,765 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,765 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,765 - DEBUG - Plain text content: ## WOW
+Wow = (used to show surprise or admiration)
+  - Wow! This cake is beautiful. Did you make it ...
+2025-06-11 15:02:46,765 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,765 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,765 - DEBUG - Plain text content: What city are you from in Thailand?...
+2025-06-11 15:02:46,765 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,765 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,765 - DEBUG - Line 0: 'LESSON 1.12: This is your student ID'
+2025-06-11 15:02:46,765 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,765 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,765 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,765 - DEBUG - Line 4: 'How to say ‘This is (something)’'
+2025-06-11 15:02:46,765 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,765 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,765 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,765 - DEBUG - Line 8: 'Pailin is at the orientation for her study-abroad program in Los Angeles. She is talking with Frank, her student advisor.'
+2025-06-11 15:02:46,765 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,766 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'COMMON MISTAKES', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,766 - DEBUG - Found lesson header: 'LESSON 1.12: This is your student ID'
+2025-06-11 15:02:46,766 - DEBUG - Parsing header: 'LESSON 1.12: This is your student ID'
+2025-06-11 15:02:46,766 - DEBUG - Extracted level=1, order=12, title='This is your student ID'
+2025-06-11 15:02:46,766 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,766 - DEBUG - Plain text content: In the conversation, Frank presents different items to Pailin. Imagine you're at a market in Thailan...
+2025-06-11 15:02:46,766 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,766 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,766 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to say 'This is (something)'
+
+
+In the conversation, Frank gives different items...
+2025-06-11 15:02:46,766 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,766 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,766 - DEBUG - Plain text content: ## MISTAKE #1
+
+It's common for Thai students to omit the -s sound in 'What's' in the question 'What'...
+2025-06-11 15:02:46,766 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,766 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,766 - DEBUG - Plain text content: What are some of your favorite Thai fruits?...
+2025-06-11 15:02:46,766 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,766 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,766 - DEBUG - Line 0: 'LESSON 1.13: It’s beautiful in Los Angeles'
+2025-06-11 15:02:46,766 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,766 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,766 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,766 - DEBUG - Line 4: 'How to describe things'
+2025-06-11 15:02:46,766 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,766 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,766 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,766 - DEBUG - Line 8: 'Pailin is at the orientation for her study-abroad program in Los Angeles. She’s talking on the phone with her mom, who is in Thailand.'
+2025-06-11 15:02:46,766 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,767 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'COMMON MISTAKES', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,767 - DEBUG - Found lesson header: 'LESSON 1.13: It’s beautiful in Los Angeles'
+2025-06-11 15:02:46,767 - DEBUG - Parsing header: 'LESSON 1.13: It’s beautiful in Los Angeles'
+2025-06-11 15:02:46,767 - DEBUG - Extracted level=1, order=13, title='It’s beautiful in Los Angeles'
+2025-06-11 15:02:46,767 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,767 - DEBUG - Plain text content: In the conversation, Pailin's mom says that it's rainy in Bangkok. How is the weather now in your ar...
+2025-06-11 15:02:46,767 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,767 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,767 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to describe things
+
+
+Take a look at these sentences from the conversation:
+
+
+  ...
+2025-06-11 15:02:46,767 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,767 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,767 - DEBUG - Plain text content: ## MISTAKE #1
+
+It's common for Thai students to omit the -s sound in the phrase 'It's.' Take a look ...
+2025-06-11 15:02:46,767 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,767 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,767 - DEBUG - Plain text content: How is the weather in your area now?...
+2025-06-11 15:02:46,767 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,767 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,767 - DEBUG - Line 0: 'LESSON 1.14: My wallet isn’t red'
+2025-06-11 15:02:46,767 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,767 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,767 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,767 - DEBUG - Line 4: 'How to use ‘not’ in a sentence'
+2025-06-11 15:02:46,767 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,767 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,767 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,767 - DEBUG - Line 8: 'Pailin is at an orientation in Los Angeles for her study-abroad program. It’s morning time. She is talking to Frank, her student advisor.'
+2025-06-11 15:02:46,767 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,768 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'COMMON MISTAKES', 'PHRASES & VERBS', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,768 - DEBUG - Found lesson header: 'LESSON 1.14: My wallet isn’t red'
+2025-06-11 15:02:46,768 - DEBUG - Parsing header: 'LESSON 1.14: My wallet isn’t red'
+2025-06-11 15:02:46,768 - DEBUG - Extracted level=1, order=14, title='My wallet isn’t red'
+2025-06-11 15:02:46,768 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,768 - DEBUG - Plain text content: In the conversation, Pailin says she's not cold. What is something you DON'T feel right now?...
+2025-06-11 15:02:46,768 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,769 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,769 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to use 'not' in a sentence
+
+
+So far, you've learned how to make affirmative sen...
+2025-06-11 15:02:46,769 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,769 - DEBUG - Section: COMMON MISTAKES
+2025-06-11 15:02:46,769 - DEBUG - Plain text content: ## MISTAKE #1
+
+Thai people often omit the to-be verb in negative sentences and only use 'not' to mak...
+2025-06-11 15:02:46,769 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,769 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,769 - DEBUG - Plain text content: HERE [1]
+
+
+## LOOK FOR
+Look for = (to try to find or search for something)
+  - I've been looking for...
+2025-06-11 15:02:46,769 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,769 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,769 - DEBUG - Plain text content: Share with us something you're not good at....
+2025-06-11 15:02:46,769 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,770 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,770 - DEBUG - Line 0: 'LESSON 1.15: What time is it?'
+2025-06-11 15:02:46,770 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,770 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,770 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,770 - DEBUG - Line 4: 'How to talk about the time'
+2025-06-11 15:02:46,770 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,770 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,770 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,770 - DEBUG - Line 8: 'Pailin is at the orientation for her study-abroad program in Los Angeles. She’s talking with her student advisor Frank and her new friend Chloe.'
+2025-06-11 15:02:46,770 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,770 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'PHRASES & VERBS', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,770 - DEBUG - Found lesson header: 'LESSON 1.15: What time is it?'
+2025-06-11 15:02:46,770 - DEBUG - Parsing header: 'LESSON 1.15: What time is it?'
+2025-06-11 15:02:46,770 - DEBUG - Extracted level=1, order=15, title='What time is it?'
+2025-06-11 15:02:46,770 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,770 - DEBUG - Plain text content: In the conversation, Frank tells Pailin and Chloe to come back at 12:00. What time do you usually wa...
+2025-06-11 15:02:46,770 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,771 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,771 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to talk about the time
+
+
+
+
+
+
+## TELLING THE TIME
+
+In the conversation, Frank as...
+2025-06-11 15:02:46,771 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,771 - DEBUG - Section: EXTRA TIPS
+2025-06-11 15:02:46,771 - DEBUG - Plain text content: ## HALF PAST & QUARTER TIL
+
+You may have learned time phrases such as these:
+
+
+        It's quarter ...
+2025-06-11 15:02:46,771 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,771 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,771 - DEBUG - Plain text content: ## LET'S SEE
+Let's see = (said when you're trying to remember something or are thinking carefully)
+ ...
+2025-06-11 15:02:46,771 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,771 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,771 - DEBUG - Plain text content: What time is it right now for you?...
+2025-06-11 15:02:46,771 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,771 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,771 - DEBUG - Line 0: 'LESSON 1.16: Is In-N-Out near the hotel?'
+2025-06-11 15:02:46,771 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,771 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,771 - DEBUG - Line 3: 'FOCUS'
+2025-06-11 15:02:46,771 - DEBUG - Line 4: 'How to ask questions with to-be verbs'
+2025-06-11 15:02:46,771 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,771 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,771 - DEBUG - Line 7: 'BACKSTORY'
+2025-06-11 15:02:46,771 - DEBUG - Line 8: 'Pailin has just finished her last day of student orientation in Los Angeles. She’s chatting with Frank, her student advisor.'
+2025-06-11 15:02:46,771 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,772 - DEBUG - Plain text buckets: ['FOCUS', 'BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'APPLY', 'UNDERSTAND', 'EXTRA TIPS', 'PHRASES & VERBS', 'PRACTICE', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,772 - DEBUG - Found lesson header: 'LESSON 1.16: Is In-N-Out near the hotel?'
+2025-06-11 15:02:46,772 - DEBUG - Parsing header: 'LESSON 1.16: Is In-N-Out near the hotel?'
+2025-06-11 15:02:46,772 - DEBUG - Extracted level=1, order=16, title='Is In-N-Out near the hotel?'
+2025-06-11 15:02:46,772 - DEBUG - Section: APPLY
+2025-06-11 15:02:46,772 - DEBUG - Plain text content: In the conversation, Frank asks Pailin if she's tired. Imagine you've just finished exercising with ...
+2025-06-11 15:02:46,772 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,773 - DEBUG - Section: UNDERSTAND
+2025-06-11 15:02:46,773 - DEBUG - Plain text content: ## LESSON FOCUS
+
+How to ask questions with to-be verbs
+
+
+So far, you've learned how to make affirmat...
+2025-06-11 15:02:46,773 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,773 - DEBUG - Section: EXTRA TIPS
+2025-06-11 15:02:46,773 - DEBUG - Plain text content: ## SHORT FORM ANSWERS
+
+'Yes/no' questions require only a simple 'yes' or 'no' response. But these ar...
+2025-06-11 15:02:46,773 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,773 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,773 - DEBUG - Plain text content: ## CHECK OUT
+Check out (something) / check (something) out = (to look at or examine a person or thin...
+2025-06-11 15:02:46,773 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,773 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,773 - DEBUG - Plain text content: What's a quick and easy food you like to eat when you're hungry?...
+2025-06-11 15:02:46,773 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,773 - DEBUG - First 10 lines of plain text:
+2025-06-11 15:02:46,773 - DEBUG - Line 0: 'CHECKPOINT 1'
+2025-06-11 15:02:46,773 - DEBUG - Line 1: ''
+2025-06-11 15:02:46,773 - DEBUG - Line 2: ''
+2025-06-11 15:02:46,773 - DEBUG - Line 3: 'BACKSTORY'
+2025-06-11 15:02:46,773 - DEBUG - Line 4: 'Pailin has finished her last day of orientation in Los Angeles for her study-abroad program. She’s relaxing in her hotel room when her phone rings. Pailin’s dad is calling her from Thailand, so she answers the phone.'
+2025-06-11 15:02:46,773 - DEBUG - Line 5: ''
+2025-06-11 15:02:46,773 - DEBUG - Line 6: ''
+2025-06-11 15:02:46,773 - DEBUG - Line 7: 'CONVERSATION'
+2025-06-11 15:02:46,773 - DEBUG - Line 8: ''
+2025-06-11 15:02:46,773 - DEBUG - Line 9: ''
+2025-06-11 15:02:46,773 - DEBUG - Plain text buckets: ['BACKSTORY', 'CONVERSATION', 'COMPREHENSION', 'PHRASES & VERBS', 'PINNED COMMENT', 'TAGS']
+2025-06-11 15:02:46,773 - DEBUG - Parsing header: 'CHECKPOINT 1'
+2025-06-11 15:02:46,774 - DEBUG - Section: PHRASES & VERBS
+2025-06-11 15:02:46,774 - DEBUG - Plain text content: ## I SEE
+I see = (I understand)
+  - Pailin: How did you know I work here?
+Luke: You told me the last...
+2025-06-11 15:02:46,774 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,774 - DEBUG - Section: PINNED COMMENT
+2025-06-11 15:02:46,774 - DEBUG - Plain text content: What's your best friend's name? How old is he or she?...
+2025-06-11 15:02:46,774 - DEBUG - Markdown content: None...
+2025-06-11 15:02:46,774 - DEBUG - Processed 17 lessons
+2025-06-11 15:02:46,774 - INFO - Converted 17 lessons with total 103 transcript lines
+2025-06-11 15:02:46,778 - INFO - Successfully wrote JSON output

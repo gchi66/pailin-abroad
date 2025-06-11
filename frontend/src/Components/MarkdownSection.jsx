@@ -2,6 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";   // allow raw HTML (tables) in markdown
 import remarkGfm from "remark-gfm";   // lists, strikethrough, tables, etc.
+import remarkBreaks from "remark-breaks";
 import "../Styles/MarkdownSection.css";
 
 /* ------------------------------------------------------------
@@ -81,7 +82,7 @@ export default function MarkdownSection({
               ) : (
                 /* Regular markdown gets piped through ReactMarkdown */
                 <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}   // GitHub‑flavoured markdown
+                  remarkPlugins={[remarkGfm, remarkBreaks]}   // GitHub‑flavoured markdown
                   rehypePlugins={[rehypeRaw]}   // enable raw HTML (tables)
                   components={{
                     /* Custom table wrapper for styling / responsiveness */
@@ -101,7 +102,7 @@ export default function MarkdownSection({
       ) : (
         <div className="markdown-content empty-content">
           <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
+            remarkPlugins={[remarkGfm, remarkBreaks]}   // GitHub‑flavoured markdown
             rehypePlugins={[rehypeRaw]}
           >
             {markdown}

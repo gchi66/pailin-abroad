@@ -138,7 +138,8 @@ def upsert_sections(lesson_id, sections, dry_run=False):
             "lesson_id": lesson_id,
             "type": sec["type"],
             "sort_order": sec["sort_order"],
-            "content": sec.get("content_md"),
+            "content": sec.get("content"),
+            "content_md": sec.get("content_md", ""),
         }
         if dry_run:
             print(f"[DRY RUN] Upsert section: {record}")
@@ -169,13 +170,16 @@ def upsert_phrases(lesson_id, sections, dry_run=False):
                     .select("id")
                     .eq("phrase", item["phrase"])
                     .eq("variant", item.get("variant", 1))
-                    .single()
                     .execute()
                 )
-                if not res.data:
+                rows = res.data or []
+                if len(rows) == 0:
                     print(f"[ERROR] Reference to missing phrase: {item['phrase']} variant {item.get('variant', 1)}")
                     continue
-                phrase_id = res.data["id"]
+                elif len(rows) > 1:
+                    print(f"[ERROR] Multiple phrases found for: {item['phrase']} variant {item.get('variant', 1)}")
+                    continue
+                phrase_id = rows[0]["id"]
             else:
                 phrase_record = {
                     "phrase":       item.get("phrase"),

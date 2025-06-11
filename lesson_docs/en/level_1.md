@@ -1,29 +1,3 @@
-<!-- Copy and paste the converted output. -->
-
-<!-----
-
-
-
-Conversion time: 12.16 seconds.
-
-
-Using this Markdown file:
-
-1. Paste this output into your source file.
-2. See the notes and action items below regarding this conversion run.
-3. Check the rendered output (headings, lists, code blocks, tables) for proper
-   formatting and use a linkchecker before you publish this page.
-
-Conversion notes:
-
-* Docs to Markdown version 1.0β44
-* Wed May 28 2025 06:40:36 GMT-0700 (PDT)
-* Source doc: LEVEL 1 - FINAL
-* Tables are currently converted to HTML tables.
------>
-
-
-
 ### LESSON 1.1: Hi, I’m Pailin
 
 <span style="text-decoration:underline;">FOCUS</span>
@@ -70,6 +44,11 @@ LESSON FOCUS
 
 How to greet people
 
+
+---
+
+HI
+
 In the conversation, Frank says to Pailin:
 
 
@@ -77,6 +56,11 @@ In the conversation, Frank says to Pailin:
 * Hi
 
 This is a standard and friendly way to greet anyone - strangers, acquaintances, friends, and family. Notice that Pailin also responds with ‘Hi’ to Frank. ‘Hi’ is said in both casual and formal settings.
+
+
+---
+
+HEY
 
 Another casual and friendly way to greet people is:
 
@@ -86,6 +70,11 @@ Another casual and friendly way to greet people is:
 
 This works with family, friends, and acquaintances, but is very casual and shouldn’t be used in formal settings.
 
+
+---
+
+HELLO
+
 You’ve likely learned to use this greeting:
 
 
@@ -93,6 +82,11 @@ You’ve likely learned to use this greeting:
 * Hello
 
 This can also be used to greet anyone, although it’s most natural to say it to strangers. It sounds a bit formal and polite, so it isn’t used as often in everyday conversation, especially with friends and family.
+
+
+---
+
+EXTRA NOTES
 
 The three greetings above can be said at any time of day. If you’re unsure which greeting to use, it’s best to stick with ‘Hi’ as it’s the most appropriate greeting for any circumstance.
 
@@ -103,38 +97,47 @@ The three greetings above can be said at any time of day. If you’re unsure whi
 
 While the Thai 'wai' is a standard greeting in Thailand, common greetings in the US usually involve physical touch, either with a handshake or a hug.
 
-Shaking hands is the most common way to greet someone you're meeting for the first time. It creates a polite and sometimes professional connection. Just as foreigners should practice how to 'wai' when visiting Thailand, you should practice your handshake - it should be firm, but not too strong. Shaking hands is common in these settings:
+**Shaking hands**
 
+Shaking hands is the most common way to greet someone you're meeting for the first time. It creates a polite and sometimes professional connection.
 
-        - At work or professional settings
+Just as foreigners should practice how to 'wai' when visiting Thailand, you should practice your handshake - it should be firm, but not too strong.
 
+**When to shake hands**
 
-        - Introducing yourself to a stranger, like a neighbor
+- At work or professional settings
 
+- Introducing yourself to a stranger, like a neighbor
 
-        - Meeting a friend of a friend for the first time, regardless of gender
+- Meeting a friend of a friend for the first time, regardless of gender
 
-Hugging has become a common greeting that shows warmth, friendliness, and a more personal connection than a handshake. Deciding whether to hug someone or give them a handshake often depends on the relationship and context:
+**Hugging**
 
+Hugging has become a common greeting that shows warmth, friendliness, and a more personal connection than a handshake.
 
-        - Casual first meetings. For women meeting a new acquaintance (especially another woman) in a casual setting, a light hug is common. When a woman casually meets a new acquaintance who's a man, either a handshake OR a hug might be appropriate
+**When to hug**
 
+- Casual first meetings. For women meeting a new acquaintance (especially another woman) in a casual setting, a light hug is common. When a woman casually meets a new acquaintance who's a man, either a handshake OR a hug might be appropriate
 
-        - With friends. Hugging is very common among friends, particularly women, even if they see each other often
+- With friends. Hugging is very common among friends, particularly women, even if they see each other often
 
+- Family: Hugs are the standard greeting for family members, including aunts, uncles, and grandparents
 
-        - Family: Hugs are the standard greeting for family members, including aunts, uncles, and grandparents
+**Bro hug**
 
-There is one more greeting: the 'bro hug.' Men sometimes greet each other with a casual 'bro hug,' which is more personable than a formal handshake. The 'bro hug' starts with a handshake, then becomes a brief pat on the back or hug with the left hand. This is common for:
+There is one more greeting: the 'bro hug.' Men sometimes greet each other with a casual 'bro hug,' which is more personable than a formal handshake.
 
+The 'bro hug' starts with a handshake, then becomes a brief pat on the back or hug with the left hand.
 
-        - A man meeting a male friend of a friend for the first time
+**When to ‘bro hug’**
 
+- A man meeting a male friend of a friend for the first time
 
-        - Guy friends greeting each other
+- Guy friends greeting each other
 
+- Note: Women typically don't do this with each other or with men. You should also avoid doing the 'bro hug' in professional settings
 
-        - Note: Women typically don't do this with each other or with men. You should also avoid doing the 'bro hug' in professional settings
+**Alternatives**
 
 American greetings usually involve physical touch. If you're uncomfortable with this, you can simply wave and say 'Hi' when meeting someone for the first time.
 
@@ -242,6 +245,11 @@ LESSON FOCUS
 
 How to introduce yourself
 
+
+---
+
+WHAT’S YOUR NAME?
+
 In the conversation, a girl at Pailin’s student orientation asks her:
 
 
@@ -254,6 +262,11 @@ In the conversation, a girl at Pailin’s student orientation asks her:
 
 
 This is the typical way to ask for someone’s name.
+
+
+---
+
+INTRODUCING YOURSELF
 
 Pailin responds with:
 
@@ -293,9 +306,13 @@ The word ‘again’ at the end of the sentence acknowledges that you’ve alrea
 
 NICKNAMES
 
-Most Thais have an official first and last name, as well as a short nickname used in everyday life. These Thai nicknames are often distinct and unrelated to a person’s official first name. But while first and last names are standard in English-speaking countries, nicknames are less common and are usually shortened versions of a first name.
+Most Thais have an official first and last name, as well as a short nickname used in everyday life. These Thai nicknames are often distinct and unrelated to a person’s official first name.
 
-Here are some examples of common English nicknames:
+**English nicknames**
+
+While first and last names are standard in English-speaking countries, nicknames are less common and are usually shortened versions of a first name.
+
+**Common English nicknames**
 
 Amanda → Mandy
 
@@ -314,6 +331,8 @@ Jeffrey → Jeff
 Joseph → Joey, Joe
 
 Thomas → Tom
+
+**Saying someone’s name**
 
 Since not everyone has or uses a nickname, it's best to refer to someone by the name they use when introducing themselves.
 
@@ -433,6 +452,11 @@ LESSON FOCUS
 
 How to use ‘It’s nice to meet you’
 
+
+---
+
+IT’S NICE TO MEET YOU
+
 In the conversation, Pailin says to Steven:
 
 
@@ -448,6 +472,11 @@ This is a standard phrase to acknowledge meeting someone for the first time. You
 * Nice to meet you.
 
 *Chloe says this in the conversation.*
+
+
+---
+
+IT’S NICE TO MEET YOU, TOO
 
 In response, you can say:
 
@@ -630,6 +659,11 @@ LESSON FOCUS
 
 How to ask how someone is doing
 
+
+---
+
+HOW ARE YOU?
+
 In the conversation, Kevin asks Pailin:
 
 
@@ -640,13 +674,20 @@ In the conversation, Kevin asks Pailin:
 
 This is a common and friendly greeting question for any context, whether casual or professional. While it is a question, it’s more of a social formality that’s used to begin a conversation.
 
+
+---
+
+I’M GREAT
+
 Pailin responds to Kevin’s question with:
 
 
 
 * I’m great, thanks, and you?
 
-This is a standard response. Notice that it’s very brief and positive, and she doesn’t go into detail of how she’s actually feeling. Even if she isn’t feeling great, she keeps the response positive and light. Other typical responses include:
+This is a standard response. Notice that it’s very brief and positive, and she doesn’t go into detail of how she’s actually feeling. Even if she isn’t feeling great, she keeps the response positive and light.
+
+**Other responses**
 
 
 
@@ -665,11 +706,19 @@ This is a standard response. Notice that it’s very brief and positive, and she
         *Can be shortened to ‘Alright.’*
 
 
+**I’m fine**
+
 Do you notice a response that’s not shown above? ‘I’m fine.’ While this is a perfectly good response, it sounds less friendly and natural than the ones above.
+
+**I’m great, thanks**
 
 Pailin adds ‘thanks’ to her sentence for added politeness. It’s like saying ‘Thanks for asking.’
 
+**And you?**
+
 Lastly, she finishes with ‘and you?’ to return the question back to Kevin.
+
+**Example**
 
 Here’s another example of this kind of exchange:
 
@@ -692,7 +741,7 @@ There are several ways to ask ‘How are you?’ in English. Some common example
 
 
 
-* How’s it going?
+* **How’s it going?**
 
         You can say this to anyone in any context. Restaurant and store employees will often say this to customers. It sounds relaxed, casual, and friendly.
 
@@ -703,7 +752,7 @@ There are several ways to ask ‘How are you?’ in English. Some common example
 
             **‘Well!’ is the correct response grammatically, but in casual spoken English, most people respond with ‘Good!’*
 
-* How’ve you been?
+* **How’ve you been?**
 
 You can say this to friends or acquaintances you haven’t seen in a while.
 
@@ -713,7 +762,7 @@ You can say this to friends or acquaintances you haven’t seen in a while.
 
         Pailin: I’ve been great!
 
-* How’s everything?
+* **How’s everything?**
 
 You can also say this to friends or acquaintances you haven’t seen in a while.
 
@@ -723,7 +772,7 @@ You can also say this to friends or acquaintances you haven’t seen in a while.
 
         Pailin: Everything is good!
 
-* What’s up?
+* **What’s up?**
 
         This is very casual and should only be said to friends you see on a regular basis. Notice the standard response of ‘Good!’ or ‘Great!’ can’t be used to answer this question.
 
@@ -751,6 +800,8 @@ HAVE YOU EATEN?
 * Good, thanks.
 * I’m okay.
 
+**Answering honestly**
+
 But if a close friend or family member asks how you’re doing, you can of course give a more in-depth answer, whether your day was great or bad. See the example conversations below:
 
 
@@ -768,7 +819,11 @@ Chloe: I’m good, thanks.
 
 	FRIENDLY EMPLOYEES
 
-In Thailand, it’s not typical for store or restaurant staff to ask customers สบายดีไหมครับ or เป็นยังไงบ้างครับ. These questions roughly translate to ‘How are you?’ and are usually said between people who know each other or are meeting on a personal level. But in the US, it’s very common for employees to greet customers with ‘How are you?’ or similar phrases. You may have noticed foreign travelers in Thailand sometimes ask สบายดีไหมครับ to servers. This is because it’s the cultural norm to have this type of interaction with employees.
+In Thailand, it’s not typical for store or restaurant staff to ask customers สบายดีไหมครับ or เป็นยังไงบ้างครับ. These questions roughly translate to ‘How are you?’ and are usually said between people who know each other or are meeting on a personal level.
+
+**Small talk with employees**
+
+But in the US, it’s very common for employees to greet customers with ‘How are you?’ or similar phrases. You may have noticed foreign travelers in Thailand sometimes ask สบายดีไหมครับ to servers. This is because it’s the cultural norm to have this type of interaction with employees.
 
 
 #### PRACTICE
@@ -884,6 +939,11 @@ LESSON FOCUS
 
 How to use greeting phrases
 
+
+---
+
+GOOD MORNING!
+
 In the conversation, Pailin says to her new friend Joey:
 
 
@@ -900,6 +960,11 @@ Joey responds with a simple:
 
 These greetings are common in the morning, typically until around 10AM or 11AM. They can be said to anyone - family, neighbors, friends, co-workers, and service staff, like a barista or cashier. Of course, ‘Hi’ or ‘Hey’ are also perfectly acceptable greetings in the morning.
 
+
+---
+
+OTHER GREETINGS
+
 You may have learned these four greeting phrases already:
 
 
@@ -909,7 +974,11 @@ You may have learned these four greeting phrases already:
 * Good evening
 * Good night
 
-‘Good morning’ and ‘good night’ are the most frequently used in everyday conversation. ‘Good afternoon’ and ‘Good evening’ sound quite formal and are hardly used in casual settings. You’re more likely to hear them in formal situations, like with a server greeting customers, hotel staff greeting a guest, or a speaker addressing an audience.
+‘Good morning’ and ‘good night’ are the most frequently used in everyday conversation.
+
+**Good afternoon & Good evening**
+
+‘Good afternoon’ and ‘Good evening’ sound quite formal and are hardly used in casual settings. You’re more likely to hear them in formal situations, like with a server greeting customers, hotel staff greeting a guest, or a speaker addressing an audience.
 
 
 #### PRACTICE
@@ -1043,7 +1112,9 @@ In the conversation, Pailin says she is nervous about meeting her host family. H
 
 #### UNDERSTAND
 
-Lesson focus: How to use the to-be verb ‘am’
+LESSON FOCUS
+
+How to use the to-be verb ‘am’
 
 
 ---
@@ -1062,12 +1133,18 @@ She is describing how she feels right now. Chloe also describes her feelings:
 
 * I’m nervous, but I’m excited!
 
+**I’m = I am**
+
 Notice that they both use ‘I’m’ in their sentences.
 
 
         I’m = I am
 
-The phrase ‘I am’ is said so often in English that it’s almost always shortened to ‘I’m.’ The verb ‘am’ is called a ‘to-be’ verb, and it is one of three to-be verbs. They are:
+The phrase ‘I am’ is said so often in English that it’s almost always shortened to ‘I’m.’
+
+**To-be verbs**
+
+The verb ‘am’ is called a ‘to-be’ verb, and it is one of three to-be verbs. They are:
 
 
         am · are · is
@@ -1084,35 +1161,39 @@ You will learn about the to-be verbs ‘are’ and ‘is’ in future lessons. T
 There are three basic ways to use ‘I’m’ in a sentence:
 
 
-        1. I’m (adjective).
+
+1. **I’m (adjective).**
+
+        - ‘Adjectives’ are words that describe nouns.
 
 
-            *‘Adjectives’ are words that describe nouns.*
+        *- Examples: funny, tall, smart, sick*
+
+2. **I’m (prepositional phrase).**
+
+        - A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.
 
 
-            *Examples: funny, tall, smart, sick*
+        *- Examples: in school, at work, on the train, near the bank*
+
+3. **I’m (noun OR noun phrase).**
+
+        - A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’
 
 
-        2. I’m (prepositional phrase).
+        *- Examples: a doctor, an engineer, a good friend, a fast learner*
 
 
-            *A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.*
+        <span style="text-decoration:underline;">Click here</span> to learn more about adjectives, prepositions, nouns, and other parts of speech.
 
 
-            *Examples: in school, at work, on the train, near the bank*
+**Conversation examples**
 
+The lines from the conversation demonstrate ‘I’m (adjective)’ because the words ‘nervous’ and ‘excited’ are adjectives.
 
-        3. I’m (noun OR noun phrase).
+**‘I’m’ for right now**
 
-
-            *A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’*
-
-
-            *Examples: a doctor, an engineer, a good friend, a fast learner*
-
-<span style="text-decoration:underline;">Click here</span> to learn more about adjectives, prepositions, nouns, and other parts of speech.
-
-The lines from the conversation demonstrate ‘I’m (adjective)’ because the words ‘nervous’ and ‘excited’ are adjectives. It’s important to note that ‘I’m’ indicates the present state you are in (right now), not the past or future. This will make more sense as you progress through the levels.
+It’s important to note that ‘I’m’ indicates the present state you are in (right now), not the past or future. This will make more sense as you progress through the levels.
 
 
 ---
@@ -1123,18 +1204,18 @@ Now that you understand the usage and structure of ‘am’ in a sentence, take 
 
 
 
-1. I’m (adjective).
+1. **I’m (adjective).**
 * I’m hungry.
 * I’m sleepy.
 * I’m smart.
 * I’m Thai. \
 
-2. I’m (prepositional phrase).
+2. **I’m (prepositional phrase).**
 * I’m at the market.
 * I’m in New York.
 * I’m from Thailand.
 * I’m by the river.
-3. I’m (noun OR noun phrase).
+3. **I’m (noun OR noun phrase).**
 * I’m a lawyer.
 * I’m a good cook.
 * I’m a quiet person.
@@ -1174,7 +1255,11 @@ I nervous. (X)
 ฉันตื่นเต้น \
 I excited. (X)
 
-These are incorrect because they don’t have a verb. In English, *every sentence must have a verb*. The sentences above must be:
+These are incorrect because they don’t have a verb.
+
+**Don’t forget the verb**
+
+In English, *every sentence must have a verb*. The sentences above must be:
 
 
 
@@ -1191,7 +1276,11 @@ Another common error is leaving out the subject of a sentence. This is because i
 
         หิวค่ะ
 
-Translated directly, this would just be ‘Hungry.’ The sentence makes sense in Thai because the subject is understood from the context. But in English, every sentence must have a subject AND a verb! So the sentence above must be:
+Translated directly, this would just be ‘Hungry.’ The sentence makes sense in Thai because the subject is understood from the context.
+
+**Don’t forget the subject**
+
+But in English, every sentence must have a subject AND a verb! So the sentence above must be:
 
 
 
@@ -1206,11 +1295,15 @@ MISTAKE #3
 
 In this conversation, you saw two adjectives - ‘excited’ and ‘nervous’ - which learners sometimes confuse.
 
+**Excited**
+
 ‘Excited’ means you feel a lot of energy, but in a happy or positive way. For example:
 
 
 
 * I’m excited to go to Disneyland!
+
+**Nervous**
 
 ‘Nervous’ also means you have a lot of energy, but it’s a more negative feeling of worry or unease. For example:
 
@@ -1407,6 +1500,11 @@ LESSON FOCUS
 
 How to ask someone’s age
 
+
+---
+
+HOW OLD ARE YOU?
+
 In the conversation, Chloe asks Pailin:
 
 
@@ -1415,16 +1513,27 @@ In the conversation, Chloe asks Pailin:
 
 * How old are you?
 
-This is the typical way to ask what someone’s age is. Take a look at how Pailin and Chloe tell each other their ages:
+This is the typical way to ask what someone’s age is.
+
+
+---
+
+SAYING YOUR AGE
+
+Take a look at how Pailin and Chloe tell each other their ages:
 
 
 
 * I’m 21.
 * I’m 23.
 
+**Common response**
+
 They use this structure:
 
 I’m (number).
+
+**Full response**
 
 The full way to reply is:
 
@@ -1440,26 +1549,43 @@ But in casual conversation, you can leave out ‘years old’ for simplicity. Sa
 
 #### PHRASES & VERBS
 
-Oh! = (said when you are pleasantly surprised about something)
+OH!
 
 
 
-* Pailin: I baked this cake for you.
-
-        Luke: Oh, it looks so good! Thank you!
-
-
-	<span style="text-decoration:underline;">See more uses of ‘Oh’</span>
+*
+Oh!
+Said when you are pleasantly surprised about something
 
 
-#### CULTURE NOTES
+
+*
+Pailin: I baked this cake for you.
+Luke: Oh, it looks so good! Thank you!
+
+<span style="text-decoration:underline;">See more uses of ‘Oh’</span>
+
+
+#### CULTURE NOTE
 
 AGE & RESPECT
 
-Age plays a significant role in Thai culture, as it affects how you talk to someone and how polite you should be. In many Asian cultures, respect is often automatically given to elders. However, in many Western cultures like the US, elders are not automatically shown respect simply because they are older. Respect is usually earned through actions, personality, or position.
+Age plays a significant role in Thai culture, as it affects how you talk to someone and how polite you should be. In many Asian cultures, respect is often automatically given to elders.
 
-Also important to note is that asking someone’s age, especially upon first meeting, can be considered impolite or sometimes even rude to ask. This is because age can be a sensitive topic, and some people prefer not to discuss it. It’s more appropriate to ask about age when you’ve gotten to know someone better, they appear to be close to your age, or the topic comes up naturally in conversation.  \
- \
+**Respect in Western countries**
+
+However, in many Western cultures like the US, elders are not automatically shown respect simply because they are older. Respect is usually earned through actions, personality, or position.
+
+**Asking for someone’s age**
+
+Also important to note is that asking someone’s age, especially upon first meeting, can be considered impolite or sometimes even rude to ask. This is because age can be a sensitive topic, and some people prefer not to discuss it.
+
+**When to ask**
+
+It’s more appropriate to ask about age when you’ve gotten to know someone better, they appear to be close to your age, or the topic comes up naturally in conversation.  \
+
+
+**Asking a woman’s age** \
 There is even a saying in English, ‘Never ask a woman about her age.’ Even if your intentions are pure, asking a woman her age can get you in trouble. They might assume that they look old and that’s why you’re asking, so it’s best to avoid asking unless they bring it up.
 
 
@@ -1601,6 +1727,11 @@ LESSON FOCUS
 
 How to thank someone
 
+
+---
+
+THANK YOU
+
 In the conversation, when Pailin compliments Chloe’s bracelet, Chloe says:
 
 
@@ -1610,6 +1741,8 @@ In the conversation, when Pailin compliments Chloe’s bracelet, Chloe says:
 * Thank you!
 
 This is perhaps the most important phrase you should know in English. You can say it to anyone and in all contexts.
+
+**Alternatives**
 
 There are variations of ‘Thank you’ which range from casual to deep appreciation, listed below:
 
@@ -1630,6 +1763,11 @@ There are variations of ‘Thank you’ which range from casual to deep apprecia
         *A strong way to show deep appreciation. Notice Pailin says this when Chloe gives her the bracelet.*
 
 
+
+---
+
+YOU’RE WELCOME
+
 After Pailin thanks Chloe for the bracelet, Chloe responds with:
 
 
@@ -1639,7 +1777,11 @@ After Pailin thanks Chloe for the bracelet, Chloe responds with:
         (Means ‘You are welcome’)
 
 
-This is the most standard polite response to ‘Thank you’ in both informal and formal settings. Here are more casual ways to respond:
+This is the most standard polite response to ‘Thank you’ in both informal and formal settings.
+
+**Casual alternatives**
+
+Here are more casual ways to respond:
 
 
 
@@ -1660,7 +1802,11 @@ This is the most standard polite response to ‘Thank you’ in both informal an
         *A casual and positive response showing your willingness to help.*
 
 
-The above responses to ‘Thank you’ are appropriate for when you help someone or give them something. But if someone says 'thank you' after you give them a compliment, the only suitable response would be ‘You’re welcome!’ or ‘Of course!’
+The above responses to ‘Thank you’ are appropriate for when you help someone or give them something.
+
+**Responses to compliments**
+
+If someone says 'thank you' after you give them a compliment, the only suitable response would be ‘You’re welcome!’ or ‘Of course!’
 
 
 #### EXTRA TIPS
@@ -1677,7 +1823,7 @@ Here are two ways to give thanks for specific reasons:
 * Thanks for your help.
 * Thank you so much for the bracelet. *(Pailin could have said this to Chloe)*
 
-		Thank you for (verb-ing).
+	Thank you for (verb-ing).
 
 
 
@@ -1688,16 +1834,25 @@ Here are two ways to give thanks for specific reasons:
 
 #### PHRASES & VERBS
 
-Here = (used to offer something to someone, like ‘Take this’)
+HERE
 
 
 
-* Luke: My breath stinks. \
+*
+Here
+Used to offer something to someone, like ‘Take this’
+
+
+
+*
+Luke: My breath stinks. \
 Pailin: Here, I have some gum. \
 
-* Pailin: I can’t find my blue pen. \
-Luke: Here, you can use mine.
 
+
+*
+Pailin: I can’t find my blue pen. \
+Luke: Here, you can use mine.
 
 #### PRACTICE
 
@@ -1840,6 +1995,8 @@ Take a look at these sentences from the conversation:
 * They’re blueberry pancakes.
 * The chocolate pancakes are on that table.
 
+**‘Are’ is hidden**
+
 All of these sentences use ‘are.’ You may not notice this at first because ‘are’ is often contracted with the subject. For example:
 
 
@@ -1848,50 +2005,55 @@ All of these sentences use ‘are.’ You may not notice this at first because �
 
         <span style="text-decoration:underline;">They’re</span> blueberry pancakes. = <span style="text-decoration:underline;">They are</span> blueberry pancakes.
 
+**When to use ‘are’**
+
 Do you remember the three ways that ‘am’ is used? ‘Are’ is used in the same three ways:
 
 
 
-1. are (adjective)
+1. **are (adjective)**
 
-        *‘Adjectives’ are words that describe nouns.*
-
-
-        *Examples: big, green, sad, loud*
-
-2. are (prepositional phrase)
-
-        *A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.*
+        *- *‘Adjectives’ are words that describe nouns.
 
 
-        *Examples: in the car, at work, on the table, near the river*
+        *- Examples: big, green, sad, loud*
 
-3. are (noun OR noun phrase).
+2. **are (prepositional phrase)**
 
-        *A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’*
-
-
-        *Examples: doctors, books, a good friend, a tall woman*
+        *- *A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.
 
 
-<span style="text-decoration:underline;">Click here</span> to learn more about adjectives, prepositions, nouns, and other parts of speech.
+        *- Examples: in the car, at work, on the table, near the river*
+
+3. **are (noun OR noun phrase).**
+
+        - A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’
+
+
+        *- Examples: doctors, books, a good friend, a tall woman*
+
+
+        <span style="text-decoration:underline;">Click here</span> to learn more about adjectives, prepositions, nouns, and other parts of speech.
+
+
+**Identify the uses of ‘are’**
 
 Try to identify how ‘are’ is used in the conversation. They’re shown below:
 
 
-        These pancakes are so good! (adjective)
+        - These pancakes are so good! (adjective)
 
 
-        You’re a great cook. (noun phrase)
+        - You’re a great cook. (noun phrase)
 
 
-        You’re so kind. (adjective)
+        - You’re so kind. (adjective)
 
 
-        They’re blueberry pancakes. (noun phrase)
+        - They’re blueberry pancakes. (noun phrase)
 
 
-        The chocolate pancakes are on that table. (prepositional phrase)
+        - The chocolate pancakes are on that table. (prepositional phrase)
 
 
 ---
@@ -1908,11 +2070,19 @@ While ‘am’ can only follow the subject ‘I,’ the verb ‘are’ follows t
 
 	(2+ nouns) are
 
+**2+ nouns**
 
+‘2+ nouns’ refers to a ‘plural noun.’ This means more than one person or thing. In the conversation, ‘these pancakes’ and ‘The chocolate pancakes’ are examples because they refer to multiple pancakes.
 
-‘2+ nouns’ refers to a ‘plural noun.’ This means more than one person or thing. In the conversation, ‘these pancakes’ and ‘The chocolate pancakes’ are examples because they refer to multiple pancakes. Plural nouns will be explored more in Lesson 3.5. For now, a simple way to recognize a plural noun is that it often ends in -s, like ‘pancakes,’ ‘books,’ or ‘dogs.’ You can see more examples of (2+ nouns) in the section below.
+Plural nouns will be explored more in <span style="text-decoration:underline;">Lesson 3.5.</span>
+
+**How to spot 2+ nouns**
+
+For now, a simple way to recognize a plural noun is that it often ends in -s, like ‘pancakes,’ ‘books,’ or ‘dogs.’ You can see more examples of (2+ nouns) in the section below.
 
 Notice that the pronouns ‘we’ and ‘they’ are also plural because they refer to more than one person.
+
+**Contractions**
 
 The subject and ‘are’ are usually contracted to form one word.
 
@@ -1942,16 +2112,16 @@ Now that you understand the usage and structure of ‘are’ in a sentence, take
 
 
 
-1. are (adjective)
+1. **are (adjective)**
 * You’re cute.
 * We’re tired.
-* Your mom and dad are tall.* (this is an example of 2+ nouns)* \
+* Tyler and Mark are tall.* (this is an example of 2+ nouns)* \
 
-2. are (prepositional phrase)
+2. **are (prepositional phrase)**
 * We’re at home.
 * They’re on a boat.
-* My kids are at school.* (this is an example of 2+ nouns)*
-3. are (noun OR noun phrase)
+* The books are in my bag.* (this is an example of 2+ nouns)*
+3. **are (noun OR noun phrase)**
 * You’re an engineer.
 * We’re doctors.
 * Those men are waiters.* (this is an example of 2+ nouns)*
@@ -1980,6 +2150,8 @@ There are no verbs in these sentences. When translated into English word for wor
 
 
         You so kind. (X)
+
+**Don’t forget the verb**
 
 These are incorrect because there is no verb. In English, every sentence must have a verb. The sentences above must be:
 
@@ -2205,6 +2377,8 @@ Take a look at these sentences from the conversation:
 * He’s very smart.
 * My mom’s a nurse.
 
+**‘Is’ is hidden**
+
 All of these sentences use ‘is.’ You may not notice this at first because ‘is’ is usually contracted with the subject. For example:
 
 
@@ -2213,47 +2387,52 @@ All of these sentences use ‘is.’ You may not notice this at first because �
 
         <span style="text-decoration:underline;">It’s</span> a good school. = <span style="text-decoration:underline;">It is</span> a good school.
 
+**When to use ‘is’**
+
 Do you remember the three ways that ‘am’ and ‘are’ are used? ’Is’ is used in the same three ways:
 
 
 
-1. is (adjective)
+1. **is (adjective)**
 
-        *‘Adjectives’ are words that describe nouns.*
-
-
-        *Examples: hot, tired, yellow, heavy*
-
-2. is (prepositional phrase)
-
-        *A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.*
+        - ‘Adjectives’ are words that describe nouns.
 
 
-        *Examples: in the kitchen, at the store, on the desk, near the post office*
+        *- Examples: hot, tired, yellow, heavy*
 
-3. is (noun OR noun phrase).
+2. **is (prepositional phrase)**
 
-        *A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’*
-
-
-        *Examples: a nurse, a phone, a talented singer, a brown dog*
+        - A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.
 
 
-<span style="text-decoration:underline;">Click here</span> to learn more about adjectives, prepositions, nouns, and other parts of speech.
+        *- Examples: in the kitchen, at the store, on the desk, near the post office*
+
+3. **is (noun OR noun phrase).**
+
+        - A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’
+
+
+        *- Examples: a nurse, a phone, a talented singer, a brown dog*
+
+
+        <span style="text-decoration:underline;">Click here</span> to learn more about adjectives, prepositions, nouns, and other parts of speech.
+
+
+**Identify the uses of ‘is’**
 
 Try to identify how ‘is’ is used in the conversation. They’re shown below:
 
 
-        He’s in LA. (prepositional phrase)
+        - He’s in LA. (prepositional phrase)
 
 
-        It’s a good school. (noun phrase)
+        - It’s a good school. (noun phrase)
 
 
-        He’s very smart. (adjective)
+        - He’s very smart. (adjective)
 
 
-        My mom’s a nurse. (noun)
+        - My mom’s a nurse. (noun)
 
 
 ---
@@ -2274,7 +2453,13 @@ You’ve learned that ‘am’ only follows ‘I’, and ‘are’ follows ‘yo
 
         (Noun) is
 
-‘Noun’ refers to just one noun, called a ‘singular noun.’ In the conversation, ‘my mom’ is an example of this because she is just one person. A singular noun doesn’t have to be a person - it can be an item, such as ‘The key’ or ‘My house.’ Notice that ‘he,’ ‘she,’ and ‘it’ also refer to a single person or thing, so they are ‘singular nouns.’ You can see examples of singular nouns and plural nouns in the Extra Tips section.
+**1 noun**
+
+‘Noun’ refers to just one noun, called a ‘singular noun.’ In the conversation, ‘my mom’ is an example of this because she is just one person. A singular noun doesn’t have to be a person - it can be an item, such as ‘The key’ or ‘My house.’
+
+Notice that ‘he,’ ‘she,’ and ‘it’ also refer to a single person or thing, so they are ‘singular nouns.’ You can see examples of singular nouns and plural nouns in the Extra Tips section.
+
+**Contractions**
 
 The subject and ‘is’ are usually contracted to form one word.
 
@@ -2301,16 +2486,16 @@ Take a look at these example sentences. Notice the contractions are used when po
 
 
 
-1. is (adjective)
+1. **is (adjective)**
 * He’s funny.
 * She’s smart.
 * Joey’s tired.* (this is an example of a singular noun) \
 *
-2. is (prepositional phrase)
+2. **is (prepositional phrase)**
 * It’s in the box.
 * She’s at the post office.
 * My dog’s outside.* (this is an example of a singular noun)*
-3. is (noun OR noun phrase)
+3. **is (noun OR noun phrase)**
 * He’s a good soccer player.
 * It’s a scary movie.
 * Mark is a lawyer.* (this is an example of a singular noun)*
@@ -2323,10 +2508,12 @@ SINGULAR VS. PLURAL NOUNS
 Now you’ve learned these rules:
 
 
-        (Noun) is
+        (1 Noun) is
 
 
         (2+ nouns) are
+
+**How to spot 2+ nouns**
 
 Without going in-depth, remember that an easy way to spot a plural noun (2+ nouns) is that it often ends in -s, like ‘pancake<span style="text-decoration:underline;">s</span>,’ ‘book<span style="text-decoration:underline;">s</span>,’ or ‘dog<span style="text-decoration:underline;">s</span>.’ Take a look at this line from the conversation:
 
@@ -2334,7 +2521,11 @@ Without going in-depth, remember that an easy way to spot a plural noun (2+ noun
 
 * His class<span style="text-decoration:underline;">es</span> <span style="text-decoration:underline;">are</span> hard.
 
-The word 'class' has -es added to the end, so the sentence refers to multiple classes. This is why 'are' is used. Compare that with this sentence:
+The word 'class' has -es added to the end, so the sentence refers to multiple classes. This is why 'are' is used.
+
+**How to spot 1 noun**
+
+Compare the sentence above with this:
 
 
 
@@ -2358,6 +2549,8 @@ There is no verb in this sentence. When translated into English word for word, i
 
 	He very smart. (X)
 
+**Don’t forget the verb**
+
 This is incorrect because there is no verb. As emphasized before, *every sentence must have a verb* in English. The sentence above must be:
 
 
@@ -2367,20 +2560,27 @@ This is incorrect because there is no verb. As emphasized before, *every sentenc
 
 #### PHRASES & VERBS
 
-Nice! = (a positive expression to show enthusiasm or approval)
+NICE!
 
 
 
-* Luke: I applied for a few jobs today.
-
-        Chloe: Nice! I’m sure you’ll get one.
-
-* Luke: I found some nice AirBnBs for our trip to Mexico City.
-
-        Pailin: Nice! Send them to me and I’ll take a look at them.
+*
+Nice!
+A positive expression to show enthusiasm or approval
 
 
-Oh! (pleasant surprise)
+
+*
+Luke: I applied for a few jobs today.
+Chloe: Nice! I’m sure you’ll get one.
+
+
+
+*
+Luke: I found some nice AirBnBs for our trip to Mexico City.
+Pailin: Nice! Send them to me and I’ll take a look at them.
+
+OH! [1]
 
 
 #### PRACTICE
@@ -2689,6 +2889,11 @@ LESSON FOCUS
 
 How to ask where someone is from and how to respond
 
+
+---
+
+WHERE ARE YOU FROM?
+
 In the conversation, Chloe asks Pailin:
 
 
@@ -2698,6 +2903,11 @@ In the conversation, Chloe asks Pailin:
 * Where are you from?
 
 This is the typical way to ask where someone is from. It’s a useful introductory question.
+
+
+---
+
+I’M FROM…
 
 Take a look at these responses from the conversation:
 
@@ -2714,6 +2924,8 @@ Take a look at these responses from the conversation:
 
 * I’m from Chiang Mai.
 
+**Any place**
+
 This is not limited to country and city - you can respond with a region or a state, or any geographical location that resonates with the listener. For example:
 
 
@@ -2726,6 +2938,8 @@ This is not limited to country and city - you can respond with a region or a sta
 * I’m from Isaan.
 * I’m from Texas.
 * I’m from the Bay.
+
+**I’m + (prepositional phrase)**
 
 Notice that these responses use ‘I’m (prepositional phrase)’, as the word ‘from’ is a preposition.
 
@@ -2740,7 +2954,9 @@ Thai learners often ask คุณมาจากไหน like this:
 
 This is a direct translation from Thai, but it is incorrect in English. Remember the correct way to ask is:
 
-	Where are you from? (✓)
+
+
+* Where are you from? (✓)
 
 
 ---
@@ -2772,24 +2988,39 @@ Take note of these three things:
 
 #### PHRASES & VERBS
 
-Wow = (used to show surprise or admiration)
+WOW
 
 
 
-* Wow! This cake is beautiful. Did you make it all by yourself?
+*
+Wow
+Used to show surprise or admiration
 
+
+
+*
+Wow! This cake is beautiful. Did you make it all by yourself?
 	<span style="text-decoration:underline;">See more uses of ‘Wow’</span>
 
-Cool! = (an informal way of saying ‘That’s great’)
+COOL!
 
 
 
-* Luke: I just got tickets to the concert! \
+*
+Cool!
+An informal way of saying ‘That’s great’
+
+
+
+*
+Luke: I just got tickets to the concert! \
 Pailin: Cool! I’m so excited. \
 
-* Pailin: We’re bringing a pie to the potluck. \
-Luke: Cool, what kind of pie are you bringing?
 
+
+*
+Pailin: We’re bringing a pie to the potluck. \
+Luke: Cool, what kind of pie are you bringing?
 
 #### PRACTICE
 
@@ -2904,6 +3135,11 @@ LESSON FOCUS
 
 How to say ‘This is (something)’
 
+
+---
+
+WHAT’S THIS?
+
 In the conversation, Frank gives different items to Pailin. He hands her something, and she asks him:
 
 
@@ -2914,6 +3150,11 @@ In the conversation, Frank gives different items to Pailin. He hands her somethi
 
 
 This is a useful question to ask when you want to know what something is.
+
+
+---
+
+THIS IS…
 
 Take a look at what Frank says as he offers different items to her:
 
@@ -2928,24 +3169,27 @@ You can follow this structure when explaining what something is:
 
         This is (a noun).
 
-For example:
+**Examples**
+
+*Pailin walks into a grocery store in the US with her friend and sees an unfamiliar food.*
 
 
-        *Pailin walks into a grocery store in the US with her friend and sees an unfamiliar food.*
+
+* Pailin: What’s this?
+
+        Luke: This is cheesecake.
+
+
+*Pailin is at a friend’s house and sees some beautiful fabric.*
 
 
 
 * Pailin: What’s this?
 
-        Tom: This is cheesecake.
+        Luke: This is my mom’s favorite scarf. It’s from Japan.
 
 
-        *Pailin is at a friend’s house and sees some beautiful fabric.*
-
-* Pailin: What’s this?
-
-        Angie: This is my mom’s favorite scarf. It’s from Japan.
-
+**Introducing a person**
 
 You can also use this sentence structure to introduce someone. In this case, the structure is:
 
@@ -2972,7 +3216,13 @@ It’s common for Thai students to omit the -s sound in ‘What’s’ in the qu
 
 * What’s this? (✓)
 
-English pronunciation often involves more tongue movement than Thai. This can cause learners to simplify sounds. However, it's beneficial to practice pronouncing all the sounds in each word, especially as a beginner. This helps build strong pronunciation habits. Your tongue might feel a little tired at first, but this practice will pay off in the long run!
+**Pronunciation practice**
+
+English pronunciation often involves more tongue movement than Thai. This can cause learners to simplify sounds.
+
+However, it's beneficial to practice pronouncing all the sounds in each word, especially as a beginner. This helps build strong pronunciation habits.
+
+Your tongue might feel a little tired at first, but this practice will pay off in the long run!
 
 
 #### PRACTICE
@@ -3141,6 +3391,11 @@ LESSON FOCUS
 
 How to describe things
 
+
+---
+
+IT’S (ADJECTIVE)
+
 Take a look at these sentences from the conversation:
 
 
@@ -3157,7 +3412,11 @@ These sentences follow a pattern:
 
         It’s (adjective).
 
+**Useful structure!**
+
 This is a very useful sentence structure. You can use it to describe almost anything! Think of different adjectives and practice using them in this structure. The more you practice, the more natural it will become.
+
+**Don’t forget the subject**
 
 Notice that in Thai, this sentence doesn’t have a subject:
 
@@ -3166,7 +3425,11 @@ Notice that in Thai, this sentence doesn’t have a subject:
 
 Since every sentence in English must have a subject, ‘It’s’ would be a typical subject for a descriptive sentence like this. So instead of just saying ‘Expensive!’ you must say ‘It’s expensive!’
 
-In the conversation, the structure ‘It’s (adjective)’ is used to discuss the weather, the food, and pricing, but it can be used to describe anything! Take a look at these descriptive sentences below:
+**Examples**
+
+In the conversation, the structure ‘It’s (adjective)’ is used to discuss the weather, the food, and pricing, but it can be used to describe anything!
+
+Take a look at these descriptive sentences below:
 
 
 
@@ -3190,7 +3453,11 @@ It’s common for Thai students to omit the -s sound in the phrase ‘It’s.’
 
 * It’s red. (✓)
 
-As mentioned in the previous lesson, it’ll be beneficial to practice pronouncing all the sounds in a word, especially the -s sounds at the end of words. Your tongue might feel a little tired at first, but this practice will pay off in the long run!
+**Pronunciation practice**
+
+As mentioned in the previous lesson, it’ll be beneficial to practice pronouncing all the sounds in a word, especially the -s sounds at the end of words.
+
+Your tongue might feel a little tired at first, but this practice will pay off in the long run!
 
 
 #### PRACTICE
@@ -3329,20 +3596,26 @@ In the conversation, Pailin says to Frank:
 
 
 
-* I’m not cold.
+* I’m <span style="text-decoration:underline;">not</span> cold.
 
 While the affirmative sentence would be ‘I’m cold,’ adding ‘not’ changes the sentence into a negative sentence.
 
+**‘Not’ - important word!**
+
 ‘Not’ is used to negate ALL verbs in English. This lesson will focus on negating simple sentences that use to-be verbs.
+
+**Examples**
 
 Take a look at these sentences from the conversation:
 
 
 
-* My jacket isn’t blue.
-* It isn’t there.
-* It’s not a big deal.
-* I’m not cold.
+* My jacket <span style="text-decoration:underline;">isn’t</span> blue.
+* It <span style="text-decoration:underline;">isn’t</span> there.
+* It’s <span style="text-decoration:underline;">not</span> a big deal.
+* I’m <span style="text-decoration:underline;">not</span> cold.
+
+**‘Not’ is hidden**
 
 In the first two sentences, you can’t see the word ‘not.’ This is because it’s combined with the to-be verb to form a negative contraction:
 
@@ -3366,6 +3639,8 @@ These will be explained more below.
 
         My jacket <span style="text-decoration:underline;">is not</span> blue.
 
+**‘Not’ placement**
+
 ‘Not’ comes after the to-be verb, so it will always follow this pattern:
 
 
@@ -3377,9 +3652,15 @@ These will be explained more below.
 
         is not
 
-Remember that contractions are key in English because they help shorten your speech and make it sound natural. There is only one way to contract ‘I am not’:
+**Contractions - ‘am not’**
+
+Remember that contractions are key in English because they help shorten your speech and make it sound natural.
+
+There is only one way to contract ‘I am not’:
 
 	I’m not
+
+**Contractions - ‘are not’ and ‘is not’**
 
 But there are two ways to contract ‘are not’ and ‘is not’ in a sentence, as you can see from these lines in the conversation:
 
@@ -3405,7 +3686,11 @@ But there are two ways to contract ‘are not’ and ‘is not’ in a sentence,
 
         They’re not
 
-Both forms are frequently used, so it’s important to know both. Here is a breakdown of ‘are’ and ‘is’ in negative sentences:
+Both forms are frequently used, so it’s important to know both.
+
+**Two ways to contract**
+
+Here is a breakdown of ‘are’ and ‘is’ in negative sentences:
 
 TABLE-1:
 
@@ -3434,6 +3719,8 @@ It’s not = It isn’t
 </table>
 
 
+**Contractions - 1 noun**
+
 Singular noun subjects can also be contracted in both ways:
 
 
@@ -3444,6 +3731,8 @@ Singular noun subjects can also be contracted in both ways:
 
 
         Frank’s not = Frank isn’t
+
+**Contractions - 2+ nouns**
 
 But for subjects of 2+ nouns, only one contraction can be used:
 
@@ -3464,49 +3753,51 @@ EXAMPLES
 Remember that to-be verbs can come before these three things:
 
 
-        adjectives
+        1. adjectives
 
 
-        prepositional phrases
+        2. prepositional phrases
 
 
-        nouns OR noun phrases
+        3. nouns OR noun phrases
 
 The same applies to negative to-be verbs. Here are examples of negative sentences. Notice that both forms of contractions are used for ‘are not’ and ‘is not.’
 
-	AM NOT
+	**am not**
 
 
 
-* I’m not hungry. (adjective)
-* I’m not from China. (prepositional phrase)
-* I’m not a good cook. (noun phrase)
+* I’m <span style="text-decoration:underline;">not</span> hungry. (adjective)
+* I’m <span style="text-decoration:underline;">not</span> from China. (prepositional phrase)
+* I’m <span style="text-decoration:underline;">not</span> a good cook. (noun phrase)
 
-	ARE NOT
-
-
-
-* You aren’t sick. (adjective)
-* We’re not at home. (prepositional phrase)
-* They aren’t fun people. (noun phrase)
-* Pailin and Chloe aren’t sisters. (noun)
-
-	IS NOT
+	**are not**
 
 
 
-* He isn’t ready. (adjective)
-* She’s not in the garage. (prepositional phrase)
-* It isn’t a toy. (noun)
-* Frank’s not tired. (adjective)
-* My friend isn’t here. (prepositional phrase)
+* You <span style="text-decoration:underline;">aren’t</span> sick. (adjective)
+* We’re <span style="text-decoration:underline;">not</span> at home. (prepositional phrase)
+* They <span style="text-decoration:underline;">aren’t</span> fun people. (noun phrase)
+* Pailin and Chloe <span style="text-decoration:underline;">aren’t</span> sisters. (noun)
+
+	**is not**
+
+
+
+* He <span style="text-decoration:underline;">isn’t</span> ready. (adjective)
+* She’s <span style="text-decoration:underline;">not</span> in the garage. (prepositional phrase)
+* It <span style="text-decoration:underline;">isn’t</span> a toy. (noun)
+* Frank’s <span style="text-decoration:underline;">not</span> tired. (adjective)
+* My friend <span style="text-decoration:underline;">isn’t</span> here. (prepositional phrase)
 
 
 #### COMMON MISTAKES
 
 MISTAKE #1
 
-Thai people often omit the to-be verb in negative sentences and only use ‘not’ to make a sentence negative. Take a look at the incorrect sentences below and how to fix them:
+Thai people often omit the to-be verb in negative sentences and only use ‘not’ to make a sentence negative.
+
+Take a look at the incorrect sentences below and how to fix them:
 
 	I not thirsty. (X)
 
@@ -3529,15 +3820,24 @@ Thai people often omit the to-be verb in negative sentences and only use ‘not�
 
 #### PHRASES & VERBS
 
-Here
+HERE [1]
 
-Look for = (to try to find or search for something)
+LOOK FOR
 
 
 
-* I’ve been looking for a new job, but not many places are hiring.
-* I’m looking for my keys. Have you seen them?
+*
+Look for
+To try to find or search for something
 
+
+
+*
+I’ve been looking for a new job, but not many places are hiring.
+
+
+*
+I’m looking for my keys. Have you seen them?
 
 #### PRACTICE
 
@@ -3848,7 +4148,14 @@ In the conversation, Frank asks the girls:
 
 * What time is it?
 
-This is the typical way to ask for the current time. Pailin responds by saying:
+This is the typical way to ask for the current time.
+
+
+---
+
+IT’S (TIME)
+
+Pailin responds by saying:
 
 
 
@@ -3881,6 +4188,8 @@ In the conversation, Frank tells the girls:
 
 * 5 o’clock = 5:00
 
+**Leaving out ‘o’clock’**
+
 	Often, ‘o’clock’ is omitted. Frank could have also said:
 
 
@@ -3890,7 +4199,7 @@ In the conversation, Frank tells the girls:
 
 ---
 
-12:01 - 12:09
+TELLING THE TIME: 12:01 - 12:09
 
 Did you notice how Pailin said the time 11:05? She didn’t say ‘eleven five’ or ‘eleven zero five.’ She said:
 
@@ -3900,16 +4209,22 @@ Did you notice how Pailin said the time 11:05? She didn’t say ‘eleven five�
 
 	The 0 is pronounced as the letter ‘O’ or ‘oh.’
 
+
+
+	QUICK PRACTICE
+
 TYPE: sentence_transform
 
-TITLE: QUICK PRACTICE
+TITLE: QUICK PRACTICE 1
 
 PROMPT: Type out how these times should be said.
 
 QUESTION: 1
 
-STEM: 8:03
 
+
+*
+STEM: 8:03
 ANSWER: eight oh three
 
 QUESTION: 2
@@ -3927,17 +4242,21 @@ ANSWER: one oh six
 
 ---
 
-12:10 - 12:59
+TELLING THE TIME: 12:10 - 12:59
 
-All other times are read as two numbers - the hour, the minutes. In the conversation, Chloe says that her favorite restaurant opens at:
+All other times are read as two numbers - the hour, the minutes.
+
+In the conversation, Chloe says that her favorite restaurant opens at:
 
 
 
 * 11:30 = eleven thirty
 
+	QUICK PRACTICE
+
 	TYPE: sentence_transform
 
-TITLE: QUICK PRACTICE
+TITLE: QUICK PRACTICE 2
 
 PROMPT: Type out how these times should be said.
 
@@ -3967,11 +4286,16 @@ AM & PM
 Telling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:
 
 
+        AM = midnight (12:00) to lunchtime (11:59)
 
-* AM = midnight (12:00) to lunchtime (11:59)
-* PM = lunchtime (12:00) to midnight (11:59)
 
-The hours go from 1 to 12. Frank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?
+        PM = lunchtime (12:00) to midnight (11:59)
+
+The hours go from 1 to 12.
+
+**Noon & midnight**
+
+Frank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?
 
 It would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example:
 
@@ -3979,6 +4303,8 @@ It would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is
 
 * Let’s meet at the park at noon.
 * I always sleep at midnight.
+
+**Don’t use military time**
 
 While many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock).
 
@@ -3991,13 +4317,17 @@ HALF PAST & QUARTER TIL
 
 You may have learned time phrases such as these:
 
-	It’s quarter past 6. (6:15)
+	- It’s quarter past 6. (6:15)
 
-	It’s half past 11. (11:30)
+	- It’s half past 11. (11:30)
 
-	It’s quarter til 3. (2:45)
+	- It’s quarter til 3. (2:45)
 
-While time phrases like these are more widely used in the UK and other English-speaking countries, they’re not used often in the US. It’s more common to simply refer to the times as:
+While time phrases like these are more widely used in the UK and other English-speaking countries, they’re not used often in the US.
+
+**How to say these times**
+
+It’s more common to simply refer to the times as:
 
 
 
@@ -4008,30 +4338,53 @@ While time phrases like these are more widely used in the UK and other English-s
 
 #### PHRASES & VERBS
 
-Let’s see = (said when you’re trying to remember something or are thinking carefully)
+LET’S SEE
 
 
 
-* Next Sunday, let’s see, I’ve got to pick up my sister from the airport.
-* Let’s see, how long did it take to get to Vegas last time?
-
-Come back = (to return)
-
-
-
-* I want to come back to Thailand next year.
-* What time did you come back last night?
-
-Sure! = (an enthusiastic way of saying ‘Yes’)
+*
+Let’s see
+Said when you’re trying to remember something or are thinking carefully
 
 
 
-* Luke: Could you help me translate these sentences into Thai?
+*
+Next Sunday, let’s see, I’ve got to pick up my sister from the airport.
 
+
+*
+Let’s see, how long did it take to get to Vegas last time?
+COME BACK
+
+
+
+*
+Come back
+To return to a place
+
+
+
+*
+I want to come back to Thailand next year.
+
+
+*
+What time did you come back last night?
+SURE!
+
+
+
+*
+Sure!
+An enthusiastic way of saying ‘Yes’
+
+
+
+*
+Luke: Could you help me translate these sentences into Thai?
 Pailin: Sure!
 
-
-    <span style="text-decoration:underline;">See more uses of ‘Sure’</span>
+<span style="text-decoration:underline;">See more uses of ‘Sure’</span>
 
 
 #### PRACTICE
@@ -4215,7 +4568,11 @@ Compare the question with this related affirmative sentence:
 
 * You are tired.
 
-Do you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question. All to-be verb questions follow this pattern:
+Do you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question.
+
+**To-be question structure**
+
+All to-be verb questions follow this pattern:
 
 
         (To-be verb) (subject) (object).
@@ -4223,13 +4580,15 @@ Do you see how the position of the words changed? The subject ‘you’ and the 
 As you might recall, the ‘object’ of the sentence can be one of these three things:
 
 
-        adjectives
+        - adjectives
 
 
-        prepositional phrases
+        - prepositional phrases
 
 
-        noun OR noun phrases
+        - noun OR noun phrases
+
+**Examples**
 
 Take a look at all the ‘to-be’ questions from the conversation:
 
@@ -4254,6 +4613,8 @@ Each of these questions follows the pattern above. For example:
 
             Object (adjective) = usually busy?
 
+**Turning questions into sentences**
+
 Try changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:
 
 
@@ -4264,13 +4625,13 @@ Try changing the questions above into affirmative sentences by swapping the to-b
 * It is usually busy.
 
 
-
-
 ---
 
 	STRUCTURE
 
-Remember that in questions, the to-be verb comes first. Here is the structure of questions using ‘am · are · is’, with examples:
+Remember that in questions, the to-be verb comes first.
+
+Here is the structure of questions using ‘am · are · is’, with examples:
 
 TABLE-2:
 
@@ -4363,12 +4724,16 @@ YES/NO QUESTIONS
 
 A question like ‘Are you tired?’ is called a ‘yes/no question.’ That means you can answer it with a simple ‘Yes’ or ‘No’ answer.
 
+**Yeah**
+
 ‘Yes’ is an affirmative answer, but in casual conversation, either of these words is used more often:
 
 
 
 * Yeah
 * Yep
+
+**No**
 
 ‘No’ is a negative answer. Either of these words can be used in casual conversation, although ‘no’ is used the most often by far:
 
@@ -4377,26 +4742,33 @@ A question like ‘Are you tired?’ is called a ‘yes/no question.’ That mea
 * No
 * Nope
 
+**Listen to the conversation**
+
 Relisten to the conversation and take note of the responses:
 
 
+        Frank: Are you excited for the weekend?
 
-* Frank: Are you excited for the weekend?
 
         Pailin: Yeah!
 
-* Frank: Are you tired?
+
+        Frank: Are you tired?
+
 
         Pailin: No.
 
-* Pailin: Is In-N-Out near the hotel?
+
+        Pailin: Is In-N-Out near the hotel?
+
 
         Frank: Yep.
 
-* Pailin: Is it usually busy?
+
+        Pailin: Is it usually busy?
+
 
         Frank: Yeah.
-
 
 ‘Yeah,’ ‘yep,’ and ‘no’ are the responses used, as they sound the most natural in everyday conversation. ‘Yes’ is perfectly fine, but it can sound a bit stiff in informal settings.
 
@@ -4405,15 +4777,22 @@ Relisten to the conversation and take note of the responses:
 
 SHORT FORM ANSWERS
 
-‘Yes/no’ questions require only a simple ‘yes’ or ‘no’ response. But these are short and abrupt one-word answers, so to keep the conversation flowing, sometimes a slightly longer ‘short answer’ will be given. Take a look at this exchange from the conversation:
+‘Yes/no’ questions require only a simple ‘yes’ or ‘no’ response. But these are short and abrupt one-word answers, so to keep the conversation flowing, sometimes a slightly longer ‘short answer’ will be given.
+
+Take a look at this exchange from the conversation:
 
 
-        Frank: Are you excited for the weekend?
 
+* Frank: Are you excited for the weekend?
 
         Pailin: Yeah, I am!
 
-A simple ‘Yeah’ would have been fine, but this short form answer offers a natural flow to the conversation. To answer these to-be verb questions with short form, you can use this structure:
+
+A simple ‘Yeah’ would have been fine, but this short form answer offers a natural flow to the conversation.
+
+**Short form structure**
+
+To answer these to-be verb questions with short form, you can use this structure:
 
 
         Yeah, (subject) (to-be verb).
@@ -4421,7 +4800,7 @@ A simple ‘Yeah’ would have been fine, but this short form answer offers a na
 
         No, (subject) (negative to-be verb).
 
-	For example:
+	**Examples**
 
 
 
@@ -4445,13 +4824,22 @@ A simple ‘Yeah’ would have been fine, but this short form answer offers a na
 
 #### PHRASES & VERBS
 
-Check out (something) / check (something) out = (to look at or examine a person or thing that seems interesting or attractive)
+CHECK OUT
 
 
 
-* Do you wanna check out this new cafe that just opened down the street?
-* Emily, check it out. This camera can take photos underwater!
+*
+Check out (something) / check (something) out
+To look at or examine a person or thing that seems interesting or attractive
 
+
+
+*
+Do you wanna check out this new cafe that just opened down the street?
+
+
+*
+Emily, check it out. This camera can take photos underwater!
 	<span style="text-decoration:underline;">See more uses of ‘Check out’</span>
 
 
@@ -4816,21 +5204,27 @@ Answer key: A
 
 #### PHRASES & VERBS
 
-I see = (I understand)
+I SEE
 
 
 
-* Pailin: How did you know I work here?
+*
+I see
+I understand
 
-        Luke: You told me the last time I saw you.
 
 
-        Pailin: Oh, I see.
+*
+Pailin: How did you know I work here?
+Luke: You told me the last time I saw you.
 
-* Luke: The reason your electricity isn't working is because someone turned off your circuit breaker.
+Pailin: Oh, I see.
 
-        Pailin: Oh, okay I see.
 
+
+*
+Luke: The reason your electricity isn't working is because someone turned off your circuit breaker.
+Pailin: Oh, okay I see.
 
 <span style="text-decoration:underline;">PINNED COMMENT</span>
 

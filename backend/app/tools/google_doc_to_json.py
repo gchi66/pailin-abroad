@@ -10,23 +10,11 @@ still emits a single object.
 Usage
 -----
 # single or multi‑lesson doc
-python google_doc_to_lesson_json.py lesson_docs/en/level_3.txt \
+python google_doc_to_lesson_json.py lesson_docs/en/level_X.txt \
        --stage Beginner \
-       --md lesson_docs/en/level_3.md \
-       > backend/data/level_3.json
+       --md lesson_docs/en/level_X.md \
+       > backend/data/level_X.json
 
-# stdout will contain either
-{ "lesson": { … } }                # one lesson
-# or
-[ { "lesson": { … } }, … ]          # many lessons
-
-Importer tip
-------------
-Your import_lessons.py should accept both:
-    payload = json.load(fp)
-    lessons = payload if isinstance(payload, list) else [payload]
-
-Nothing else changes.
 """
 
 import argparse
@@ -38,7 +26,6 @@ import unicodedata as ud
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-# Import the markdown_utils functions
 try:
     from .markdown_utils import extract_tables, markdown_to_html
     MARKDOWN_IT_AVAILABLE = True
@@ -92,7 +79,7 @@ SECTION_TYPE_MAP = {
     "PINNED COMMENT": "pinned_comment",
 }
 
-# ───────────────────────────── utilities
+# ───────────────────────────── utilities/helpers
 
 def chunk_by_headings(lines: List[str]) -> Dict[str, List[str]]:
     buckets: Dict[str, List[str]] = {}
@@ -123,6 +110,67 @@ def chunk_by_headings(lines: List[str]) -> Dict[str, List[str]]:
             buckets.setdefault(current, []).append(ln)
 
     return buckets
+
+def chunk_by_md_headings(md_lines: list[str]) -> dict[str, list[str]]:
+    """
+    Splits a markdown lesson chunk into sections by headings like '#### UNDERSTAND'.
+    Returns a dict mapping section names (UPPERCASE) to lists of lines.
+    """
+    buckets = {}
+    current = None
+    lesson_heading_re = re.compile(r'^[\s\x00-\x1f\x7f-\x9f]*#{0,6}\s*[*_]*(?:LESSON|Lesson)\s+\d+\.\d+')
+
+    for ln in md_lines:
+        # STOP processing if we hit a new lesson header (unless it's the first line)
+        if lesson_heading_re.match(ln.strip()) and buckets:
+            break
+
+        m = re.match(r'^####\s*([A-Z &]+)\s*', ln.strip())
+        if m:
+            heading = m.group(1).strip().upper()
+            if heading in SECTION_ORDER:
+                current = heading
+                continue
+            else:
+                current = None
+                continue
+        if current:
+            buckets.setdefault(current, []).append(ln)
+    return buckets
+
+def split_md_by_lesson(md_lines: list[str]) -> list[list[str]]:
+    """
+    Split markdown lines into lesson chunks.
+    Returns a list of line lists, one per lesson.
+    """
+    lesson_chunks = []
+    current_chunk = []
+    lesson_heading_re = re.compile(r'^[\s\x00-\x1f\x7f-\x9f]*#{0,6}\s*[*_]*(?:LESSON|Lesson)\s+\d+\.\d+')
+
+    for ln in md_lines:
+        if lesson_heading_re.match(ln):
+            # Save the previous chunk if it exists and has content
+            if current_chunk:
+                lesson_chunks.append(current_chunk)
+            # Start new chunk
+            current_chunk = [ln]
+        else:
+            # Add to current chunk
+            current_chunk.append(ln)
+
+    # Don't forget the last chunk!
+    if current_chunk:
+        lesson_chunks.append(current_chunk)
+
+    # Filter out chunks that don't start with a lesson header
+    valid_chunks = []
+    for chunk in lesson_chunks:
+        if chunk and lesson_heading_re.match(chunk[0]):
+            valid_chunks.append(chunk)
+
+    logger.debug(f"Found {len(valid_chunks)} valid markdown lesson chunks")
+    return valid_chunks
+
 
 
 def normalise_markdown_line(ln: str) -> str:
@@ -308,12 +356,12 @@ def extract_html_tables(md_path: str) -> List[str]:
         logger.warning("markdown_utils not available—no tables extracted")
         return []
 
-def parse_phrases_verbs_items(lines):
+
+
+def parse_phrases_verbs_items(plain_lines, md_lines=None):
     """
-    Parse PHRASES & VERBS section into an items array:
-    Each ALL CAPS line is a phrase, and all lines under it (until next ALL CAPS or end) are content_md.
-    Supports variants: e.g., OH! [2] → phrase="OH!", variant=2; defaults to variant=1.
-    If a header is present with no content, treat as a reference.
+    Parse PHRASES & VERBS section into an items array.
+    Each item will have both content (plain text) and content_md (markdown) fields.
     """
     items = []
     current_phrase = None
@@ -333,22 +381,70 @@ def parse_phrases_verbs_items(lines):
             and 1 <= len(stripped.split()) <= 5
         )
 
-    for ln in lines:
+    # Helper to extract markdown content for a phrase
+    def extract_md_for_phrase(phrase, md_lines):
+        if not md_lines:
+            return None
+        phrase_re = re.compile(rf"^{re.escape(phrase)}\s*(?:\[\d+\])?\s*$", re.I)
+        start = None
+        for i, ln in enumerate(md_lines):
+            if phrase_re.match(ln.strip()):
+                start = i + 1
+                break
+        if start is None:
+            return None
+        # Find next all-caps header or end
+        end = len(md_lines)
+        for j in range(start, len(md_lines)):
+            if is_all_caps_header(md_lines[j]):
+                end = j
+                break
+        return "\n".join(md_lines[start:end]).strip()
+
+    # Helper to extract plain text content for a phrase
+    def extract_plain_for_phrase(phrase, plain_lines):
+        phrase_re = re.compile(rf"^{re.escape(phrase)}\s*(?:\[\d+\])?\s*$", re.I)
+        start = None
+        for i, ln in enumerate(plain_lines):
+            if phrase_re.match(ln.strip()):
+                start = i + 1
+                break
+        if start is None:
+            return None
+        # Find next all-caps header or end
+        end = len(plain_lines)
+        for j in range(start, len(plain_lines)):
+            if is_all_caps_header(plain_lines[j]):
+                end = j
+                break
+        content_lines = plain_lines[start:end]
+        return "\n".join(fix_leading_spaces(content_lines)).strip()
+
+    # Process each line to identify phrases
+    for ln in plain_lines:
         if is_all_caps_header(ln):
+            # Save previous phrase if exists
             if current_phrase is not None:
-                # Remove leading spaces from all lines before joining
-                content = "\n".join(fix_leading_spaces(current_content))
                 item = {
                     "phrase": current_phrase,
                     "variant": current_variant,
                     "translation_th": "",
                 }
-                if content.strip():
-                    item["content_md"] = content
-                else:
-                    item["reference"] = True
+
+                # Extract plain text content
+                plain_content = extract_plain_for_phrase(current_phrase, plain_lines)
+                if plain_content:
+                    item["content"] = plain_content
+
+                # Extract markdown content
+                if md_lines:
+                    md_content = extract_md_for_phrase(current_phrase, md_lines)
+                    if md_content:
+                        item["content_md"] = md_content
+
                 items.append(item)
-            # Extract phrase and variant
+
+            # Parse new phrase header
             match = header_re.match(ln.strip().lstrip("#").strip())
             if match:
                 current_phrase = match.group(1).strip()
@@ -359,28 +455,42 @@ def parse_phrases_verbs_items(lines):
             current_content = []
         else:
             current_content.append(ln)
+
+    # Don't forget the last phrase
     if current_phrase:
-        content = "\n".join(fix_leading_spaces(current_content))
         item = {
             "phrase": current_phrase,
             "variant": current_variant,
             "translation_th": "",
         }
-        if content.strip():
-            item["content_md"] = content
-        else:
-            item["reference"] = True
+
+        # Extract plain text content
+        plain_content = extract_plain_for_phrase(current_phrase, plain_lines)
+        if plain_content:
+            item["content"] = plain_content
+
+        # Extract markdown content
+        if md_lines:
+            md_content = extract_md_for_phrase(current_phrase, md_lines)
+            if md_content:
+                item["content_md"] = md_content
+
         items.append(item)
+
     return items
 
 def build_section(section_name: str,
                   lines: List[str],
                   order: int,
-                  html_tables: List[str] = None) -> Dict:
-    out_lines = []
+                  html_tables: List[str] = None,
+                  md_buckets: dict[str, list[str]] | None = None) -> Dict:
+    """
+    Build a section with both plain text content and markdown content.
+    """
+    out_lines: list[str] = []
     i = 0
     table_counter = 0
-    quick_practice_count = 1  # Counter for quick practice placeholders
+    quick_practice_count = 1
 
     while i < len(lines):
         raw = ud.normalize('NFKD', lines[i]).translate({
@@ -389,48 +499,39 @@ def build_section(section_name: str,
             0x00A0: ord(' '), 0x200B: None
         }).rstrip()
 
-        # --- Insert Quick Practice placeholder if TITLE: QUICK PRACTICE detected ---
         if raw.strip().upper().startswith("QUICK PRACTICE"):
             out_lines.append(f"[[QUICK_PRACTICE_{quick_practice_count}]]")
             quick_practice_count += 1
             i += 1
             continue
 
-        # ────────────────── 1) TABLE token?  ─────────────────────────────
         m = TABLE_TOKEN_RE.match(raw)
         if m:
-            # Which table should we insert?
-            if m.group(1):                         #  TABLE‑N:
+            if m.group(1):
                 try:
-                    table_index = int(m.group(1)) - 1   # 0‑based
+                    table_index = int(m.group(1)) - 1
                 except ValueError:
                     table_index = -1
-            else:                                  #  plain TABLE:
+            else:
                 table_index = table_counter
                 table_counter += 1
 
-            # Drop the HTML table into the output
             if html_tables and 0 <= table_index < len(html_tables):
                 out_lines.append(html_tables[table_index])
             else:
                 out_lines.append(f"<!-- TABLE {table_index+1} MISSING -->")
 
-            # ── swallow the *raw* table that follows ────────────────────
-            i += 1  # move to the line after TABLE:
-            # 1) skip any leading blank lines
+            i += 1
             while i < len(lines) and not lines[i].strip():
                 i += 1
-            # 2) now skip the contiguous block of non‑blank lines
             while i < len(lines) and lines[i].strip():
                 i += 1
-            # control returns to main loop (which will handle the blank line)
             continue
 
-        # ────────────────── 2) heading detection (unchanged) ─────────────
         stripped = raw.strip()
         is_heading = False
 
-        # ─── skip visual separator lines like "_______" or "-----" ───
+        # Skip visual separator lines like "_______" or "-----"
         if re.match(r'^[_\-]{3,}$', stripped):
             i += 1
             continue
@@ -439,9 +540,9 @@ def build_section(section_name: str,
             any(c.isalpha() for c in stripped) and
             1 <= len(stripped.split()) <= 5 and
             not stripped.startswith(('* ', '- ', '> ')) and
-            all(c.isupper() or c in " '’‘\"&-.!?();:" for c in stripped)):
+            all(c.isupper() or c in " '''\"&-.!?();:" for c in stripped)):
             is_heading = True
-        elif (re.match(r'^[A-Z][A-Z0-9#\s\'’‘"&.\-();:]+$', stripped) and
+        elif (re.match(r'^[A-Z][A-Z0-9#\s\'''"&.\-();:]+$', stripped) and
               len(stripped) <= 50 and
               len(stripped.split()) <= 10 and
               not stripped.endswith('.')):
@@ -459,25 +560,48 @@ def build_section(section_name: str,
 
         i += 1
 
-    # Remove leading spaces from all lines before joining
-    out_lines = normalise_block(out_lines)
-    content_md = re.sub(r'\n{3,}', '\n\n', "\n".join(out_lines)).strip()
+    # Process plain text content
+    txt_norm = normalise_block(out_lines)
+    plain_txt = "\n".join(txt_norm).strip()
 
-    # ────────────────── special "phrases & verbs" type ──────────────────
+    # Process markdown content
+    content_md = None
+    md_lines_for_section = None
+    if md_buckets and section_name in md_buckets:
+        md_lines_for_section = md_buckets[section_name]
+        content_md = "\n".join(md_lines_for_section)
+
+    # Debug output
+    logger.debug(f"Section: {section_name}")
+    logger.debug(f"Plain text content: {plain_txt[:100]}...")
+    logger.debug(f"Markdown content: {content_md[:100] if content_md else 'None'}...")
+
+    # Handle phrases and verbs section
     if section_name == "PHRASES & VERBS":
-        items = parse_phrases_verbs_items(out_lines)
-        return {
+        # Pass both plain and markdown lines to the parser
+        items = parse_phrases_verbs_items(
+            lines,
+            md_lines=md_lines_for_section
+        )
+        section = {
             "type": "phrases_verbs",
             "sort_order": order,
             "items": items
         }
+        return section
 
-    # normal section
-    return {"type": SECTION_TYPE_MAP.get(section_name, section_name.lower()),
-            "sort_order": order,
-            "content_md": content_md}
+    # Build standard section
+    section = {
+        "type": SECTION_TYPE_MAP.get(section_name, section_name.lower()),
+        "sort_order": order,
+        "content": plain_txt,
+    }
 
+    # Add markdown content if available
+    if content_md:
+        section["content_md"] = content_md
 
+    return section
 
 def parse_tags(lines: List[str]) -> List[str]:
     return [t.strip() for t in re.split(r",|\n", " ".join(lines)) if t.strip()]
@@ -657,33 +781,47 @@ def parse_practice(lines: List[str]) -> List[Dict]:
     return exercises
 # ───────────────────────────── convert one lesson chunk
 
-def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
+def convert_chunk(chunk: str, stage: str, html_tables: List[str], md_lines: list[str] = None) -> Dict:
     """
     Convert a chunk of text into a lesson object.
-    Now passing in the full list of HTML tables instead of an iterator.
+    Now properly handles both plain text and markdown content.
     """
     lines = [ln.rstrip() for ln in chunk.splitlines()]
 
+    # Process markdown lines if provided
+    md_buckets = None
+    if md_lines:
+        logger.debug(f"Processing {len(md_lines)} markdown lines")
+        md_buckets = chunk_by_md_headings(md_lines)
+        logger.debug(f"Markdown buckets: {list(md_buckets.keys())}")
+
+        # Debug: show first few lines of each bucket
+        for bucket_name, bucket_lines in md_buckets.items():
+            logger.debug(f"Bucket {bucket_name}: {len(bucket_lines)} lines")
+            for i, line in enumerate(bucket_lines[:3]):
+                logger.debug(f"  Line {i}: {repr(line)}")
+
     # Debug the first few lines to help identify formatting issues
+    logger.debug("First 10 lines of plain text:")
     for i, line in enumerate(lines[:10]):
         logger.debug(f"Line {i}: '{line}'")
 
     buckets = chunk_by_headings(lines)
+    logger.debug(f"Plain text buckets: {list(buckets.keys())}")
 
-    # Find header line more reliably - look for any line containing lesson X.Y pattern
+    # Find header line more reliably
     header_line = ""
     for ln in lines:
         if re.search(r'(?:LESSON|Lesson)\s+\d+\.\d+', ln, re.I):
             header_line = ln
             logger.debug(f"Found lesson header: '{header_line}'")
             break
-        if re.match(r'\s*CHECKPOINT\s+\d+', ln, re.I):   # checkpoint header checker
+        if re.match(r'\s*CHECKPOINT\s+\d+', ln, re.I):
             header_line = ln
             break
 
     if not header_line:
         logger.error("No lesson header found in chunk")
-        # Sample of the chunk for debugging
         logger.error(f"Chunk starts with: {chunk[:200]}")
         raise ValueError("Missing 'Lesson X.Y' header in document chunk")
 
@@ -695,38 +833,31 @@ def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
     transcript = parse_conversation(buckets.get("CONVERSATION", []))
     comprehension = parse_comprehension(buckets.get("COMPREHENSION", []))
 
-    # 1. parse the normal PRACTICE bucket once
+    # Parse practice items
     practice_items = parse_practice(buckets.get("PRACTICE", []))
-
-    # 2. harvest any embedded Quick‑Practice from UNDERSTAND
     embedded_practice = parse_practice(buckets.get("UNDERSTAND", []))
 
     if embedded_practice:
-        # give embedded rows sequential sort_order after regular practice
         for ex in embedded_practice:
             ex["sort_order"] = len(practice_items) + 1
             practice_items.append(ex)
-
-        # 3. scrub directive lines so they don't show in UNDERSTAND markdown
         buckets["UNDERSTAND"] = strip_practice_directives(buckets["UNDERSTAND"])
 
-
-
-    # Build the section
+    # Build sections
     tags = parse_tags(buckets.get("TAGS", []))
     sections = []
     order = 1
+
     for sec in SECTION_ORDER:
         if sec in {"FOCUS", "BACKSTORY", "CONVERSATION", "COMPREHENSION", "TAGS", "PRACTICE"}:
             continue
         if sec not in buckets:
             continue
-        # Pass the full list of tables, not an iterator
-        built = build_section(sec, buckets[sec], order, html_tables)
+
+        built = build_section(sec, buckets[sec], order, html_tables=html_tables, md_buckets=md_buckets)
         if built:
             sections.append(built)
             order += 1
-
 
     return {
         "lesson": lesson,
@@ -737,24 +868,40 @@ def convert_chunk(chunk: str, stage: str, html_tables: List[str]) -> Dict:
         "tags": tags,
     }
 
-def convert(doc_text: str, stage: str, html_tables: List[str]):
-    # Handles Lesson X.Y and Checkpoint X headers
-    chunks = re.split(
+def convert(doc_text: str, stage: str, html_tables: List[str], md_lines: list[str] = None):
+    # Split plain text into lesson chunks
+    raw_chunks = re.split(
         r"(?=^\s*(?:LESSON|Lesson)\s+\d+\.\d+|CHECKPOINT\s+\d+)",
         doc_text,
         flags=re.M | re.I
     )
-    # Debug: Print chunk information
-    logger.debug(f"Split document into {len(chunks)} chunks")
+
+    # Filter out empty chunks
+    chunks = [chunk for chunk in raw_chunks if chunk.strip()]
+
+    # Split markdown into lesson chunks
+    md_chunks = []
+    if md_lines:
+        md_chunks = split_md_by_lesson(md_lines)
+
+    # Ensure we have matching counts or pad with None
+    while len(md_chunks) < len(chunks):
+        md_chunks.append(None)
+
+    logger.info(f"Processing {len(chunks)} plain text chunks and {len(md_chunks)} markdown chunks")
+
+    lessons = []
     for i, chunk in enumerate(chunks):
-        if chunk.strip():
-            logger.debug(f"Chunk {i} starts with: {chunk.strip()[:50]}...")
+        md_chunk = md_chunks[i] if i < len(md_chunks) else None
 
-    # Pass the full list of tables to each chunk instead of an iterator
-    lessons = [convert_chunk(chunk, stage, html_tables) for chunk in chunks if chunk.strip()]
+        # Debug logging
+        logger.debug(f"Processing lesson {i+1}:")
+        logger.debug(f"  Plain text chunk size: {len(chunk)} chars")
+        logger.debug(f"  Markdown chunk: {'Yes' if md_chunk else 'No'} ({len(md_chunk) if md_chunk else 0} lines)")
+
+        lessons.append(convert_chunk(chunk, stage, html_tables, md_chunk))
+
     logger.debug(f"Processed {len(lessons)} lessons")
-
-    # One lesson or multiple?
     return lessons[0] if len(lessons) == 1 else lessons
 
 def main() -> None:
@@ -764,9 +911,12 @@ def main() -> None:
         parser.add_argument("input", help="Input text file")
         parser.add_argument("--stage", required=True, help="Lesson stage")
         parser.add_argument("--md", default="", help="Markdown file path")
+        parser.add_argument("--debug", action="store_true")
         args = parser.parse_args()
 
         logger.debug(f"Args: {args}")
+        if args.debug:
+            logging.getLogger().setLevel(logging.DEBUG)
 
         if not Path(args.input).exists():
             logger.error(f"Input file not found: {args.input}")
@@ -775,8 +925,11 @@ def main() -> None:
         text = Path(args.input).read_text(encoding='utf-8')
         logger.debug(f"Read {len(text)} chars from {args.input}")
         html_tables = extract_html_tables(args.md) if args.md else []
+        md_lines = []
+        if args.md and Path(args.md).exists():
+            md_lines = Path(args.md).read_text(encoding='utf-8').splitlines()
 
-        result = convert(text, stage=args.stage, html_tables=html_tables)
+        result = convert(text, stage=args.stage, html_tables=html_tables, md_lines=md_lines)
 
         # Get count of transcript lines, handling both single and multi-lesson formats
         if isinstance(result, list):

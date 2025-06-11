@@ -77,8 +77,8 @@ const LessonsIndex = () => {
   ];
 
   return (
-    <div className="page-container">
-      <header className="page-header">
+    <div className="lessons-index-page-container">
+      <header className="lessons-index-page-header">
         <h1 className="page-header-text">LESSON LIBRARY</h1>
         <img src="/images/books-lesson-library.webp" alt="Library Books" className="header-image" />
       </header>
