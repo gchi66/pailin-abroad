@@ -151,10 +151,13 @@ export default function LessonContent({
   }
 
   /* choose Thai or English copy */
+   /* choose markdown or plaintext*/
   const contentText =
-    uiLang === "th" && section.content_th
-      ? section.content_th
-      : section.content;
+    section.content_md && section.content_md.trim() !== ""
+      ? section.content_md
+      : (uiLang === "th" && section.content_th
+          ? section.content_th
+          : section.content);
 
   /* ------------------ APPLY SECTION ------------------ */
   if (section.type === "apply") {

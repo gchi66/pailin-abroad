@@ -138,6 +138,27 @@ def chunk_by_md_headings(md_lines: list[str]) -> dict[str, list[str]]:
             buckets.setdefault(current, []).append(ln)
     return buckets
 
+def add_md_headers(md_lines: list[str]) -> list[str]:
+    """
+    For markdown lines, add '## ' before all-caps lines that are not already headings.
+    """
+    out = []
+    for ln in md_lines:
+        stripped = ln.strip()
+        # If already a markdown heading, leave it
+        if stripped.startswith("#"):
+            out.append(ln)
+            continue
+        # If ALL CAPS and not a bullet/list, treat as a header
+        if (stripped.upper() == stripped and
+            any(c.isalpha() for c in stripped) and
+            not stripped.startswith(("*", "-", ">")) and
+            1 <= len(stripped.split()) <= 5):
+            out.append(f"## {stripped}")
+        else:
+            out.append(ln)
+    return out
+
 def split_md_by_lesson(md_lines: list[str]) -> list[list[str]]:
     """
     Split markdown lines into lesson chunks.
@@ -569,6 +590,7 @@ def build_section(section_name: str,
     md_lines_for_section = None
     if md_buckets and section_name in md_buckets:
         md_lines_for_section = md_buckets[section_name]
+        md_lines_for_section = add_md_headers(md_lines_for_section)
         content_md = "\n".join(md_lines_for_section)
 
     # Debug output
