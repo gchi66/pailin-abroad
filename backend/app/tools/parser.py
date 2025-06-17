@@ -22,7 +22,6 @@ from typing import Dict, List, Tuple, Union
 from .docs_fetch import fetch_doc      # fetch_doc uses the Google Docs API
 from .docwalker import paragraphs      # returns a list of paragraphs with indent and markdown formatting
 
-# If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -30,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 # ───────────────────────────── regex helpers (from old parser)
 HEADING_RE = re.compile(r"^([A-Z][A-Z &''']+)(?::\s*(.*))?$", re.I)
+UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&'‘’\-]{2,60}$")
 QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
 OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
@@ -66,6 +66,16 @@ SECTION_TYPE_MAP = {
     "PRACTICE": "practice",
     "PINNED COMMENT": "pinned_comment",
 }
+
+# ───────────────────────────── helper functions
+def is_subheader(text: str, style: str) -> bool:
+    """
+    True for HEADING_3…6 *or* for a paragraph that is entirely ALL-CAPS
+    (2-60 chars, digits & basic punctuation allowed).
+    """
+    if style.startswith("HEADING_") and style not in {"HEADING_1", "HEADING_2"}:
+        return True
+    return bool(UPPER_SUB_RE.match(text.strip()))
 
 # ───────────────────────────── New style-based extraction functions
 
@@ -111,6 +121,7 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
         "CULTURE NOTE",
         "COMMON MISTAKES",
         "EXTRA TIPS",
+        "PINNED COMMENT",
         "TAGS"
     }
 
@@ -127,7 +138,7 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
             current_lines = []
         else:
             if current_header is not None:
-                current_lines.append(text)
+                current_lines.append((text, style))
     if current_header is not None:
         sections.append((current_header, current_lines))
     return sections
@@ -205,51 +216,61 @@ class GoogleDocsParser:
                 })
         return transcript
 
-    def build_lesson_from_sections(self, lesson_sections: List[Tuple[str, List[str]]], stage: str) -> Dict:
+    def build_lesson_from_sections(self,
+                               lesson_sections: List[Tuple[str, List[Tuple[str, str]]]],
+                               stage: str) -> Dict:
         """
-        Map the lesson sections (a list of (header, lines)) onto the rich schema.
-        The first section is used to parse the lesson header.
-        Sections with standard headers such as FOCUS, BACKSTORY, CONVERSATION,
-        COMPREHENSION, PRACTICE, TAGS are mapped to dedicated fields.
-        Other sections are placed into the 'sections' array (with content_md).
+        Assemble one lesson object, adding Markdown “## ” sub-headers for any
+        paragraph whose Google-Docs style starts with HEADING_3…6.
         """
-        # The first section must be the lesson header
-        lesson_header, header_lines = lesson_sections[0]
+        # ── lesson header ─────────────────────────────────────────────
+        lesson_header, _ = lesson_sections[0]
         lesson_info, _ = self.parse_lesson_header(lesson_header, stage)
         lesson = lesson_info.copy()
 
-        # Initialize rich fields
+        # main fields
         lesson["focus"] = ""
         lesson["backstory"] = ""
-        transcript_lines = []      # for CONVERSATION
-        comp_lines = []            # comprehension questions (list of strings)
-        practice_lines = []        # lines for practice exercises
-        other_sections = []        # additional sections – will include content
-        tags_lines = []            # for TAGS
 
-        # Process other sections
+        transcript_lines: List[str] = []
+        comp_lines: List[str] = []
+        practice_lines: List[str] = []
+        tags_lines: List[str] = []
+
+        other_sections: List[Dict] = []
+
         for header, lines in lesson_sections[1:]:
             norm_header = header.strip().upper().rstrip(":")
-            content = "\n".join(lines).strip()
-            if norm_header in "FOCUS":
-                lesson["focus"] = content
+            # split (text, style) pairs
+            texts_only = [t for t, _ in lines]
+
+            if norm_header == "FOCUS":
+                lesson["focus"] = "\n".join(texts_only).strip()
             elif norm_header == "BACKSTORY":
-                lesson["backstory"] = content
+                lesson["backstory"] = "\n".join(texts_only).strip()
             elif norm_header == "CONVERSATION":
-                transcript_lines.extend(lines)
+                transcript_lines.extend(texts_only)
             elif norm_header == "COMPREHENSION":
-                comp_lines.extend(lines)
+                comp_lines.extend(texts_only)
             elif norm_header == "PRACTICE":
-                practice_lines.extend(lines)
+                practice_lines.extend(texts_only)
             elif norm_header == "TAGS":
-                tags_lines.extend(lines)
+                tags_lines.extend(texts_only)
             else:
+                # ── build one rich section with “## ” sub-headers ──
+                body_parts: List[str] = []
+                for text, style in lines:
+                    if is_subheader(text, style):
+                        body_parts.append("## " + text.strip())
+                    else:
+                        body_parts.append(text)
                 other_sections.append({
-                    "header": norm_header,
-                    "content": content,
+                    "type": SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
+                    "sort_order": len(other_sections) + 1,
+                    "content": "\n".join(body_parts).strip()
                 })
 
-        # Instead of parsing speakers, simply use a raw transcript function.
+        # ── convert the remaining pieces ─────────────────────────────
         transcript = self.parse_conversation_from_lines(transcript_lines)
         comprehension = self.parse_comprehension(comp_lines)
         practice_exercises = self.parse_practice(practice_lines)
