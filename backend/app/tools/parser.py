@@ -299,42 +299,201 @@ class GoogleDocsParser:
 
     def parse_comprehension(self, lines: List[str]) -> List[Dict]:
         """
-        Parses the comprehension section text into a list of comprehension question dictionaries.
-        This example assumes the text is structured with a "Prompt" line followed by questions starting
-        with "QUESTION:".
+        Build a list of comprehension-question objects in the format:
+
+            {
+                "sort_order": 1,
+                "prompt": "…",
+                "options": ["A. …", "B. …", …],
+                "answer_key": ["C"]
+            }
+
+        Expected structure in the doc:
+
+            Prompt
+            1. Question text
+            Options
+            A. …
+            B. …
+            …
+            Answer key: C
+            2. Next question …
+            …
         """
-        content = "\n".join(lines).strip()
-        if not content:
-            return []
-        # Remove any leading word "Prompt" if present.
-        content = re.sub(r"^Prompt\s*\n", "", content, flags=re.IGNORECASE)
-        questions = []
-        # Split when encountering a question marker (for example "QUESTION:")
-        blocks = re.split(r"\nQUESTION:\s*", content)
-        for block in blocks:
-            if block.strip():
-                q = {}
-                # Try to capture a question number at the start
-                m = re.match(r"(\d+)\s*(.*)", block.strip(), flags=re.DOTALL)
-                if m:
-                    q["number"] = int(m.group(1))
-                    q["text"] = m.group(2).strip()
-                else:
-                    q["text"] = block.strip()
-                questions.append(q)
+        questions: List[Dict] = []
+        cur_q: Dict | None = None
+        options: List[str] = []
+        answer_key: List[str] = []
+
+        for raw in lines:
+            # Handle \n that slipped through by splitting each paragraph
+            for piece in raw.splitlines():
+                line = piece.strip()
+                if not line or line.lower() in {"prompt", "options"}:
+                    continue
+
+                # New question line
+                m_q = QUESTION_NUM_RE.match(line)
+                if m_q:
+                    if cur_q:                       # flush previous
+                        cur_q["options"] = options
+                        cur_q["answer_key"] = answer_key
+                        questions.append(cur_q)
+
+                    prompt = re.sub(r"\bOptions\b$", "", m_q.group(1)).strip()
+                    cur_q = {
+                        "sort_order": len(questions) + 1,
+                        "prompt": prompt,
+                    }
+                    options, answer_key = [], []
+                    continue
+
+                # Option lines
+                if OPTION_RE.match(line):
+                    options.append(line)
+                    continue
+
+                # Answer key
+                m_ans = ANSWER_KEY_RE.match(line)
+                if m_ans:
+                    answer_key = [x.strip() for x in re.split(r"[,\s/]+", m_ans.group(1)) if x.strip()]
+                    continue
+
+                # Extra text before “Options” – append to prompt
+                if cur_q and not options:
+                    cur_q["prompt"] += " " + line
+
+        if cur_q:                                   # flush final
+            cur_q["options"] = options
+            cur_q["answer_key"] = answer_key
+            questions.append(cur_q)
+
         return questions
 
     def parse_practice(self, lines: List[str]) -> List[Dict]:
-        """Basic practice exercise parser (adapted from old parser logic)."""
-        # For simplicity, here we just return a single exercise block with the raw content.
-        if not lines:
-            return []
-        content = "\n".join(lines).strip()
-        exercise = {
-            "sort_order": 1,
-            "content": content
-        }
-        return [exercise]
+        """
+        Convert the flat “directive” block into structured exercises.
+
+        Markers handled:
+          TYPE: <multiple_choice | open | ...>
+          TITLE: <exercise title>
+          PROMPT: <prompt shown above the items>
+          PARAGRAPH: <optional explanatory paragraph>
+          QUESTION: <n>
+          TEXT: <stem>
+          OPTIONS:                # the very next lines are A. / B. / …
+          ANSWER: <letter(s)>     # for MC
+          KEYWORDS: <kw list>     # for open items
+          PINNED COMMENT          # everything after this goes into a pinned_comment string
+        """
+        import re
+        exercises: List[Dict] = []
+        cur_ex: Dict | None = None  # current exercise being built
+        cur_items: List[Dict] = []
+        collecting_opts = False
+
+        def flush_exercise():
+            nonlocal cur_ex, cur_items
+            if cur_ex is not None:
+                cur_ex["items"] = cur_items
+                exercises.append(cur_ex)
+            cur_ex, cur_items = None, []
+
+        def new_exercise(kind: str):
+            flush_exercise()
+            return {
+                "kind": kind,
+                "title": "",
+                "prompt": "",
+                "paragraph": "",
+                "items": [],
+                "sort_order": len(exercises) + 1,
+            }
+
+        # Flatten all lines into a single string and iterate line by line.
+        practice_text = "\n".join(lines)
+        for line in practice_text.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+
+            # Check for block-level directives
+            m_type = re.match(r'^TYPE:\s*(\w+)', line, re.I)
+            if m_type:
+                cur_ex = new_exercise(m_type.group(1).lower())
+                continue
+
+            if cur_ex is None:
+                # Skip lines before the first TYPE:
+                continue
+
+            if line.startswith("TITLE:"):
+                cur_ex["title"] = line.split(":", 1)[1].strip()
+                continue
+            if line.startswith("PROMPT:"):
+                cur_ex["prompt"] = line.split(":", 1)[1].strip()
+                continue
+            if line.startswith("PARAGRAPH:"):
+                cur_ex["paragraph"] = line.split(":", 1)[1].strip()
+                continue
+
+            # Item-level directives.
+            if line.startswith("QUESTION:"):
+                number = line.split(":", 1)[1].strip()
+                # Create a new question entry.
+                cur_items.append({"number": number})
+                collecting_opts = False
+                continue
+
+            if line.startswith("TEXT:"):
+                # Only proceed if there's an item to update.
+                if not cur_items:
+                    # Log warning or create a new item automatically.
+                    cur_items.append({})
+                cur_items[-1]["text"] = line.split(":", 1)[1].strip()
+                continue
+
+            if line.startswith("OPTIONS:"):
+                collecting_opts = True
+                # Ensure the current item has an options list.
+                if not cur_items:
+                    cur_items.append({})
+                cur_items[-1]["options"] = []
+                continue
+
+            if line.startswith("ANSWER:"):
+                # Only update if there's an existing item.
+                if not cur_items:
+                    cur_items.append({})
+                cur_items[-1]["answer"] = line.split(":", 1)[1].strip()
+                collecting_opts = False
+                continue
+
+            if line.startswith(("KEYWORDS:", "PINNED COMMENT")):
+                kw = line.split(":", 1)[1].strip() if ":" in line else ""
+                if kw:
+                    if not cur_items:
+                        cur_items.append({})
+                    cur_items[-1]["keywords"] = kw
+                collecting_opts = False
+                continue
+
+            # Item bullet lines (e.g., "A. option text")
+            m_opt = re.match(r'^\s*([A-Z])\.\s*(.+)$', line)
+            if collecting_opts and m_opt:
+                if not cur_items:
+                    cur_items.append({})
+                cur_items[-1].setdefault("options", []).append(line)
+                continue
+
+            # Optionally, if not collecting options, append free text to the current question's text.
+            if cur_items and not collecting_opts:
+                cur_items[-1]["text"] = cur_items[-1].get("text", "") + " " + line
+
+        flush_exercise()
+        return exercises
+
+
 
     def parse_tags(self, lines: List[str]) -> List[str]:
         """
