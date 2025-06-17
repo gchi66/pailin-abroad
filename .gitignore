@@ -12,3 +12,15 @@ frontend/.env
 
 # Dependencies
 node_modules/
+
+
+# Ignore all JSON files in backend/data
+backend/data/*.json
+
+# Ignore lesson docs in the frontend
+frontend/lesson_docs/*
+
+# Ignore keys folder
+backend/keys/*
+
+pailin-abroad.git/
