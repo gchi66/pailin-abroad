@@ -250,7 +250,7 @@ class GoogleDocsParser:
                 })
 
         # Instead of parsing speakers, simply use a raw transcript function.
-        transcript = self.parse_raw_transcript(transcript_lines)
+        transcript = self.parse_conversation_from_lines(transcript_lines)
         comprehension = self.parse_comprehension(comp_lines)
         practice_exercises = self.parse_practice(practice_lines)
         tags = self.parse_tags(tags_lines)
@@ -267,46 +267,34 @@ class GoogleDocsParser:
     def parse_conversation_from_lines(self, lines: List[str]) -> List[Dict]:
         """
         Extract transcript entries from conversation lines.
-        This enhanced logic detects speaker names using a colon separator.
-        It groups consecutive lines by the same speaker so the transcript array
-        more closely matches the structure from the old JSON.
+        For each line starting with a speaker followed by a colon,
+        it extracts the speaker and removes it from the line_text.
+        Lines that do not start with a speaker are appended to the previous entry.
         """
         transcript = []
-        current_speaker = ""
-        current_text = ""
-        sort_order = 1
-
+        current_entry = None
+        # Use the SPEAKER_RE defined earlier: it captures everything before the first colon as speaker,
+        # then the rest of the line as the speech text.
         for raw in lines:
             line = raw.strip()
-            if not line or line in {"…", "..."}:
+            if not line:
                 continue
+
             m = SPEAKER_RE.match(line)
             if m:
-                # if we already have an entry, append it
-                if current_text:
-                    transcript.append({
-                        "sort_order": sort_order,
-                        "speaker": current_speaker,
-                        "line_text": current_text.strip(),
-                        "indent": 0
-                    })
-                    sort_order += 1
-                current_speaker = m.group(1).strip()
-                current_text = m.group(2).strip()
+                speaker, text_rest = m.groups()
+                # Create a new transcript entry:
+                current_entry = {
+                    "sort_order": len(transcript) + 1,
+                    "speaker": speaker.strip(),
+                    "line_text": text_rest.strip(),
+                    "indent": 0
+                }
+                transcript.append(current_entry)
             else:
-                # if no new speaker detected, then append this line to the current text
-                if current_text:
-                    current_text += " " + line
-                else:
-                    current_text = line
-        # append the last entry, if it exists
-        if current_text:
-            transcript.append({
-                "sort_order": sort_order,
-                "speaker": current_speaker,
-                "line_text": current_text.strip(),
-                "indent": 0
-            })
+                # If the line doesn't match, append it to the previous entry if it exists
+                if current_entry:
+                    current_entry["line_text"] += " " + line
         return transcript
 
     def parse_comprehension(self, lines: List[str]) -> List[Dict]:
