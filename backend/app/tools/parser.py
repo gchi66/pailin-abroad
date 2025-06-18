@@ -222,6 +222,53 @@ class GoogleDocsParser:
                 })
         return transcript
 
+    def parse_phrases_verbs(self, lines: List[Tuple[str, str]]) -> List[dict]:
+        """
+        Parse PHRASES & VERBS section into an items array.
+        Each item will have: phrase, variant, translation_th, content.
+        Subheading detection is supported (all-caps or heading style lines, including punctuation like 'OH!').
+        """
+        items = []
+        current = None
+        current_variant = 1
+        current_content = []
+        current_translation = ""
+        header_re = re.compile(r"^(.*?)(?:\s*\[(\d+)\])?$")
+
+        for text, style in lines:
+            if is_subheader(text, style):
+                # Save previous item
+                if current is not None:
+                    items.append({
+                        "phrase": current,
+                        "variant": current_variant,
+                        "translation_th": current_translation.strip(),
+                        "content": "\n".join(current_content).strip()
+                    })
+                # Parse new header
+                match = header_re.match(text.strip().lstrip("#").strip())
+                if match:
+                    current = match.group(1).strip()
+                    current_variant = int(match.group(2)) if match.group(2) else 1
+                else:
+                    current = text.strip().lstrip("#").strip()
+                    current_variant = 1
+                current_content = []
+                current_translation = ""
+            elif text.strip().startswith("[TH]"):
+                current_translation = text.strip()[4:].strip()
+            else:
+                current_content.append(text)
+        # Don't forget the last item
+        if current is not None:
+            items.append({
+                "phrase": current,
+                "variant": current_variant,
+                "translation_th": current_translation.strip(),
+                "content": "\n".join(current_content).strip()
+            })
+        return items
+
     def build_lesson_from_sections(self,
                                lesson_sections: List[Tuple[str, List[Tuple[str, str]]]],
                                stage: str) -> Dict:
@@ -247,7 +294,6 @@ class GoogleDocsParser:
 
         for header, lines in lesson_sections[1:]:
             norm_header = header.strip().upper().rstrip(":")
-            # split (text, style) pairs
             texts_only = [t for t, _ in lines]
 
             if norm_header == "FOCUS":
@@ -262,6 +308,14 @@ class GoogleDocsParser:
                 practice_lines.extend(texts_only)
             elif norm_header == "TAGS":
                 tags_lines.extend(texts_only)
+            elif norm_header == "PHRASES & VERBS":
+                # Use the new parser for phrases & verbs
+                items = self.parse_phrases_verbs(lines)
+                other_sections.append({
+                    "type": "phrases_verbs",
+                    "sort_order": len(other_sections) + 1,
+                    "items": items
+                })
             else:
                 # ── build one rich section with “## ” sub-headers ──
                 body_parts: List[str] = []
