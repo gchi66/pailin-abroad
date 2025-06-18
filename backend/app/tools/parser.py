@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 # ───────────────────────────── regex helpers (from old parser)
 HEADING_RE = re.compile(r"^([A-Z][A-Z &''']+)(?::\s*(.*))?$", re.I)
-UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&'‘’\-]{2,60}$")
+UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&'‘’\-!?$%#]{2,60}$")
 QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
 OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
@@ -71,11 +71,17 @@ SECTION_TYPE_MAP = {
 def is_subheader(text: str, style: str) -> bool:
     """
     True for HEADING_3…6 *or* for a paragraph that is entirely ALL-CAPS
-    (2-60 chars, digits & basic punctuation allowed).
+    (2-60 chars, digits & basic punctuation allowed), even if the style is NORMAL_TEXT.
     """
+    # Normalize text by removing zero-width spaces and stripping whitespace
+    normalized_text = text.replace("\u200b", "").strip()
+
     if style.startswith("HEADING_") and style not in {"HEADING_1", "HEADING_2"}:
         return True
-    return bool(UPPER_SUB_RE.match(text.strip()))
+    if bool(UPPER_SUB_RE.match(normalized_text)):
+        return True
+
+    return False
 
 # ───────────────────────────── New style-based extraction functions
 
@@ -221,7 +227,7 @@ class GoogleDocsParser:
                                stage: str) -> Dict:
         """
         Assemble one lesson object, adding Markdown “## ” sub-headers for any
-        paragraph whose Google-Docs style starts with HEADING_3…6.
+        paragraph whose Google-Docs style starts with HEADING_3…6 or is all-caps.
         """
         # ── lesson header ─────────────────────────────────────────────
         lesson_header, _ = lesson_sections[0]
@@ -260,8 +266,8 @@ class GoogleDocsParser:
                 # ── build one rich section with “## ” sub-headers ──
                 body_parts: List[str] = []
                 for text, style in lines:
-                    if is_subheader(text, style):
-                        body_parts.append("## " + text.strip())
+                    if norm_header in {"UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"} and is_subheader(text, style):
+                        body_parts.append(f"## {text.strip()}")
                     else:
                         body_parts.append(text)
                 other_sections.append({
