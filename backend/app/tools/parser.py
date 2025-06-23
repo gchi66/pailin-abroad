@@ -16,11 +16,13 @@ import json
 import re
 import sys
 import logging
+import dataclasses
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
 from .docs_fetch import fetch_doc      # fetch_doc uses the Google Docs API
-from .docwalker import paragraphs      # returns a list of paragraphs with indent and markdown formatting
+from .docwalker import paragraph_nodes, Node      # returns a list of paragraphs with indent and markdown formatting
+from .textutils import is_subheader  # now from textutils, not parser
 
 SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
 
@@ -68,20 +70,6 @@ SECTION_TYPE_MAP = {
 }
 
 # ───────────────────────────── helper functions
-def is_subheader(text: str, style: str) -> bool:
-    """
-    True for HEADING_3…6 *or* for a paragraph that is entirely ALL-CAPS
-    (2-60 chars, digits & basic punctuation allowed), even if the style is NORMAL_TEXT.
-    """
-    # Normalize text by removing zero-width spaces and stripping whitespace
-    normalized_text = text.replace("\u200b", "").strip()
-
-    if style.startswith("HEADING_") and style not in {"HEADING_1", "HEADING_2"}:
-        return True
-    if bool(UPPER_SUB_RE.match(normalized_text)):
-        return True
-
-    return False
 
 # ───────────────────────────── New style-based extraction functions
 
@@ -109,10 +97,8 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
     """
     Returns a list of (header, [lines]) tuples for each section.
     A section header is detected either by a paragraph whose style starts with "HEADING"
-    or if the paragraph text (trimmed and uppercased, with trailing colon removed) equals one of the special headers.
-    Special headers include: FOCUS, LESSON FOCUS, BACKSTORY, CONVERSATION, COMPREHENSION,
-    PRACTICE, UNDERSTAND, CULTURE NOTE, and TAGS.
-    All subsequent paragraphs are collected as lines.
+    or if the paragraph text (trimmed and uppercased, with trailing colon removed) equals one of the special headers,
+    or if it starts with 'CHECKPOINT'.
     """
     sections = []
     current_header = None
@@ -133,13 +119,12 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
 
     for text, style in paragraphs_with_style(doc_json):
         stripped = text.strip()
-        # Remove any trailing colon for header comparison.
         header_candidate = stripped.upper().rstrip(":")
-        if style.startswith("HEADING") or header_candidate in special_headers:
+        is_checkpoint = header_candidate.startswith("CHECKPOINT")
+        if style.startswith("HEADING") or header_candidate in special_headers or is_checkpoint:
             if current_header is not None:
                 sections.append((current_header, current_lines))
-            # Use the normalized header (without a trailing colon) if applicable
-            header_key = header_candidate if header_candidate in special_headers else stripped
+            header_key = header_candidate if (header_candidate in special_headers or is_checkpoint) else stripped
             current_header = header_key
             current_lines = []
         else:
@@ -149,23 +134,21 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
         sections.append((current_header, current_lines))
     return sections
 
-def split_lessons_by_header(sections: List[Tuple[str, List[str]]]) -> List[List[Tuple[str, List[str]]]]:
-    """
-    Split sections into lessons based on the lesson header (matching LESSON_ID_RE).
-    Returns a list where each element is a list of (header, lines) for one lesson.
-    """
-    lessons = []
-    current_lesson = []
+def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
+                            ) -> list[list[tuple[str, list[tuple[str, str]]]]]:
+    """Break the full-doc section list into one sub-list per lesson."""
+    lessons, current = [], []
     for header, lines in sections:
-        if LESSON_ID_RE.match(header):
-            if current_lesson:
-                lessons.append(current_lesson)
-            current_lesson = [(header, lines)]
+        # ORIGINAL: if LESSON_ID_RE.match(header):
+        if LESSON_ID_RE.match(header) or header.upper().startswith("CHECKPOINT"):
+            if current:
+                lessons.append(current)
+            current = [(header, lines)]
         else:
-            if current_lesson:
-                current_lesson.append((header, lines))
-    if current_lesson:
-        lessons.append(current_lesson)
+            if current:
+                current.append((header, lines))
+    if current:
+        lessons.append(current)
     return lessons
 
 # ───────────────────────────── GoogleDocsParser class
@@ -269,81 +252,118 @@ class GoogleDocsParser:
             })
         return items
 
-    def build_lesson_from_sections(self,
-                               lesson_sections: List[Tuple[str, List[Tuple[str, str]]]],
-                               stage: str) -> Dict:
+    def build_lesson_from_sections(
+            self,
+            lesson_sections: list[tuple[str, list[tuple[str, str]]]],
+            stage: str,
+            doc_json,                       # ← NEW: full Google-Docs JSON
+    ) -> dict:
         """
-        Assemble one lesson object, adding Markdown “## ” sub-headers for any
-        paragraph whose Google-Docs style starts with HEADING_3…6 or is all-caps.
+        Assemble one lesson object.
+
+        *   Still writes legacy plain-text `content`.
+        *   For UNDERSTAND / EXTRA TIPS / CULTURE NOTE / COMMON MISTAKES,
+            also builds `content_jsonb` (array of nodes) for rich rendering.
         """
-        # ── lesson header ─────────────────────────────────────────────
+
+        # ── header ──────────────────────────────────────────────────────
         lesson_header, _ = lesson_sections[0]
-        lesson_info, _ = self.parse_lesson_header(lesson_header, stage)
-        lesson = lesson_info.copy()
+        lesson_info, _   = self.parse_lesson_header(lesson_header, stage)
+        lesson           = lesson_info.copy()
+        lesson["focus"]      = ""
+        lesson["backstory"]  = ""
 
-        # main fields
-        lesson["focus"] = ""
-        lesson["backstory"] = ""
+        # buckets
+        transcript_lines: list[str] = []
+        comp_lines:        list[str] = []
+        practice_lines:    list[str] = []
+        tags_lines:        list[str] = []
+        pinned_comment_lines: list[str] = []
+        other_sections:    list[dict] = []
 
-        transcript_lines: List[str] = []
-        comp_lines: List[str] = []
-        practice_lines: List[str] = []
-        tags_lines: List[str] = []
-
-        other_sections: List[Dict] = []
-
+        # ── walk section blocks ─────────────────────────────────────────
         for header, lines in lesson_sections[1:]:
             norm_header = header.strip().upper().rstrip(":")
-            texts_only = [t for t, _ in lines]
+            texts_only  = [t for t, _ in lines]
 
-            if norm_header == "FOCUS":
-                lesson["focus"] = "\n".join(texts_only).strip()
-            elif norm_header == "BACKSTORY":
-                lesson["backstory"] = "\n".join(texts_only).strip()
-            elif norm_header == "CONVERSATION":
-                transcript_lines.extend(texts_only)
-            elif norm_header == "COMPREHENSION":
-                comp_lines.extend(texts_only)
-            elif norm_header == "PRACTICE":
-                practice_lines.extend(texts_only)
-            elif norm_header == "TAGS":
-                tags_lines.extend(texts_only)
+            if   norm_header == "FOCUS":          lesson["focus"]      = "\n".join(texts_only).strip()
+            elif norm_header == "BACKSTORY":      lesson["backstory"]  = "\n".join(texts_only).strip()
+            elif norm_header == "CONVERSATION":   transcript_lines    += texts_only
+            elif norm_header == "COMPREHENSION":  comp_lines          += texts_only
+            elif norm_header == "PRACTICE":       practice_lines      += texts_only
+            elif norm_header == "TAGS":           tags_lines          += texts_only
             elif norm_header == "PHRASES & VERBS":
-                # Use the new parser for phrases & verbs
                 items = self.parse_phrases_verbs(lines)
                 other_sections.append({
-                    "type": "phrases_verbs",
+                    "type":       "phrases_verbs",
                     "sort_order": len(other_sections) + 1,
-                    "items": items
+                    "items":      items,
+                })
+            elif norm_header == "PINNED COMMENT":
+                pinned_comment_lines += texts_only
+            elif norm_header.startswith("CHECKPOINT"):
+                other_sections.append({
+                    "type":       "checkpoint",
+                    "sort_order": len(other_sections) + 1,
+                    "content":    "\n".join(texts_only).strip(),
                 })
             else:
-                # ── build one rich section with “## ” sub-headers ──
-                body_parts: List[str] = []
-                for text, style in lines:
-                    if norm_header in {"UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"} and is_subheader(text, style):
-                        body_parts.append(f"## {text.strip()}")
-                    else:
-                        body_parts.append(text)
-                other_sections.append({
-                    "type": SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
-                    "sort_order": len(other_sections) + 1,
-                    "content": "\n".join(body_parts).strip()
-                })
+                # ── Rich-format sections → build node array ────────────
+                if norm_header in {
+                    "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"
+                }:
+                    node_list: list[dict] = []
 
-        # ── convert the remaining pieces ─────────────────────────────
-        transcript = self.parse_conversation_from_lines(transcript_lines)
-        comprehension = self.parse_comprehension(comp_lines)
-        practice_exercises = self.parse_practice(practice_lines)
-        tags = self.parse_tags(tags_lines)
+                    # Re-walk doc JSON; keep only paragraphs whose raw text
+                    # appears in the current section’s line list.
+                    wanted = set(texts_only)
+                    for n in paragraph_nodes(doc_json):
+                        plain_txt = "".join(s.text for s in n.inlines).strip()
+                        if plain_txt in wanted:
+                            node_list.append(dataclasses.asdict(n))
 
-        return {
-            "lesson": lesson,
-            "transcript": transcript,
-            "comprehension_questions": comprehension,
-            "practice_exercises": practice_exercises,
-            "sections": other_sections,
-            "tags": tags,
+                    # Use body_parts routine for content
+                    body_parts: list[str] = []
+                    for text, style in lines:
+                        if is_subheader(text, style):
+                            body_parts.append(f"## {text.strip()}")
+                        else:
+                            body_parts.append(text)
+
+                    other_sections.append({
+                        "type":          SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
+                        "sort_order":    len(other_sections) + 1,
+                        "content_jsonb": node_list,
+                        # use body_parts for fallback plain-text
+                        "content":       "\n".join(body_parts).strip(),
+                    })
+                else:
+                    # ── Everything else → legacy markdown with “##” ─────
+                    body_parts: list[str] = []
+                    for text, style in lines:
+                        if is_subheader(text, style):
+                            body_parts.append(f"## {text.strip()}")
+                        else:
+                            body_parts.append(text)
+                    other_sections.append({
+                        "type":       SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
+                        "sort_order": len(other_sections) + 1,
+                        "content":    "\n".join(body_parts).strip(),
+                    })
+
+        # ── convert buckets to structured fields ───────────────────────
+        lesson_obj = {
+            "lesson":                 lesson,
+            "transcript":             self.parse_conversation_from_lines(transcript_lines),
+            "comprehension_questions": self.parse_comprehension(comp_lines),
+            "practice_exercises":     self.parse_practice(practice_lines),
+            "sections":               other_sections,
+            "tags":                   self.parse_tags(tags_lines),
         }
+        if pinned_comment_lines:
+            lesson_obj["pinned_comment"] = "\n".join(pinned_comment_lines).strip()
+
+        return lesson_obj
 
     def parse_conversation_from_lines(self, lines: List[str]) -> List[Dict]:
         """
@@ -594,7 +614,7 @@ class GoogleDocsParser:
         results = []
         for lesson_sections in lessons:
             try:
-                lesson_data = self.build_lesson_from_sections(lesson_sections, stage)
+                lesson_data = self.build_lesson_from_sections(lesson_sections, stage, doc_json)
                 results.append(lesson_data)
             except Exception as e:
                 logger.error(f"Error processing a lesson: {e}")

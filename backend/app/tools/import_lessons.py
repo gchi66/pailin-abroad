@@ -3,14 +3,11 @@
 Import lessons into Supabase from JSON files.
 
 Usage:
-  # Import all JSON files in a folder
-  python import_lessons.py path/to/folder
-
-  # Import a single JSON file with multiple lessons (array)
-  python import_lessons.py path/to/level3.json
+  # Import a level folder containing multiple lesson JSON files
+  python -m app.tools.import_lessons data/level_X.json
 
   # Dry run (print payloads without writing)
-  python import_lessons.py path/to/folder --dry-run
+  python -m app.tools.import_lessons data/level_X.json --dry-run
 """
 
 import os
@@ -139,7 +136,7 @@ def upsert_sections(lesson_id, sections, dry_run=False):
             "type": sec["type"],
             "sort_order": sec["sort_order"],
             "content": sec.get("content"),
-            "content_md": sec.get("content_md", ""),
+            "content_jsonb": sec.get("content_jsonb", ""),
         }
         if dry_run:
             print(f"[DRY RUN] Upsert section: {record}")

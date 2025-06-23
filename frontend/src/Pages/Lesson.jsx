@@ -6,6 +6,7 @@ import LessonHeader   from "../Components/LessonHeader";
 import AudioBar       from "../Components/AudioBar";
 import LessonSidebar  from "../Components/LessonSidebar";
 import LessonContent  from "../Components/LessonContent";
+import PinnedComment   from "../Components/PinnedComment";
 
 import "../Styles/Lesson.css";
 
@@ -28,6 +29,9 @@ export default function Lesson() {
 
   // Audio URL state
   const [audioUrl, setAudioUrl] = useState(null);
+
+  // Add state for pinned comment
+  const [pinnedComment, setPinnedComment] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -76,6 +80,10 @@ export default function Lesson() {
       setQuestions(qs);
       setTranscript(tr);
       setPracticeExercises(pe);
+
+      // Find pinned comment section
+      const pinnedSection = secs.find((s) => s.type === "pinned_comment");
+      setPinnedComment(pinnedSection ? pinnedSection.content : "");
 
       // initial active: first section, or fallback to comprehension/transcript
       setActiveId(
@@ -159,6 +167,7 @@ export default function Lesson() {
             lessonPhrases={lessonPhrases}
             activeId={activeId}
             onSelect={setActiveId}
+            lesson={lesson} // Pass lesson prop for correct header
           />
           <LessonContent
             sections={sections}
@@ -171,6 +180,8 @@ export default function Lesson() {
             setUiLang={setUiLang}
           />
         </div>
+        {/* pinned comment at the bottom */}
+        <PinnedComment comment={pinnedComment} />
       </div>
     </main>
   );

@@ -5,6 +5,7 @@ import ComprehensionQuiz from "./ComprehensionQuiz";
 import ApplySection from "./ApplySection";
 import MarkdownSection from "./MarkdownSection";
 import PracticeSection from "./PracticeSection";
+import RichSectionRenderer from "./RichSectionRenderer";
 
 import "../Styles/LessonContent.css";
 
@@ -92,34 +93,23 @@ export default function LessonContent({
   /* ===============================================================
      4) PHRASES & VERBS VIEW
   =============================================================== */
-  if (activeId === "phrases_verbs" && lessonPhrases.length > 0) {
-    // Only include phrases with non-empty content_md
+  if (activeId === "phrases_verbs") {
+    // Only include phrases with non-empty content_md or content
     const filteredPhrases = lessonPhrases.filter(
-      (item) => item.content_md && item.content_md.trim() !== ""
+      (item) =>
+        (item.content_md && item.content_md.trim() !== "") ||
+        (item.content && item.content.trim() !== "")
     );
 
     if (filteredPhrases.length === 0) {
-      return (
-        <article className="lc-card">
-          <header className="lc-head">
-            <div className="lc-head-left">
-              <span className="lc-head-title">PHRASES & VERBS</span>
-            </div>
-            <div className="lc-head-right">
-              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
-            </div>
-          </header>
-          <div className="lc-body">
-            <em>No phrases or verbs to display.</em>
-          </div>
-        </article>
-      );
+      // Hide the PHRASES & VERBS view entirely if there are no phrases/verbs
+      return null;
     }
 
     const phrasesMarkdown = filteredPhrases
       .map(
         (item) =>
-          `## ${item.phrase}\n${item.content_md ? item.content_md.trim() : ""}`
+          `## ${item.phrase}\n${item.content_md ? item.content_md.trim() : item.content ? item.content.trim() : ""}`
       )
       .join("\n\n");
 
@@ -207,6 +197,36 @@ export default function LessonContent({
       }));
     }
 
+    // --- RICH CONTENT RENDERING ---
+    if (Array.isArray(section.content_jsonb) && section.content_jsonb.length > 0) {
+      return (
+        <article className="lc-card">
+          <header className="lc-head">
+            <div className="lc-head-left">
+              <span className="lc-head-title">
+                {section.type.replace("_", " ").toUpperCase()}
+              </span>
+              {section.title_th && (
+                <span className="lc-head-title-th">{section.title_th}</span>
+              )}
+            </div>
+            <div className="lc-head-right">
+              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+            </div>
+          </header>
+          <RichSectionRenderer nodes={section.content_jsonb} />
+          {/* Render extraSections (e.g., quick practice) below rich content if present */}
+          {extraSections.length > 0 && (
+            <div className="extra-sections">
+              {extraSections.map((ex) => (
+                <div key={ex.key}>{ex.body}</div>
+              ))}
+            </div>
+          )}
+        </article>
+      );
+    }
+    // --- FALLBACK TO MARKDOWN ---
     return (
       <article className="lc-card">
         <header className="lc-head">

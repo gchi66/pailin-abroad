@@ -26,6 +26,25 @@ const MASTER_ORDER = [
   "practice",
 ];
 
+function getLessonHeader(lesson) {
+  if (!lesson) return "LESSON –";
+  const externalId = lesson.external_id || "";
+  // Check for checkpoint: external_id ends with .chp or lesson_order === 0
+  if (externalId.endsWith(".chp") || lesson.lesson_order === 0) {
+    return "Checkpoint";
+  }
+  // Try to extract the lesson number from external_id (e.g., 1.14 -> 14)
+  const match = externalId.match(/^(\d+)\.(\d+)$/);
+  if (match) {
+    return `LESSON ${parseInt(match[2], 10)}`;
+  }
+  // Fallback to lesson_order if available
+  if (lesson.lesson_order) {
+    return `LESSON ${lesson.lesson_order}`;
+  }
+  return "LESSON –";
+}
+
 export default function LessonSidebar({
   sections = [],
   questions = [],
@@ -34,6 +53,7 @@ export default function LessonSidebar({
   lessonPhrases = [],
   activeId,
   onSelect,
+  lesson, // <-- new prop
 }) {
   // Build the menu in the master order, skipping types with no data
   const menuItems = MASTER_ORDER
@@ -44,12 +64,20 @@ export default function LessonSidebar({
       if (type === "transcript" && transcript.length) {
         return { id: "transcript", type };
       }
-      if (type === "practice" && practiceExercises.length) {   // ②  PRACTICE GATE
+      if (type === "practice" && practiceExercises.length) {
         return { id: "practice", type };
       }
-      if (type === "phrases_verbs" && lessonPhrases.length) {
-        // <-- Add this block
-        return { id: "phrases_verbs", type };
+      if (type === "phrases_verbs") {
+        // Only show if there are phrases/verbs with non-empty content or content_md
+        const hasPhrases = lessonPhrases.some(
+          (item) =>
+            (item.content_md && item.content_md.trim() !== "") ||
+            (item.content && item.content.trim() !== "")
+        );
+        if (hasPhrases) {
+          return { id: "phrases_verbs", type };
+        }
+        return null;
       }
       const sec = sections.find((s) => s.type === type);
       return sec ? { id: sec.id, type } : null;
@@ -59,7 +87,7 @@ export default function LessonSidebar({
   return (
     <aside className="ls-sidebar">
       <header className="ls-header">
-        LESSON {sections[0]?.sort_order ?? "–"}
+        {getLessonHeader(lesson)}
       </header>
       <ul className="ls-list">
         {menuItems.map((item) => (
