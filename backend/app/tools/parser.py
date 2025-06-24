@@ -11,6 +11,7 @@ python -m app.tools.parser <document_id> --stage Beginner --output lesson.json
 """
 
 from __future__ import annotations
+from collections import Counter
 import argparse
 import json
 import re
@@ -256,24 +257,15 @@ class GoogleDocsParser:
             self,
             lesson_sections: list[tuple[str, list[tuple[str, str]]]],
             stage: str,
-            doc_json,                       # ← NEW: full Google-Docs JSON
+            doc_json,
     ) -> dict:
-        """
-        Assemble one lesson object.
-
-        *   Still writes legacy plain-text `content`.
-        *   For UNDERSTAND / EXTRA TIPS / CULTURE NOTE / COMMON MISTAKES,
-            also builds `content_jsonb` (array of nodes) for rich rendering.
-        """
-
-        # ── header ──────────────────────────────────────────────────────
+        # ---- (header + bucket logic identical) ----
         lesson_header, _ = lesson_sections[0]
         lesson_info, _   = self.parse_lesson_header(lesson_header, stage)
         lesson           = lesson_info.copy()
         lesson["focus"]      = ""
         lesson["backstory"]  = ""
 
-        # buckets
         transcript_lines: list[str] = []
         comp_lines:        list[str] = []
         practice_lines:    list[str] = []
@@ -281,11 +273,11 @@ class GoogleDocsParser:
         pinned_comment_lines: list[str] = []
         other_sections:    list[dict] = []
 
-        # ── walk section blocks ─────────────────────────────────────────
         for header, lines in lesson_sections[1:]:
             norm_header = header.strip().upper().rstrip(":")
             texts_only  = [t for t, _ in lines]
 
+            # ---- buckets unchanged ----
             if   norm_header == "FOCUS":          lesson["focus"]      = "\n".join(texts_only).strip()
             elif norm_header == "BACKSTORY":      lesson["backstory"]  = "\n".join(texts_only).strip()
             elif norm_header == "CONVERSATION":   transcript_lines    += texts_only
@@ -314,15 +306,19 @@ class GoogleDocsParser:
                 }:
                     node_list: list[dict] = []
 
-                    # Re-walk doc JSON; keep only paragraphs whose raw text
-                    # appears in the current section’s line list.
-                    wanted = set(texts_only)
+                    # PATCHED: use Counter to cap duplicates
+                    wanted_counts = Counter(texts_only)
                     for n in paragraph_nodes(doc_json):
                         plain_txt = "".join(s.text for s in n.inlines).strip()
-                        if plain_txt in wanted:
+                        if wanted_counts[plain_txt] > 0:
                             node_list.append(dataclasses.asdict(n))
+                            wanted_counts[plain_txt] -= 1
+                            if wanted_counts[plain_txt] == 0:
+                                del wanted_counts[plain_txt]
+                        if not wanted_counts:  # all satisfied
+                            break
 
-                    # Use body_parts routine for content
+                    # fallback plain‑text unchanged
                     body_parts: list[str] = []
                     for text, style in lines:
                         if is_subheader(text, style):
@@ -334,11 +330,10 @@ class GoogleDocsParser:
                         "type":          SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
                         "sort_order":    len(other_sections) + 1,
                         "content_jsonb": node_list,
-                        # use body_parts for fallback plain-text
                         "content":       "\n".join(body_parts).strip(),
                     })
                 else:
-                    # ── Everything else → legacy markdown with “##” ─────
+                    # unchanged legacy markdown path
                     body_parts: list[str] = []
                     for text, style in lines:
                         if is_subheader(text, style):
@@ -351,7 +346,7 @@ class GoogleDocsParser:
                         "content":    "\n".join(body_parts).strip(),
                     })
 
-        # ── convert buckets to structured fields ───────────────────────
+        # ---- rest of the function untouched ----
         lesson_obj = {
             "lesson":                 lesson,
             "transcript":             self.parse_conversation_from_lines(transcript_lines),
@@ -364,6 +359,7 @@ class GoogleDocsParser:
             lesson_obj["pinned_comment"] = "\n".join(pinned_comment_lines).strip()
 
         return lesson_obj
+
 
     def parse_conversation_from_lines(self, lines: List[str]) -> List[Dict]:
         """
