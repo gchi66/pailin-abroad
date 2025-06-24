@@ -92,37 +92,11 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
               {
                 "text": "How to greet people",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "HI",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -170,19 +144,6 @@
             "indent": 0
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "HEY",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -214,19 +175,6 @@
             "inlines": [
               {
                 "text": "This works with family, friends, and acquaintances, but is very casual and shouldn’t be used in formal settings.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "HELLO",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -274,19 +222,6 @@
             "indent": 0
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "EXTRA NOTES",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -306,19 +241,6 @@
         "type": "culture_note",
         "sort_order": 3,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "​​GREETINGS IN THE US",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "paragraph",
             "level": null,
@@ -741,37 +663,11 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
               {
                 "text": "How to introduce yourself",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "WHAT’S YOUR NAME?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -824,19 +720,6 @@
             "inlines": [
               {
                 "text": "This is the typical way to ask for someone’s name. ",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "INTRODUCING YOURSELF",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -943,19 +826,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "WHAT’S YOUR NAME AGAIN?",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -979,7 +849,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 1,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -1001,19 +873,6 @@
         "type": "culture_note",
         "sort_order": 4,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "NICKNAMES",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "paragraph",
             "level": null,
@@ -1349,19 +1208,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -1373,19 +1219,6 @@
               },
               {
                 "text": "",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "IT’S NICE TO MEET YOU",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -1453,19 +1286,6 @@
                 "text": "Chloe says this in the conversation.",
                 "bold": false,
                 "italic": true,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "IT’S NICE TO MEET YOU, TOO",
-                "bold": false,
-                "italic": false,
                 "underline": false
               }
             ],
@@ -1544,19 +1364,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "SO NICE TO MEET YOU",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -1592,7 +1399,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 2,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -1600,19 +1409,6 @@
             "inlines": [
               {
                 "text": "The word ‘so’ makes the feeling more enthusiastic.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "NICE TO FINALLY MEET YOU",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -1656,7 +1452,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 3,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -1664,19 +1462,6 @@
             "inlines": [
               {
                 "text": "\t‘Finally’ shows that you’ve been waiting to meet them for a long time.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tNICE TO SEE YOU",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -1732,7 +1517,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 4,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -1757,7 +1544,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 5,
+            "audio_section": "extra_tip"
           }
         ],
         "content": "## SO NICE TO MEET YOU\nIf you are genuinely excited or happy to meet someone, you can say:\nIt’s so nice to meet you.\nThe word ‘so’ makes the feeling more enthusiastic.\n## NICE TO FINALLY MEET YOU\nWhen you’ve been hearing good things about someone from a mutual friend, and you now get the chance to meet them in person, you can say:\nIt’s nice to finally meet you.\n‘Finally’ shows that you’ve been waiting to meet them for a long time.\n## NICE TO SEE YOU\nYou can only say ‘It’s nice to meet you’ when meeting someone for the first time. If you meet a friend or someone you already know after not seeing them for a while, you would say this instead:\nIt’s nice to see you!\nIt’s so nice to see you!"
@@ -1880,37 +1669,11 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
               {
                 "text": "How to ask how someone is doing",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "HOW ARE YOU?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -1950,19 +1713,6 @@
             "inlines": [
               {
                 "text": "This is a common and friendly greeting question for any context, whether casual or professional. While it is a question, it’s more of a social formality that’s used to begin a conversation.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "I’M GREAT",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -2257,19 +2007,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "ALTERNATIVE PHRASES",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -2299,7 +2036,9 @@
                 "underline": false
               }
             ],
-            "indent": 0
+            "indent": 0,
+            "audio_seq": 6,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2325,7 +2064,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 7,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2370,7 +2111,9 @@
                 "underline": false
               }
             ],
-            "indent": 0
+            "indent": 0,
+            "audio_seq": 8,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2396,7 +2139,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 9,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2428,7 +2173,9 @@
                 "underline": false
               }
             ],
-            "indent": 0
+            "indent": 0,
+            "audio_seq": 10,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2454,7 +2201,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 11,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2486,7 +2235,9 @@
                 "underline": false
               }
             ],
-            "indent": 0
+            "indent": 0,
+            "audio_seq": 12,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2512,7 +2263,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 13,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -2535,19 +2288,6 @@
         "sort_order": 4,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -2567,19 +2307,6 @@
         "type": "culture_note",
         "sort_order": 5,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "HAVE YOU EATEN?",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "paragraph",
             "level": null,
@@ -2604,7 +2331,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 1,
+            "audio_section": "culture_note"
           },
           {
             "kind": "list_item",
@@ -2617,7 +2346,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 2,
+            "audio_section": "culture_note"
           },
           {
             "kind": "paragraph",
@@ -2638,19 +2369,6 @@
             "inlines": [
               {
                 "text": "But if a close friend or family member asks how you’re doing, you can of course give a more in-depth answer, whether your day was great or bad. See the example conversations below:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tFRIENDLY EMPLOYEES",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -2807,37 +2525,11 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
               {
                 "text": "How to use greeting phrases",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "GOOD MORNING!",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -2903,19 +2595,6 @@
             "inlines": [
               {
                 "text": "These greetings are common in the morning, typically until around 10AM or 11AM. They can be said to anyone - family, neighbors, friends, co-workers, and service staff, like a barista or cashier. Of course, ‘Hi’ or ‘Hey’ are also perfectly acceptable greetings in the morning.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "OTHER GREETINGS",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3192,37 +2871,11 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
               {
                 "text": "How to use the to-be verb ‘am’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "STRUCTURE OF ‘AM’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3392,19 +3045,6 @@
             "inlines": [
               {
                 "text": "‘Am’ is ONLY used after the subject ‘I,’ as in ‘I am’ or more commonly ‘I’m.’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tUSES OF ‘AM’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3638,19 +3278,6 @@
             "indent": 0
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "EXAMPLE SENTENCES",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -3871,19 +3498,6 @@
             "indent": 6
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "THAI TO-BE VERBS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -3953,19 +3567,6 @@
         "type": "common_mistake",
         "sort_order": 3,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "list_item",
             "level": null,
@@ -4067,7 +3668,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 1,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "list_item",
@@ -4080,20 +3683,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tMISTAKE #2",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
+            "indent": 4,
+            "audio_seq": 2,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -4174,19 +3766,6 @@
             "indent": 0
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #3",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -4236,7 +3815,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 4,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -4275,7 +3856,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 5,
+            "audio_section": "common_mistake"
           }
         ],
         "content": "## MISTAKE #1\nThai people often omit the word ‘am’ in a sentence, for example ‘I tired’ or ‘I hungry.’ This is likely because they are translating a sentence directly from Thai to English. Take a look at these two sentences in Thai from the conversation:\nฉันกังวล\nฉันตื่นเต้น\nThere is no verb in these sentences. When translated into English word for word, they become:\nฉันกังวล\nI nervous. (X)\nฉันตื่นเต้น\nI excited. (X)\nThese are incorrect because they don’t have a verb.\nDon’t forget the verb\nIn English, every sentence must have a verb. The sentences above must be:\nI’m nervous. (✓)\nI’m excited. (✓)\n## MISTAKE #2\nAnother common error is leaving out the subject of a sentence. This is because in Thai, the subject of a sentence is usually omitted when it’s clear from the context who the subject is. For example:\nหิวค่ะ\nTranslated directly, this would just be ‘Hungry.’ The sentence makes sense in Thai because the subject is understood from the context.\nDon’t forget the subject\nBut in English, every sentence must have a subject AND a verb! So the sentence above must be:\nI’m hungry.\nRemember to always use the word ‘I’ when talking about yourself.\n## MISTAKE #3\nIn this conversation, you saw two adjectives - ‘excited’ and ‘nervous’ - which learners sometimes confuse.\nExcited\n‘Excited’ means you feel a lot of energy, but in a happy or positive way. For example:\nI’m excited to go to Disneyland!\nNervous\n‘Nervous’ also means you have a lot of energy, but it’s a more negative feeling of worry or unease. For example:\nI’m nervous about meeting my boyfriend’s parents."
@@ -4421,37 +4004,11 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
               {
                 "text": "How to ask someone’s age",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "HOW OLD ARE YOU?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -4491,19 +4048,6 @@
             "inlines": [
               {
                 "text": "This is the typical way to ask what someone’s age is.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "SAYING YOUR AGE",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -4673,19 +4217,6 @@
         "type": "culture_note",
         "sort_order": 4,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "AGE & RESPECT",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "paragraph",
             "level": null,
@@ -4893,19 +4424,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -4924,19 +4442,6 @@
             "inlines": [
               {
                 "text": "How to thank someone",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "THANK YOU",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5073,19 +4578,6 @@
               }
             ],
             "indent": 4
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "YOU’RE WELCOME",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
           },
           {
             "kind": "paragraph",
@@ -5334,19 +4826,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "GIVING THANKS FOR SPECIFIC REASONS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -5383,7 +4862,9 @@
                 "underline": false
               }
             ],
-            "indent": 6
+            "indent": 6,
+            "audio_seq": 14,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -5396,7 +4877,9 @@
                 "underline": false
               }
             ],
-            "indent": 6
+            "indent": 6,
+            "audio_seq": 15,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -5415,7 +4898,9 @@
                 "underline": false
               }
             ],
-            "indent": 6
+            "indent": 6,
+            "audio_seq": 16,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -5441,7 +4926,9 @@
                 "underline": false
               }
             ],
-            "indent": 6
+            "indent": 6,
+            "audio_seq": 17,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -5454,7 +4941,9 @@
                 "underline": false
               }
             ],
-            "indent": 6
+            "indent": 6,
+            "audio_seq": 18,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -5467,7 +4956,9 @@
                 "underline": false
               }
             ],
-            "indent": 6
+            "indent": 6,
+            "audio_seq": 19,
+            "audio_section": "extra_tip"
           }
         ],
         "content": "## GIVING THANKS FOR SPECIFIC REASONS\nHere are two ways to give thanks for specific reasons:\nThank you for (noun).\nThank you for the gift.\nThanks for your help.\nThank you so much for the bracelet. (Pailin could have said this to Chloe)\nThank you for (verb-ing).\nThank you for coming.\nThanks for driving me to the airport.\nThanks so much for helping me."
@@ -5632,19 +5123,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -5727,19 +5205,6 @@
             "indent": 4
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "EXAMPLE SENTENCES",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -5758,19 +5223,6 @@
             "inlines": [
               {
                 "text": "You’ve already learned about the to-be verb ‘am’ in Lesson 1.6. Now you’ll learn about the second to-be verb, ‘are.’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "USES OF ‘ARE’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -6138,19 +5590,6 @@
               }
             ],
             "indent": 4
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tSUBJECTS WITH ‘ARE’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
           },
           {
             "kind": "paragraph",
@@ -6612,19 +6051,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -6765,7 +6191,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 6,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "list_item",
@@ -6778,7 +6206,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 7,
+            "audio_section": "common_mistake"
           }
         ],
         "content": "## MISTAKE #1\nStudents often omit the word ‘are’ in a sentence, for example ‘You beautiful’ or ‘They hungry.’ This is likely because they are translating a sentence directly from Thai to English. Take a look at these sentences in Thai from the conversation:\nแพนเค้กเหล่านี้อร่อยมาก\nคุณใจดีมาก\nThere are no verbs in these sentences. When translated into English word for word, they become:\nแพนเค้กเหล่านี้อร่อยมาก\nThese pancakes so good. (X)\nคุณใจดีมาก\nYou so kind. (X)\nDon’t forget the verb\nThese are incorrect because there is no verb. In English, every sentence must have a verb. The sentences above must be:\nThese pancakes are so good. (✓)\nYou’re so kind. (✓)"
@@ -6999,19 +6429,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -7094,19 +6511,6 @@
             "indent": 4
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "EXAMPLE SENTENCES",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -7151,19 +6555,6 @@
             "inlines": [
               {
                 "text": "You’ve already learned about the to-be verbs ‘am’ and ‘are.’ Now you’ll learn about the last to-be verb, ‘is.’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "USES OF ‘IS’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7510,19 +6901,6 @@
               }
             ],
             "indent": 4
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tSUBJECTS WITH ‘IS’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
           },
           {
             "kind": "paragraph",
@@ -7939,19 +7317,6 @@
             "indent": 0
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "SINGULAR VS. PLURAL NOUNS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -8061,7 +7426,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 23,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -8125,7 +7492,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 24,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -8147,19 +7516,6 @@
         "type": "common_mistake",
         "sort_order": 4,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "paragraph",
             "level": null,
@@ -8286,7 +7642,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 8,
+            "audio_section": "common_mistake"
           }
         ],
         "content": "## MISTAKE #1\nJust as with ‘am’ and ‘are,’ Thai people often omit the word ‘is’ from a sentence. Try to avoid translating sentences from Thai to English, because this can cause important words to be omitted. Take a look at this sentence from the conversation in Thai:\nเขาฉลาดมาก\nThere is no verb in this sentence. When translated into English word for word, it becomes:\nเขาฉลาดมาก\nHe very smart. (X)\nDon’t forget the verb\nThis is incorrect because there is no verb. As emphasized before, every sentence must have a verb in English. The sentence above must be:\nHe’s very smart. (✓)"
@@ -8472,19 +7830,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "list_item",
             "level": null,
             "inlines": [
@@ -8516,19 +7861,6 @@
             "inlines": [
               {
                 "text": "How to ask where someone is from and how to respond",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "WHERE ARE YOU FROM?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -8758,19 +8090,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "list_item",
             "level": null,
             "inlines": [
@@ -8795,19 +8114,6 @@
               }
             ],
             "indent": 6
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tMISTAKE #2",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
           },
           {
             "kind": "paragraph",
@@ -8859,7 +8165,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 12,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -8937,7 +8245,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 15,
+            "audio_section": "common_mistake"
           }
         ],
         "content": "## MISTAKE #1\nThai learners often ask คุณมาจากไหน like this:\nWhere you come from? (X)\nThis is a direct translation from Thai, but it is incorrect in English. Remember the correct way to ask is:\nWhere are you from? (✓)\n## MISTAKE #2\nThai students often incorrectly say ‘I’m from Thai’ instead of ‘I’m from Thailand.’ This is because in Thai language, the country of Thailand is called ประเทศไทย.\nTake note of these three things:\nCountry: Thailand\nI’m from Thailand.\nNationality: Thai\nI’m Thai.\nLanguage: Thai\nI speak Thai."
@@ -9084,19 +8394,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -9115,19 +8412,6 @@
             "inlines": [
               {
                 "text": "How to say ‘This is (something)’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "WHAT’S THIS?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9460,19 +8744,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -9509,7 +8780,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 21,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -9719,19 +8992,6 @@
         "type": "understand",
         "sort_order": 2,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "list_item",
             "level": null,
@@ -10065,19 +9325,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -10140,7 +9387,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 22,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -10423,19 +9672,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -10480,19 +9716,6 @@
             "inlines": [
               {
                 "text": "So far, you’ve learned how to make affirmative sentences with the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make those sentences negative using the word ‘not.’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "NEGATIVE SENTENCES",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10740,19 +9963,6 @@
             "inlines": [
               {
                 "text": "These will be explained more below.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tSTRUCTURE",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11253,19 +10463,6 @@
             "indent": 4
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "EXAMPLES",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -11695,19 +10892,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -11757,7 +10941,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 23,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -11783,7 +10969,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 24,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -11809,7 +10997,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 25,
+            "audio_section": "common_mistake"
           }
         ],
         "content": "## MISTAKE #1\nThai people often omit the to-be verb in negative sentences and only use ‘not’ to make a sentence negative.\nTake a look at the incorrect sentences below and how to fix them:\nI not thirsty. (X)\nI’m not thirsty. (✓)\nWe not scared. (X)\nWe’re not scared. (✓)\nHe not at home. (X)\nHe’s not at home. (✓)"
@@ -11979,19 +11169,6 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -12109,19 +11286,6 @@
             "indent": 0
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "TELLING THE TIME",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -12231,19 +11395,6 @@
             "inlines": [
               {
                 "text": "\tTelling the time is pretty straight-forward, although there are a few things to note.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "O’CLOCK",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12400,19 +11551,6 @@
             "inlines": [
               {
                 "text": "\tThe 0 is pronounced as the letter ‘O’ or ‘oh.’",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tQUICK PRACTICE",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12589,19 +11727,6 @@
             "indent": 4
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tQUICK PRACTICE",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -12716,19 +11841,6 @@
               },
               {
                 "text": "",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "AM & PM",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12887,19 +11999,6 @@
         "sort_order": 3,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "HALF PAST & QUARTER TIL",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -13001,7 +12100,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 25,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -13014,7 +12115,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 26,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -13027,7 +12130,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 27,
+            "audio_section": "extra_tip"
           }
         ],
         "content": "## HALF PAST & QUARTER TIL\nYou may have learned time phrases such as these:\n- It’s quarter past 6. (6:15)\n- It’s half past 11. (11:30)\n- It’s quarter til 3. (2:45)\nWhile time phrases like these are more widely used in the UK and other English-speaking countries, they’re not used often in the US.\nHow to say these times\nIt’s more common to simply refer to the times as:\nIt’s 6:15.\nIt’s 11:30.\nIt’s 2:45."
@@ -13309,38 +12414,12 @@
         "sort_order": 2,
         "content_jsonb": [
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "LESSON FOCUS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
               {
                 "text": "Examples",
                 "bold": true,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tSTRUCTURE",
-                "bold": false,
                 "italic": false,
                 "underline": false
               }
@@ -13392,19 +12471,6 @@
             "inlines": [
               {
                 "text": "So far, you’ve learned how to make affirmative and negative sentences using the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make questions with these verbs.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "TO-BE VERB QUESTIONS",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14096,19 +13162,6 @@
             "indent": 4
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "SHORT FORM ANSWERS",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
-          {
             "kind": "paragraph",
             "level": null,
             "inlines": [
@@ -14223,7 +13276,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 37,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -14249,7 +13304,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 38,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -14275,7 +13332,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 39,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -14301,7 +13360,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 40,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "paragraph",
@@ -14323,19 +13384,6 @@
         "type": "common_mistake",
         "sort_order": 4,
         "content_jsonb": [
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "MISTAKE #1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0
-          },
           {
             "kind": "paragraph",
             "level": null,
@@ -14418,7 +13466,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 29,
+            "audio_section": "common_mistake"
           },
           {
             "kind": "paragraph",
@@ -14450,7 +13500,9 @@
                 "underline": false
               }
             ],
-            "indent": 4
+            "indent": 4,
+            "audio_seq": 30,
+            "audio_section": "common_mistake"
           }
         ],
         "content": "## MISTAKE #1\nThai people sometimes mix up when to use ‘Is’ and ‘Are’ in a question. Remember which verb goes with which pronoun:\nAre → you / we / they\nIs → he / she / it\nTake a look at the incorrect sentences and how to fix them:\nIs you an engineer? (X)\nAre you an engineer? (✓)\nAre he from New York? (X)\nIs he from New York? (✓)"

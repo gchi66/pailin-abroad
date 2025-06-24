@@ -60,6 +60,15 @@ SECTION_ORDER = [
     "TAGS",
 ]
 
+AUDIO_SECTION_HEADERS = {
+    "PRACTICE",
+    "COMMON MISTAKES",
+    "CULTURE NOTE",
+    "UNDERSTAND",
+    "EXTRA TIPS",
+    "APPLY",
+}
+
 SECTION_TYPE_MAP = {
     "APPLY": "apply",
     "UNDERSTAND": "understand",
@@ -69,6 +78,7 @@ SECTION_TYPE_MAP = {
     "PRACTICE": "practice",
     "PINNED COMMENT": "pinned_comment",
 }
+
 
 # ───────────────────────────── helper functions
 
@@ -151,6 +161,35 @@ def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
     if current:
         lessons.append(current)
     return lessons
+
+def tag_audio_sequences(doc_json):
+    current_header = None
+    seq_counter = {h: 0 for h in AUDIO_SECTION_HEADERS}
+    tagged_nodes = []
+
+    for n in paragraph_nodes(doc_json):
+        # Are we entering a new heading?
+        if n.kind == "heading":
+            header_text = "".join(s.text for s in n.inlines).strip().upper().rstrip(":")
+            if header_text in AUDIO_SECTION_HEADERS:
+                current_header = header_text              # inside audio section
+            elif header_text.startswith(("LESSON", "CHECKPOINT")):
+                current_header = None                     # reset between lessons
+            continue
+
+        # If inside an audio section and on a bullet, number it
+        if current_header and n.kind == "list_item":
+            seq_counter[current_header] += 1
+            n_dict = dataclasses.asdict(n)
+            n_dict["audio_seq"] = seq_counter[current_header]
+            n_dict["audio_section"] = SECTION_TYPE_MAP.get(
+                current_header, current_header.lower()
+            )
+            tagged_nodes.append(n_dict)
+        else:
+            tagged_nodes.append(dataclasses.asdict(n))
+
+    return tagged_nodes
 
 # ───────────────────────────── GoogleDocsParser class
 
@@ -253,37 +292,55 @@ class GoogleDocsParser:
             })
         return items
 
+
+
     def build_lesson_from_sections(
-            self,
-            lesson_sections: list[tuple[str, list[tuple[str, str]]]],
-            stage: str,
-            doc_json,
+        self,
+        lesson_sections: list[tuple[str, list[tuple[str, str]]]],
+        stage: str,
+        doc_json,
     ) -> dict:
-        # ---- (header + bucket logic identical) ----
+        # ---- header & bucket bookkeeping -----------------------------------
         lesson_header, _ = lesson_sections[0]
         lesson_info, _   = self.parse_lesson_header(lesson_header, stage)
         lesson           = lesson_info.copy()
         lesson["focus"]      = ""
         lesson["backstory"]  = ""
 
-        transcript_lines: list[str] = []
-        comp_lines:        list[str] = []
-        practice_lines:    list[str] = []
-        tags_lines:        list[str] = []
-        pinned_comment_lines: list[str] = []
-        other_sections:    list[dict] = []
+        transcript_lines:      list[str] = []
+        comp_lines:            list[str] = []
+        practice_lines:        list[str] = []
+        tags_lines:            list[str] = []
+        pinned_comment_lines:  list[str] = []
+        other_sections:        list[dict] = []
 
+        # One pass: every paragraph, already tagged with audio_seq where needed
+        tagged_nodes = tag_audio_sequences(doc_json)
+
+        # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
             norm_header = header.strip().upper().rstrip(":")
             texts_only  = [t for t, _ in lines]
 
-            # ---- buckets unchanged ----
-            if   norm_header == "FOCUS":          lesson["focus"]      = "\n".join(texts_only).strip()
-            elif norm_header == "BACKSTORY":      lesson["backstory"]  = "\n".join(texts_only).strip()
-            elif norm_header == "CONVERSATION":   transcript_lines    += texts_only
-            elif norm_header == "COMPREHENSION":  comp_lines          += texts_only
-            elif norm_header == "PRACTICE":       practice_lines      += texts_only
-            elif norm_header == "TAGS":           tags_lines          += texts_only
+            # ---- simple text buckets ---------------------------------------
+            if   norm_header == "FOCUS":
+                lesson["focus"] = "\n".join(texts_only).strip()
+                continue
+            elif norm_header == "BACKSTORY":
+                lesson["backstory"] = "\n".join(texts_only).strip()
+                continue
+            elif norm_header == "CONVERSATION":
+                transcript_lines += texts_only
+                continue
+            elif norm_header == "COMPREHENSION":
+                comp_lines += texts_only
+                continue
+            elif norm_header == "PRACTICE":
+                practice_lines += texts_only
+                continue
+            elif norm_header == "TAGS":
+                tags_lines += texts_only
+                continue
             elif norm_header == "PHRASES & VERBS":
                 items = self.parse_phrases_verbs(lines)
                 other_sections.append({
@@ -291,69 +348,72 @@ class GoogleDocsParser:
                     "sort_order": len(other_sections) + 1,
                     "items":      items,
                 })
+                continue
             elif norm_header == "PINNED COMMENT":
                 pinned_comment_lines += texts_only
+                continue
             elif norm_header.startswith("CHECKPOINT"):
                 other_sections.append({
                     "type":       "checkpoint",
                     "sort_order": len(other_sections) + 1,
                     "content":    "\n".join(texts_only).strip(),
                 })
+                continue
+
+            # ---- rich-text + (optional) audio bullets ----------------------
+            RICH_AUDIO_HEADERS = {
+                "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"
+            }
+
+            if norm_header in RICH_AUDIO_HEADERS:
+                section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
+                node_list: list[dict] = []
+
+                # Collect just the paragraphs whose *plain text* matches this section
+                wanted = Counter(texts_only)
+                for n in tagged_nodes:
+                    plain = "".join(s["text"] for s in n["inlines"]).strip()
+                    if wanted[plain] == 0:
+                        continue
+                    node_list.append(n)            # already carries audio_seq if bullet
+                    wanted[plain] -= 1
+                    if wanted[plain] == 0:
+                        del wanted[plain]
+                    if not wanted:
+                        break
+
+                # fallback plain-text (Markdown) version
+                body_parts = [
+                    f"## {t.strip()}" if is_subheader(t, style) else t
+                    for t, style in lines
+                ]
+
+                other_sections.append({
+                    "type":          section_key,
+                    "sort_order":    len(other_sections) + 1,
+                    "content_jsonb": node_list,
+                    "content":       "\n".join(body_parts).strip(),
+                })
             else:
-                # ── Rich-format sections → build node array ────────────
-                if norm_header in {
-                    "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"
-                }:
-                    node_list: list[dict] = []
+                # ---- legacy / plain-text section (e.g. APPLY) -------------
+                body_parts = [
+                    f"## {t.strip()}" if is_subheader(t, style) else t
+                    for t, style in lines
+                ]
+                other_sections.append({
+                    "type":       SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
+                    "sort_order": len(other_sections) + 1,
+                    "content":    "\n".join(body_parts).strip(),
+                })
 
-                    # PATCHED: use Counter to cap duplicates
-                    wanted_counts = Counter(texts_only)
-                    for n in paragraph_nodes(doc_json):
-                        plain_txt = "".join(s.text for s in n.inlines).strip()
-                        if wanted_counts[plain_txt] > 0:
-                            node_list.append(dataclasses.asdict(n))
-                            wanted_counts[plain_txt] -= 1
-                            if wanted_counts[plain_txt] == 0:
-                                del wanted_counts[plain_txt]
-                        if not wanted_counts:  # all satisfied
-                            break
-
-                    # fallback plain‑text unchanged
-                    body_parts: list[str] = []
-                    for text, style in lines:
-                        if is_subheader(text, style):
-                            body_parts.append(f"## {text.strip()}")
-                        else:
-                            body_parts.append(text)
-
-                    other_sections.append({
-                        "type":          SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
-                        "sort_order":    len(other_sections) + 1,
-                        "content_jsonb": node_list,
-                        "content":       "\n".join(body_parts).strip(),
-                    })
-                else:
-                    # unchanged legacy markdown path
-                    body_parts: list[str] = []
-                    for text, style in lines:
-                        if is_subheader(text, style):
-                            body_parts.append(f"## {text.strip()}")
-                        else:
-                            body_parts.append(text)
-                    other_sections.append({
-                        "type":       SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
-                        "sort_order": len(other_sections) + 1,
-                        "content":    "\n".join(body_parts).strip(),
-                    })
-
-        # ---- rest of the function untouched ----
+        # --------------------------------------------------------------------
         lesson_obj = {
-            "lesson":                 lesson,
-            "transcript":             self.parse_conversation_from_lines(transcript_lines),
+            "lesson":                  lesson,
+            "transcript":              self.parse_conversation_from_lines(transcript_lines),
             "comprehension_questions": self.parse_comprehension(comp_lines),
-            "practice_exercises":     self.parse_practice(practice_lines),
-            "sections":               other_sections,
-            "tags":                   self.parse_tags(tags_lines),
+            "practice_exercises":      self.parse_practice(practice_lines),
+            "sections":                other_sections,
+            "tags":                    self.parse_tags(tags_lines),
         }
         if pinned_comment_lines:
             lesson_obj["pinned_comment"] = "\n".join(pinned_comment_lines).strip()
