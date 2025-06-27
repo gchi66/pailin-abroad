@@ -1,9 +1,9 @@
-import React from "react";
 import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
+import AudioBullet from "./AudioBullet";
 
 // Renders a node array from content_jsonb (headings, paragraphs, lists, etc.)
-export default function RichSectionRenderer({ nodes }) {
+export default function RichSectionRenderer({ nodes, snipIdx }) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
   // Group nodes by heading (for accordion/dropdown), filter out consecutive duplicate headings
@@ -29,6 +29,21 @@ export default function RichSectionRenderer({ nodes }) {
     sections.push(current);
   }
 
+  // Helper for rendering inlines
+  const renderInlines = (inlines) =>
+    inlines.map((span, m) => (
+      <span
+        key={m}
+        style={{
+          fontWeight: span.bold ? "bold" : undefined,
+          fontStyle: span.italic ? "italic" : undefined,
+          textDecoration: span.underline ? "underline" : undefined,
+        }}
+      >
+        {span.text}
+      </span>
+    ));
+
   return (
     <div className="markdown-section">
       {sections.length > 0 ? (
@@ -53,35 +68,23 @@ export default function RichSectionRenderer({ nodes }) {
                 if (node.kind === "paragraph") {
                   return (
                     <p key={k} style={{ marginLeft: node.indent * 24 }}>
-                      {node.inlines.map((span, m) => (
-                        <span
-                          key={m}
-                          style={{
-                            fontWeight: span.bold ? "bold" : undefined,
-                            fontStyle: span.italic ? "italic" : undefined,
-                            textDecoration: span.underline ? "underline" : undefined,
-                          }}
-                        >
-                          {span.text}
-                        </span>
-                      ))}
+                      {renderInlines(node.inlines)}
                     </p>
                   );
                 } else if (node.kind === "list_item") {
+                  if (node.audio_seq) {
+                    return (
+                      <AudioBullet
+                        key={k}
+                        node={node}
+                        snipIdx={snipIdx}
+                        renderInlines={renderInlines}
+                      />
+                    );
+                  }
                   return (
                     <li key={k} style={{ marginLeft: node.indent * 24 }}>
-                      {node.inlines.map((span, m) => (
-                        <span
-                          key={m}
-                          style={{
-                            fontWeight: span.bold ? "bold" : undefined,
-                            fontStyle: span.italic ? "italic" : undefined,
-                            textDecoration: span.underline ? "underline" : undefined,
-                          }}
-                        >
-                          {span.text}
-                        </span>
-                      ))}
+                      {renderInlines(node.inlines)}
                     </li>
                   );
                 }
@@ -94,18 +97,7 @@ export default function RichSectionRenderer({ nodes }) {
         // fallback: render all as paragraphs
         nodes.map((node, i) => (
           <p key={i} style={{ marginLeft: node.indent * 24 }}>
-            {node.inlines.map((span, m) => (
-              <span
-                key={m}
-                style={{
-                  fontWeight: span.bold ? "bold" : undefined,
-                  fontStyle: span.italic ? "italic" : undefined,
-                  textDecoration: span.underline ? "underline" : undefined,
-                }}
-              >
-                {span.text}
-              </span>
-            ))}
+            {renderInlines(node.inlines)}
           </p>
         ))
       )}

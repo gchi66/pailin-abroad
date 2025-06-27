@@ -1,3 +1,7 @@
+# RCLONE USAGE -
+# rclone copy \\n  pailin_audio:"Final/L1/Conversations" \\n  supabase:"lesson-audio/Beginner/L1/Conversations" \\n  --include "*_conversation.mp3" -P
+
+
 import os, re
 from pathlib import PurePosixPath
 from app.config import Config

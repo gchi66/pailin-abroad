@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
+import { fetchSnippets } from "../lib/fetchSnippets";
 
 import LessonHeader   from "../Components/LessonHeader";
 import AudioBar       from "../Components/AudioBar";
@@ -32,6 +33,9 @@ export default function Lesson() {
 
   // Add state for pinned comment
   const [pinnedComment, setPinnedComment] = useState("");
+
+  // Audio snippet index
+  const [snipIdx, setSnipIdx] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -131,6 +135,16 @@ export default function Lesson() {
       } else {
         setLessonPhrases(phraseLinks.map(row => row.phrases));
       }
+
+      // Fetch audio snippet index for this lesson
+      if (lsn && lsn.external_id) {
+        try {
+          const idx = await fetchSnippets(lsn.external_id);
+          setSnipIdx(idx);
+        } catch (err) {
+          console.error("Error fetching audio snippets:", err);
+        }
+      }
     })(); // <-- closes the async IIFE
   }, [id]); // <-- closes useEffect
 
@@ -178,6 +192,7 @@ export default function Lesson() {
             activeId={activeId}
             uiLang={uiLang}
             setUiLang={setUiLang}
+            snipIdx={snipIdx} // pass down
           />
         </div>
         {/* pinned comment at the bottom */}
