@@ -98,7 +98,11 @@ export default function Lesson() {
 
       // Fetch audio URL if present
       const bucket = "lesson-audio";
-      console.log("Lesson data:", lsn); // Debug log
+
+      // Check if file exists by listing the directory
+      const { data: files, error: listError } = await supabaseClient.storage
+        .from('lesson-audio')
+        .list('Beginner/L1/Conversations');
 
       if (lsn && lsn.conversation_audio_url) {
         console.log("Attempting to fetch audio for path:", lsn.conversation_audio_url);
@@ -181,7 +185,7 @@ export default function Lesson() {
             lessonPhrases={lessonPhrases}
             activeId={activeId}
             onSelect={setActiveId}
-            lesson={lesson} // Pass lesson prop for correct header
+            lesson={lesson}
           />
           <LessonContent
             sections={sections}
@@ -192,7 +196,7 @@ export default function Lesson() {
             activeId={activeId}
             uiLang={uiLang}
             setUiLang={setUiLang}
-            snipIdx={snipIdx} // pass down
+            snipIdx={snipIdx}
           />
         </div>
         {/* pinned comment at the bottom */}

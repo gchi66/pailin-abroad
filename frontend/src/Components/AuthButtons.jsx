@@ -5,7 +5,6 @@ import  supabaseClient  from "../supabaseClient"; // Import the Supabase client
 
 const AuthButtons = ({ onLogin, onSignup }) => {
   const { user } = useAuth(); // Access the user from the AuthContext
-  console.log("AuthButtons user:", user);
   const navigate = useNavigate();
 
   // const handleSignup = () => {

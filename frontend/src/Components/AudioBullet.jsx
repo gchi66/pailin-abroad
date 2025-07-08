@@ -4,8 +4,9 @@ import supabaseClient from "../supabaseClient";
 // Use public URL for image instead of import
 const playPng = "/images/snippet_play_button.png";
 
-export default function AudioBullet({ node, snipIdx, renderInlines }) {
+export default function AudioBullet({ node, indent = 0, snipIdx, renderInlines }) {
   const snip = snipIdx?.[node.audio_section]?.[node.audio_seq];
+
   const [url, setUrl] = useState();
 
   async function play() {
@@ -23,7 +24,10 @@ export default function AudioBullet({ node, snipIdx, renderInlines }) {
   }
 
   return (
-    <li className="flex items-start gap-2 pb-1">
+    <li
+      className="audio-bullet"
+      style={{ marginLeft: indent * 24, listStyleType: "none" }}
+    >
       <img
         src={playPng}
         onClick={play}

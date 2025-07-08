@@ -4,6 +4,7 @@ import AudioBullet from "./AudioBullet";
 
 // Renders a node array from content_jsonb (headings, paragraphs, lists, etc.)
 export default function RichSectionRenderer({ nodes, snipIdx }) {
+
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
   // Group nodes by heading (for accordion/dropdown), filter out consecutive duplicate headings
@@ -77,6 +78,7 @@ export default function RichSectionRenderer({ nodes, snipIdx }) {
                       <AudioBullet
                         key={k}
                         node={node}
+                        indent={node.indent}
                         snipIdx={snipIdx}
                         renderInlines={renderInlines}
                       />

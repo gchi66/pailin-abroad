@@ -162,32 +162,47 @@ def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
         lessons.append(current)
     return lessons
 
-def tag_audio_sequences(doc_json):
-    current_header = None
-    seq_counter = {h: 0 for h in AUDIO_SECTION_HEADERS}
-    tagged_nodes = []
+
+def tag_audio_sequences_with_sections(doc_json):
+    """Tag every paragraph with lesson / section context + audio numbering."""
+    current_lesson   = None           # e.g. LESSON 1.2 …
+    current_section  = None           # e.g. UNDERSTAND, EXTRA TIPS …
+    seq_counter      = {h: 0 for h in AUDIO_SECTION_HEADERS}
+    tagged_nodes     = []
 
     for n in paragraph_nodes(doc_json):
-        # Are we entering a new heading?
         if n.kind == "heading":
-            header_text = "".join(s.text for s in n.inlines).strip().upper().rstrip(":")
-            if header_text in AUDIO_SECTION_HEADERS:
-                current_header = header_text              # inside audio section
-            elif header_text.startswith(("LESSON", "CHECKPOINT")):
-                current_header = None                     # reset between lessons
-            continue
+            header_text = "".join(s.text for s in n.inlines).strip()
+            upper       = header_text.upper().rstrip(":")
 
-        # If inside an audio section and on a bullet, number it
-        if current_header and n.kind == "list_item":
-            seq_counter[current_header] += 1
-            n_dict = dataclasses.asdict(n)
-            n_dict["audio_seq"] = seq_counter[current_header]
-            n_dict["audio_section"] = SECTION_TYPE_MAP.get(
-                current_header, current_header.lower()
-            )
-            tagged_nodes.append(n_dict)
-        else:
-            tagged_nodes.append(dataclasses.asdict(n))
+            # -------- lesson header (only the real “Lesson n.m”) ------------
+            if LESSON_ID_RE.match(upper) or upper.startswith("CHECKPOINT"):
+                current_lesson  = header_text
+                current_section = None
+                seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
+
+            # -------- top-level content sections (FOCUS, UNDERSTAND, …) -----
+            if upper in SECTION_ORDER:
+                current_section = upper
+
+
+        # ------------- attach context & audio tags to the node --------------
+        n_dict = dataclasses.asdict(n)
+        if current_lesson:
+            n_dict["lesson_context"] = current_lesson
+        if current_section:
+            n_dict["section_context"] = current_section
+
+        if (current_section in AUDIO_SECTION_HEADERS
+                and n.kind == "list_item"):
+            seq_counter[current_section] += 1
+            n_dict["audio_seq"]      = seq_counter[current_section]
+            n_dict["audio_section"]  = SECTION_TYPE_MAP.get(
+                                            current_section,
+                                            current_section.lower()
+                                        )
+
+        tagged_nodes.append(n_dict)
 
     return tagged_nodes
 
@@ -302,6 +317,7 @@ class GoogleDocsParser:
     ) -> dict:
         # ---- header & bucket bookkeeping -----------------------------------
         lesson_header, _ = lesson_sections[0]
+        lesson_header_raw = lesson_header
         lesson_info, _   = self.parse_lesson_header(lesson_header, stage)
         lesson           = lesson_info.copy()
         lesson["focus"]      = ""
@@ -314,8 +330,7 @@ class GoogleDocsParser:
         pinned_comment_lines:  list[str] = []
         other_sections:        list[dict] = []
 
-        # One pass: every paragraph, already tagged with audio_seq where needed
-        tagged_nodes = tag_audio_sequences(doc_json)
+        tagged_nodes = tag_audio_sequences_with_sections(doc_json)
 
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
@@ -369,18 +384,53 @@ class GoogleDocsParser:
                 section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
                 node_list: list[dict] = []
 
-                # Collect just the paragraphs whose *plain text* matches this section
-                wanted = Counter(texts_only)
+                # Create a mapping of text to nodes for this lesson and section
+                text_to_nodes = {}
                 for n in tagged_nodes:
-                    plain = "".join(s["text"] for s in n["inlines"]).strip()
-                    if wanted[plain] == 0:
+                    if n.get("lesson_context") == lesson_header_raw:
+                        plain = "".join(s["text"] for s in n["inlines"]).strip()
+                        if plain:
+                            if plain not in text_to_nodes:
+                                text_to_nodes[plain] = []
+                            text_to_nodes[plain].append(n)
+
+                # Process lines in order, preserving the original sequence
+                for text_line, style in lines:
+                    text_line = text_line.strip()
+                    if not text_line:
                         continue
-                    node_list.append(n)            # already carries audio_seq if bullet
-                    wanted[plain] -= 1
-                    if wanted[plain] == 0:
-                        del wanted[plain]
-                    if not wanted:
-                        break
+
+                    # Find matching nodes for this text
+                    matching_nodes = text_to_nodes.get(text_line, [])
+
+                    if matching_nodes:
+                        # Prefer nodes with the correct audio_section
+                        audio_nodes = [n for n in matching_nodes if n.get("audio_section") == section_key]
+                        section_nodes = [n for n in matching_nodes if n.get("section_context") == norm_header]
+
+                        # Choose the best match
+                        if audio_nodes:
+                            chosen_node = audio_nodes[0]
+                        elif section_nodes:
+                            chosen_node = section_nodes[0]
+                        else:
+                            chosen_node = matching_nodes[0]
+
+                        node_list.append(chosen_node)
+                        # Remove the used node to avoid duplicates
+                        matching_nodes.remove(chosen_node)
+                    else:
+                        # If no matching node found, create a synthetic one
+                        # This handles cases where the text might not have been properly tagged
+                        synthetic_node = {
+                            "kind": "paragraph",
+                            "level": None,
+                            "inlines": [{"text": text_line, "bold": False, "italic": False, "underline": False}],
+                            "indent": 0,
+                            "lesson_context": lesson_header_raw,
+                            "section_context": norm_header
+                        }
+                        node_list.append(synthetic_node)
 
                 # fallback plain-text (Markdown) version
                 body_parts = [

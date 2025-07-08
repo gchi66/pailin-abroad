@@ -18,6 +18,7 @@ export default function LessonContent({
   activeId,
   uiLang = "en",
   setUiLang,
+  snipIdx = {},
 }) {
   /* ===============================================================
      1) COMPREHENSION VIEW
@@ -214,7 +215,7 @@ export default function LessonContent({
               <LanguageToggle language={uiLang} setLanguage={setUiLang} />
             </div>
           </header>
-          <RichSectionRenderer nodes={section.content_jsonb} />
+          <RichSectionRenderer nodes={section.content_jsonb} snipIdx={snipIdx} />
           {/* Render extraSections (e.g., quick practice) below rich content if present */}
           {extraSections.length > 0 && (
             <div className="extra-sections">
