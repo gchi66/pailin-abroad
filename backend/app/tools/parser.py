@@ -82,7 +82,39 @@ SECTION_TYPE_MAP = {
 
 # ───────────────────────────── helper functions
 
-# ───────────────────────────── New style-based extraction functions
+def _plain_text(elements: list[dict]) -> str:
+    """Concatenate all textRun content inside a list of Google-Docs elements."""
+    out = []
+    for el in elements:
+        text = el.get("textRun", {}).get("content", "")
+        if text:
+            out.append(text)
+    return "".join(out).strip()
+
+def _table_block(elem: dict, tbl_id: int) -> dict:
+    """Convert a Google-Docs table element to a minimal table block."""
+    tbl        = elem["table"]
+    rows_data  = []
+    for row in tbl["tableRows"]:
+        row_cells = []
+        for cell in row["tableCells"]:
+            cell_text_lines = []
+            for para in cell.get("content", []):
+                if "paragraph" in para:
+                    cell_text_lines.append(_plain_text(para["paragraph"]["elements"]))
+            row_cells.append("\n".join(cell_text_lines))
+        rows_data.append(row_cells)
+
+    return {
+        "kind":  "table",
+        "type":  "table",
+        "id":    f"table-{tbl_id}",
+        "rows":  tbl.get("rows", len(rows_data)),
+        "cols":  tbl.get("columns", len(rows_data[0]) if rows_data else 0),
+        "cells": rows_data,
+    }
+
+# ───────────────────────────── style-based extraction functions
 
 def paragraphs_with_style(doc_json) -> List[Tuple[str, str]]:
     """
@@ -163,46 +195,64 @@ def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
     return lessons
 
 
-def tag_audio_sequences_with_sections(doc_json):
-    """Tag every paragraph with lesson / section context + audio numbering."""
-    current_lesson   = None           # e.g. LESSON 1.2 …
-    current_section  = None           # e.g. UNDERSTAND, EXTRA TIPS …
+def tag_nodes_with_sections(doc_json):
+    """
+    Walk every top-level structural element (paragraphs *and* tables),
+    tag them with lesson / section context, and give tables their own blocks.
+    """
+    current_lesson   = None
+    current_section  = None
     seq_counter      = {h: 0 for h in AUDIO_SECTION_HEADERS}
+    table_counter    = 0
     tagged_nodes     = []
 
-    for n in paragraph_nodes(doc_json):
-        if n.kind == "heading":
-            header_text = "".join(s.text for s in n.inlines).strip()
-            upper       = header_text.upper().rstrip(":")
+    for elem in doc_json["body"]["content"]:
 
-            # -------- lesson header (only the real “Lesson n.m”) ------------
-            if LESSON_ID_RE.match(upper) or upper.startswith("CHECKPOINT"):
-                current_lesson  = header_text
-                current_section = None
-                seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
+        # ───────── paragraphs / headings ─────────
+        if "paragraph" in elem:
+            # Use paragraph_nodes() helper to keep existing inline structure
+            para_nodes = list(paragraph_nodes({"body": {"content": [elem]}}))
+            if not para_nodes:
+                continue
+            n = para_nodes[0]
 
-            # -------- top-level content sections (FOCUS, UNDERSTAND, …) -----
-            if upper in SECTION_ORDER:
-                current_section = upper
+            if n.kind == "heading":
+                header_text = "".join(s.text for s in n.inlines).strip()
+                upper       = header_text.upper().rstrip(":")
+                if LESSON_ID_RE.match(upper) or upper.startswith("CHECKPOINT"):
+                    current_lesson  = header_text
+                    current_section = None
+                    seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
+                if upper in SECTION_ORDER:
+                    current_section = upper
 
+            # attach context
+            n_dict = dataclasses.asdict(n)
+            if current_lesson:
+                n_dict["lesson_context"] = current_lesson
+            if current_section:
+                n_dict["section_context"] = current_section
 
-        # ------------- attach context & audio tags to the node --------------
-        n_dict = dataclasses.asdict(n)
-        if current_lesson:
-            n_dict["lesson_context"] = current_lesson
-        if current_section:
-            n_dict["section_context"] = current_section
+            # audio bullet numbering
+            if (current_section in AUDIO_SECTION_HEADERS) and (n.kind == "list_item"):
+                seq_counter[current_section] += 1
+                n_dict["audio_seq"]      = seq_counter[current_section]
+                n_dict["audio_section"]  = SECTION_TYPE_MAP.get(
+                                                current_section,
+                                                current_section.lower()
+                                            )
+            tagged_nodes.append(n_dict)
+            continue  # done with this element
 
-        if (current_section in AUDIO_SECTION_HEADERS
-                and n.kind == "list_item"):
-            seq_counter[current_section] += 1
-            n_dict["audio_seq"]      = seq_counter[current_section]
-            n_dict["audio_section"]  = SECTION_TYPE_MAP.get(
-                                            current_section,
-                                            current_section.lower()
-                                        )
-
-        tagged_nodes.append(n_dict)
+        # ───────── tables ─────────
+        if "table" in elem:
+            table_counter += 1
+            tbl_block = _table_block(elem, table_counter)
+            if current_lesson:
+                tbl_block["lesson_context"] = current_lesson
+            if current_section:
+                tbl_block["section_context"] = current_section
+            tagged_nodes.append(tbl_block)
 
     return tagged_nodes
 
@@ -330,7 +380,7 @@ class GoogleDocsParser:
         pinned_comment_lines:  list[str] = []
         other_sections:        list[dict] = []
 
-        tagged_nodes = tag_audio_sequences_with_sections(doc_json)
+        tagged_nodes = tag_nodes_with_sections(doc_json)
 
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
@@ -386,19 +436,34 @@ class GoogleDocsParser:
 
                 # Create a mapping of text to nodes for this lesson and section
                 text_to_nodes = {}
+                table_nodes = {}  # Separate mapping for table nodes
+
                 for n in tagged_nodes:
-                    if n.get("lesson_context") == lesson_header_raw:
-                        plain = "".join(s["text"] for s in n["inlines"]).strip()
+                    if n.get("lesson_context") != lesson_header_raw:
+                        continue
+                    if n.get("section_context") != norm_header:
+                        continue
+
+                    if n.get("kind") == "table":
+                        # Store table nodes by their ID for direct lookup
+                        table_nodes[n["id"]] = n
+                    else:
+                        plain = "".join(s.get("text", "") for s in n.get("inlines", [])).strip()
                         if plain:
-                            if plain not in text_to_nodes:
-                                text_to_nodes[plain] = []
-                            text_to_nodes[plain].append(n)
+                            text_to_nodes.setdefault(plain, []).append(n)
 
                 # Process lines in order, preserving the original sequence
                 for text_line, style in lines:
                     text_line = text_line.strip()
                     if not text_line:
                         continue
+
+                    # Check if this is a table placeholder (e.g., "TABLE-1:")
+                    if text_line.upper().startswith("TABLE-") and text_line.endswith(":"):
+                        table_id = text_line.lower().rstrip(":")
+                        if table_id in table_nodes:
+                            node_list.append(table_nodes[table_id])
+                            continue
 
                     # Find matching nodes for this text
                     matching_nodes = text_to_nodes.get(text_line, [])

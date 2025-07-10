@@ -1,0 +1,18 @@
+.lesson-table-wrapper {
+  overflow-x: auto;          /* horizontal scroll on small screens */
+}
+
+.lesson-table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lesson-table-wrapper td,
+.lesson-table-wrapper th {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+.lesson-table-wrapper tr:nth-child(even) {
+  background: #f8f8f8;       /* zebra striping */
+}

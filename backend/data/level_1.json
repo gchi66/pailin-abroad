@@ -12780,17 +12780,21 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "TABLE-1:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
+            "kind": "table",
+            "type": "table",
+            "id": "table-1",
+            "rows": 2,
+            "cols": 2,
+            "cells": [
+              [
+                "ARE NOT",
+                "IS NOT"
+              ],
+              [
+                "You’re not = You aren’t\nWe’re not = We aren’t\nThey’re not = They aren’t",
+                "He’s not = He isn’t\nShe’s not = She isn’t\nIt’s not = It isn’t"
+              ]
             ],
-            "indent": 0,
             "lesson_context": "LESSON 1.14: My wallet isn’t red",
             "section_context": "UNDERSTAND"
           },
@@ -15837,17 +15841,37 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "TABLE-2:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
+            "kind": "table",
+            "type": "table",
+            "id": "table-2",
+            "rows": 4,
+            "cols": 4,
+            "cells": [
+              [
+                "TO-BE VERB",
+                "SUBJECT",
+                "OBJECT",
+                "EXAMPLE QUESTIONS"
+              ],
+              [
+                "Am",
+                "I",
+                "(object)?",
+                "Am I tall?"
+              ],
+              [
+                "Are",
+                "you\nwe\nthey\n2+ nouns",
+                "(object)?",
+                "Are you an engineer?\nAre we at the bus stop?\nAre they angry?\nAre Pailin and Chloe tired?"
+              ],
+              [
+                "Is",
+                "he\nshe\nit\nnoun",
+                "(object)?",
+                "Is he from New York?\nIs she at the store?\nIs it good?\nIs Emily a good dancer?"
+              ]
             ],
-            "indent": 0,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND"
           },

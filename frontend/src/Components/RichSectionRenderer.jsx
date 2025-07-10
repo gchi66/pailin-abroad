@@ -1,6 +1,8 @@
 import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
+import "../Styles/LessonTable.css";
 import AudioBullet from "./AudioBullet";
+import LessonTable from "./LessonTable";
 
 // Renders a node array from content_jsonb (headings, paragraphs, lists, etc.)
 export default function RichSectionRenderer({ nodes, snipIdx }) {
@@ -89,6 +91,17 @@ export default function RichSectionRenderer({ nodes, snipIdx }) {
                       {renderInlines(node.inlines)}
                     </li>
                   );
+
+                } else if (node.kind === "table") {
+                  return (
+                    <LessonTable
+                      key={k}
+                      data={{
+                        cells: node.cells,
+                        indent: node.indent,
+                      }}
+                    />
+                  );
                 }
                 return null;
               })}
@@ -96,12 +109,50 @@ export default function RichSectionRenderer({ nodes, snipIdx }) {
           </details>
         ))
       ) : (
-        // fallback: render all as paragraphs
-        nodes.map((node, i) => (
-          <p key={i} style={{ marginLeft: node.indent * 24 }}>
-            {renderInlines(node.inlines)}
-          </p>
-        ))
+        // fallback: render nodes appropriately based on their type
+        nodes.map((node, i) => {
+          if (node.kind === "table") {
+            return (
+              <LessonTable
+                key={i}
+                data={{
+                  cells: node.cells,
+                  indent: node.indent,
+                }}
+              />
+            );
+          } else if (node.kind === "paragraph") {
+            return (
+              <p key={i} style={{ marginLeft: (node.indent || 0) * 24 }}>
+                {renderInlines(node.inlines)}
+              </p>
+            );
+          } else if (node.kind === "list_item") {
+            if (node.audio_seq) {
+              return (
+                <AudioBullet
+                  key={i}
+                  node={node}
+                  indent={node.indent}
+                  snipIdx={snipIdx}
+                  renderInlines={renderInlines}
+                />
+              );
+            }
+            return (
+              <li key={i} style={{ marginLeft: (node.indent || 0) * 24 }}>
+                {renderInlines(node.inlines)}
+              </li>
+            );
+          } else if (node.kind === "heading") {
+            return (
+              <h3 key={i} style={{ marginLeft: (node.indent || 0) * 24 }}>
+                {renderInlines(node.inlines)}
+              </h3>
+            );
+          }
+          return null;
+        })
       )}
     </div>
   );
