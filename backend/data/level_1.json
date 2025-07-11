@@ -3552,27 +3552,27 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: (picture of a person in hot weather)",
+            "stem": "(picture of a person in hot weather)",
             "answer": "im hot, i am hot"
           },
           {
             "number": "2",
-            "text": " STEM: (picture of a doctor)",
+            "stem": "(picture of a doctor)",
             "answer": "im a doctor, i am a doctor"
           },
           {
             "number": "3",
-            "text": " STEM: (picture of a sick person)",
+            "stem": "(picture of a sick person)",
             "answer": "im sick, i am sick"
           },
           {
             "number": "4",
-            "text": " STEM: (picture of a person at school)",
+            "stem": "(picture of a person at school)",
             "answer": "im at school, i am at school"
           },
           {
             "number": "5",
-            "text": " STEM: (picture of a sad person)",
+            "stem": "(picture of a sad person)",
             "answer": "im sad, i am sad"
           }
         ],
@@ -3586,26 +3586,31 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: I late. CORRECT: no",
+            "stem": "I late.",
+            "correct": false,
             "answer": "I'm late."
           },
           {
             "number": "2",
-            "text": " STEM: I’m cold. CORRECT: yes"
+            "stem": "I’m cold.",
+            "correct": true
           },
           {
             "number": "3",
-            "text": " STEM: I from Thailand. CORRECT: no",
+            "stem": "I from Thailand.",
+            "correct": false,
             "answer": "I'm from Thailand."
           },
           {
             "number": "4",
-            "text": " STEM: I excited. CORRECT: no",
+            "stem": "I excited.",
+            "correct": false,
             "answer": "I'm excited."
           },
           {
             "number": "5",
-            "text": " STEM: I’m at home. CORRECT: yes"
+            "stem": "I’m at home.",
+            "correct": true
           }
         ],
         "sort_order": 2
@@ -6445,6 +6450,27 @@
         "paragraph": "",
         "items": [
           {
+            "number": "1",
+            "text": "They __ from Bangkok.",
+            "answer": "are"
+          },
+          {
+            "number": "2",
+            "text": "I __ a nurse.",
+            "answer": "am"
+          },
+          {
+            "number": "3",
+            "text": "Jack and Maria __ nice people.",
+            "answer": "are"
+          },
+          {
+            "number": "4",
+            "text": "We __ at the park.",
+            "answer": "are"
+          },
+          {
+            "number": "5",
             "text": "You __ funny.",
             "answer": "are"
           }
@@ -6459,26 +6485,31 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: They so funny. CORRECT: no",
+            "stem": "They so funny.",
+            "correct": false,
             "answer": "they are so funny, theyre so funny"
           },
           {
             "number": "2",
-            "text": " STEM: We at the park. CORRECT: no",
+            "stem": "We at the park.",
+            "correct": false,
             "answer": "we are at the park, were at the park"
           },
           {
             "number": "3",
-            "text": " STEM: My cats are black. CORRECT: yes"
+            "stem": "My cats are black.",
+            "correct": true
           },
           {
             "number": "4",
-            "text": " STEM: They from Bangkok. CORRECT: no",
+            "stem": "They from Bangkok.",
+            "correct": false,
             "answer": "they are from bangkok, theyre from bangkok"
           },
           {
             "number": "5",
-            "text": " STEM: You’re my best friend. CORRECT: yes"
+            "stem": "You’re my best friend.",
+            "correct": true
           }
         ],
         "sort_order": 2
@@ -7984,6 +8015,27 @@
         "paragraph": "",
         "items": [
           {
+            "number": "1",
+            "text": "He __ my teacher.",
+            "answer": "is"
+          },
+          {
+            "number": "2",
+            "text": "They __ at the store.",
+            "answer": "are"
+          },
+          {
+            "number": "3",
+            "text": "She __ an actor.",
+            "answer": "is"
+          },
+          {
+            "number": "4",
+            "text": "Joey __ in his room.",
+            "answer": "is"
+          },
+          {
+            "number": "5",
             "text": "You __ Thai.",
             "answer": "are"
           }
@@ -7997,6 +8049,27 @@
         "paragraph": "",
         "items": [
           {
+            "number": "1",
+            "text": "The book __ on the table.",
+            "answer": "is"
+          },
+          {
+            "number": "2",
+            "text": "My dogs __ cute.",
+            "answer": "are"
+          },
+          {
+            "number": "3",
+            "text": "Your phone __ in my bag.",
+            "answer": "is"
+          },
+          {
+            "number": "4",
+            "text": "The cars __ red.",
+            "answer": "are"
+          },
+          {
+            "number": "5",
             "text": "My parents __ in New York.",
             "answer": "are"
           }
@@ -8011,26 +8084,31 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: She at home. CORRECT: no",
+            "stem": "She at home.",
+            "correct": false,
             "answer": "she is at home, shes at home"
           },
           {
             "number": "2",
-            "text": " STEM: Tyler from LA. CORRECT: no",
+            "stem": "Tyler from LA.",
+            "correct": false,
             "answer": "tyler is from la, tylers from la"
           },
           {
             "number": "3",
-            "text": " STEM: He’s hungry. CORRECT: yes"
+            "stem": "He’s hungry.",
+            "correct": true
           },
           {
             "number": "4",
-            "text": " STEM: It on the desk. CORRECT: no",
+            "stem": "It on the desk.",
+            "correct": false,
             "answer": "it is on the desk, its on the desk"
           },
           {
             "number": "5",
-            "text": " STEM: It’s a camera. CORRECT: yes"
+            "stem": "It’s a camera.",
+            "correct": true
           }
         ],
         "sort_order": 3
@@ -8042,8 +8120,44 @@
         "paragraph": "",
         "items": [
           {
-            "answer": "am",
-            "text": " ITEM: 2 ITEM: 3 ITEM: 4 ITEM: 5 ITEM: 6 ITEM: 7 ITEM: 8 ITEM: 9 ITEM: 10"
+            "number": "1",
+            "answer": "am"
+          },
+          {
+            "number": "2",
+            "answer": "is"
+          },
+          {
+            "number": "3",
+            "answer": "are"
+          },
+          {
+            "number": "4",
+            "answer": "is"
+          },
+          {
+            "number": "5",
+            "answer": "is"
+          },
+          {
+            "number": "6",
+            "answer": "is"
+          },
+          {
+            "number": "7",
+            "answer": "are"
+          },
+          {
+            "number": "8",
+            "answer": "are"
+          },
+          {
+            "number": "9",
+            "answer": "are"
+          },
+          {
+            "number": "10",
+            "answer": "am"
           }
         ],
         "sort_order": 4
@@ -10411,7 +10525,18 @@
         "paragraph": "",
         "items": [
           {
-            "text": " A: What’s this? B: This is a _____. (picture of a papaya)",
+            "number": "1",
+            "text": "A: What’s this? B: This is a _____. (picture of rose apple)",
+            "answer": "rose apple"
+          },
+          {
+            "number": "2",
+            "text": "A: What’s this? B: This is _____. (picture of green curry)",
+            "answer": "green curry"
+          },
+          {
+            "number": "3",
+            "text": "A: What’s this? B: This is a _____. (picture of a papaya)",
             "answer": "papaya"
           }
         ],
@@ -11142,27 +11267,27 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: (picture of something cheap)",
+            "stem": "(picture of something cheap)",
             "answer": "its cheap"
           },
           {
             "number": "2",
-            "text": " STEM: (picture of something spicy)",
+            "stem": "(picture of something spicy)",
             "answer": "its spicy"
           },
           {
             "number": "3",
-            "text": " STEM: (picture of something cold)",
+            "stem": "(picture of something cold)",
             "answer": "its cold"
           },
           {
             "number": "4",
-            "text": " STEM: (picture of a clock)",
+            "stem": "(picture of a clock)",
             "answer": "its early"
           },
           {
             "number": "5",
-            "text": " STEM: (picture of something purple)",
+            "stem": "(picture of something purple)",
             "answer": "its purple"
           }
         ],
@@ -11815,28 +11940,33 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: I’m tall.",
-            "answer": "im not tall, i am not tall"
+            "stem": "I’m tall.",
+            "answer": "im not tall, i am not tall",
+            "correct": false
           },
           {
             "number": "2",
-            "text": " STEM: I’m at the park.",
-            "answer": "im not at the park, i am not at the park"
+            "stem": "I’m at the park.",
+            "answer": "im not at the park, i am not at the park",
+            "correct": false
           },
           {
             "number": "3",
-            "text": " STEM: I’m a pilot.",
-            "answer": "im not a pilot, i am not a pilot"
+            "stem": "I’m a pilot.",
+            "answer": "im not a pilot, i am not a pilot",
+            "correct": false
           },
           {
             "number": "4",
-            "text": " STEM: I’m sleepy.",
-            "answer": "im not sleepy, i am not sleepy"
+            "stem": "I’m sleepy.",
+            "answer": "im not sleepy, i am not sleepy",
+            "correct": false
           },
           {
             "number": "5",
-            "text": " STEM: I’m downstairs.",
-            "answer": "im not downstairs, i am not downstairs"
+            "stem": "I’m downstairs.",
+            "answer": "im not downstairs, i am not downstairs",
+            "correct": false
           }
         ],
         "sort_order": 1
@@ -11849,28 +11979,33 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: You’re lazy.",
-            "answer": "you are not lazy, you arent lazy, youre not lazy"
+            "stem": "You’re lazy.",
+            "answer": "you are not lazy, you arent lazy, youre not lazy",
+            "correct": false
           },
           {
             "number": "2",
-            "text": " STEM: We’re from Mexico.",
-            "answer": "we are not from mexico, we arent from mexico, were not from mexico"
+            "stem": "We’re from Mexico.",
+            "answer": "we are not from mexico, we arent from mexico, were not from mexico",
+            "correct": false
           },
           {
             "number": "3",
-            "text": " STEM: They’re twins.",
-            "answer": "they are not twins, they arent twins, theyre not twins"
+            "stem": "They’re twins.",
+            "answer": "they are not twins, they arent twins, theyre not twins",
+            "correct": false
           },
           {
             "number": "4",
-            "text": " STEM: Dara and Lek are singers.",
-            "answer": "dara and lek are not singers, dara and lek arent singers"
+            "stem": "Dara and Lek are singers.",
+            "answer": "dara and lek are not singers, dara and lek arent singers",
+            "correct": false
           },
           {
             "number": "5",
-            "text": " STEM: The kids are outside.",
-            "answer": "the kids are not outside, the kids arent outside"
+            "stem": "The kids are outside.",
+            "answer": "the kids are not outside, the kids arent outside",
+            "correct": false
           }
         ],
         "sort_order": 2
@@ -11883,28 +12018,33 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: He’s good at soccer.",
-            "answer": "he is not good at soccer, he isnt good at soccer, hes not good at soccer"
+            "stem": "He’s good at soccer.",
+            "answer": "he is not good at soccer, he isnt good at soccer, hes not good at soccer",
+            "correct": false
           },
           {
             "number": "2",
-            "text": " STEM: She’s at the store.",
-            "answer": "she is not at the store, she isnt at the store, shes not at the store"
+            "stem": "She’s at the store.",
+            "answer": "she is not at the store, she isnt at the store, shes not at the store",
+            "correct": false
           },
           {
             "number": "3",
-            "text": " STEM: It’s a camera.",
-            "answer": "it is not a camera, it isnt a camera, its not a camera"
+            "stem": "It’s a camera.",
+            "answer": "it is not a camera, it isnt a camera, its not a camera",
+            "correct": false
           },
           {
             "number": "4",
-            "text": " STEM: Frank’s funny.",
-            "answer": "frank is not funny, frank isnt funny, franks not funny"
+            "stem": "Frank’s funny.",
+            "answer": "frank is not funny, frank isnt funny, franks not funny",
+            "correct": false
           },
           {
             "number": "5",
-            "text": " STEM: My sister’s at work.",
-            "answer": "my sister is not at work, my sister isnt at work, my sisters not at work"
+            "stem": "My sister’s at work.",
+            "answer": "my sister is not at work, my sister isnt at work, my sisters not at work",
+            "correct": false
           }
         ],
         "sort_order": 3
@@ -11917,26 +12057,31 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: She not at work. CORRECT: no",
+            "stem": "She not at work.",
+            "correct": false,
             "answer": "she is not at work, she isnt at work, shes not at work"
           },
           {
             "number": "2",
-            "text": " STEM: I’m not hungry. CORRECT: yes"
+            "stem": "I’m not hungry.",
+            "correct": true
           },
           {
             "number": "3",
-            "text": " STEM: You not old. CORRECT: no",
+            "stem": "You not old.",
+            "correct": false,
             "answer": "you are not old, you arent old, youre not old"
           },
           {
             "number": "4",
-            "text": " STEM: We not from Canada. CORRECT: no",
+            "stem": "We not from Canada.",
+            "correct": false,
             "answer": "we are not from canada, we arent from canada, were not from canada"
           },
           {
             "number": "5",
-            "text": " STEM: Chloe not here. CORRECT: no",
+            "stem": "Chloe not here.",
+            "correct": false,
             "answer": "chloe is not here, chloe isnt here, chloes not here"
           }
         ],
@@ -11950,7 +12095,7 @@
         "items": [
           {
             "number": "1",
-            "text": " A: Are your parents from Malaysia? B: _____",
+            "text": "A: Are your parents from Malaysia? B: _____",
             "keywords": "no my parents are not from, no my parents arent from"
           },
           {
@@ -13672,6 +13817,62 @@
     ],
     "practice_exercises": [
       {
+        "kind": "sentence_transform",
+        "title": "QUICK PRACTICE 1",
+        "prompt": "Type out how these times should be said.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "8:03",
+            "answer": "eight oh three",
+            "correct": false
+          },
+          {
+            "number": "2",
+            "stem": "10:08",
+            "answer": "ten oh eight",
+            "correct": false
+          },
+          {
+            "number": "3",
+            "stem": "1:06",
+            "answer": "one oh six",
+            "text": "TELLING THE TIME: 12:10 - 12:59 All other times are read as two numbers - the hour, the minutes. In the conversation, Chloe says that her favorite restaurant opens at: 11:30 = eleven thirty QUICK PRACTICE",
+            "correct": false
+          }
+        ],
+        "sort_order": 1
+      },
+      {
+        "kind": "sentence_transform",
+        "title": "QUICK PRACTICE 2",
+        "prompt": "Type out how these times should be said.",
+        "paragraph": "",
+        "items": [
+          {
+            "number": "1",
+            "stem": "2:35",
+            "answer": "two thirty five",
+            "correct": false
+          },
+          {
+            "number": "2",
+            "stem": "7:18",
+            "answer": "seven eighteen",
+            "correct": false
+          },
+          {
+            "number": "3",
+            "stem": "9:56",
+            "answer": "nine fifty six",
+            "text": "AM & PM Telling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets: AM = midnight (12:00) to lunchtime (11:59) PM = lunchtime (12:00) to midnight (11:59) The hours go from 1 to 12. Noon & midnight Frank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM? It would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example: Let’s meet at the park at noon. I always sleep at midnight. Don’t use military time While many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock).",
+            "correct": false
+          }
+        ],
+        "sort_order": 2
+      },
+      {
         "kind": "open",
         "title": "PRACTICE TELLING THE TIME",
         "prompt": "Look at the clock and type the time. Add AM or PM based on if there’s a sun or moon.",
@@ -13703,7 +13904,7 @@
             "answer": "9:40PM"
           }
         ],
-        "sort_order": 1
+        "sort_order": 3
       },
       {
         "kind": "open",
@@ -13737,7 +13938,7 @@
             "answer": "6:30"
           }
         ],
-        "sort_order": 2
+        "sort_order": 4
       },
       {
         "kind": "open",
@@ -13751,7 +13952,7 @@
             "keywords": "asking time, stranger"
           }
         ],
-        "sort_order": 3
+        "sort_order": 5
       }
     ],
     "sections": [
@@ -14165,666 +14366,9 @@
             "indent": 0,
             "lesson_context": "LESSON 1.15: What time is it?",
             "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "TYPE: sentence_transform",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "TITLE: ",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              },
-              {
-                "text": "QUICK PRACTICE 1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "PROMPT: ",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              },
-              {
-                "text": "Type out how these times should be said.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "QUESTION: 1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "STEM: 8:03",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "ANSWER: eight oh three",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "QUESTION: 2",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "STEM: 10:08",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "ANSWER: ten oh eight",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "QUESTION: 3",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "STEM: 1:06",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "ANSWER: one oh six",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "TELLING THE TIME: 12:10 - 12:59",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "All other times are read as two numbers - the hour, the minutes.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "In the conversation, Chloe says that her favorite restaurant opens at:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "list_item",
-            "level": null,
-            "inlines": [
-              {
-                "text": "11:30 = eleven thirty",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 4,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND",
-            "audio_seq": 7,
-            "audio_section": "understand"
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "\tQUICK PRACTICE",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "\t",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              },
-              {
-                "text": "TYPE: sentence_transform",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "TITLE: ",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              },
-              {
-                "text": "QUICK PRACTICE 2",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "PROMPT: ",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              },
-              {
-                "text": "Type out how these times should be said.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "QUESTION: 1",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "STEM: 2:35",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "ANSWER: two thirty five",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "QUESTION: 2",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "STEM: 7:18",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "ANSWER: seven eighteen",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "QUESTION: 3",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "STEM: 9:56",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "ANSWER: nine fifty six",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              },
-              {
-                "text": "",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "AM & PM",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "Telling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "AM = midnight (12:00) to lunchtime (11:59)",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 4,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "PM = lunchtime (12:00) to midnight (11:59)",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 4,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "The hours go from 1 to 12.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "Noon & midnight",
-                "bold": true,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "Frank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "It would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "list_item",
-            "level": null,
-            "inlines": [
-              {
-                "text": "Let’s meet at the park at noon.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 4,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND",
-            "audio_seq": 8,
-            "audio_section": "understand"
-          },
-          {
-            "kind": "list_item",
-            "level": null,
-            "inlines": [
-              {
-                "text": "I always sleep at midnight.",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 4,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND",
-            "audio_seq": 9,
-            "audio_section": "understand"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "Don’t use military time",
-                "bold": true,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "paragraph",
-            "level": null,
-            "inlines": [
-              {
-                "text": "While many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock).",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to talk about the time\n## TELLING THE TIME\nIn the conversation, Frank asks the girls:\nWhat time is it?\nThis is the typical way to ask for the current time.\nIT’S (TIME)\nPailin responds by saying:\nIt’s 11:05.\nThe sentence structure to tell the time is:\nIt’s (time).\nTelling the time is pretty straight-forward, although there are a few things to note.\n## O’CLOCK\nIn the conversation, Frank tells the girls:\nPlease come back at 12:00.\nOn the hour, the time can be read as:\n(#) o’clock\n5 o’clock = 5:00\nLeaving out ‘o’clock’\nOften, ‘o’clock’ is omitted. Frank could have also said:\nPlease come back at 12.\nTELLING THE TIME: 12:01 - 12:09\nDid you notice how Pailin said the time 11:05? She didn’t say ‘eleven five’ or ‘eleven zero five.’ She said:\n11:05 = eleven-o-five\nThe 0 is pronounced as the letter ‘O’ or ‘oh.’\n## QUICK PRACTICE\nTYPE: sentence_transform\nTITLE: QUICK PRACTICE 1\nPROMPT: Type out how these times should be said.\nQUESTION: 1\nSTEM: 8:03\nANSWER: eight oh three\nQUESTION: 2\nSTEM: 10:08\nANSWER: ten oh eight\nQUESTION: 3\nSTEM: 1:06\nANSWER: one oh six\nTELLING THE TIME: 12:10 - 12:59\nAll other times are read as two numbers - the hour, the minutes.\nIn the conversation, Chloe says that her favorite restaurant opens at:\n11:30 = eleven thirty\n## QUICK PRACTICE\nTYPE: sentence_transform\nTITLE: QUICK PRACTICE 2\nPROMPT: Type out how these times should be said.\nQUESTION: 1\nSTEM: 2:35\nANSWER: two thirty five\nQUESTION: 2\nSTEM: 7:18\nANSWER: seven eighteen\nQUESTION: 3\nSTEM: 9:56\nANSWER: nine fifty six\n## AM & PM\nTelling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:\nAM = midnight (12:00) to lunchtime (11:59)\nPM = lunchtime (12:00) to midnight (11:59)\nThe hours go from 1 to 12.\nNoon & midnight\nFrank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?\nIt would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example:\nLet’s meet at the park at noon.\nI always sleep at midnight.\nDon’t use military time\nWhile many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock)."
+        "content": "## LESSON FOCUS\nHow to talk about the time\n## TELLING THE TIME\nIn the conversation, Frank asks the girls:\nWhat time is it?\nThis is the typical way to ask for the current time.\nIT’S (TIME)\nPailin responds by saying:\nIt’s 11:05.\nThe sentence structure to tell the time is:\nIt’s (time).\nTelling the time is pretty straight-forward, although there are a few things to note.\n## O’CLOCK\nIn the conversation, Frank tells the girls:\nPlease come back at 12:00.\nOn the hour, the time can be read as:\n(#) o’clock\n5 o’clock = 5:00\nLeaving out ‘o’clock’\nOften, ‘o’clock’ is omitted. Frank could have also said:\nPlease come back at 12.\nTELLING THE TIME: 12:01 - 12:09\nDid you notice how Pailin said the time 11:05? She didn’t say ‘eleven five’ or ‘eleven zero five.’ She said:\n11:05 = eleven-o-five\nThe 0 is pronounced as the letter ‘O’ or ‘oh.’\n## QUICK PRACTICE"
       },
       {
         "type": "extra_tip",
@@ -15116,28 +14660,33 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: I’m tall.",
-            "answer": "am i tall"
+            "stem": "I’m tall.",
+            "answer": "am i tall",
+            "correct": false
           },
           {
             "number": "2",
-            "text": " STEM: I’m at your house.",
-            "answer": "am i at your house"
+            "stem": "I’m at your house.",
+            "answer": "am i at your house",
+            "correct": false
           },
           {
             "number": "3",
-            "text": " STEM: I’m a good singer.",
-            "answer": "am i a good singer"
+            "stem": "I’m a good singer.",
+            "answer": "am i a good singer",
+            "correct": false
           },
           {
             "number": "4",
-            "text": " STEM: I’m funny.",
-            "answer": "am i funny"
+            "stem": "I’m funny.",
+            "answer": "am i funny",
+            "correct": false
           },
           {
             "number": "5",
-            "text": " STEM: I’m stinky.",
-            "answer": "am i stinky"
+            "stem": "I’m stinky.",
+            "answer": "am i stinky",
+            "correct": false
           }
         ],
         "sort_order": 1
@@ -15150,28 +14699,33 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: You’re inside.",
-            "answer": "are you inside"
+            "stem": "You’re inside.",
+            "answer": "are you inside",
+            "correct": false
           },
           {
             "number": "2",
-            "text": " STEM: We’re late.",
-            "answer": "are we late"
+            "stem": "We’re late.",
+            "answer": "are we late",
+            "correct": false
           },
           {
             "number": "3",
-            "text": " STEM: They’re friends.",
-            "answer": "are they friends"
+            "stem": "They’re friends.",
+            "answer": "are they friends",
+            "correct": false
           },
           {
             "number": "4",
-            "text": " STEM: Pailin and Dara are from Bangkok.",
-            "answer": "are pailin and dara"
+            "stem": "Pailin and Dara are from Bangkok.",
+            "answer": "are pailin and dara",
+            "correct": false
           },
           {
             "number": "5",
-            "text": " STEM: The kids are at the park.",
-            "answer": "are the kids"
+            "stem": "The kids are at the park.",
+            "answer": "are the kids",
+            "correct": false
           }
         ],
         "sort_order": 2
@@ -15184,28 +14738,33 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: He’s in the car.",
-            "answer": "is he in the car"
+            "stem": "He’s in the car.",
+            "answer": "is he in the car",
+            "correct": false
           },
           {
             "number": "2",
-            "text": " STEM: She’s ready.",
-            "answer": "is she ready"
+            "stem": "She’s ready.",
+            "answer": "is she ready",
+            "correct": false
           },
           {
             "number": "3",
-            "text": " STEM: It’s cold outside.",
-            "answer": "is it cold outside"
+            "stem": "It’s cold outside.",
+            "answer": "is it cold outside",
+            "correct": false
           },
           {
             "number": "4",
-            "text": " STEM: Frank’s at the library.",
-            "answer": "is frank at the library"
+            "stem": "Frank’s at the library.",
+            "answer": "is frank at the library",
+            "correct": false
           },
           {
             "number": "5",
-            "text": " STEM: My sister’s smart.",
-            "answer": "is my sister smart"
+            "stem": "My sister’s smart.",
+            "answer": "is my sister smart",
+            "correct": false
           }
         ],
         "sort_order": 3
@@ -15218,26 +14777,31 @@
         "items": [
           {
             "number": "1",
-            "text": " STEM: Is you an actor? CORRECT: no",
+            "stem": "Is you an actor?",
+            "correct": false,
             "answer": "are you an actor"
           },
           {
             "number": "2",
-            "text": " STEM: Are they from Italy? CORRECT: yes"
+            "stem": "Are they from Italy?",
+            "correct": true
           },
           {
             "number": "3",
-            "text": " STEM: Are she sleepy? CORRECT: no",
+            "stem": "Are she sleepy?",
+            "correct": false,
             "answer": "is she sleepy"
           },
           {
             "number": "4",
-            "text": " STEM: Is we on time? CORRECT: no",
+            "stem": "Is we on time?",
+            "correct": false,
             "answer": "are we on time"
           },
           {
             "number": "5",
-            "text": " STEM: Is Mark in Hawaii? CORRECT: yes"
+            "stem": "Is Mark in Hawaii?",
+            "correct": true
           }
         ],
         "sort_order": 4
@@ -15249,7 +14813,28 @@
         "paragraph": "",
         "items": [
           {
-            "text": " A: Is he at school? B: Yeah, ___.",
+            "number": "1",
+            "text": "A: Are they from Thailand? B: Yeah, ___.",
+            "answer": "they are"
+          },
+          {
+            "number": "2",
+            "text": "A: Is she a teacher? B: No, ___.",
+            "answer": "she's not"
+          },
+          {
+            "number": "3",
+            "text": "A: Are we late? B: No, ___.",
+            "answer": "we're not"
+          },
+          {
+            "number": "4",
+            "text": "A: Are you tired? B: Yeah, ___.",
+            "answer": "I am"
+          },
+          {
+            "number": "5",
+            "text": "A: Is he at school? B: Yeah, ___.",
             "answer": "he is"
           }
         ],
