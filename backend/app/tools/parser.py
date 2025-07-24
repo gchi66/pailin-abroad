@@ -82,39 +82,7 @@ SECTION_TYPE_MAP = {
 
 # ───────────────────────────── helper functions
 
-def _plain_text(elements: list[dict]) -> str:
-    """Concatenate all textRun content inside a list of Google-Docs elements."""
-    out = []
-    for el in elements:
-        text = el.get("textRun", {}).get("content", "")
-        if text:
-            out.append(text)
-    return "".join(out).strip()
-
-def _table_block(elem: dict, tbl_id: int) -> dict:
-    """Convert a Google-Docs table element to a minimal table block."""
-    tbl        = elem["table"]
-    rows_data  = []
-    for row in tbl["tableRows"]:
-        row_cells = []
-        for cell in row["tableCells"]:
-            cell_text_lines = []
-            for para in cell.get("content", []):
-                if "paragraph" in para:
-                    cell_text_lines.append(_plain_text(para["paragraph"]["elements"]))
-            row_cells.append("\n".join(cell_text_lines))
-        rows_data.append(row_cells)
-
-    return {
-        "kind":  "table",
-        "type":  "table",
-        "id":    f"table-{tbl_id}",
-        "rows":  tbl.get("rows", len(rows_data)),
-        "cols":  tbl.get("columns", len(rows_data[0]) if rows_data else 0),
-        "cells": rows_data,
-    }
-
-# ───────────────────────────── style-based extraction functions
+# ───────────────────────────── New style-based extraction functions
 
 def paragraphs_with_style(doc_json) -> List[Tuple[str, str]]:
     """
@@ -195,64 +163,46 @@ def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
     return lessons
 
 
-def tag_nodes_with_sections(doc_json):
-    """
-    Walk every top-level structural element (paragraphs *and* tables),
-    tag them with lesson / section context, and give tables their own blocks.
-    """
-    current_lesson   = None
-    current_section  = None
+def tag_audio_sequences_with_sections(doc_json):
+    """Tag every paragraph with lesson / section context + audio numbering."""
+    current_lesson   = None           # e.g. LESSON 1.2 …
+    current_section  = None           # e.g. UNDERSTAND, EXTRA TIPS …
     seq_counter      = {h: 0 for h in AUDIO_SECTION_HEADERS}
-    table_counter    = 0
     tagged_nodes     = []
 
-    for elem in doc_json["body"]["content"]:
+    for n in paragraph_nodes(doc_json):
+        if n.kind == "heading":
+            header_text = "".join(s.text for s in n.inlines).strip()
+            upper       = header_text.upper().rstrip(":")
 
-        # ───────── paragraphs / headings ─────────
-        if "paragraph" in elem:
-            # Use paragraph_nodes() helper to keep existing inline structure
-            para_nodes = list(paragraph_nodes({"body": {"content": [elem]}}))
-            if not para_nodes:
-                continue
-            n = para_nodes[0]
+            # -------- lesson header (only the real “Lesson n.m”) ------------
+            if LESSON_ID_RE.match(upper) or upper.startswith("CHECKPOINT"):
+                current_lesson  = header_text
+                current_section = None
+                seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
 
-            if n.kind == "heading":
-                header_text = "".join(s.text for s in n.inlines).strip()
-                upper       = header_text.upper().rstrip(":")
-                if LESSON_ID_RE.match(upper) or upper.startswith("CHECKPOINT"):
-                    current_lesson  = header_text
-                    current_section = None
-                    seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
-                if upper in SECTION_ORDER:
-                    current_section = upper
+            # -------- top-level content sections (FOCUS, UNDERSTAND, …) -----
+            if upper in SECTION_ORDER:
+                current_section = upper
 
-            # attach context
-            n_dict = dataclasses.asdict(n)
-            if current_lesson:
-                n_dict["lesson_context"] = current_lesson
-            if current_section:
-                n_dict["section_context"] = current_section
 
-            # audio bullet numbering
-            if (current_section in AUDIO_SECTION_HEADERS) and (n.kind == "list_item"):
-                seq_counter[current_section] += 1
-                n_dict["audio_seq"]      = seq_counter[current_section]
-                n_dict["audio_section"]  = SECTION_TYPE_MAP.get(
-                                                current_section,
-                                                current_section.lower()
-                                            )
-            tagged_nodes.append(n_dict)
-            continue  # done with this element
+        # ------------- attach context & audio tags to the node --------------
+        n_dict = dataclasses.asdict(n)
+        if current_lesson:
+            n_dict["lesson_context"] = current_lesson
+        if current_section:
+            n_dict["section_context"] = current_section
 
-        # ───────── tables ─────────
-        if "table" in elem:
-            table_counter += 1
-            tbl_block = _table_block(elem, table_counter)
-            if current_lesson:
-                tbl_block["lesson_context"] = current_lesson
-            if current_section:
-                tbl_block["section_context"] = current_section
-            tagged_nodes.append(tbl_block)
+        if (current_section in AUDIO_SECTION_HEADERS
+                and n.kind == "list_item"):
+            seq_counter[current_section] += 1
+            n_dict["audio_seq"]      = seq_counter[current_section]
+            n_dict["audio_section"]  = SECTION_TYPE_MAP.get(
+                                            current_section,
+                                            current_section.lower()
+                                        )
+
+        tagged_nodes.append(n_dict)
 
     return tagged_nodes
 
@@ -378,10 +328,10 @@ class GoogleDocsParser:
         practice_lines:        list[str] = []
         tags_lines:            list[str] = []
         pinned_comment_lines:  list[str] = []
-        embedded_practice_lines: list[str] = []
         other_sections:        list[dict] = []
+        embedded_practice_lines: list[str] = []
 
-        tagged_nodes = tag_nodes_with_sections(doc_json)
+        tagged_nodes = tag_audio_sequences_with_sections(doc_json)
 
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
@@ -426,36 +376,51 @@ class GoogleDocsParser:
                 })
                 continue
 
-
             # ---- rich-text + (optional) audio bullets ----------------------
             RICH_AUDIO_HEADERS = {
                 "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"
             }
 
             if norm_header in RICH_AUDIO_HEADERS:
-                # -----------------------------------------------------------------
-                # Harvest any “quick practice” directive block hiding in this text
-                # -----------------------------------------------------------------
-                qp_chunk: list[str] = []
-                keep_lines: list[tuple[str, str]] = []
+                # Add directive regex for quick practice harvesting
+                directive_re = re.compile(
+                    r"^(TYPE:|TITLE:|PROMPT:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:)",
+                    re.I
+                )
+                qp_chunk, keep_lines = [], []
 
                 for text_line, style in lines:
-                    if text_line.strip().upper().startswith("TYPE:"):
-                        # starting a new quick-practice chunk
-                        if qp_chunk:
+                    upper = text_line.strip().upper()
+
+                    # keep the visible header
+                    if upper.startswith("QUICK PRACTICE"):
+                        keep_lines.append((text_line, style))
+                        continue
+
+                    # ---- start of a new directive block ----
+                    if upper.startswith("TYPE:"):
+                        if qp_chunk:                            # flush the previous block
                             embedded_practice_lines.extend(qp_chunk)
                             qp_chunk = []
-                        qp_chunk.append(text_line)
-                    elif qp_chunk:
-                        # still inside the directive chunk
-                        qp_chunk.append(text_line)
-                    else:
-                        keep_lines.append((text_line, style))
+                        qp_chunk.append(text_line.strip())
+                        continue
 
-                # flush the final chunk, if any
+                    # ---- other directive lines ----
+                    if directive_re.match(upper):
+                        qp_chunk.append(text_line.strip())
+                        continue
+
+                    # ---- normal prose ----
+                    if qp_chunk:                               # flush finished block
+                        embedded_practice_lines.extend(qp_chunk)
+                        qp_chunk = []
+                    keep_lines.append((text_line, style))
+
+                # flush any trailing block
                 if qp_chunk:
                     embedded_practice_lines.extend(qp_chunk)
-                # keep_lines now contains the remaining lines after extracting quick practice
+
+                # keep_lines now holds the real UNDERSTAND prose + later headings
                 lines = keep_lines
 
                 section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
@@ -463,34 +428,19 @@ class GoogleDocsParser:
 
                 # Create a mapping of text to nodes for this lesson and section
                 text_to_nodes = {}
-                table_nodes = {}  # Separate mapping for table nodes
-
                 for n in tagged_nodes:
-                    if n.get("lesson_context") != lesson_header_raw:
-                        continue
-                    if n.get("section_context") != norm_header:
-                        continue
-
-                    if n.get("kind") == "table":
-                        # Store table nodes by their ID for direct lookup
-                        table_nodes[n["id"]] = n
-                    else:
-                        plain = "".join(s.get("text", "") for s in n.get("inlines", [])).strip()
+                    if n.get("lesson_context") == lesson_header_raw:
+                        plain = "".join(s["text"] for s in n["inlines"]).strip()
                         if plain:
-                            text_to_nodes.setdefault(plain, []).append(n)
+                            if plain not in text_to_nodes:
+                                text_to_nodes[plain] = []
+                            text_to_nodes[plain].append(n)
 
                 # Process lines in order, preserving the original sequence
                 for text_line, style in lines:
                     text_line = text_line.strip()
                     if not text_line:
                         continue
-
-                    # Check if this is a table placeholder (e.g., "TABLE-1:")
-                    if text_line.upper().startswith("TABLE-") and text_line.endswith(":"):
-                        table_id = text_line.lower().rstrip(":")
-                        if table_id in table_nodes:
-                            node_list.append(table_nodes[table_id])
-                            continue
 
                     # Find matching nodes for this text
                     matching_nodes = text_to_nodes.get(text_line, [])
@@ -673,24 +623,21 @@ class GoogleDocsParser:
         """
         Convert the flat “directive” block into structured exercises.
 
-        Supported directives
-        --------------------
-        BLOCK-LEVEL
-        TYPE: <multiple_choice | sentence_transform | fill_blank | paragraph | ...>
-        TITLE:, PROMPT:, PARAGRAPH:
-
-        ITEM-LEVEL
-        QUESTION: <n>          # starts a new item
-        TEXT: <stem text>      # generic stem (MC, short answer, etc.)
-        STEM: <sentence>       # sentence-transform or fill-blank
-        CORRECT: <yes|no>      # sentence-transform (boolean)
-        OPTIONS:               # MC – following lines are A., B., …
-        ANSWER: <value>        # MC (letters) or transform answer
-        KEYWORDS: <kw list>    # short answer
+        Markers handled:
+          TYPE: <multiple_choice | open | ...>
+          TITLE: <exercise title>
+          PROMPT: <prompt shown above the items>
+          PARAGRAPH: <optional explanatory paragraph>
+          QUESTION: <n>
+          TEXT: <stem>
+          OPTIONS:                # the very next lines are A. / B. / …
+          ANSWER: <letter(s)>     # for MC
+          KEYWORDS: <kw list>     # for open items
+          PINNED COMMENT          # everything after this goes into a pinned_comment string
         """
-
+        import re
         exercises: List[Dict] = []
-        cur_ex: Dict | None = None          # exercise being built
+        cur_ex: Dict | None = None  # current exercise being built
         cur_items: List[Dict] = []
         collecting_opts = False
 
@@ -701,10 +648,10 @@ class GoogleDocsParser:
                 exercises.append(cur_ex)
             cur_ex, cur_items = None, []
 
-        def new_exercise(kind: str) -> Dict:
+        def new_exercise(kind: str):
             flush_exercise()
             return {
-                "kind": kind.lower(),       # keep the original kinds
+                "kind": kind,
                 "title": "",
                 "prompt": "",
                 "paragraph": "",
@@ -712,116 +659,97 @@ class GoogleDocsParser:
                 "sort_order": len(exercises) + 1,
             }
 
-        # iterate over every logical line
-        for raw in "\n".join(lines).splitlines():
-            line = raw.strip()
+        # Flatten all lines into a single string and iterate line by line.
+        practice_text = "\n".join(lines)
+        for line in practice_text.splitlines():
+            line = line.strip()
             if not line:
                 continue
 
-            # ─── block-level directives ────────────────────────────────────────
-            if line.upper().startswith("TYPE:"):
-                ex_type = line.split(":", 1)[1].strip()
-                cur_ex = new_exercise(ex_type)
+            # Check for block-level directives
+            m_type = re.match(r'^TYPE:\s*(\w+)', line, re.I)
+            if m_type:
+                cur_ex = new_exercise(m_type.group(1).lower())
                 continue
 
-            if cur_ex is None:                     # ignore stray lines before TYPE:
+            if cur_ex is None:
+                # Skip lines before the first TYPE:
                 continue
 
-            if line.upper().startswith("TITLE:"):
+            if line.startswith("TITLE:"):
                 cur_ex["title"] = line.split(":", 1)[1].strip()
                 continue
-            if line.upper().startswith("PROMPT:"):
+            if line.startswith("PROMPT:"):
                 cur_ex["prompt"] = line.split(":", 1)[1].strip()
                 continue
-            if line.upper().startswith("PARAGRAPH:"):
+            if line.startswith("PARAGRAPH:"):
                 cur_ex["paragraph"] = line.split(":", 1)[1].strip()
                 continue
 
-            # ─── item-level directives ────────────────────────────────────────
-            if line.upper().startswith("QUESTION:"):
-                num = line.split(":", 1)[1].strip()
-                cur_items.append({"number": num})
+            # Item-level directives.
+            if line.startswith("QUESTION:"):
+                number = line.split(":", 1)[1].strip()
+                # Create a new question entry.
+                cur_items.append({"number": number})
                 collecting_opts = False
                 continue
 
-            if line.upper().startswith("ITEM:"):
-                num = line.split(":", 1)[1].strip()
-                cur_items.append({"number": num})
-                collecting_opts = False
-                continue
-
-            # generic TEXT (used by MC, short answer, etc.)
-            if line.upper().startswith("TEXT:"):
+            # --- STEM for any exercise type ---
+            if line.startswith("STEM:"):
                 if not cur_items:
+                    cur_items.append({})
+                value = line.split(":", 1)[1].strip()
+                cur_items[-1]["stem"] = value
+                continue
+
+            if line.startswith("TEXT:"):
+                # Only proceed if there's an item to update.
+                if not cur_items:
+                    # Log warning or create a new item automatically.
                     cur_items.append({})
                 cur_items[-1]["text"] = line.split(":", 1)[1].strip()
                 continue
 
-            # sentence-transform or fill-blank STEM
-            if line.upper().startswith("STEM:"):
-                if not cur_items:
-                    cur_items.append({})
-                cur_items[-1]["stem"] = line.split(":", 1)[1].strip()
-                continue
-
-            # sentence-transform CORRECT flag
-            if line.upper().startswith("CORRECT:"):
-                if not cur_items:
-                    cur_items.append({})
-                val = line.split(":", 1)[1].strip().lower()
-                cur_items[-1]["correct"] = val in {"yes", "true", "correct"}
-                continue
-
-            # MC options
-            if line.upper().startswith("OPTIONS:"):
+            if line.startswith("OPTIONS:"):
                 collecting_opts = True
+                # Ensure the current item has an options list.
                 if not cur_items:
                     cur_items.append({})
                 cur_items[-1]["options"] = []
                 continue
 
-            if collecting_opts and re.match(r"^[A-Z]\.\s", line):
-                cur_items[-1].setdefault("options", []).append(line)
-                continue
-
-
-            # ANSWER (works for MC, sentence-transform etc.)
-            if line.upper().startswith("ANSWER:"):
+            if line.startswith("ANSWER:"):
+                # Only update if there's an existing item.
                 if not cur_items:
                     cur_items.append({})
                 cur_items[-1]["answer"] = line.split(":", 1)[1].strip()
                 collecting_opts = False
                 continue
 
-            # KEYWORDS directive
-            if line.upper().startswith("KEYWORDS:"):
-                if not cur_items:
-                    cur_items.append({})
-                cur_items[-1]["keywords"] = line.split(":", 1)[1].strip()
+            if line.startswith(("KEYWORDS:", "PINNED COMMENT")):
+                kw = line.split(":", 1)[1].strip() if ":" in line else ""
+                if kw:
+                    if not cur_items:
+                        cur_items.append({})
+                    cur_items[-1]["keywords"] = kw
                 collecting_opts = False
                 continue
 
-            # fallback: uninterpreted line gets appended to current stem/text
-            if cur_items:
-                existing_text = cur_items[-1].get("text", "")
-                if existing_text:
-                    cur_items[-1]["text"] = existing_text + " " + line
-                else:
-                    cur_items[-1]["text"] = line
+            # Item bullet lines (e.g., "A. option text")
+            m_opt = re.match(r'^\s*([A-Z])\.\s*(.+)$', line)
+            if collecting_opts and m_opt:
+                if not cur_items:
+                    cur_items.append({})
+                cur_items[-1].setdefault("options", []).append(line)
+                continue
+
+            # Optionally, if not collecting options, append free text to the current question's text.
+            if cur_items and not collecting_opts:
+                cur_items[-1]["text"] = cur_items[-1].get("text", "") + " " + line
 
         flush_exercise()
-
-        # ─── post-process sentence-transform items to match front-end schema ──
-        for ex in exercises:
-            if ex["kind"] == "sentence_transform":
-                for itm in ex["items"]:
-                    # some historical docs may still carry 'text'
-                    if "stem" not in itm and "text" in itm:
-                        itm["stem"] = itm.pop("text").lstrip("STEM:").strip()
-                    # normalise missing correct flag
-                    itm.setdefault("correct", False)
-
         return exercises
+
 
 
     def parse_tags(self, lines: List[str]) -> List[str]:

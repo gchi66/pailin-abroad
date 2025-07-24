@@ -1,3 +1,4 @@
+import React from "react";
 import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
@@ -5,32 +6,13 @@ import AudioBullet from "./AudioBullet";
 import LessonTable from "./LessonTable";
 
 // Renders a node array from content_jsonb (headings, paragraphs, lists, etc.)
-export default function RichSectionRenderer({ nodes, snipIdx }) {
-
+export default function RichSectionRenderer({
+  nodes,
+  snipIdx,
+  uiLang = "en",
+  renderQuickPractice
+}) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
-
-  // Group nodes by heading (for accordion/dropdown), filter out consecutive duplicate headings
-  const sections = [];
-  let current = null;
-  let lastHeadingText = null;
-  nodes.forEach((node, idx) => {
-    if (node.kind === "heading") {
-      const headingText = node.inlines.map((s) => s.text).join("").trim();
-      if (headingText === lastHeadingText) {
-        // skip duplicate consecutive heading
-        return;
-      }
-      lastHeadingText = headingText;
-      if (current) sections.push(current);
-      current = { heading: node, body: [] };
-    } else if (current) {
-      current.body.push(node);
-    }
-  });
-  // Only push the last section if it has content or is not a duplicate
-  if (current && (current.body.length > 0 || sections.length === 0 || (current.heading && current.heading.inlines.map((s) => s.text).join("").trim() !== lastHeadingText))) {
-    sections.push(current);
-  }
 
   // Helper for rendering inlines
   const renderInlines = (inlines) =>
@@ -47,113 +29,165 @@ export default function RichSectionRenderer({ nodes, snipIdx }) {
       </span>
     ));
 
-  return (
-    <div className="markdown-section">
-      {sections.length > 0 ? (
-        sections.map((sec, i) => (
-          <details key={i} className="markdown-item" open={i === 0}>
-            <summary className="markdown-summary">
-              {sec.heading.inlines.map((span, j) => (
-                <span
-                  key={j}
-                  style={{
-                    fontWeight: span.bold ? "bold" : undefined,
-                    fontStyle: span.italic ? "italic" : undefined,
-                    textDecoration: span.underline ? "underline" : undefined,
-                  }}
-                >
-                  {span.text}
-                </span>
-              ))}
-            </summary>
-            <div className="markdown-content">
-              {sec.body.map((node, k) => {
-                if (node.kind === "paragraph") {
-                  return (
-                    <p key={k} style={{ marginLeft: node.indent * 24 }}>
-                      {renderInlines(node.inlines)}
-                    </p>
-                  );
-                } else if (node.kind === "list_item") {
-                  if (node.audio_seq) {
-                    return (
-                      <AudioBullet
-                        key={k}
-                        node={node}
-                        indent={node.indent}
-                        snipIdx={snipIdx}
-                        renderInlines={renderInlines}
-                      />
-                    );
-                  }
-                  return (
-                    <li key={k} style={{ marginLeft: node.indent * 24 }}>
-                      {renderInlines(node.inlines)}
-                    </li>
-                  );
+  // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
+  const renderNode = (node, key) => {
+    if (node.kind === "paragraph") {
+      return (
+        <p key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
+          {renderInlines(node.inlines)}
+        </p>
+      );
+    }
 
-                } else if (node.kind === "table") {
-                  return (
-                    <LessonTable
-                      key={k}
-                      data={{
-                        cells: node.cells,
-                        indent: node.indent,
-                      }}
-                    />
-                  );
-                }
-                return null;
-              })}
-            </div>
-          </details>
-        ))
-      ) : (
-        // fallback: render nodes appropriately based on their type
-        nodes.map((node, i) => {
-          if (node.kind === "table") {
+    if (node.kind === "list_item") {
+      if (node.audio_seq) {
+        return (
+          <AudioBullet
+            key={key}
+            node={node}
+            indent={node.indent}
+            snipIdx={snipIdx}
+            renderInlines={renderInlines}
+          />
+        );
+      }
+      return (
+        <li key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
+          {renderInlines(node.inlines)}
+        </li>
+      );
+    }
+
+    if (node.kind === "table") {
+      return (
+        <LessonTable
+          key={key}
+          data={{
+            cells: node.cells,
+            indent: node.indent,
+          }}
+        />
+      );
+    }
+
+    // REMOVED: heading rendering logic - headings should only be rendered as accordion headers
+
+    // Handle Quick Practice exercises
+    if (node.kind === "quick_practice_exercise" && renderQuickPractice) {
+      return (
+        <div key={key} className="quick-practice-inline">
+          {renderQuickPractice(node.exercise)}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  // Group nodes by heading (for accordion/dropdown)
+  const sections = [];
+  let current = null;
+  // const seenHeadings = new Set();
+
+  nodes.forEach((node, idx) => {
+    if (node.kind === "heading") {
+      // Clean the heading text by trimming whitespace and tabs
+      const headingText = node.inlines
+        .map((s) => s.text)
+        .join("")
+        .replace(/\s+/g, " ")
+        .trim()
+
+      console.log("HEADING ⟶", JSON.stringify(headingText));
+      // Create a unique key for this heading based on text and position
+      const headingKey = `${headingText}-${idx}`;
+
+      // Skip only if we've seen this exact heading recently (within last 3 nodes)
+      // const recentHeadings = Array.from(seenHeadings).slice(-3);
+      // if (recentHeadings.includes(headingText)) {
+      //   return;
+      // }
+
+      // seenHeadings.add(headingText);
+
+      // Close current section and start new one
+      if (current) sections.push(current);
+      current = {
+        heading: node,
+        body: [],
+        key: headingKey
+      };
+    } else if (current) {
+      current.body.push(node);
+    } else {
+      // Handle nodes before any heading
+      if (!current) {
+        current = {
+          heading: null,
+          body: [node],
+          key: `no-heading-${idx}`
+        };
+      }
+    }
+  });
+
+  // Add the final section
+  if (current) {
+    sections.push(current);
+  }
+
+  // Debug: Log sections to see what's being created
+  console.log("Sections created:", sections.map(s => ({
+    heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
+    bodyCount: s.body.length,
+    key: s.key
+  })));
+
+  // If we have sections with headings, render as accordion
+  const hasHeadings = sections.some(sec => sec.heading);
+
+  if (hasHeadings) {
+    return (
+      <div className="markdown-section">
+        {sections.map((sec, i) => {
+          // If section has no heading, render content directly
+          if (!sec.heading) {
             return (
-              <LessonTable
-                key={i}
-                data={{
-                  cells: node.cells,
-                  indent: node.indent,
-                }}
-              />
-            );
-          } else if (node.kind === "paragraph") {
-            return (
-              <p key={i} style={{ marginLeft: (node.indent || 0) * 24 }}>
-                {renderInlines(node.inlines)}
-              </p>
-            );
-          } else if (node.kind === "list_item") {
-            if (node.audio_seq) {
-              return (
-                <AudioBullet
-                  key={i}
-                  node={node}
-                  indent={node.indent}
-                  snipIdx={snipIdx}
-                  renderInlines={renderInlines}
-                />
-              );
-            }
-            return (
-              <li key={i} style={{ marginLeft: (node.indent || 0) * 24 }}>
-                {renderInlines(node.inlines)}
-              </li>
-            );
-          } else if (node.kind === "heading") {
-            return (
-              <h3 key={i} style={{ marginLeft: (node.indent || 0) * 24 }}>
-                {renderInlines(node.inlines)}
-              </h3>
+              <div key={sec.key} className="markdown-content no-heading">
+                {sec.body.map((node, k) => renderNode(node, k))}
+              </div>
             );
           }
-          return null;
-        })
-      )}
+
+          // Clean the heading text for display
+          const cleanHeadingText = sec.heading.inlines
+            .map((s) => s.text)
+            .join("")
+            .trim()
+            .replace(/^\t+/, ""); // Remove leading tabs
+
+          // Render as accordion section
+          return (
+            <details key={sec.key} className="markdown-item" open={i === 0}>
+              <summary className="markdown-summary">
+                {cleanHeadingText}
+              </summary>
+              <div className="markdown-content">
+                {sec.body.map((node, k) => renderNode(node, k))}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // Fallback: render all nodes directly (no accordion)
+  return (
+    <div className="markdown-section">
+      <div className="markdown-content">
+        {nodes.map((node, i) => renderNode(node, i))}
+      </div>
     </div>
   );
 }

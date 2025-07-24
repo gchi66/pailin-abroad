@@ -52,7 +52,7 @@ export default function UnderstandSection({ lessonId }) {
     if (!Comp) return null;
     return {
       key:   `qp-${ex.id}`,
-      title: ex.title || "Quick Practice",
+      title: ex.title || `Quick Practice ${ex.sort_order || ""}`,
       body:  (                        // JSX, not markdown
         <>
           {ex.prompt_md && <p className="fb-prompt">{ex.prompt_md}</p>}

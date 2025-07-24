@@ -62,7 +62,7 @@ export default function PracticeSection({
   // optional filter
   const list = hideQuick
     ? exercises.filter(
-        (ex) => !(ex.title || "").toLowerCase().startsWith("quick practice")
+        (ex) => !(ex.title || "").toLowerCase().includes("quick practice")
       )
     : exercises;
 
@@ -74,18 +74,21 @@ export default function PracticeSection({
         const Renderer = kindToComponent[ex.kind];
         if (!Renderer) return null;
 
-        if (wrapInDetails) {
-          return (
-            <details key={ex.id} className="ps-accordion">
-              <summary className="ps-summary">
-                {ex.title || ex.prompt || "Exercise"}
-              </summary>
-              <Renderer exercise={ex} uiLang={uiLang} />
-            </details>
-          );
+        // If this is a Quick Practice exercise and wrapInDetails is false,
+        // render without the details wrapper
+        if (!wrapInDetails) {
+          return <Renderer key={ex.id} exercise={ex} uiLang={uiLang} />;
         }
-        /* no extra header */
-        return <Renderer key={ex.id} exercise={ex} uiLang={uiLang} />;
+
+        // Otherwise, wrap in details
+        return (
+          <details key={ex.id} className="ps-accordion">
+            <summary className="ps-summary">
+              {ex.title || ex.prompt || "Exercise"}
+            </summary>
+            <Renderer exercise={ex} uiLang={uiLang} />
+          </details>
+        );
       })}
     </div>
   );

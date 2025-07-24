@@ -174,7 +174,96 @@ export default function LessonContent({
       section.type
     )
   ) {
-    // Only build extraSections for "understand"
+    // --- RICH CONTENT RENDERING ---
+    if (Array.isArray(section.content_jsonb) && section.content_jsonb.length > 0) {
+      // Get quick practice exercises for "understand" sections only
+      let quickExercises = [];
+      if (section.type === "understand") {
+        quickExercises = practiceExercises.filter(
+          (ex) =>
+            (ex.title || "").toLowerCase().startsWith("quick practice") &&
+            ex.sort_order
+        );
+      }
+
+      // Process content to insert Quick Practice exercises inline
+      const processedContent = [];
+      let quickPracticeIndex = 0;
+
+      for (let i = 0; i < section.content_jsonb.length; i++) {
+        const node = section.content_jsonb[i];
+
+        // Check if this is a Quick Practice heading
+        const isQuickPracticeHeading =
+          node.kind === 'heading' &&
+          node.inlines?.some(inline =>
+            inline.text?.toLowerCase().includes('quick practice'));
+
+        if (isQuickPracticeHeading && quickPracticeIndex < quickExercises.length) {
+          // Add the heading
+          processedContent.push(node);
+
+          // Add the corresponding practice exercise right after the heading
+          processedContent.push({
+            kind: 'quick_practice_exercise',
+            exercise: quickExercises[quickPracticeIndex],
+            key: `quick-practice-${quickPracticeIndex}`
+          });
+
+          quickPracticeIndex++;
+        } else {
+          // Skip any content that appears to be exercise data
+          const isExerciseContent =
+            node.type === 'exercise' ||
+            node.title?.toLowerCase().includes('quick practice') ||
+            (node.kind === 'paragraph' &&
+             node.inlines?.some(inline =>
+               inline.text?.includes('TYPE:') ||
+               inline.text?.includes('STEM:') ||
+               inline.text?.includes('ANSWER:') ||
+               inline.text?.includes('QUESTION:')
+             ));
+
+          if (!isExerciseContent) {
+            processedContent.push(node);
+          }
+        }
+      }
+
+      return (
+        <article className="lc-card">
+          <header className="lc-head">
+            <div className="lc-head-left">
+              <span className="lc-head-title">
+                {section.type.replace("_", " ").toUpperCase()}
+              </span>
+              {section.title_th && (
+                <span className="lc-head-title-th">{section.title_th}</span>
+              )}
+            </div>
+            <div className="lc-head-right">
+              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
+            </div>
+          </header>
+          <RichSectionRenderer
+            nodes={processedContent}
+            snipIdx={snipIdx}
+            uiLang={uiLang}
+            renderQuickPractice={(exercise) => (
+              <PracticeSection
+                exercises={[exercise]}
+                uiLang={uiLang}
+                hideQuick={false}
+                wrapInDetails={false}
+              />
+            )}
+          />
+        </article>
+      );
+    }
+
+    // --- FALLBACK TO MARKDOWN ---
+    // Only build extraSections for "understand" when using markdown fallback
     let extraSections = [];
     if (section.type === "understand") {
       const quickExercises = practiceExercises.filter(
@@ -198,36 +287,6 @@ export default function LessonContent({
       }));
     }
 
-    // --- RICH CONTENT RENDERING ---
-    if (Array.isArray(section.content_jsonb) && section.content_jsonb.length > 0) {
-      return (
-        <article className="lc-card">
-          <header className="lc-head">
-            <div className="lc-head-left">
-              <span className="lc-head-title">
-                {section.type.replace("_", " ").toUpperCase()}
-              </span>
-              {section.title_th && (
-                <span className="lc-head-title-th">{section.title_th}</span>
-              )}
-            </div>
-            <div className="lc-head-right">
-              <LanguageToggle language={uiLang} setLanguage={setUiLang} />
-            </div>
-          </header>
-          <RichSectionRenderer nodes={section.content_jsonb} snipIdx={snipIdx} />
-          {/* Render extraSections (e.g., quick practice) below rich content if present */}
-          {extraSections.length > 0 && (
-            <div className="extra-sections">
-              {extraSections.map((ex) => (
-                <div key={ex.key}>{ex.body}</div>
-              ))}
-            </div>
-          )}
-        </article>
-      );
-    }
-    // --- FALLBACK TO MARKDOWN ---
     return (
       <article className="lc-card">
         <header className="lc-head">
