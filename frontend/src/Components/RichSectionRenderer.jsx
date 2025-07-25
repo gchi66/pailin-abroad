@@ -98,7 +98,6 @@ export default function RichSectionRenderer({
         .replace(/\s+/g, " ")
         .trim()
 
-      console.log("HEADING ⟶", JSON.stringify(headingText));
       // Create a unique key for this heading based on text and position
       const headingKey = `${headingText}-${idx}`;
 
@@ -136,12 +135,12 @@ export default function RichSectionRenderer({
     sections.push(current);
   }
 
-  // Debug: Log sections to see what's being created
-  console.log("Sections created:", sections.map(s => ({
-    heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
-    bodyCount: s.body.length,
-    key: s.key
-  })));
+  // // Debug: Log sections to see what's being created
+  // console.log("Sections created:", sections.map(s => ({
+  //   heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
+  //   bodyCount: s.body.length,
+  //   key: s.key
+  // })));
 
   // If we have sections with headings, render as accordion
   const hasHeadings = sections.some(sec => sec.heading);

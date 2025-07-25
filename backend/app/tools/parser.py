@@ -437,6 +437,8 @@ class GoogleDocsParser:
                             text_to_nodes[plain].append(n)
 
                 # Process lines in order, preserving the original sequence
+                quick_practice_titles = [ex["title"] for ex in self.parse_practice(embedded_practice_lines + practice_lines) if (ex.get("title", "").lower().startswith("quick practice"))]
+                quick_practice_idx = 0
                 for text_line, style in lines:
                     text_line = text_line.strip()
                     if not text_line:
@@ -444,6 +446,34 @@ class GoogleDocsParser:
 
                     # Find matching nodes for this text
                     matching_nodes = text_to_nodes.get(text_line, [])
+
+                    # --- PATCH: Replace Quick Practice heading with full title ---
+                    is_quick_practice_heading = (
+                        any(word in text_line.lower() for word in ["quick practice"]) and is_subheader(text_line, style)
+                    )
+                    if is_quick_practice_heading and quick_practice_idx < len(quick_practice_titles):
+                        # Replace heading node's text with the full title
+                        full_title = quick_practice_titles[quick_practice_idx]
+                        quick_practice_idx += 1
+                        # If matching node exists, update its inlines text
+                        if matching_nodes:
+                            node = matching_nodes[0]
+                            for inline in node["inlines"]:
+                                inline["text"] = full_title
+                            node_list.append(node)
+                            matching_nodes.remove(node)
+                        else:
+                            # Synthetic heading node
+                            synthetic_node = {
+                                "kind": "heading",
+                                "level": None,
+                                "inlines": [{"text": full_title, "bold": False, "italic": False, "underline": False}],
+                                "indent": 0,
+                                "lesson_context": lesson_header_raw,
+                                "section_context": norm_header
+                            }
+                            node_list.append(synthetic_node)
+                        continue
 
                     if matching_nodes:
                         # Prefer nodes with the correct audio_section
@@ -463,7 +493,6 @@ class GoogleDocsParser:
                         matching_nodes.remove(chosen_node)
                     else:
                         # If no matching node found, create a synthetic one
-                        # This handles cases where the text might not have been properly tagged
                         synthetic_node = {
                             "kind": "paragraph",
                             "level": None,

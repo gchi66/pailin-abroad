@@ -273,7 +273,7 @@ export default function LessonContent({
       );
       extraSections = quickExercises.map((ex, idx) => ({
         key: `quick-practice-${idx}`,
-        title: ex.title || "Quick Practice",
+        title: ex.title || "Quick Practice 1",
         body: (
           <PracticeSection
             exercises={[ex]}
