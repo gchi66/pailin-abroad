@@ -6,11 +6,6 @@ const playPng = "/images/snippet_play_button.png";
 
 export default function AudioBullet({ node, indent = 0, snipIdx, renderInlines }) {
   const snip = snipIdx?.[node.audio_section]?.[node.audio_seq];
-  console.log("AudioBullet snip:", snip);
-  console.log('node.audio_section:', node.audio_section);
-  console.log('node.audio_seq:', node.audio_seq);
-  console.log('snipIdx structure:', snipIdx);
-  console.log('snipIdx[audio_section]:', snipIdx?.[node.audio_section]);
 
   const [url, setUrl] = useState();
 
