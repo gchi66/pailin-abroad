@@ -139,11 +139,13 @@ export default function Lesson() {
       } else {
         setLessonPhrases(phraseLinks.map(row => row.phrases));
       }
+      console.log("Full lesson data:", lsn);
+      console.log("Lesson external_id:", lsn.lesson_external_id);
 
       // Fetch audio snippet index for this lesson
-      if (lsn && lsn.external_id) {
+      if (lsn && lsn.lesson_external_id) {
         try {
-          const idx = await fetchSnippets(lsn.external_id);
+          const idx = await fetchSnippets(lsn.lesson_external_id);
           setSnipIdx(idx);
         } catch (err) {
           console.error("Error fetching audio snippets:", err);
