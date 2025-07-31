@@ -105,7 +105,7 @@ export default function Lesson() {
         .list('Beginner/L1/Conversations');
 
       if (lsn && lsn.conversation_audio_url) {
-        console.log("Attempting to fetch audio for path:", lsn.conversation_audio_url);
+        // console.log("Attempting to fetch audio for path:", lsn.conversation_audio_url);
 
         // Try to create signed URL
         const { data, error } = await supabaseClient
@@ -114,11 +114,11 @@ export default function Lesson() {
           .createSignedUrl(lsn.conversation_audio_url, 2 * 60 * 60);
 
         if (error) {
-          console.error("Audio signed URL error:", error);
-          console.error("Full error details:", JSON.stringify(error, null, 2));
+          // console.error("Audio signed URL error:", error);
+          // console.error("Full error details:", JSON.stringify(error, null, 2));
           setAudioUrl(null);
         } else {
-          console.log("Successfully created signed URL:", data.signedUrl);
+          // console.log("Successfully created signed URL:", data.signedUrl);
           setAudioUrl(data.signedUrl);
         }
       } else {
@@ -139,8 +139,8 @@ export default function Lesson() {
       } else {
         setLessonPhrases(phraseLinks.map(row => row.phrases));
       }
-      console.log("Full lesson data:", lsn);
-      console.log("Lesson external_id:", lsn.lesson_external_id);
+      // console.log("Full lesson data:", lsn);
+      // console.log("Lesson external_id:", lsn.lesson_external_id);
 
       // Fetch audio snippet index for this lesson
       if (lsn && lsn.lesson_external_id) {
