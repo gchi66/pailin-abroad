@@ -1,2 +1,7 @@
 .env
 venv/
+
+# Ignore Python byte-code
+__pycache__/
+*.pyc
+backend/data/*.json
