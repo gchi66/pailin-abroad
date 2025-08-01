@@ -2653,7 +2653,7 @@
             "section_context": "EXTRA TIPS"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -2671,7 +2671,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.4: How are you?",
-            "section_context": "EXTRA TIPS"
+            "section_context": "EXTRA TIPS",
+            "audio_seq": 3,
+            "audio_section": "extra_tip"
           },
           {
             "kind": "list_item",
@@ -2687,7 +2689,7 @@
             "indent": 0,
             "lesson_context": "LESSON 1.4: How are you?",
             "section_context": "EXTRA TIPS",
-            "audio_seq": 3,
+            "audio_seq": 4,
             "audio_section": "extra_tip"
           },
           {
@@ -2719,7 +2721,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.4: How are you?",
             "section_context": "EXTRA TIPS",
-            "audio_seq": 4,
+            "audio_seq": 5,
             "audio_section": "extra_tip"
           },
           {
@@ -2757,7 +2759,7 @@
             "indent": 0,
             "lesson_context": "LESSON 1.4: How are you?",
             "section_context": "EXTRA TIPS",
-            "audio_seq": 5,
+            "audio_seq": 6,
             "audio_section": "extra_tip"
           },
           {
@@ -2789,7 +2791,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.4: How are you?",
             "section_context": "EXTRA TIPS",
-            "audio_seq": 6,
+            "audio_seq": 7,
             "audio_section": "extra_tip"
           },
           {
@@ -2827,7 +2829,7 @@
             "indent": 0,
             "lesson_context": "LESSON 1.4: How are you?",
             "section_context": "EXTRA TIPS",
-            "audio_seq": 7,
+            "audio_seq": 8,
             "audio_section": "extra_tip"
           },
           {
@@ -2859,7 +2861,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.4: How are you?",
             "section_context": "EXTRA TIPS",
-            "audio_seq": 8,
+            "audio_seq": 9,
             "audio_section": "extra_tip"
           },
           {
@@ -3925,7 +3927,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -3937,10 +3939,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 3,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -3958,10 +3962,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 4,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -3973,10 +3979,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 5,
+            "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -3988,10 +3996,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 6,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4009,10 +4019,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 7,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4024,10 +4036,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 8,
+            "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4039,10 +4053,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 9,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4060,10 +4076,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 10,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4075,7 +4093,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 11,
+            "audio_section": "understand"
           },
           {
             "kind": "paragraph",
@@ -4195,7 +4215,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4207,7 +4227,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 12,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -4223,7 +4245,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 3,
+            "audio_seq": 13,
             "audio_section": "understand"
           },
           {
@@ -4240,7 +4262,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 4,
+            "audio_seq": 14,
             "audio_section": "understand"
           },
           {
@@ -4257,7 +4279,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 5,
+            "audio_seq": 15,
             "audio_section": "understand"
           },
           {
@@ -4274,11 +4296,11 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 6,
+            "audio_seq": 16,
             "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4296,7 +4318,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 17,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -4312,7 +4336,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 7,
+            "audio_seq": 18,
             "audio_section": "understand"
           },
           {
@@ -4329,7 +4353,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 8,
+            "audio_seq": 19,
             "audio_section": "understand"
           },
           {
@@ -4346,7 +4370,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 9,
+            "audio_seq": 20,
             "audio_section": "understand"
           },
           {
@@ -4363,11 +4387,11 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 10,
+            "audio_seq": 21,
             "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -4385,7 +4409,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 22,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -4401,7 +4427,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 11,
+            "audio_seq": 23,
             "audio_section": "understand"
           },
           {
@@ -4418,7 +4444,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 12,
+            "audio_seq": 24,
             "audio_section": "understand"
           },
           {
@@ -4435,7 +4461,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 13,
+            "audio_seq": 25,
             "audio_section": "understand"
           },
           {
@@ -4452,7 +4478,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "UNDERSTAND",
-            "audio_seq": 14,
+            "audio_seq": 26,
             "audio_section": "understand"
           },
           {
@@ -6808,7 +6834,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6820,10 +6846,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 6,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6841,10 +6869,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 7,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6856,10 +6886,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 8,
+            "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6871,10 +6903,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 9,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6892,10 +6926,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 10,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6907,10 +6943,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 11,
+            "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6922,10 +6960,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 12,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6943,10 +6983,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 13,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -6958,7 +7000,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 14,
+            "audio_section": "understand"
           },
           {
             "kind": "paragraph",
@@ -7012,7 +7056,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7024,10 +7068,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 15,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7039,10 +7085,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 16,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7054,10 +7102,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 17,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7069,10 +7119,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 18,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7084,7 +7136,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 19,
+            "audio_section": "understand"
           },
           {
             "kind": "heading",
@@ -7429,7 +7483,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7441,7 +7495,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 20,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -7457,7 +7513,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 6,
+            "audio_seq": 21,
             "audio_section": "understand"
           },
           {
@@ -7474,7 +7530,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 7,
+            "audio_seq": 22,
             "audio_section": "understand"
           },
           {
@@ -7503,11 +7559,11 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 8,
+            "audio_seq": 23,
             "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7519,7 +7575,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 24,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -7535,7 +7593,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 9,
+            "audio_seq": 25,
             "audio_section": "understand"
           },
           {
@@ -7552,7 +7610,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 10,
+            "audio_seq": 26,
             "audio_section": "understand"
           },
           {
@@ -7575,11 +7633,11 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 11,
+            "audio_seq": 27,
             "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -7591,7 +7649,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.9: You’re a great cook",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 28,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -7607,7 +7667,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 12,
+            "audio_seq": 29,
             "audio_section": "understand"
           },
           {
@@ -7624,7 +7684,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 13,
+            "audio_seq": 30,
             "audio_section": "understand"
           },
           {
@@ -7647,7 +7707,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.9: You’re a great cook",
             "section_context": "UNDERSTAND",
-            "audio_seq": 14,
+            "audio_seq": 31,
             "audio_section": "understand"
           }
         ],
@@ -8349,7 +8409,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8361,10 +8421,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 5,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8382,10 +8444,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 6,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8403,10 +8467,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 7,
+            "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8418,10 +8484,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 8,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8439,10 +8507,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 9,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8460,10 +8530,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 10,
+            "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8475,10 +8547,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 11,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8496,10 +8570,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 12,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8511,7 +8587,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 13,
+            "audio_section": "understand"
           },
           {
             "kind": "paragraph",
@@ -8571,7 +8649,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8583,10 +8661,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 14,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8598,10 +8678,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 15,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8613,10 +8695,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 16,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8628,7 +8712,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 17,
+            "audio_section": "understand"
           },
           {
             "kind": "heading",
@@ -8901,7 +8987,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8913,7 +8999,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 18,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -8929,7 +9017,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 5,
+            "audio_seq": 19,
             "audio_section": "understand"
           },
           {
@@ -8946,7 +9034,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 6,
+            "audio_seq": 20,
             "audio_section": "understand"
           },
           {
@@ -8969,11 +9057,11 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 7,
+            "audio_seq": 21,
             "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -8985,7 +9073,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 22,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -9001,7 +9091,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 8,
+            "audio_seq": 23,
             "audio_section": "understand"
           },
           {
@@ -9018,7 +9108,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 9,
+            "audio_seq": 24,
             "audio_section": "understand"
           },
           {
@@ -9047,11 +9137,11 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 10,
+            "audio_seq": 25,
             "audio_section": "understand"
           },
           {
-            "kind": "numbered_list_item",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -9063,7 +9153,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 26,
+            "audio_section": "understand"
           },
           {
             "kind": "list_item",
@@ -9079,7 +9171,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 11,
+            "audio_seq": 27,
             "audio_section": "understand"
           },
           {
@@ -9096,7 +9188,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 12,
+            "audio_seq": 28,
             "audio_section": "understand"
           },
           {
@@ -9125,7 +9217,7 @@
             "indent": 6,
             "lesson_context": "LESSON 1.10: He’s a student at USC",
             "section_context": "UNDERSTAND",
-            "audio_seq": 13,
+            "audio_seq": 29,
             "audio_section": "understand"
           }
         ],
@@ -12764,17 +12856,21 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "TABLE-1:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
+            "kind": "table",
+            "type": "table",
+            "id": "table-1",
+            "rows": 2,
+            "cols": 2,
+            "cells": [
+              [
+                "ARE NOT",
+                "IS NOT"
+              ],
+              [
+                "You’re not = You aren’t\nWe’re not = We aren’t\nThey’re not = They aren’t",
+                "He’s not = He isn’t\nShe’s not = She isn’t\nIt’s not = It isn’t"
+              ]
             ],
-            "indent": 0,
             "lesson_context": "LESSON 1.14: My wallet isn’t red",
             "section_context": "UNDERSTAND"
           },
@@ -12959,7 +13055,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -12974,7 +13070,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -12989,7 +13085,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -13430,7 +13526,7 @@
             "audio_section": "understand"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to use ‘not’ in a sentence\nSo far, you’ve learned how to make affirmative sentences with the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make those sentences negative using the word ‘not.’\n## NEGATIVE SENTENCES\nIn the conversation, Pailin says to Frank:\nI’m not cold.\nWhile the affirmative sentence would be ‘I’m cold,’ adding ‘not’ changes the sentence into a negative sentence.\n‘Not’ - important word!\n‘Not’ is used to negate ALL verbs in English. This lesson will focus on negating simple sentences that use to-be verbs.\nExamples\nTake a look at these sentences from the conversation:\nMy jacket isn’t blue.\nIt isn’t there.\nIt’s not a big deal.\nI’m not cold.\n‘Not’ is hidden\nIn the first two sentences, you can’t see the word ‘not.’ This is because it’s combined with the to-be verb to form a negative contraction:\nIt isn’t there. = It is not there.\nThese will be explained more below.\n## STRUCTURE\nNotice where the word ‘not’ comes in a sentence. Is it before or after the to-be verb?\nMy jacket isn’t blue.\nMy jacket is not blue.\n‘Not’ placement\n‘Not’ comes after the to-be verb, so it will always follow this pattern:\nam not\nare not\nis not\nContractions - ‘am not’\nRemember that contractions are key in English because they help shorten your speech and make it sound natural.\nThere is only one way to contract ‘I am not’:\nI’m not\nContractions - ‘are not’ and ‘is not’\nBut there are two ways to contract ‘are not’ and ‘is not’ in a sentence, as you can see from these lines in the conversation:\nIt isn’t there.\nIt’s not a big deal.\n‘It is not’ can become:\nIt isn’t\nIt’s not\n‘They are not’ can become either:\nThey aren’t\nThey’re not\nBoth forms are frequently used, so it’s important to know both.\nTwo ways to contract\nHere is a breakdown of ‘are’ and ‘is’ in negative sentences:\n## TABLE-1:\nContractions - 1 noun\nSingular noun subjects can also be contracted in both ways:\n(Noun)’s not = (Noun) isn’t\nMy mom’s not = My mom isn’t\nFrank’s not = Frank isn’t\nContractions - 2+ nouns\nBut for subjects of 2+ nouns, only one contraction can be used:\n(2+ nouns) aren’t\nMy mom and dad aren’t\nThe kids aren’t\n## EXAMPLES\nRemember that to-be verbs can come before these three things:\n1. adjectives\n2. prepositional phrases\n3. nouns OR noun phrases\nThe same applies to negative to-be verbs. Here are examples of negative sentences. Notice that both forms of contractions are used for ‘are not’ and ‘is not.’\nam not\nI’m not hungry. (adjective)\nI’m not from China. (prepositional phrase)\nI’m not a good cook. (noun phrase)\nare not\nYou aren’t sick. (adjective)\nWe’re not at home. (prepositional phrase)\nThey aren’t fun people. (noun phrase)\nPailin and Chloe aren’t sisters. (noun)\nis not\nHe isn’t ready. (adjective)\nShe’s not in the garage. (prepositional phrase)\nIt isn’t a toy. (noun)\nFrank’s not tired. (adjective)\nMy friend isn’t here. (prepositional phrase)"
+        "content": "## LESSON FOCUS\nHow to use ‘not’ in a sentence\nSo far, you’ve learned how to make affirmative sentences with the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make those sentences negative using the word ‘not.’\n## NEGATIVE SENTENCES\nIn the conversation, Pailin says to Frank:\nI’m not cold.\nWhile the affirmative sentence would be ‘I’m cold,’ adding ‘not’ changes the sentence into a negative sentence.\n‘Not’ - important word!\n‘Not’ is used to negate ALL verbs in English. This lesson will focus on negating simple sentences that use to-be verbs.\nExamples\nTake a look at these sentences from the conversation:\nMy jacket isn’t blue.\nIt isn’t there.\nIt’s not a big deal.\nI’m not cold.\n‘Not’ is hidden\nIn the first two sentences, you can’t see the word ‘not.’ This is because it’s combined with the to-be verb to form a negative contraction:\nIt isn’t there. = It is not there.\nThese will be explained more below.\n## STRUCTURE\nNotice where the word ‘not’ comes in a sentence. Is it before or after the to-be verb?\nMy jacket isn’t blue.\nMy jacket is not blue.\n‘Not’ placement\n‘Not’ comes after the to-be verb, so it will always follow this pattern:\nam not\nare not\nis not\nContractions - ‘am not’\nRemember that contractions are key in English because they help shorten your speech and make it sound natural.\nThere is only one way to contract ‘I am not’:\nI’m not\nContractions - ‘are not’ and ‘is not’\nBut there are two ways to contract ‘are not’ and ‘is not’ in a sentence, as you can see from these lines in the conversation:\nIt isn’t there.\nIt’s not a big deal.\n‘It is not’ can become:\nIt isn’t\nIt’s not\n‘They are not’ can become either:\nThey aren’t\nThey’re not\nBoth forms are frequently used, so it’s important to know both.\nTwo ways to contract\nHere is a breakdown of ‘are’ and ‘is’ in negative sentences:\n## TABLE-1:\n## TABLE-1:\nContractions - 1 noun\nSingular noun subjects can also be contracted in both ways:\n(Noun)’s not = (Noun) isn’t\nMy mom’s not = My mom isn’t\nFrank’s not = Frank isn’t\nContractions - 2+ nouns\nBut for subjects of 2+ nouns, only one contraction can be used:\n(2+ nouns) aren’t\nMy mom and dad aren’t\nThe kids aren’t\n## EXAMPLES\nRemember that to-be verbs can come before these three things:\n1. adjectives\n2. prepositional phrases\n3. nouns OR noun phrases\nThe same applies to negative to-be verbs. Here are examples of negative sentences. Notice that both forms of contractions are used for ‘are not’ and ‘is not.’\nam not\nI’m not hungry. (adjective)\nI’m not from China. (prepositional phrase)\nI’m not a good cook. (noun phrase)\nare not\nYou aren’t sick. (adjective)\nWe’re not at home. (prepositional phrase)\nThey aren’t fun people. (noun phrase)\nPailin and Chloe aren’t sisters. (noun)\nis not\nHe isn’t ready. (adjective)\nShe’s not in the garage. (prepositional phrase)\nIt isn’t a toy. (noun)\nFrank’s not tired. (adjective)\nMy friend isn’t here. (prepositional phrase)"
       },
       {
         "type": "common_mistake",
@@ -15117,7 +15213,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -15129,10 +15225,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 3,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -15144,10 +15242,12 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 4,
+            "audio_section": "understand"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
@@ -15159,7 +15259,9 @@
             ],
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
-            "section_context": "UNDERSTAND"
+            "section_context": "UNDERSTAND",
+            "audio_seq": 5,
+            "audio_section": "understand"
           },
           {
             "kind": "paragraph",
@@ -15205,7 +15307,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 3,
+            "audio_seq": 6,
             "audio_section": "understand"
           },
           {
@@ -15222,7 +15324,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 4,
+            "audio_seq": 7,
             "audio_section": "understand"
           },
           {
@@ -15239,7 +15341,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 5,
+            "audio_seq": 8,
             "audio_section": "understand"
           },
           {
@@ -15256,7 +15358,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 6,
+            "audio_seq": 9,
             "audio_section": "understand"
           },
           {
@@ -15378,7 +15480,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 7,
+            "audio_seq": 10,
             "audio_section": "understand"
           },
           {
@@ -15395,7 +15497,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 8,
+            "audio_seq": 11,
             "audio_section": "understand"
           },
           {
@@ -15412,7 +15514,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 9,
+            "audio_seq": 12,
             "audio_section": "understand"
           },
           {
@@ -15429,7 +15531,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 10,
+            "audio_seq": 13,
             "audio_section": "understand"
           },
           {
@@ -15478,17 +15580,37 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
-                "text": "TABLE-2:",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
+            "kind": "table",
+            "type": "table",
+            "id": "table-2",
+            "rows": 4,
+            "cols": 4,
+            "cells": [
+              [
+                "TO-BE VERB",
+                "SUBJECT",
+                "OBJECT",
+                "EXAMPLE QUESTIONS"
+              ],
+              [
+                "Am",
+                "I",
+                "(object)?",
+                "Am I tall?"
+              ],
+              [
+                "Are",
+                "you\nwe\nthey\n2+ nouns",
+                "(object)?",
+                "Are you an engineer?\nAre we at the bus stop?\nAre they angry?\nAre Pailin and Chloe tired?"
+              ],
+              [
+                "Is",
+                "he\nshe\nit\nnoun",
+                "(object)?",
+                "Is he from New York?\nIs she at the store?\nIs it good?\nIs Emily a good dancer?"
+              ]
             ],
-            "indent": 0,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND"
           },
@@ -15536,7 +15658,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 11,
+            "audio_seq": 14,
             "audio_section": "understand"
           },
           {
@@ -15583,7 +15705,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 12,
+            "audio_seq": 15,
             "audio_section": "understand"
           },
           {
@@ -15600,7 +15722,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 13,
+            "audio_seq": 16,
             "audio_section": "understand"
           },
           {
@@ -15647,7 +15769,7 @@
             "indent": 4,
             "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
             "section_context": "UNDERSTAND",
-            "audio_seq": 14,
+            "audio_seq": 17,
             "audio_section": "understand"
           },
           {
@@ -15816,7 +15938,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to ask questions with to-be verbs\nSo far, you’ve learned how to make affirmative and negative sentences using the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make questions with these verbs.\n## TO-BE VERB QUESTIONS\nIn the conversation, Frank asks Pailin:\nAre you tired?\nCompare the question with this related affirmative sentence:\nYou are tired.\nDo you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question.\nTo-be question structure\nAll to-be verb questions follow this pattern:\n(To-be verb) (subject) (object).\nAs you might recall, the ‘object’ of the sentence can be one of these three things:\n- adjectives\n- prepositional phrases\n- noun OR noun phrases\nExamples\nTake a look at all the ‘to-be’ questions from the conversation:\nAre you excited for the weekend? (adjective)\nAre you tired? (adjective)\nIs In-N-Out near the hotel? (prepositional phrase)\nIs it usually busy? (adjective)\nEach of these questions follows the pattern above. For example:\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\nTurning questions into sentences\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\nYou are excited for the weekend.\nYou are tired.\nIn-N-Out is near the hotel.\nIt is usually busy.\n## STRUCTURE\nRemember that in questions, the to-be verb comes first.\nHere is the structure of questions using ‘am · are · is’, with examples:\n## TABLE-2:\nYES/NO QUESTIONS\nA question like ‘Are you tired?’ is called a ‘yes/no question.’ That means you can answer it with a simple ‘Yes’ or ‘No’ answer.\nYeah\n‘Yes’ is an affirmative answer, but in casual conversation, either of these words is used more often:\nYeah\nYep\nNo\n‘No’ is a negative answer. Either of these words can be used in casual conversation, although ‘no’ is used the most often by far:\nNo\nNope\nListen to the conversation\nRelisten to the conversation and take note of the responses:\nFrank: Are you excited for the weekend?\nPailin: Yeah!\nFrank: Are you tired?\nPailin: No.\nPailin: Is In-N-Out near the hotel?\nFrank: Yep.\nPailin: Is it usually busy?\nFrank: Yeah.\n‘Yeah,’ ‘yep,’ and ‘no’ are the responses used, as they sound the most natural in everyday conversation. ‘Yes’ is perfectly fine, but it can sound a bit stiff in informal settings."
+        "content": "## LESSON FOCUS\nHow to ask questions with to-be verbs\nSo far, you’ve learned how to make affirmative and negative sentences using the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make questions with these verbs.\n## TO-BE VERB QUESTIONS\nIn the conversation, Frank asks Pailin:\nAre you tired?\nCompare the question with this related affirmative sentence:\nYou are tired.\nDo you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question.\nTo-be question structure\nAll to-be verb questions follow this pattern:\n(To-be verb) (subject) (object).\nAs you might recall, the ‘object’ of the sentence can be one of these three things:\n- adjectives\n- prepositional phrases\n- noun OR noun phrases\nExamples\nTake a look at all the ‘to-be’ questions from the conversation:\nAre you excited for the weekend? (adjective)\nAre you tired? (adjective)\nIs In-N-Out near the hotel? (prepositional phrase)\nIs it usually busy? (adjective)\nEach of these questions follows the pattern above. For example:\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\nTurning questions into sentences\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\nYou are excited for the weekend.\nYou are tired.\nIn-N-Out is near the hotel.\nIt is usually busy.\n## STRUCTURE\nRemember that in questions, the to-be verb comes first.\nHere is the structure of questions using ‘am · are · is’, with examples:\n## TABLE-2:\n## TABLE-2:\nYES/NO QUESTIONS\nA question like ‘Are you tired?’ is called a ‘yes/no question.’ That means you can answer it with a simple ‘Yes’ or ‘No’ answer.\nYeah\n‘Yes’ is an affirmative answer, but in casual conversation, either of these words is used more often:\nYeah\nYep\nNo\n‘No’ is a negative answer. Either of these words can be used in casual conversation, although ‘no’ is used the most often by far:\nNo\nNope\nListen to the conversation\nRelisten to the conversation and take note of the responses:\nFrank: Are you excited for the weekend?\nPailin: Yeah!\nFrank: Are you tired?\nPailin: No.\nPailin: Is In-N-Out near the hotel?\nFrank: Yep.\nPailin: Is it usually busy?\nFrank: Yeah.\n‘Yeah,’ ‘yep,’ and ‘no’ are the responses used, as they sound the most natural in everyday conversation. ‘Yes’ is perfectly fine, but it can sound a bit stiff in informal settings."
       },
       {
         "type": "extra_tip",

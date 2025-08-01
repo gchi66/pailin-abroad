@@ -82,6 +82,34 @@ SECTION_TYPE_MAP = {
 
 # ───────────────────────────── helper functions
 
+
+def _plain_text(elems: list[dict]) -> str:
+    """Concatenate all textRun content inside a list of Google-Docs elements."""
+    parts = [el.get("textRun", {}).get("content", "") for el in elems]
+    return "".join(parts).strip()
+
+def _table_block(elem: dict, tbl_id: int) -> dict:
+    """Convert a Google-Docs table element to a minimal table node."""
+    rows = []
+    for row in elem["table"]["tableRows"]:
+        row_cells = []
+        for cell in row["tableCells"]:
+            cell_lines = []
+            for para in cell.get("content", []):
+                if "paragraph" in para:
+                    cell_lines.append(_plain_text(para["paragraph"]["elements"]))
+            row_cells.append("\n".join(cell_lines))
+        rows.append(row_cells)
+
+    return {
+        "kind":  "table",
+        "type":  "table",
+        "id":    f"table-{tbl_id}",
+        "rows":  len(rows),
+        "cols":  len(rows[0]) if rows else 0,
+        "cells": rows,
+    }
+
 # ───────────────────────────── New style-based extraction functions
 
 def paragraphs_with_style(doc_json) -> List[Tuple[str, str]]:
@@ -110,10 +138,13 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
     A section header is detected either by a paragraph whose style starts with "HEADING"
     or if the paragraph text (trimmed and uppercased, with trailing colon removed) equals one of the special headers,
     or if it starts with 'CHECKPOINT'.
+
+    Now processes ALL content elements (paragraphs AND tables) to avoid skipping lessons with tables.
     """
     sections = []
     current_header = None
     current_lines = []
+    table_counter = 0
     special_headers = {
         "FOCUS",
         "BACKSTORY",
@@ -128,21 +159,47 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
         "TAGS"
     }
 
-    for text, style in paragraphs_with_style(doc_json):
-        stripped = text.strip()
-        header_candidate = stripped.upper().rstrip(":")
-        is_checkpoint = header_candidate.startswith("CHECKPOINT")
-        if style.startswith("HEADING") or header_candidate in special_headers or is_checkpoint:
+    # Process ALL content elements, not just paragraphs
+    for elem in doc_json.get("body", {}).get("content", []):
+        # Handle paragraphs (including headers)
+        if "paragraph" in elem:
+            para = elem["paragraph"]
+            style = para.get("paragraphStyle", {}).get("namedStyleType", "")
+            text = "".join(
+                r.get("textRun", {}).get("content", "")
+                for r in para.get("elements", [])
+            ).replace("\u000b", "\n").strip()
+
+            if not text:
+                continue
+
+            stripped = text.strip()
+            header_candidate = stripped.upper().rstrip(":")
+            is_checkpoint = header_candidate.startswith("CHECKPOINT")
+
+            # Check if this is a section header
+            if style.startswith("HEADING") or header_candidate in special_headers or is_checkpoint:
+                if current_header is not None:
+                    sections.append((current_header, current_lines))
+                header_key = header_candidate if (header_candidate in special_headers or is_checkpoint) else stripped
+                current_header = header_key
+                current_lines = []
+            else:
+                # Regular paragraph content
+                if current_header is not None:
+                    current_lines.append((text, style))
+
+        # Handle tables - add them as placeholder text to preserve document order
+        elif "table" in elem:
+            table_counter += 1
+            table_placeholder = f"TABLE-{table_counter}:"
             if current_header is not None:
-                sections.append((current_header, current_lines))
-            header_key = header_candidate if (header_candidate in special_headers or is_checkpoint) else stripped
-            current_header = header_key
-            current_lines = []
-        else:
-            if current_header is not None:
-                current_lines.append((text, style))
+                current_lines.append((table_placeholder, ""))
+
+    # Don't forget the last section
     if current_header is not None:
         sections.append((current_header, current_lines))
+
     return sections
 
 def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
@@ -163,48 +220,62 @@ def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
     return lessons
 
 
-def tag_audio_sequences_with_sections(doc_json):
-    """Tag every paragraph with lesson / section context + audio numbering."""
-    current_lesson   = None           # e.g. LESSON 1.2 …
-    current_section  = None           # e.g. UNDERSTAND, EXTRA TIPS …
-    seq_counter      = {h: 0 for h in AUDIO_SECTION_HEADERS}
-    tagged_nodes     = []
+def tag_nodes_with_sections(doc_json):
+    """
+    Walk every element (paragraph *and* table) in body.content,
+    tag it with lesson / section context and (for bullets) audio indices.
+    """
+    current_lesson  = None
+    current_section = None
+    seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
+    table_counter   = 0
+    tagged_nodes    = []
 
-    for n in paragraph_nodes(doc_json):
-        if n.kind == "heading":
-            header_text = "".join(s.text for s in n.inlines).strip()
-            upper       = header_text.upper().rstrip(":")
+    for elem in doc_json["body"]["content"]:
+        # ── paragraph / heading ───────────────────────────────────────────
+        if "paragraph" in elem:
+            para_nodes = list(paragraph_nodes({"body": {"content": [elem]}}))
+            if not para_nodes:
+                continue
+            n = para_nodes[0]
 
-            # -------- lesson header (only the real “Lesson n.m”) ------------
-            if LESSON_ID_RE.match(upper) or upper.startswith("CHECKPOINT"):
-                current_lesson  = header_text
-                current_section = None
-                seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
+            if n.kind == "heading":
+                hdr = "".join(s.text for s in n.inlines).strip()
+                up  = hdr.upper().rstrip(":")
+                if LESSON_ID_RE.match(up) or up.startswith("CHECKPOINT"):
+                    current_lesson  = hdr
+                    current_section = None
+                    seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
+                elif up in SECTION_ORDER:
+                    current_section = up
 
-            # -------- top-level content sections (FOCUS, UNDERSTAND, …) -----
-            if upper in SECTION_ORDER:
-                current_section = upper
+            nd = dataclasses.asdict(n)
+            if current_lesson:
+                nd["lesson_context"] = current_lesson
+            if current_section:
+                nd["section_context"] = current_section
 
+            if current_section in AUDIO_SECTION_HEADERS and n.kind == "list_item":
+                seq_counter[current_section] += 1
+                nd["audio_seq"]     = seq_counter[current_section]
+                nd["audio_section"] = SECTION_TYPE_MAP.get(
+                    current_section, current_section.lower())
 
-        # ------------- attach context & audio tags to the node --------------
-        n_dict = dataclasses.asdict(n)
-        if current_lesson:
-            n_dict["lesson_context"] = current_lesson
-        if current_section:
-            n_dict["section_context"] = current_section
+            tagged_nodes.append(nd)
+            continue
 
-        if (current_section in AUDIO_SECTION_HEADERS
-                and n.kind == "list_item"):
-            seq_counter[current_section] += 1
-            n_dict["audio_seq"]      = seq_counter[current_section]
-            n_dict["audio_section"]  = SECTION_TYPE_MAP.get(
-                                            current_section,
-                                            current_section.lower()
-                                        )
-
-        tagged_nodes.append(n_dict)
+        # ── table ─────────────────────────────────────────────────────────
+        if "table" in elem:
+            table_counter += 1
+            tbl = _table_block(elem, table_counter)
+            if current_lesson:
+                tbl["lesson_context"] = current_lesson
+            if current_section:
+                tbl["section_context"] = current_section
+            tagged_nodes.append(tbl)
 
     return tagged_nodes
+
 
 # ───────────────────────────── GoogleDocsParser class
 
@@ -331,7 +402,11 @@ class GoogleDocsParser:
         other_sections:        list[dict] = []
         embedded_practice_lines: list[str] = []
 
-        tagged_nodes = tag_audio_sequences_with_sections(doc_json)
+        tagged_nodes = tag_nodes_with_sections(doc_json)
+        table_nodes = {n["id"]: n for n in tagged_nodes
+            if n.get("kind") == "table"
+            and n.get("lesson_context") == lesson_header_raw
+        }
 
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
@@ -389,6 +464,10 @@ class GoogleDocsParser:
                 )
                 qp_chunk, keep_lines = [], []
 
+                node_list: list[dict] = []
+                # Track tables added to prevent duplicates within this section
+                table_ids_added = set()
+
                 for text_line, style in lines:
                     upper = text_line.strip().upper()
 
@@ -410,7 +489,7 @@ class GoogleDocsParser:
                         qp_chunk.append(text_line.strip())
                         continue
 
-                    # ---- normal prose ----
+                    # ---- normal prose (including table placeholders) ----
                     if qp_chunk:                               # flush finished block
                         embedded_practice_lines.extend(qp_chunk)
                         qp_chunk = []
@@ -420,28 +499,40 @@ class GoogleDocsParser:
                 if qp_chunk:
                     embedded_practice_lines.extend(qp_chunk)
 
-                # keep_lines now holds the real UNDERSTAND prose + later headings
+                # keep_lines now holds the real prose + table placeholders in correct order
                 lines = keep_lines
 
                 section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
-                node_list: list[dict] = []
 
                 # Create a mapping of text to nodes for this lesson and section
                 text_to_nodes = {}
                 for n in tagged_nodes:
                     if n.get("lesson_context") == lesson_header_raw:
-                        plain = "".join(s["text"] for s in n["inlines"]).strip()
-                        if plain:
-                            if plain not in text_to_nodes:
-                                text_to_nodes[plain] = []
-                            text_to_nodes[plain].append(n)
+                        if "inlines" in n:
+                            plain = "".join(s["text"] for s in n["inlines"]).strip()
+                            if plain:
+                                if plain not in text_to_nodes:
+                                    text_to_nodes[plain] = []
+                                text_to_nodes[plain].append(n)
 
                 # Process lines in order, preserving the original sequence
                 quick_practice_titles = [ex["title"] for ex in self.parse_practice(embedded_practice_lines + practice_lines) if (ex.get("title", "").lower().startswith("quick practice"))]
                 quick_practice_idx = 0
+
                 for text_line, style in lines:
                     text_line = text_line.strip()
                     if not text_line:
+                        continue
+
+                    # ── Handle table placeholders in their correct position ──
+                    if text_line.upper().startswith("TABLE-") and text_line.endswith(":"):
+                        table_id = text_line.lower().rstrip(":")
+                        tbl = table_nodes.get(table_id)
+                        if tbl and table_id not in table_ids_added:
+                            # Create a copy to avoid modifying the original
+                            table_copy = tbl.copy()
+                            node_list.append(table_copy)
+                            table_ids_added.add(table_id)
                         continue
 
                     # Find matching nodes for this text
@@ -457,11 +548,11 @@ class GoogleDocsParser:
                         quick_practice_idx += 1
                         # If matching node exists, update its inlines text
                         if matching_nodes:
-                            node = matching_nodes[0]
+                            node = matching_nodes[0].copy()  # Create a copy
                             for inline in node["inlines"]:
                                 inline["text"] = full_title
                             node_list.append(node)
-                            matching_nodes.remove(node)
+                            matching_nodes.remove(matching_nodes[0])  # Remove from original list
                         else:
                             # Synthetic heading node
                             synthetic_node = {
@@ -488,7 +579,12 @@ class GoogleDocsParser:
                         else:
                             chosen_node = matching_nodes[0]
 
-                        node_list.append(chosen_node)
+                        # Create a copy to avoid modifying the original
+                        node_copy = chosen_node.copy()
+                        if "inlines" in node_copy:
+                            node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
+
+                        node_list.append(node_copy)
                         # Remove the used node to avoid duplicates
                         matching_nodes.remove(chosen_node)
                     else:
