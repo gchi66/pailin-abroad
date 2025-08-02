@@ -21,6 +21,7 @@ export default function AudioBar({
   const [duration, setDuration] = useState(0);
   const [muted, setMuted] = useState(false);
   const [rate, setRate] = useState(1);
+  const rates = [0.5, 0.75, 1, 1.25, 1.5];
 
   /* ─── event handlers ────────────────────────────────────── */
   const togglePlay = () => {
@@ -51,9 +52,7 @@ export default function AudioBar({
   };
 
   const cycleRate = () => {
-    const newRate = rate >= 2 ? 1 : +(rate + 0.25).toFixed(2);
-    if (audio.current) audio.current.playbackRate = newRate;
-    setRate(newRate);
+    // Deprecated: replaced by direct selection
   };
 
   /* ─── attach listeners once ─────────────────────────────── */
@@ -64,11 +63,13 @@ export default function AudioBar({
     const onMeta = () => setDuration(el.duration || 0);
     el.addEventListener("timeupdate", onTime);
     el.addEventListener("loadedmetadata", onMeta);
+    // Set playback rate whenever rate changes
+    el.playbackRate = rate;
     return () => {
       el.removeEventListener("timeupdate", onTime);
       el.removeEventListener("loadedmetadata", onMeta);
     };
-  }, []);
+  }, [rate]);
 
   const fmt = (s) =>
     !s ? "0:00" : `${Math.floor(s / 60)}:${`${Math.floor(s % 60)}`.padStart(2, "0")}`;
@@ -120,9 +121,19 @@ export default function AudioBar({
           {muted ? "🔇" : "🔊"}
         </button>
 
-        <button className="rate-btn" onClick={cycleRate}>
-          {rate}x
-        </button>
+        {/* Elegant playback rate control */}
+        <div className="rate-group">
+          {rates.map((r) => (
+            <button
+              key={r}
+              className={`rate-btn${rate === r ? " active" : ""}`}
+              onClick={() => setRate(r)}
+              aria-label={`Set playback rate to ${r}x`}
+            >
+              {r}x
+            </button>
+          ))}
+        </div>
       </div>
 {/*
       listening tips

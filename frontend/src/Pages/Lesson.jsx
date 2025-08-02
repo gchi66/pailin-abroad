@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchSnippets } from "../lib/fetchSnippets";
 
@@ -36,6 +36,9 @@ export default function Lesson() {
 
   // Audio snippet index
   const [snipIdx, setSnipIdx] = useState({});
+
+  // Add state for all lessons in current stage/level
+  const [lessonList, setLessonList] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -151,12 +154,30 @@ export default function Lesson() {
           console.error("Error fetching audio snippets:", err);
         }
       }
+
+      // Fetch all lessons for current stage/level for navigation
+      if (lsn && lsn.stage && lsn.level) {
+        const { data: allLessons, error: allLessonsError } = await supabaseClient
+          .from("lessons")
+          .select("id, lesson_order, title")
+          .eq("stage", lsn.stage)
+          .eq("level", lsn.level)
+          .order("lesson_order", { ascending: true });
+        if (!allLessonsError && allLessons) {
+          setLessonList(allLessons);
+        }
+      }
     })(); // <-- closes the async IIFE
   }, [id]); // <-- closes useEffect
 
   if (!lesson) {
     return <div style={{ padding: "10vh", textAlign: "center" }}>Loading…</div>;
   }
+
+  // Find current lesson index in lessonList
+  const currentIdx = lessonList.findIndex(l => l.id === lesson?.id);
+  const prevLesson = currentIdx > 0 ? lessonList[currentIdx - 1] : null;
+  const nextLesson = currentIdx >= 0 && currentIdx < lessonList.length - 1 ? lessonList[currentIdx + 1] : null;
 
   return (
     <main>
@@ -201,6 +222,24 @@ export default function Lesson() {
             snipIdx={snipIdx}
           />
         </div>
+        {/* Next/Previous navigation */}
+        <div className="lesson-nav-buttons" style={{ display: "flex", justifyContent: "center", gap: "2rem", margin: "2rem 0" }}>
+          <Link
+            to={prevLesson ? `/lesson/${prevLesson.id}` : "#"}
+            className={`lesson-nav-btn${prevLesson ? "" : " disabled"}`}
+            style={{ pointerEvents: prevLesson ? "auto" : "none", opacity: prevLesson ? 1 : 0.5 }}
+          >
+            ← Previous Lesson
+          </Link>
+          <Link
+            to={nextLesson ? `/lesson/${nextLesson.id}` : "#"}
+            className={`lesson-nav-btn${nextLesson ? "" : " disabled"}`}
+            style={{ pointerEvents: nextLesson ? "auto" : "none", opacity: nextLesson ? 1 : 0.5 }}
+          >
+            Next Lesson →
+          </Link>
+        </div>
+
         {/* pinned comment at the bottom */}
         <PinnedComment comment={pinnedComment} />
       </div>

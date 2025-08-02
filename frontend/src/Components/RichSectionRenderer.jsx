@@ -57,6 +57,25 @@ export default function RichSectionRenderer({
         </li>
       );
     }
+    if (node.kind === "numbered_item" || node.kind === "misc_item") {
+      if (node.audio_seq) {
+        return (
+          <AudioBullet
+            key={key}
+            node={node}
+            indent={node.indent}
+            snipIdx={snipIdx}
+            renderInlines={renderInlines}
+          />
+        );
+      }
+      // Render as a div, not <li>, to avoid default bullet styling
+      return (
+        <div key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
+          {renderInlines(node.inlines)}
+        </div>
+      );
+    }
 
     if (node.kind === "table") {
       return (
