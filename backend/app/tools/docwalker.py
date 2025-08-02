@@ -1,9 +1,16 @@
-from dataclasses import dataclass
-from .textutils import is_subheader
+from __future__ import annotations
+from dataclasses import dataclass, field
 import logging
+import re
+
+from .textutils import is_subheader   # helper already in your repo
 
 logger = logging.getLogger(__name__)
 
+
+# ────────────────────────────────────────────────────────────
+#   Data structures
+# ────────────────────────────────────────────────────────────
 @dataclass
 class Inline:
     text: str
@@ -11,103 +18,99 @@ class Inline:
     italic: bool = False
     underline: bool = False
 
+
 @dataclass
 class Node:
-    kind: str                   # 'heading' | 'paragraph' | 'list_item' | 'numbered_item'
-    level: int | None = None    # for headings
-    inlines: list[Inline] | None = None
-    indent: int = 0             # bullet nesting
+    kind: str                     # heading | paragraph | list_item | numbered_item | misc_item
+    level: int | None = None      # heading level (1-6) or None
+    inlines: list[Inline] = field(default_factory=list)
+    indent: int = 0               # nesting level
 
-def is_bullet_list(doc_json, bullet_info):
-    """
-    Check if a bullet is actually a bullet point (not a numbered list).
-    Returns True for bullet points, False for numbered lists.
-    """
-    if not bullet_info:
-        return False
 
+# ────────────────────────────────────────────────────────────
+#   Internal helpers
+# ────────────────────────────────────────────────────────────
+_numbered_glyphs = {
+    "DECIMAL",       # 1-, 2-, …
+    "UPPER_ALPHA",   # A-, B-, …
+    "LOWER_ALPHA",   # a-, b-, …
+    "UPPER_ROMAN",   # I-, II-, …
+    "LOWER_ROMAN",   # i-, ii-, …
+}
+
+# Only Unicode bullet “•” counts
+_bullet_symbol = {"•"}
+
+_manual_numbered_rx = re.compile(
+    r"^(\d+\.|\d+\)|[A-Za-z]\.|[A-Za-z]\)|[ivxIVX]+\.)\s+"
+)
+_manual_bullet_rx = re.compile(rf"^({'|'.join(map(re.escape, _bullet_symbol))})\s+")
+
+
+def _plain_text(elems: list[dict]) -> str:
+    """Concatenate textRun chunks in a Google-Docs paragraph element."""
+    return "".join(
+        r.get("textRun", {}).get("content", "")
+        for r in elems if r.get("textRun")
+    ).rstrip("\n")
+
+
+def _is_native_bullet(doc_json: dict, bullet_info: dict) -> bool:
+    """
+    Decide whether a native Google-Docs list item is a bullet
+    (True) or a numbered/lettered item (False).
+    """
     list_id = bullet_info.get("listId")
-    nesting_level = bullet_info.get("nestingLevel", 0)
-
-    if not list_id:
-        logger.debug("No listId found in bullet_info")
+    level   = bullet_info.get("nestingLevel", 0)
+    list_def = doc_json.get("lists", {}).get(list_id)
+    if not list_def:
+        return True
+    try:
+        nest_def   = list_def["listProperties"]["nestingLevels"][level]
+        glyph_type = nest_def.get("glyphType", "")
+        glyph_sym  = nest_def.get("glyphSymbol", "")
+    except Exception:
+        return True
+    if glyph_sym and glyph_sym in _bullet_symbol:
+        return True
+    if glyph_type in _numbered_glyphs:
         return False
-
-    # Check the list properties in the document
-    lists = doc_json.get("lists", {})
-    if list_id not in lists:
-        logger.debug(f"List ID {list_id} not found in document lists. Available lists: {list(lists.keys())}")
-        # If we can't find the list definition, assume it's a bullet (common case)
-        return True
-
-    list_properties = lists[list_id]
-    nesting_properties = list_properties.get("listProperties", {}).get("nestingLevels", [])
-
-    logger.debug(f"List {list_id} has {len(nesting_properties)} nesting levels, requesting level {nesting_level}")
-
-    if nesting_level >= len(nesting_properties):
-        logger.debug(f"Nesting level {nesting_level} exceeds available levels ({len(nesting_properties)}), defaulting to bullet")
-        # If the nesting level isn't defined, it's often a simple bullet list
-        return True
-
-    current_level = nesting_properties[nesting_level]
-    glyph_type = current_level.get("glyphType", "")
-    glyph_symbol = current_level.get("glyphSymbol", "")
-    glyph_format = current_level.get("glyphFormat", "")
-
-    # Log the full level info for debugging
-    logger.debug(f"List {list_id}, level {nesting_level}: {current_level}")
-    logger.debug(f"  glyphType='{glyph_type}', glyphSymbol='{glyph_symbol}', glyphFormat='{glyph_format}'")
-
-    # Check if it's explicitly a numbered list
-    numbered_types = {
-        "DECIMAL",           # 1, 2, 3...
-        "UPPER_ALPHA",       # A, B, C...
-        "LOWER_ALPHA",       # a, b, c...
-        "UPPER_ROMAN",       # I, II, III...
-        "LOWER_ROMAN"        # i, ii, iii...
-    }
-
-    # If we have a glyph symbol, check if it looks like a bullet
-    if glyph_symbol:
-        bullet_symbols = {"•", "◦", "▪", "▫", "‣", "⁃", "-", "*"}
-        if glyph_symbol in bullet_symbols:
-            logger.debug(f"Detected bullet based on symbol: '{glyph_symbol}'")
-            return True
-
-    # Check glyph type - if it's a numbered type, it's definitely numbered
-    if glyph_type in numbered_types:
-        logger.debug(f"Detected numbered list based on glyph type: '{glyph_type}'")
-        return False
-
-    # If glyph type is empty/unspecified and no symbol, it's usually a bullet
-    if not glyph_type or glyph_type in {"GLYPH_TYPE_UNSPECIFIED", "NONE"}:
-        logger.debug(f"Empty or unspecified glyph type, assuming bullet list")
-        return True
-
-    # For any other glyph type we don't recognize, log it and default to bullet
-    logger.debug(f"Unknown glyph type '{glyph_type}', defaulting to bullet")
     return True
 
-def paragraph_nodes(doc_json):
+
+def _manual_list_class(text: str) -> str | None:
     """
-    Yield Node objects instead of markdown strings.
+    For indented plain paragraphs (manual lists) decide the class:
+        • "bullet"   → exactly our bullet symbol
+        • "numbered" → looks like 1., a), I. …
+        • None       → not a list
     """
-    for elem in doc_json["body"]["content"]:
+    if _manual_bullet_rx.match(text):
+        return "bullet"
+    if _manual_numbered_rx.match(text):
+        return "numbered"
+    return None
+
+
+# ────────────────────────────────────────────────────────────
+#   Public generator
+# ────────────────────────────────────────────────────────────
+def paragraph_nodes(doc_json: dict):
+    """
+    Yield a stream of Node objects, one per paragraph.
+
+    Headings keep their Google level (3 by default for SHOUTY
+    sub-headers), bullets become list_item, numbered become
+    numbered_item, everything else indented → misc_item.
+    """
+    for elem in doc_json.get("body", {}).get("content", []):
         p = elem.get("paragraph")
         if not p:
             continue
 
-        # -------- indent / bullet
-        bullet_info = p.get("bullet")
-        indent = bullet_info.get("nestingLevel", 0) if bullet_info else 0
-        if indent == 0:
-            pts = p.get("paragraphStyle", {}).get("indentStart", {}).get("magnitude", 0)
-            indent = round(pts / 18)
-
-        # -------- inline spans
-        spans = []
-        for run in p["elements"]:
+        # ─── collect spans ──────────────────────────────────────────
+        spans: list[Inline] = []
+        for run in p.get("elements", []):
             tr = run.get("textRun")
             if not tr:
                 continue
@@ -121,114 +124,45 @@ def paragraph_nodes(doc_json):
                     underline  = bool(st.get("underline")),
                 )
             )
+        plain = "".join(s.text for s in spans).strip()
 
-        style = p.get("paragraphStyle", {}).get("namedStyleType", "")
-        plain_text = "".join(s.text for s in spans).strip()
+        # ─── indent / nesting ─────────────────────────────────────
+        bullet_info = p.get("bullet")
+        indent = bullet_info.get("nestingLevel", 0) if bullet_info else 0
+        if indent == 0:
+            pts = p.get("paragraphStyle", {}).get("indentStart", {}).get("magnitude", 0)
+            indent = round(pts / 18)
 
-        # ── decide kind ────────────────────────────────────────────────
-        if (style.startswith("HEADING_") and style not in {"HEADING_1", "HEADING_2"}) \
-        or is_subheader(plain_text, style):
-            # default "manual" headers to level 3
-            lvl = int(style[-1]) if style.startswith("HEADING_") else 3
+        # ─── classify ─────────────────────────────────────────────
+        style_name = p.get("paragraphStyle", {}).get("namedStyleType", "")
+
+        # HEADINGS -------------------------------------------------
+        if (style_name.startswith("HEADING_") and style_name not in {"HEADING_1","HEADING_2"}) \
+           or is_subheader(plain, style_name):
+            lvl = 3
+            if style_name.startswith("HEADING_") and style_name[-1].isdigit():
+                lvl = int(style_name[-1])
             yield Node(kind="heading", level=lvl, inlines=spans, indent=indent)
-        elif bullet_info:
-            # This handles Google Docs native bullet/numbered lists
-            list_id = bullet_info.get("listId")
-            nesting_level = bullet_info.get("nestingLevel", 0)
+            continue
 
-            # Get additional context for debugging
-            lists = doc_json.get("lists", {})
-            if list_id in lists:
-                list_props = lists[list_id].get("listProperties", {})
-                nesting_levels = list_props.get("nestingLevels", [])
-                if nesting_level < len(nesting_levels):
-                    current_level = nesting_levels[nesting_level]
-                    logger.debug(f"Processing native list item: '{plain_text[:50]}...' "
-                               f"listId={list_id}, level={nesting_level}, "
-                               f"glyphType={current_level.get('glyphType', 'None')}, "
-                               f"glyphSymbol={current_level.get('glyphSymbol', 'None')}")
-
-            # Distinguish between bullet points and numbered lists
-            if is_bullet_list(doc_json, bullet_info):
-                logger.debug(f"Classified as native bullet: '{plain_text[:30]}...'")
+        # NATIVE GOOGLE LIST -------------------------------------
+        if bullet_info:
+            if _is_native_bullet(doc_json, bullet_info):
                 yield Node(kind="list_item", inlines=spans, indent=indent)
             else:
-                logger.debug(f"Classified as native numbered: '{plain_text[:30]}...'")
                 yield Node(kind="numbered_item", inlines=spans, indent=indent)
-        elif indent > 0 and is_manual_list_item(plain_text):
-            # This handles manually typed numbered/bulleted lists (indented paragraphs)
-            if is_numbered_list_by_content(plain_text):
-                logger.debug(f"Classified as manual numbered item: '{plain_text[:30]}...' (indent={indent})")
+            continue
+
+        # MANUAL LISTS (indented) -------------------------------
+        if indent > 0:
+            cls = _manual_list_class(plain)
+            if cls == "bullet":
+                yield Node(kind="list_item", inlines=spans, indent=indent)
+            elif cls == "numbered":
                 yield Node(kind="numbered_item", inlines=spans, indent=indent)
             else:
-                logger.debug(f"Classified as manual bullet list: '{plain_text[:30]}...' (indent={indent})")
-                yield Node(kind="list_item", inlines=spans, indent=indent)
-        else:
-            yield Node(kind="paragraph", inlines=spans, indent=indent)
+                yield Node(kind="misc_item", inlines=spans, indent=indent)
+            continue
 
-
-def is_manual_list_item(plain_text):
-    """
-    Check if this looks like a manually typed list item (numbered or bulleted).
-    """
-    text = plain_text.strip()
-    if not text:
-        return False
-
-    import re
-
-    # Patterns for numbered lists
-    numbered_patterns = [
-        r'^\d+\.',           # 1. 2. 3.
-        r'^\d+\)',           # 1) 2) 3)
-        r'^[a-z]\.',         # a. b. c.
-        r'^[A-Z]\.',         # A. B. C.
-        r'^[ivx]+\.',        # i. ii. iii.
-        r'^[IVX]+\.',        # I. II. III.
-    ]
-
-    # Patterns for bullet lists
-    bullet_patterns = [
-        r'^[•◦▪▫‣⁃\-\*]\s',  # Various bullet symbols followed by space
-        r'^[•◦▪▫‣⁃\-\*]',     # Just the bullet symbol
-    ]
-
-    # Check numbered patterns
-    for pattern in numbered_patterns:
-        if re.match(pattern, text):
-            return True
-
-    # Check bullet patterns
-    for pattern in bullet_patterns:
-        if re.match(pattern, text):
-            return True
-
-    return False
-
-
-def is_numbered_list_by_content(plain_text):
-    """
-    Analyze the text content to determine if it's a numbered list item.
-    Returns True for numbered lists, False for bullet lists.
-    """
-    text = plain_text.strip()
-    if not text:
-        return False
-
-    import re
-
-    # Check if text starts with common numbered patterns
-    numbered_patterns = [
-        r'^\d+\.',           # 1. 2. 3.
-        r'^\d+\)',           # 1) 2) 3)
-        r'^[a-z]\.',         # a. b. c.
-        r'^[A-Z]\.',         # A. B. C.
-        r'^[ivx]+\.',        # i. ii. iii. (roman numerals)
-        r'^[IVX]+\.',        # I. II. III. (roman numerals)
-    ]
-
-    for pattern in numbered_patterns:
-        if re.match(pattern, text):
-            return True  # It's a numbered list
-
-    return False  # It's a bullet list
+        # PLAIN PARAGRAPH ----------------------------------------
+        yield Node(kind="paragraph", inlines=spans, indent=indent)
