@@ -19,11 +19,12 @@ function nestComments(comments) {
   return roots;
 }
 
-export default function LessonDiscussion({ lessonId, isAdmin }) {
+export default function LessonDiscussion({ lessonId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [posting, setPosting] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { user } = useAuth();
 
   // Fetch comments for this lesson
@@ -42,6 +43,20 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
     fetchComments();
   }, [lessonId]);
 
+  useEffect(() => {
+    // Check if user is admin
+    if (!user) return;
+    supabaseClient
+      .from("users")
+      .select("is_admin")
+      .eq("id", user.id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) console.error("Error checking admin status:", error);
+        else setIsAdmin(data?.is_admin ?? false);
+      });
+  }, [user]);
+
   // Add new comment (requires login)
   async function handleNewComment(body, parentCommentId = null) {
     if (!user) return;
@@ -56,6 +71,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
 
   // Pin/unpin comment (admin only)
   async function handlePin(commentId, pinned) {
+    if (!isAdmin) return;
     await supabaseClient
       .from("comments")
       .update({ pinned })
@@ -114,6 +130,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
           comments={nested}
           onReply={handleReply}
           onPin={isAdmin ? handlePin : undefined}
+          isAdmin={isAdmin}
         />
       )}
     </section>

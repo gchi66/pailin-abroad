@@ -27,7 +27,7 @@
 
 .profile-pic {
   flex-shrink: 0; /* Prevents the image from affecting the card's height */
-  max-width: 53%; /* Scales with the card size */
+  max-width: 53%;
   height: auto;
   object-fit: contain;
   position: relative;
