@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import supabaseClient from "../supabaseClient";
 import DiscussionBoard from "./DiscussionBoard";
-import NewCommentForm from "./NewCommentForm";
 import "../Styles/DiscussionBoard.css";
 import { useAuth } from "../AuthContext";
 
@@ -23,6 +22,8 @@ function nestComments(comments) {
 export default function LessonDiscussion({ lessonId, isAdmin }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newComment, setNewComment] = useState("");
+  const [posting, setPosting] = useState(false);
   const { user } = useAuth();
 
   // Fetch comments for this lesson
@@ -48,9 +49,6 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
       .from("comments")
       .insert({ lesson_id: lessonId, user_id: user.id, body, parent_comment_id: parentCommentId })
       .select();
-    if (error) {
-      console.error("Insert failed:", error.message, error.details);
-    }
     if (data) {
       setComments(prev => [...prev, ...data]);
     }
@@ -66,18 +64,46 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   }
 
   // Reply handler
-  function handleReply(parentComment) {
-    // Could open a reply form inline, handled in CommentItem
+  async function handleReply(parentComment, replyBody) {
+    if (!user) return;
+    const { data, error } = await supabaseClient
+      .from("comments")
+      .insert({ lesson_id: lessonId, user_id: user.id, body: replyBody, parent_comment_id: parentComment.id })
+      .select();
+    if (data) {
+      setComments(prev => [...prev, ...data]);
+    }
   }
 
   // Nest comments for rendering
   const nested = nestComments(comments);
 
+  async function handleNewCommentSubmit(e) {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+    setPosting(true);
+    await handleNewComment(newComment);
+    setNewComment("");
+    setPosting(false);
+  }
+
   return (
     <section className="lesson-discussion">
       <h3 className="discussion-title">Discussion Board</h3>
       {user ? (
-        <NewCommentForm onPost={handleNewComment} />
+        <form className="new-comment-form" onSubmit={handleNewCommentSubmit}>
+          <textarea
+            value={newComment}
+            onChange={e => setNewComment(e.target.value)}
+            placeholder="Write a new comment..."
+            rows={3}
+            className="comment-textarea"
+            required
+          />
+          <button type="submit" className="comment-submit-btn" disabled={posting || !newComment.trim()}>
+            {posting ? "Posting..." : "Post"}
+          </button>
+        </form>
       ) : (
         <div className="discussion-login-msg">You must be logged in to post a comment.</div>
       )}
