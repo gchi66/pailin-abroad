@@ -7,6 +7,8 @@ import LessonHeader   from "../Components/LessonHeader";
 import AudioBar       from "../Components/AudioBar";
 import LessonSidebar  from "../Components/LessonSidebar";
 import LessonContent  from "../Components/LessonContent";
+
+import LessonDiscussion from "../Components/LessonDiscussion";
 import PinnedComment   from "../Components/PinnedComment";
 
 import "../Styles/Lesson.css";
@@ -240,8 +242,10 @@ export default function Lesson() {
           </Link>
         </div>
 
-        {/* pinned comment at the bottom */}
-        <PinnedComment comment={pinnedComment} />
+        {/* Discussion board below lesson content */}
+        <LessonDiscussion lessonId={lesson.id} isAdmin={lesson.is_admin} />
+        {/* pinned comment at the bottom
+        <PinnedComment comment={pinnedComment} /> */}
       </div>
     </main>
   );
