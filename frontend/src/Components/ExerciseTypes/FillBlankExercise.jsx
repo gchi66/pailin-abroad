@@ -6,14 +6,7 @@ import React, { useState } from "react";
  *   • row exercises        – each item.text contains ____ (underscores)
  */
 export default function FillBlankExercise({ exercise }) {
-  // IMPORTANT: Make sure the exercise object is properly structured
-  // Explicitly check for the paragraph property
   const { title, prompt, paragraph, items = [] } = exercise || {};
-
-  // Debug log to see what we're receiving
-  console.log("Exercise object:", exercise);
-  console.log("Paragraph:", paragraph);
-  console.log("Has paragraph?", Boolean(paragraph));
 
   /* ---------- state ---------- */
   const [inputs, setInputs] = useState(Array(items.length).fill(""));
@@ -34,53 +27,92 @@ export default function FillBlankExercise({ exercise }) {
   };
 
   const handleCheck = () => setChecked(true);
-  const handleReset = () => { setInputs(Array(items.length).fill("")); setChecked(false); };
+  const handleReset = () => {
+    setInputs(Array(items.length).fill(""));
+    setChecked(false);
+  };
+
+  // Create answer key from items array for paragraph style
+  const answerKey = items.reduce((acc, item) => {
+    acc[item.number] = item.answer.toLowerCase().trim();
+    return acc;
+  }, {});
+
+  // Handle input changes for paragraph style (by question number)
+  const handleParagraphInputChange = (number, value) => {
+    const itemIndex = items.findIndex(item => item.number === number);
+    if (itemIndex !== -1) {
+      handleChange(itemIndex, value);
+    }
+  };
+
+  // Check if paragraph answer is correct by question number
+  const isParagraphCorrect = (number) => {
+    const itemIndex = items.findIndex(item => item.number === number);
+    return isCorrect(itemIndex);
+  };
+
+  // Get user answer for paragraph style
+  const getParagraphUserAnswer = (number) => {
+    const itemIndex = items.findIndex(item => item.number === number);
+    return inputs[itemIndex] || '';
+  };
+
+  // Convert paragraph with **number** or ___number___ markers to JSX with input fields
+  const renderParagraphWithInputs = (paragraph) => {
+    // Handle both **number** and ___number___ formats
+    const parts = paragraph.split(/(\*\*\d+\*\*|_{2,3}\d+_{2,3})/);
+
+    return parts.map((part, index) => {
+      // Check for **number** format
+      let numberMatch = part.match(/\*\*(\d+)\*\*/);
+      // Check for ___number___ format if first didn't match
+      if (!numberMatch) {
+        numberMatch = part.match(/_{2,3}(\d+)_{2,3}/);
+      }
+
+      if (numberMatch) {
+        const number = numberMatch[1];
+        const inputValue = getParagraphUserAnswer(number);
+
+        return (
+          <span key={index} className="fb-inline">
+            <input
+              type="text"
+              className="fb-input"
+              value={inputValue}
+              onChange={(e) => handleParagraphInputChange(number, e.target.value)}
+              disabled={checked}
+              placeholder="___"
+            />
+            {checked && (
+              <span className={`fb-mark ${isParagraphCorrect(number) ? "correct" : "wrong"}`}>
+                {isParagraphCorrect(number) ? "✓" : "✗"}
+                {!isParagraphCorrect(number) && (
+                  <span className="correct-answer">
+                    {" "}(Correct: {answerKey[number]})
+                  </span>
+                )}
+              </span>
+            )}
+          </span>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
 
   /* ================================================================
    *  RENDER – PARAGRAPH STYLE
    * ================================================================ */
-  // Strengthen the check for paragraph - make sure it's a non-empty string
   if (paragraph && typeof paragraph === 'string' && paragraph.trim() !== '') {
-    console.log("Using paragraph style");
-
-    // Fixed regex to match ___1___ pattern
-    const parts = paragraph.split(/___([\d]+)___/g);
-    console.log("Paragraph parts:", parts);
-
     return (
       <div className="fb-wrap">
         {title && <h3 className="fb-title">{title}</h3>}
         {prompt && <p className="fb-prompt">{prompt}</p>}
 
         <p className="fb-paragraph">
-          {parts.map((part, idx) =>
-            /* even indices = plain text */
-            idx % 2 === 0 ? (
-              <span key={`text-${idx}`}>{part}</span>
-            ) : (
-              /* odd indices = number placeholder */
-              <span key={`blank-${idx}`} className="fb-inline">
-                <input
-                  type="text"
-                  className="fb-input"
-                  value={inputs[parseInt(part) - 1] || ""}
-                  onChange={(e) => handleChange(parseInt(part) - 1, e.target.value)}
-                  disabled={checked}
-                  placeholder="___"
-                />
-                {checked && (
-                  <span className={`fb-mark ${isCorrect(parseInt(part) - 1) ? "correct" : "wrong"}`}>
-                    {isCorrect(parseInt(part) - 1) ? "✓" : "✗"}
-                    {!isCorrect(parseInt(part) - 1) && (
-                      <span className="correct-answer">
-                        {" "}(Correct: {items[parseInt(part) - 1].answer})
-                      </span>
-                    )}
-                  </span>
-                )}
-              </span>
-            )
-          )}
+          {renderParagraphWithInputs(paragraph)}
         </p>
 
         <Buttons
@@ -96,7 +128,6 @@ export default function FillBlankExercise({ exercise }) {
   /* ================================================================
    *  RENDER – ROW STYLE
    * ================================================================ */
-  console.log("Using row style");
   return (
     <div className="fb-wrap">
       {title && <h3 className="fb-title">{title}</h3>}
@@ -116,7 +147,7 @@ export default function FillBlankExercise({ exercise }) {
               disabled={checked}
               placeholder="___"
             />
-            {parts[1] /* might be undefined but that's fine */}
+            {parts[1]}
             {checked && (
               <span className={`fb-mark ${isCorrect(idx) ? "correct" : "wrong"}`}>
                 {isCorrect(idx) ? "✓" : "✗"}

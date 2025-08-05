@@ -3552,27 +3552,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "(picture of a person in hot weather)",
+            "text": "(picture of a person in hot weather)",
             "answer": "im hot, i am hot"
           },
           {
             "number": "2",
-            "stem": "(picture of a doctor)",
+            "text": "(picture of a doctor)",
             "answer": "im a doctor, i am a doctor"
           },
           {
             "number": "3",
-            "stem": "(picture of a sick person)",
+            "text": "(picture of a sick person)",
             "answer": "im sick, i am sick"
           },
           {
             "number": "4",
-            "stem": "(picture of a person at school)",
+            "text": "(picture of a person at school)",
             "answer": "im at school, i am at school"
           },
           {
             "number": "5",
-            "stem": "(picture of a sad person)",
+            "text": "(picture of a sad person)",
             "answer": "im sad, i am sad"
           }
         ],
@@ -3586,31 +3586,26 @@
         "items": [
           {
             "number": "1",
-            "stem": "I late.",
-            "text": " CORRECT: no",
+            "text": "I late. CORRECT: no",
             "answer": "I'm late."
           },
           {
             "number": "2",
-            "stem": "I’m cold.",
-            "text": " CORRECT: yes"
+            "text": "I’m cold. CORRECT: yes"
           },
           {
             "number": "3",
-            "stem": "I from Thailand.",
-            "text": " CORRECT: no",
+            "text": "I from Thailand. CORRECT: no",
             "answer": "I'm from Thailand."
           },
           {
             "number": "4",
-            "stem": "I excited.",
-            "text": " CORRECT: no",
+            "text": "I excited. CORRECT: no",
             "answer": "I'm excited."
           },
           {
             "number": "5",
-            "stem": "I’m at home.",
-            "text": " CORRECT: yes"
+            "text": "I’m at home. CORRECT: yes"
           }
         ],
         "sort_order": 2
@@ -6450,6 +6445,27 @@
         "paragraph": "",
         "items": [
           {
+            "number": "1",
+            "text": "They __ from Bangkok.",
+            "answer": "are"
+          },
+          {
+            "number": "2",
+            "text": "I __ a nurse.",
+            "answer": "am"
+          },
+          {
+            "number": "3",
+            "text": "Jack and Maria __ nice people.",
+            "answer": "are"
+          },
+          {
+            "number": "4",
+            "text": "We __ at the park.",
+            "answer": "are"
+          },
+          {
+            "number": "5",
             "text": "You __ funny.",
             "answer": "are"
           }
@@ -6464,31 +6480,26 @@
         "items": [
           {
             "number": "1",
-            "stem": "They so funny.",
-            "text": " CORRECT: no",
+            "text": "They so funny. CORRECT: no",
             "answer": "they are so funny, theyre so funny"
           },
           {
             "number": "2",
-            "stem": "We at the park.",
-            "text": " CORRECT: no",
+            "text": "We at the park. CORRECT: no",
             "answer": "we are at the park, were at the park"
           },
           {
             "number": "3",
-            "stem": "My cats are black.",
-            "text": " CORRECT: yes"
+            "text": "My cats are black. CORRECT: yes"
           },
           {
             "number": "4",
-            "stem": "They from Bangkok.",
-            "text": " CORRECT: no",
+            "text": "They from Bangkok. CORRECT: no",
             "answer": "they are from bangkok, theyre from bangkok"
           },
           {
             "number": "5",
-            "stem": "You’re my best friend.",
-            "text": " CORRECT: yes"
+            "text": "You’re my best friend. CORRECT: yes"
           }
         ],
         "sort_order": 2
@@ -7994,6 +8005,27 @@
         "paragraph": "",
         "items": [
           {
+            "number": "1",
+            "text": "He __ my teacher.",
+            "answer": "is"
+          },
+          {
+            "number": "2",
+            "text": "They __ at the store.",
+            "answer": "are"
+          },
+          {
+            "number": "3",
+            "text": "She __ an actor.",
+            "answer": "is"
+          },
+          {
+            "number": "4",
+            "text": "Joey __ in his room.",
+            "answer": "is"
+          },
+          {
+            "number": "5",
             "text": "You __ Thai.",
             "answer": "are"
           }
@@ -8007,6 +8039,27 @@
         "paragraph": "",
         "items": [
           {
+            "number": "1",
+            "text": "The book __ on the table.",
+            "answer": "is"
+          },
+          {
+            "number": "2",
+            "text": "My dogs __ cute.",
+            "answer": "are"
+          },
+          {
+            "number": "3",
+            "text": "Your phone __ in my bag.",
+            "answer": "is"
+          },
+          {
+            "number": "4",
+            "text": "The cars __ red.",
+            "answer": "are"
+          },
+          {
+            "number": "5",
             "text": "My parents __ in New York.",
             "answer": "are"
           }
@@ -8021,31 +8074,26 @@
         "items": [
           {
             "number": "1",
-            "stem": "She at home.",
-            "text": " CORRECT: no",
+            "text": "She at home. CORRECT: no",
             "answer": "she is at home, shes at home"
           },
           {
             "number": "2",
-            "stem": "Tyler from LA.",
-            "text": " CORRECT: no",
+            "text": "Tyler from LA. CORRECT: no",
             "answer": "tyler is from la, tylers from la"
           },
           {
             "number": "3",
-            "stem": "He’s hungry.",
-            "text": " CORRECT: yes"
+            "text": "He’s hungry. CORRECT: yes"
           },
           {
             "number": "4",
-            "stem": "It on the desk.",
-            "text": " CORRECT: no",
+            "text": "It on the desk. CORRECT: no",
             "answer": "it is on the desk, its on the desk"
           },
           {
             "number": "5",
-            "stem": "It’s a camera.",
-            "text": " CORRECT: yes"
+            "text": "It’s a camera. CORRECT: yes"
           }
         ],
         "sort_order": 3
@@ -8054,11 +8102,47 @@
         "kind": "fill_blank",
         "title": "MIXED PRACTICE",
         "prompt": "Fill in the blanks with the correct to-be verb (am · are · is).",
-        "paragraph": "",
+        "paragraph": "I __1__ Frank. My family __2__ from Germany, but they __3__ in LA now. Germany __4__ too cold for them. My dad __5__ a journalist, and my mom __6__ a stay-at-home-mom. My little brother and sister __7__ twins, and they __8__ only 7 years old. We __9__ a close family, and I __10__ glad that they live in LA with me.",
         "items": [
           {
-            "answer": "am",
-            "text": " ITEM: 2 ITEM: 3 ITEM: 4 ITEM: 5 ITEM: 6 ITEM: 7 ITEM: 8 ITEM: 9 ITEM: 10"
+            "number": "1",
+            "answer": "am"
+          },
+          {
+            "number": "2",
+            "answer": "is"
+          },
+          {
+            "number": "3",
+            "answer": "are"
+          },
+          {
+            "number": "4",
+            "answer": "is"
+          },
+          {
+            "number": "5",
+            "answer": "is"
+          },
+          {
+            "number": "6",
+            "answer": "is"
+          },
+          {
+            "number": "7",
+            "answer": "are"
+          },
+          {
+            "number": "8",
+            "answer": "are"
+          },
+          {
+            "number": "9",
+            "answer": "are"
+          },
+          {
+            "number": "10",
+            "answer": "am"
           }
         ],
         "sort_order": 4
@@ -10426,7 +10510,18 @@
         "paragraph": "",
         "items": [
           {
-            "text": " A: What’s this? B: This is a _____. (picture of a papaya)",
+            "number": "1",
+            "text": "A: What’s this?\nB: This is a _____.\n(picture of rose apple)",
+            "answer": "rose apple"
+          },
+          {
+            "number": "2",
+            "text": "A: What’s this?\nB: This is _____.\n(picture of green curry)",
+            "answer": "green curry"
+          },
+          {
+            "number": "3",
+            "text": "A: What’s this?\nB: This is a _____.\n(picture of a papaya)",
             "answer": "papaya"
           }
         ],
@@ -11157,27 +11252,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "(picture of something cheap)",
+            "text": "(picture of something cheap)",
             "answer": "its cheap"
           },
           {
             "number": "2",
-            "stem": "(picture of something spicy)",
+            "text": "(picture of something spicy)",
             "answer": "its spicy"
           },
           {
             "number": "3",
-            "stem": "(picture of something cold)",
+            "text": "(picture of something cold)",
             "answer": "its cold"
           },
           {
             "number": "4",
-            "stem": "(picture of a clock)",
+            "text": "(picture of a clock)",
             "answer": "its early"
           },
           {
             "number": "5",
-            "stem": "(picture of something purple)",
+            "text": "(picture of something purple)",
             "answer": "its purple"
           }
         ],
@@ -11830,27 +11925,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "I’m tall.",
+            "text": "I’m tall.",
             "answer": "im not tall, i am not tall"
           },
           {
             "number": "2",
-            "stem": "I’m at the park.",
+            "text": "I’m at the park.",
             "answer": "im not at the park, i am not at the park"
           },
           {
             "number": "3",
-            "stem": "I’m a pilot.",
+            "text": "I’m a pilot.",
             "answer": "im not a pilot, i am not a pilot"
           },
           {
             "number": "4",
-            "stem": "I’m sleepy.",
+            "text": "I’m sleepy.",
             "answer": "im not sleepy, i am not sleepy"
           },
           {
             "number": "5",
-            "stem": "I’m downstairs.",
+            "text": "I’m downstairs.",
             "answer": "im not downstairs, i am not downstairs"
           }
         ],
@@ -11864,27 +11959,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "You’re lazy.",
+            "text": "You’re lazy.",
             "answer": "you are not lazy, you arent lazy, youre not lazy"
           },
           {
             "number": "2",
-            "stem": "We’re from Mexico.",
+            "text": "We’re from Mexico.",
             "answer": "we are not from mexico, we arent from mexico, were not from mexico"
           },
           {
             "number": "3",
-            "stem": "They’re twins.",
+            "text": "They’re twins.",
             "answer": "they are not twins, they arent twins, theyre not twins"
           },
           {
             "number": "4",
-            "stem": "Dara and Lek are singers.",
+            "text": "Dara and Lek are singers.",
             "answer": "dara and lek are not singers, dara and lek arent singers"
           },
           {
             "number": "5",
-            "stem": "The kids are outside.",
+            "text": "The kids are outside.",
             "answer": "the kids are not outside, the kids arent outside"
           }
         ],
@@ -11898,27 +11993,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "He’s good at soccer.",
+            "text": "He’s good at soccer.",
             "answer": "he is not good at soccer, he isnt good at soccer, hes not good at soccer"
           },
           {
             "number": "2",
-            "stem": "She’s at the store.",
+            "text": "She’s at the store.",
             "answer": "she is not at the store, she isnt at the store, shes not at the store"
           },
           {
             "number": "3",
-            "stem": "It’s a camera.",
+            "text": "It’s a camera.",
             "answer": "it is not a camera, it isnt a camera, its not a camera"
           },
           {
             "number": "4",
-            "stem": "Frank’s funny.",
+            "text": "Frank’s funny.",
             "answer": "frank is not funny, frank isnt funny, franks not funny"
           },
           {
             "number": "5",
-            "stem": "My sister’s at work.",
+            "text": "My sister’s at work.",
             "answer": "my sister is not at work, my sister isnt at work, my sisters not at work"
           }
         ],
@@ -11932,31 +12027,26 @@
         "items": [
           {
             "number": "1",
-            "stem": "She not at work.",
-            "text": " CORRECT: no",
+            "text": "She not at work. CORRECT: no",
             "answer": "she is not at work, she isnt at work, shes not at work"
           },
           {
             "number": "2",
-            "stem": "I’m not hungry.",
-            "text": " CORRECT: yes"
+            "text": "I’m not hungry. CORRECT: yes"
           },
           {
             "number": "3",
-            "stem": "You not old.",
-            "text": " CORRECT: no",
+            "text": "You not old. CORRECT: no",
             "answer": "you are not old, you arent old, youre not old"
           },
           {
             "number": "4",
-            "stem": "We not from Canada.",
-            "text": " CORRECT: no",
+            "text": "We not from Canada. CORRECT: no",
             "answer": "we are not from canada, we arent from canada, were not from canada"
           },
           {
             "number": "5",
-            "stem": "Chloe not here.",
-            "text": " CORRECT: no",
+            "text": "Chloe not here. CORRECT: no",
             "answer": "chloe is not here, chloe isnt here, chloes not here"
           }
         ],
@@ -11970,7 +12060,7 @@
         "items": [
           {
             "number": "1",
-            "text": " A: Are your parents from Malaysia? B: _____",
+            "text": "A: Are your parents from Malaysia?\nB: _____",
             "keywords": "no my parents are not from, no my parents arent from"
           },
           {
@@ -13699,17 +13789,17 @@
         "items": [
           {
             "number": "1",
-            "stem": "8:03",
+            "text": "8:03",
             "answer": "eight oh three"
           },
           {
             "number": "2",
-            "stem": "10:08",
+            "text": "10:08",
             "answer": "ten oh eight"
           },
           {
             "number": "3",
-            "stem": "1:06",
+            "text": "1:06",
             "answer": "one oh six"
           }
         ],
@@ -13723,17 +13813,17 @@
         "items": [
           {
             "number": "1",
-            "stem": "2:35",
+            "text": "2:35",
             "answer": "two thirty five"
           },
           {
             "number": "2",
-            "stem": "7:18",
+            "text": "7:18",
             "answer": "seven eighteen"
           },
           {
             "number": "3",
-            "stem": "9:56",
+            "text": "9:56",
             "answer": "nine fifty six"
           }
         ],
@@ -14788,27 +14878,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "I’m tall.",
+            "text": "I’m tall.",
             "answer": "am i tall"
           },
           {
             "number": "2",
-            "stem": "I’m at your house.",
+            "text": "I’m at your house.",
             "answer": "am i at your house"
           },
           {
             "number": "3",
-            "stem": "I’m a good singer.",
+            "text": "I’m a good singer.",
             "answer": "am i a good singer"
           },
           {
             "number": "4",
-            "stem": "I’m funny.",
+            "text": "I’m funny.",
             "answer": "am i funny"
           },
           {
             "number": "5",
-            "stem": "I’m stinky.",
+            "text": "I’m stinky.",
             "answer": "am i stinky"
           }
         ],
@@ -14822,27 +14912,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "You’re inside.",
+            "text": "You’re inside.",
             "answer": "are you inside"
           },
           {
             "number": "2",
-            "stem": "We’re late.",
+            "text": "We’re late.",
             "answer": "are we late"
           },
           {
             "number": "3",
-            "stem": "They’re friends.",
+            "text": "They’re friends.",
             "answer": "are they friends"
           },
           {
             "number": "4",
-            "stem": "Pailin and Dara are from Bangkok.",
+            "text": "Pailin and Dara are from Bangkok.",
             "answer": "are pailin and dara"
           },
           {
             "number": "5",
-            "stem": "The kids are at the park.",
+            "text": "The kids are at the park.",
             "answer": "are the kids"
           }
         ],
@@ -14856,27 +14946,27 @@
         "items": [
           {
             "number": "1",
-            "stem": "He’s in the car.",
+            "text": "He’s in the car.",
             "answer": "is he in the car"
           },
           {
             "number": "2",
-            "stem": "She’s ready.",
+            "text": "She’s ready.",
             "answer": "is she ready"
           },
           {
             "number": "3",
-            "stem": "It’s cold outside.",
+            "text": "It’s cold outside.",
             "answer": "is it cold outside"
           },
           {
             "number": "4",
-            "stem": "Frank’s at the library.",
+            "text": "Frank’s at the library.",
             "answer": "is frank at the library"
           },
           {
             "number": "5",
-            "stem": "My sister’s smart.",
+            "text": "My sister’s smart.",
             "answer": "is my sister smart"
           }
         ],
@@ -14890,31 +14980,26 @@
         "items": [
           {
             "number": "1",
-            "stem": "Is you an actor?",
-            "text": " CORRECT: no",
+            "text": "Is you an actor? CORRECT: no",
             "answer": "are you an actor"
           },
           {
             "number": "2",
-            "stem": "Are they from Italy?",
-            "text": " CORRECT: yes"
+            "text": "Are they from Italy? CORRECT: yes"
           },
           {
             "number": "3",
-            "stem": "Are she sleepy?",
-            "text": " CORRECT: no",
+            "text": "Are she sleepy? CORRECT: no",
             "answer": "is she sleepy"
           },
           {
             "number": "4",
-            "stem": "Is we on time?",
-            "text": " CORRECT: no",
+            "text": "Is we on time? CORRECT: no",
             "answer": "are we on time"
           },
           {
             "number": "5",
-            "stem": "Is Mark in Hawaii?",
-            "text": " CORRECT: yes"
+            "text": "Is Mark in Hawaii? CORRECT: yes"
           }
         ],
         "sort_order": 4
@@ -14926,7 +15011,28 @@
         "paragraph": "",
         "items": [
           {
-            "text": " A: Is he at school? B: Yeah, ___.",
+            "number": "1",
+            "text": "A: Are they from Thailand?\nB: Yeah, ___.",
+            "answer": "they are"
+          },
+          {
+            "number": "2",
+            "text": "A: Is she a teacher?\nB: No, ___.",
+            "answer": "she's not"
+          },
+          {
+            "number": "3",
+            "text": "A: Are we late?\nB: No, ___.",
+            "answer": "we're not"
+          },
+          {
+            "number": "4",
+            "text": "A: Are you tired?\nB: Yeah, ___.",
+            "answer": "I am"
+          },
+          {
+            "number": "5",
+            "text": "A: Is he at school?\nB: Yeah, ___.",
             "answer": "he is"
           }
         ],
@@ -16378,108 +16484,114 @@
     "transcript": [
       {
         "sort_order": 1,
+        "speaker": "Pailin",
+        "line_text": "Hi, Dad.",
+        "indent": 0
+      },
+      {
+        "sort_order": 2,
         "speaker": "Dad",
         "line_text": "Morning, Pai.",
         "indent": 0
       },
       {
-        "sort_order": 2,
+        "sort_order": 3,
         "speaker": "Pailin",
-        "line_text": "Hi, Dad. It’s not morning in LA.",
+        "line_text": "It’s not morning in LA.",
         "indent": 0
       },
       {
-        "sort_order": 3,
+        "sort_order": 4,
         "speaker": "Dad",
         "line_text": "Oh, what time is it now?",
         "indent": 0
       },
       {
-        "sort_order": 4,
+        "sort_order": 5,
         "speaker": "Pailin",
         "line_text": "It’s…6PM.",
         "indent": 0
       },
       {
-        "sort_order": 5,
+        "sort_order": 6,
         "speaker": "Dad",
         "line_text": "Oh, it’s morning in Bangkok. So, how are you?",
         "indent": 0
       },
       {
-        "sort_order": 6,
+        "sort_order": 7,
         "speaker": "Pailin",
         "line_text": "I’m great! How are you and Mom?",
         "indent": 0
       },
       {
-        "sort_order": 7,
+        "sort_order": 8,
         "speaker": "Dad",
         "line_text": "We’re good. We miss you already. Are you at the hotel?",
         "indent": 0
       },
       {
-        "sort_order": 8,
+        "sort_order": 9,
         "speaker": "Pailin",
         "line_text": "Yep, I'm in my room.",
         "indent": 0
       },
       {
-        "sort_order": 9,
+        "sort_order": 10,
         "speaker": "Dad",
         "line_text": "I see. Is it hot in LA?",
         "indent": 0
       },
       {
-        "sort_order": 10,
+        "sort_order": 11,
         "speaker": "Pailin",
         "line_text": "It’s warm outside, but my AC is on.",
         "indent": 0
       },
       {
-        "sort_order": 11,
+        "sort_order": 12,
         "speaker": "Dad",
         "line_text": "Good. Is orientation over?",
         "indent": 0
       },
       {
-        "sort_order": 12,
+        "sort_order": 13,
         "speaker": "Pailin",
         "line_text": "Yep, it's over. I have a new friend. She’s from Thailand.",
         "indent": 0
       },
       {
-        "sort_order": 13,
+        "sort_order": 14,
         "speaker": "Dad",
         "line_text": "Great! What’s her name?",
         "indent": 0
       },
       {
-        "sort_order": 14,
+        "sort_order": 15,
         "speaker": "Pailin",
         "line_text": "Her name is Chloe.",
         "indent": 0
       },
       {
-        "sort_order": 15,
+        "sort_order": 16,
         "speaker": "Dad",
         "line_text": "Oh, and how old is she?",
         "indent": 0
       },
       {
-        "sort_order": 16,
+        "sort_order": 17,
         "speaker": "Pailin",
         "line_text": "She’s 23. She’s cool! Is Mom awake?",
         "indent": 0
       },
       {
-        "sort_order": 17,
+        "sort_order": 18,
         "speaker": "Dad",
         "line_text": "No, she's not awake yet. Okay, I'm going to work now. Love you Pai.",
         "indent": 0
       },
       {
-        "sort_order": 18,
+        "sort_order": 19,
         "speaker": "Pailin",
         "line_text": "Love you Dad. Bye.",
         "indent": 0

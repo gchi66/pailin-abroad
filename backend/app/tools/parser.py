@@ -744,27 +744,31 @@ class GoogleDocsParser:
 
         return questions
 
+
     def parse_practice(self, lines: List[str]) -> List[Dict]:
         """
-        Convert the flat “directive” block into structured exercises.
+        Convert the flat "directive" block into structured exercises.
 
         Markers handled:
-          TYPE: <multiple_choice | open | ...>
-          TITLE: <exercise title>
-          PROMPT: <prompt shown above the items>
-          PARAGRAPH: <optional explanatory paragraph>
-          QUESTION: <n>
-          TEXT: <stem>
-          OPTIONS:                # the very next lines are A. / B. / …
-          ANSWER: <letter(s)>     # for MC
-          KEYWORDS: <kw list>     # for open items
-          PINNED COMMENT          # everything after this goes into a pinned_comment string
+        TYPE: <multiple_choice | open | fill_blank | ...>
+        TITLE: <exercise title>
+        PROMPT: <prompt shown above the items>
+        PARAGRAPH: <optional explanatory paragraph>
+        QUESTION: <n> or ITEM: <n>
+        TEXT: <stem>
+        STEM: <stem> (alternative to TEXT)
+        OPTIONS:                # the very next lines are A. / B. / …
+        ANSWER: <letter(s)>     # for MC or fill_blank
+        KEYWORDS: <kw list>     # for open items
+        PINNED COMMENT          # everything after this goes into a pinned_comment string
         """
         import re
         exercises: List[Dict] = []
         cur_ex: Dict | None = None  # current exercise being built
         cur_items: List[Dict] = []
         collecting_opts = False
+        collecting_text = False  # New flag for multi-line text collection
+        collecting_paragraph = False  # New flag for multi-line paragraph collection
 
         def flush_exercise():
             nonlocal cur_ex, cur_items
@@ -787,14 +791,27 @@ class GoogleDocsParser:
         # Flatten all lines into a single string and iterate line by line.
         practice_text = "\n".join(lines)
         for line in practice_text.splitlines():
+            original_line = line  # Keep original for text collection
             line = line.strip()
+
             if not line:
+                # If we're collecting text or paragraph, preserve empty lines as line breaks
+                if collecting_text and cur_items:
+                    current_text = cur_items[-1].get("text", "")
+                    if current_text and not current_text.endswith("\n"):
+                        cur_items[-1]["text"] = current_text + "\n"
+                elif collecting_paragraph and cur_ex:
+                    current_paragraph = cur_ex.get("paragraph", "")
+                    if current_paragraph and not current_paragraph.endswith("\n"):
+                        cur_ex["paragraph"] = current_paragraph + "\n"
                 continue
 
             # Check for block-level directives
             m_type = re.match(r'^TYPE:\s*(\w+)', line, re.I)
             if m_type:
                 cur_ex = new_exercise(m_type.group(1).lower())
+                collecting_text = False
+                collecting_opts = False
                 continue
 
             if cur_ex is None:
@@ -803,40 +820,62 @@ class GoogleDocsParser:
 
             if line.startswith("TITLE:"):
                 cur_ex["title"] = line.split(":", 1)[1].strip()
+                collecting_text = False
+                collecting_paragraph = False
                 continue
             if line.startswith("PROMPT:"):
                 cur_ex["prompt"] = line.split(":", 1)[1].strip()
+                collecting_text = False
+                collecting_paragraph = False
                 continue
             if line.startswith("PARAGRAPH:"):
-                cur_ex["paragraph"] = line.split(":", 1)[1].strip()
+                # Get the content after the colon
+                content = line.split(":", 1)[1].strip() if ":" in line else ""
+
+                if content:
+                    # There's content on the same line
+                    cur_ex["paragraph"] = content
+                    collecting_paragraph = False
+                else:
+                    # Empty PARAGRAPH: line, start collecting multi-line paragraph
+                    cur_ex["paragraph"] = ""
+                    collecting_paragraph = True
+                collecting_text = False
                 continue
 
-            # Item-level directives.
-            if line.startswith("QUESTION:"):
+            # Item-level directives - handle both QUESTION: and ITEM:
+            if line.startswith(("QUESTION:", "ITEM:")):
                 number = line.split(":", 1)[1].strip()
-                # Create a new question entry.
+                # Create a new question/item entry.
                 cur_items.append({"number": number})
                 collecting_opts = False
+                collecting_text = False
+                collecting_paragraph = False
                 continue
 
-            # --- STEM for any exercise type ---
-            if line.startswith("STEM:"):
+            # --- TEXT/STEM for any exercise type ---
+            if line.startswith(("TEXT:", "STEM:")):
                 if not cur_items:
                     cur_items.append({})
-                value = line.split(":", 1)[1].strip()
-                cur_items[-1]["stem"] = value
-                continue
 
-            if line.startswith("TEXT:"):
-                # Only proceed if there's an item to update.
-                if not cur_items:
-                    # Log warning or create a new item automatically.
-                    cur_items.append({})
-                cur_items[-1]["text"] = line.split(":", 1)[1].strip()
+                # Get the content after the colon
+                content = line.split(":", 1)[1].strip() if ":" in line else ""
+
+                if content:
+                    # There's content on the same line
+                    cur_items[-1]["text"] = content
+                    collecting_text = False
+                else:
+                    # Empty TEXT: line, start collecting multi-line text
+                    cur_items[-1]["text"] = ""
+                    collecting_text = True
+                collecting_opts = False
                 continue
 
             if line.startswith("OPTIONS:"):
                 collecting_opts = True
+                collecting_text = False
+                collecting_paragraph = False
                 # Ensure the current item has an options list.
                 if not cur_items:
                     cur_items.append({})
@@ -849,6 +888,8 @@ class GoogleDocsParser:
                     cur_items.append({})
                 cur_items[-1]["answer"] = line.split(":", 1)[1].strip()
                 collecting_opts = False
+                collecting_text = False
+                collecting_paragraph = False
                 continue
 
             if line.startswith(("KEYWORDS:", "PINNED COMMENT")):
@@ -858,6 +899,8 @@ class GoogleDocsParser:
                         cur_items.append({})
                     cur_items[-1]["keywords"] = kw
                 collecting_opts = False
+                collecting_text = False
+                collecting_paragraph = False
                 continue
 
             # Item bullet lines (e.g., "A. option text")
@@ -868,9 +911,31 @@ class GoogleDocsParser:
                 cur_items[-1].setdefault("options", []).append(line)
                 continue
 
-            # Optionally, if not collecting options, append free text to the current question's text.
-            if cur_items and not collecting_opts:
-                cur_items[-1]["text"] = cur_items[-1].get("text", "") + " " + line
+            # Multi-line text collection
+            if collecting_text and cur_items:
+                current_text = cur_items[-1].get("text", "")
+                if current_text:
+                    cur_items[-1]["text"] = current_text + "\n" + original_line
+                else:
+                    cur_items[-1]["text"] = original_line
+                continue
+
+            # Multi-line paragraph collection
+            if collecting_paragraph and cur_ex:
+                current_paragraph = cur_ex.get("paragraph", "")
+                if current_paragraph:
+                    cur_ex["paragraph"] = current_paragraph + "\n" + original_line
+                else:
+                    cur_ex["paragraph"] = original_line
+                continue
+
+            # Fallback: if not collecting options, text, or paragraph and we have items, append to current item's text
+            if cur_items and not collecting_opts and not collecting_text and not collecting_paragraph:
+                existing_text = cur_items[-1].get("text", "")
+                if existing_text:
+                    cur_items[-1]["text"] = existing_text + " " + line
+                else:
+                    cur_items[-1]["text"] = line
 
         flush_exercise()
         return exercises
