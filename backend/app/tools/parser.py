@@ -882,6 +882,18 @@ class GoogleDocsParser:
                 cur_items[-1]["options"] = []
                 continue
 
+            if line.startswith("CORRECT:"):
+                # Handle CORRECT: directive for sentence_transform exercises
+                if not cur_items:
+                    cur_items.append({})
+                correct_value = line.split(":", 1)[1].strip()
+                # Build the text field in the expected format
+                cur_items[-1]["correct"] = correct_value
+                collecting_opts = False
+                collecting_text = False
+                collecting_paragraph = False
+                continue
+
             if line.startswith("ANSWER:"):
                 # Only update if there's an existing item.
                 if not cur_items:
