@@ -27,7 +27,7 @@ export default function Lesson() {
   const [lessonPhrases, setLessonPhrases] = useState([]);
 
   // UI state
-  const [activeId, setActiveId] = useState(null);
+  const [activeId, setActiveId] = useState("comprehension");
   const [uiLang,   setUiLang]   = useState("en");
 
   // Audio URL state
@@ -94,12 +94,12 @@ export default function Lesson() {
       const pinnedSection = secs.find((s) => s.type === "pinned_comment");
       setPinnedComment(pinnedSection ? pinnedSection.content : "");
 
-      // initial active: first section, or fallback to comprehension/transcript
-      setActiveId(
-        secs[0]?.id
-        || (qs.length ? "comprehension" : null)
-        || (tr.length ? "transcript" : null)
-      );
+      // // initial active: first section, or fallback to comprehension/transcript
+      // setActiveId(
+      //   secs[0]?.id
+      //   || (qs.length ? "comprehension" : null)
+      //   || (tr.length ? "transcript" : null)
+      // );
 
       // Fetch audio URL if present
       const bucket = "lesson-audio";

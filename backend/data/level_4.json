@@ -271,27 +271,32 @@
         "items": [
           {
             "number": "1",
-            "text": "I cooking lunch. CORRECT: no",
+            "text": "I cooking lunch.",
+            "correct": "no",
             "answer": "i am cooking, im cooking"
           },
           {
             "number": "2",
-            "text": "Is you wearing a jacket? CORRECT: no",
+            "text": "Is you wearing a jacket?",
+            "correct": "no",
             "answer": "are you wearing"
           },
           {
             "number": "3",
-            "text": "You not listening to me. CORRECT: no",
+            "text": "You not listening to me.",
+            "correct": "no",
             "answer": "you are not listening, you arent listening"
           },
           {
             "number": "4",
-            "text": "He's drive to work. CORRECT: no",
+            "text": "He's drive to work.",
+            "correct": "no",
             "answer": "hes driving, he is driving"
           },
           {
             "number": "5",
-            "text": "They watching TV. CORRECT: no",
+            "text": "They watching TV.",
+            "correct": "no",
             "answer": "they are watching, theyre watching"
           }
         ],
@@ -5626,26 +5631,31 @@
         "items": [
           {
             "number": "1",
-            "text": "My birthday is on October 31. CORRECT: no",
+            "text": "My birthday is on October 31.",
+            "correct": "no",
             "answer": "october 31st"
           },
           {
             "number": "2",
-            "text": "I live on the 5th floor. CORRECT: yes"
+            "text": "I live on the 5th floor.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "This is my 3 time in Mexico. CORRECT: no",
+            "text": "This is my 3 time in Mexico.",
+            "correct": "no",
             "answer": "3rd time"
           },
           {
             "number": "4",
-            "text": "I leave for Bangkok on the 22. CORRECT: no",
+            "text": "I leave for Bangkok on the 22.",
+            "correct": "no",
             "answer": "22nd"
           },
           {
             "number": "5",
-            "text": "Tomorrow is my dad’s 67th birthday. CORRECT: yes"
+            "text": "Tomorrow is my dad’s 67th birthday.",
+            "correct": "yes"
           }
         ],
         "sort_order": 2
@@ -9767,26 +9777,31 @@
         "items": [
           {
             "number": "1",
-            "text": "My sister works on Thailand. CORRECT: no",
+            "text": "My sister works on Thailand.",
+            "correct": "no",
             "answer": "in thailand"
           },
           {
             "number": "2",
-            "text": "The movie ends in 9PM. CORRECT: no",
+            "text": "The movie ends in 9PM.",
+            "correct": "no",
             "answer": "at 9"
           },
           {
             "number": "3",
-            "text": "The ski resort is closed at summer. CORRECT: no",
+            "text": "The ski resort is closed at summer.",
+            "correct": "no",
             "answer": "in summer"
           },
           {
             "number": "4",
-            "text": "Let's meet at the restaurant. CORRECT: yes"
+            "text": "Let's meet at the restaurant.",
+            "correct": "yes"
           },
           {
             "number": "5",
-            "text": "I was born on 1998. CORRECT: no",
+            "text": "I was born on 1998.",
+            "correct": "no",
             "answer": "in 1998"
           }
         ],
@@ -12768,25 +12783,30 @@
         "items": [
           {
             "number": "1",
-            "text": "He can't driving a car. CORRECT: no",
+            "text": "He can't driving a car.",
+            "correct": "no",
             "answer": "cant drive"
           },
           {
             "number": "2",
-            "text": "Chloe's mom can speak three languages. CORRECT: yes"
+            "text": "Chloe's mom can speak three languages.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "Can I borrow your pen? CORRECT: yes"
+            "text": "Can I borrow your pen?",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "I can't helping you tonight. CORRECT: no",
+            "text": "I can't helping you tonight.",
+            "correct": "no",
             "answer": "cant help"
           },
           {
             "number": "5",
-            "text": "We can see the movie tomorrow. CORRECT: yes"
+            "text": "We can see the movie tomorrow.",
+            "correct": "yes"
           }
         ],
         "sort_order": 3
@@ -15144,26 +15164,31 @@
         "items": [
           {
             "number": "1",
-            "text": "She wants to playing the guitar. CORRECT: no",
+            "text": "She wants to playing the guitar.",
+            "correct": "no",
             "answer": "wants to play"
           },
           {
             "number": "2",
-            "text": "I don't want eat breakfast. CORRECT: no",
+            "text": "I don't want eat breakfast.",
+            "correct": "no",
             "answer": "dont want to eat"
           },
           {
             "number": "3",
-            "text": "He wants the blue car. CORRECT: yes"
+            "text": "He wants the blue car.",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "We want to traveling to Italy. CORRECT: no",
+            "text": "We want to traveling to Italy.",
+            "correct": "no",
             "answer": "want to travel"
           },
           {
             "number": "5",
-            "text": "They want to go to the mall. CORRECT: yes"
+            "text": "They want to go to the mall.",
+            "correct": "yes"
           }
         ],
         "sort_order": 6
@@ -17986,26 +18011,31 @@
         "items": [
           {
             "number": "1",
-            "text": "I'm headache. CORRECT: no",
+            "text": "I'm headache.",
+            "correct": "no",
             "answer": "i have a headache"
           },
           {
             "number": "2",
-            "text": "I have a sore throat. CORRECT: yes"
+            "text": "I have a sore throat.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "I'm have a cold. CORRECT: no",
+            "text": "I'm have a cold.",
+            "correct": "no",
             "answer": "i have a cold"
           },
           {
             "number": "4",
-            "text": "I'm hangover. CORRECT: no",
+            "text": "I'm hangover.",
+            "correct": "no",
             "answer": "im hungover, i have a hangover"
           },
           {
             "number": "5",
-            "text": "I'm fever. CORRECT: no",
+            "text": "I'm fever.",
+            "correct": "no",
             "answer": "i have a fever"
           }
         ],
@@ -19836,26 +19866,31 @@
         "items": [
           {
             "number": "1",
-            "text": "I take my son to school yesterday. CORRECT: no",
+            "text": "I take my son to school yesterday.",
+            "correct": "no",
             "answer": "i took"
           },
           {
             "number": "2",
-            "text": "They went to Beijing last year. CORRECT: yes"
+            "text": "They went to Beijing last year.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "We have breakfast already. CORRECT: no",
+            "text": "We have breakfast already.",
+            "correct": "no",
             "answer": "we had"
           },
           {
             "number": "4",
-            "text": "She get Covid last month. CORRECT: no",
+            "text": "She get Covid last month.",
+            "correct": "no",
             "answer": "she got"
           },
           {
             "number": "5",
-            "text": "I come here at 8:30. CORRECT: no",
+            "text": "I come here at 8:30.",
+            "correct": "no",
             "answer": "i came"
           }
         ],
@@ -22452,25 +22487,30 @@
         "items": [
           {
             "number": "1",
-            "text": "I drank so many coffee this morning. CORRECT: no",
+            "text": "I drank so many coffee this morning.",
+            "correct": "no",
             "answer": "so much coffee"
           },
           {
             "number": "2",
-            "text": "You have so much pillows on your bed. CORRECT: no",
+            "text": "You have so much pillows on your bed.",
+            "correct": "no",
             "answer": "so many pillows"
           },
           {
             "number": "3",
-            "text": "How many people do you live with? CORRECT: yes"
+            "text": "How many people do you live with?",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "There's so much traffic today. CORRECT: yes"
+            "text": "There's so much traffic today.",
+            "correct": "yes"
           },
           {
             "number": "5",
-            "text": "I don't have many homework today. CORRECT: no",
+            "text": "I don't have many homework today.",
+            "correct": "no",
             "answer": "much homework"
           }
         ],
@@ -26079,25 +26119,30 @@
         "items": [
           {
             "number": "1",
-            "text": "I paint a picture this morning. CORRECT: no",
+            "text": "I paint a picture this morning.",
+            "correct": "no",
             "answer": "i painted"
           },
           {
             "number": "2",
-            "text": "It didn't rained yesterday. CORRECT: no",
+            "text": "It didn't rained yesterday.",
+            "correct": "no",
             "answer": "didnt rain"
           },
           {
             "number": "3",
-            "text": "Did you wash your hands? CORRECT: yes"
+            "text": "Did you wash your hands?",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "He turned the fan on. CORRECT: yes"
+            "text": "He turned the fan on.",
+            "correct": "yes"
           },
           {
             "number": "5",
-            "text": "She fixed the clock. CORRECT: yes"
+            "text": "She fixed the clock.",
+            "correct": "yes"
           }
         ],
         "sort_order": 7
@@ -28779,26 +28824,31 @@
         "items": [
           {
             "number": "1",
-            "text": "I drink coffee this morning. CORRECT: no",
+            "text": "I drink coffee this morning.",
+            "correct": "no",
             "answer": "drank"
           },
           {
             "number": "2",
-            "text": "They did laundry yesterday. CORRECT: yes"
+            "text": "They did laundry yesterday.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "We see an elephant at the zoo. CORRECT: no",
+            "text": "We see an elephant at the zoo.",
+            "correct": "no",
             "answer": "saw"
           },
           {
             "number": "4",
-            "text": "I tell him the show starts at 6. CORRECT: no",
+            "text": "I tell him the show starts at 6.",
+            "correct": "no",
             "answer": "told"
           },
           {
             "number": "5",
-            "text": "She thought the movie was good. CORRECT: yes"
+            "text": "She thought the movie was good.",
+            "correct": "yes"
           }
         ],
         "sort_order": 4

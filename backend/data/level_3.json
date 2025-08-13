@@ -2216,26 +2216,31 @@
         "items": [
           {
             "number": "1",
-            "text": "She don’t work on the weekends. CORRECT: no",
+            "text": "She don’t work on the weekends.",
+            "correct": "no",
             "answer": "she doesnt work"
           },
           {
             "number": "2",
-            "text": "They not live in Bangkok. CORRECT: no",
+            "text": "They not live in Bangkok.",
+            "correct": "no",
             "answer": "they dont live"
           },
           {
             "number": "3",
-            "text": "He doesn’t know Sarah. CORRECT: yes"
+            "text": "He doesn’t know Sarah.",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "Dara not want kids. CORRECT: no",
+            "text": "Dara not want kids.",
+            "correct": "no",
             "answer": "dara doesnt want"
           },
           {
             "number": "5",
-            "text": "It don’t rain often. CORRECT: no",
+            "text": "It don’t rain often.",
+            "correct": "no",
             "answer": "it doesnt rain"
           }
         ],
@@ -3368,26 +3373,31 @@
         "items": [
           {
             "number": "1",
-            "text": "I got a email. CORRECT: no",
+            "text": "I got a email.",
+            "correct": "no",
             "answer": "an email"
           },
           {
             "number": "2",
-            "text": "We live in an big house. CORRECT: no",
+            "text": "We live in an big house.",
+            "correct": "no",
             "answer": "a big house"
           },
           {
             "number": "3",
-            "text": "She has an appointment. CORRECT: yes"
+            "text": "She has an appointment.",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "That's a excellent idea. CORRECT: no",
+            "text": "That's a excellent idea.",
+            "correct": "no",
             "answer": "an excellent idea"
           },
           {
             "number": "5",
-            "text": "She has cat. CORRECT: no",
+            "text": "She has cat.",
+            "correct": "no",
             "answer": "a cat"
           }
         ],
@@ -5321,25 +5331,30 @@
         "items": [
           {
             "number": "1",
-            "text": "I went to a beach yesterday. CORRECT: no",
+            "text": "I went to a beach yesterday.",
+            "correct": "no",
             "answer": "the beach"
           },
           {
             "number": "2",
-            "text": "She wants to get a new car. CORRECT: yes"
+            "text": "She wants to get a new car.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "Pailin is an university student. CORRECT: no",
+            "text": "Pailin is an university student.",
+            "correct": "no",
             "answer": "a university student"
           },
           {
             "number": "4",
-            "text": "Where are the keys? CORRECT: yes"
+            "text": "Where are the keys?",
+            "correct": "yes"
           },
           {
             "number": "5",
-            "text": "A house next door is blue. CORRECT: no",
+            "text": "A house next door is blue.",
+            "correct": "no",
             "answer": "the house"
           }
         ],
@@ -7723,26 +7738,31 @@
         "items": [
           {
             "number": "1",
-            "text": "I have three sister. CORRECT: no",
+            "text": "I have three sister.",
+            "correct": "no",
             "answer": "three sisters"
           },
           {
             "number": "2",
-            "text": "The bag is ten dollars. CORRECT: yes"
+            "text": "The bag is ten dollars.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "She lives with two person. CORRECT: no",
+            "text": "She lives with two person.",
+            "correct": "no",
             "answer": "two people"
           },
           {
             "number": "4",
-            "text": "Chloe has some book. CORRECT: no",
+            "text": "Chloe has some book.",
+            "correct": "no",
             "answer": "some books"
           },
           {
             "number": "5",
-            "text": "We don't have any blanket. CORRECT: no",
+            "text": "We don't have any blanket.",
+            "correct": "no",
             "answer": "any blankets"
           }
         ],
@@ -10037,25 +10057,30 @@
         "items": [
           {
             "number": "1",
-            "text": "Mark car is white. CORRECT: no",
+            "text": "Mark car is white.",
+            "correct": "no",
             "answer": "mark’s car"
           },
           {
             "number": "2",
-            "text": "My uncle's cat is friendly. CORRECT: yes"
+            "text": "My uncle's cat is friendly.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "I've never met my brother wife. CORRECT: no",
+            "text": "I've never met my brother wife.",
+            "correct": "no",
             "answer": "my brother’s wife"
           },
           {
             "number": "4",
-            "text": "This is Adam's phone. CORRECT: yes"
+            "text": "This is Adam's phone.",
+            "correct": "yes"
           },
           {
             "number": "5",
-            "text": "Your grandma necklace is beautiful. CORRECT: no",
+            "text": "Your grandma necklace is beautiful.",
+            "correct": "no",
             "answer": "your grandma’s necklace"
           }
         ],
@@ -11344,25 +11369,30 @@
         "items": [
           {
             "number": "1",
-            "text": "Let's go on a hike. CORRECT: yes"
+            "text": "Let's go on a hike.",
+            "correct": "yes"
           },
           {
             "number": "2",
-            "text": "Let watch a movie. CORRECT: no",
+            "text": "Let watch a movie.",
+            "correct": "no",
             "answer": "lets watch"
           },
           {
             "number": "3",
-            "text": "Let's meet in an hour. CORRECT: yes"
+            "text": "Let's meet in an hour.",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "Let take the subway. CORRECT: no",
+            "text": "Let take the subway.",
+            "correct": "no",
             "answer": "lets take"
           },
           {
             "number": "5",
-            "text": "Let finish this. CORRECT: no",
+            "text": "Let finish this.",
+            "correct": "no",
             "answer": "lets finish"
           }
         ],
@@ -12615,26 +12645,31 @@
         "items": [
           {
             "number": "1",
-            "text": "Is you guys hungry? CORRECT: no",
+            "text": "Is you guys hungry?",
+            "correct": "no",
             "answer": "are you guys"
           },
           {
             "number": "2",
-            "text": "You guys was late. CORRECT: no",
+            "text": "You guys was late.",
+            "correct": "no",
             "answer": "you guys were"
           },
           {
             "number": "3",
-            "text": "Do you guys like wine? CORRECT: yes"
+            "text": "Do you guys like wine?",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "You guys is doing a great job. CORRECT: no",
+            "text": "You guys is doing a great job.",
+            "correct": "no",
             "answer": "you guys are"
           },
           {
             "number": "5",
-            "text": "Does you guys play soccer? CORRECT: no",
+            "text": "Does you guys play soccer?",
+            "correct": "no",
             "answer": "do you guys"
           }
         ],
@@ -13966,26 +14001,31 @@
         "items": [
           {
             "number": "1",
-            "text": "Do she speak Thai? CORRECT: no",
+            "text": "Do she speak Thai?",
+            "correct": "no",
             "answer": "does she speak"
           },
           {
             "number": "2",
-            "text": "Does it rain often? CORRECT: yes"
+            "text": "Does it rain often?",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "Do your brother play the guitar? CORRECT: no",
+            "text": "Do your brother play the guitar?",
+            "correct": "no",
             "answer": "does your brother play"
           },
           {
             "number": "4",
-            "text": "Does they have any pets? CORRECT: no",
+            "text": "Does they have any pets?",
+            "correct": "no",
             "answer": "do they have"
           },
           {
             "number": "5",
-            "text": "Does Chloe and Alex work tonight? CORRECT: no",
+            "text": "Does Chloe and Alex work tonight?",
+            "correct": "no",
             "answer": "do chloe and alex work"
           }
         ],
@@ -15762,26 +15802,31 @@
         "items": [
           {
             "number": "1",
-            "text": "He have a new car. CORRECT: no",
+            "text": "He have a new car.",
+            "correct": "no",
             "answer": "he has"
           },
           {
             "number": "2",
-            "text": "We has a lot of homework. CORRECT: no",
+            "text": "We has a lot of homework.",
+            "correct": "no",
             "answer": "we have"
           },
           {
             "number": "3",
-            "text": "Does she have a good job? CORRECT: yes"
+            "text": "Does she have a good job?",
+            "correct": "yes"
           },
           {
             "number": "4",
-            "text": "Marcus doesn't has his phone. CORRECT: no",
+            "text": "Marcus doesn't has his phone.",
+            "correct": "no",
             "answer": "doesn’t have"
           },
           {
             "number": "5",
-            "text": "Our teacher have blonde hair. CORRECT: no",
+            "text": "Our teacher have blonde hair.",
+            "correct": "no",
             "answer": "teacher has"
           }
         ],
@@ -16984,49 +17029,59 @@
         "items": [
           {
             "number": "1",
-            "text": "The movie were interesting. CORRECT: no",
+            "text": "The movie were interesting.",
+            "correct": "no",
             "answer": "movie was"
           },
           {
             "number": "2",
-            "text": "Chloe is half French. CORRECT: yes"
+            "text": "Chloe is half French.",
+            "correct": "yes"
           },
           {
             "number": "3",
-            "text": "My uncle live with my grandparents. CORRECT: no",
+            "text": "My uncle live with my grandparents.",
+            "correct": "no",
             "answer": "uncle lives"
           },
           {
             "number": "4",
-            "text": "He has a flight tomorrow. CORRECT: yes"
+            "text": "He has a flight tomorrow.",
+            "correct": "yes"
           },
           {
             "number": "5",
-            "text": "His boss like him. CORRECT: no",
+            "text": "His boss like him.",
+            "correct": "no",
             "answer": "boss likes"
           },
           {
             "number": "6",
-            "text": "She isn't at home. CORRECT: yes"
+            "text": "She isn't at home.",
+            "correct": "yes"
           },
           {
             "number": "7",
-            "text": "Do Pete ride a bike to school? CORRECT: no",
+            "text": "Do Pete ride a bike to school?",
+            "correct": "no",
             "answer": "does pete ride"
           },
           {
             "number": "8",
-            "text": "Dara don't have any kids. CORRECT: no",
+            "text": "Dara don't have any kids.",
+            "correct": "no",
             "answer": "dara doesnt have"
           },
           {
             "number": "9",
-            "text": "Were Alex late to work? CORRECT: no",
+            "text": "Were Alex late to work?",
+            "correct": "no",
             "answer": "was alex"
           },
           {
             "number": "10",
-            "text": "My mom doesn't like tea. CORRECT: yes"
+            "text": "My mom doesn't like tea.",
+            "correct": "yes"
           }
         ],
         "sort_order": 2

@@ -30,7 +30,7 @@ SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# ───────────────────────────── regex helpers (from old parser)
+# ───────────────────────────── regex helpers
 HEADING_RE = re.compile(r"^([A-Z][A-Z &''']+)(?::\s*(.*))?$", re.I)
 UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&'‘’\-!?$%#]{2,60}$")
 QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
@@ -38,6 +38,9 @@ OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
 LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
+SPEAKER_RE_TH = re.compile(r'^([\u0E00-\u0E7F][^:]{0,50}):\s*(.+)$')
+TH = re.compile(r'[\u0E00-\u0E7F]')
+EN = re.compile(r'[A-Za-z]')
 PRACTICE_DIRECTIVE_RE = re.compile(
     r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
     r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
@@ -82,6 +85,11 @@ SECTION_TYPE_MAP = {
 
 # ───────────────────────────── helper functions
 
+def _has_en(s: str | None) -> bool:
+    return bool(s and EN.search(s))
+
+def _has_th(s: str | None) -> bool:
+    return bool(s and TH.search(s))
 
 def _plain_text(elems: list[dict]) -> str:
     """Concatenate all textRun content inside a list of Google-Docs elements."""
@@ -110,7 +118,156 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
         "cells": rows,
     }
 
-# ───────────────────────────── New style-based extraction functions
+
+
+# ───────────────────────────── module-level bilingual helpers
+def split_en_th(line: str):
+    if not line: return None, None
+    # "EN (TH)" pattern
+    m = re.match(r'^(.*?)\s*\(([\u0E00-\u0E7F].*?)\)\s*$', line)
+    if m:
+        en = m.group(1).strip() or None
+        th = m.group(2).strip() or None
+        return en, th
+    # "EN … TH" pattern (first Thai char starts TH)
+    idx = next((i for i, ch in enumerate(line) if TH.match(ch)), -1)
+    if idx >= 0:
+        en = line[:idx].strip() or None
+        th = line[idx:].strip() or None
+        return en, th
+    # mono language
+    if TH.search(line):
+        return None, line.strip() or None
+    return line.strip() or None, None
+
+def node_plain_text(node):
+    if "text" in node and isinstance(node["text"], str):
+        return node["text"]
+    if "inlines" in node:
+        return ''.join(run.get("text", "") for run in node["inlines"])
+    return ""
+
+
+def bilingualize_headers_th(nodes, default_level=3):
+    out = []
+    for n in nodes:
+        if n.get("kind") in {"heading", "header"}:
+            # already a heading -> try to split into en/th
+            s = node_plain_text(n)
+            en, th = split_en_th(s)
+            if en or th:
+                out.append({"kind": "heading", "level": n.get("level", default_level), "text": {"en": en, "th": th}})
+            else:
+                out.append(n)
+            continue
+        # fallback: a paragraph that looks like a bilingual heading
+        if n.get("kind") == "paragraph":
+            s = node_plain_text(n)
+            has_th = bool(TH.search(s))
+            has_en = bool(re.search(r'[A-Za-z]', s))
+            looks_like_title = has_en and s.strip().upper() == s.strip()  # ALL CAPS EN
+            if has_th and (looks_like_title or n.get("is_bold_header")):
+                en, th = split_en_th(s)
+                if en or th:
+                    out.append({"kind": "heading", "level": default_level, "text": {"en": en, "th": th}})
+                    continue
+        out.append(n)
+    return out
+
+def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
+    """
+    Merge EN+TH transcript lines into a single row with speaker_th / line_text_th.
+
+    Handles:
+      A) EN-only line followed by TH-only line  → merge
+      B) TH-only line followed by EN-only line  → merge (keep EN as base)
+      C) Single entry whose line_text contains both EN and TH → split inline
+         and (optionally) extract Thai speaker from the TH chunk if present.
+    """
+    out = []
+    i = 0
+    order = 1
+
+    while i < len(entries):
+        a = dict(entries[i])  # copy
+        a_text_full = f"{a.get('speaker','')} {a.get('line_text','')}"
+        a_en, a_th = _has_en(a_text_full), _has_th(a_text_full)
+
+        # ── Case C: inline mixed EN+TH in the same entry
+        # e.g., line_text == "Good morning, Joey! (สวัสดีตอนเช้าค่ะ โจอี้!)"
+        # or "Good morning, Joey! สวัสดีตอนเช้าค่ะ โจอี้!"
+        if a_en and a_th:
+            en_txt, th_txt = split_en_th(a.get("line_text", ""))
+            spk_th = None
+            if th_txt:
+                # Extract Thai speaker if author included "ที่ปรึกษา: ..." inline
+                mth = SPEAKER_RE_TH.match(th_txt)
+                if mth:
+                    spk_th, th_txt = mth.group(1).strip(), mth.group(2).strip()
+            merged = a
+            if en_txt is not None:
+                merged["line_text"] = en_txt
+            merged["speaker_th"]   = spk_th
+            merged["line_text_th"] = th_txt
+            merged["sort_order"]   = order
+            out.append(merged)
+            i += 1
+            order += 1
+            continue
+
+        # Lookahead for pairing A/B
+        b = entries[i+1] if i + 1 < len(entries) else None
+        b_en = b_th = False
+        if b:
+            b_text_full = f"{b.get('speaker','')} {b.get('line_text','')}"
+            b_en, b_th = _has_en(b_text_full), _has_th(b_text_full)
+
+        # ── Case A: EN-only followed by TH-only
+        if a_en and not a_th and b and b_th and not b_en:
+            merged = a
+            merged["speaker_th"]   = b.get("speaker")
+            merged["line_text_th"] = b.get("line_text")
+            merged["sort_order"]   = order
+            out.append(merged)
+            i += 2
+            order += 1
+            continue
+
+        # ── Case B: TH-only followed by EN-only (rare)
+        if a_th and not a_en and b and b_en and not b_th:
+            merged = dict(b)
+            merged["speaker_th"]   = a.get("speaker")
+            merged["line_text_th"] = a.get("line_text")
+            merged["sort_order"]   = order
+            out.append(merged)
+            i += 2
+            order += 1
+            continue
+
+        # ── TH-only with no pair → keep as *_th-only row
+        if a_th and not a_en:
+            out.append({
+                "sort_order":   order,
+                "speaker":      "",
+                "line_text":    "",
+                "indent":       a.get("indent", 0),
+                "speaker_th":   a.get("speaker"),
+                "line_text_th": a.get("line_text"),
+            })
+            i += 1
+            order += 1
+            continue
+
+        # ── EN-only → keep as-is
+        a["sort_order"] = order
+        out.append(a)
+        i += 1
+        order += 1
+
+    return out
+
+
+# ───────────────────────────── Style-based extraction functions
 
 def paragraphs_with_style(doc_json) -> List[Tuple[str, str]]:
     """
@@ -277,6 +434,7 @@ def tag_nodes_with_sections(doc_json):
     return tagged_nodes
 
 
+
 # ───────────────────────────── GoogleDocsParser class
 
 class GoogleDocsParser:
@@ -380,11 +538,13 @@ class GoogleDocsParser:
 
 
 
+
     def build_lesson_from_sections(
         self,
         lesson_sections: list[tuple[str, list[tuple[str, str]]]],
         stage: str,
         doc_json,
+        lang: str = 'en'
     ) -> dict:
         # ---- header & bucket bookkeeping -----------------------------------
         lesson_header, _ = lesson_sections[0]
@@ -393,6 +553,7 @@ class GoogleDocsParser:
         lesson           = lesson_info.copy()
         lesson["focus"]      = ""
         lesson["backstory"]  = ""
+        conversation_present = False
 
         transcript_lines:      list[str] = []
         comp_lines:            list[str] = []
@@ -421,7 +582,10 @@ class GoogleDocsParser:
                 lesson["backstory"] = "\n".join(texts_only).strip()
                 continue
             elif norm_header == "CONVERSATION":
-                transcript_lines += texts_only
+                if lang == 'th':
+                    conversation_present = True     # harvest later from tagged_nodes
+                else:
+                    transcript_lines += texts_only  # preserve original EN behavior
                 continue
             elif norm_header == "COMPREHENSION":
                 comp_lines += texts_only
@@ -622,11 +786,28 @@ class GoogleDocsParser:
                     "sort_order": len(other_sections) + 1,
                     "content":    "\n".join(body_parts).strip(),
                 })
+        if lang == 'th' and conversation_present:
+            transcript_lines = []
+            for n in tagged_nodes:
+                if (
+                    n.get("lesson_context") == lesson_header_raw and
+                    n.get("section_context") == "CONVERSATION" and
+                    "inlines" in n
+                ):
+                    s = "".join(run.get("text", "") for run in n["inlines"]).strip()
+                    if s:
+                        transcript_lines.append(s)
+        parsed_transcript = self.parse_conversation_from_lines(transcript_lines)
+        if lang == 'th':
+            parsed_transcript = pair_transcript_bilingual(parsed_transcript)
+            for sec in other_sections:
+                if "content_jsonb" in sec and isinstance(sec["content_jsonb"], list):
+                    sec["content_jsonb"] = bilingualize_headers_th(sec["content_jsonb"])
 
         # --------------------------------------------------------------------
         lesson_obj = {
             "lesson":                  lesson,
-            "transcript":              self.parse_conversation_from_lines(transcript_lines),
+            "transcript":              parsed_transcript,
             "comprehension_questions": self.parse_comprehension(comp_lines),
             "practice_exercises":      self.parse_practice(embedded_practice_lines + practice_lines),
             "sections":                other_sections,
@@ -636,6 +817,7 @@ class GoogleDocsParser:
             lesson_obj["pinned_comment"] = "\n".join(pinned_comment_lines).strip()
 
         return lesson_obj
+
 
 
     def parse_conversation_from_lines(self, lines: List[str]) -> List[Dict]:
@@ -961,7 +1143,7 @@ class GoogleDocsParser:
         tags_text = " ".join(lines)
         return [tag.strip() for tag in tags_text.split(",") if tag.strip()]
 
-    def convert_document(self, document_id: str, stage: str) -> Union[Dict, List[Dict]]:
+    def convert_document(self, document_id: str, stage: str, lang: str = 'en') -> Union[Dict, List[Dict]]:
         logger.info(f"Converting document {document_id}")
         doc_json = fetch_doc(document_id)
         if not doc_json:
@@ -972,7 +1154,7 @@ class GoogleDocsParser:
         results = []
         for lesson_sections in lessons:
             try:
-                lesson_data = self.build_lesson_from_sections(lesson_sections, stage, doc_json)
+                lesson_data = self.build_lesson_from_sections(lesson_sections, stage, doc_json, lang=lang)
                 results.append(lesson_data)
             except Exception as e:
                 logger.error(f"Error processing a lesson: {e}")
@@ -991,6 +1173,7 @@ def main():
     parser.add_argument('--stage', required=True, help='Lesson stage (e.g., Beginner)')
     parser.add_argument('--raw-output', help='File to write raw JSON output (optional)')
     parser.add_argument('--output', help='File to write processed JSON output (default: stdout)')
+    parser.add_argument('--lang', choices=['en','th'], default='en', help='Language of this doc')
     args = parser.parse_args()
 
     try:
@@ -1000,7 +1183,7 @@ def main():
             with open(args.raw_output, 'w', encoding='utf-8') as f:
                 json.dump(raw_doc, f, ensure_ascii=False, indent=2)
             logger.info(f"Wrote raw document JSON to {args.raw_output}")
-        result = docs_parser.convert_document(args.document_id, args.stage)
+        result = docs_parser.convert_document(args.document_id, args.stage, lang=args.lang)
         if args.output:
             with open(args.output, 'w', encoding='utf-8') as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
