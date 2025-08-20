@@ -65,45 +65,109 @@ def upsert_practice_exercises(lesson_id, practice_exercises, dry_run=False):
         except Exception as e:
             print(f"[ERROR] practice_exercises for lesson {lesson_id}: {e}")
 
-def upsert_lesson(data, dry_run=False):
+def upsert_lesson(data, lang="en", dry_run=False):
     lesson = data["lesson"]
-    record = {
+    key = {
         "stage": lesson["stage"],
         "level": lesson["level"],
         "lesson_order": lesson["lesson_order"],
-        "title": lesson["title"],
-        "subtitle": lesson.get("subtitle"),
-        "focus": lesson.get("focus"),
-        "backstory": lesson.get("backstory"),
     }
-    if dry_run:
-        print(f"[DRY RUN] Upsert lesson: {record}")
-        return None
 
-    res = supabase.table("lessons") \
-        .upsert(record, on_conflict="stage,level,lesson_order", returning="representation") \
-        .execute()
-
-    return res.data[0]["id"]
-
-
-def upsert_transcript(lesson_id, transcript, dry_run=False):
-    for line in transcript:
+    if lang == "en":
         record = {
-            "lesson_id": lesson_id,
-            "sort_order": line["sort_order"],
-            "speaker": line["speaker"],
-            "line_text": line["line_text"],
+            **key,
+            "title": lesson.get("title"),
+            "subtitle": lesson.get("subtitle"),
+            "focus": lesson.get("focus"),
+            "backstory": lesson.get("backstory"),
         }
         if dry_run:
-            print(f"[DRY RUN] Upsert transcript: {record}")
+            print(f"[DRY RUN] Lesson EN UPSERT: {record}")
+            return None
+        res = (supabase.table("lessons")
+               .upsert(record, on_conflict="stage,level,lesson_order", returning="representation")
+               .execute())
+        return res.data[0]["id"]
+
+    # TH path: update-only, then insert if missing
+    th_update = {}
+    if lesson.get("title"):     th_update["title_th"]     = lesson["title"]
+    if lesson.get("subtitle"):  th_update["subtitle_th"]  = lesson["subtitle"]
+    if lesson.get("focus"):     th_update["focus_th"]     = lesson["focus"]
+    if lesson.get("backstory"): th_update["backstory_th"] = lesson["backstory"]
+
+    if dry_run:
+        print(f"[DRY RUN] Lesson TH UPDATE where {key} set {th_update}")
+        print(f"[DRY RUN] (if no row, INSERT { {**key, **th_update} })")
+        return None
+
+    # UPDATE
+    upd = (supabase.table("lessons")
+           .update(th_update)
+           .eq("stage", key["stage"])
+           .eq("level", key["level"])
+           .eq("lesson_order", key["lesson_order"])
+           .execute())
+    rows = upd.data or []
+    if len(rows) == 0:
+        # INSERT minimal row with TH
+        ins_record = {**key, **th_update}
+        res = (supabase.table("lessons")
+               .insert(ins_record)
+               .execute())
+    # fetch id (safe either way)
+    sel = (supabase.table("lessons")
+           .select("id")
+           .eq("stage", key["stage"])
+           .eq("level", key["level"])
+           .eq("lesson_order", key["lesson_order"])
+           .single()
+           .execute())
+    return sel.data["id"]
+
+
+def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
+    for line in transcript:
+        key = {"lesson_id": lesson_id, "sort_order": line["sort_order"]}
+
+        if lang == "en":
+            record = {**key,
+                      "speaker": line.get("speaker", ""),
+                      "line_text": line.get("line_text", "")}
+            if dry_run:
+                print(f"[DRY RUN] Transcript EN UPSERT: {record}")
+                continue
+            (supabase.table("transcript_lines")
+             .upsert(record, on_conflict="lesson_id,sort_order")
+             .execute())
             continue
-        try:
-            supabase.table("transcript_lines") \
-                .upsert(record, on_conflict="lesson_id,sort_order") \
-                .execute()
-        except Exception as e:
-            print(f"[ERROR] transcript_lines for lesson {lesson_id}, sort {line['sort_order']}: {e}")
+
+        # TH path: update-only; insert if missing
+        th_update = {}
+        if "speaker_th" in line:   th_update["speaker_th"]   = line["speaker_th"]
+        if "line_text_th" in line: th_update["line_text_th"] = line["line_text_th"]
+
+        if dry_run:
+            print(f"[DRY RUN] Transcript TH UPDATE where {key} set {th_update}")
+            print(f"[DRY RUN] (if no row, INSERT { {**key, **th_update} })")
+            continue
+
+        upd = (supabase.table("transcript_lines")
+               .update(th_update)
+               .eq("lesson_id", lesson_id)
+               .eq("sort_order", line["sort_order"])
+               .execute())
+        rows = upd.data or []
+        if len(rows) == 0:
+            # Insert minimal row but supply NOT NULL EN columns with safe placeholders
+            ins_record = {
+                **key,
+                "speaker": line.get("speaker", "") or "",      # satisfy NOT NULL
+                "line_text": line.get("line_text", "") or "",  # satisfy NOT NULL
+                **th_update,                                   # speaker_th / line_text_th
+            }
+            (supabase.table("transcript_lines").insert(ins_record).execute())
+
 
 
 def upsert_comprehension(lesson_id, questions, dry_run=False):
@@ -126,31 +190,68 @@ def upsert_comprehension(lesson_id, questions, dry_run=False):
             print(f"[ERROR] comprehension_questions for lesson {lesson_id}, sort {q['sort_order']}: {e}")
 
 
-def upsert_sections(lesson_id, sections, dry_run=False):
+def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
     for sec in sections:
-        # phrases_verbs handled separately
         if sec["type"] == "phrases_verbs":
             continue
-        record = {
+
+        key = {
             "lesson_id": lesson_id,
             "type": sec["type"],
             "sort_order": sec["sort_order"],
-            "content": sec.get("content"),
-            "content_jsonb": sec.get("content_jsonb", ""),
         }
-        if dry_run:
-            print(f"[DRY RUN] Upsert section: {record}")
-            if sec["type"] == "understand":
-                print("\n--- Understand Section (raw markdown) ---")
-                print(sec.get("content_md"))
-                print("--- End Understand Section ---\n")
+
+        if lang == "en":
+            record = {
+                **key,
+                "content": sec.get("content"),
+            }
+            if "content_jsonb" in sec and sec["content_jsonb"] is not None:
+                record["content_jsonb"] = sec["content_jsonb"]
+            if dry_run:
+                print(f"[DRY RUN] Section EN UPSERT: {record}")
+                continue
+            try:
+                (supabase.table("lesson_sections")
+                    .upsert(record, on_conflict="lesson_id,type,sort_order")
+                    .execute())
+            except Exception as e:
+                print(f"[ERROR] lesson_sections EN upsert {key}: {e}")
             continue
+
+        # --------- TH path: update only TH fields; insert if missing ----------
+        th_update = {}
+        if "content_jsonb" in sec:
+            th_update["content_jsonb_th"] = sec["content_jsonb"]
+        if sec.get("render_mode"):
+            th_update["render_mode"] = sec["render_mode"]
+
+        if not th_update:
+            # nothing to write for TH in this section
+            continue
+
+        if dry_run:
+            print(f"[DRY RUN] Section TH UPDATE where {key} set {th_update}")
+            print(f"[DRY RUN] (if no row, INSERT { {**key, **th_update} })")
+            continue
+
         try:
-            supabase.table("lesson_sections") \
-                .upsert(record, on_conflict="lesson_id,type") \
-                .execute()
+            # UPDATE first (only TH fields)
+            upd = (supabase.table("lesson_sections")
+                   .update(th_update)
+                   .eq("lesson_id", key["lesson_id"])
+                   .eq("type", key["type"])
+                   .eq("sort_order", key["sort_order"])
+                   .execute())
+            rows = upd.data or []
+            if len(rows) == 0:
+                # INSERT minimal row with TH fields
+                ins_record = {**key, **th_update}
+                (supabase.table("lesson_sections")
+                 .insert(ins_record)
+                 .execute())
         except Exception as e:
-            print(f"[ERROR] lesson_sections for lesson {lesson_id}, type {sec['type']}: {e}")
+            print(f"[ERROR] lesson_sections TH update/insert {key}: {e}")
 
 
 def upsert_phrases(lesson_id, sections, dry_run=False):
@@ -246,22 +347,22 @@ def upsert_tags(lesson_id, tags, dry_run=False):
             print(f"[ERROR] lesson_tags for lesson {lesson_id}, tag {tag_name}: {e}")
 
 
-def process_lesson(data, dry_run=False):
+def process_lesson(data, lang="en", dry_run=False):
     keys = set(data.keys())
     if not REQUIRED_KEYS.issubset(keys):
         print(f"[ERROR] Missing keys: {REQUIRED_KEYS - keys}")
         return
 
-    lesson_id = upsert_lesson(data, dry_run=dry_run)
-    upsert_transcript(lesson_id, data.get("transcript", []), dry_run=dry_run)
+    lesson_id = upsert_lesson(data, lang=lang, dry_run=dry_run)
+    upsert_transcript(lesson_id, data.get("transcript", []), lang=lang, dry_run=dry_run)
     upsert_comprehension(lesson_id, data.get("comprehension_questions", []), dry_run=dry_run)
-    upsert_sections(lesson_id, data.get("sections", []), dry_run=dry_run)
+    upsert_sections(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
     upsert_phrases(lesson_id, data.get("sections", []), dry_run=dry_run)
     upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), dry_run=dry_run)
     upsert_tags(lesson_id, data.get("tags", []), dry_run=dry_run)
 
 
-def import_lessons_from_folder(folder_path, dry_run=False):
+def import_lessons_from_folder(folder_path, lang="en", dry_run=False):
     json_files = sorted(glob.glob(os.path.join(folder_path, "*.json")))
     if not json_files:
         print(f"No JSON files found in folder: {folder_path}")
@@ -274,12 +375,12 @@ def import_lessons_from_folder(folder_path, dry_run=False):
             print("\n--- Full JSON content ---")
             print(json.dumps(data, indent=2, ensure_ascii=False))
             print("--- End JSON content ---\n")
-        process_lesson(data, dry_run=dry_run)
+        process_lesson(data, lang=lang, dry_run=dry_run)
 
     print("Folder import complete.")
 
 
-def import_lessons_from_file(file_path, dry_run=False):
+def import_lessons_from_file(file_path, lang="en", dry_run=False):
     print(f"Importing lessons array from file: {file_path}")
     lessons = json.load(open(file_path, "r", encoding="utf-8"))
     if not isinstance(lessons, list):
@@ -292,7 +393,7 @@ def import_lessons_from_file(file_path, dry_run=False):
             print("\n--- Full JSON content for lesson ---")
             print(json.dumps(data, indent=2, ensure_ascii=False))
             print("--- End JSON content ---\n")
-        process_lesson(data, dry_run=dry_run)
+        process_lesson(data, lang=lang, dry_run=dry_run)
 
     print("File import complete.")
 
@@ -300,11 +401,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Import lessons JSON into Supabase")
     parser.add_argument("path", help="Path to a JSON file or folder of JSON files")
     parser.add_argument("--dry-run", action="store_true", help="Print actions without writing to DB")
+    parser.add_argument("--lang", choices=["en","th"], default="en", help="Language of this JSON")
     args = parser.parse_args()
 
     if os.path.isdir(args.path):
-        import_lessons_from_folder(args.path, dry_run=args.dry_run)
+        import_lessons_from_folder(args.path, lang=args.lang, dry_run=args.dry_run)
     elif os.path.isfile(args.path):
-        import_lessons_from_file(args.path, dry_run=args.dry_run)
+        import_lessons_from_file(args.path, lang=args.lang, dry_run=args.dry_run)
     else:
         print(f"[ERROR] Path not found: {args.path}")

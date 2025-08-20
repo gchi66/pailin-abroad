@@ -118,6 +118,40 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
         "cells": rows,
     }
 
+def _count_th(s: str) -> int:
+    return len(TH.findall(s or ""))
+
+def _count_en(s: str) -> int:
+    return len(EN.findall(s or ""))
+
+def _lang_of_entry(e: dict) -> str:
+    """
+    Classify an entry as 'TH', 'EN', or 'MIXED' with robust heuristics:
+    1) If speaker has Thai, it's TH.
+    2) Else if speaker has Latin (and no Thai), it's EN.
+    3) Else decide by counts in line_text; use dominance so a few acronyms (USC/PM) don't flip TH.
+    """
+    spk = (e.get("speaker") or "").strip()
+    txt = (e.get("line_text") or "").strip()
+
+    if TH.search(spk):
+        return "TH"
+    if EN.search(spk) and not TH.search(spk):
+        return "EN"
+
+    th = _count_th(txt)
+    en = _count_en(txt)
+    if th and not en:
+        return "TH"
+    if en and not th:
+        return "EN"
+
+
+    if th >= en + 3:
+        return "TH"
+    if en >= th + 3:
+        return "EN"
+    return "MIXED"
 
 
 # ───────────────────────────── module-level bilingual helpers
@@ -176,13 +210,8 @@ def bilingualize_headers_th(nodes, default_level=3):
 
 def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
     """
-    Merge EN+TH transcript lines into a single row with speaker_th / line_text_th.
-
-    Handles:
-      A) EN-only line followed by TH-only line  → merge
-      B) TH-only line followed by EN-only line  → merge (keep EN as base)
-      C) Single entry whose line_text contains both EN and TH → split inline
-         and (optionally) extract Thai speaker from the TH chunk if present.
+    Merge EN+TH transcript lines into single rows with speaker_th / line_text_th.
+    Robust to Thai lines containing a few Latin tokens (e.g., USC, 6PM, In-N-Out).
     """
     out = []
     i = 0
@@ -190,20 +219,24 @@ def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
 
     while i < len(entries):
         a = dict(entries[i])  # copy
-        a_text_full = f"{a.get('speaker','')} {a.get('line_text','')}"
-        a_en, a_th = _has_en(a_text_full), _has_th(a_text_full)
+        la = _lang_of_entry(a)
 
-        # ── Case C: inline mixed EN+TH in the same entry
-        # e.g., line_text == "Good morning, Joey! (สวัสดีตอนเช้าค่ะ โจอี้!)"
-        # or "Good morning, Joey! สวัสดีตอนเช้าค่ะ โจอี้!"
-        if a_en and a_th:
+        # Look ahead
+        b = entries[i + 1] if i + 1 < len(entries) else None
+        lb = _lang_of_entry(b) if b else None
+
+        # ── Case C: inline mixed EN+TH in the same entry (only when speaker isn't clearly TH)
+        # e.g., "Good morning (สวัสดีตอนเช้า)" or "EN … TH" in one line
+        if la == "MIXED":
+            # Try to split inline TH from the text only, not the speaker
             en_txt, th_txt = split_en_th(a.get("line_text", ""))
             spk_th = None
             if th_txt:
-                # Extract Thai speaker if author included "ที่ปรึกษา: ..." inline
+                # If author inlined a Thai speaker ("ไพลิน: ..."), extract it
                 mth = SPEAKER_RE_TH.match(th_txt)
                 if mth:
                     spk_th, th_txt = mth.group(1).strip(), mth.group(2).strip()
+
             merged = a
             if en_txt is not None:
                 merged["line_text"] = en_txt
@@ -215,15 +248,8 @@ def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
             order += 1
             continue
 
-        # Lookahead for pairing A/B
-        b = entries[i+1] if i + 1 < len(entries) else None
-        b_en = b_th = False
-        if b:
-            b_text_full = f"{b.get('speaker','')} {b.get('line_text','')}"
-            b_en, b_th = _has_en(b_text_full), _has_th(b_text_full)
-
-        # ── Case A: EN-only followed by TH-only
-        if a_en and not a_th and b and b_th and not b_en:
+        # ── Case A: EN-only (or EN-dominant) followed by TH-only (or TH-dominant)
+        if la == "EN" and b and lb == "TH":
             merged = a
             merged["speaker_th"]   = b.get("speaker")
             merged["line_text_th"] = b.get("line_text")
@@ -233,8 +259,8 @@ def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
             order += 1
             continue
 
-        # ── Case B: TH-only followed by EN-only (rare)
-        if a_th and not a_en and b and b_en and not b_th:
+        # ── Case B: TH-only (or TH-dominant) followed by EN-only (or EN-dominant)
+        if la == "TH" and b and lb == "EN":
             merged = dict(b)
             merged["speaker_th"]   = a.get("speaker")
             merged["line_text_th"] = a.get("line_text")
@@ -244,8 +270,8 @@ def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
             order += 1
             continue
 
-        # ── TH-only with no pair → keep as *_th-only row
-        if a_th and not a_en:
+        # ── TH-only with no pair → keep as TH-only row (blank EN fields)
+        if la == "TH":
             out.append({
                 "sort_order":   order,
                 "speaker":      "",
@@ -258,7 +284,7 @@ def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
             order += 1
             continue
 
-        # ── EN-only → keep as-is
+        # ── EN-only (or fallback) → keep as-is
         a["sort_order"] = order
         out.append(a)
         i += 1
@@ -553,7 +579,6 @@ class GoogleDocsParser:
         lesson           = lesson_info.copy()
         lesson["focus"]      = ""
         lesson["backstory"]  = ""
-        conversation_present = False
 
         transcript_lines:      list[str] = []
         comp_lines:            list[str] = []
@@ -582,10 +607,12 @@ class GoogleDocsParser:
                 lesson["backstory"] = "\n".join(texts_only).strip()
                 continue
             elif norm_header == "CONVERSATION":
-                if lang == 'th':
-                    conversation_present = True     # harvest later from tagged_nodes
-                else:
-                    transcript_lines += texts_only  # preserve original EN behavior
+                for raw_text, _style in lines:
+                    text = (raw_text or "").replace("\u000b", "\n")
+                    for piece in text.splitlines():
+                        piece = piece.strip()
+                        if piece:
+                            transcript_lines.append(piece)
                 continue
             elif norm_header == "COMPREHENSION":
                 comp_lines += texts_only
@@ -786,17 +813,6 @@ class GoogleDocsParser:
                     "sort_order": len(other_sections) + 1,
                     "content":    "\n".join(body_parts).strip(),
                 })
-        if lang == 'th' and conversation_present:
-            transcript_lines = []
-            for n in tagged_nodes:
-                if (
-                    n.get("lesson_context") == lesson_header_raw and
-                    n.get("section_context") == "CONVERSATION" and
-                    "inlines" in n
-                ):
-                    s = "".join(run.get("text", "") for run in n["inlines"]).strip()
-                    if s:
-                        transcript_lines.append(s)
         parsed_transcript = self.parse_conversation_from_lines(transcript_lines)
         if lang == 'th':
             parsed_transcript = pair_transcript_bilingual(parsed_transcript)
