@@ -221,6 +221,8 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
 
         # --------- TH path: update only TH fields; insert if missing ----------
         th_update = {}
+        if "content" in sec:
+            th_update["content_th"] = sec["content"]
         if "content_jsonb" in sec:
             th_update["content_jsonb_th"] = sec["content_jsonb"]
         if sec.get("render_mode"):

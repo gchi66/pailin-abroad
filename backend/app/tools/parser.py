@@ -183,29 +183,67 @@ def node_plain_text(node):
 
 
 def bilingualize_headers_th(nodes, default_level=3):
+    FOCUS_EN = "LESSON FOCUS"
+    FOCUS_TH = "จุดเน้นบทเรียน"
     out = []
+
     for n in nodes:
+        # PATCH: Handle LESSON FOCUS specifically first
+        if n.get("kind") == "paragraph":
+            # Check if this paragraph is exactly "LESSON FOCUS"
+            para_text = node_plain_text(n).strip()
+            if para_text.upper() == FOCUS_EN:
+                out.append({
+                    "kind": "heading",
+                    "level": 3,
+                    "text": {"en": FOCUS_EN, "th": FOCUS_TH},
+                    "lesson_context": n.get("lesson_context"),
+                    "section_context": n.get("section_context"),
+                })
+                continue
+
+        # PATCH: For existing headings, check if they're LESSON FOCUS and need Thai
         if n.get("kind") in {"heading", "header"}:
-            # already a heading -> try to split into en/th
+            # Check if this is a LESSON FOCUS heading that needs Thai translation
+            if isinstance(n.get("text"), dict):
+                text_en = (n["text"].get("en") or "").strip().upper()
+                if text_en == FOCUS_EN and not n["text"].get("th"):
+                    n = {**n, "text": {**n["text"], "th": FOCUS_TH}}
+                    out.append(n)
+                    continue
+
+            # Your existing heading logic
             s = node_plain_text(n)
             en, th = split_en_th(s)
             if en or th:
-                out.append({"kind": "heading", "level": n.get("level", default_level), "text": {"en": en, "th": th}})
+                out.append({
+                    "kind": "heading",
+                    "level": n.get("level", default_level),
+                    "text": {"en": en, "th": th}
+                })
             else:
                 out.append(n)
             continue
-        # fallback: a paragraph that looks like a bilingual heading
+
+        # Your existing paragraph logic (fallback for bilingual headings)
         if n.get("kind") == "paragraph":
             s = node_plain_text(n)
             has_th = bool(TH.search(s))
             has_en = bool(re.search(r'[A-Za-z]', s))
             looks_like_title = has_en and s.strip().upper() == s.strip()  # ALL CAPS EN
+
             if has_th and (looks_like_title or n.get("is_bold_header")):
                 en, th = split_en_th(s)
                 if en or th:
-                    out.append({"kind": "heading", "level": default_level, "text": {"en": en, "th": th}})
+                    out.append({
+                        "kind": "heading",
+                        "level": default_level,
+                        "text": {"en": en, "th": th}
+                    })
                     continue
+
         out.append(n)
+
     return out
 
 def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
