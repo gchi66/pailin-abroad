@@ -34,62 +34,137 @@ VALID_EXERCISE_KINDS = {
     'open'
 }
 
-def upsert_practice_exercises(lesson_id, practice_exercises, dry_run=False):
-    """Minimal update to handle practice exercises without changing other logic"""
-    for ex in practice_exercises:
-        if ex["kind"] not in VALID_EXERCISE_KINDS:
-            print(f"[WARNING] Skipping invalid exercise kind: {ex['kind']}")
-            continue
+def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=False):
+    lang = (lang or "en").lower()
+    if lang not in ("en", "th"):
+        raise ValueError("lang must be 'en' or 'th'")
 
-        record = {
+    if lang == "th":
+        for ex in (practice_exercises or []):
+            kind = ex.get("kind")
+            if kind not in VALID_EXERCISE_KINDS:
+                print(f"[WARNING] Skipping invalid exercise kind: {kind}")
+                continue
+
+            key = {"lesson_id": lesson_id, "kind": kind, "sort_order": ex.get("sort_order", 0)}
+            patch = {
+                "title_th":     ex.get("title", "") or "",
+                "prompt_th":    (ex.get("prompt_md") or ex.get("prompt") or "") or "",
+                "paragraph_th": ex.get("paragraph", "") or "",
+                "items_th":     ex.get("items", []),
+                # if you ever add localized MCQ choices for practice, include options_th here
+            }
+
+            if dry_run:
+                print(f"[DRY RUN] PRACTICE TH UPDATE where {key} set {patch}")
+                continue
+
+            upd = (supabase.table("practice_exercises")
+                   .update(patch)
+                   .eq("lesson_id", key["lesson_id"])
+                   .eq("kind", key["kind"])
+                   .eq("sort_order", key["sort_order"])
+                   .execute())
+            if not (upd.data or []):
+                print(f"[WARN] TH skip (no EN row yet) for practice {key}. Run EN import first.")
+        return
+
+    # EN (default): keep your existing UPSERT for base columns
+    rows = []
+    for ex in (practice_exercises or []):
+        kind = ex.get("kind")
+        if kind not in VALID_EXERCISE_KINDS:
+            print(f"[WARNING] Skipping invalid exercise kind: {kind}")
+            continue
+        rows.append({
             "lesson_id": lesson_id,
-            "kind": ex["kind"],
-            "title": ex.get("title", ""),
-            "prompt_md": ex.get("prompt") or None,
-            "paragraph": ex.get("paragraph") or None,
-            "items": ex.get("items", []),
-            # Provide default sort_order (0 if not specified)
+            "kind": kind,
             "sort_order": ex.get("sort_order", 0),
-            # These can be derived from items in components:
-            "options": [],
-            "answer_key": {}
-}
-        if dry_run:
-            print(f"[DRY RUN] Would upsert practice exercise: {record}")
-            continue
+            "title":      ex.get("title", "") or "",
+            "prompt_md":  (ex.get("prompt_md") or ex.get("prompt")) or None,
+            "paragraph":  ex.get("paragraph") or None,
+            "items":      ex.get("items", []),
+            "options":    ex.get("options", []),    # EN-only, keep NOT NULL
+            "answer_key": ex.get("answer_key", {}), # EN-only, keep NOT NULL if you want
+        })
 
-        try:
-            supabase.table("practice_exercises") \
-                .upsert(record, on_conflict="lesson_id, kind, sort_order") \
-                .execute()
-        except Exception as e:
-            print(f"[ERROR] practice_exercises for lesson {lesson_id}: {e}")
+    if not rows:
+        print(f"[INFO] No practice rows to upsert for lesson {lesson_id} (lang=en). Skipping.")
+        return
+
+    (supabase.table("practice_exercises")
+        .upsert(rows, on_conflict="lesson_id,kind,sort_order")
+        .execute())
 
 def upsert_lesson(data, lang="en", dry_run=False):
     lesson = data["lesson"]
-    key = {
-        "stage": lesson["stage"],
-        "level": lesson["level"],
-        "lesson_order": lesson["lesson_order"],
-    }
+
+    # --- Normalize keys so EN/TH hit the exact same row ---
+    stage = (str(lesson.get("stage", ""))).strip()
+    try:
+        level = int(lesson.get("level"))
+    except Exception:
+        raise RuntimeError(f"Invalid level in lesson payload: {lesson.get('level')!r}")
+    try:
+        lesson_order = int(lesson.get("lesson_order"))
+    except Exception:
+        raise RuntimeError(f"Invalid lesson_order in lesson payload: {lesson.get('lesson_order')!r}")
+
+    key = {"stage": stage, "level": level, "lesson_order": lesson_order}
+
+    lang = (lang or "en").lower()
+    if lang not in ("en", "th"):
+        raise ValueError("lang must be 'en' or 'th'")
 
     if lang == "en":
+        # Base-language columns
         record = {
             **key,
-            "title": lesson.get("title"),
-            "subtitle": lesson.get("subtitle"),
-            "focus": lesson.get("focus"),
-            "backstory": lesson.get("backstory"),
+            "title":     lesson.get("title") or None,
+            "subtitle":  lesson.get("subtitle") or None,
+            "focus":     lesson.get("focus") or None,
+            "backstory": lesson.get("backstory") or None,
+            # add other base fields here if you have them (e.g., conversation_audio_url)
         }
-        if dry_run:
-            print(f"[DRY RUN] Lesson EN UPSERT: {record}")
-            return None
-        res = (supabase.table("lessons")
-               .upsert(record, on_conflict="stage,level,lesson_order", returning="representation")
-               .execute())
-        return res.data[0]["id"]
 
-    # TH path: update-only, then insert if missing
+        if dry_run:
+            print(f"[DRY RUN] Lesson EN UPSERT:", record)
+            # Return a stable fake id so downstream dry-run prints don't crash
+            return f"dryrun:{stage}-{level}-{lesson_order}"
+
+        try:
+            res = (
+                supabase
+                .table("lessons")
+                .upsert(record, on_conflict="stage,level,lesson_order", returning="representation")
+                .execute()
+            )
+            if res.data and len(res.data) > 0:
+                return res.data[0]["id"]
+            # Fallback: fetch by key if the client didn't return representation
+            sel = (
+                supabase.table("lessons")
+                .select("id")
+                .eq("stage", stage).eq("level", level).eq("lesson_order", lesson_order)
+                .single()
+                .execute()
+            )
+            return sel.data["id"]
+        except Exception as e:
+            # Last-chance fallback: try to read the existing id (in case upsert succeeded but the client errored)
+            try:
+                sel = (
+                    supabase.table("lessons")
+                    .select("id")
+                    .eq("stage", stage).eq("level", level).eq("lesson_order", lesson_order)
+                    .single()
+                    .execute()
+                )
+                return sel.data["id"]
+            except Exception:
+                raise RuntimeError(f"EN upsert_lesson failed for {key}: {e}")
+
+    # ---------------- TH path: update-only (never insert) ----------------
     th_update = {}
     if lesson.get("title"):     th_update["title_th"]     = lesson["title"]
     if lesson.get("subtitle"):  th_update["subtitle_th"]  = lesson["subtitle"]
@@ -98,32 +173,31 @@ def upsert_lesson(data, lang="en", dry_run=False):
 
     if dry_run:
         print(f"[DRY RUN] Lesson TH UPDATE where {key} set {th_update}")
-        print(f"[DRY RUN] (if no row, INSERT { {**key, **th_update} })")
-        return None
+        return f"dryrun:{stage}-{level}-{lesson_order}"
 
-    # UPDATE
-    upd = (supabase.table("lessons")
-           .update(th_update)
-           .eq("stage", key["stage"])
-           .eq("level", key["level"])
-           .eq("lesson_order", key["lesson_order"])
-           .execute())
-    rows = upd.data or []
-    if len(rows) == 0:
-        # INSERT minimal row with TH
-        ins_record = {**key, **th_update}
-        res = (supabase.table("lessons")
-               .insert(ins_record)
-               .execute())
-    # fetch id (safe either way)
-    sel = (supabase.table("lessons")
-           .select("id")
-           .eq("stage", key["stage"])
-           .eq("level", key["level"])
-           .eq("lesson_order", key["lesson_order"])
-           .single()
-           .execute())
-    return sel.data["id"]
+    try:
+        upd = (
+            supabase.table("lessons")
+            .update(th_update)
+            .eq("stage", stage).eq("level", level).eq("lesson_order", lesson_order)
+            .execute()
+        )
+        # Ensure the EN row exists; if not, fail loudly
+        if not (upd.data or []):
+            raise RuntimeError(
+                f"TH update found no EN base row for {key}. Run EN import first (or allow TH to insert)."
+            )
+
+        sel = (
+            supabase.table("lessons")
+            .select("id")
+            .eq("stage", stage).eq("level", level).eq("lesson_order", lesson_order)
+            .single()
+            .execute()
+        )
+        return sel.data["id"]
+    except Exception as e:
+        raise RuntimeError(f"TH upsert_lesson failed for {key}: {e}")
 
 
 def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
@@ -170,25 +244,48 @@ def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
 
 
 
-def upsert_comprehension(lesson_id, questions, dry_run=False):
-    for q in questions:
-        record = {
-            "lesson_id": lesson_id,
-            "sort_order": q["sort_order"],
-            "prompt": q["prompt"],
-            "options": q.get("options", []),
-            "answer_key": q.get("answer_key", []),
-        }
-        if dry_run:
-            print(f"[DRY RUN] Upsert comprehension: {record}")
-            continue
-        try:
-            supabase.table("comprehension_questions") \
-                .upsert(record, on_conflict="lesson_id,sort_order") \
-                .execute()
-        except Exception as e:
-            print(f"[ERROR] comprehension_questions for lesson {lesson_id}, sort {q['sort_order']}: {e}")
+def upsert_comprehension(lesson_id, questions, lang=None, dry_run=False):
+    lang = (lang or "en").lower()
+    if lang not in ("en", "th"):
+        raise ValueError("lang must be 'en' or 'th'")
 
+    if lang == "en":
+        rows = []
+        for q in questions:
+            key = {"lesson_id": lesson_id, "sort_order": int(q["sort_order"])}
+            rows.append({
+                **key,
+                "prompt": q.get("prompt", "") or "",
+                "options": q.get("options", []),
+                "answer_key": q.get("answer_key", {}),
+            })
+        if not rows:
+            print(f"[INFO] No comprehension rows (EN) for lesson {lesson_id}. Skipping.")
+            return
+        supabase.table("comprehension_questions") \
+            .upsert(rows, on_conflict="lesson_id,sort_order") \
+            .execute()
+        return
+
+    # --- TH: update existing row only ---
+    for q in questions:
+        key = {"lesson_id": lesson_id, "sort_order": int(q["sort_order"])}
+        patch = {
+            "prompt_th": q.get("prompt", "") or "",
+            "options_th": q.get("options", []),   # always set
+        }
+
+        if dry_run:
+            print(f"[DRY RUN] TH UPDATE where {key} set {patch}")
+            continue
+
+        upd = (supabase.table("comprehension_questions")
+               .update(patch)
+               .eq("lesson_id", key["lesson_id"])
+               .eq("sort_order", key["sort_order"])
+               .execute())
+        if not (upd.data or []):
+            print(f"[WARN] TH skip (no EN row yet) for {key}. Run EN import first.")
 
 def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
     for sec in sections:
@@ -213,7 +310,7 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
                 continue
             try:
                 (supabase.table("lesson_sections")
-                    .upsert(record, on_conflict="lesson_id,type,sort_order")
+                    .upsert(record, on_conflict="lesson_id,type")
                     .execute())
             except Exception as e:
                 print(f"[ERROR] lesson_sections EN upsert {key}: {e}")
@@ -357,10 +454,10 @@ def process_lesson(data, lang="en", dry_run=False):
 
     lesson_id = upsert_lesson(data, lang=lang, dry_run=dry_run)
     upsert_transcript(lesson_id, data.get("transcript", []), lang=lang, dry_run=dry_run)
-    upsert_comprehension(lesson_id, data.get("comprehension_questions", []), dry_run=dry_run)
+    upsert_comprehension(lesson_id, data.get("comprehension_questions", []), lang=lang, dry_run=dry_run)
     upsert_sections(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
     upsert_phrases(lesson_id, data.get("sections", []), dry_run=dry_run)
-    upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), dry_run=dry_run)
+    upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), lang=lang, dry_run=dry_run)
     upsert_tags(lesson_id, data.get("tags", []), dry_run=dry_run)
 
 

@@ -862,7 +862,7 @@ class GoogleDocsParser:
         lesson_obj = {
             "lesson":                  lesson,
             "transcript":              parsed_transcript,
-            "comprehension_questions": self.parse_comprehension(comp_lines),
+            "comprehension_questions": self.parse_comprehension(comp_lines, lang=lang),
             "practice_exercises":      self.parse_practice(embedded_practice_lines + practice_lines),
             "sections":                other_sections,
             "tags":                    self.parse_tags(tags_lines),
@@ -907,73 +907,91 @@ class GoogleDocsParser:
                     current_entry["line_text"] += " " + line
         return transcript
 
-    def parse_comprehension(self, lines: List[str]) -> List[Dict]:
+    def parse_comprehension(self, lines: list[str], lang: str = "en") -> list[dict]:
         """
-        Build a list of comprehension-question objects in the format:
-
-            {
-                "sort_order": 1,
-                "prompt": "…",
-                "options": ["A. …", "B. …", …],
-                "answer_key": ["C"]
-            }
-
-        Expected structure in the doc:
-
-            Prompt
-            1. Question text
-            Options
-            A. …
-            B. …
-            …
-            Answer key: C
-            2. Next question …
-            …
+        Keeps Thai translations on the NEXT line(s) for each option.
+        Example option output (single string with newline):
+        "A. He's excited.\nเขาตื่นเต้น"
         """
-        questions: List[Dict] = []
-        cur_q: Dict | None = None
-        options: List[str] = []
-        answer_key: List[str] = []
+        questions: list[dict] = []
+        cur_q: dict | None = None
+        options: list[str] = []
+        answer_key: list[str] = []
 
-        for raw in lines:
-            # Handle \n that slipped through by splitting each paragraph
-            for piece in raw.splitlines():
+        # When lang == "th", we collect an EN option, then append 1+ TH lines
+        pending_en: str | None = None
+        pending_th: list[str] = []
+
+        def flush_pending():
+            nonlocal pending_en, pending_th, options
+            if pending_en is not None:
+                if pending_th:
+                    options.append(pending_en + "\n" + "\n".join(pending_th))
+                else:
+                    options.append(pending_en)
+            pending_en = None
+            pending_th = []
+
+        def is_thai_continuation(s: str) -> bool:
+            # Thai chars, and not a new option, not an answer key, not a new question
+            return (
+                _has_th(s)
+                and not OPTION_RE.match(s)
+                and not ANSWER_KEY_RE.match(s)
+                and not QUESTION_NUM_RE.match(s)
+            )
+
+        for raw in (lines or []):
+            for piece in (raw or "").splitlines():
                 line = piece.strip()
                 if not line or line.lower() in {"prompt", "options"}:
                     continue
 
-                # New question line
+                # New question
                 m_q = QUESTION_NUM_RE.match(line)
                 if m_q:
-                    if cur_q:                       # flush previous
+                    flush_pending()
+                    if cur_q:
                         cur_q["options"] = options
                         cur_q["answer_key"] = answer_key
                         questions.append(cur_q)
-
-                    prompt = re.sub(r"\bOptions\b$", "", m_q.group(1)).strip()
                     cur_q = {
                         "sort_order": len(questions) + 1,
-                        "prompt": prompt,
+                        "prompt": re.sub(r"\bOptions\b$", "", m_q.group(1)).strip(),
                     }
                     options, answer_key = [], []
-                    continue
-
-                # Option lines
-                if OPTION_RE.match(line):
-                    options.append(line)
                     continue
 
                 # Answer key
                 m_ans = ANSWER_KEY_RE.match(line)
                 if m_ans:
+                    flush_pending()
                     answer_key = [x.strip() for x in re.split(r"[,\s/]+", m_ans.group(1)) if x.strip()]
                     continue
 
-                # Extra text before “Options” – append to prompt
-                if cur_q and not options:
-                    cur_q["prompt"] += " " + line
+                # Option line (A./B./C.)
+                if OPTION_RE.match(line):
+                    flush_pending()
+                    if lang == "th" and not _has_th(line):
+                        # EN only — wait for Thai continuation lines
+                        pending_en = line
+                        pending_th = []
+                    else:
+                        options.append(line)
+                    continue
 
-        if cur_q:                                   # flush final
+                # Thai continuation lines after an English option
+                if lang == "th" and pending_en and is_thai_continuation(line):
+                    pending_th.append(line)
+                    continue
+
+                # Extra text before any options → belongs to prompt
+                if cur_q and not options and not pending_en:
+                    cur_q["prompt"] = (cur_q["prompt"] + " " + line).strip()
+
+        # Final flush
+        flush_pending()
+        if cur_q:
             cur_q["options"] = options
             cur_q["answer_key"] = answer_key
             questions.append(cur_q)
@@ -1212,7 +1230,7 @@ class GoogleDocsParser:
                 results.append(lesson_data)
             except Exception as e:
                 logger.error(f"Error processing a lesson: {e}")
-        return results if len(results) > 1 else results[0]
+        return results if len(results) > 1 else (results[0] if results else [])
 
 
 def parse_google_doc(doc_json) -> List[List[Tuple[str, List[str]]]]:
