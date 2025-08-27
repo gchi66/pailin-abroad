@@ -10,6 +10,7 @@ Usage:
   python -m app.tools.import_lessons data/level_X.json --dry-run
 """
 
+import re
 import os
 import glob
 import json
@@ -34,6 +35,32 @@ VALID_EXERCISE_KINDS = {
     'open'
 }
 
+# ______________________ HELPERS
+def _normalize_phrase(s: str) -> str:
+    """Normalize punctuation/spacing and uppercase for stable matching."""
+    if not s:
+        return ""
+    s = (s.replace("’", "'")
+           .replace("‘", "'")
+           .replace("“", '"')
+           .replace("”", '"')
+           .replace("–", "-")
+           .replace("—", "-"))
+    s = re.sub(r"\s+", " ", s.strip())
+    return s.upper()
+
+def _find_phrase_by_norm(variant: int, phrase_raw: str):
+    """Fetch by variant, pick the row whose normalized phrase matches."""
+    norm = _normalize_phrase(phrase_raw)
+    res = supabase.table("phrases").select("id, phrase").eq("variant", variant).execute()
+    rows = res.data or []
+    for r in rows:
+        if _normalize_phrase(r.get("phrase", "")) == norm:
+            return r
+    return None
+
+
+#______________________ REGULAR METHODS
 def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=False):
     lang = (lang or "en").lower()
     if lang not in ("en", "th"):
@@ -353,74 +380,110 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
             print(f"[ERROR] lesson_sections TH update/insert {key}: {e}")
 
 
-def upsert_phrases(lesson_id, sections, dry_run=False):
+def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
     for sec in sections:
-        if sec["type"] != "phrases_verbs":
+        if sec.get("type") != "phrases_verbs":
             continue
 
         for idx, item in enumerate(sec.get("items", []), start=1):
-            # If this is a reference, just link to the existing phrase+variant
+            phrase_raw = (item.get("phrase") or "").strip()
+            if not phrase_raw:
+                continue
+            variant = item.get("variant", 1)
+
+            # --- pick the right JSONB payload per language ---
+            if lang == "th":
+                nodes_payload = item.get("content_jsonb_th")
+                text_fallback = (item.get("content") or "").strip()  # optional
+            else:  # en
+                nodes_payload = item.get("content_jsonb")
+                text_fallback = (item.get("content") or "").strip()  # optional
+
+            notes     = item.get("notes")
+            phrase_th = item.get("phrase_th")
+            notes_th  = item.get("notes_th")
+
+            # reference path
             if item.get("reference"):
-                # Find the phrase by phrase+variant
-                res = (
-                    supabase.table("phrases")
-                    .select("id")
-                    .eq("phrase", item["phrase"])
-                    .eq("variant", item.get("variant", 1))
-                    .execute()
-                )
-                rows = res.data or []
-                if len(rows) == 0:
-                    print(f"[ERROR] Reference to missing phrase: {item['phrase']} variant {item.get('variant', 1)}")
+                row = _find_phrase_by_norm(variant, phrase_raw)
+                if not row:
+                    print(f"[ERROR] Reference to missing phrase: {phrase_raw} variant {variant}")
                     continue
-                elif len(rows) > 1:
-                    print(f"[ERROR] Multiple phrases found for: {item['phrase']} variant {item.get('variant', 1)}")
-                    continue
-                phrase_id = rows[0]["id"]
+                phrase_id = row["id"]
             else:
-                phrase_record = {
-                    "phrase":       item.get("phrase"),
-                    "variant":      item.get("variant", 1),
-                    "translation":  item.get("translation_th") or "",
-                    "content_md":   item.get("content_md") or "",
-                    "notes":        item.get("notes"),
-                    "phrase_th":    item.get("phrase_th"),
-                    "notes_th":     item.get("notes_th"),
-                }
+                row = _find_phrase_by_norm(variant, phrase_raw)
 
-                if dry_run:
-                    print("[DRY RUN] Upsert phrase:", phrase_record)
-                    phrase_id = None
+                if row:
+                    updates = {}
+                    norm_phrase = _normalize_phrase(phrase_raw)
+                    if norm_phrase and norm_phrase != row.get("phrase"):
+                        updates["phrase"] = norm_phrase
+
+                    if lang == "en":
+                        if nodes_payload:
+                            updates["content_jsonb"] = nodes_payload
+                        if text_fallback:
+                            updates["content"] = text_fallback
+                        if notes is not None:
+                            updates["notes"] = notes
+                    else:  # th
+                        if nodes_payload:
+                            updates["content_jsonb_th"] = nodes_payload
+                        if text_fallback:
+                            updates["content_th"] = text_fallback
+                        if phrase_th is not None:
+                            updates["phrase_th"] = phrase_th
+                        if notes_th is not None:
+                            updates["notes_th"] = notes_th
+
+                    if updates:
+                        if dry_run:
+                            print("[DRY RUN] Update phrases(id=%s): %r" % (row["id"], updates))
+                        else:
+                            supabase.table("phrases").update(updates).eq("id", row["id"]).execute()
+
+                    phrase_id = row["id"]
+
                 else:
-                    res = (
-                        supabase.table("phrases")
-                        .upsert(
-                            phrase_record,
-                            on_conflict="phrase,variant",  # unique key is phrase+variant
-                            returning="representation"
-                        )
-                        .execute()
-                    )
+                    insert_payload = {
+                        "phrase":  _normalize_phrase(phrase_raw),
+                        "variant": variant,
+                    }
+                    if lang == "en":
+                        if nodes_payload:
+                            insert_payload["content_jsonb"] = nodes_payload
+                        if text_fallback:
+                            insert_payload["content"] = text_fallback
+                        if notes is not None:
+                            insert_payload["notes"] = notes
+                    else:  # th
+                        if nodes_payload:
+                            insert_payload["content_jsonb_th"] = nodes_payload
+                        if text_fallback:
+                            insert_payload["content_th"] = text_fallback
+                        if phrase_th is not None:
+                            insert_payload["phrase_th"] = phrase_th
+                        if notes_th is not None:
+                            insert_payload["notes_th"] = notes_th
 
-                    if res.data:
-                        phrase_id = res.data[0]["id"]
+                    if dry_run:
+                        print("[DRY RUN] Insert phrases:", insert_payload)
+                        phrase_id = None
                     else:
-                        phrase_id = (
-                            supabase.table("phrases")
-                            .select("id")
-                            .eq("phrase", phrase_record["phrase"])
-                            .eq("variant", phrase_record["variant"])
-                            .single()
-                            .execute()
-                            .data["id"]
-                        )
+                        ins = supabase.table("phrases").insert(insert_payload).execute()
+                        phrase_id = (ins.data or [{}])[0].get("id")
+                        if not phrase_id:
+                            refetched = _find_phrase_by_norm(variant, phrase_raw)
+                            phrase_id = refetched["id"] if refetched else None
 
             if phrase_id:
                 link = {"lesson_id": lesson_id, "phrase_id": phrase_id, "sort_order": idx}
                 if dry_run:
-                    print("[DRY RUN] Link lesson to phrase:", link)
+                    print("[DRY RUN] Link lesson_phrases upsert:", link)
                 else:
-                    supabase.table("lesson_phrases").upsert(link, on_conflict="lesson_id,phrase_id").execute()
+                    supabase.table("lesson_phrases").upsert(
+                        link, on_conflict="lesson_id,phrase_id"
+                    ).execute()
 
 
 def upsert_tags(lesson_id, tags, dry_run=False):
@@ -456,7 +519,7 @@ def process_lesson(data, lang="en", dry_run=False):
     upsert_transcript(lesson_id, data.get("transcript", []), lang=lang, dry_run=dry_run)
     upsert_comprehension(lesson_id, data.get("comprehension_questions", []), lang=lang, dry_run=dry_run)
     upsert_sections(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
-    upsert_phrases(lesson_id, data.get("sections", []), dry_run=dry_run)
+    upsert_phrases(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
     upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), lang=lang, dry_run=dry_run)
     upsert_tags(lesson_id, data.get("tags", []), dry_run=dry_run)
 

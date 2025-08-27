@@ -35,6 +35,7 @@ HEADING_RE = re.compile(r"^([A-Z][A-Z &''']+)(?::\s*(.*))?$", re.I)
 UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&'‘’\-!?$%#]{2,60}$")
 QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
 OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
+BULLET_RE = re.compile(r"^\s*[–—\-*•●▪◦·・►»]\s+")
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
 LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
@@ -553,55 +554,50 @@ class GoogleDocsParser:
                 })
         return transcript
 
-    def parse_phrases_verbs(self, lines: List[Tuple[str, str]]) -> List[dict]:
-        """
-        Parse PHRASES & VERBS section into an items array.
-        Each item will have: phrase, variant, translation_th, content.
-        Subheading detection is supported (all-caps or heading style lines, including punctuation like 'OH!').
-        """
-        items = []
-        current = None
-        current_variant = 1
-        current_content = []
-        current_translation = ""
+    def parse_phrases_verbs(self, lines):
         header_re = re.compile(r"^(.*?)(?:\s*\[(\d+)\])?$")
+        items = []
+        current_phrase, current_variant = None, 1
+        current_lines, current_rows = [], []
 
-        for text, style in lines:
-            if is_subheader(text, style):
-                # Save previous item
-                if current is not None:
+        for raw_text, style in lines:
+            text = (raw_text or "").strip()
+
+            if text == "":                     # preserve blank lines
+                current_lines.append("")
+                current_rows.append(("", style))
+                continue
+
+            if is_subheader(text, style):      # new item header
+                if current_phrase is not None:
                     items.append({
-                        "phrase": current,
+                        "phrase": current_phrase,
                         "variant": current_variant,
-                        "translation_th": current_translation.strip(),
-                        "content": "\n".join(current_content).strip()
+                        "content": "\n".join(current_lines).strip(),
+                        "content_rows": current_rows[:],   # <— carry (text, style)
                     })
-                # Parse new header
-                match = header_re.match(text.strip().lstrip("#").strip())
-                if match:
-                    current = match.group(1).strip()
-                    current_variant = int(match.group(2)) if match.group(2) else 1
-                else:
-                    current = text.strip().lstrip("#").strip()
-                    current_variant = 1
-                current_content = []
-                current_translation = ""
-            elif text.strip().startswith("[TH]"):
-                current_translation = text.strip()[4:].strip()
-            else:
-                current_content.append(text)
-        # Don't forget the last item
-        if current is not None:
+                head = text.lstrip("#").rstrip(":").strip()
+                m = header_re.match(head)
+                current_phrase  = (m.group(1).strip() if m else head)
+                current_variant = int(m.group(2)) if (m and m.group(2)) else 1
+                current_lines, current_rows = [], []
+                continue
+
+            if text.startswith("[TH]"):        # tolerate legacy tag
+                text = text[4:].strip()
+
+            current_lines.append(text)
+            current_rows.append((text, style))
+
+        if current_phrase is not None:
             items.append({
-                "phrase": current,
+                "phrase": current_phrase,
                 "variant": current_variant,
-                "translation_th": current_translation.strip(),
-                "content": "\n".join(current_content).strip()
+                "content": "\n".join(current_lines).strip(),
+                "content_rows": current_rows[:],
             })
+
         return items
-
-
-
 
     def build_lesson_from_sections(
         self,
@@ -663,10 +659,92 @@ class GoogleDocsParser:
                 continue
             elif norm_header == "PHRASES & VERBS":
                 items = self.parse_phrases_verbs(lines)
+
+                def _plain_of(n: dict) -> str:
+                    if "inlines" not in n: return ""
+                    return re.sub(r"\s+", " ", "".join(s.get("text","") for s in n["inlines"]).strip())
+
+                # Build normalized text -> nodes map for this lesson
+                text_to_nodes = {}
+                for n in tagged_nodes:
+                    if n.get("lesson_context") != lesson_header_raw:
+                        continue
+                    key = _plain_of(n)
+                    if key:
+                        text_to_nodes.setdefault(key, []).append(n)
+
+                def _take_node(key: str):
+                    k = re.sub(r"\s+", " ", (key or "").strip())
+                    bucket = text_to_nodes.get(k)
+                    if bucket:
+                        chosen = bucket.pop(0).copy()
+                        if "inlines" in chosen:
+                            chosen["inlines"] = [i.copy() for i in chosen["inlines"]]
+                        return chosen
+                    # try again with bullet stripped (if present)
+                    if BULLET_RE.match(key):
+                        k2 = re.sub(r"\s+", " ", BULLET_RE.sub("", key).strip())
+                        bucket = text_to_nodes.get(k2)
+                        if bucket:
+                            chosen = bucket.pop(0).copy()
+                            if "inlines" in chosen:
+                                chosen["inlines"] = [i.copy() for i in chosen["inlines"]]
+                            return chosen
+                    return None
+
+                def _looks_like_list(style) -> bool:
+                    # Try to infer list formatting from style if present
+                    if isinstance(style, dict):
+                        if style.get("bullet") or style.get("is_list"): return True
+                        if style.get("namedStyleType") in {"BULLETED_LIST", "NUMBERED_LIST"}: return True
+                        if style.get("list_id") or style.get("listId"): return True
+                    return False
+
+                def _synth_node(kind: str, text: str) -> dict:
+                    return {
+                        "kind": kind,
+                        "level": None,
+                        "inlines": [{"text": text, "bold": False, "italic": False, "underline": False}],
+                        "indent": 0,
+                        "lesson_context": lesson_header_raw,
+                        "section_context": norm_header,
+                    }
+
+                enriched_items = []
+                for it in items:
+                    rows = it.pop("content_rows", None)
+                    lines_for_nodes = rows if rows is not None else [(t, None) for t in it.get("content", "").splitlines()]
+                    node_list = []
+
+                    for raw, style in lines_for_nodes:
+                        if not (raw or "").strip():
+                            node_list.append(_synth_node("paragraph", ""))
+                            continue
+
+                        # Prefer exact node from doc
+                        node = _take_node(raw)
+                        if node is not None:
+                            node_list.append(node)
+                            continue
+
+                        # Fallback: bullet if text shows bullet OR style says it's a list
+                        if BULLET_RE.match(raw) or _looks_like_list(style):
+                            txt = BULLET_RE.sub("", raw).strip()
+                            node_list.append(_synth_node("list_item", txt))
+                        else:
+                            node_list.append(_synth_node("paragraph", raw.strip()))
+
+                    enriched = dict(it)
+                    if lang == 'th':
+                        enriched["content_jsonb_th"] = node_list
+                    else:
+                        enriched["content_jsonb"] = node_list
+                    enriched_items.append(enriched)
+
                 other_sections.append({
                     "type":       "phrases_verbs",
                     "sort_order": len(other_sections) + 1,
-                    "items":      items,
+                    "items":      enriched_items,
                 })
                 continue
             elif norm_header == "PINNED COMMENT":

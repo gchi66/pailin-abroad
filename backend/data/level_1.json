@@ -752,6 +752,18 @@
         "speaker": "Chloe",
         "line_text": "Hi! What’s your name?",
         "indent": 0
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "I’m Pailin, and you?",
+        "indent": 0
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Chloe",
+        "line_text": "I’m Chloe.",
+        "indent": 0
       }
     ],
     "comprehension_questions": [
@@ -1412,17 +1424,29 @@
       {
         "sort_order": 2,
         "speaker": "Steven",
-        "line_text": "It’s nice to meet you too. And what’s your name?",
+        "line_text": "I’m Steven, and you?",
         "indent": 0
       },
       {
         "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "I’m Pailin. It’s nice to meet you.",
+        "indent": 0
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Steven",
+        "line_text": "It’s nice to meet you too. And what’s your name?",
+        "indent": 0
+      },
+      {
+        "sort_order": 5,
         "speaker": "Chloe",
         "line_text": "I’m Chloe, nice to meet you.",
         "indent": 0
       },
       {
-        "sort_order": 4,
+        "sort_order": 6,
         "speaker": "Steven",
         "line_text": "Hi Chloe, nice to meet you too.",
         "indent": 0
@@ -2019,12 +2043,30 @@
       },
       {
         "sort_order": 2,
+        "speaker": "Kevin",
+        "line_text": "I’m Kevin, nice to meet you.",
+        "indent": 0
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Nice to meet you too.",
+        "indent": 0
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Kevin",
+        "line_text": "How are you?",
+        "indent": 0
+      },
+      {
+        "sort_order": 5,
         "speaker": "Pailin",
         "line_text": "I’m great, thanks, and you?",
         "indent": 0
       },
       {
-        "sort_order": 3,
+        "sort_order": 6,
         "speaker": "Kevin",
         "line_text": "I’m good!",
         "indent": 0
@@ -3134,6 +3176,30 @@
         "speaker": "Pailin",
         "line_text": "Good morning, Joey!",
         "indent": 0
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Joey",
+        "line_text": "Morning! How’s it going?",
+        "indent": 0
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Good, and you?",
+        "indent": 0
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Joey",
+        "line_text": "Great, thanks! Did you have breakfast?",
+        "indent": 0
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Pailin",
+        "line_text": "No, not yet.",
+        "indent": 0
       }
     ],
     "comprehension_questions": [
@@ -3516,6 +3582,18 @@
         "sort_order": 1,
         "speaker": "Frank",
         "line_text": "Good morning! You will meet your host families on Saturday. Are you excited?",
+        "indent": 0
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "I’m so nervous!",
+        "indent": 0
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Chloe",
+        "line_text": "I’m nervous too, but I’m excited!",
         "indent": 0
       }
     ],
@@ -5015,6 +5093,24 @@
         "speaker": "Chloe",
         "line_text": "How old are you, Pailin?",
         "indent": 0
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "I’m 21. How about you?",
+        "indent": 0
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Chloe",
+        "line_text": "I’m 23.",
+        "indent": 0
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Pailin",
+        "line_text": "Oh! My big sister is also 23.",
+        "indent": 0
       }
     ],
     "comprehension_questions": [
@@ -5416,8 +5512,84 @@
           {
             "phrase": "OH!",
             "variant": 1,
-            "translation_th": "",
-            "content": "Oh!\nSaid when you are pleasantly surprised about something\nPailin: I baked this cake for you.\nLuke: Oh, it looks so good! Thank you!\nSee more uses of ‘Oh’"
+            "content": "Oh!\nSaid when you are pleasantly surprised about something\nPailin: I baked this cake for you.\nLuke: Oh, it looks so good! Thank you!\nSee more uses of ‘Oh’",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Oh!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.7: How old are you?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Said when you are pleasantly surprised about something",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.7: How old are you?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: I baked this cake for you.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.7: How old are you?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: Oh, it looks so good! Thank you!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.7: How old are you?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "See more uses of ‘Oh’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": true
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.7: How old are you?",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       },
@@ -5588,6 +5760,24 @@
         "sort_order": 1,
         "speaker": "Pailin",
         "line_text": "I like your bracelet, Chloe.",
+        "indent": 0
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Chloe",
+        "line_text": "Thank you! I made it. Here, you can have it. I have more in my bag.",
+        "indent": 0
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Pailin",
+        "line_text": "Really? Thank you so much!",
+        "indent": 0
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Chloe",
+        "line_text": "You’re welcome!",
         "indent": 0
       }
     ],
@@ -6376,8 +6566,69 @@
           {
             "phrase": "HERE",
             "variant": 1,
-            "translation_th": "",
-            "content": "Here\nUsed to offer something to someone, like ‘Take this’\nLuke: My breath stinks.\nPailin: Here, I have some gum.\nPailin: I can’t find my blue pen.\nLuke: Here, you can use mine."
+            "content": "Here\nUsed to offer something to someone, like ‘Take this’\nLuke: My breath stinks.\nPailin: Here, I have some gum.\nPailin: I can’t find my blue pen.\nLuke: Here, you can use mine.",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Here",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.8: Thanks, I made it",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Used to offer something to someone, like ‘Take this’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.8: Thanks, I made it",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: My breath stinks.\nPailin: Here, I have some gum.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.8: Thanks, I made it",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: I can’t find my blue pen.\nLuke: Here, you can use mine.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.8: Thanks, I made it",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       }
@@ -9704,8 +9955,114 @@
           {
             "phrase": "NICE!",
             "variant": 1,
-            "translation_th": "",
-            "content": "Nice!\nA positive expression to show enthusiasm or approval\nLuke: I applied for a few jobs today.\nChloe: Nice! I’m sure you’ll get one.\nLuke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I’ll take a look at them.\nOH! [1]"
+            "content": "Nice!\nA positive expression to show enthusiasm or approval\nLuke: I applied for a few jobs today.\nChloe: Nice! I’m sure you’ll get one.\nLuke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I’ll take a look at them.\nOH! [1]",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Nice!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.10: He’s a student at USC",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "A positive expression to show enthusiasm or approval",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.10: He’s a student at USC",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: I applied for a few jobs today.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.10: He’s a student at USC",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Chloe: Nice! I’m sure you’ll get one.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.10: He’s a student at USC",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: I found some nice AirBnBs for our trip to Mexico City.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.10: He’s a student at USC",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: Nice! Send them to me and I’ll take a look at them.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.10: He’s a student at USC",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "OH! [1]",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.10: He’s a student at USC",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       }
@@ -10447,14 +10804,142 @@
           {
             "phrase": "WOW",
             "variant": 1,
-            "translation_th": "",
-            "content": "Wow\nUsed to show surprise or admiration\nWow! This cake is beautiful. Did you make it all by yourself?\nSee more uses of ‘Wow’"
+            "content": "Wow\nUsed to show surprise or admiration\nWow! This cake is beautiful. Did you make it all by yourself?\nSee more uses of ‘Wow’",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Wow",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Used to show surprise or admiration",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Wow! This cake is beautiful. Did you make it all by yourself?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "\t",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  },
+                  {
+                    "text": "See more uses of ‘Wow’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": true
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           },
           {
             "phrase": "COOL!",
             "variant": 1,
-            "translation_th": "",
-            "content": "Cool!\nAn informal way of saying ‘That’s great’\nLuke: I just got tickets to the concert!\nPailin: Cool! I’m so excited.\nPailin: We’re bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?"
+            "content": "Cool!\nAn informal way of saying ‘That’s great’\nLuke: I just got tickets to the concert!\nPailin: Cool! I’m so excited.\nPailin: We’re bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Cool!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "An informal way of saying ‘That’s great’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: I just got tickets to the concert!\nPailin: Cool! I’m so excited.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: We’re bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       }
@@ -13737,8 +14222,69 @@
           {
             "phrase": "LOOK FOR",
             "variant": 1,
-            "translation_th": "",
-            "content": "Look for\nTo try to find or search for something\nI’ve been looking for a new job, but not many places are hiring.\nI’m looking for my keys. Have you seen them?"
+            "content": "Look for\nTo try to find or search for something\nI’ve been looking for a new job, but not many places are hiring.\nI’m looking for my keys. Have you seen them?",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Look for",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.14: My wallet isn’t red",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "To try to find or search for something",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.14: My wallet isn’t red",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "I’ve been looking for a new job, but not many places are hiring.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.14: My wallet isn’t red",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "I’m looking for my keys. Have you seen them?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.14: My wallet isn’t red",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       }
@@ -13769,6 +14315,42 @@
         "sort_order": 1,
         "speaker": "Frank",
         "line_text": "What time is it?",
+        "indent": 0
+      },
+      {
+        "sort_order": 2,
+        "speaker": "Pailin",
+        "line_text": "Let’s see, it’s…11:05.",
+        "indent": 0
+      },
+      {
+        "sort_order": 3,
+        "speaker": "Frank",
+        "line_text": "Okay, it’s time for lunch. You have one hour for lunch. Please come back at 12:00.",
+        "indent": 0
+      },
+      {
+        "sort_order": 4,
+        "speaker": "Pailin",
+        "line_text": "Chloe, are you hungry?",
+        "indent": 0
+      },
+      {
+        "sort_order": 5,
+        "speaker": "Chloe",
+        "line_text": "Yes, I’m so hungry!",
+        "indent": 0
+      },
+      {
+        "sort_order": 6,
+        "speaker": "Pailin",
+        "line_text": "Do you want to eat lunch with me?",
+        "indent": 0
+      },
+      {
+        "sort_order": 7,
+        "speaker": "Chloe",
+        "line_text": "Sure! My favorite restaurant is around here. They open at 11:30.",
         "indent": 0
       }
     ],
@@ -14793,20 +15375,218 @@
           {
             "phrase": "LET’S SEE",
             "variant": 1,
-            "translation_th": "",
-            "content": "Let’s see\nSaid when you’re trying to remember something or are thinking carefully\nNext Sunday, let’s see, I’ve got to pick up my sister from the airport.\nLet’s see, how long did it take to get to Vegas last time?"
+            "content": "Let’s see\nSaid when you’re trying to remember something or are thinking carefully\nNext Sunday, let’s see, I’ve got to pick up my sister from the airport.\nLet’s see, how long did it take to get to Vegas last time?",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Let’s see",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Said when you’re trying to remember something or are thinking carefully",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Next Sunday, let’s see, I’ve got to pick up my sister from the airport.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Let’s see, how long did it take to get to Vegas last time?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           },
           {
             "phrase": "COME BACK",
             "variant": 1,
-            "translation_th": "",
-            "content": "Come back\nTo return to a place\nI want to come back to Thailand next year.\nWhat time did you come back last night?"
+            "content": "Come back\nTo return to a place\nI want to come back to Thailand next year.\nWhat time did you come back last night?",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Come back",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "To return to a place",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "I want to come back to Thailand next year.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "What time did you come back last night?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           },
           {
             "phrase": "SURE!",
             "variant": 1,
-            "translation_th": "",
-            "content": "Sure!\nAn enthusiastic way of saying ‘Yes’\nLuke: Could you help me translate these sentences into Thai?\nPailin: Sure!\nSee more uses of ‘Sure’"
+            "content": "Sure!\nAn enthusiastic way of saying ‘Yes’\nLuke: Could you help me translate these sentences into Thai?\nPailin: Sure!\nSee more uses of ‘Sure’",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Sure!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "An enthusiastic way of saying ‘Yes’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: Could you help me translate these sentences into Thai?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: Sure!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "See more uses of ‘Sure’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": true
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.15: What time is it?",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       }
@@ -16482,8 +17262,90 @@
           {
             "phrase": "CHECK OUT",
             "variant": 1,
-            "translation_th": "",
-            "content": "Check out (something) / check (something) out\nTo look at or examine a person or thing that seems interesting or attractive\nDo you wanna check out this new cafe that just opened down the street?\nEmily, check it out. This camera can take photos underwater!\nSee more uses of ‘Check out’"
+            "content": "Check out (something) / check (something) out\nTo look at or examine a person or thing that seems interesting or attractive\nDo you wanna check out this new cafe that just opened down the street?\nEmily, check it out. This camera can take photos underwater!\nSee more uses of ‘Check out’",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Check out (something) / check (something) out",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "To look at or examine a person or thing that seems interesting or attractive",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Do you wanna check out this new cafe that just opened down the street?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Emily, check it out. This camera can take photos underwater!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "\t",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  },
+                  {
+                    "text": "See more uses of ‘Check out’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": true
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.16: Is In-N-Out near the hotel?",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       }
@@ -16680,8 +17542,114 @@
           {
             "phrase": "I SEE",
             "variant": 1,
-            "translation_th": "",
-            "content": "I see\nI understand\nPailin: How did you know I work here?\nLuke: You told me the last time I saw you.\nPailin: Oh, I see.\nLuke: The reason your electricity isn't working is because someone turned off your circuit breaker.\nPailin: Oh, okay I see."
+            "content": "I see\nI understand\nPailin: How did you know I work here?\nLuke: You told me the last time I saw you.\nPailin: Oh, I see.\nLuke: The reason your electricity isn't working is because someone turned off your circuit breaker.\nPailin: Oh, okay I see.",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "I see",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "CHECKPOINT 1",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "I understand",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "CHECKPOINT 1",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: How did you know I work here?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "CHECKPOINT 1",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: You told me the last time I saw you.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "CHECKPOINT 1",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: Oh, I see.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "CHECKPOINT 1",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Luke: The reason your electricity isn't working is because someone turned off your circuit breaker.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "CHECKPOINT 1",
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: Oh, okay I see.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "CHECKPOINT 1",
+                "section_context": "PHRASES & VERBS"
+              }
+            ]
           }
         ]
       }
