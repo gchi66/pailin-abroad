@@ -39,7 +39,7 @@ _numbered_glyphs = {
 }
 
 # Only Unicode bullet “•” counts
-_bullet_symbol = {"•"}
+_bullet_symbol = {"•", "●", "◦", "○", "∙", "·"}
 
 _manual_numbered_rx = re.compile(
     r"^(\d+\.|\d+\)|[A-Za-z]\.|[A-Za-z]\)|[ivxIVX]+\.)\s+"
@@ -166,3 +166,112 @@ def paragraph_nodes(doc_json: dict):
 
         # PLAIN PARAGRAPH ----------------------------------------
         yield Node(kind="paragraph", inlines=spans, indent=indent)
+
+def debug_google_lists(doc_json: dict):
+    """Debug what Google Docs thinks are lists"""
+    print("\n=== GOOGLE DOCS LIST DEBUG ===")
+
+    # Check what lists are defined
+    lists = doc_json.get("lists", {})
+    print(f"Found {len(lists)} list definitions:")
+    for list_id, list_def in lists.items():
+        print(f"  List {list_id}:")
+        nesting_levels = list_def.get("listProperties", {}).get("nestingLevels", [])
+        for i, level in enumerate(nesting_levels):
+            glyph_type = level.get("glyphType", "")
+            glyph_symbol = level.get("glyphSymbol", "")
+            print(f"    Level {i}: glyphType='{glyph_type}', glyphSymbol='{glyph_symbol}'")
+
+    # Check paragraphs with bullet info
+    bullet_count = 0
+    for elem in doc_json.get("body", {}).get("content", []):
+        p = elem.get("paragraph")
+        if not p:
+            continue
+
+        bullet_info = p.get("bullet")
+        if bullet_info:
+            bullet_count += 1
+            text = _plain_text(p.get("elements", []))
+            list_id = bullet_info.get("listId")
+            nesting = bullet_info.get("nestingLevel", 0)
+            print(f"  Bullet item: '{text[:50]}...' | listId={list_id} | nesting={nesting}")
+
+            # Check what our function thinks about this
+            is_bullet = _is_native_bullet(doc_json, bullet_info)
+            print(f"    -> _is_native_bullet says: {is_bullet}")
+
+    print(f"Total paragraphs with bullet info: {bullet_count}")
+    print("=== END LIST DEBUG ===\n")
+
+def debug_paragraph_classification(doc_json: dict, section_name: str = "PHRASES & VERBS"):
+    """Debug how paragraphs get classified in a specific section"""
+    print(f"\n=== PARAGRAPH CLASSIFICATION DEBUG ({section_name}) ===")
+
+    in_target_section = False
+    for elem in doc_json.get("body", {}).get("content", []):
+        p = elem.get("paragraph")
+        if not p:
+            continue
+
+        text = _plain_text(p.get("elements", [])).strip()
+        if not text:
+            continue
+
+        # Check if we're entering/leaving the target section
+        if section_name.upper() in text.upper():
+            in_target_section = True
+            print(f">>> Entering section: {text}")
+            continue
+        elif text.upper().startswith(("FOCUS", "BACKSTORY", "CONVERSATION", "COMPREHENSION", "PRACTICE", "UNDERSTAND", "CULTURE NOTE", "COMMON MISTAKES", "EXTRA TIPS", "PINNED COMMENT", "TAGS", "LESSON", "CHECKPOINT")):
+            if in_target_section:
+                print(f">>> Exiting section at: {text}")
+                break
+            continue
+
+        if not in_target_section:
+            continue
+
+        # Analyze this paragraph
+        style_name = p.get("paragraphStyle", {}).get("namedStyleType", "")
+        bullet_info = p.get("bullet")
+        indent = bullet_info.get("nestingLevel", 0) if bullet_info else 0
+
+        if indent == 0:
+            pts = p.get("paragraphStyle", {}).get("indentStart", {}).get("magnitude", 0)
+            indent = round(pts / 18)
+
+        print(f"  Text: '{text[:60]}...'")
+        print(f"    Style: '{style_name}'")
+        print(f"    Has bullet info: {bool(bullet_info)}")
+        print(f"    Indent: {indent}")
+
+        if bullet_info:
+            list_id = bullet_info.get("listId")
+            nesting = bullet_info.get("nestingLevel", 0)
+            is_bullet = _is_native_bullet(doc_json, bullet_info)
+            print(f"    Bullet details: listId={list_id}, nesting={nesting}, is_bullet={is_bullet}")
+
+        # What would the docwalker classify this as?
+        if style_name.startswith("HEADING_") or is_subheader(text, style_name):
+            classification = "heading"
+        elif bullet_info:
+            if _is_native_bullet(doc_json, bullet_info):
+                classification = "list_item"
+            else:
+                classification = "numbered_item"
+        elif indent > 0:
+            cls = _manual_list_class(text)
+            if cls == "bullet":
+                classification = "list_item"
+            elif cls == "numbered":
+                classification = "numbered_item"
+            else:
+                classification = "misc_item"
+        else:
+            classification = "paragraph"
+
+        print(f"    -> Classification: {classification}")
+        print()
+
+    print("=== END CLASSIFICATION DEBUG ===\n")

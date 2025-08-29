@@ -22,8 +22,8 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
 from .docs_fetch import fetch_doc      # fetch_doc uses the Google Docs API
-from .docwalker import paragraph_nodes, Node      # returns a list of paragraphs with indent and markdown formatting
-from .textutils import is_subheader  # now from textutils, not parser
+from .docwalker import paragraph_nodes, Node
+from .textutils import is_subheader
 
 SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
 
@@ -124,6 +124,19 @@ def _count_th(s: str) -> int:
 
 def _count_en(s: str) -> int:
     return len(EN.findall(s or ""))
+
+def _norm_header_str(s: str | None) -> str:
+    if not s: return ""
+    return re.sub(r"\s+", " ", (s or "").replace("\u000b", " ").strip())
+
+def _lesson_key(s: str | None) -> str | None:
+    if not s: return None
+    m = LESSON_ID_RE.search(s)
+    return f"{m.group(1)}.{m.group(2)}" if m else None
+
+def _norm2(s: str) -> str:
+    # robust normalization for matching docwalker nodes to section lines
+    return re.sub(r"\s+", " ", (s or "").replace("\u000b", " ").replace("\n", " ").strip())
 
 def _lang_of_entry(e: dict) -> str:
     """
@@ -226,7 +239,7 @@ def bilingualize_headers_th(nodes, default_level=3):
                 out.append(n)
             continue
 
-        # Your existing paragraph logic (fallback for bilingual headings)
+        # FIXED: Only apply bilingual conversion to paragraphs, preserve other node types
         if n.get("kind") == "paragraph":
             s = node_plain_text(n)
             has_th = bool(TH.search(s))
@@ -243,9 +256,11 @@ def bilingualize_headers_th(nodes, default_level=3):
                     })
                     continue
 
+        # FIXED: Always preserve the original node for non-paragraph types or paragraphs that don't need conversion
         out.append(n)
 
     return out
+
 
 def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
     """
@@ -465,15 +480,22 @@ def tag_nodes_with_sections(doc_json):
                 hdr = "".join(s.text for s in n.inlines).strip()
                 up  = hdr.upper().rstrip(":")
                 if LESSON_ID_RE.match(up) or up.startswith("CHECKPOINT"):
-                    current_lesson  = hdr
-                    current_section = None
-                    seq_counter     = {h: 0 for h in AUDIO_SECTION_HEADERS}
+                    current_lesson      = hdr
+                    current_lesson_key  = _lesson_key(hdr)
+                    current_lesson_norm = _norm_header_str(hdr)
+                    current_lesson_en, current_lesson_th = split_en_th(hdr)
+                    current_section     = None
+                    seq_counter         = {h: 0 for h in AUDIO_SECTION_HEADERS}
                 elif up in SECTION_ORDER:
                     current_section = up
 
             nd = dataclasses.asdict(n)
             if current_lesson:
-                nd["lesson_context"] = current_lesson
+                nd["lesson_context"]       = current_lesson          # keep legacy
+                nd["lesson_key"]           = current_lesson_key      # durable key: "1.14"
+                nd["lesson_context_norm"]  = current_lesson_norm
+                nd["lesson_context_en"]    = current_lesson_en       # NEW
+                nd["lesson_context_th"]    = current_lesson_th       # NEW
             if current_section:
                 nd["section_context"] = current_section
 
@@ -554,50 +576,260 @@ class GoogleDocsParser:
                 })
         return transcript
 
-    def parse_phrases_verbs(self, lines):
-        header_re = re.compile(r"^(.*?)(?:\s*\[(\d+)\])?$")
+    def parse_phrases_verbs(
+        self,
+        lines: List[Tuple[str, str]],
+        doc_nodes: list[dict],
+        lesson_header_raw: str,
+        lang: str = "en",
+    ) -> List[dict]:
+        """
+        Parse PHRASES & VERBS section into an items array.
+        Each item has:
+            phrase, variant, translation_th, content (plain),
+            and content_jsonb / content_jsonb_th preserving bullets and formatting.
+        """
         items = []
-        current_phrase, current_variant = None, 1
-        current_lines, current_rows = [], []
+        current_phrase = None
+        current_variant = 1
+        current_translation = ""
+        node_buffer: list[dict] = []
+        text_buffer: list[str] = []
 
+        header_re = re.compile(r"^(.*?)(?:\s*\[(\d+)\])?$")
+
+        # ---- helper to normalize text for matching ----
+        def _norm(s: str) -> str:
+            # Normalize soft breaks/newlines -> spaces
+            s = (s or "").replace("\u000b", " ").replace("\n", " ")
+            # Remove any parenthetical that contains Thai chars (e.g., "(โอ้)", "(อะไรสักอย่าง)")
+            s = re.sub(r"\([\u0E00-\u0E7F0-9\s.,!?;:'\"-]*\)", "", s)
+            # Collapse spaces
+            s = re.sub(r"\s+", " ", s).strip()
+            # Strip leading bullet glyphs (several forms)
+            s = re.sub(r"^[–—\-*•●▪◦·・►»]\s*", "", s)
+            return s
+
+        def _flush():
+            nonlocal current_phrase, current_variant, current_translation, node_buffer, text_buffer
+            if current_phrase is not None:
+                item = {
+                    "phrase": current_phrase,
+                    "variant": current_variant,
+                    "translation_th": current_translation.strip(),
+                    "content": "\n".join(text_buffer).strip(),
+                }
+                if lang == "th":
+                    item["content_jsonb_th"] = node_buffer
+                else:
+                    item["content_jsonb"] = node_buffer
+                items.append(item)
+        # Build STRICT (section-scoped) and FALLBACK (lesson-wide) maps
+        scoped_nodes: dict[str, list[dict]] = {}
+        lesson_wide_nodes: dict[str, list[dict]] = {}
+
+        LKEY  = _lesson_key(lesson_header_raw)          # e.g., "1.14"
+        LCTXN = _norm_header_str(lesson_header_raw)     # tolerant string compare
+
+        for n in doc_nodes:
+            if "inlines" not in n:
+                continue
+
+            # Prefer durable key match; fall back to normalized header compare
+            nk = n.get("lesson_key") or _lesson_key(n.get("lesson_context"))
+            if LKEY and nk and nk != LKEY:
+                continue
+            if LKEY and not nk:
+                lc = n.get("lesson_context")
+                if lc and _norm_header_str(lc) != LCTXN:
+                    continue
+
+            plain = "".join(s.get("text", "") for s in n.get("inlines", []))
+            key = _norm(plain)
+            if not key:
+                continue
+
+            # lesson-wide bucket (fallback)
+            lesson_wide_nodes.setdefault(key, []).append(n)
+
+            # section-scoped bucket (first choice)
+            if n.get("section_context") == "PHRASES & VERBS":
+                scoped_nodes.setdefault(key, []).append(n)
+
+        def _clone_node(n: dict) -> dict:
+            c = n.copy()
+            if "inlines" in c:
+                c["inlines"] = [i.copy() for i in c["inlines"]]
+            return c
+
+        def _pick_with_fallback(bucket_map: dict[str, list[dict]], key: str) -> tuple[dict | None, str | None]:
+            # exact
+            if bucket_map.get(key):
+                return bucket_map[key][0], key
+            # substring either direction (good for short titles/phrases)
+            for k, bucket in bucket_map.items():
+                if bucket and (key in k or k in key):
+                    return bucket[0], k
+            # lightweight fuzzy (word overlap)
+            best = None; best_k = None; best_score = 0.0
+            a = set(key.split())
+            if not a:
+                return None, None
+            for k, bucket in bucket_map.items():
+                if not bucket:
+                    continue
+                b = set(k.split())
+                if not b:
+                    continue
+                score = len(a & b) / max(len(a), len(b))
+                if score > 0.45 and score > best_score:
+                    best, best_k, best_score = bucket[0], k, score
+            return best, best_k
+
+        def _take_node(raw: str) -> dict | None:
+            """Try to find the closest matching node for this raw text."""
+            def _try_maps(norm_key: str) -> dict | None:
+                # 1) section-scoped (exact → substring → fuzzy)
+                chosen, k = _pick_with_fallback(scoped_nodes, norm_key)
+                if chosen:
+                    # PRESERVE THE ORIGINAL KIND - KEY FIX
+                    result = _clone_node(chosen)
+                    # Ensure list_item kind is preserved from original node
+                    if chosen.get("kind") == "list_item":
+                        result["kind"] = "list_item"
+                        print(f"Found list_item: {result}")
+                    scoped_nodes[k].remove(chosen)
+                    return result
+                # 2) lesson-wide (exact → substring → fuzzy)
+                chosen, k = _pick_with_fallback(lesson_wide_nodes, norm_key)
+                if chosen:
+                    result = _clone_node(chosen)
+                    # Ensure list_item kind is preserved from original node
+                    if chosen.get("kind") == "list_item":
+                        result["kind"] = "list_item"
+                    lesson_wide_nodes[k].remove(chosen)
+                    return result
+                return None
+
+            norm_key = _norm(raw)
+            hit = _try_maps(norm_key)
+            if hit:
+                return hit
+
+            # --- NEW: try splitting on line breaks (EN and TH often joined) ---
+            # e.g., "EN...\nTH..." or with \u000b
+            raw_parts = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
+            for part in raw_parts:
+                part = part.strip()
+                if not part:
+                    continue
+                hit = _try_maps(_norm(part))
+                if hit:
+                    return hit
+
+            # --- NEW: try splitting at first Thai character boundary (EN | TH) ---
+            m = re.search(r"[\u0E00-\u0E7F]", raw or "")
+            if m:
+                left = (raw[:m.start()] or "").strip()
+                right = (raw[m.start():] or "").strip()
+                for piece in (left, right):
+                    if piece:
+                        hit = _try_maps(_norm(piece))
+                        if hit:
+                            return hit
+
+            return None
+
+        def _synth_node(kind: str, text: str, is_bullet: bool = False) -> dict:
+            # Use the actual bullet information if available
+            actual_kind = "list_item" if is_bullet else kind
+            return {
+                "kind": actual_kind,
+                "level": None,
+                "inlines": [
+                    {"text": text, "bold": False, "italic": False, "underline": False}
+                ],
+                "indent": 0,
+                "lesson_context": lesson_header_raw,
+                "section_context": "PHRASES & VERBS",
+            }
+
+        def _is_bullet_node(node: dict) -> bool:
+            """Check if a node represents a bullet point using multiple indicators"""
+            if node.get("kind") == "list_item":
+                return True
+            if node.get("bullet"):
+                return True
+            if node.get("resolvedListGlyph", {}).get("glyphSymbol"):
+                return True
+            return False
+
+        # ---- main loop over lines ----
         for raw_text, style in lines:
             text = (raw_text or "").strip()
-
-            if text == "":                     # preserve blank lines
-                current_lines.append("")
-                current_rows.append(("", style))
+            if not text:
                 continue
 
-            if is_subheader(text, style):      # new item header
-                if current_phrase is not None:
-                    items.append({
-                        "phrase": current_phrase,
-                        "variant": current_variant,
-                        "content": "\n".join(current_lines).strip(),
-                        "content_rows": current_rows[:],   # <— carry (text, style)
-                    })
-                head = text.lstrip("#").rstrip(":").strip()
-                m = header_re.match(head)
-                current_phrase  = (m.group(1).strip() if m else head)
-                current_variant = int(m.group(2)) if (m and m.group(2)) else 1
-                current_lines, current_rows = [], []
+            # new phrase heading
+            if is_subheader(text, style):
+                _flush()
+                match = header_re.match(text.lstrip("#").strip())
+                if match:
+                    current_phrase = match.group(1).strip()
+                    current_variant = int(match.group(2) or 1)
+                else:
+                    current_phrase = text.lstrip("#").strip()
+                    current_variant = 1
+                current_translation = ""
+                node_buffer = []
+                text_buffer = []
                 continue
 
-            if text.startswith("[TH]"):        # tolerate legacy tag
-                text = text[4:].strip()
+            # inline Thai translation line
+            if text.startswith("[TH]"):
+                current_translation = text[4:].strip()
+                continue
 
-            current_lines.append(text)
-            current_rows.append((text, style))
+            # normal line → try to attach real node
+            text_buffer.append(text)
+            node = _take_node(text)
+            if node is not None:
+                # Ensure bullet nodes are properly marked as list_item
+                if _is_bullet_node(node):
+                    node["kind"] = "list_item"
+                node_buffer.append(node)
+            else:
+                # BETTER FALLBACK: Check if this should be a bullet by looking at original nodes
+                is_bullet = False
+                norm_text = _norm(text)
 
-        if current_phrase is not None:
-            items.append({
-                "phrase": current_phrase,
-                "variant": current_variant,
-                "content": "\n".join(current_lines).strip(),
-                "content_rows": current_rows[:],
-            })
+                # Check scoped nodes first
+                for node_list in scoped_nodes.values():
+                    for n in node_list:
+                        node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
+                        if _norm(node_text) == norm_text and _is_bullet_node(n):
+                            is_bullet = True
+                            break
+                    if is_bullet:
+                        break
 
+                # Check lesson-wide nodes if not found
+                if not is_bullet:
+                    for node_list in lesson_wide_nodes.values():
+                        for n in node_list:
+                            node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
+                            if _norm(node_text) == norm_text and _is_bullet_node(n):
+                                is_bullet = True
+                                break
+                        if is_bullet:
+                            break
+
+                node_buffer.append(_synth_node("paragraph", text, is_bullet))
+
+        # flush last item
+        _flush()
         return items
+
 
     def build_lesson_from_sections(
         self,
@@ -658,93 +890,11 @@ class GoogleDocsParser:
                 tags_lines += texts_only
                 continue
             elif norm_header == "PHRASES & VERBS":
-                items = self.parse_phrases_verbs(lines)
-
-                def _plain_of(n: dict) -> str:
-                    if "inlines" not in n: return ""
-                    return re.sub(r"\s+", " ", "".join(s.get("text","") for s in n["inlines"]).strip())
-
-                # Build normalized text -> nodes map for this lesson
-                text_to_nodes = {}
-                for n in tagged_nodes:
-                    if n.get("lesson_context") != lesson_header_raw:
-                        continue
-                    key = _plain_of(n)
-                    if key:
-                        text_to_nodes.setdefault(key, []).append(n)
-
-                def _take_node(key: str):
-                    k = re.sub(r"\s+", " ", (key or "").strip())
-                    bucket = text_to_nodes.get(k)
-                    if bucket:
-                        chosen = bucket.pop(0).copy()
-                        if "inlines" in chosen:
-                            chosen["inlines"] = [i.copy() for i in chosen["inlines"]]
-                        return chosen
-                    # try again with bullet stripped (if present)
-                    if BULLET_RE.match(key):
-                        k2 = re.sub(r"\s+", " ", BULLET_RE.sub("", key).strip())
-                        bucket = text_to_nodes.get(k2)
-                        if bucket:
-                            chosen = bucket.pop(0).copy()
-                            if "inlines" in chosen:
-                                chosen["inlines"] = [i.copy() for i in chosen["inlines"]]
-                            return chosen
-                    return None
-
-                def _looks_like_list(style) -> bool:
-                    # Try to infer list formatting from style if present
-                    if isinstance(style, dict):
-                        if style.get("bullet") or style.get("is_list"): return True
-                        if style.get("namedStyleType") in {"BULLETED_LIST", "NUMBERED_LIST"}: return True
-                        if style.get("list_id") or style.get("listId"): return True
-                    return False
-
-                def _synth_node(kind: str, text: str) -> dict:
-                    return {
-                        "kind": kind,
-                        "level": None,
-                        "inlines": [{"text": text, "bold": False, "italic": False, "underline": False}],
-                        "indent": 0,
-                        "lesson_context": lesson_header_raw,
-                        "section_context": norm_header,
-                    }
-
-                enriched_items = []
-                for it in items:
-                    rows = it.pop("content_rows", None)
-                    lines_for_nodes = rows if rows is not None else [(t, None) for t in it.get("content", "").splitlines()]
-                    node_list = []
-
-                    for raw, style in lines_for_nodes:
-                        if not (raw or "").strip():
-                            node_list.append(_synth_node("paragraph", ""))
-                            continue
-
-                        # Prefer exact node from doc
-                        node = _take_node(raw)
-                        if node is not None:
-                            node_list.append(node)
-                            continue
-
-                        # Fallback: bullet if text shows bullet OR style says it's a list
-                        if BULLET_RE.match(raw) or _looks_like_list(style):
-                            txt = BULLET_RE.sub("", raw).strip()
-                            node_list.append(_synth_node("list_item", txt))
-                        else:
-                            node_list.append(_synth_node("paragraph", raw.strip()))
-
-                    enriched = dict(it)
-                    if lang == 'th':
-                        enriched["content_jsonb_th"] = node_list
-                    else:
-                        enriched["content_jsonb"] = node_list
-                    enriched_items.append(enriched)
-
+                items = self.parse_phrases_verbs(lines, tagged_nodes, lesson_header_raw, lang=lang)
                 other_sections.append({
                     "type":       "phrases_verbs",
                     "sort_order": len(other_sections) + 1,
-                    "items":      enriched_items,
+                    "items":      items,
                 })
                 continue
             elif norm_header == "PINNED COMMENT":
@@ -816,11 +966,10 @@ class GoogleDocsParser:
                 for n in tagged_nodes:
                     if n.get("lesson_context") == lesson_header_raw:
                         if "inlines" in n:
-                            plain = "".join(s["text"] for s in n["inlines"]).strip()
-                            if plain:
-                                if plain not in text_to_nodes:
-                                    text_to_nodes[plain] = []
-                                text_to_nodes[plain].append(n)
+                            plain = "".join(s["text"] for s in n["inlines"])
+                            key = _norm2(plain)
+                            if key:
+                                text_to_nodes.setdefault(key, []).append(n)
 
                 # Process lines in order, preserving the original sequence
                 quick_practice_titles = [ex["title"] for ex in self.parse_practice(embedded_practice_lines + practice_lines) if (ex.get("title", "").lower().startswith("quick practice"))]
@@ -843,7 +992,8 @@ class GoogleDocsParser:
                         continue
 
                     # Find matching nodes for this text
-                    matching_nodes = text_to_nodes.get(text_line, [])
+                    norm_key = _norm2(text_line)
+                    matching_nodes = text_to_nodes.get(norm_key, [])
 
                     # --- PATCH: Replace Quick Practice heading with full title ---
                     is_quick_practice_heading = (
@@ -874,37 +1024,58 @@ class GoogleDocsParser:
                         continue
 
                     if matching_nodes:
-                        # Prefer nodes with the correct audio_section
-                        audio_nodes = [n for n in matching_nodes if n.get("audio_section") == section_key]
+                        # Prefer nodes explicitly tagged for this audio section, else same section, else first
+                        audio_nodes   = [n for n in matching_nodes if n.get("audio_section") == section_key]
                         section_nodes = [n for n in matching_nodes if n.get("section_context") == norm_header]
 
-                        # Choose the best match
-                        if audio_nodes:
-                            chosen_node = audio_nodes[0]
-                        elif section_nodes:
-                            chosen_node = section_nodes[0]
-                        else:
-                            chosen_node = matching_nodes[0]
+                        chosen_node = audio_nodes[0] if audio_nodes else (section_nodes[0] if section_nodes else matching_nodes[0])
 
-                        # Create a copy to avoid modifying the original
                         node_copy = chosen_node.copy()
                         if "inlines" in node_copy:
                             node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
-
                         node_list.append(node_copy)
-                        # Remove the used node to avoid duplicates
+
+                        # consume it so the same node isn't reused
                         matching_nodes.remove(chosen_node)
                     else:
-                        # If no matching node found, create a synthetic one
-                        synthetic_node = {
-                            "kind": "paragraph",
-                            "level": None,
-                            "inlines": [{"text": text_line, "bold": False, "italic": False, "underline": False}],
-                            "indent": 0,
-                            "lesson_context": lesson_header_raw,
-                            "section_context": norm_header
-                        }
-                        node_list.append(synthetic_node)
+                        # --- Fallback: try a tiny fuzzy match in this lesson-wide map ---
+                        best = None
+                        best_key = None
+                        best_score = 0.0
+                        a = set(norm_key.split())
+                        if a:
+                            for k, bucket in text_to_nodes.items():
+                                if not bucket:
+                                    continue
+                                b = set(k.split())
+                                if not b:
+                                    continue
+                                score = len(a & b) / max(len(a), len(b))
+                                if score > 0.6 and score > best_score:
+                                    best = bucket[0]
+                                    best_key = k
+                                    best_score = score
+
+                        if best is not None:
+                            node_copy = best.copy()
+                            if "inlines" in node_copy:
+                                node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
+                            node_list.append(node_copy)
+                            # consume it
+                            text_to_nodes[best_key].remove(best)
+                        else:
+                            # Last resort: synthesize but try to preserve bullets in audio sections
+                            looks_bullety = bool(re.match(r"^[–—\-*•●▪◦·・►»]\s", text_line))
+                            synthetic_kind = "list_item" if (looks_bullety or norm_header in RICH_AUDIO_HEADERS) else "paragraph"
+
+                            node_list.append({
+                                "kind": synthetic_kind,
+                                "level": None,
+                                "inlines": [{"text": text_line, "bold": False, "italic": False, "underline": False}],
+                                "indent": 0,
+                                "lesson_context": lesson_header_raw,
+                                "section_context": norm_header
+                            })
 
                 # fallback plain-text (Markdown) version
                 body_parts = [

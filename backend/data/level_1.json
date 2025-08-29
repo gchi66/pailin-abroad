@@ -3058,34 +3058,38 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
-                "text": "Pailin: How are you?\nDara: Not too good, I just got fired from my job.\nPailin: Oh, I’m sorry to hear that!",
+                "text": "Pailin: How are you?\u000bDara: Not too good, I just got fired from my job.\u000bPailin: Oh, I’m sorry to hear that!\u000b",
                 "bold": false,
                 "italic": false,
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.4: How are you?",
-            "section_context": "CULTURE NOTE"
+            "section_context": "CULTURE NOTE",
+            "audio_seq": 3,
+            "audio_section": "culture_note"
           },
           {
-            "kind": "paragraph",
+            "kind": "list_item",
             "level": null,
             "inlines": [
               {
-                "text": "Chloe: How are you?\nPailin: A bit tired. I didn’t sleep well. How about you?\nChloe: I’m good, thanks.",
+                "text": "Chloe: How are you?\u000bPailin: A bit tired. I didn’t sleep well. How about you?\u000bChloe: I’m good, thanks.",
                 "bold": false,
                 "italic": false,
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.4: How are you?",
-            "section_context": "CULTURE NOTE"
+            "section_context": "CULTURE NOTE",
+            "audio_seq": 4,
+            "audio_section": "culture_note"
           },
           {
             "kind": "heading",
@@ -4667,17 +4671,17 @@
             "section_context": "COMMON MISTAKES"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
-                "text": "ฉันกังวล\nฉันตื่นเต้น",
+                "text": "ฉันกังวล\u000bฉันตื่นเต้น",
                 "bold": false,
                 "italic": false,
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "COMMON MISTAKES"
           },
@@ -4697,32 +4701,32 @@
             "section_context": "COMMON MISTAKES"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
-                "text": "ฉันกังวล\nI nervous. (X)",
+                "text": "ฉันกังวล\u000bI nervous. (X)",
                 "bold": false,
                 "italic": false,
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "COMMON MISTAKES"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
-                "text": "ฉันตื่นเต้น\nI excited. (X)",
+                "text": "\u000bฉันตื่นเต้น\u000bI excited. (X)",
                 "bold": false,
                 "italic": false,
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.6: I’m excited!",
             "section_context": "COMMON MISTAKES"
           },
@@ -5512,6 +5516,7 @@
           {
             "phrase": "OH!",
             "variant": 1,
+            "translation_th": "",
             "content": "Oh!\nSaid when you are pleasantly surprised about something\nPailin: I baked this cake for you.\nLuke: Oh, it looks so good! Thank you!\nSee more uses of ‘Oh’",
             "content_jsonb": [
               {
@@ -5722,7 +5727,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "Asking a woman’s age\nThere is even a saying in English, ‘Never ask a woman about her age.’ Even if your intentions are pure, asking a woman her age can get you in trouble. They might assume that they look old and that’s why you’re asking, so it’s best to avoid asking unless they bring it up.",
+                "text": "Asking a woman’s age",
+                "bold": true,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "\u000bThere is even a saying in English, ‘Never ask a woman about her age.’ Even if your intentions are pure, asking a woman her age can get you in trouble. They might assume that they look old and that’s why you’re asking, so it’s best to avoid asking unless they bring it up.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -6566,6 +6577,7 @@
           {
             "phrase": "HERE",
             "variant": 1,
+            "translation_th": "",
             "content": "Here\nUsed to offer something to someone, like ‘Take this’\nLuke: My breath stinks.\nPailin: Here, I have some gum.\nPailin: I can’t find my blue pen.\nLuke: Here, you can use mine.",
             "content_jsonb": [
               {
@@ -6599,11 +6611,11 @@
                 "section_context": "PHRASES & VERBS"
               },
               {
-                "kind": "paragraph",
+                "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Luke: My breath stinks.\nPailin: Here, I have some gum.",
+                    "text": "Luke: My breath stinks.\u000bPailin: Here, I have some gum.\u000b",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -6614,11 +6626,11 @@
                 "section_context": "PHRASES & VERBS"
               },
               {
-                "kind": "paragraph",
+                "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Pailin: I can’t find my blue pen.\nLuke: Here, you can use mine.",
+                    "text": "Pailin: I can’t find my blue pen.\u000bLuke: Here, you can use mine.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -9955,6 +9967,7 @@
           {
             "phrase": "NICE!",
             "variant": 1,
+            "translation_th": "",
             "content": "Nice!\nA positive expression to show enthusiasm or approval\nLuke: I applied for a few jobs today.\nChloe: Nice! I’m sure you’ll get one.\nLuke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I’ll take a look at them.\nOH! [1]",
             "content_jsonb": [
               {
@@ -10804,6 +10817,7 @@
           {
             "phrase": "WOW",
             "variant": 1,
+            "translation_th": "",
             "content": "Wow\nUsed to show surprise or admiration\nWow! This cake is beautiful. Did you make it all by yourself?\nSee more uses of ‘Wow’",
             "content_jsonb": [
               {
@@ -10877,6 +10891,7 @@
           {
             "phrase": "COOL!",
             "variant": 1,
+            "translation_th": "",
             "content": "Cool!\nAn informal way of saying ‘That’s great’\nLuke: I just got tickets to the concert!\nPailin: Cool! I’m so excited.\nPailin: We’re bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?",
             "content_jsonb": [
               {
@@ -10910,11 +10925,11 @@
                 "section_context": "PHRASES & VERBS"
               },
               {
-                "kind": "paragraph",
+                "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Luke: I just got tickets to the concert!\nPailin: Cool! I’m so excited.",
+                    "text": "Luke: I just got tickets to the concert!\u000bPailin: Cool! I’m so excited.\u000b",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -10925,11 +10940,11 @@
                 "section_context": "PHRASES & VERBS"
               },
               {
-                "kind": "paragraph",
+                "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Pailin: We’re bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?",
+                    "text": "Pailin: We’re bringing a pie to the potluck.\u000bLuke: Cool, what kind of pie are you bringing?",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -14222,6 +14237,7 @@
           {
             "phrase": "LOOK FOR",
             "variant": 1,
+            "translation_th": "",
             "content": "Look for\nTo try to find or search for something\nI’ve been looking for a new job, but not many places are hiring.\nI’m looking for my keys. Have you seen them?",
             "content_jsonb": [
               {
@@ -15375,6 +15391,7 @@
           {
             "phrase": "LET’S SEE",
             "variant": 1,
+            "translation_th": "",
             "content": "Let’s see\nSaid when you’re trying to remember something or are thinking carefully\nNext Sunday, let’s see, I’ve got to pick up my sister from the airport.\nLet’s see, how long did it take to get to Vegas last time?",
             "content_jsonb": [
               {
@@ -15442,6 +15459,7 @@
           {
             "phrase": "COME BACK",
             "variant": 1,
+            "translation_th": "",
             "content": "Come back\nTo return to a place\nI want to come back to Thailand next year.\nWhat time did you come back last night?",
             "content_jsonb": [
               {
@@ -15509,6 +15527,7 @@
           {
             "phrase": "SURE!",
             "variant": 1,
+            "translation_th": "",
             "content": "Sure!\nAn enthusiastic way of saying ‘Yes’\nLuke: Could you help me translate these sentences into Thai?\nPailin: Sure!\nSee more uses of ‘Sure’",
             "content_jsonb": [
               {
@@ -17262,6 +17281,7 @@
           {
             "phrase": "CHECK OUT",
             "variant": 1,
+            "translation_th": "",
             "content": "Check out (something) / check (something) out\nTo look at or examine a person or thing that seems interesting or attractive\nDo you wanna check out this new cafe that just opened down the street?\nEmily, check it out. This camera can take photos underwater!\nSee more uses of ‘Check out’",
             "content_jsonb": [
               {
@@ -17542,6 +17562,7 @@
           {
             "phrase": "I SEE",
             "variant": 1,
+            "translation_th": "",
             "content": "I see\nI understand\nPailin: How did you know I work here?\nLuke: You told me the last time I saw you.\nPailin: Oh, I see.\nLuke: The reason your electricity isn't working is because someone turned off your circuit breaker.\nPailin: Oh, okay I see.",
             "content_jsonb": [
               {

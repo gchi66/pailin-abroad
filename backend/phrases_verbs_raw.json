@@ -1,0 +1,220 @@
+[
+  {
+    "index": 3427,
+    "text": "",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3428,
+    "text": "I SEE",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3429,
+    "text": "I see (เข้าใจแล้ว)",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": {
+      "listId": "kix.51gl03fmqxe3",
+      "textStyle": {}
+    },
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": "●"
+    },
+    "docwalker_kind_guess": "list_item"
+  },
+  {
+    "index": 3430,
+    "text": "มีความหมายว่า ฉันเข้าใจแล้ว",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3431,
+    "text": "",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3432,
+    "text": "Pailin: How did you know I work here?\u000bไพลิน: คุณรู้ได้ยังไงว่าฉันทำงานที่นี่?",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": {
+      "listId": "kix.nm4hu3h9hj1u",
+      "textStyle": {}
+    },
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": "●"
+    },
+    "docwalker_kind_guess": "list_item"
+  },
+  {
+    "index": 3433,
+    "text": "Luke: You told me the last time I saw you.\u000bลูค: ก็คุณบอกฉันตอนครั้งสุดท้ายที่เราเจอกันไง",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3434,
+    "text": "Pailin: Oh, I see.\u000bไพลิน: โอ้ ฉันเข้าใจแล้วล่ะ",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3435,
+    "text": "",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3436,
+    "text": "Luke: The reason your electricity isn't working is because someone turned off your circuit breaker.\u000bลูค: สาเหตุที่ไฟฟ้าคุณใช้งานไม่ได้เพราะว่ามีคนไปปิดเบรกเกอร์ไฟฟ้าน่ะ",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": {
+      "listId": "kix.tdgk34nam0wt",
+      "textStyle": {}
+    },
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": "●"
+    },
+    "docwalker_kind_guess": "list_item"
+  },
+  {
+    "index": 3437,
+    "text": "Pailin: Oh, okay I see.",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3438,
+    "text": "ไพลิน: โอ้ โอเคค่ะ เข้าใจละ",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3439,
+    "text": "",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3440,
+    "text": "PINNED COMMENT",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3441,
+    "text": "",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3442,
+    "text": "\tเพื่อนสนิทของคุณชื่ออะไร? เขาหรือเธออายุเท่าไหร่? ",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3443,
+    "text": "TAGS",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3444,
+    "text": "\u000b\tเวลา, อากาศ, สายโทรศัพท์, ครอบครัว, เพื่อน, พ่อแม่",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  },
+  {
+    "index": 3445,
+    "text": "",
+    "namedStyleType": "NORMAL_TEXT",
+    "bullet": null,
+    "resolvedListGlyph": {
+      "glyphType": null,
+      "glyphSymbol": null
+    },
+    "docwalker_kind_guess": "paragraph"
+  }
+]
