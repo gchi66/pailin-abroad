@@ -471,7 +471,10 @@ def tag_nodes_with_sections(doc_json):
     for elem in doc_json["body"]["content"]:
         # ── paragraph / heading ───────────────────────────────────────────
         if "paragraph" in elem:
-            para_nodes = list(paragraph_nodes({"body": {"content": [elem]}}))
+            para_nodes = list(paragraph_nodes({
+                "body":  {"content": [elem]},
+                "lists": doc_json.get("lists", {}),   # <-- critical
+            }))
             if not para_nodes:
                 continue
             n = para_nodes[0]
@@ -1086,19 +1089,19 @@ class GoogleDocsParser:
                             # Last resort: synthesize, but preserve bullets if we’ve ever seen this exact text as a list/numbered item in this lesson
 
                             synthetic_kind = "paragraph"
-
+                            orig = orig_kind_by_text.get(norm_key)
                             # 1) Prefer original kind when Thai (bilingual lines often break matching)
-                            if lang == 'th' and orig_kind_by_text.get(norm_key) in {"list_item", "numbered_item"}:
-                                synthetic_kind = "list_item"
+                            if lang == 'th' and orig in {"list_item", "numbered_item"}:
+                                synthetic_kind = orig
                             else:
-                                # 2) Try bilingual splits to see if any piece is a known list item
-                                #    (helps when the doc line is "EN\nTH" but originals were split)
                                 parts = re.split(r"(?:\u000b|\n)+", text_line.strip())
-                                for part in parts:
-                                    k_part = _norm2(part)
-                                    if orig_kind_by_text.get(k_part) in {"list_item", "numbered_item"}:
-                                        synthetic_kind = "list_item"
-                                        break
+                                part_kinds = [orig_kind_by_text.get(_norm2(p)) for p in parts if p.strip()]
+                                if "numbered_item" in part_kinds:
+                                    synthetic_kind = "numbered_item"  # <-- prefer numbered if seen
+                                elif "list_item" in part_kinds:
+                                    synthetic_kind = "list_item"
+                                elif bool(re.match(r"^[•●◦○∙·]\s", text_line)):
+                                    synthetic_kind = "list_item"
 
                                 # 3) Last fallback: visible bullet glyphs only
                                 if synthetic_kind == "paragraph":

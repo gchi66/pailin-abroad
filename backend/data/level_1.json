@@ -4795,7 +4795,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -4811,9 +4811,7 @@
             "lesson_context_norm": "LESSON 1.6: I’m excited!",
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 3,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -4860,7 +4858,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -4876,9 +4874,7 @@
             "lesson_context_norm": "LESSON 1.6: I’m excited!",
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 4,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -4925,7 +4921,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -4941,9 +4937,7 @@
             "lesson_context_norm": "LESSON 1.6: I’m excited!",
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 5,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -5135,7 +5129,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -5151,9 +5145,7 @@
             "lesson_context_norm": "LESSON 1.6: I’m excited!",
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 6,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -5173,7 +5165,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 7,
+            "audio_seq": 3,
             "audio_section": "understand"
           },
           {
@@ -5194,7 +5186,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 8,
+            "audio_seq": 4,
             "audio_section": "understand"
           },
           {
@@ -5215,7 +5207,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 9,
+            "audio_seq": 5,
             "audio_section": "understand"
           },
           {
@@ -5236,11 +5228,11 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 10,
+            "audio_seq": 6,
             "audio_section": "understand"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -5262,9 +5254,7 @@
             "lesson_context_norm": "LESSON 1.6: I’m excited!",
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 11,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -5284,7 +5274,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 12,
+            "audio_seq": 7,
             "audio_section": "understand"
           },
           {
@@ -5305,7 +5295,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 13,
+            "audio_seq": 8,
             "audio_section": "understand"
           },
           {
@@ -5326,7 +5316,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 14,
+            "audio_seq": 9,
             "audio_section": "understand"
           },
           {
@@ -5347,11 +5337,11 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 15,
+            "audio_seq": 10,
             "audio_section": "understand"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -5373,9 +5363,7 @@
             "lesson_context_norm": "LESSON 1.6: I’m excited!",
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 16,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -5395,7 +5383,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 17,
+            "audio_seq": 11,
             "audio_section": "understand"
           },
           {
@@ -5416,7 +5404,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 18,
+            "audio_seq": 12,
             "audio_section": "understand"
           },
           {
@@ -5437,7 +5425,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 19,
+            "audio_seq": 13,
             "audio_section": "understand"
           },
           {
@@ -5458,7 +5446,7 @@
             "lesson_context_en": "LESSON 1.6: I’m excited!",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 20,
+            "audio_seq": 14,
             "audio_section": "understand"
           },
           {
@@ -8516,7 +8504,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -8532,9 +8520,7 @@
             "lesson_context_norm": "LESSON 1.9: You’re a great cook",
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 6,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -8581,7 +8567,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -8597,9 +8583,7 @@
             "lesson_context_norm": "LESSON 1.9: You’re a great cook",
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 7,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -8646,7 +8630,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -8662,9 +8646,7 @@
             "lesson_context_norm": "LESSON 1.9: You’re a great cook",
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 8,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -9299,7 +9281,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -9315,9 +9297,7 @@
             "lesson_context_norm": "LESSON 1.9: You’re a great cook",
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 9,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -9337,7 +9317,7 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 10,
+            "audio_seq": 6,
             "audio_section": "understand"
           },
           {
@@ -9358,7 +9338,7 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 11,
+            "audio_seq": 7,
             "audio_section": "understand"
           },
           {
@@ -9391,11 +9371,11 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 12,
+            "audio_seq": 8,
             "audio_section": "understand"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -9411,9 +9391,7 @@
             "lesson_context_norm": "LESSON 1.9: You’re a great cook",
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 13,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -9433,7 +9411,7 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 14,
+            "audio_seq": 9,
             "audio_section": "understand"
           },
           {
@@ -9454,7 +9432,7 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 15,
+            "audio_seq": 10,
             "audio_section": "understand"
           },
           {
@@ -9481,11 +9459,11 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 16,
+            "audio_seq": 11,
             "audio_section": "understand"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -9501,9 +9479,7 @@
             "lesson_context_norm": "LESSON 1.9: You’re a great cook",
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 17,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -9523,7 +9499,7 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 18,
+            "audio_seq": 12,
             "audio_section": "understand"
           },
           {
@@ -9544,7 +9520,7 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 19,
+            "audio_seq": 13,
             "audio_section": "understand"
           },
           {
@@ -9571,7 +9547,7 @@
             "lesson_context_en": "LESSON 1.9: You’re a great cook",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 20,
+            "audio_seq": 14,
             "audio_section": "understand"
           }
         ],
@@ -10463,7 +10439,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -10479,9 +10455,7 @@
             "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 5,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -10534,7 +10508,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -10550,9 +10524,7 @@
             "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 6,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -10605,7 +10577,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -10621,9 +10593,7 @@
             "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 7,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "misc_item",
@@ -11157,7 +11127,7 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -11173,9 +11143,7 @@
             "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 8,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -11195,7 +11163,7 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 9,
+            "audio_seq": 5,
             "audio_section": "understand"
           },
           {
@@ -11216,7 +11184,7 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 10,
+            "audio_seq": 6,
             "audio_section": "understand"
           },
           {
@@ -11243,11 +11211,11 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 11,
+            "audio_seq": 7,
             "audio_section": "understand"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -11263,9 +11231,7 @@
             "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 12,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -11285,7 +11251,7 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 13,
+            "audio_seq": 8,
             "audio_section": "understand"
           },
           {
@@ -11306,7 +11272,7 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 14,
+            "audio_seq": 9,
             "audio_section": "understand"
           },
           {
@@ -11339,11 +11305,11 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 15,
+            "audio_seq": 10,
             "audio_section": "understand"
           },
           {
-            "kind": "list_item",
+            "kind": "numbered_item",
             "level": null,
             "inlines": [
               {
@@ -11359,9 +11325,7 @@
             "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
-            "section_context": "UNDERSTAND",
-            "audio_seq": 16,
-            "audio_section": "understand"
+            "section_context": "UNDERSTAND"
           },
           {
             "kind": "list_item",
@@ -11381,7 +11345,7 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 17,
+            "audio_seq": 11,
             "audio_section": "understand"
           },
           {
@@ -11402,7 +11366,7 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 18,
+            "audio_seq": 12,
             "audio_section": "understand"
           },
           {
@@ -11435,7 +11399,7 @@
             "lesson_context_en": "LESSON 1.10: He’s a student at USC",
             "lesson_context_th": null,
             "section_context": "UNDERSTAND",
-            "audio_seq": 19,
+            "audio_seq": 13,
             "audio_section": "understand"
           }
         ],
