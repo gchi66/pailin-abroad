@@ -846,6 +846,20 @@ class GoogleDocsParser:
         lesson["focus"]      = ""
         lesson["backstory"]  = ""
 
+        # Add these right after the header parse:
+        LKEY  = _lesson_key(lesson_header_raw)
+        LCTXN = _norm_header_str(lesson_header_raw)
+
+        def _same_lesson(n: dict) -> bool:
+            nk = n.get("lesson_key") or _lesson_key(n.get("lesson_context"))
+            if LKEY and nk and nk != LKEY:
+                return False
+            if LKEY and not nk:
+                lc = n.get("lesson_context")
+                if lc and _norm_header_str(lc) != LCTXN:
+                    return False
+            return True
+
         transcript_lines:      list[str] = []
         comp_lines:            list[str] = []
         practice_lines:        list[str] = []
@@ -857,7 +871,7 @@ class GoogleDocsParser:
         tagged_nodes = tag_nodes_with_sections(doc_json)
         table_nodes = {n["id"]: n for n in tagged_nodes
             if n.get("kind") == "table"
-            and n.get("lesson_context") == lesson_header_raw
+            and _same_lesson(n)
         }
 
         # --------------------------------------------------------------------
@@ -912,7 +926,6 @@ class GoogleDocsParser:
             RICH_AUDIO_HEADERS = {
                 "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"
             }
-
             if norm_header in RICH_AUDIO_HEADERS:
                 # Add directive regex for quick practice harvesting
                 directive_re = re.compile(
@@ -963,13 +976,19 @@ class GoogleDocsParser:
 
                 # Create a mapping of text to nodes for this lesson and section
                 text_to_nodes = {}
+                orig_kind_by_text = {}
                 for n in tagged_nodes:
-                    if n.get("lesson_context") == lesson_header_raw:
-                        if "inlines" in n:
-                            plain = "".join(s["text"] for s in n["inlines"])
-                            key = _norm2(plain)
-                            if key:
-                                text_to_nodes.setdefault(key, []).append(n)
+                    if not _same_lesson(n):
+                        continue
+                    if "inlines" in n:
+                        plain = "".join(s["text"] for s in n["inlines"])
+                        k = _norm2(plain)
+                        if not k:
+                            continue
+                        text_to_nodes.setdefault(k, []).append(n)
+                        # remember the strongest original kind we’ve seen for this text
+                        if n.get("kind") in {"list_item", "numbered_item"}:
+                            orig_kind_by_text[k] = n["kind"]
 
                 # Process lines in order, preserving the original sequence
                 quick_practice_titles = [ex["title"] for ex in self.parse_practice(embedded_practice_lines + practice_lines) if (ex.get("title", "").lower().startswith("quick practice"))]
@@ -1064,9 +1083,28 @@ class GoogleDocsParser:
                             # consume it
                             text_to_nodes[best_key].remove(best)
                         else:
-                            # Last resort: synthesize but try to preserve bullets in audio sections
-                            looks_bullety = bool(re.match(r"^[–—\-*•●▪◦·・►»]\s", text_line))
-                            synthetic_kind = "list_item" if (looks_bullety or norm_header in RICH_AUDIO_HEADERS) else "paragraph"
+                            # Last resort: synthesize, but preserve bullets if we’ve ever seen this exact text as a list/numbered item in this lesson
+
+                            synthetic_kind = "paragraph"
+
+                            # 1) Prefer original kind when Thai (bilingual lines often break matching)
+                            if lang == 'th' and orig_kind_by_text.get(norm_key) in {"list_item", "numbered_item"}:
+                                synthetic_kind = "list_item"
+                            else:
+                                # 2) Try bilingual splits to see if any piece is a known list item
+                                #    (helps when the doc line is "EN\nTH" but originals were split)
+                                parts = re.split(r"(?:\u000b|\n)+", text_line.strip())
+                                for part in parts:
+                                    k_part = _norm2(part)
+                                    if orig_kind_by_text.get(k_part) in {"list_item", "numbered_item"}:
+                                        synthetic_kind = "list_item"
+                                        break
+
+                                # 3) Last fallback: visible bullet glyphs only
+                                if synthetic_kind == "paragraph":
+                                    looks_bullety = bool(re.match(r"^[•●◦○∙·]\s", text_line))
+                                    if looks_bullety:
+                                        synthetic_kind = "list_item"
 
                             node_list.append({
                                 "kind": synthetic_kind,

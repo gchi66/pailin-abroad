@@ -19,12 +19,11 @@ function nestComments(comments) {
   return roots;
 }
 
-export default function LessonDiscussion({ lessonId }) {
+export default function LessonDiscussion({ lessonId, isAdmin }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [posting, setPosting] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const { user } = useAuth();
 
   // Fetch comments for this lesson
@@ -43,20 +42,6 @@ export default function LessonDiscussion({ lessonId }) {
     fetchComments();
   }, [lessonId]);
 
-  useEffect(() => {
-    // Check if user is admin
-    if (!user) return;
-    supabaseClient
-      .from("users")
-      .select("is_admin")
-      .eq("id", user.id)
-      .single()
-      .then(({ data, error }) => {
-        if (error) console.error("Error checking admin status:", error);
-        else setIsAdmin(data?.is_admin ?? false);
-      });
-  }, [user]);
-
   // Add new comment (requires login)
   async function handleNewComment(body, parentCommentId = null) {
     if (!user) return;
@@ -71,7 +56,6 @@ export default function LessonDiscussion({ lessonId }) {
 
   // Pin/unpin comment (admin only)
   async function handlePin(commentId, pinned) {
-    if (!isAdmin) return;
     await supabaseClient
       .from("comments")
       .update({ pinned })
@@ -106,33 +90,39 @@ export default function LessonDiscussion({ lessonId }) {
   return (
     <section className="lesson-discussion">
       <h3 className="discussion-title">Discussion Board</h3>
-      {user ? (
-        <form className="new-comment-form" onSubmit={handleNewCommentSubmit}>
-          <textarea
-            value={newComment}
-            onChange={e => setNewComment(e.target.value)}
-            placeholder="Write a new comment..."
-            rows={3}
-            className="comment-textarea"
-            required
+      <section className="discussion-board">
+        {user ? (
+          <form className="new-comment-form">
+            <textarea
+              value={newComment}
+              onChange={e => setNewComment(e.target.value)}
+              placeholder="Write a new comment..."
+              rows={3}
+              className="comment-textarea"
+              required
+            />
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={posting || !newComment.trim()}
+              onClick={handleNewCommentSubmit}
+            >
+              {posting ? "Posting..." : "Post"}
+            </button>
+          </form>
+        ) : (
+          <div className="discussion-login-msg">You must be logged in to post a comment.</div>
+        )}
+        {loading ? (
+          <div className="discussion-loading">Loading comments…</div>
+        ) : (
+          <DiscussionBoard
+            comments={nested}
+            onReply={handleReply}
+            onPin={isAdmin ? handlePin : undefined}
           />
-          <button type="submit" className="comment-submit-btn" disabled={posting || !newComment.trim()}>
-            {posting ? "Posting..." : "Post"}
-          </button>
-        </form>
-      ) : (
-        <div className="discussion-login-msg">You must be logged in to post a comment.</div>
-      )}
-      {loading ? (
-        <div className="discussion-loading">Loading comments…</div>
-      ) : (
-        <DiscussionBoard
-          comments={nested}
-          onReply={handleReply}
-          onPin={isAdmin ? handlePin : undefined}
-          isAdmin={isAdmin}
-        />
-      )}
+        )}
+      </section>
     </section>
   );
 }
