@@ -22,10 +22,10 @@ export default function LessonHeader({ level, lessonOrder, title, subtitle, titl
         <h1 className="lesson-title">{title}</h1>
         <h2 className="lesson-subtitle">{subtitle}</h2>
 
-        <p className="thai-line">
+        {/* <p className="thai-line">
           {titleTh}<br />
           {subtitleTh}
-        </p>
+        </p> */}
       </div>
 
       {/* right column */}

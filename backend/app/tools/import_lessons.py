@@ -345,12 +345,19 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
 
         # --------- TH path: update only TH fields; insert if missing ----------
         th_update = {}
-        if "content" in sec:
-            th_update["content_th"] = sec["content"]
-        if "content_jsonb" in sec:
-            th_update["content_jsonb_th"] = sec["content_jsonb"]
-        if sec.get("render_mode"):
-            th_update["render_mode"] = sec["render_mode"]
+
+        val = sec.get("content")
+        if isinstance(val, str) and val.strip():
+            th_update["content_th"] = val.strip()
+
+        cj = sec.get("content_jsonb")
+        if cj not in (None, "", "''", '""'):        # guard weird empties
+            th_update["content_jsonb_th"] = cj
+
+        # Only set render_mode if provided and non-empty
+        rm = sec.get("render_mode")
+        if isinstance(rm, str) and rm:
+            th_update["render_mode"] = rm
 
         if not th_update:
             # nothing to write for TH in this section

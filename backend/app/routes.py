@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.supabase_client import supabase
+from app.resolver import resolve_lesson
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
@@ -144,3 +145,21 @@ def contact():
     except Exception as e:
         print("Error sending email:", e)
         return jsonify({"message": "Failed to send email."}), 500
+
+
+@routes.route("/api/lessons/<lesson_id>/resolved", methods=["GET"])
+def get_lesson_resolved(lesson_id):
+    lang = (request.args.get("lang") or "en").lower()
+    if lang not in ("en", "th"):
+        return jsonify({"error": "lang must be 'en' or 'th'"}), 400
+    try:
+        payload = resolve_lesson(lesson_id, lang)
+    except KeyError:
+        return jsonify({"error": "Lesson not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    resp = jsonify(payload)
+    resp.headers["Cache-Control"] = "public, max-age=60"
+    resp.headers["Vary"] = "Accept-Encoding, lang"
+    return resp, 200

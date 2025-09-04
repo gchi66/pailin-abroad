@@ -1,206 +1,339 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+// frontend/src/Pages/Lesson.jsx
+import React, { useEffect, useMemo, useState } from "react";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
+import { fetchResolvedLesson } from "../lib/fetchResolvedLesson";
 import { fetchSnippets } from "../lib/fetchSnippets";
 
-import LessonHeader   from "../Components/LessonHeader";
-import AudioBar       from "../Components/AudioBar";
-import LessonSidebar  from "../Components/LessonSidebar";
-import LessonContent  from "../Components/LessonContent";
-
+import LessonHeader from "../Components/LessonHeader";
+import AudioBar from "../Components/AudioBar";
+import LessonSidebar from "../Components/LessonSidebar";
+import LessonContent from "../Components/LessonContent";
 import LessonDiscussion from "../Components/LessonDiscussion";
-import PinnedComment   from "../Components/PinnedComment";
 
 import "../Styles/Lesson.css";
+
+// ---------------- helpers ----------------
+
+function safeJSON(v, fallback) {
+  if (v == null) return fallback;
+  if (Array.isArray(v) || (typeof v === "object" && v !== null)) return v;
+  try {
+    return JSON.parse(v);
+  } catch {
+    return fallback;
+  }
+}
+
+function pickLang(en, th, lang) {
+  const clean = (x) => {
+    if (x == null) return null;
+    const s = String(x).trim();
+    return s === "" ? null : s;
+  };
+  if (lang === "th") return clean(th) ?? clean(en);
+  return clean(en) ?? clean(th);
+}
+
+// Normalize a single practice exercise row to the shape the UI expects.
+function normalizeExercise(ex, contentLang) {
+  const exercise_type = ex.exercise_type || ex.kind || null;
+
+  const title =
+    ex.title != null || ex.title_th != null
+      ? pickLang(ex.title, ex.title_th, contentLang)
+      : ex.title ?? null;
+
+  const prompt =
+    ex.prompt != null || ex.prompt_th != null
+      ? pickLang(ex.prompt, ex.prompt_th, contentLang)
+      : pickLang(ex.prompt_md, ex.prompt_th, contentLang) ||
+        ex.prompt_md ||
+        ex.prompt ||
+        null;
+
+  const paragraph =
+    ex.paragraph != null || ex.paragraph_th != null
+      ? pickLang(ex.paragraph, ex.paragraph_th, contentLang)
+      : null;
+
+  const rawOptions =
+    contentLang === "th" && ex.options_th ? ex.options_th : ex.options;
+  const rawItems =
+    contentLang === "th" && ex.items_th ? ex.items_th : ex.items;
+
+  const options = safeJSON(rawOptions, []);
+  const items = safeJSON(rawItems, []);
+  const answer_key = safeJSON(ex.answer_key, {});
+  const feedback =
+    ex.feedback != null || ex.feedback_th != null
+      ? pickLang(ex.feedback, ex.feedback_th, contentLang)
+      : null;
+
+  return {
+    id: ex.id,
+    lesson_id: ex.lesson_id,
+    sort_order: ex.sort_order ?? 0,
+    exercise_type, // "fill_blank" | "multiple_choice" | "open" | "sentence_transform"
+    title,
+    prompt, // from prompt_md or prompt
+    paragraph, // optional helper text
+    items, // for fill_blank / sentence_transform
+    options, // for MCQ
+    answer_key,
+    feedback,
+  };
+}
+
+// Normalize comprehension question rows to support BOTH schemas
+function normalizeQuestion(q, contentLang) {
+  const question_text =
+    q.question_text != null || q.question_text_th != null
+      ? pickLang(q.question_text, q.question_text_th, contentLang)
+      : pickLang(q.prompt, q.prompt_th, contentLang) || q.prompt || null;
+
+  let options;
+  if (q.options || q.options_th) {
+    const raw = contentLang === "th" && q.options_th ? q.options_th : q.options;
+    options = safeJSON(raw, []);
+  } else {
+    const choices = ["choice_a", "choice_b", "choice_c", "choice_d"]
+      .map((k) => {
+        const en = q[k];
+        const th = q[`${k}_th`];
+        const v = pickLang(en, th, contentLang);
+        return v ? v : null;
+      })
+      .filter(Boolean);
+    options = choices.length ? choices : [];
+  }
+
+  const correct_choice = q.correct_choice ?? null; // legacy single-letter
+  const answer_key = safeJSON(q.answer_key, null); // new array like ["B"]
+  const explanation = pickLang(q.explanation, q.explanation_th, contentLang);
+
+  return {
+    id: q.id,
+    lesson_id: q.lesson_id,
+    sort_order: q.sort_order ?? 0,
+    question_type: q.question_type || null,
+    question_text,
+    options,
+    correct_choice,
+    answer_key,
+    explanation,
+  };
+}
+
+// ---------------- component ----------------
 
 export default function Lesson() {
   const { id } = useParams();
 
-  // high-level lesson row
-  const [lesson, setLesson] = useState(null);
+  // URL param → controls resolver language (content language)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const contentLang = (searchParams.get("content_lang") || "en").toLowerCase(); // "en" | "th"
 
-  // sections, questions, transcript
-  const [sections,  setSections]  = useState([]);
+  // UI language for site-wide labels + header (independent of contentLang)
+  const [uiLang, setUiLang] = useState("en");
+
+  // Resolved payload pieces
+  const [lesson, setLesson] = useState(null);
+  const [sections, setSections] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [transcript, setTranscript] = useState([]);
   const [practiceExercises, setPracticeExercises] = useState([]);
   const [lessonPhrases, setLessonPhrases] = useState([]);
 
   // UI state
-  const [activeId, setActiveId] = useState("comprehension");
-  const [uiLang,   setUiLang]   = useState("en");
+  const [activeId, setActiveId] = useState(null);
 
-  // Audio URL state
+  // Audio + snippets
   const [audioUrl, setAudioUrl] = useState(null);
-
-  // Add state for pinned comment
-  const [pinnedComment, setPinnedComment] = useState("");
-
-  // Audio snippet index
   const [snipIdx, setSnipIdx] = useState({});
 
-  // Add state for all lessons in current stage/level
+  // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
+
+  // Pinned comment from sections
+  const pinnedComment = useMemo(() => {
+    const s = sections.find((x) => x.type === "pinned_comment");
+    return s ? s.content || "" : "";
+  }, [sections]);
+
+  // Change content language via URL
+  const setContentLang = (lang) => {
+    const next = new URLSearchParams(searchParams);
+    next.set("content_lang", lang);
+    setSearchParams(next, { replace: true });
+  };
+
+
 
   useEffect(() => {
     (async () => {
-      // fetch lesson, sections, questions, and transcript in parallel
-      const [
-        { data: lsn,  error: e1 },
-        { data: secs, error: e2 },
-        { data: qs,   error: e3 },
-        { data: tr,   error: e4 },
-        { data: pe,   error: e5 },
-      ] = await Promise.all([
-        supabaseClient
-          .from("lessons")
-          .select("*")
-          .eq("id", id)
-          .single(),
-        supabaseClient
-          .from("lesson_sections")
-          .select("*")
-          .eq("lesson_id", id)
-          .order("sort_order"),
-        supabaseClient
-          .from("comprehension_questions")
-          .select("*")
-          .eq("lesson_id", id)
-          .order("sort_order"),
-        supabaseClient
-          .from("transcript_lines")
-          .select("*")
-          .eq("lesson_id", id)
-          .order("sort_order"),
-        supabaseClient
-          .from("practice_exercises")
-          .select("*")
-          .eq("lesson_id", id)
-          .order("sort_order"),
-      ]);
+      try {
+        // 1) fetch resolved payload from backend
+        const payload = await fetchResolvedLesson(id, contentLang);
 
-      if (e1 || e2 || e3 || e4 || e5) {
-        console.error(e1, e2, e3, e4, e5);
-        return;
-      }
+        // derive safe title/subtitle variants for UI (fall back if resolver doesn’t expose *_en/_th)
+        const title_en = payload.title_en ?? payload.title ?? null;
+        const title_th = payload.title_th ?? null;
+        const subtitle_en = payload.subtitle_en ?? payload.subtitle ?? null;
+        const subtitle_th = payload.subtitle_th ?? null;
 
-      setLesson(lsn);
-      setSections(secs);
-      setQuestions(qs);
-      setTranscript(tr);
-      setPracticeExercises(pe);
+        const lsn = {
+          id: payload.id,
+          stage: payload.stage,
+          level: payload.level,
+          lesson_order: payload.lesson_order,
+          image_url: payload.image_url,
+          conversation_audio_url: payload.conversation_audio_url,
+          lesson_external_id: payload.lesson_external_id,
+          // keep both for UI choice
+          title_en,
+          title_th,
+          subtitle_en,
+          subtitle_th,
+          // convenient content-language strings too (if you still want them)
+          title: payload.title ?? null,
+          subtitle: payload.subtitle ?? null,
+          focus: payload.focus ?? null,
+          backstory: payload.backstory ?? null,
+        };
 
-      // Find pinned comment section
-      const pinnedSection = secs.find((s) => s.type === "pinned_comment");
-      setPinnedComment(pinnedSection ? pinnedSection.content : "");
+        // normalize questions/exercises in case resolver sends raw DB rows
+        const normalizedQuestions = (payload.questions || []).map((q) =>
+          normalizeQuestion(q, contentLang)
+        );
 
-      // // initial active: first section, or fallback to comprehension/transcript
-      // setActiveId(
-      //   secs[0]?.id
-      //   || (qs.length ? "comprehension" : null)
-      //   || (tr.length ? "transcript" : null)
-      // );
+        const normalizedExercises = (payload.practice_exercises || []).map(
+          (ex) => normalizeExercise(ex, contentLang)
+        );
 
-      // Fetch audio URL if present
-      const bucket = "lesson-audio";
+        setLesson(lsn);
+        setSections(payload.sections || []);
+        setTranscript(payload.transcript || []);
+        setQuestions(normalizedQuestions);
+        setPracticeExercises(normalizedExercises);
+        setLessonPhrases(payload.phrases || []);
 
-      // Check if file exists by listing the directory
-      const { data: files, error: listError } = await supabaseClient.storage
-        .from('lesson-audio')
-        .list('Beginner/L1/Conversations');
+        // 2) initial active section
+        const firstSectionId = (payload.sections && payload.sections[0]?.id) || null;
+        const fallback =
+          (normalizedQuestions.length ? "comprehension" : null) ||
+          ((payload.transcript || []).length ? "transcript" : null);
+        setActiveId(firstSectionId || fallback);
 
-      if (lsn && lsn.conversation_audio_url) {
-        // console.log("Attempting to fetch audio for path:", lsn.conversation_audio_url);
-
-        // Try to create signed URL
-        const { data, error } = await supabaseClient
-          .storage
-          .from(bucket)
-          .createSignedUrl(lsn.conversation_audio_url, 2 * 60 * 60);
-
-        if (error) {
-          // console.error("Audio signed URL error:", error);
-          // console.error("Full error details:", JSON.stringify(error, null, 2));
-          setAudioUrl(null);
+        // 3) sign conversation audio
+        if (lsn.conversation_audio_url) {
+          try {
+            const { data, error } = await supabaseClient.storage
+              .from("lesson-audio")
+              .createSignedUrl(lsn.conversation_audio_url, 2 * 60 * 60);
+            if (error) {
+              console.warn("Audio signed URL error:", error);
+              setAudioUrl(null);
+            } else {
+              setAudioUrl(data.signedUrl);
+            }
+          } catch (e) {
+            console.warn("Audio signed URL exception:", e);
+            setAudioUrl(null);
+          }
         } else {
-          // console.log("Successfully created signed URL:", data.signedUrl);
-          setAudioUrl(data.signedUrl);
+          setAudioUrl(null);
         }
-      } else {
-        console.log("No audio URL found in lesson data");
-        setAudioUrl(null);
-      }
 
-      // Fetch phrases for this lesson
-      const { data: phraseLinks, error: phraseError } = await supabaseClient
-        .from("lesson_phrases")
-        .select("sort_order, phrases(*)")
-        .eq("lesson_id", id)
-        .order("sort_order");
+        // 4) fetch audio snippet index
+        if (lsn.lesson_external_id) {
+          try {
+            const idx = await fetchSnippets(lsn.lesson_external_id);
+            setSnipIdx(idx || {});
+          } catch (err) {
+            console.error("Error fetching audio snippets:", err);
+            setSnipIdx({});
+          }
+        } else {
+          setSnipIdx({});
+        }
 
-      if (phraseError) {
-        console.error("Error fetching lesson phrases:", phraseError);
+        // 5) prev/next list
+        if (lsn.stage && typeof lsn.level !== "undefined") {
+          const { data: allLessons, error: allLessonsError } = await supabaseClient
+            .from("lessons")
+            .select("id, lesson_order, title, title_th, stage, level")
+            .eq("stage", lsn.stage)
+            .eq("level", lsn.level)
+            .order("lesson_order", { ascending: true });
+          if (!allLessonsError && allLessons) {
+            setLessonList(allLessons);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch resolved lesson:", err);
+        // clear to avoid stale UI
+        setLesson(null);
+        setSections([]);
+        setTranscript([]);
+        setQuestions([]);
+        setPracticeExercises([]);
         setLessonPhrases([]);
-      } else {
-        setLessonPhrases(phraseLinks.map(row => row.phrases));
       }
-      // console.log("Full lesson data:", lsn);
-      // console.log("Lesson external_id:", lsn.lesson_external_id);
-
-      // Fetch audio snippet index for this lesson
-      if (lsn && lsn.lesson_external_id) {
-        try {
-          const idx = await fetchSnippets(lsn.lesson_external_id);
-          setSnipIdx(idx);
-        } catch (err) {
-          console.error("Error fetching audio snippets:", err);
-        }
-      }
-
-      // Fetch all lessons for current stage/level for navigation
-      if (lsn && lsn.stage && lsn.level) {
-        const { data: allLessons, error: allLessonsError } = await supabaseClient
-          .from("lessons")
-          .select("id, lesson_order, title")
-          .eq("stage", lsn.stage)
-          .eq("level", lsn.level)
-          .order("lesson_order", { ascending: true });
-        if (!allLessonsError && allLessons) {
-          setLessonList(allLessons);
-        }
-      }
-    })(); // <-- closes the async IIFE
-  }, [id]); // <-- closes useEffect
+    })();
+  }, [id, contentLang]); // refetch when lesson id or content language changes
 
   if (!lesson) {
     return <div style={{ padding: "10vh", textAlign: "center" }}>Loading…</div>;
   }
 
-  // Find current lesson index in lessonList
-  const currentIdx = lessonList.findIndex(l => l.id === lesson?.id);
+  // Prev/Next
+  const currentIdx = lessonList.findIndex((l) => l.id === lesson.id);
   const prevLesson = currentIdx > 0 ? lessonList[currentIdx - 1] : null;
-  const nextLesson = currentIdx >= 0 && currentIdx < lessonList.length - 1 ? lessonList[currentIdx + 1] : null;
+  const nextLesson =
+    currentIdx >= 0 && currentIdx < lessonList.length - 1
+      ? lessonList[currentIdx + 1]
+      : null;
+
+  // Choose header strings by UI language (independent of contentLang)
+  const headerTitle =
+    uiLang === "th" ? (lesson.title_th || lesson.title_en) : (lesson.title_en || lesson.title_th);
+  const headerSubtitle =
+    uiLang === "th" ? (lesson.subtitle_th || lesson.subtitle_en) : (lesson.subtitle_en || lesson.subtitle_th);
 
   return (
     <main>
       <div className="lesson-page-container">
-        {/* header banner */}
+        {/* Header */}
         <LessonHeader
           level={lesson.level}
           lessonOrder={lesson.lesson_order}
-          title={lesson.title}
-          subtitle={lesson.subtitle}
-          titleTh={lesson.title_th}
-          subtitleTh={lesson.subtitle_th}
+          title={headerTitle}
+          subtitle={headerSubtitle}
         />
 
-        {/* audio card */}
-        <AudioBar
-          audioSrc={audioUrl}
-          description={lesson.backstory}
-        />
+        {/* Audio card */}
+        <AudioBar audioSrc={audioUrl} description={lesson.backstory} />
 
-        {/* sidebar + content */}
+        {/* Language toggles */}
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", margin: "1rem 0" }}>
+          {/* <LessonLanguageToggle contentLang={contentLang} onToggle={handleToggleContentLang} /> */}
+          <span style={{ marginLeft: "1rem" }}>UI language:</span>
+          <button
+            className={`lesson-nav-btn${uiLang === "en" ? " active" : ""}`}
+            onClick={() => setUiLang("en")}
+          >
+            EN
+          </button>
+          <button
+            className={`lesson-nav-btn${uiLang === "th" ? " active" : ""}`}
+            onClick={() => setUiLang("th")}
+          >
+            TH
+          </button>
+        </div>
+
+        {/* Body */}
         <div className="lesson-body">
           <LessonSidebar
             sections={sections}
@@ -222,10 +355,16 @@ export default function Lesson() {
             uiLang={uiLang}
             setUiLang={setUiLang}
             snipIdx={snipIdx}
+            contentLang={contentLang}
+            setContentLang={setContentLang}
           />
         </div>
-        {/* Next/Previous navigation */}
-        <div className="lesson-nav-buttons" style={{ display: "flex", justifyContent: "center", gap: "2rem", margin: "2rem 0" }}>
+
+        {/* Prev / Next */}
+        <div
+          className="lesson-nav-buttons"
+          style={{ display: "flex", justifyContent: "center", gap: "2rem", margin: "2rem 0" }}
+        >
           <Link
             to={prevLesson ? `/lesson/${prevLesson.id}` : "#"}
             className={`lesson-nav-btn${prevLesson ? "" : " disabled"}`}
@@ -242,10 +381,8 @@ export default function Lesson() {
           </Link>
         </div>
 
-        {/* Discussion board below lesson content */}
-        <LessonDiscussion lessonId={lesson.id} isAdmin={lesson.is_admin} />
-        {/* pinned comment at the bottom
-        <PinnedComment comment={pinnedComment} /> */}
+        {/* Discussion */}
+        <LessonDiscussion lessonId={lesson.id} isAdmin={false} />
       </div>
     </main>
   );

@@ -19,6 +19,8 @@ export default function LessonContent({
   uiLang = "en",
   setUiLang,
   snipIdx = {},
+  contentLang = "en",
+  setContentLang,
 }) {
   /* ===============================================================
      1) COMPREHENSION VIEW
@@ -31,7 +33,7 @@ export default function LessonContent({
             <span className="lc-head-title">COMPREHENSION QUESTIONS</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
           </div>
         </header>
 
@@ -51,7 +53,7 @@ export default function LessonContent({
             <span className="lc-head-title">TRANSCRIPT</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
           </div>
         </header>
 
@@ -82,7 +84,7 @@ export default function LessonContent({
             <span className="lc-head-title">PRACTICE</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
           </div>
         </header>
 
@@ -121,7 +123,7 @@ export default function LessonContent({
             <span className="lc-head-title">PHRASES & VERBS</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
           </div>
         </header>
         <MarkdownSection
@@ -159,7 +161,7 @@ export default function LessonContent({
             <span className="lc-head-title">APPLY</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
           </div>
         </header>
 
@@ -242,7 +244,7 @@ export default function LessonContent({
               )}
             </div>
             <div className="lc-head-right">
-              <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
             </div>
           </header>
           <RichSectionRenderer
@@ -299,7 +301,7 @@ export default function LessonContent({
             )}
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
           </div>
         </header>
         <MarkdownSection
@@ -326,7 +328,7 @@ export default function LessonContent({
         </div>
 
         <div className="lc-head-right">
-          <LessonLanguageToggle language={uiLang} setLanguage={setUiLang} />
+          <LessonLanguageToggle contentLang={uiLang} setContentLang={setUiLang} />
         </div>
       </header>
 
