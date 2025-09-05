@@ -1,5 +1,5 @@
 // frontend/src/Pages/Lesson.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchResolvedLesson } from "../lib/fetchResolvedLesson";
@@ -14,15 +14,58 @@ import LessonDiscussion from "../Components/LessonDiscussion";
 import "../Styles/Lesson.css";
 
 // ---------------- helpers ----------------
+// Your global order (match your sidebar's MASTER_ORDER)
+const MASTER_ORDER = [
+  "comprehension",
+  "transcript",
+  "apply",
+  "understand",
+  "extra_tip",
+  "common_mistake",
+  "phrases_verbs",
+  "culture_note",
+  "practice",
+];
+
+function tabExists({ id, sections, questions, transcript, practiceExercises, lessonPhrases }) {
+  if (id === "comprehension") return (questions?.length ?? 0) > 0;
+  if (id === "transcript")    return (transcript?.length ?? 0) > 0;
+  if (id === "practice")      return (practiceExercises?.length ?? 0) > 0;
+  if (id === "phrases_verbs") {
+    return (lessonPhrases ?? []).some(
+      p => (p.content_md && p.content_md.trim()) || (p.content && p.content.trim())
+    );
+  }
+  // otherwise it's a real section UUID from `sections`
+  return sections.some(s => s.id === id);
+}
+
+function computeDefaultActiveId({ sections, questions, transcript, practiceExercises, lessonPhrases }) {
+  if ((questions?.length ?? 0) > 0) return "comprehension";
+
+  for (const type of MASTER_ORDER) {
+    if (type === "comprehension" && (questions?.length ?? 0) > 0) return "comprehension";
+    if (type === "transcript"    && (transcript?.length ?? 0) > 0) return "transcript";
+    if (type === "practice"      && (practiceExercises?.length ?? 0) > 0) return "practice";
+    if (type === "phrases_verbs") {
+      const hasPhrases = (lessonPhrases ?? []).some(
+        p => (p.content_md && p.content_md.trim()) || (p.content && p.content.trim())
+      );
+      if (hasPhrases) return "phrases_verbs";
+      continue;
+    }
+    const sec = sections.find(s => s.type === type);
+    if (sec) return sec.id;
+  }
+  return null;
+}
 
 function safeJSON(v, fallback) {
   if (v == null) return fallback;
   if (Array.isArray(v) || (typeof v === "object" && v !== null)) return v;
-  try {
-    return JSON.parse(v);
-  } catch {
-    return fallback;
-  }
+  const s = String(v).trim();
+  if (s === "") return fallback;             // <— handle "" from DB
+  try { return JSON.parse(s); } catch { return fallback; }
 }
 
 function pickLang(en, th, lang) {
@@ -44,27 +87,28 @@ function normalizeExercise(ex, contentLang) {
       ? pickLang(ex.title, ex.title_th, contentLang)
       : ex.title ?? null;
 
-  const prompt =
-    ex.prompt != null || ex.prompt_th != null
+  // prefer prompt / prompt_md; if still missing and it's open-ended, use first item's text
+  const rawItems = contentLang === "th" && ex.items_th ? ex.items_th : ex.items;
+  const items    = safeJSON(rawItems, []);
+  let prompt =
+    (ex.prompt != null || ex.prompt_th != null
       ? pickLang(ex.prompt, ex.prompt_th, contentLang)
-      : pickLang(ex.prompt_md, ex.prompt_th, contentLang) ||
-        ex.prompt_md ||
-        ex.prompt ||
-        null;
+      : pickLang(ex.prompt_md, ex.prompt_th, contentLang) || ex.prompt_md || ex.prompt || null);
+
+  if (!prompt && (exercise_type === "open" || exercise_type === "open_ended")) {
+    const first = items && items[0] && (items[0].text || items[0].prompt || items[0].question);
+    if (first) prompt = String(first);
+  }
 
   const paragraph =
     ex.paragraph != null || ex.paragraph_th != null
       ? pickLang(ex.paragraph, ex.paragraph_th, contentLang)
       : null;
 
-  const rawOptions =
-    contentLang === "th" && ex.options_th ? ex.options_th : ex.options;
-  const rawItems =
-    contentLang === "th" && ex.items_th ? ex.items_th : ex.items;
-
-  const options = safeJSON(rawOptions, []);
-  const items = safeJSON(rawItems, []);
+  const rawOptions = contentLang === "th" && ex.options_th ? ex.options_th : ex.options;
+  const options    = safeJSON(rawOptions, []);
   const answer_key = safeJSON(ex.answer_key, {});
+
   const feedback =
     ex.feedback != null || ex.feedback_th != null
       ? pickLang(ex.feedback, ex.feedback_th, contentLang)
@@ -74,38 +118,28 @@ function normalizeExercise(ex, contentLang) {
     id: ex.id,
     lesson_id: ex.lesson_id,
     sort_order: ex.sort_order ?? 0,
-    exercise_type, // "fill_blank" | "multiple_choice" | "open" | "sentence_transform"
+    exercise_type,   // "fill_blank" | "multiple_choice" | "open" | ...
     title,
-    prompt, // from prompt_md or prompt
-    paragraph, // optional helper text
-    items, // for fill_blank / sentence_transform
-    options, // for MCQ
+    prompt,          // will exist for open after fallback
+    paragraph,
+    items,
+    options,
     answer_key,
     feedback,
   };
 }
 
-// Normalize comprehension question rows to support BOTH schemas
+// Normalize comprehension question rows to match backend fields
 function normalizeQuestion(q, contentLang) {
-  const question_text =
-    q.question_text != null || q.question_text_th != null
-      ? pickLang(q.question_text, q.question_text_th, contentLang)
-      : pickLang(q.prompt, q.prompt_th, contentLang) || q.prompt || null;
+  // Use prompt and prompt_th from backend
+  const prompt = pickLang(q.prompt, q.prompt_th, contentLang) || q.prompt || null;
 
   let options;
   if (q.options || q.options_th) {
     const raw = contentLang === "th" && q.options_th ? q.options_th : q.options;
     options = safeJSON(raw, []);
   } else {
-    const choices = ["choice_a", "choice_b", "choice_c", "choice_d"]
-      .map((k) => {
-        const en = q[k];
-        const th = q[`${k}_th`];
-        const v = pickLang(en, th, contentLang);
-        return v ? v : null;
-      })
-      .filter(Boolean);
-    options = choices.length ? choices : [];
+    options = [];
   }
 
   const correct_choice = q.correct_choice ?? null; // legacy single-letter
@@ -117,7 +151,7 @@ function normalizeQuestion(q, contentLang) {
     lesson_id: q.lesson_id,
     sort_order: q.sort_order ?? 0,
     question_type: q.question_type || null,
-    question_text,
+    prompt,
     options,
     correct_choice,
     answer_key,
@@ -128,6 +162,11 @@ function normalizeQuestion(q, contentLang) {
 // ---------------- component ----------------
 
 export default function Lesson() {
+  // Remember/restore the current tab across language toggles
+  // UI state
+  const [activeId, setActiveId] = useState(null);
+  const lastActiveRef = useRef(null);
+  useEffect(() => { lastActiveRef.current = activeId; }, [activeId]);
   const { id } = useParams();
 
   // URL param → controls resolver language (content language)
@@ -145,8 +184,6 @@ export default function Lesson() {
   const [practiceExercises, setPracticeExercises] = useState([]);
   const [lessonPhrases, setLessonPhrases] = useState([]);
 
-  // UI state
-  const [activeId, setActiveId] = useState(null);
 
   // Audio + snippets
   const [audioUrl, setAudioUrl] = useState(null);
@@ -210,6 +247,7 @@ export default function Lesson() {
         const normalizedExercises = (payload.practice_exercises || []).map(
           (ex) => normalizeExercise(ex, contentLang)
         );
+        console.log("Normalized Exercises:", normalizedExercises);
 
         setLesson(lsn);
         setSections(payload.sections || []);
@@ -218,12 +256,41 @@ export default function Lesson() {
         setPracticeExercises(normalizedExercises);
         setLessonPhrases(payload.phrases || []);
 
-        // 2) initial active section
-        const firstSectionId = (payload.sections && payload.sections[0]?.id) || null;
-        const fallback =
-          (normalizedQuestions.length ? "comprehension" : null) ||
-          ((payload.transcript || []).length ? "transcript" : null);
-        setActiveId(firstSectionId || fallback);
+        console.log("Practice exercises:", practiceExercises);
+        // 2) initial active section: only set if not already chosen
+        setActiveId(prev => {
+          if (prev) return prev;
+          return computeDefaultActiveId({
+            sections: payload.sections || [],
+            questions: normalizedQuestions,
+            transcript: payload.transcript || [],
+            practiceExercises: normalizedExercises,
+            lessonPhrases: payload.phrases || [],
+          });
+        });
+
+        // Restore tab after all state is set
+        {
+          const desired = lastActiveRef.current;
+          const canKeep = desired && tabExists({
+            id: desired,
+            sections: payload.sections || [],
+            questions: normalizedQuestions,
+            transcript: payload.transcript || [],
+            practiceExercises: normalizedExercises,
+            lessonPhrases: payload.phrases || [],
+          });
+
+          if (!canKeep) {
+            setActiveId(prev => prev ?? computeDefaultActiveId({
+              sections: payload.sections || [],
+              questions: normalizedQuestions,
+              transcript: payload.transcript || [],
+              practiceExercises: normalizedExercises,
+              lessonPhrases: payload.phrases || [],
+            }));
+          }
+        }
 
         // 3) sign conversation audio
         if (lsn.conversation_audio_url) {

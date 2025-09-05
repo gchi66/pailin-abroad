@@ -6,51 +6,50 @@ import SentenceTransformExercise from "./ExerciseTypes/SentenceTransformExercise
 
 import "../Styles/PracticeSection.css";
 
+// map normalized "exercise_type" (or DB "kind") to component
 const kindToComponent = {
   fill_blank: FillBlankExercise,
   multiple_choice: MultipleChoiceExercise,
   open: OpenEndedExercise,
+  open_ended: OpenEndedExercise,         // tolerate alias
   sentence_transform: SentenceTransformExercise,
 };
 
-// Transform DB data to component-friendly format
-const transformExercise = (dbExercise) => {
-  const base = {
-    id: dbExercise.id,
-    kind: dbExercise.kind,
-    prompt: dbExercise.prompt_md || "",
-    title: dbExercise.title || dbExercise.prompt_md || `Exercise ${dbExercise.sort_order ?? ""}`,
-    paragraph: dbExercise.paragraph || ""
-  };
+// tiny helpers
+const arr = (v) => (Array.isArray(v) ? v : []);
+const textOr = (a, b, c) => a ?? b ?? c ?? "";
 
-  switch(dbExercise.kind) {
-    case 'fill_blank':
-      return {
-        ...base,
-        items: dbExercise.items || []
-      };
+// accept BOTH the raw DB row shape and the normalized row shape
+const transformExercise = (row) => {
+  const kind = row.exercise_type || row.kind || null;
 
-    case 'multiple_choice':
-      return {
-        ...base,
-        items: dbExercise.items || []
-      };
+  // prefer normalized fields; fall back to DB ones
+  const items = arr(row.items);
+  const options = arr(row.options);
+  const answer_key = row.answer_key || {}; // object for fill_blank/open; array for MCQ is fine too
 
-    case 'open':
-      return {
-        ...base,
-        items: dbExercise.items || []
-      };
-
-    case 'sentence_transform':
-      return {
-        ...base,
-        items: dbExercise.items || []
-      };
-
-    default:
-      return base;
+  // prompt: prefer normalized "prompt", then DB "prompt_md"; if open and still empty,
+  // fall back to the first item's text/prompt/question
+  let prompt = textOr(row.prompt, row.prompt_md, null);
+  if (!prompt && (kind === "open" || kind === "open_ended")) {
+    const first = items[0];
+    prompt = textOr(first?.text, first?.prompt, first?.question);
   }
+
+  const title = textOr(row.title, row.prompt, row.prompt_md, `Exercise ${row.sort_order ?? ""}`);
+  const paragraph = row.paragraph || "";
+
+  return {
+    id: row.id,
+    kind,
+    title,
+    prompt: prompt || "",
+    paragraph,
+    items,
+    options,
+    answer_key,
+    sort_order: row.sort_order ?? 0,
+  };
 };
 
 export default function PracticeSection({
@@ -59,28 +58,32 @@ export default function PracticeSection({
   hideQuick = true,
   wrapInDetails = true,
 }) {
-  // optional filter
+  // ensure we’re working with an array
+  const list0 = arr(exercises).map(transformExercise);
+
+  // optionally hide "Quick Practice"
   const list = hideQuick
-    ? exercises.filter(
-        (ex) => !(ex.title || "").toLowerCase().includes("quick practice")
-      )
-    : exercises;
+    ? list0.filter((ex) => !(ex.title || "").toLowerCase().includes("quick practice"))
+    : list0;
 
   if (!list.length) return <p>No practice exercises for this lesson.</p>;
+
   return (
     <div className="ps-container">
-      {list.map((db) => {
-        const ex = transformExercise(db);
-        const Renderer = kindToComponent[ex.kind];
-        if (!Renderer) return null;
+      {list.map((ex) => {
+        const Renderer = ex.kind ? kindToComponent[ex.kind] : null;
+        if (!Renderer) {
+          // eslint-disable-next-line no-console
+          console.warn("[PracticeSection] Unknown exercise kind:", ex.kind, ex);
+          return null;
+        }
 
-        // If this is a Quick Practice exercise and wrapInDetails is false,
-        // render without the details wrapper
+        // Pass full normalized exercise to the renderer.
+        // MultipleChoiceExercise can read ex.options / ex.answer_key; fill_blank uses ex.items; open uses ex.prompt/items.
         if (!wrapInDetails) {
           return <Renderer key={ex.id} exercise={ex} uiLang={uiLang} />;
         }
 
-        // Otherwise, wrap in details
         return (
           <details key={ex.id} className="ps-accordion">
             <summary className="ps-summary">

@@ -328,7 +328,7 @@ export default function LessonContent({
         </div>
 
         <div className="lc-head-right">
-          <LessonLanguageToggle contentLang={uiLang} setContentLang={setUiLang} />
+          <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
         </div>
       </header>
 
