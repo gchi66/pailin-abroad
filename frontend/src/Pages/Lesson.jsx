@@ -10,6 +10,7 @@ import AudioBar from "../Components/AudioBar";
 import LessonSidebar from "../Components/LessonSidebar";
 import LessonContent from "../Components/LessonContent";
 import LessonDiscussion from "../Components/LessonDiscussion";
+import LanguageToggle from "../Components/LanguageToggle";
 
 import "../Styles/Lesson.css";
 
@@ -334,7 +335,14 @@ export default function Lesson() {
             .eq("level", lsn.level)
             .order("lesson_order", { ascending: true });
           if (!allLessonsError && allLessons) {
-            setLessonList(allLessons);
+            const normalLessons = allLessons.filter(
+              l => !(l.external_id && l.external_id.endsWith('.chp'))
+            );
+            // If you want to show the checkpoint separately, you can find it:
+            const checkpointLesson = allLessons.find(
+              l => l.external_id && l.external_id.endsWith('.chp')
+            );
+            setLessonList(normalLessons);
           }
         }
       } catch (err) {
@@ -382,23 +390,14 @@ export default function Lesson() {
         {/* Audio card */}
         <AudioBar audioSrc={audioUrl} description={lesson.backstory} />
 
-        {/* Language toggles */}
-        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", margin: "1rem 0" }}>
-          {/* <LessonLanguageToggle contentLang={contentLang} onToggle={handleToggleContentLang} /> */}
-          <span style={{ marginLeft: "1rem" }}>UI language:</span>
-          <button
-            className={`lesson-nav-btn${uiLang === "en" ? " active" : ""}`}
-            onClick={() => setUiLang("en")}
-          >
-            EN
-          </button>
-          <button
-            className={`lesson-nav-btn${uiLang === "th" ? " active" : ""}`}
-            onClick={() => setUiLang("th")}
-          >
-            TH
-          </button>
-        </div>
+        {/* Language toggles
+        <LanguageToggle
+          language={uiLang}
+          setLanguage={setUiLang}
+          label="UI language:"
+          showLabel={true}
+          buttonStyle={true}
+        /> */}
 
         {/* Body */}
         <div className="lesson-body">

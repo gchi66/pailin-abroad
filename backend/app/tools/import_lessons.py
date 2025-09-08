@@ -147,6 +147,7 @@ def upsert_lesson(data, lang="en", dry_run=False):
         # Base-language columns
         record = {
             **key,
+            "lesson_external_id": lesson.get("external_id") or None,
             "title":     lesson.get("title") or None,
             "subtitle":  lesson.get("subtitle") or None,
             "focus":     lesson.get("focus") or None,

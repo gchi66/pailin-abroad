@@ -1,0 +1,21 @@
+/* Language Toggle Span Style */
+.language-toggle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.language-toggle .language-label {
+  margin-right: 0.5rem;
+}
+
+.language-toggle span:not(.language-label) {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.language-toggle span.active {
+  font-weight: bold;
+}

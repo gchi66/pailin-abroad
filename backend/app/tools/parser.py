@@ -536,11 +536,19 @@ class GoogleDocsParser:
         m_chp = re.match(r'\s*CHECKPOINT\s+(\d+)', raw_header, re.I)
         if m_chp:
             level = int(m_chp.group(1))
+            # Dynamically compute max lesson order for this level
+            # This assumes self.lessons_by_level is set before calling this method
+            max_order = 0
+            if hasattr(self, "lessons_by_level") and self.lessons_by_level.get(level):
+                max_order = max(l.get("lesson_order", 0) for l in self.lessons_by_level[level])
+            else:
+                logger.warning(f"lessons_by_level not set or no lessons for level {level}, defaulting checkpoint order to 1")
+                max_order = 0
             return ({
                 "external_id": f"{level}.chp",
                 "stage": stage,
                 "level": level,
-                "lesson_order": 0,
+                "lesson_order": max_order + 1,
                 "title": f"Level {level} Checkpoint",
             }, f"Level {level} Checkpoint")
         m = re.search(r'(?:LESSON|Lesson)\s+(\d+)\.(\d+)', raw_header, re.I)
@@ -1513,6 +1521,18 @@ class GoogleDocsParser:
             return {}
         sections = extract_sections(doc_json)
         lessons = split_lessons_by_header(sections)
+
+        # Build lessons_by_level for dynamic checkpoint ordering
+        lessons_by_level = {}
+        for lesson_sections in lessons:
+            header = lesson_sections[0][0] if lesson_sections and lesson_sections[0] else None
+            m = re.search(r'(?:LESSON|Lesson)\s+(\d+)\.(\d+)', header or "", re.I)
+            if m:
+                level = int(m.group(1))
+                order = int(m.group(2))
+                lessons_by_level.setdefault(level, []).append({"lesson_order": order})
+        self.lessons_by_level = lessons_by_level
+
         results = []
         for lesson_sections in lessons:
             try:
