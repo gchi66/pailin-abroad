@@ -1,0 +1,95 @@
+
+.free-lesson-cards {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 3vw;
+  margin: 5vh 0;
+}
+
+.fl-card {
+  background: white;
+  border-radius: 3vh;
+  border: .1rem solid #1E1E1E;
+  box-shadow: .2rem .2rem 0vw #1E1E1E;
+  padding: 3vh 1.5vw;
+  max-width: 22vw;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vh;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.fl-card-img {
+  width: 9vw;
+  height: 9vw;
+  object-fit: contain;
+  border-radius: 1vw;
+  margin: 1.5vh 0 1vh 0;
+  display: block;
+  background: white;
+}
+ .fl-card-title {
+  /* margin-bottom: 1vh; */
+  text-align: left;
+}
+.fl-card-level,
+.fl-card-focus,
+.fl-card-desc {
+  text-align: left;
+  width: 100%;
+}
+ .fl-card-btn {
+   margin-top: 2vh;
+  width: 90%;
+  align-self: center;
+  padding: 0.6vh 0;
+}
+
+
+.fl-card-title {
+  font-size: 2vw;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  /* margin-bottom: 1vh; */
+}
+
+.fl-card-desc {
+  font-size: 1.2vw;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  margin: 0;
+}
+
+.fl-card-btn {
+  /* margin-top: 2vh; */
+  width: 100%;
+  background: #fff;
+  border: 0.13rem solid #1E1E1E;
+  border-radius: 2vh;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.3vw;
+  /* margin-top: 2vh; */
+  width: 90%;
+  align-self: center;
+  padding: 0.6vh 0;
+  padding: 1.2vh 0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.fl-card-btn:hover {
+  background: #1E1E1E;
+  color: #fff;
+}
+
+h3 {
+  margin: 0;
+}

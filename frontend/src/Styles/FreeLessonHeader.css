@@ -1,0 +1,41 @@
+.free-lesson-header {
+  width: 100vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 6vh 0;
+}
+
+.flh-line {
+  width: 100vw;
+  height: 0.22vh;
+  background: #1E1E1E;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 1;
+}
+
+.flh-bubble {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  border: 0.22vh solid #1E1E1E;
+  border-radius: 2vw;
+  padding: 2vh 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.flh-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 2.2vw;
+  color: #1E1E1E;
+  text-align: center;
+}

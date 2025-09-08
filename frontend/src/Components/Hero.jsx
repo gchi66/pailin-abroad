@@ -6,22 +6,18 @@ const Hero = () => {
   return (
     <section className="hero">
       <div className="hero-card">
+        <img src="/images/characters/pailin-blue-right.png" alt="Pailin" className="hero-img" />
         <div className="hero-content">
           <div className="title-container">
             <h2>
-              PAILIN ABROAD
+              English learning for Thai speakers
             </h2>
-            <svg className="underline" viewBox="0 0 150 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 20 Q75 12, 145 20" stroke="#FF4545" stroke-width="3" fill="none" stroke-linecap="round"/>
-            </svg>
           </div>
-          <p>Effective English learning for Thai speakers</p>
+          <p className="hero-subheader">Lessons based on audio conversations to teach useful, conversational, english.</p>
           <div className="hero-buttons">
-            <button className="free-lessons">FREE LESSONS</button>
-            <button className="placement-test">PLACEMENT TEST</button>
+            <button className="free-lessons">SIGN UP FOR FREE</button>
           </div>
         </div>
-          <img src="/images/characters/pailin-blue-right.png" alt="Pailin" className="profile-pic" />
       </div>
     </section>
   );

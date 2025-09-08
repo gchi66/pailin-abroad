@@ -13,69 +13,74 @@
   display: flex;
   align-items: center;
   background: white;
-  padding: 8vh 15vh;
+  padding: 9vh 10vh;
   border-radius: 2vh;
   border: .1rem solid #1E1E1E;
-  box-shadow: .2rem .2rem 0px #1E1E1E;
+  box-shadow: .2rem .2rem 0vw #1E1E1E;
   position: relative;
-  max-width: 60vw;
+  max-width: 70vw;
   width: 100%;
-  max-height: 40vh;
+  min-height: 44vh;
   height: auto;
-  gap: 6vw;
+  gap: 3vw;
 }
 
-.profile-pic {
-  flex-shrink: 0; /* Prevents the image from affecting the card's height */
-  max-width: 53%;
+.hero-img {
+  flex-shrink: 0;
+  max-width: 36%;
   height: auto;
   object-fit: contain;
-  position: relative;
-  top: 4vh;
+  margin-left: 0;
+  margin-right: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 /* Hero Content */
 .hero-content {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
   text-align: left;
-  max-width: 60%;
 }
 
 .title-container {
-  display: inline-block; /* Ensures the SVG aligns with the text */
-  text-align: left; /* Aligns everything to the left */
-  position: relative; /* Needed for absolute positioning of the underline */
+  display: block;
+  text-align: left;
+  position: relative;
+  margin-bottom: 1.2vh;
+  max-width: 70vw;
 }
 
 .hero-content h2 {
-  font-size: 8vh;
+  font-size: 4.5vw;
   color: #1E1E1E;
-  font-weight: bold;
   font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  line-height: 1.15;
   position: relative;
   margin-top: 0;
-  margin-bottom: .6rem;
-  white-space: nowrap; /* Prevents text from wrapping */
-  max-width: 100%; /* Allow it to take the full width */
-  overflow: hidden; /* Prevents overflow issues */
+  white-space: normal;
+  max-width: 100%;
+  overflow: hidden;
+  text-shadow: 0.08vw 0.08vw 0.18vw rgba(30,30,30,0.13);
 }
 
 .underline {
-  display: block;
-  position: absolute;
-  left: 0;
-  bottom: -5px;
-  width: 40%;
-  margin-top: .1rem;
+  display: none;
 }
 
 /* Ensure text does not overlap the image */
-.hero-content p {
-  font-size: 4vh;
+/* .hero-content p {
+  display: none;
+} */
+.hero-subheader {
+  font-size: 2.9vh;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
-  font-weight: bold;
-  margin-bottom: 2vh;
+  font-weight: 500;
+  margin-top: -.2vh;
   white-space: normal;
 }
 
@@ -85,22 +90,17 @@
   gap: 2vh;
 }
 
-.hero-buttons .free-lessons,
-.hero-buttons .placement-test {
-  /* padding: 2vh 5vh; Increased padding to make buttons larger */
-  font-size: 2.5vh; /* Increased font size */
+.hero-buttons .free-lessons {
+  font-size: 2.7vh;
   border-radius: 4vh;
   cursor: pointer;
   transition: transform 0.2s;
   border: .3dvh solid #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
-  min-width: 12rem;
-  padding: .5rem;
-}
-
-.hero-buttons .free-lessons {
-  background-color: #FF4545;
+  min-width: 18rem;
+  padding: 2vh 5vw;
+  background-color: #F65555;
   color: white;
 }
 
@@ -108,17 +108,6 @@
   transform: scale(1.05);
   background-color: white;
   color: #1E1E1E;
-}
-
-.hero-buttons .placement-test {
-  background-color: white;
-  color: #1E1E1E;
-}
-
-.hero-buttons .placement-test:hover {
-  transform: scale(1.05);
-  background-color: #FF4545;
-  color: white;
 }
 
 
