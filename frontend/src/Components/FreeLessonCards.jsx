@@ -31,13 +31,16 @@ const cards = [
 const FreeLessonCards = () => (
   <section className="free-lesson-cards">
     {cards.map((card, idx) => (
-      <div className="fl-card" key={idx}>
-      <span className="fl-card-level">{card.level}</span>
-      <h3 className="fl-card-title">{card.title}</h3>
-      <img src="/images/globe.webp" alt="Lesson globe" className="fl-card-img" />
-      <span className="fl-card-focus">{card.focus}</span>
-      <p className="fl-card-desc">{card.description}</p>
-      <button className="fl-card-btn">GO TO LESSON</button>
+      <div className={`fl-card${idx === 3 ? " fl-card-disabled" : ""}`} key={idx}>
+        {idx === 3 && (
+          <span className="fl-card-comingsoon">COMING SOON!</span>
+        )}
+        <span className="fl-card-level">{card.level}</span>
+        <h3 className="fl-card-title">{card.title}</h3>
+        <img src="/images/globe.webp" alt="Lesson globe" className="fl-card-img" />
+        <span className="fl-card-focus">{card.focus}</span>
+        <p className="fl-card-desc">{card.description}</p>
+        <button className="fl-card-btn" disabled={idx === 3}>GO TO LESSON</button>
       </div>
     ))}
   </section>

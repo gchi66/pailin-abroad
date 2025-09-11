@@ -4,6 +4,7 @@ import supabaseClient from "../supabaseClient";
 import Hero from "../Components/Hero";
 import FreeLessonHeader from "../Components/FreeLessonHeader";
 import FreeLessonCards from "../Components/FreeLessonCards";
+import ReusablePlacementTest from "../Components/ReusablePlacementTest";
 import Features from "../Components/Features";
 import Method from "../Components/Method";
 // import About from "../Components/About";
@@ -45,10 +46,11 @@ const Home = () => {
   return (
     <div>
       <Hero />
-  <FreeLessonHeader />
-  <FreeLessonCards />
+      <FreeLessonHeader />
+      <FreeLessonCards />
+      <ReusablePlacementTest />
       <Features  />
-      <Method />
+      {/* <Method /> */}
       <CTA />
       {/* <About /> */}
       <Characters />

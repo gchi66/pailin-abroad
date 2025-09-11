@@ -93,47 +93,71 @@ export default function LessonContent({
     );
   }
 
-  /* ===============================================================
-     4) PHRASES & VERBS VIEW
-  =============================================================== */
-  if (activeId === "phrases_verbs") {
-    // Only include phrases with non-empty content_md or content
-    const filteredPhrases = lessonPhrases.filter(
-      (item) =>
-        (item.content_md && item.content_md.trim() !== "") ||
-        (item.content && item.content.trim() !== "")
-    );
+/* ===============================================================
+   4) PHRASES & VERBS VIEW (rich)
+=============================================================== */
+if (activeId === "phrases_verbs") {
+  // Prefer reading from the "sections" shape if available; otherwise use lessonPhrases
+  const phrasesSection = Array.isArray(sections)
+    ? sections.find((s) => s?.type === "phrases_verbs")
+    : null;
 
-    if (filteredPhrases.length === 0) {
-      // Hide the PHRASES & VERBS view entirely if there are no phrases/verbs
-      return null;
-    }
+  const rawItems = (phrasesSection?.items ?? lessonPhrases ?? []).filter(Boolean);
 
-    const phrasesMarkdown = filteredPhrases
-      .map(
-        (item) =>
-          `## ${item.phrase}\n${item.content_md ? item.content_md.trim() : item.content ? item.content.trim() : ""}`
-      )
-      .join("\n\n");
+  // Keep only items that actually have something to render
+  const items = rawItems.filter((item) =>
+    (Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0) ||
+    (item.content_md && item.content_md.trim() !== "") ||
+    (item.content && item.content.trim() !== "")
+  );
 
-    return (
-      <article className="lc-card">
-        <header className="lc-head">
-          <div className="lc-head-left">
-            <span className="lc-head-title">PHRASES & VERBS</span>
-          </div>
-          <div className="lc-head-right">
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
-          </div>
-        </header>
-        <MarkdownSection
-          markdown={phrasesMarkdown}
-          defaultOpenFirst={false}
-          sectionType="phrases_verbs"
-        />
-      </article>
-    );
-  }
+  if (items.length === 0) return null;
+
+  return (
+    <article className="lc-card">
+      <header className="lc-head">
+        <div className="lc-head-left">
+          <span className="lc-head-title">PHRASES & VERBS</span>
+        </div>
+        <div className="lc-head-right">
+          <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+        </div>
+      </header>
+
+      <div className="markdown-section">
+        {items.map((item, idx) => {
+          const hasRich = Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0;
+          const md = item.content_md?.trim?.() || item.content?.trim?.() || "";
+
+          return (
+            <details key={idx} className="markdown-item" open={idx === 0}>
+              <summary className="markdown-summary">
+                {item.phrase || "Phrase"}
+                {/* Optional: add a ▶ play button later by mapping (section,seq)->snipIdx */}
+              </summary>
+
+              <div className="markdown-content">
+                {hasRich ? (
+                  <RichSectionRenderer
+                    nodes={item.content_jsonb}
+                    snipIdx={snipIdx}
+                    uiLang={uiLang}
+                  />
+                ) : md ? (
+                  <MarkdownSection
+                    markdown={md}
+                    defaultOpenFirst={false}
+                    sectionType="phrases_verbs_item"
+                  />
+                ) : null}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </article>
+  );
+}
 
   /* ===============================================================
      5) REGULAR LESSON SECTIONS (markdown or apply)

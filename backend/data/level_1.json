@@ -85,7 +85,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin says ‘Hi’ to Frank and introduces herself. Imagine you are meeting someone for the first time. Say ‘Hi’ and introduce yourself to them."
+        "content": "In the conversation, Pailin says ‘Hi’ to Frank and introduces herself.\nImagine you are meeting someone for the first time. Say ‘Hi’ and introduce yourself to them."
       },
       {
         "type": "understand",
@@ -992,7 +992,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Chloe asks Pailin for her name. Imagine you are meeting someone for the first time. Try asking for their name."
+        "content": "In the conversation, Chloe asks Pailin for her name.\nImagine you are meeting someone for the first time. Try asking for their name."
       },
       {
         "type": "understand",
@@ -1341,7 +1341,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Sorry, what’s your name again?",
+                "text": "Sorry, what’s your name ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "again",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": "?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -1832,7 +1844,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin tells Steven that it’s nice to meet him. Imagine you are meeting someone for the first time. After you’ve introduced yourself to them, what can you say to them?"
+        "content": "In the conversation, Pailin tells Steven that it’s nice to meet him.\nImagine you are meeting someone for the first time. After you’ve introduced yourself to them, what can you say to them?"
       },
       {
         "type": "understand",
@@ -2547,7 +2559,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin asks Kevin, ‘How are you?’ Imagine someone just asked you this. How can you respond? Tip: Try not to use the word ‘fine.’"
+        "content": "In the conversation, Kevin asks Pailin, ‘How are you?’\nImagine someone just asked you this. How can you respond? Tip: Try not to use the word ‘fine.’"
       },
       {
         "type": "understand",
@@ -3304,7 +3316,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Chai: How’ve you been?",
+                "text": "Acquaintance: How’ve you been?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3390,7 +3402,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Lek: How’s everything?",
+                "text": "Family Friend: How’s everything?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3497,7 +3509,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Pete: Not much.",
+                "text": "Luke: Not much.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3512,7 +3524,7 @@
             "section_context": "EXTRA TIPS"
           }
         ],
-        "content": "## ALTERNATIVE PHRASES\nThere are several ways to ask ‘How are you?’ in English. Some common examples and their appropriate responses are listed below:\nHow’s it going?\nYou can say this to anyone in any context. Restaurant and store employees will often say this to customers. It sounds relaxed, casual, and friendly.\nStore Clerk: How’s it going?\nPailin: Good!\n*‘Well!’ is the correct response grammatically, but in casual spoken English, most people respond with ‘Good!’\nHow’ve you been?\nYou can say this to friends or acquaintances you haven’t seen in a while.\nChai: How’ve you been?\nPailin: I’ve been great!\nHow’s everything?\nYou can also say this to friends or acquaintances you haven’t seen in a while.\nLek: How’s everything?\nPailin: Everything is good!\nWhat’s up?\nThis is very casual and should only be said to friends you see on a regular basis. Notice the standard response of ‘Good!’ or ‘Great!’ can’t be used to answer this question.\nPailin: What’s up?\nPete: Not much."
+        "content": "## ALTERNATIVE PHRASES\nThere are several ways to ask ‘How are you?’ in English. Some common examples and their appropriate responses are listed below:\nHow’s it going?\nYou can say this to anyone in any context. Restaurant and store employees will often say this to customers. It sounds relaxed, casual, and friendly.\nStore Clerk: How’s it going?\nPailin: Good!\n*‘Well!’ is the correct response grammatically, but in casual spoken English, most people respond with ‘Good!’\nHow’ve you been?\nYou can say this to friends or acquaintances you haven’t seen in a while.\nAcquaintance: How’ve you been?\nPailin: I’ve been great!\nHow’s everything?\nYou can also say this to friends or acquaintances you haven’t seen in a while.\nFamily Friend: How’s everything?\nPailin: Everything is good!\nWhat’s up?\nThis is very casual and should only be said to friends you see on a regular basis. Notice the standard response of ‘Good!’ or ‘Great!’ can’t be used to answer this question.\nPailin: What’s up?\nLuke: Not much."
       },
       {
         "type": "common_mistake",
@@ -3555,9 +3567,87 @@
             "lesson_context_en": "LESSON 1.4: How are you?",
             "lesson_context_th": null,
             "section_context": "COMMON MISTAKES"
+          },
+          {
+            "kind": "list_item",
+            "level": null,
+            "inlines": [
+              {
+                "text": "Pailin: How are you?",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              }
+            ],
+            "indent": 4,
+            "lesson_context": "LESSON 1.4: How are you?",
+            "lesson_key": "1.4",
+            "lesson_context_norm": "LESSON 1.4: How are you?",
+            "lesson_context_en": "LESSON 1.4: How are you?",
+            "lesson_context_th": null,
+            "section_context": "COMMON MISTAKES",
+            "audio_seq": 1,
+            "audio_section": "common_mistake"
+          },
+          {
+            "kind": "misc_item",
+            "level": null,
+            "inlines": [
+              {
+                "text": "Luke: I’m fine, thank you, and you? [X]",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              }
+            ],
+            "indent": 4,
+            "lesson_context": "LESSON 1.4: How are you?",
+            "lesson_key": "1.4",
+            "lesson_context_norm": "LESSON 1.4: How are you?",
+            "lesson_context_en": "LESSON 1.4: How are you?",
+            "lesson_context_th": null,
+            "section_context": "COMMON MISTAKES"
+          },
+          {
+            "kind": "misc_item",
+            "level": null,
+            "inlines": [
+              {
+                "text": "Pailin: How are you?",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              }
+            ],
+            "indent": 4,
+            "lesson_context": "LESSON 1.4: How are you?",
+            "lesson_key": "1.4",
+            "lesson_context_norm": "LESSON 1.4: How are you?",
+            "lesson_context_en": "LESSON 1.4: How are you?",
+            "lesson_context_th": null,
+            "section_context": "COMMON MISTAKES"
+          },
+          {
+            "kind": "misc_item",
+            "level": null,
+            "inlines": [
+              {
+                "text": "Luke: I’m great, thanks, and you? [✓]",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              }
+            ],
+            "indent": 4,
+            "lesson_context": "LESSON 1.4: How are you?",
+            "lesson_key": "1.4",
+            "lesson_context_norm": "LESSON 1.4: How are you?",
+            "lesson_context_en": "LESSON 1.4: How are you?",
+            "lesson_context_th": null,
+            "section_context": "COMMON MISTAKES"
           }
         ],
-        "content": "## MISTAKE #1\nTry to avoid responding to ‘How are you?’ with ‘I’m fine, thank you, and you?’ You probably learned this response in English class at school, but it can sound robotic and unnatural in casual conversation."
+        "content": "## MISTAKE #1\nTry to avoid responding to ‘How are you?’ with ‘I’m fine, thank you, and you?’ You probably learned this response in English class at school, but it can sound robotic and unnatural in casual conversation.\nPailin: How are you?\nLuke: I’m fine, thank you, and you? [X]\nPailin: How are you?\nLuke: I’m great, thanks, and you? [✓]"
       },
       {
         "type": "culture_note",
@@ -3602,11 +3692,11 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "list_item",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
-                "text": "Good, thanks.",
+                "text": "- Good, thanks.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3618,16 +3708,14 @@
             "lesson_context_norm": "LESSON 1.4: How are you?",
             "lesson_context_en": "LESSON 1.4: How are you?",
             "lesson_context_th": null,
-            "section_context": "CULTURE NOTE",
-            "audio_seq": 1,
-            "audio_section": "culture_note"
+            "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "list_item",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
-                "text": "I’m okay.",
+                "text": "- I’m okay.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3639,9 +3727,7 @@
             "lesson_context_norm": "LESSON 1.4: How are you?",
             "lesson_context_en": "LESSON 1.4: How are you?",
             "lesson_context_th": null,
-            "section_context": "CULTURE NOTE",
-            "audio_seq": 2,
-            "audio_section": "culture_note"
+            "section_context": "CULTURE NOTE"
           },
           {
             "kind": "paragraph",
@@ -3682,7 +3768,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "list_item",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -3698,12 +3784,10 @@
             "lesson_context_norm": "LESSON 1.4: How are you?",
             "lesson_context_en": "LESSON 1.4: How are you?",
             "lesson_context_th": null,
-            "section_context": "CULTURE NOTE",
-            "audio_seq": 3,
-            "audio_section": "culture_note"
+            "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "list_item",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -3719,9 +3803,7 @@
             "lesson_context_norm": "LESSON 1.4: How are you?",
             "lesson_context_en": "LESSON 1.4: How are you?",
             "lesson_context_th": null,
-            "section_context": "CULTURE NOTE",
-            "audio_seq": 4,
-            "audio_section": "culture_note"
+            "section_context": "CULTURE NOTE"
           },
           {
             "kind": "heading",
@@ -3800,7 +3882,7 @@
             "section_context": "CULTURE NOTE"
           }
         ],
-        "content": "## HAVE YOU EATEN?\n‘How are you?’ is similar to asking ‘Have you eaten?’ in Thailand. It’s more of a greeting than a serious question. If an acquaintance asks you ‘How are you?’ you should answer with something positive, even if you’ve had a bad day, such as one of these responses:\nGood, thanks.\nI’m okay.\nAnswering honestly\nBut if a close friend or family member asks how you’re doing, you can of course give a more in-depth answer, whether your day was great or bad. See the example conversations below:\nPailin: How are you?\nDara: Not too good, I just got fired from my job.\nPailin: Oh, I’m sorry to hear that!\nChloe: How are you?\nPailin: A bit tired. I didn’t sleep well. How about you?\nChloe: I’m good, thanks.\n## FRIENDLY EMPLOYEES\nIn Thailand, it’s not typical for store or restaurant staff to ask customers สบายดีไหมครับ or เป็นยังไงบ้างครับ. These questions roughly translate to ‘How are you?’ and are usually said between people who know each other or are meeting on a personal level.\nSmall talk with employees\nBut in the US, it’s very common for employees to greet customers with ‘How are you?’ or similar phrases. You may have noticed foreign travelers in Thailand sometimes ask สบายดีไหมครับ to servers. This is because it’s the cultural norm to have this type of interaction with employees."
+        "content": "## HAVE YOU EATEN?\n‘How are you?’ is similar to asking ‘Have you eaten?’ in Thailand. It’s more of a greeting than a serious question. If an acquaintance asks you ‘How are you?’ you should answer with something positive, even if you’ve had a bad day, such as one of these responses:\n- Good, thanks.\n- I’m okay.\nAnswering honestly\nBut if a close friend or family member asks how you’re doing, you can of course give a more in-depth answer, whether your day was great or bad. See the example conversations below:\nPailin: How are you?\nDara: Not too good, I just got fired from my job.\nPailin: Oh, I’m sorry to hear that!\nChloe: How are you?\nPailin: A bit tired. I didn’t sleep well. How about you?\nChloe: I’m good, thanks.\n## FRIENDLY EMPLOYEES\nIn Thailand, it’s not typical for store or restaurant staff to ask customers สบายดีไหมครับ or เป็นยังไงบ้างครับ. These questions roughly translate to ‘How are you?’ and are usually said between people who know each other or are meeting on a personal level.\nSmall talk with employees\nBut in the US, it’s very common for employees to greet customers with ‘How are you?’ or similar phrases. You may have noticed foreign travelers in Thailand sometimes ask สบายดีไหมครับ to servers. This is because it’s the cultural norm to have this type of interaction with employees."
       }
     ],
     "tags": [
@@ -3926,7 +4008,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin greets her new friend Joey. Imagine you’ve just woken up and you see your roommate in the living room. How can you greet him?"
+        "content": "In the conversation, Pailin greets her new friend Joey.\nImagine you’ve just woken up and you see your roommate in the living room. How can you greet him?"
       },
       {
         "type": "understand",
@@ -4442,7 +4524,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin says she is nervous about meeting her host family. How do you feel right now?"
+        "content": "In the conversation, Pailin says she is nervous about meeting her host family.\nHow do you feel right now?"
       },
       {
         "type": "understand",
@@ -4529,7 +4611,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m so nervous!",
+                "text": "I’m",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " so nervous!",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -4569,7 +4657,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m nervous, but I’m excited!",
+                "text": "I’m",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " nervous, but I’m excited!",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -4647,7 +4741,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "The phrase ‘I am’ is said so often in English that it’s almost always shortened to ‘I’m.’ ",
+                "text": "The phrase ‘I am’ is said so often in English that it’s almost always shortened to ‘I’m.’ This is called a ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "contraction",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -4799,7 +4905,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (adjective).",
+                "text": "I’m [adjective].",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -4862,7 +4968,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (prepositional phrase).",
+                "text": "I’m [prepositional phrase].",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -4925,7 +5031,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (noun OR noun phrase).",
+                "text": "I’m [noun OR noun phrase].",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -5038,7 +5144,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "The lines from the conversation demonstrate ‘I’m (adjective)’ because the words ‘nervous’ and ‘excited’ are adjectives.",
+                "text": "The lines from the conversation demonstrate ‘I’m [adjective]’ because the words ‘nervous’ and ‘excited’ are adjectives.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5133,7 +5239,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (adjective).",
+                "text": "I’m [adjective].",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -5236,7 +5342,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (prepositional phrase).",
+                "text": "I’m [prepositional phrase].",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -5345,7 +5451,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (noun OR noun phrase).",
+                "text": "I’m [noun OR noun phrase].",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -5550,7 +5656,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to use the to-be verb ‘am’\n## STRUCTURE OF ‘AM’\nWhen Frank asks Pailin and Chloe if they’re excited to meet their host families, Pailin says:\nI’m so nervous!\nShe is describing how she feels right now. Chloe also describes her feelings:\nI’m nervous, but I’m excited!\nI’m = I am\nNotice that they both use ‘I’m’ in their sentences.\nI’m = I am\nThe phrase ‘I am’ is said so often in English that it’s almost always shortened to ‘I’m.’\nTo-be verbs\nThe verb ‘am’ is called a ‘to-be’ verb, and it is one of three to-be verbs. They are:\nam · are · is\nYou will learn about the to-be verbs ‘are’ and ‘is’ in future lessons. This lesson focuses on ‘am.’\n‘Am’ is ONLY used after the subject ‘I,’ as in ‘I am’ or more commonly ‘I’m.’\n## USES OF ‘AM’\nThere are three basic ways to use ‘I’m’ in a sentence:\nI’m (adjective).\n- ‘Adjectives’ are words that describe nouns.\n- Examples: funny, tall, smart, sick\nI’m (prepositional phrase).\n- A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.\n- Examples: in school, at work, on the train, near the bank\nI’m (noun OR noun phrase).\n- A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’\n- Examples: a doctor, an engineer, a good friend, a fast learner\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\nConversation examples\nThe lines from the conversation demonstrate ‘I’m (adjective)’ because the words ‘nervous’ and ‘excited’ are adjectives.\n‘I’m’ for right now\nIt’s important to note that ‘I’m’ indicates the present state you are in (right now), not the past or future. This will make more sense as you progress through the levels.\n## EXAMPLE SENTENCES\nNow that you understand the usage and structure of ‘am’ in a sentence, take a look at these example sentences. Notice the contracted version ‘I’m’ is always used:\nI’m (adjective).\nI’m hungry.\nI’m sleepy.\nI’m smart.\nI’m Thai.\nI’m (prepositional phrase).\nI’m at the market.\nI’m in New York.\nI’m from Thailand.\nI’m by the river.\nI’m (noun OR noun phrase).\nI’m a lawyer.\nI’m a good cook.\nI’m a quiet person.\nI’m a student.\n## THAI TO-BE VERBS\nThai also has three to-be verbs:\nเป็น · คือ · อยู่\nBut while the Thai to-be verbs are used in different contexts, English to-be verbs are used in the same contexts but with different subjects. This will become clearer in later lessons."
+        "content": "## LESSON FOCUS\nHow to use the to-be verb ‘am’\n## STRUCTURE OF ‘AM’\nWhen Frank asks Pailin and Chloe if they’re excited to meet their host families, Pailin says:\nI’m so nervous!\nShe is describing how she feels right now. Chloe also describes her feelings:\nI’m nervous, but I’m excited!\nI’m = I am\nNotice that they both use ‘I’m’ in their sentences.\nI’m = I am\nThe phrase ‘I am’ is said so often in English that it’s almost always shortened to ‘I’m.’ This is called a contraction.\nTo-be verbs\nThe verb ‘am’ is called a ‘to-be’ verb, and it is one of three to-be verbs. They are:\nam · are · is\nYou will learn about the to-be verbs ‘are’ and ‘is’ in future lessons. This lesson focuses on ‘am.’\n‘Am’ is ONLY used after the subject ‘I,’ as in ‘I am’ or more commonly ‘I’m.’\n## USES OF ‘AM’\nThere are three basic ways to use ‘I’m’ in a sentence:\nI’m [adjective].\n- ‘Adjectives’ are words that describe nouns.\n- Examples: funny, tall, smart, sick\nI’m [prepositional phrase].\n- A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.\n- Examples: in school, at work, on the train, near the bank\nI’m [noun OR noun phrase].\n- A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’\n- Examples: a doctor, an engineer, a good friend, a fast learner\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\nConversation examples\nThe lines from the conversation demonstrate ‘I’m [adjective]’ because the words ‘nervous’ and ‘excited’ are adjectives.\n‘I’m’ for right now\nIt’s important to note that ‘I’m’ indicates the present state you are in (right now), not the past or future. This will make more sense as you progress through the levels.\n## EXAMPLE SENTENCES\nNow that you understand the usage and structure of ‘am’ in a sentence, take a look at these example sentences. Notice the contracted version ‘I’m’ is always used:\nI’m [adjective].\nI’m hungry.\nI’m sleepy.\nI’m smart.\nI’m Thai.\nI’m [prepositional phrase].\nI’m at the market.\nI’m in New York.\nI’m from Thailand.\nI’m by the river.\nI’m [noun OR noun phrase].\nI’m a lawyer.\nI’m a good cook.\nI’m a quiet person.\nI’m a student.\n## THAI TO-BE VERBS\nThai also has three to-be verbs:\nเป็น · คือ · อยู่\nBut while the Thai to-be verbs are used in different contexts, English to-be verbs are used in the same contexts but with different subjects. This will become clearer in later lessons."
       },
       {
         "type": "common_mistake",
@@ -5599,7 +5705,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "ฉันกังวล\u000bฉันตื่นเต้น",
+                "text": "ฉันประหม่า\u000bฉันตื่นเต้น",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5637,7 +5743,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "ฉันกังวล\u000bI nervous. (X)",
+                "text": "ฉันประหม่า",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "\u000bI nervous. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5656,7 +5768,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\u000bฉันตื่นเต้น\u000bI excited. (X)",
+                "text": "\u000bฉันตื่นเต้น\u000bI excited. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5744,7 +5856,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m nervous. (✓)",
+                "text": "I’m",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " nervous. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5765,7 +5883,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m excited. (✓)",
+                "text": "I’m",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " excited. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5900,7 +6024,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m hungry.",
+                "text": "I’m",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " hungry. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -6016,7 +6146,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m excited to go to Disneyland!",
+                "text": "I’m ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "excited",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " to go to Disneyland!",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -6075,7 +6217,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m nervous about meeting my boyfriend’s parents.",
+                "text": "I’m ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "nervous",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " about meeting my boyfriend’s parents.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -6092,7 +6246,7 @@
             "audio_section": "common_mistake"
           }
         ],
-        "content": "## MISTAKE #1\nThai people often omit the word ‘am’ in a sentence, for example ‘I tired’ or ‘I hungry.’ This is likely because they are translating a sentence directly from Thai to English. Take a look at these two sentences in Thai from the conversation:\nฉันกังวล\nฉันตื่นเต้น\nThere is no verb in these sentences. When translated into English word for word, they become:\nฉันกังวล\nI nervous. (X)\nฉันตื่นเต้น\nI excited. (X)\nThese are incorrect because they don’t have a verb.\nDon’t forget the verb\nIn English, every sentence must have a verb. The sentences above must be:\nI’m nervous. (✓)\nI’m excited. (✓)\n## MISTAKE #2\nAnother common error is leaving out the subject of a sentence. This is because in Thai, the subject of a sentence is usually omitted when it’s clear from the context who the subject is. For example:\nหิวค่ะ\nTranslated directly, this would just be ‘Hungry.’ The sentence makes sense in Thai because the subject is understood from the context.\nDon’t forget the subject\nBut in English, every sentence must have a subject AND a verb! So the sentence above must be:\nI’m hungry.\nRemember to always use the word ‘I’ when talking about yourself.\n## MISTAKE #3\nIn this conversation, you saw two adjectives - ‘excited’ and ‘nervous’ - which learners sometimes confuse.\nExcited\n‘Excited’ means you feel a lot of energy, but in a happy or positive way. For example:\nI’m excited to go to Disneyland!\nNervous\n‘Nervous’ also means you have a lot of energy, but it’s a more negative feeling of worry or unease. For example:\nI’m nervous about meeting my boyfriend’s parents."
+        "content": "## MISTAKE #1\nThai people often omit the word ‘am’ in a sentence, for example ‘I tired’ or ‘I hungry.’ This is likely because they are translating a sentence directly from Thai to English. Take a look at these two sentences in Thai from the conversation:\nฉันประหม่า\nฉันตื่นเต้น\nThere is no verb in these sentences. When translated into English word for word, they become:\nฉันประหม่า\nI nervous. [X]\nฉันตื่นเต้น\nI excited. [X]\nThese are incorrect because they don’t have a verb.\nDon’t forget the verb\nIn English, every sentence must have a verb. The sentences above must be:\nI’m nervous. [✓]\nI’m excited. [✓]\n## MISTAKE #2\nAnother common error is leaving out the subject of a sentence. This is because in Thai, the subject of a sentence is usually omitted when it’s clear from the context who the subject is. For example:\nหิวค่ะ\nTranslated directly, this would just be ‘Hungry.’ The sentence makes sense in Thai because the subject is understood from the context.\nDon’t forget the subject\nBut in English, every sentence must have a subject AND a verb! So the sentence above must be:\nI’m hungry. [✓]\nRemember to always use the word ‘I’ when talking about yourself.\n## MISTAKE #3\nIn this conversation, you saw two adjectives - ‘excited’ and ‘nervous’ - which learners sometimes confuse.\nExcited\n‘Excited’ means you feel a lot of energy, but in a happy or positive way. For example:\nI’m excited to go to Disneyland!\nNervous\n‘Nervous’ also means you have a lot of energy, but it’s a more negative feeling of worry or unease. For example:\nI’m nervous about meeting my boyfriend’s parents."
       }
     ],
     "tags": [
@@ -6246,7 +6400,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin tells Chloe how old she is. Imagine you’ve just met someone. What can you ask to find out their age?"
+        "content": "In the conversation, Pailin tells Chloe how old she is.\nImagine you’ve just met someone. What can you ask to find out their age?"
       },
       {
         "type": "understand",
@@ -6491,7 +6645,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (number).",
+                "text": "I’m [number].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -6548,7 +6702,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m (number) years old.",
+                "text": "I’m [number] years old.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -6603,7 +6757,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to ask someone’s age\n## HOW OLD ARE YOU?\nIn the conversation, Chloe asks Pailin:\nHow old are you?\nThis is the typical way to ask what someone’s age is.\n## SAYING YOUR AGE\nTake a look at how Pailin and Chloe tell each other their ages:\nI’m 21.\nI’m 23.\nCommon response\nThey use this structure:\nI’m (number).\nFull response\nThe full way to reply is:\nI’m (number) years old.\nI’m 34 years old.\nBut in casual conversation, you can leave out ‘years old’ for simplicity. Saying ‘I’m 27’ sounds more natural than saying the full sentence ‘I’m 27 years old.’"
+        "content": "## LESSON FOCUS\nHow to ask someone’s age\n## HOW OLD ARE YOU?\nIn the conversation, Chloe asks Pailin:\nHow old are you?\nThis is the typical way to ask what someone’s age is.\n## SAYING YOUR AGE\nTake a look at how Pailin and Chloe tell each other their ages:\nI’m 21.\nI’m 23.\nCommon response\nThey use this structure:\nI’m [number].\nFull response\nThe full way to reply is:\nI’m [number] years old.\nI’m 34 years old.\nBut in casual conversation, you can leave out ‘years old’ for simplicity. Saying ‘I’m 27’ sounds more natural than saying the full sentence ‘I’m 27 years old.’"
       },
       {
         "type": "phrases_verbs",
@@ -6611,7 +6765,7 @@
         "items": [
           {
             "phrase": "OH!",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Oh!\nSaid when you are pleasantly surprised about something\nPailin: I baked this cake for you.\nLuke: Oh, it looks so good! Thank you!\nSee more uses of ‘Oh’",
             "content_jsonb": [
@@ -6632,7 +6786,9 @@
                 "lesson_context_norm": "LESSON 1.7: How old are you?",
                 "lesson_context_en": "LESSON 1.7: How old are you?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -6670,7 +6826,9 @@
                 "lesson_context_norm": "LESSON 1.7: How old are you?",
                 "lesson_context_en": "LESSON 1.7: How old are you?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -7022,7 +7180,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin thanks Chloe for the bracelet she gave to her. Imagine someone just gave you a gift for your birthday. What can you say to them to show appreciation?"
+        "content": "In the conversation, Pailin thanks Chloe for the bracelet she gave to her.\nImagine someone just gave you a gift for your birthday. What can you say to them to show appreciation?"
       },
       {
         "type": "understand",
@@ -7722,7 +7880,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\tThank you for (noun).",
+                "text": "\tThank you for [noun].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7741,7 +7899,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Thank you for the gift.",
+                "text": "Thank you ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "for the gift",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7762,7 +7932,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Thanks for your help.",
+                "text": "Thanks ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "for your help",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7783,7 +7965,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Thank you so much for the bracelet. ",
+                "text": "Thank you so much ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "for the bracelet",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7810,7 +8004,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\tThank you for (verb-ing).",
+                "text": "\tThank you for [verb-ing].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7829,7 +8023,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Thank you for coming.",
+                "text": "Thank you ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "for coming",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7850,7 +8056,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Thanks for driving me to the airport.",
+                "text": "Thanks ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "for driving",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " me to the airport.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7871,7 +8089,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Thanks so much for helping me.",
+                "text": "Thanks so much ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "for helping",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " me.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7888,7 +8118,7 @@
             "audio_section": "extra_tip"
           }
         ],
-        "content": "## GIVING THANKS FOR SPECIFIC REASONS\nHere are two ways to give thanks for specific reasons:\nThank you for (noun).\nThank you for the gift.\nThanks for your help.\nThank you so much for the bracelet. (Pailin could have said this to Chloe)\nThank you for (verb-ing).\nThank you for coming.\nThanks for driving me to the airport.\nThanks so much for helping me."
+        "content": "## GIVING THANKS FOR SPECIFIC REASONS\nHere are two ways to give thanks for specific reasons:\nThank you for [noun].\nThank you for the gift.\nThanks for your help.\nThank you so much for the bracelet. (Pailin could have said this to Chloe)\nThank you for [verb-ing].\nThank you for coming.\nThanks for driving me to the airport.\nThanks so much for helping me."
       },
       {
         "type": "phrases_verbs",
@@ -7896,7 +8126,7 @@
         "items": [
           {
             "phrase": "HERE",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Here\nUsed to offer something to someone, like ‘Take this’\nLuke: My breath stinks.\nPailin: Here, I have some gum.\nPailin: I can’t find my blue pen.\nLuke: Here, you can use mine.",
             "content_jsonb": [
@@ -7917,7 +8147,9 @@
                 "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
                 "lesson_context_en": "LESSON 1.8: Thanks, I made it",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -7955,7 +8187,9 @@
                 "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
                 "lesson_context_en": "LESSON 1.8: Thanks, I made it",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
@@ -7974,7 +8208,9 @@
                 "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
                 "lesson_context_en": "LESSON 1.8: Thanks, I made it",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               }
             ]
           }
@@ -8147,7 +8383,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin compliments the cook by telling him he’s a great cook. Imagine your best friend is feeling sad. What compliments could you say to make them feel good about themselves?"
+        "content": "In the conversation, Pailin compliments the cook by telling him he’s a great cook.\nImagine your best friend is feeling sad. What compliments could you say to make them feel good about themselves?"
       },
       {
         "type": "understand",
@@ -8196,7 +8432,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "You’ve already learned about the to-be verb ‘am’ in Lesson 1.6. Now you’ll learn about the second to-be verb, ‘are.’",
+                "text": "You’ve already learned about the to-be verb ‘am’ in ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "Lesson 1.6",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". Now you’ll learn about the second to-be verb, ‘are.’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -8253,7 +8501,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "These pancakes are so good!",
+                "text": "These pancakes ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " so good!",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -8274,7 +8534,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "You’re a great cook.",
+                "text": "You",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a great cook.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -8295,7 +8567,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "You’re so kind.",
+                "text": "You",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " so kind.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -8316,7 +8600,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "They’re blueberry pancakes.",
+                "text": "They",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " blueberry pancakes.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -8337,7 +8633,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "The chocolate pancakes are on that table.",
+                "text": "The chocolate pancakes ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " on that table.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -8508,7 +8816,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "are (adjective)",
+                "text": "are [adjective]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -8571,7 +8879,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "are (prepositional phrase)",
+                "text": "are [prepositional phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -8634,7 +8942,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "are (noun OR noun phrase).",
+                "text": "are [noun OR noun phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -8760,9 +9068,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- These pancakes are so good! (adjective)",
+                "text": "- These pancakes are so ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "good",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": "! ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -8779,9 +9105,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- You’re a great cook. (noun phrase)",
+                "text": "- You’re ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "a great cook",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(noun phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -8798,9 +9142,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- You’re so kind. (adjective)",
+                "text": "- You’re so ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "kind",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -8817,9 +9179,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- They’re blueberry pancakes. (noun phrase)",
+                "text": "- They’re ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "blueberry pancakes",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(noun phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -8836,9 +9216,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- The chocolate pancakes are on that table. (prepositional phrase)",
+                "text": "- The chocolate pancakes are ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "on that table",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(prepositional phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -9114,7 +9512,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "The subject and ‘are’ are usually contracted to form one word.  ",
+                "text": "The subject and ‘are’ are usually contracted to form one word. This is called a ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "contraction",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".  ",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9209,7 +9619,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "My mom and dad’re (X)",
+                "text": "My mom and dad’re [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9228,7 +9638,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "My mom and dad are (✓)",
+                "text": "My mom and dad are [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9285,7 +9695,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "are (adjective)",
+                "text": "are [adjective]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -9304,7 +9714,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "You’re cute.",
+                "text": "You",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " cute.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9325,7 +9747,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "We’re tired.",
+                "text": "We",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " tired.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9346,7 +9780,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Tyler and Mark are tall.",
+                "text": "Tyler and Mark ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " tall.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9379,7 +9825,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "are (prepositional phrase)",
+                "text": "are [prepositional phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -9398,7 +9844,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "We’re at home.",
+                "text": "We",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " at home.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9419,7 +9877,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "They’re on a boat.",
+                "text": "They",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " on a boat.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9440,7 +9910,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "The books are in my bag.",
+                "text": "The books ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " in my bag.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9467,7 +9949,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "are (noun OR noun phrase)",
+                "text": "are [noun OR noun phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -9486,7 +9968,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "You’re an engineer.",
+                "text": "You",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " an engineer.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9507,7 +10001,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "We’re doctors.",
+                "text": "We",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " doctors.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9528,7 +10034,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Those men are waiters.",
+                "text": "Those men ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " waiters.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9551,7 +10069,7 @@
             "audio_section": "understand"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to use the to-be verb ‘are’\nYou’ve already learned about the to-be verb ‘am’ in Lesson 1.6. Now you’ll learn about the second to-be verb, ‘are.’\n## USES OF ‘ARE’\nTake a look at these sentences from the conversation:\nThese pancakes are so good!\nYou’re a great cook.\nYou’re so kind.\nThey’re blueberry pancakes.\nThe chocolate pancakes are on that table.\n‘Are’ is hidden\nAll of these sentences use ‘are.’ You may not notice this at first because ‘are’ is often contracted with the subject. For example:\nYou’re a great cook. = You are a great cook.\nThey’re blueberry pancakes. = They are blueberry pancakes.\nWhen to use ‘are’\nDo you remember the three ways that ‘am’ is used? ‘Are’ is used in the same three ways:\nare (adjective)\n- ‘Adjectives’ are words that describe nouns.\n- Examples: big, green, sad, loud\nare (prepositional phrase)\n- A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.\n- Examples: in the car, at work, on the table, near the river\nare (noun OR noun phrase).\n- A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’\n- Examples: doctors, books, a good friend, a tall woman\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\nIdentify the uses of ‘are’\nTry to identify how ‘are’ is used in the conversation. They’re shown below:\n- These pancakes are so good! (adjective)\n- You’re a great cook. (noun phrase)\n- You’re so kind. (adjective)\n- They’re blueberry pancakes. (noun phrase)\n- The chocolate pancakes are on that table. (prepositional phrase)\n## SUBJECTS WITH ‘ARE’\nWhile ‘am’ can only follow the subject ‘I,’ the verb ‘are’ follows these subjects:\nYou are\nWe are\nThey are\n(2+ nouns) are\n2+ nouns\n‘2+ nouns’ refers to a ‘plural noun.’ This means more than one person or thing. In the conversation, ‘these pancakes’ and ‘The chocolate pancakes’ are examples because they refer to multiple pancakes.\nPlural nouns will be explored more in Lesson 3.5.\nHow to spot 2+ nouns\nFor now, a simple way to recognize a plural noun is that it often ends in -s, like ‘pancakes,’ ‘books,’ or ‘dogs.’ You can see more examples of (2+ nouns) in the section below.\nNotice that the pronouns ‘we’ and ‘they’ are also plural because they refer to more than one person.\nContractions\nThe subject and ‘are’ are usually contracted to form one word.\nYou are = You’re\nWe are = We’re\nThey are = We’re\nNote that you can’t contract (2+ nouns) and ‘are.’\nMy mom and dad’re (X)\nMy mom and dad are (✓)\n## EXAMPLE SENTENCES\nNow that you understand the usage and structure of ‘are’ in a sentence, take a look at these example sentences. Notice the contractions are used when possible:\nare (adjective)\nYou’re cute.\nWe’re tired.\nTyler and Mark are tall. (this is an example of 2+ nouns)\nare (prepositional phrase)\nWe’re at home.\nThey’re on a boat.\nThe books are in my bag. (this is an example of 2+ nouns)\nare (noun OR noun phrase)\nYou’re an engineer.\nWe’re doctors.\nThose men are waiters. (this is an example of 2+ nouns)"
+        "content": "## LESSON FOCUS\nHow to use the to-be verb ‘are’\nYou’ve already learned about the to-be verb ‘am’ in Lesson 1.6. Now you’ll learn about the second to-be verb, ‘are.’\n## USES OF ‘ARE’\nTake a look at these sentences from the conversation:\nThese pancakes are so good!\nYou’re a great cook.\nYou’re so kind.\nThey’re blueberry pancakes.\nThe chocolate pancakes are on that table.\n‘Are’ is hidden\nAll of these sentences use ‘are.’ You may not notice this at first because ‘are’ is often contracted with the subject. For example:\nYou’re a great cook. = You are a great cook.\nThey’re blueberry pancakes. = They are blueberry pancakes.\nWhen to use ‘are’\nDo you remember the three ways that ‘am’ is used? ‘Are’ is used in the same three ways:\nare [adjective]\n- ‘Adjectives’ are words that describe nouns.\n- Examples: big, green, sad, loud\nare [prepositional phrase]\n- A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.\n- Examples: in the car, at work, on the table, near the river\nare [noun OR noun phrase]\n- A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’\n- Examples: doctors, books, a good friend, a tall woman\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\nIdentify the uses of ‘are’\nTry to identify how ‘are’ is used in the conversation. They’re shown below:\n- These pancakes are so good! (adjective)\n- You’re a great cook. (noun phrase)\n- You’re so kind. (adjective)\n- They’re blueberry pancakes. (noun phrase)\n- The chocolate pancakes are on that table. (prepositional phrase)\n## SUBJECTS WITH ‘ARE’\nWhile ‘am’ can only follow the subject ‘I,’ the verb ‘are’ follows these subjects:\nYou are\nWe are\nThey are\n(2+ nouns) are\n2+ nouns\n‘2+ nouns’ refers to a ‘plural noun.’ This means more than one person or thing. In the conversation, ‘these pancakes’ and ‘The chocolate pancakes’ are examples because they refer to multiple pancakes.\nPlural nouns will be explored more in Lesson 3.5.\nHow to spot 2+ nouns\nFor now, a simple way to recognize a plural noun is that it often ends in -s, like ‘pancakes,’ ‘books,’ or ‘dogs.’ You can see more examples of (2+ nouns) in the section below.\nNotice that the pronouns ‘we’ and ‘they’ are also plural because they refer to more than one person.\nContractions\nThe subject and ‘are’ are usually contracted to form one word. This is called a contraction.\nYou are = You’re\nWe are = We’re\nThey are = We’re\nNote that you can’t contract (2+ nouns) and ‘are.’\nMy mom and dad’re [X]\nMy mom and dad are [✓]\n## EXAMPLE SENTENCES\nNow that you understand the usage and structure of ‘are’ in a sentence, take a look at these example sentences. Notice the contractions are used when possible:\nare [adjective]\nYou’re cute.\nWe’re tired.\nTyler and Mark are tall. (this is an example of 2+ nouns)\nare [prepositional phrase]\nWe’re at home.\nThey’re on a boat.\nThe books are in my bag. (this is an example of 2+ nouns)\nare [noun OR noun phrase]\nYou’re an engineer.\nWe’re doctors.\nThose men are waiters. (this is an example of 2+ nouns)"
       },
       {
         "type": "common_mistake",
@@ -9676,7 +10194,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "        These pancakes so good. (X)",
+                "text": "        These pancakes so good. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9714,7 +10232,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "You so kind. (X)",
+                "text": "You so kind. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9771,7 +10289,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "These pancakes are so good. (✓)",
+                "text": "These pancakes ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " so good. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9792,7 +10322,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "You’re so kind. (✓)",
+                "text": "You",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " so kind. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -9809,7 +10351,7 @@
             "audio_section": "common_mistake"
           }
         ],
-        "content": "## MISTAKE #1\nStudents often omit the word ‘are’ in a sentence, for example ‘You beautiful’ or ‘They hungry.’ This is likely because they are translating a sentence directly from Thai to English. Take a look at these sentences in Thai from the conversation:\nแพนเค้กเหล่านี้อร่อยมาก\nคุณใจดีมาก\nThere are no verbs in these sentences. When translated into English word for word, they become:\nแพนเค้กเหล่านี้อร่อยมาก\nThese pancakes so good. (X)\nคุณใจดีมาก\nYou so kind. (X)\nDon’t forget the verb\nThese are incorrect because there is no verb. In English, every sentence must have a verb. The sentences above must be:\nThese pancakes are so good. (✓)\nYou’re so kind. (✓)"
+        "content": "## MISTAKE #1\nStudents often omit the word ‘are’ in a sentence, for example ‘You beautiful’ or ‘They hungry.’ This is likely because they are translating a sentence directly from Thai to English. Take a look at these sentences in Thai from the conversation:\nแพนเค้กเหล่านี้อร่อยมาก\nคุณใจดีมาก\nThere are no verbs in these sentences. When translated into English word for word, they become:\nแพนเค้กเหล่านี้อร่อยมาก\nThese pancakes so good. [X]\nคุณใจดีมาก\nYou so kind. [X]\nDon’t forget the verb\nThese are incorrect because there is no verb. In English, every sentence must have a verb. The sentences above must be:\nThese pancakes are so good. [✓]\nYou’re so kind. [✓]"
       }
     ],
     "tags": [
@@ -10103,7 +10645,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin says that her mom is a nurse. What is your mom or dad’s job?"
+        "content": "In the conversation, Pailin says that her mom is a nurse.\nWhat is your mom or dad’s job?"
       },
       {
         "type": "understand",
@@ -10152,7 +10694,31 @@
             "level": null,
             "inlines": [
               {
-                "text": "You’ve already learned about the to-be verbs ‘am’ and ‘are.’ Now you’ll learn about the last to-be verb, ‘is.’",
+                "text": "You’ve already learned about the to-be verbs ‘",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "am",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": "’ and ‘",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".’ Now you’ll learn about the last to-be verb, ‘is.’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10209,7 +10775,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "He’s in LA.",
+                "text": "He",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " in LA.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10230,7 +10808,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s a good school.",
+                "text": "It",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a good school.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10251,7 +10841,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "He’s very smart.",
+                "text": "He",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " very smart.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10272,7 +10874,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "My mom’s a nurse.",
+                "text": "My mom",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a nurse.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10443,7 +11057,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "is (adjective)",
+                "text": "is [adjective]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -10512,7 +11126,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "is (prepositional phrase)",
+                "text": "is [prepositional phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -10581,7 +11195,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "is (noun OR noun phrase).",
+                "text": "is [noun OR noun phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -10713,9 +11327,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- He’s in LA. (prepositional phrase)",
+                "text": "- He’s ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "in LA",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(prepositional phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -10732,9 +11364,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- It’s a good school. (noun phrase)",
+                "text": "- It’s ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "a good school",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(noun phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -10751,9 +11401,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- He’s very smart. (adjective)",
+                "text": "- He’s very ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "smart",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -10770,9 +11438,27 @@
             "level": null,
             "inlines": [
               {
-                "text": "- My mom’s a nurse. (noun)",
+                "text": "- My mom’s ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "a nurse",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(noun)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -10884,7 +11570,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "(Noun) is        ",
+                "text": "[Noun] is        ",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10922,7 +11608,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "‘Noun’ refers to just one noun, called a ‘singular noun.’ In the conversation, ‘my mom’ is an example of this because she is just one person. A singular noun doesn’t have to be a person - it can be an item, such as ‘The key’ or ‘My house.’",
+                "text": "‘Noun’ refers to just one noun, called a ‘",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "singular noun",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".’ In the conversation, ‘my mom’ is an example of this because she is just one person. A singular noun doesn’t have to be a person - it can be an item, such as ‘The key’ or ‘My house.’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -10979,7 +11677,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "The subject and ‘is’ are usually contracted to form one word. ",
+                "text": "The subject and ‘is’ are usually contracted to form one word. This is called a ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "contraction",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". ",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11055,7 +11765,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "(Noun) is = (Noun)’s",
+                "text": "[Noun] is = [Noun]’s",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11131,7 +11841,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "is (adjective)",
+                "text": "is [adjective]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -11150,7 +11860,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "He’s funny.",
+                "text": "He",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " funny.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11171,7 +11893,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "She’s smart.",
+                "text": "She",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " smart.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11192,7 +11926,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Joey’s tired.",
+                "text": "Joey",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " tired.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11219,7 +11965,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "is (prepositional phrase)",
+                "text": "is [prepositional phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -11238,7 +11984,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s in the box.",
+                "text": "It",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " in the box.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11259,7 +12017,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "She’s at the post office.",
+                "text": "She",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " at the post office.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11280,7 +12050,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "My dog’s outside.",
+                "text": "My dog",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " outside.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11313,7 +12095,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "is (noun OR noun phrase)",
+                "text": "is [noun OR noun phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -11332,7 +12114,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "He’s a good soccer player.",
+                "text": "He",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a good soccer player.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11353,7 +12147,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s a scary movie.",
+                "text": "It",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a scary movie.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11374,7 +12180,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Mark is a lawyer.",
+                "text": "Mark ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "is",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a lawyer.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11403,7 +12221,7 @@
             "audio_section": "understand"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to use the to-be verb ‘is’\nYou’ve already learned about the to-be verbs ‘am’ and ‘are.’ Now you’ll learn about the last to-be verb, ‘is.’\n## USES OF ‘IS’\nTake a look at these sentences from the conversation:\nHe’s in LA.\nIt’s a good school.\nHe’s very smart.\nMy mom’s a nurse.\n‘Is’ is hidden\nAll of these sentences use ‘is.’ You may not notice this at first because ‘is’ is usually contracted with the subject. For example:\nHe’s in LA. = He is in LA.\nIt’s a good school. = It is a good school.\nWhen to use ‘is’\nDo you remember the three ways that ‘am’ and ‘are’ are used? ’Is’ is used in the same three ways:\nis (adjective)\n- ‘Adjectives’ are words that describe nouns.\n- Examples: hot, tired, yellow, heavy\nis (prepositional phrase)\n- A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.\n- Examples: in the kitchen, at the store, on the desk, near the post office\nis (noun OR noun phrase).\n- A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’\n- Examples: a nurse, a phone, a talented singer, a brown dog\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\nIdentify the uses of ‘is’\nTry to identify how ‘is’ is used in the conversation. They’re shown below:\n- He’s in LA. (prepositional phrase)\n- It’s a good school. (noun phrase)\n- He’s very smart. (adjective)\n- My mom’s a nurse. (noun)\n## SUBJECTS WITH ‘IS’\nYou’ve learned that ‘am’ only follows ‘I’, and ‘are’ follows ‘you · we · they · 2+ nouns.’ The verb ‘is’ follows these subjects:\nHe is\nShe is\nIt is\n(Noun) is\n1 noun\n‘Noun’ refers to just one noun, called a ‘singular noun.’ In the conversation, ‘my mom’ is an example of this because she is just one person. A singular noun doesn’t have to be a person - it can be an item, such as ‘The key’ or ‘My house.’\nNotice that ‘he,’ ‘she,’ and ‘it’ also refer to a single person or thing, so they are ‘singular nouns.’ You can see examples of singular nouns and plural nouns in the Extra Tips section.\nContractions\nThe subject and ‘is’ are usually contracted to form one word.\nHe is = He’s\nShe is = She’s\nIt is = It’s\n(Noun) is = (Noun)’s\nRemember, contractions make a sentence smoother and sound more natural. The line ‘My mom’s a nurse’ flows better than ‘My mom is a nurse.’\n## EXAMPLE SENTENCES\nTake a look at these example sentences. Notice the contractions are used when possible:\nis (adjective)\nHe’s funny.\nShe’s smart.\nJoey’s tired. (this is an example of a singular noun)\nis (prepositional phrase)\nIt’s in the box.\nShe’s at the post office.\nMy dog’s outside. (this is an example of a singular noun)\nis (noun OR noun phrase)\nHe’s a good soccer player.\nIt’s a scary movie.\nMark is a lawyer. (this is an example of a singular noun)"
+        "content": "## LESSON FOCUS\nHow to use the to-be verb ‘is’\nYou’ve already learned about the to-be verbs ‘am’ and ‘are.’ Now you’ll learn about the last to-be verb, ‘is.’\n## USES OF ‘IS’\nTake a look at these sentences from the conversation:\nHe’s in LA.\nIt’s a good school.\nHe’s very smart.\nMy mom’s a nurse.\n‘Is’ is hidden\nAll of these sentences use ‘is.’ You may not notice this at first because ‘is’ is usually contracted with the subject. For example:\nHe’s in LA. = He is in LA.\nIt’s a good school. = It is a good school.\nWhen to use ‘is’\nDo you remember the three ways that ‘am’ and ‘are’ are used? ’Is’ is used in the same three ways:\nis [adjective]\n- ‘Adjectives’ are words that describe nouns.\n- Examples: hot, tired, yellow, heavy\nis [prepositional phrase]\n- A ‘prepositional phrase’ begins with a preposition word, such as ‘in · at · on · near,’ followed by a place. It describes your relationship to a location.\n- Examples: in the kitchen, at the store, on the desk, near the post office\nis [noun OR noun phrase]\n- A ‘noun’ is a person, place, thing, or idea. A ‘noun phrase’ is an ‘adjective + noun.’\n- Examples: a nurse, a phone, a talented singer, a brown dog\nClick here to learn more about adjectives, prepositions, nouns, and other parts of speech.\nIdentify the uses of ‘is’\nTry to identify how ‘is’ is used in the conversation. They’re shown below:\n- He’s in LA. (prepositional phrase)\n- It’s a good school. (noun phrase)\n- He’s very smart. (adjective)\n- My mom’s a nurse. (noun)\n## SUBJECTS WITH ‘IS’\nYou’ve learned that ‘am’ only follows ‘I’, and ‘are’ follows ‘you · we · they · 2+ nouns.’ The verb ‘is’ follows these subjects:\nHe is\nShe is\nIt is\n[Noun] is\n1 noun\n‘Noun’ refers to just one noun, called a ‘singular noun.’ In the conversation, ‘my mom’ is an example of this because she is just one person. A singular noun doesn’t have to be a person - it can be an item, such as ‘The key’ or ‘My house.’\nNotice that ‘he,’ ‘she,’ and ‘it’ also refer to a single person or thing, so they are ‘singular nouns.’ You can see examples of singular nouns and plural nouns in the Extra Tips section.\nContractions\nThe subject and ‘is’ are usually contracted to form one word. This is called a contraction.\nHe is = He’s\nShe is = She’s\nIt is = It’s\n[Noun] is = [Noun]’s\nRemember, contractions make a sentence smoother and sound more natural. The line ‘My mom’s a nurse’ flows better than ‘My mom is a nurse.’\n## EXAMPLE SENTENCES\nTake a look at these example sentences. Notice the contractions are used when possible:\nis [adjective]\nHe’s funny.\nShe’s smart.\nJoey’s tired. (this is an example of a singular noun)\nis [prepositional phrase]\nIt’s in the box.\nShe’s at the post office.\nMy dog’s outside. (this is an example of a singular noun)\nis [noun OR noun phrase]\nHe’s a good soccer player.\nIt’s a scary movie.\nMark is a lawyer. (this is an example of a singular noun)"
       },
       {
         "type": "extra_tip",
@@ -11452,7 +12270,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "(1 Noun) is",
+                "text": "[1 Noun] is",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11471,7 +12289,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "(2+ nouns) are",
+                "text": "[2+ nouns] are",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11714,7 +12532,7 @@
             "section_context": "EXTRA TIPS"
           }
         ],
-        "content": "## SINGULAR VS. PLURAL NOUNS\nNow you’ve learned these rules:\n(1 Noun) is\n(2+ nouns) are\nHow to spot 2+ nouns\nWithout going in-depth, remember that an easy way to spot a plural noun (2+ nouns) is that it often ends in -s, like ‘pancakes,’ ‘books,’ or ‘dogs.’ Take a look at this line from the conversation:\nHis classes are hard.\nThe word 'class' has -es added to the end, so the sentence refers to multiple classes. This is why 'are' is used.\nHow to spot 1 noun\nCompare the sentence above with this:\nHis class is hard.\n‘Class’ refers to a single class, so ‘is’ is used. ‘Class’ is the singular noun, while ‘classes’ is the plural noun. You will learn more about these in Lesson 3.5."
+        "content": "## SINGULAR VS. PLURAL NOUNS\nNow you’ve learned these rules:\n[1 Noun] is\n[2+ nouns] are\nHow to spot 2+ nouns\nWithout going in-depth, remember that an easy way to spot a plural noun (2+ nouns) is that it often ends in -s, like ‘pancakes,’ ‘books,’ or ‘dogs.’ Take a look at this line from the conversation:\nHis classes are hard.\nThe word 'class' has -es added to the end, so the sentence refers to multiple classes. This is why 'are' is used.\nHow to spot 1 noun\nCompare the sentence above with this:\nHis class is hard.\n‘Class’ refers to a single class, so ‘is’ is used. ‘Class’ is the singular noun, while ‘classes’ is the plural noun. You will learn more about these in Lesson 3.5."
       },
       {
         "type": "common_mistake",
@@ -11832,7 +12650,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\tHe very smart. (X)",
+                "text": "\tHe very smart. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11901,7 +12719,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "He’s very smart. (✓)",
+                "text": "He",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " very smart. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11918,7 +12748,7 @@
             "audio_section": "common_mistake"
           }
         ],
-        "content": "## MISTAKE #1\nJust as with ‘am’ and ‘are,’ Thai people often omit the word ‘is’ from a sentence. Try to avoid translating sentences from Thai to English, because this can cause important words to be omitted. Take a look at this sentence from the conversation in Thai:\nเขาฉลาดมาก\nThere is no verb in this sentence. When translated into English word for word, it becomes:\nเขาฉลาดมาก\nHe very smart. (X)\nDon’t forget the verb\nThis is incorrect because there is no verb. As emphasized before, every sentence must have a verb in English. The sentence above must be:\nHe’s very smart. (✓)"
+        "content": "## MISTAKE #1\nJust as with ‘am’ and ‘are,’ Thai people often omit the word ‘is’ from a sentence. Try to avoid translating sentences from Thai to English, because this can cause important words to be omitted. Take a look at this sentence from the conversation in Thai:\nเขาฉลาดมาก\nThere is no verb in this sentence. When translated into English word for word, it becomes:\nเขาฉลาดมาก\nHe very smart. [X]\nDon’t forget the verb\nThis is incorrect because there is no verb. As emphasized before, every sentence must have a verb in English. The sentence above must be:\nHe’s very smart. [✓]"
       },
       {
         "type": "phrases_verbs",
@@ -11926,9 +12756,9 @@
         "items": [
           {
             "phrase": "NICE!",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
-            "content": "Nice!\nA positive expression to show enthusiasm or approval\nLuke: I applied for a few jobs today.\nChloe: Nice! I’m sure you’ll get one.\nLuke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I’ll take a look at them.\nOH! [1]",
+            "content": "Nice!\nA positive expression to show enthusiasm or approval\nLuke: I applied for a few jobs today.\nPailin: Nice! I’m sure you’ll get one.\nLuke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I’ll take a look at them.",
             "content_jsonb": [
               {
                 "kind": "list_item",
@@ -11947,7 +12777,9 @@
                 "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
                 "lesson_context_en": "LESSON 1.10: He’s a student at USC",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -11985,14 +12817,16 @@
                 "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
                 "lesson_context_en": "LESSON 1.10: He’s a student at USC",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Chloe: Nice! I’m sure you’ll get one.",
+                    "text": "Pailin: Nice! I’m sure you’ll get one.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -12023,7 +12857,9 @@
                 "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
                 "lesson_context_en": "LESSON 1.10: He’s a student at USC",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -12043,27 +12879,15 @@
                 "lesson_context_en": "LESSON 1.10: He’s a student at USC",
                 "lesson_context_th": null,
                 "section_context": "PHRASES & VERBS"
-              },
-              {
-                "kind": "paragraph",
-                "level": null,
-                "inlines": [
-                  {
-                    "text": "OH! [1]",
-                    "bold": false,
-                    "italic": false,
-                    "underline": false
-                  }
-                ],
-                "indent": 0,
-                "lesson_context": "LESSON 1.10: He’s a student at USC",
-                "lesson_key": "1.10",
-                "lesson_context_norm": "LESSON 1.10: He’s a student at USC",
-                "lesson_context_en": "LESSON 1.10: He’s a student at USC",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
               }
             ]
+          },
+          {
+            "phrase": "OH!",
+            "variant": 0,
+            "translation_th": "",
+            "content": "",
+            "content_jsonb": []
           }
         ]
       }
@@ -12229,7 +13053,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Chloe tells Pailin that she’s from Chiang Mai. Which part of Thailand are you from?"
+        "content": "In the conversation, Chloe tells Pailin that she’s from Chiang Mai.\nWhich part of Thailand are you from?"
       },
       {
         "type": "understand",
@@ -12394,7 +13218,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m from (country).",
+                "text": "I’m from [country].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12413,7 +13237,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m from Thailand.",
+                "text": "I’m from ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "Thailand",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12434,7 +13270,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\t\tI’m from (city).",
+                "text": "\t\tI’m from [city].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12453,7 +13289,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m from Chiang Mai.",
+                "text": "I’m from ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "Chiang Mai",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12512,7 +13360,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\t\tI’m from (place).",
+                "text": "\t\tI’m from [place].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12531,13 +13379,25 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m from the nor",
+                "text": "I’m from ",
                 "bold": false,
                 "italic": false,
                 "underline": false
               },
               {
-                "text": "th of Thailand.",
+                "text": "the nor",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": "th of Thailand",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12558,7 +13418,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m from Isaan.",
+                "text": "I’m from ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "Isaan",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12579,7 +13451,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m from Texas.",
+                "text": "I’m from ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "Texas",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12600,7 +13484,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m from the Bay.",
+                "text": "I’m from ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "the Bay",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12621,7 +13517,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m + (prepositional phrase)",
+                "text": "I’m + [prepositional phrase]",
                 "bold": true,
                 "italic": false,
                 "underline": false
@@ -12655,7 +13551,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to ask where someone is from and how to respond\n## WHERE ARE YOU FROM?\nIn the conversation, Chloe asks Pailin:\nWhere are you from?\nThis is the typical way to ask where someone is from. It’s a useful introductory question.\nI’M FROM…\nTake a look at these responses from the conversation:\nI’m from (country).\nI’m from Thailand.\nI’m from (city).\nI’m from Chiang Mai.\nAny place\nThis is not limited to country and city - you can respond with a region or a state, or any geographical location that resonates with the listener. For example:\nI’m from (place).\nI’m from the north of Thailand.\nI’m from Isaan.\nI’m from Texas.\nI’m from the Bay.\nI’m + (prepositional phrase)\nNotice that these responses use ‘I’m (prepositional phrase)’, as the word ‘from’ is a preposition."
+        "content": "## LESSON FOCUS\nHow to ask where someone is from and how to respond\n## WHERE ARE YOU FROM?\nIn the conversation, Chloe asks Pailin:\nWhere are you from?\nThis is the typical way to ask where someone is from. It’s a useful introductory question.\nI’M FROM…\nTake a look at these responses from the conversation:\nI’m from [country].\nI’m from Thailand.\nI’m from [city].\nI’m from Chiang Mai.\nAny place\nThis is not limited to country and city - you can respond with a region or a state, or any geographical location that resonates with the listener. For example:\nI’m from [place].\nI’m from the north of Thailand.\nI’m from Isaan.\nI’m from Texas.\nI’m from the Bay.\nI’m + [prepositional phrase]\nNotice that these responses use ‘I’m (prepositional phrase)’, as the word ‘from’ is a preposition."
       },
       {
         "type": "common_mistake",
@@ -12704,7 +13600,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\tWhere you come from? (X)",
+                "text": "\tWhere you come from? [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12742,7 +13638,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Where are you from? (✓)",
+                "text": "Where are you from? [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -12936,7 +13832,7 @@
             "audio_section": "common_mistake"
           }
         ],
-        "content": "## MISTAKE #1\nThai learners often ask คุณมาจากไหน like this:\nWhere you come from? (X)\nThis is a direct translation from Thai, but it is incorrect in English. Remember the correct way to ask is:\nWhere are you from? (✓)\n## MISTAKE #2\nThai students often incorrectly say ‘I’m from Thai’ instead of ‘I’m from Thailand.’ This is because in Thai language, the country of Thailand is called ประเทศไทย.\nTake note of these three things:\nCountry: Thailand\nI’m from Thailand.\nNationality: Thai\nI’m Thai.\nLanguage: Thai\nI speak Thai."
+        "content": "## MISTAKE #1\nThai learners often ask คุณมาจากไหน like this:\nWhere you come from? [X]\nThis is a direct translation from Thai, but it is incorrect in English. Remember the correct way to ask is:\nWhere are you from? [✓]\n## MISTAKE #2\nThai students often incorrectly say ‘I’m from Thai’ instead of ‘I’m from Thailand.’ This is because in Thai language, the country of Thailand is called ประเทศไทย.\nTake note of these three things:\nCountry: Thailand\nI’m from Thailand.\nNationality: Thai\nI’m Thai.\nLanguage: Thai\nI speak Thai."
       },
       {
         "type": "phrases_verbs",
@@ -12944,7 +13840,7 @@
         "items": [
           {
             "phrase": "WOW",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Wow\nUsed to show surprise or admiration\nWow! This cake is beautiful. Did you make it all by yourself?\nSee more uses of ‘Wow’",
             "content_jsonb": [
@@ -12965,7 +13861,9 @@
                 "lesson_context_norm": "LESSON 1.11: Where are you from?",
                 "lesson_context_en": "LESSON 1.11: Where are you from?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -13003,7 +13901,9 @@
                 "lesson_context_norm": "LESSON 1.11: Where are you from?",
                 "lesson_context_en": "LESSON 1.11: Where are you from?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -13034,7 +13934,7 @@
           },
           {
             "phrase": "COOL!",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Cool!\nAn informal way of saying ‘That’s great’\nLuke: I just got tickets to the concert!\nPailin: Cool! I’m so excited.\nPailin: We’re bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?",
             "content_jsonb": [
@@ -13055,7 +13955,9 @@
                 "lesson_context_norm": "LESSON 1.11: Where are you from?",
                 "lesson_context_en": "LESSON 1.11: Where are you from?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -13093,7 +13995,9 @@
                 "lesson_context_norm": "LESSON 1.11: Where are you from?",
                 "lesson_context_en": "LESSON 1.11: Where are you from?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 4,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
@@ -13101,6 +14005,108 @@
                 "inlines": [
                   {
                     "text": "Pailin: We’re bringing a pie to the potluck.\u000bLuke: Cool, what kind of pie are you bringing?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "lesson_key": "1.11",
+                "lesson_context_norm": "LESSON 1.11: Where are you from?",
+                "lesson_context_en": "LESSON 1.11: Where are you from?",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 5,
+                "audio_section": "phrases_verbs"
+              }
+            ]
+          },
+          {
+            "phrase": "WOW",
+            "variant": 1,
+            "translation_th": "",
+            "content": "Wow\nUsed to show surprise or admiration\nWow! This cake is beautiful. Did you make it all by yourself?\nSee more uses of ‘Wow’",
+            "content_jsonb": [
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Wow",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "lesson_key": "1.11",
+                "lesson_context_norm": "LESSON 1.11: Where are you from?",
+                "lesson_context_en": "LESSON 1.11: Where are you from?",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 6,
+                "audio_section": "phrases_verbs"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Used to show surprise or admiration",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "lesson_key": "1.11",
+                "lesson_context_norm": "LESSON 1.11: Where are you from?",
+                "lesson_context_en": "LESSON 1.11: Where are you from?",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Wow! This cake is beautiful. Did you make it all by yourself?",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "lesson_key": "1.11",
+                "lesson_context_norm": "LESSON 1.11: Where are you from?",
+                "lesson_context_en": "LESSON 1.11: Where are you from?",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 7,
+                "audio_section": "phrases_verbs"
+              },
+              {
+                "kind": "paragraph",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "\t",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  },
+                  {
+                    "text": "See more uses of ‘Wow’",
+                    "bold": false,
+                    "italic": false,
+                    "underline": true
+                  },
+                  {
+                    "text": "",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -13181,7 +14187,7 @@
       {
         "kind": "fill_blank",
         "title": "PRACTICE NAMING THINGS",
-        "prompt": "Take a look at the pictures and answer the question ‘What’s this?’ using the sentence structure ‘This is (a noun).’",
+        "prompt": "Take a look at the pictures and answer the question ‘What’s this?’ using the sentence structure ‘This is [a noun].’",
         "paragraph": "",
         "items": [
           {
@@ -13205,7 +14211,7 @@
       {
         "kind": "open",
         "title": "PRACTICE INTRODUCING PEOPLE",
-        "prompt": "Take a look at Pailin’s family picture. Introduce the people in the picture based on her relationship with them and their name. Use the structure ‘This is (person), (name).’ For example: This is my cousin, Pailin.",
+        "prompt": "Take a look at Pailin’s family picture. Introduce the people in the picture based on her relationship with them and their name. Use the structure ‘This is [person], [name].’ For example: This is my cousin, Pailin.",
         "paragraph": "",
         "items": [
           {
@@ -13246,7 +14252,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Frank presents different items to Pailin. Imagine you’re at a market in Thailand with an American. What might be new or interesting to them? How can you identify these things? Use ‘This is…’ in your sentences."
+        "content": "In the conversation, Frank presents different items to Pailin.\nImagine you’re at a market in Thailand with an American. What might be new or interesting to them? How can you identify these things? Use ‘This is…’ in your sentences."
       },
       {
         "type": "understand",
@@ -13430,7 +14436,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is your student ID.",
+                "text": "This is",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " your student ID.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13451,7 +14463,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is a welcome bag.",
+                "text": "This is",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a welcome bag.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13472,7 +14490,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is a map of the city.",
+                "text": "This",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " is a map of the city.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13512,7 +14536,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is (a noun).",
+                "text": "This is [a noun].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13602,7 +14626,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Luke: This is cheesecake.",
+                "text": "Luke: This is ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "cheesecake",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13661,7 +14697,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Luke: This is my mom’s favorite scarf. It’s from Japan.",
+                "text": "Luke: This is ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "my mom’s favorite scarf",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". It’s from Japan.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13718,7 +14766,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is (a person).",
+                "text": "This is [a person].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13737,7 +14785,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is my friend, Chloe.",
+                "text": "This is ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "my friend, Chloe",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13758,7 +14818,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is Adam.",
+                "text": "This is ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "Adam",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13779,7 +14851,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "This is my mom.",
+                "text": "This is ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "my mom",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13802,7 +14886,7 @@
             "audio_section": "understand"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to say ‘This is (something)’\n## WHAT’S THIS?\nIn the conversation, Frank gives different items to Pailin. He hands her something, and she asks him:\nWhat’s this?\nWhat’s = What is\nThis is a useful question to ask when you want to know what something is.\nTHIS IS…\nTake a look at what Frank says as he offers different items to her:\nThis is your student ID.\nThis is a welcome bag.\nThis is a map of the city.\nYou can follow this structure when explaining what something is:\nThis is (a noun).\nExamples\nPailin walks into a grocery store in the US with her friend and sees an unfamiliar food.\nPailin: What’s this?\nLuke: This is cheesecake.\nPailin is at a friend’s house and sees some beautiful fabric.\nPailin: What’s this?\nLuke: This is my mom’s favorite scarf. It’s from Japan.\nIntroducing a person\nYou can also use this sentence structure to introduce someone. In this case, the structure is:\nThis is (a person).\nThis is my friend, Chloe.\nThis is Adam.\nThis is my mom."
+        "content": "## LESSON FOCUS\nHow to say ‘This is (something)’\n## WHAT’S THIS?\nIn the conversation, Frank gives different items to Pailin. He hands her something, and she asks him:\nWhat’s this?\nWhat’s = What is\nThis is a useful question to ask when you want to know what something is.\nTHIS IS…\nTake a look at what Frank says as he offers different items to her:\nThis is your student ID.\nThis is a welcome bag.\nThis is a map of the city.\nYou can follow this structure when explaining what something is:\nThis is [a noun].\nExamples\nPailin walks into a grocery store in the US with her friend and sees an unfamiliar food.\nPailin: What’s this?\nLuke: This is cheesecake.\nPailin is at a friend’s house and sees some beautiful fabric.\nPailin: What’s this?\nLuke: This is my mom’s favorite scarf. It’s from Japan.\nIntroducing a person\nYou can also use this sentence structure to introduce someone. In this case, the structure is:\nThis is [a person].\nThis is my friend, Chloe.\nThis is Adam.\nThis is my mom."
       },
       {
         "type": "common_mistake",
@@ -13851,7 +14935,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "What this? (X)",
+                "text": "What this? [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13870,7 +14954,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "What’s this? (✓)",
+                "text": "What",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " this? [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -13963,7 +15059,7 @@
             "section_context": "COMMON MISTAKES"
           }
         ],
-        "content": "## MISTAKE #1\nIt’s common for Thai students to omit the -s sound in ‘What’s’ in the question ‘What’s this?’ Take a look at the fix below:\nWhat this? (X)\nWhat’s this? (✓)\nPronunciation practice\nEnglish pronunciation often involves more tongue movement than Thai. This can cause learners to simplify sounds.\nHowever, it's beneficial to practice pronouncing all the sounds in each word, especially as a beginner. This helps build strong pronunciation habits.\nYour tongue might feel a little tired at first, but this practice will pay off in the long run!"
+        "content": "## MISTAKE #1\nIt’s common for Thai students to omit the -s sound in ‘What’s’ in the question ‘What’s this?’ Take a look at the fix below:\nWhat this? [X]\nWhat’s this? [✓]\nPronunciation practice\nEnglish pronunciation often involves more tongue movement than Thai. This can cause learners to simplify sounds.\nHowever, it's beneficial to practice pronouncing all the sounds in each word, especially as a beginner. This helps build strong pronunciation habits.\nYour tongue might feel a little tired at first, but this practice will pay off in the long run!"
       }
     ],
     "tags": [
@@ -13995,7 +15091,7 @@
       {
         "sort_order": 2,
         "speaker": "Mom",
-        "line_text": "Is everything okay over there?",
+        "line_text": "Hey Pai. Is everything okay over there?",
         "indent": 0
       },
       {
@@ -14112,7 +15208,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin’s mom says that it’s rainy in Bangkok. How is the weather now in your area?"
+        "content": "In the conversation, Pailin’s mom says that it’s rainy in Bangkok.\nHow is the weather now in your area?"
       },
       {
         "type": "understand",
@@ -14199,7 +15295,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s sunny and beautiful.",
+                "text": "It’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " sunny and beautiful.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14220,7 +15322,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s really dry.",
+                "text": "It’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " really dry.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14241,7 +15349,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s rainy now in Bangkok.",
+                "text": "It’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " rainy now in Bangkok.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14262,7 +15376,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s okay.",
+                "text": "It’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " okay.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14283,7 +15403,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s a bit bland.",
+                "text": "It’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " a bit bland.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14304,7 +15430,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s so expensive.",
+                "text": "It’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " so expensive.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14496,7 +15628,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "In the conversation, the structure ‘It’s (adjective)’ is used to discuss the weather, the food, and pricing, but it can be used to describe anything!",
+                "text": "In the conversation, the structure ‘It’s [adjective]’ is used to discuss the weather, the food, and pricing, but it can be used to describe anything!",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14534,7 +15666,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s late.",
+                "text": "It’s ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "late",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14555,7 +15699,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s difficult.",
+                "text": "It’s ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "difficult",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14576,7 +15732,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s important.",
+                "text": "It’s ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "important",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14597,7 +15765,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s blue.",
+                "text": "It’s ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "blue",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14618,7 +15798,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s nice to meet you.",
+                "text": "It’s ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "nice",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " to meet you.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14641,7 +15833,7 @@
             "audio_section": "understand"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to describe things\nIT’S (ADJECTIVE)\nTake a look at these sentences from the conversation:\nIt’s sunny and beautiful.\nIt’s really dry.\nIt’s rainy now in Bangkok.\nIt’s okay.\nIt’s a bit bland.\nIt’s so expensive.\nThese sentences follow a pattern:\nIt’s (adjective).\nUseful structure!\nThis is a very useful sentence structure. You can use it to describe almost anything! Think of different adjectives and practice using them in this structure. The more you practice, the more natural it will become.\nDon’t forget the subject\nNotice that in Thai, this sentence doesn’t have a subject:\nแพงมาก\nSince every sentence in English must have a subject, ‘It’s’ would be a typical subject for a descriptive sentence like this. So instead of just saying ‘Expensive!’ you must say ‘It’s expensive!’\nExamples\nIn the conversation, the structure ‘It’s (adjective)’ is used to discuss the weather, the food, and pricing, but it can be used to describe anything!\nTake a look at these descriptive sentences below:\nIt’s late.\nIt’s difficult.\nIt’s important.\nIt’s blue.\nIt’s nice to meet you."
+        "content": "## LESSON FOCUS\nHow to describe things\nIT’S (ADJECTIVE)\nTake a look at these sentences from the conversation:\nIt’s sunny and beautiful.\nIt’s really dry.\nIt’s rainy now in Bangkok.\nIt’s okay.\nIt’s a bit bland.\nIt’s so expensive.\nThese sentences follow a pattern:\nIt’s (adjective).\nUseful structure!\nThis is a very useful sentence structure. You can use it to describe almost anything! Think of different adjectives and practice using them in this structure. The more you practice, the more natural it will become.\nDon’t forget the subject\nNotice that in Thai, this sentence doesn’t have a subject:\nแพงมาก\nSince every sentence in English must have a subject, ‘It’s’ would be a typical subject for a descriptive sentence like this. So instead of just saying ‘Expensive!’ you must say ‘It’s expensive!’\nExamples\nIn the conversation, the structure ‘It’s [adjective]’ is used to discuss the weather, the food, and pricing, but it can be used to describe anything!\nTake a look at these descriptive sentences below:\nIt’s late.\nIt’s difficult.\nIt’s important.\nIt’s blue.\nIt’s nice to meet you."
       },
       {
         "type": "common_mistake",
@@ -14690,7 +15882,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "It red. (X)",
+                "text": "It red. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14709,7 +15901,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s red. (✓)",
+                "text": "It",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " red. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14783,7 +15987,7 @@
             "section_context": "COMMON MISTAKES"
           }
         ],
-        "content": "## MISTAKE #1\nIt’s common for Thai students to omit the -s sound in the phrase ‘It’s.’ Take a look at the fix below:\nIt red. (X)\nIt’s red. (✓)\nPronunciation practice\nAs mentioned in the previous lesson, it’ll be beneficial to practice pronouncing all the sounds in a word, especially the -s sounds at the end of words.\nYour tongue might feel a little tired at first, but this practice will pay off in the long run!"
+        "content": "## MISTAKE #1\nIt’s common for Thai students to omit the -s sound in the phrase ‘It’s.’ Take a look at the fix below:\nIt red. [X]\nIt’s red. [✓]\nPronunciation practice\nAs mentioned in the previous lesson, it’ll be beneficial to practice pronouncing all the sounds in a word, especially the -s sounds at the end of words.\nYour tongue might feel a little tired at first, but this practice will pay off in the long run!"
       }
     ],
     "tags": [
@@ -15017,27 +16221,27 @@
           },
           {
             "number": "2",
-            "text": "Are you from Germany?",
+            "text": "A: Are you from Germany?\nB: _____",
             "keywords": "no i am not from, no im not from"
           },
           {
             "number": "3",
-            "text": "Is it snowy today?",
+            "text": "A: Is it snowy today?\nB: _____",
             "keywords": "no it is not, no it isnt, no its not"
           },
           {
             "number": "4",
-            "text": "Is American food spicy?",
+            "text": "A: Is American food spicy?\nB: _____",
             "keywords": "no american food is not, no american food isnt"
           },
           {
             "number": "5",
-            "text": "Are cookies healthy?",
+            "text": "A: Are cookies healthy?\nB: _____",
             "keywords": "no cookies are not, no cookies arent"
           },
           {
             "number": "6",
-            "text": "Are you on an airplane?",
+            "text": "A: Are you on an airplane?\nB: _____",
             "keywords": "no i am not, no im not"
           }
         ],
@@ -15048,7 +16252,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Pailin says she’s not cold. What is something you DON’T feel right now?"
+        "content": "In the conversation, Pailin says she’s not cold.\nWhat is something you don’t feel right now?"
       },
       {
         "type": "understand",
@@ -15433,7 +16637,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "In the first two sentences, you can’t see the word ‘not.’ This is because it’s combined with the to-be verb to form a negative contraction:",
+                "text": "In the first two sentences, you can’t see the word ‘not.’ This is because it’s combined with the to-be verb to form a negative ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "contraction",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ":",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -15546,7 +16762,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "My jacket isn’t blue.",
+                "text": "My jacket ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "isn’t",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " blue.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -15710,7 +16938,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Remember that contractions are key in English because they help shorten your speech and make it sound natural.",
+                "text": "Remember that ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "contractions",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " are key in English because they help shorten your speech and make it sound natural.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16083,7 +17323,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "(Noun)’s not = (Noun) isn’t",
+                "text": "[Noun]’s not = [Noun] isn’t",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16178,7 +17418,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "(2+ nouns) aren’t",
+                "text": "[2+ nouns] aren’t",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16386,9 +17626,15 @@
                 "underline": true
               },
               {
-                "text": " hungry. (adjective)",
+                "text": " hungry. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16419,9 +17665,15 @@
                 "underline": true
               },
               {
-                "text": " from China. (prepositional phrase)",
+                "text": " from China. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(prepositional phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16452,9 +17704,15 @@
                 "underline": true
               },
               {
-                "text": " a good cook. (noun phrase)",
+                "text": " a good cook. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(noun phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16510,9 +17768,15 @@
                 "underline": true
               },
               {
-                "text": " sick. (adjective)",
+                "text": " sick.",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": " (adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16543,9 +17807,15 @@
                 "underline": true
               },
               {
-                "text": " at home. (prepositional phrase)",
+                "text": " at home. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(prepositional phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16576,9 +17846,15 @@
                 "underline": true
               },
               {
-                "text": " fun people. (noun phrase)",
+                "text": " fun people.",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": " (noun phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16609,9 +17885,15 @@
                 "underline": true
               },
               {
-                "text": " sisters. (noun)",
+                "text": " sisters. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(noun)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16667,9 +17949,15 @@
                 "underline": true
               },
               {
-                "text": " ready. (adjective)",
+                "text": " ready. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16700,9 +17988,15 @@
                 "underline": true
               },
               {
-                "text": " in the garage. (prepositional phrase)",
+                "text": " in the garage. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(prepositional phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16733,9 +18027,15 @@
                 "underline": true
               },
               {
-                "text": " a toy. (noun)A",
+                "text": " a toy. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(noun)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16766,9 +18066,15 @@
                 "underline": true
               },
               {
-                "text": " tired. (adjective)",
+                "text": " tired. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16799,9 +18105,15 @@
                 "underline": true
               },
               {
-                "text": " here. (prepositional phrase)",
+                "text": " here. ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(prepositional phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -16816,7 +18128,7 @@
             "audio_section": "understand"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to use ‘not’ in a sentence\nSo far, you’ve learned how to make affirmative sentences with the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make those sentences negative using the word ‘not.’\n## NEGATIVE SENTENCES\nIn the conversation, Pailin says to Frank:\nI’m not cold.\nWhile the affirmative sentence would be ‘I’m cold,’ adding ‘not’ changes the sentence into a negative sentence.\n‘Not’ - important word!\n‘Not’ is used to negate ALL verbs in English. This lesson will focus on negating simple sentences that use to-be verbs.\nExamples\nTake a look at these sentences from the conversation:\nMy jacket isn’t blue.\nIt isn’t there.\nIt’s not a big deal.\nI’m not cold.\n‘Not’ is hidden\nIn the first two sentences, you can’t see the word ‘not.’ This is because it’s combined with the to-be verb to form a negative contraction:\nIt isn’t there. = It is not there.\nThese will be explained more below.\n## STRUCTURE\nNotice where the word ‘not’ comes in a sentence. Is it before or after the to-be verb?\nMy jacket isn’t blue.\nMy jacket is not blue.\n‘Not’ placement\n‘Not’ comes after the to-be verb, so it will always follow this pattern:\nam not\nare not\nis not\nContractions - ‘am not’\nRemember that contractions are key in English because they help shorten your speech and make it sound natural.\nThere is only one way to contract ‘I am not’:\nI’m not\nContractions - ‘are not’ and ‘is not’\nBut there are two ways to contract ‘are not’ and ‘is not’ in a sentence, as you can see from these lines in the conversation:\nIt isn’t there.\nIt’s not a big deal.\n‘It is not’ can become:\nIt isn’t\nIt’s not\n‘They are not’ can become either:\nThey aren’t\nThey’re not\nBoth forms are frequently used, so it’s important to know both.\nTwo ways to contract\nHere is a breakdown of ‘are’ and ‘is’ in negative sentences:\n## TABLE-1:\n## TABLE-1:\nContractions - 1 noun\nSingular noun subjects can also be contracted in both ways:\n(Noun)’s not = (Noun) isn’t\nMy mom’s not = My mom isn’t\nFrank’s not = Frank isn’t\nContractions - 2+ nouns\nBut for subjects of 2+ nouns, only one contraction can be used:\n(2+ nouns) aren’t\nMy mom and dad aren’t\nThe kids aren’t\n## EXAMPLES\nRemember that to-be verbs can come before these three things:\n1. adjectives\n2. prepositional phrases\n3. nouns OR noun phrases\nThe same applies to negative to-be verbs. Here are examples of negative sentences. Notice that both forms of contractions are used for ‘are not’ and ‘is not.’\nam not\nI’m not hungry. (adjective)\nI’m not from China. (prepositional phrase)\nI’m not a good cook. (noun phrase)\nare not\nYou aren’t sick. (adjective)\nWe’re not at home. (prepositional phrase)\nThey aren’t fun people. (noun phrase)\nPailin and Chloe aren’t sisters. (noun)\nis not\nHe isn’t ready. (adjective)\nShe’s not in the garage. (prepositional phrase)\nIt isn’t a toy. (noun)A\nFrank’s not tired. (adjective)\nMy friend isn’t here. (prepositional phrase)"
+        "content": "## LESSON FOCUS\nHow to use ‘not’ in a sentence\nSo far, you’ve learned how to make affirmative sentences with the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make those sentences negative using the word ‘not.’\n## NEGATIVE SENTENCES\nIn the conversation, Pailin says to Frank:\nI’m not cold.\nWhile the affirmative sentence would be ‘I’m cold,’ adding ‘not’ changes the sentence into a negative sentence.\n‘Not’ - important word!\n‘Not’ is used to negate ALL verbs in English. This lesson will focus on negating simple sentences that use to-be verbs.\nExamples\nTake a look at these sentences from the conversation:\nMy jacket isn’t blue.\nIt isn’t there.\nIt’s not a big deal.\nI’m not cold.\n‘Not’ is hidden\nIn the first two sentences, you can’t see the word ‘not.’ This is because it’s combined with the to-be verb to form a negative contraction:\nIt isn’t there. = It is not there.\nThese will be explained more below.\n## STRUCTURE\nNotice where the word ‘not’ comes in a sentence. Is it before or after the to-be verb?\nMy jacket isn’t blue.\nMy jacket is not blue.\n‘Not’ placement\n‘Not’ comes after the to-be verb, so it will always follow this pattern:\nam not\nare not\nis not\nContractions - ‘am not’\nRemember that contractions are key in English because they help shorten your speech and make it sound natural.\nThere is only one way to contract ‘I am not’:\nI’m not\nContractions - ‘are not’ and ‘is not’\nBut there are two ways to contract ‘are not’ and ‘is not’ in a sentence, as you can see from these lines in the conversation:\nIt isn’t there.\nIt’s not a big deal.\n‘It is not’ can become:\nIt isn’t\nIt’s not\n‘They are not’ can become either:\nThey aren’t\nThey’re not\nBoth forms are frequently used, so it’s important to know both.\nTwo ways to contract\nHere is a breakdown of ‘are’ and ‘is’ in negative sentences:\n## TABLE-1:\n## TABLE-1:\nContractions - 1 noun\nSingular noun subjects can also be contracted in both ways:\n[Noun]’s not = [Noun] isn’t\nMy mom’s not = My mom isn’t\nFrank’s not = Frank isn’t\nContractions - 2+ nouns\nBut for subjects of 2+ nouns, only one contraction can be used:\n[2+ nouns] aren’t\nMy mom and dad aren’t\nThe kids aren’t\n## EXAMPLES\nRemember that to-be verbs can come before these three things:\n1. adjectives\n2. prepositional phrases\n3. nouns OR noun phrases\nThe same applies to negative to-be verbs. Here are examples of negative sentences. Notice that both forms of contractions are used for ‘are not’ and ‘is not.’\nam not\nI’m not hungry. (adjective)\nI’m not from China. (prepositional phrase)\nI’m not a good cook. (noun phrase)\nare not\nYou aren’t sick. (adjective)\nWe’re not at home. (prepositional phrase)\nThey aren’t fun people. (noun phrase)\nPailin and Chloe aren’t sisters. (noun)\nis not\nHe isn’t ready. (adjective)\nShe’s not in the garage. (prepositional phrase)\nIt isn’t a toy. (noun)\nFrank’s not tired. (adjective)\nMy friend isn’t here. (prepositional phrase)"
       },
       {
         "type": "common_mistake",
@@ -16884,7 +18196,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\tI not thirsty. (X)",
+                "text": "\tI not thirsty. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16903,7 +18215,13 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m not thirsty. (✓)",
+                "text": "I’m not",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " thirsty. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16924,7 +18242,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\t\tWe not scared. (X)",
+                "text": "\t\tWe not scared. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16943,7 +18261,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "We’re not scared. (✓)",
+                "text": "We",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’re not",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " scared. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16964,7 +18294,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\t\tHe not at home. (X)",
+                "text": "\t\tHe not at home. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -16983,7 +18313,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "He’s not at home. (✓)",
+                "text": "He",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "’s not",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": " at home. [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -17000,15 +18342,22 @@
             "audio_section": "common_mistake"
           }
         ],
-        "content": "## MISTAKE #1\nThai people often omit the to-be verb in negative sentences and only use ‘not’ to make a sentence negative.\nTake a look at the incorrect sentences below and how to fix them:\nI not thirsty. (X)\nI’m not thirsty. (✓)\nWe not scared. (X)\nWe’re not scared. (✓)\nHe not at home. (X)\nHe’s not at home. (✓)"
+        "content": "## MISTAKE #1\nThai people often omit the to-be verb in negative sentences and only use ‘not’ to make a sentence negative.\nTake a look at the incorrect sentences below and how to fix them:\nI not thirsty. [X]\nI’m not thirsty. [✓]\nWe not scared. [X]\nWe’re not scared. [✓]\nHe not at home. [X]\nHe’s not at home. [✓]"
       },
       {
         "type": "phrases_verbs",
         "sort_order": 4,
         "items": [
           {
+            "phrase": "HERE",
+            "variant": 0,
+            "translation_th": "",
+            "content": "",
+            "content_jsonb": []
+          },
+          {
             "phrase": "LOOK FOR",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Look for\nTo try to find or search for something\nI’ve been looking for a new job, but not many places are hiring.\nI’m looking for my keys. Have you seen them?",
             "content_jsonb": [
@@ -17029,7 +18378,9 @@
                 "lesson_context_norm": "LESSON 1.14: My wallet isn’t red",
                 "lesson_context_en": "LESSON 1.14: My wallet isn’t red",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -17067,7 +18418,9 @@
                 "lesson_context_norm": "LESSON 1.14: My wallet isn’t red",
                 "lesson_context_en": "LESSON 1.14: My wallet isn’t red",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
@@ -17086,7 +18439,9 @@
                 "lesson_context_norm": "LESSON 1.14: My wallet isn’t red",
                 "lesson_context_en": "LESSON 1.14: My wallet isn’t red",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               }
             ]
           }
@@ -17098,9 +18453,9 @@
       "to-be verb",
       "negative sentence",
       "not",
-      "isn’t",
-      "aren’t",
-      "I’m not"
+      "isnt",
+      "arent",
+      "im not"
     ],
     "pinned_comment": "Share with us something you’re not good at."
   },
@@ -17243,8 +18598,8 @@
         "items": [
           {
             "number": "1",
-            "text": "(picture of clock showing 10:00 with a moon)",
-            "answer": "10:00PM"
+            "text": "(picture of clock showing 10:00 with a sun)",
+            "answer": "10:00AM"
           },
           {
             "number": "2",
@@ -17253,7 +18608,7 @@
           },
           {
             "number": "3",
-            "text": "(picture of clock showing 12:05 with a sun)",
+            "text": "(picture of clock showing 12:05 with a moon)",
             "answer": "12:05PM"
           },
           {
@@ -17272,12 +18627,12 @@
       {
         "kind": "open",
         "title": "LISTENING PRACTICE",
-        "prompt": "Listen to the audio and type the time as (hour):(minute). For example: 4:58",
+        "prompt": "Listen to the audio and type the time as [hour]:[minute]. For example: 4:58",
         "paragraph": "",
         "items": [
           {
             "number": "1",
-            "text": "AUDIO 1",
+            "text": "(Audio of ‘2:06’)",
             "answer": "2:06"
           },
           {
@@ -17322,7 +18677,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Frank tells Pailin and Chloe to come back at 12:00. What time do you usually wake up?"
+        "content": "In the conversation, Frank tells Pailin and Chloe to come back at 12:00.\nWhat time do you usually wake up?"
       },
       {
         "type": "understand",
@@ -17445,11 +18800,11 @@
             "section_context": "UNDERSTAND"
           },
           {
-            "kind": "paragraph",
-            "level": null,
+            "kind": "heading",
+            "level": 3,
             "inlines": [
               {
-                "text": "IT’S (TIME)",
+                "text": "IT’S [TIME]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -17527,7 +18882,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\t\tIt’s (time).",
+                "text": "\t\tIt’s [time].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -17643,7 +18998,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\t\t(#) o’clock",
+                "text": "\t\t[#] o’clock",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -18088,7 +19443,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Let’s meet at the park at noon.",
+                "text": "Let’s meet at the park at ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "noon",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -18109,7 +19476,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "I always sleep at midnight.",
+                "text": "I always sleep at ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "midnight",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -18164,7 +19543,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to talk about the time\n## TELLING THE TIME\nIn the conversation, Frank asks the girls:\nWhat time is it?\nThis is the typical way to ask for the current time.\nIT’S (TIME)\nPailin responds by saying:\nIt’s 11:05.\nThe sentence structure to tell the time is:\nIt’s (time).\nTelling the time is pretty straight-forward, although there are a few things to note.\n## O’CLOCK\nIn the conversation, Frank tells the girls:\nPlease come back at 12:00.\nOn the hour, the time can be read as:\n(#) o’clock\n5 o’clock = 5:00\nLeaving out ‘o’clock’\nOften, ‘o’clock’ is omitted. Frank could have also said:\nPlease come back at 12.\n## TELLING THE TIME: 12:01 - 12:09\nDid you notice how Pailin said the time 11:05? She didn’t say ‘eleven five’ or ‘eleven zero five.’ She said:\n11:05 = eleven-o-five\nThe 0 is pronounced as the letter ‘O’ or ‘oh.’\n## QUICK PRACTICE\n## TELLING THE TIME: 12:10 - 12:59\nAll other times are read as two numbers - the hour, the minutes.\nIn the conversation, Chloe says that her favorite restaurant opens at:\n11:30 = eleven thirty\n## QUICK PRACTICE\n## AM & PM\nTelling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:\nAM = midnight (12:00) to lunchtime (11:59)\nPM = lunchtime (12:00) to midnight (11:59)\nThe hours go from 1 to 12.\nNoon & midnight\nFrank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?\nIt would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example:\nLet’s meet at the park at noon.\nI always sleep at midnight.\nDon’t use military time\nWhile many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock)."
+        "content": "## LESSON FOCUS\nHow to talk about the time\n## TELLING THE TIME\nIn the conversation, Frank asks the girls:\nWhat time is it?\nThis is the typical way to ask for the current time.\n## IT’S [TIME]\nPailin responds by saying:\nIt’s 11:05.\nThe sentence structure to tell the time is:\nIt’s [time].\nTelling the time is pretty straight-forward, although there are a few things to note.\n## O’CLOCK\nIn the conversation, Frank tells the girls:\nPlease come back at 12:00.\nOn the hour, the time can be read as:\n[#] o’clock\n5 o’clock = 5:00\nLeaving out ‘o’clock’\nOften, ‘o’clock’ is omitted. Frank could have also said:\nPlease come back at 12.\n## TELLING THE TIME: 12:01 - 12:09\nDid you notice how Pailin said the time 11:05? She didn’t say ‘eleven five’ or ‘eleven zero five.’ She said:\n11:05 = eleven-o-five\nThe 0 is pronounced as the letter ‘O’ or ‘oh.’\n## QUICK PRACTICE\n## TELLING THE TIME: 12:10 - 12:59\nAll other times are read as two numbers - the hour, the minutes.\nIn the conversation, Chloe says that her favorite restaurant opens at:\n11:30 = eleven thirty\n## QUICK PRACTICE\n## AM & PM\nTelling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:\nAM = midnight (12:00) to lunchtime (11:59)\nPM = lunchtime (12:00) to midnight (11:59)\nThe hours go from 1 to 12.\nNoon & midnight\nFrank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?\nIt would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example:\nLet’s meet at the park at noon.\nI always sleep at midnight.\nDon’t use military time\nWhile many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock)."
       },
       {
         "type": "extra_tip",
@@ -18394,7 +19773,7 @@
         "items": [
           {
             "phrase": "LET’S SEE",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Let’s see\nSaid when you’re trying to remember something or are thinking carefully\nNext Sunday, let’s see, I’ve got to pick up my sister from the airport.\nLet’s see, how long did it take to get to Vegas last time?",
             "content_jsonb": [
@@ -18415,7 +19794,9 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -18453,7 +19834,9 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
@@ -18472,13 +19855,15 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               }
             ]
           },
           {
             "phrase": "COME BACK",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Come back\nTo return to a place\nI want to come back to Thailand next year.\nWhat time did you come back last night?",
             "content_jsonb": [
@@ -18499,7 +19884,9 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 4,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -18537,7 +19924,9 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 5,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
@@ -18556,13 +19945,15 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 6,
+                "audio_section": "phrases_verbs"
               }
             ]
           },
           {
             "phrase": "SURE!",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "Sure!\nAn enthusiastic way of saying ‘Yes’\nLuke: Could you help me translate these sentences into Thai?\nPailin: Sure!\nSee more uses of ‘Sure’",
             "content_jsonb": [
@@ -18583,7 +19974,9 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 7,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -18621,7 +20014,9 @@
                 "lesson_context_norm": "LESSON 1.15: What time is it?",
                 "lesson_context_en": "LESSON 1.15: What time is it?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 8,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -18671,7 +20066,7 @@
       "time",
       "clock",
       "numbers",
-      "what time is it?"
+      "what time is it"
     ],
     "pinned_comment": "What time is it right now for you?"
   },
@@ -18689,7 +20084,7 @@
       {
         "sort_order": 1,
         "speaker": "Frank",
-        "line_text": "Pailin, are you excited for the weekend?",
+        "line_text": "Hey Pailin, are you excited for the weekend?",
         "indent": 0
       },
       {
@@ -18815,7 +20210,7 @@
       },
       {
         "kind": "sentence_transform",
-        "title": "PRACTICE ‘IS…?’",
+        "title": "PRACTICE ‘IS…?’ QUESTIONS",
         "prompt": "Make the affirmative sentences into questions.",
         "paragraph": "",
         "items": [
@@ -18937,7 +20332,7 @@
       {
         "type": "apply",
         "sort_order": 1,
-        "content": "In the conversation, Frank asks Pailin if she’s tired. Imagine you’ve just finished exercising with a friend. It’s around lunchtime. What can you ask her? Begin your question with ‘Are you…?’"
+        "content": "In the conversation, Frank asks Pailin if she’s tired.\nImagine you’ve just finished exercising with a friend. It’s around lunchtime. What can you ask her? Begin your question with ‘Are you…?’"
       },
       {
         "type": "understand",
@@ -19161,7 +20556,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "(To-be verb) (subject) (object).",
+                "text": "[To-be verb] [subject] [object].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -19294,9 +20689,15 @@
             "level": null,
             "inlines": [
               {
-                "text": "Are you excited for the weekend? (adjective)",
+                "text": "Are you excited for the weekend? ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -19315,9 +20716,15 @@
             "level": null,
             "inlines": [
               {
-                "text": "Are you tired? (adjective)",
+                "text": "Are you tired?",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": " (adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -19336,9 +20743,15 @@
             "level": null,
             "inlines": [
               {
-                "text": "Is In-N-Out near the hotel? (prepositional phrase)",
+                "text": "Is In-N-Out near the hotel?",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": " (prepositional phrase)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -19357,9 +20770,15 @@
             "level": null,
             "inlines": [
               {
-                "text": "Is it usually busy? (adjective)",
+                "text": "Is it usually busy? ",
                 "bold": false,
                 "italic": false,
+                "underline": false
+              },
+              {
+                "text": "(adjective)",
+                "bold": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -19663,19 +21082,19 @@
               [
                 "Am",
                 "I",
-                "(object)?",
+                "[object]?",
                 "Am I tall?"
               ],
               [
                 "Are",
                 "you\nwe\nthey\n2+ nouns",
-                "(object)?",
+                "[object]?",
                 "Are you an engineer?\nAre we at the bus stop?\nAre they angry?\nAre Pailin and Chloe tired?"
               ],
               [
                 "Is",
                 "he\nshe\nit\nnoun",
-                "(object)?",
+                "[object]?",
                 "Is he from New York?\nIs she at the store?\nIs it good?\nIs Emily a good dancer?"
               ]
             ],
@@ -20090,7 +21509,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to ask questions with to-be verbs\nSo far, you’ve learned how to make affirmative and negative sentences using the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make questions with these verbs.\n## TO-BE VERB QUESTIONS\nIn the conversation, Frank asks Pailin:\nAre you tired?\nCompare the question with this related affirmative sentence:\nYou are tired.\nDo you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question.\nTo-be question structure\nAll to-be verb questions follow this pattern:\n(To-be verb) (subject) (object).\nAs you might recall, the ‘object’ of the sentence can be one of these three things:\n- adjectives\n- prepositional phrases\n- noun OR noun phrases\nExamples\nTake a look at all the ‘to-be’ questions from the conversation:\nAre you excited for the weekend? (adjective)\nAre you tired? (adjective)\nIs In-N-Out near the hotel? (prepositional phrase)\nIs it usually busy? (adjective)\nEach of these questions follows the pattern above. For example:\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\nTurning questions into sentences\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\nYou are excited for the weekend.\nYou are tired.\nIn-N-Out is near the hotel.\nIt is usually busy.\n## STRUCTURE\nRemember that in questions, the to-be verb comes first.\nHere is the structure of questions using ‘am · are · is’, with examples:\n## TABLE-2:\n## TABLE-2:\nYES/NO QUESTIONS\nA question like ‘Are you tired?’ is called a ‘yes/no question.’ That means you can answer it with a simple ‘Yes’ or ‘No’ answer.\nYeah\n‘Yes’ is an affirmative answer, but in casual conversation, either of these words is used more often:\nYeah\nYep\nNo\n‘No’ is a negative answer. Either of these words can be used in casual conversation, although ‘no’ is used the most often by far:\nNo\nNope\nListen to the conversation\nRelisten to the conversation and take note of the responses:\nFrank: Are you excited for the weekend?\nPailin: Yeah!\nFrank: Are you tired?\nPailin: No.\nPailin: Is In-N-Out near the hotel?\nFrank: Yep.\nPailin: Is it usually busy?\nFrank: Yeah.\n‘Yeah,’ ‘yep,’ and ‘no’ are the responses used, as they sound the most natural in everyday conversation. ‘Yes’ is perfectly fine, but it can sound a bit stiff in informal settings."
+        "content": "## LESSON FOCUS\nHow to ask questions with to-be verbs\nSo far, you’ve learned how to make affirmative and negative sentences using the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make questions with these verbs.\n## TO-BE VERB QUESTIONS\nIn the conversation, Frank asks Pailin:\nAre you tired?\nCompare the question with this related affirmative sentence:\nYou are tired.\nDo you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question.\nTo-be question structure\nAll to-be verb questions follow this pattern:\n[To-be verb] [subject] [object].\nAs you might recall, the ‘object’ of the sentence can be one of these three things:\n- adjectives\n- prepositional phrases\n- noun OR noun phrases\nExamples\nTake a look at all the ‘to-be’ questions from the conversation:\nAre you excited for the weekend? (adjective)\nAre you tired? (adjective)\nIs In-N-Out near the hotel? (prepositional phrase)\nIs it usually busy? (adjective)\nEach of these questions follows the pattern above. For example:\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\nTurning questions into sentences\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\nYou are excited for the weekend.\nYou are tired.\nIn-N-Out is near the hotel.\nIt is usually busy.\n## STRUCTURE\nRemember that in questions, the to-be verb comes first.\nHere is the structure of questions using ‘am · are · is’, with examples:\n## TABLE-2:\n## TABLE-2:\nYES/NO QUESTIONS\nA question like ‘Are you tired?’ is called a ‘yes/no question.’ That means you can answer it with a simple ‘Yes’ or ‘No’ answer.\nYeah\n‘Yes’ is an affirmative answer, but in casual conversation, either of these words is used more often:\nYeah\nYep\nNo\n‘No’ is a negative answer. Either of these words can be used in casual conversation, although ‘no’ is used the most often by far:\nNo\nNope\nListen to the conversation\nRelisten to the conversation and take note of the responses:\nFrank: Are you excited for the weekend?\nPailin: Yeah!\nFrank: Are you tired?\nPailin: No.\nPailin: Is In-N-Out near the hotel?\nFrank: Yep.\nPailin: Is it usually busy?\nFrank: Yeah.\n‘Yeah,’ ‘yep,’ and ‘no’ are the responses used, as they sound the most natural in everyday conversation. ‘Yes’ is perfectly fine, but it can sound a bit stiff in informal settings."
       },
       {
         "type": "extra_tip",
@@ -20179,10 +21598,16 @@
             "level": null,
             "inlines": [
               {
-                "text": "Pailin: Yeah, I am!",
+                "text": "Pailin: ",
                 "bold": false,
                 "italic": false,
                 "underline": false
+              },
+              {
+                "text": "Yeah, I am!",
+                "bold": false,
+                "italic": false,
+                "underline": true
               }
             ],
             "indent": 4,
@@ -20255,7 +21680,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Yeah, (subject) (to-be verb).",
+                "text": "Yeah, [subject] [to-be verb].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20274,7 +21699,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "No, (subject) (negative to-be verb).",
+                "text": "No, [subject] [negative to-be verb].",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20339,7 +21764,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Tyler: Yeah, I am.",
+                "text": "Luke: Yeah, ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "I am",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20379,7 +21816,31 @@
             "level": null,
             "inlines": [
               {
-                "text": "Tyler: No, she’s not. (or ‘No, she isn’t.’)",
+                "text": "Luke: No, ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "she’s not",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ". (or ‘No, ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "she isn’t.",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": "’)",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20419,7 +21880,19 @@
             "level": null,
             "inlines": [
               {
-                "text": "Tyler: Yep, they are.",
+                "text": "Luke: Yep, ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "they are",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": ".",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20459,7 +21932,31 @@
             "level": null,
             "inlines": [
               {
-                "text": "Tyler: No, you aren’t! (or ‘No, you’re not!’)",
+                "text": "Luke: No, ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "you aren’t",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": "! (or ‘No, ",
+                "bold": false,
+                "italic": false,
+                "underline": false
+              },
+              {
+                "text": "you’re not",
+                "bold": false,
+                "italic": false,
+                "underline": true
+              },
+              {
+                "text": "!’)",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20474,7 +21971,7 @@
             "section_context": "EXTRA TIPS"
           }
         ],
-        "content": "## SHORT FORM ANSWERS\n‘Yes/no’ questions require only a simple ‘yes’ or ‘no’ response. But these are short and abrupt one-word answers, so to keep the conversation flowing, sometimes a slightly longer ‘short answer’ will be given.\nTake a look at this exchange from the conversation:\nFrank: Are you excited for the weekend?\nPailin: Yeah, I am!\nA simple ‘Yeah’ would have been fine, but this short form answer offers a natural flow to the conversation.\nShort form structure\nTo answer these to-be verb questions with short form, you can use this structure:\nYeah, (subject) (to-be verb).\nNo, (subject) (negative to-be verb).\nExamples\nPailin: Are you at the market?\nTyler: Yeah, I am.\nPailin: Is she tired?\nTyler: No, she’s not. (or ‘No, she isn’t.’)\nPailin: Are they Thai?\nTyler: Yep, they are.\nPailin: Am I fat?\nTyler: No, you aren’t! (or ‘No, you’re not!’)"
+        "content": "## SHORT FORM ANSWERS\n‘Yes/no’ questions require only a simple ‘yes’ or ‘no’ response. But these are short and abrupt one-word answers, so to keep the conversation flowing, sometimes a slightly longer ‘short answer’ will be given.\nTake a look at this exchange from the conversation:\nFrank: Are you excited for the weekend?\nPailin: Yeah, I am!\nA simple ‘Yeah’ would have been fine, but this short form answer offers a natural flow to the conversation.\nShort form structure\nTo answer these to-be verb questions with short form, you can use this structure:\nYeah, [subject] [to-be verb].\nNo, [subject] [negative to-be verb].\nExamples\nPailin: Are you at the market?\nLuke: Yeah, I am.\nPailin: Is she tired?\nLuke: No, she’s not. (or ‘No, she isn’t.’)\nPailin: Are they Thai?\nLuke: Yep, they are.\nPailin: Am I fat?\nLuke: No, you aren’t! (or ‘No, you’re not!’)"
       },
       {
         "type": "common_mistake",
@@ -20580,7 +22077,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Is you an engineer? (X)",
+                "text": "Is you an engineer? [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20605,7 +22102,7 @@
                 "underline": true
               },
               {
-                "text": " an engineer? (✓)",
+                "text": " an engineer? [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20626,7 +22123,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Are he from New York? (X)",
+                "text": "Are he from New York? [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20651,7 +22148,7 @@
                 "underline": true
               },
               {
-                "text": " from New York? (✓)",
+                "text": " from New York? [✓]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -20668,7 +22165,7 @@
             "audio_section": "common_mistake"
           }
         ],
-        "content": "## MISTAKE #1\nThai people sometimes mix up when to use ‘Is’ and ‘Are’ in a question. Remember which verb goes with which pronoun:\nAre → you / we / they\nIs → he / she / it\nTake a look at the incorrect sentences and how to fix them:\nIs you an engineer? (X)\nAre you an engineer? (✓)\nAre he from New York? (X)\nIs he from New York? (✓)"
+        "content": "## MISTAKE #1\nThai people sometimes mix up when to use ‘Is’ and ‘Are’ in a question. Remember which verb goes with which pronoun:\nAre → you / we / they\nIs → he / she / it\nTake a look at the incorrect sentences and how to fix them:\nIs you an engineer? [X]\nAre you an engineer? [✓]\nAre he from New York? [X]\nIs he from New York? [✓]"
       },
       {
         "type": "phrases_verbs",
@@ -20676,16 +22173,16 @@
         "items": [
           {
             "phrase": "CHECK OUT",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
-            "content": "Check out (something) / check (something) out\nTo look at or examine a person or thing that seems interesting or attractive\nDo you wanna check out this new cafe that just opened down the street?\nEmily, check it out. This camera can take photos underwater!\nSee more uses of ‘Check out’",
+            "content": "Check out [something] / check [something] out\nTo look at or examine a person or thing that seems interesting or attractive\nDo you wanna check out this new cafe that just opened down the street?\nEmily, check it out. This camera can take photos underwater!\nSee more uses of ‘Check out’",
             "content_jsonb": [
               {
                 "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Check out (something) / check (something) out",
+                    "text": "Check out [something] / check [something] out",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -20697,7 +22194,9 @@
                 "lesson_context_norm": "LESSON 1.16: Is In-N-Out near the hotel?",
                 "lesson_context_en": "LESSON 1.16: Is In-N-Out near the hotel?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -20735,7 +22234,9 @@
                 "lesson_context_norm": "LESSON 1.16: Is In-N-Out near the hotel?",
                 "lesson_context_en": "LESSON 1.16: Is In-N-Out near the hotel?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
@@ -20754,7 +22255,9 @@
                 "lesson_context_norm": "LESSON 1.16: Is In-N-Out near the hotel?",
                 "lesson_context_en": "LESSON 1.16: Is In-N-Out near the hotel?",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -20977,7 +22480,7 @@
         "items": [
           {
             "phrase": "I SEE",
-            "variant": 1,
+            "variant": 0,
             "translation_th": "",
             "content": "I see\nI understand\nPailin: How did you know I work here?\nLuke: You told me the last time I saw you.\nPailin: Oh, I see.\nLuke: The reason your electricity isn't working is because someone turned off your circuit breaker.\nPailin: Oh, okay I see.",
             "content_jsonb": [
@@ -20998,7 +22501,9 @@
                 "lesson_context_norm": "CHECKPOINT 1",
                 "lesson_context_en": "CHECKPOINT 1",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -21036,7 +22541,9 @@
                 "lesson_context_norm": "CHECKPOINT 1",
                 "lesson_context_en": "CHECKPOINT 1",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",
@@ -21093,7 +22600,9 @@
                 "lesson_context_norm": "CHECKPOINT 1",
                 "lesson_context_en": "CHECKPOINT 1",
                 "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "paragraph",

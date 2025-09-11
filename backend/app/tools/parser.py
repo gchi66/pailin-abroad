@@ -71,6 +71,7 @@ AUDIO_SECTION_HEADERS = {
     "UNDERSTAND",
     "EXTRA TIPS",
     "APPLY",
+    "PHRASES & VERBS",
 }
 
 SECTION_TYPE_MAP = {
@@ -81,6 +82,7 @@ SECTION_TYPE_MAP = {
     "CULTURE NOTE": "culture_note",
     "PRACTICE": "practice",
     "PINNED COMMENT": "pinned_comment",
+    "PHRASES & VERBS": "phrases_verbs",
 }
 
 
@@ -171,18 +173,36 @@ def _lang_of_entry(e: dict) -> str:
 # ───────────────────────────── module-level bilingual helpers
 def split_en_th(line: str):
     if not line: return None, None
+    line = line.strip()
+
     # "EN (TH)" pattern
     m = re.match(r'^(.*?)\s*\(([\u0E00-\u0E7F].*?)\)\s*$', line)
     if m:
         en = m.group(1).strip() or None
         th = m.group(2).strip() or None
         return en, th
+
     # "EN … TH" pattern (first Thai char starts TH)
-    idx = next((i for i, ch in enumerate(line) if TH.match(ch)), -1)
-    if idx >= 0:
-        en = line[:idx].strip() or None
-        th = line[idx:].strip() or None
+    # Look for the first Thai character
+    thai_start = -1
+    for i, ch in enumerate(line):
+        if '\u0E00' <= ch <= '\u0E7F':  # Thai Unicode range
+            thai_start = i
+            break
+
+    if thai_start >= 0:
+        # Find a good split point - prefer splitting at word boundaries
+        # Look backwards from thai_start to find a space
+        split_point = thai_start
+        for i in range(thai_start - 1, -1, -1):
+            if line[i] == ' ':
+                split_point = i + 1
+                break
+
+        en = line[:split_point].strip() or None
+        th = line[split_point:].strip() or None
         return en, th
+
     # mono language
     if TH.search(line):
         return None, line.strip() or None
@@ -226,15 +246,18 @@ def bilingualize_headers_th(nodes, default_level=3):
                     out.append(n)
                     continue
 
-            # Your existing heading logic
+            # Your existing heading logic - apply bilingual split to ALL headings
             s = node_plain_text(n)
             en, th = split_en_th(s)
             if en or th:
-                out.append({
+                # Preserve all other properties from the original node
+                new_heading = {**n}
+                new_heading.update({
                     "kind": "heading",
                     "level": n.get("level", default_level),
                     "text": {"en": en, "th": th}
                 })
+                out.append(new_heading)
             else:
                 out.append(n)
             continue
@@ -587,6 +610,7 @@ class GoogleDocsParser:
                 })
         return transcript
 
+
     def parse_phrases_verbs(
         self,
         lines: List[Tuple[str, str]],
@@ -597,56 +621,97 @@ class GoogleDocsParser:
         """
         Parse PHRASES & VERBS section into an items array.
         Each item has:
-            phrase, variant, translation_th, content (plain),
-            and content_jsonb / content_jsonb_th preserving bullets and formatting.
+        phrase, phrase_th, variant, content (plain),
+        and content_jsonb / content_jsonb_th preserving bullets and formatting.
         """
-        items = []
-        current_phrase = None
-        current_variant = 1
-        current_translation = ""
+
+        import re
+
+        items: List[dict] = []
+        current_phrase: str | None = None
+        current_phrase_th: str | None = None  # Changed from current_translation
+        current_variant: int = 0
         node_buffer: list[dict] = []
         text_buffer: list[str] = []
 
-        header_re = re.compile(r"^(.*?)(?:\s*\[(\d+)\])?$")
+        # ---------------- regex helpers ----------------
+        TH_RX = re.compile(r"[\u0E00-\u0E7F]")              # Thai block
+        HEADER_TRAILING_VARIANT_RX = re.compile(r"\[\s*\d+\s*\]\s*$")  # [1], [ 2 ], etc.
 
-        # ---- helper to normalize text for matching ----
+        # ---------------- small utils ------------------
+        def _strip_bullets_tabs(s: str) -> str:
+            return re.sub(r"^[\t \-–—*•●▪◦·・►»]+", "", (s or "").strip())
+
+        def parse_phrase_and_variant(raw_header: str) -> tuple[str, str, int]:
+            """
+            Accept bilingual headers and bracketed variants, e.g.:
+            'COOL! เยี่ยมเลย [1]' -> phrase='COOL!', phrase_th='เยี่ยมเลย', variant=1
+            'COOL! [1] เยี่ยมเลย' -> phrase='COOL!', phrase_th='เยี่ยมเลย', variant=1
+            'LET'S SEE [1]'       -> phrase='LET'S SEE', phrase_th='', variant=1
+            'COOL! เยี่ยมเลย'     -> phrase='COOL!', phrase_th='เยี่ยมเลย', variant=0
+            """
+            s = _strip_bullets_tabs(raw_header.lstrip("#"))
+
+            # Extract variant first
+            m = re.search(r"\[\s*(\d+)\s*\]\s*$", s)
+            if m:
+                variant = int(m.group(1))
+                s = s[: m.start()].strip()
+            else:
+                variant = 0
+
+            # Now split English and Thai using the existing split_en_th function
+            en, th = split_en_th(s)
+            phrase = en or s  # fallback to original if no EN detected
+            phrase_th = th or ""
+
+            return phrase, phrase_th, variant
+
         def _norm(s: str) -> str:
             # Normalize soft breaks/newlines -> spaces
             s = (s or "").replace("\u000b", " ").replace("\n", " ")
-            # Remove any parenthetical that contains Thai chars (e.g., "(โอ้)", "(อะไรสักอย่าง)")
+            # Remove parentheticals that contain Thai/digits/punct (e.g., "(โอ้)")
             s = re.sub(r"\([\u0E00-\u0E7F0-9\s.,!?;:'\"-]*\)", "", s)
             # Collapse spaces
             s = re.sub(r"\s+", " ", s).strip()
-            # Strip leading bullet glyphs (several forms)
+            # Strip leading bullet glyphs
             s = re.sub(r"^[–—\-*•●▪◦·・►»]\s*", "", s)
             return s
 
         def _flush():
-            nonlocal current_phrase, current_variant, current_translation, node_buffer, text_buffer
-            if current_phrase is not None:
-                item = {
-                    "phrase": current_phrase,
-                    "variant": current_variant,
-                    "translation_th": current_translation.strip(),
-                    "content": "\n".join(text_buffer).strip(),
-                }
-                if lang == "th":
-                    item["content_jsonb_th"] = node_buffer
-                else:
-                    item["content_jsonb"] = node_buffer
-                items.append(item)
-        # Build STRICT (section-scoped) and FALLBACK (lesson-wide) maps
+            nonlocal current_phrase, current_phrase_th, current_variant, node_buffer, text_buffer
+            if current_phrase is None:
+                return
+            item = {
+                "phrase": current_phrase,
+                "phrase_th": current_phrase_th,  # Changed from translation_th
+                "variant": current_variant,
+                "content": "\n".join(text_buffer).strip(),
+            }
+            if lang == "th":
+                item["content_jsonb_th"] = node_buffer
+            else:
+                item["content_jsonb"] = node_buffer
+            items.append(item)
+            # reset state
+            current_phrase = None
+            current_phrase_th = None  # Changed from current_translation
+            current_variant = 0
+            node_buffer = []
+            text_buffer = []
+
+        # -------- build section-scoped and lesson-wide maps --------
         scoped_nodes: dict[str, list[dict]] = {}
         lesson_wide_nodes: dict[str, list[dict]] = {}
 
-        LKEY  = _lesson_key(lesson_header_raw)          # e.g., "1.14"
-        LCTXN = _norm_header_str(lesson_header_raw)     # tolerant string compare
+        LKEY = _lesson_key(lesson_header_raw)          # e.g. "1.16"
+        LCTXN = _norm_header_str(lesson_header_raw)    # tolerant compare
 
         for n in doc_nodes:
             if "inlines" not in n:
                 continue
 
-            # Prefer durable key match; fall back to normalized header compare
+            # prefer durable key, fall back to header string compare
             nk = n.get("lesson_key") or _lesson_key(n.get("lesson_context"))
             if LKEY and nk and nk != LKEY:
                 continue
@@ -667,6 +732,7 @@ class GoogleDocsParser:
             if n.get("section_context") == "PHRASES & VERBS":
                 scoped_nodes.setdefault(key, []).append(n)
 
+        # --------------------- node utilities ----------------------
         def _clone_node(n: dict) -> dict:
             c = n.copy()
             if "inlines" in c:
@@ -677,12 +743,14 @@ class GoogleDocsParser:
             # exact
             if bucket_map.get(key):
                 return bucket_map[key][0], key
-            # substring either direction (good for short titles/phrases)
+            # substring either direction
             for k, bucket in bucket_map.items():
                 if bucket and (key in k or k in key):
                     return bucket[0], k
             # lightweight fuzzy (word overlap)
-            best = None; best_k = None; best_score = 0.0
+            best = None
+            best_k = None
+            best_score = 0.0
             a = set(key.split())
             if not a:
                 return None, None
@@ -697,25 +765,30 @@ class GoogleDocsParser:
                     best, best_k, best_score = bucket[0], k, score
             return best, best_k
 
+        def _is_bullet_node(node: dict) -> bool:
+            if node.get("kind") == "list_item":
+                return True
+            if node.get("bullet"):
+                return True
+            if node.get("resolvedListGlyph", {}).get("glyphSymbol"):
+                return True
+            return False
+
         def _take_node(raw: str) -> dict | None:
             """Try to find the closest matching node for this raw text."""
             def _try_maps(norm_key: str) -> dict | None:
-                # 1) section-scoped (exact → substring → fuzzy)
+                # 1) section-scoped
                 chosen, k = _pick_with_fallback(scoped_nodes, norm_key)
                 if chosen:
-                    # PRESERVE THE ORIGINAL KIND - KEY FIX
                     result = _clone_node(chosen)
-                    # Ensure list_item kind is preserved from original node
                     if chosen.get("kind") == "list_item":
                         result["kind"] = "list_item"
-                        print(f"Found list_item: {result}")
                     scoped_nodes[k].remove(chosen)
                     return result
-                # 2) lesson-wide (exact → substring → fuzzy)
+                # 2) lesson-wide
                 chosen, k = _pick_with_fallback(lesson_wide_nodes, norm_key)
                 if chosen:
                     result = _clone_node(chosen)
-                    # Ensure list_item kind is preserved from original node
                     if chosen.get("kind") == "list_item":
                         result["kind"] = "list_item"
                     lesson_wide_nodes[k].remove(chosen)
@@ -727,8 +800,7 @@ class GoogleDocsParser:
             if hit:
                 return hit
 
-            # --- NEW: try splitting on line breaks (EN and TH often joined) ---
-            # e.g., "EN...\nTH..." or with \u000b
+            # split on newlines / soft breaks (EN+TH often combined)
             raw_parts = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
             for part in raw_parts:
                 part = part.strip()
@@ -738,10 +810,10 @@ class GoogleDocsParser:
                 if hit:
                     return hit
 
-            # --- NEW: try splitting at first Thai character boundary (EN | TH) ---
-            m = re.search(r"[\u0E00-\u0E7F]", raw or "")
+            # split at first Thai boundary (EN | TH)
+            m = TH_RX.search(raw or "")
             if m:
-                left = (raw[:m.start()] or "").strip()
+                left = (raw[: m.start()] or "").strip()
                 right = (raw[m.start():] or "").strip()
                 for piece in (left, right):
                     if piece:
@@ -752,81 +824,61 @@ class GoogleDocsParser:
             return None
 
         def _synth_node(kind: str, text: str, is_bullet: bool = False) -> dict:
-            # Use the actual bullet information if available
-            actual_kind = "list_item" if is_bullet else kind
             return {
-                "kind": actual_kind,
+                "kind": "list_item" if is_bullet else kind,
                 "level": None,
-                "inlines": [
-                    {"text": text, "bold": False, "italic": False, "underline": False}
-                ],
+                "inlines": [{"text": text, "bold": False, "italic": False, "underline": False}],
                 "indent": 0,
                 "lesson_context": lesson_header_raw,
                 "section_context": "PHRASES & VERBS",
             }
 
-        def _is_bullet_node(node: dict) -> bool:
-            """Check if a node represents a bullet point using multiple indicators"""
-            if node.get("kind") == "list_item":
-                return True
-            if node.get("bullet"):
-                return True
-            if node.get("resolvedListGlyph", {}).get("glyphSymbol"):
-                return True
-            return False
+        def looks_like_header(chunk: str, style: str) -> bool:
+            """
+            Treat as header if:
+            - your existing is_subheader() says so (styled/all-caps), OR
+            - it ends with [n] (variant marker).
+            """
+            s = _strip_bullets_tabs(chunk)
+            return bool(is_subheader(s, style) or HEADER_TRAILING_VARIANT_RX.search(s))
 
-        # ---- main loop over lines ----
+        # -------------------------- main loop --------------------------
         for raw_text, style in lines:
-            text = (raw_text or "").strip()
-            if not text:
+            if not raw_text:
                 continue
 
-            # new phrase heading
-            if is_subheader(text, style):
-                _flush()
-                match = header_re.match(text.lstrip("#").strip())
-                if match:
-                    current_phrase = match.group(1).strip()
-                    current_variant = int(match.group(2) or 1)
+            # Split so inline headers like "LET'S SEE [1]" don't get swallowed
+            for piece in re.split(r"(?:\u000b|\n)+", raw_text):
+                text = (piece or "").strip()
+                if not text:
+                    continue
+
+                # (styled/all-caps) OR (ends with [n]) → start new item
+                if looks_like_header(text, style):
+                    _flush()
+                    current_phrase, current_phrase_th, current_variant = parse_phrase_and_variant(text)
+                    node_buffer = []
+                    text_buffer = []
+                    continue
+
+                # Remove the old inline Thai translation handling since we now split in the header
+                # if text.startswith("[TH]"):
+                #     current_translation = text[4:].strip()
+                #     continue
+
+                # normal line → try to attach real node
+                text_buffer.append(text)
+                node = _take_node(text)
+                if node is not None:
+                    if _is_bullet_node(node):
+                        node["kind"] = "list_item"
+                    node_buffer.append(node)
                 else:
-                    current_phrase = text.lstrip("#").strip()
-                    current_variant = 1
-                current_translation = ""
-                node_buffer = []
-                text_buffer = []
-                continue
+                    # fallback: infer bulletness by scanning buckets
+                    is_bullet = False
+                    norm_text = _norm(text)
 
-            # inline Thai translation line
-            if text.startswith("[TH]"):
-                current_translation = text[4:].strip()
-                continue
-
-            # normal line → try to attach real node
-            text_buffer.append(text)
-            node = _take_node(text)
-            if node is not None:
-                # Ensure bullet nodes are properly marked as list_item
-                if _is_bullet_node(node):
-                    node["kind"] = "list_item"
-                node_buffer.append(node)
-            else:
-                # BETTER FALLBACK: Check if this should be a bullet by looking at original nodes
-                is_bullet = False
-                norm_text = _norm(text)
-
-                # Check scoped nodes first
-                for node_list in scoped_nodes.values():
-                    for n in node_list:
-                        node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
-                        if _norm(node_text) == norm_text and _is_bullet_node(n):
-                            is_bullet = True
-                            break
-                    if is_bullet:
-                        break
-
-                # Check lesson-wide nodes if not found
-                if not is_bullet:
-                    for node_list in lesson_wide_nodes.values():
+                    for node_list in scoped_nodes.values():
                         for n in node_list:
                             node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
                             if _norm(node_text) == norm_text and _is_bullet_node(n):
@@ -835,13 +887,26 @@ class GoogleDocsParser:
                         if is_bullet:
                             break
 
-                node_buffer.append(_synth_node("paragraph", text, is_bullet))
+                    if not is_bullet:
+                        for node_list in lesson_wide_nodes.values():
+                            for n in node_list:
+                                node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
+                                if _norm(node_text) == norm_text and _is_bullet_node(n):
+                                    is_bullet = True
+                                    break
+                            if is_bullet:
+                                break
+
+                    node_buffer.append(_synth_node("paragraph", text, is_bullet))
 
         # flush last item
         _flush()
         return items
 
 
+
+
+    ################################################################################
     def build_lesson_from_sections(
         self,
         lesson_sections: list[tuple[str, list[tuple[str, str]]]],
