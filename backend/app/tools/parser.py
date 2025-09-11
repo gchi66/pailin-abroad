@@ -624,18 +624,17 @@ class GoogleDocsParser:
         phrase, phrase_th, variant, content (plain),
         and content_jsonb / content_jsonb_th preserving bullets and formatting.
         """
-
         import re
 
         items: List[dict] = []
         current_phrase: str | None = None
-        current_phrase_th: str | None = None  # Changed from current_translation
+        current_phrase_th: str | None = None
         current_variant: int = 0
         node_buffer: list[dict] = []
         text_buffer: list[str] = []
 
         # ---------------- regex helpers ----------------
-        TH_RX = re.compile(r"[\u0E00-\u0E7F]")              # Thai block
+        TH_RX = re.compile(r"[\u0E00-\u0E7F]")                 # Thai block
         HEADER_TRAILING_VARIANT_RX = re.compile(r"\[\s*\d+\s*\]\s*$")  # [1], [ 2 ], etc.
 
         # ---------------- small utils ------------------
@@ -645,37 +644,28 @@ class GoogleDocsParser:
         def parse_phrase_and_variant(raw_header: str) -> tuple[str, str, int]:
             """
             Accept bilingual headers and bracketed variants, e.g.:
-            'COOL! เยี่ยมเลย [1]' -> phrase='COOL!', phrase_th='เยี่ยมเลย', variant=1
-            'COOL! [1] เยี่ยมเลย' -> phrase='COOL!', phrase_th='เยี่ยมเลย', variant=1
-            'LET'S SEE [1]'       -> phrase='LET'S SEE', phrase_th='', variant=1
-            'COOL! เยี่ยมเลย'     -> phrase='COOL!', phrase_th='เยี่ยมเลย', variant=0
+            'COOL! เยี่ยมเลย [1]' -> ('COOL!', 'เยี่ยมเลย', 1)
+            'COOL! [1] เยี่ยมเลย' -> ('COOL!', 'เยี่ยมเลย', 1)
+            "LET'S SEE [1]"       -> ("LET'S SEE", '', 1)
+            'COOL! เยี่ยมเลย'     -> ('COOL!', 'เยี่ยมเลย', 0)
             """
             s = _strip_bullets_tabs(raw_header.lstrip("#"))
-
-            # Extract variant first
             m = re.search(r"\[\s*(\d+)\s*\]\s*$", s)
             if m:
                 variant = int(m.group(1))
                 s = s[: m.start()].strip()
             else:
                 variant = 0
-
-            # Now split English and Thai using the existing split_en_th function
-            en, th = split_en_th(s)
-            phrase = en or s  # fallback to original if no EN detected
+            en, th = split_en_th(s)  # your existing helper
+            phrase = en or s
             phrase_th = th or ""
-
             return phrase, phrase_th, variant
 
         def _norm(s: str) -> str:
-            # Normalize soft breaks/newlines -> spaces
             s = (s or "").replace("\u000b", " ").replace("\n", " ")
-            # Remove parentheticals that contain Thai/digits/punct (e.g., "(โอ้)")
-            s = re.sub(r"\([\u0E00-\u0E7F0-9\s.,!?;:'\"-]*\)", "", s)
-            # Collapse spaces
+            s = re.sub(r"\([\u0E00-\u0E7F0-9\s.,!?;:'\"-]*\)", "", s)  # drop Thai-ish parens
             s = re.sub(r"\s+", " ", s).strip()
-            # Strip leading bullet glyphs
-            s = re.sub(r"^[–—\-*•●▪◦·・►»]\s*", "", s)
+            s = re.sub(r"^[–—\-*•●▪◦·・►»]\s*", "", s)  # strip leading bullets
             return s
 
         def _flush():
@@ -684,7 +674,7 @@ class GoogleDocsParser:
                 return
             item = {
                 "phrase": current_phrase,
-                "phrase_th": current_phrase_th,  # Changed from translation_th
+                "phrase_th": current_phrase_th,
                 "variant": current_variant,
                 "content": "\n".join(text_buffer).strip(),
             }
@@ -693,9 +683,9 @@ class GoogleDocsParser:
             else:
                 item["content_jsonb"] = node_buffer
             items.append(item)
-            # reset state
+            # reset
             current_phrase = None
-            current_phrase_th = None  # Changed from current_translation
+            current_phrase_th = None
             current_variant = 0
             node_buffer = []
             text_buffer = []
@@ -704,14 +694,13 @@ class GoogleDocsParser:
         scoped_nodes: dict[str, list[dict]] = {}
         lesson_wide_nodes: dict[str, list[dict]] = {}
 
-        LKEY = _lesson_key(lesson_header_raw)          # e.g. "1.16"
+        LKEY = _lesson_key(lesson_header_raw)          # e.g., "1.16"
         LCTXN = _norm_header_str(lesson_header_raw)    # tolerant compare
 
         for n in doc_nodes:
             if "inlines" not in n:
                 continue
 
-            # prefer durable key, fall back to header string compare
             nk = n.get("lesson_key") or _lesson_key(n.get("lesson_context"))
             if LKEY and nk and nk != LKEY:
                 continue
@@ -725,10 +714,7 @@ class GoogleDocsParser:
             if not key:
                 continue
 
-            # lesson-wide bucket (fallback)
             lesson_wide_nodes.setdefault(key, []).append(n)
-
-            # section-scoped bucket (first choice)
             if n.get("section_context") == "PHRASES & VERBS":
                 scoped_nodes.setdefault(key, []).append(n)
 
@@ -740,17 +726,12 @@ class GoogleDocsParser:
             return c
 
         def _pick_with_fallback(bucket_map: dict[str, list[dict]], key: str) -> tuple[dict | None, str | None]:
-            # exact
             if bucket_map.get(key):
                 return bucket_map[key][0], key
-            # substring either direction
             for k, bucket in bucket_map.items():
                 if bucket and (key in k or k in key):
                     return bucket[0], k
-            # lightweight fuzzy (word overlap)
-            best = None
-            best_k = None
-            best_score = 0.0
+            best = None; best_k = None; best_score = 0.0
             a = set(key.split())
             if not a:
                 return None, None
@@ -766,18 +747,14 @@ class GoogleDocsParser:
             return best, best_k
 
         def _is_bullet_node(node: dict) -> bool:
-            if node.get("kind") == "list_item":
-                return True
-            if node.get("bullet"):
-                return True
-            if node.get("resolvedListGlyph", {}).get("glyphSymbol"):
-                return True
-            return False
+            return bool(
+                node.get("kind") == "list_item"
+                or node.get("bullet")
+                or node.get("resolvedListGlyph", {}).get("glyphSymbol")
+            )
 
         def _take_node(raw: str) -> dict | None:
-            """Try to find the closest matching node for this raw text."""
             def _try_maps(norm_key: str) -> dict | None:
-                # 1) section-scoped
                 chosen, k = _pick_with_fallback(scoped_nodes, norm_key)
                 if chosen:
                     result = _clone_node(chosen)
@@ -785,7 +762,6 @@ class GoogleDocsParser:
                         result["kind"] = "list_item"
                     scoped_nodes[k].remove(chosen)
                     return result
-                # 2) lesson-wide
                 chosen, k = _pick_with_fallback(lesson_wide_nodes, norm_key)
                 if chosen:
                     result = _clone_node(chosen)
@@ -800,17 +776,14 @@ class GoogleDocsParser:
             if hit:
                 return hit
 
-            # split on newlines / soft breaks (EN+TH often combined)
-            raw_parts = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
-            for part in raw_parts:
-                part = part.strip()
-                if not part:
+            for part in re.split(r"(?:\u000b|\n)+", (raw or "").strip()):
+                p = part.strip()
+                if not p:
                     continue
-                hit = _try_maps(_norm(part))
+                hit = _try_maps(_norm(p))
                 if hit:
                     return hit
 
-            # split at first Thai boundary (EN | TH)
             m = TH_RX.search(raw or "")
             if m:
                 left = (raw[: m.start()] or "").strip()
@@ -820,7 +793,6 @@ class GoogleDocsParser:
                         hit = _try_maps(_norm(piece))
                         if hit:
                             return hit
-
             return None
 
         def _synth_node(kind: str, text: str, is_bullet: bool = False) -> dict:
@@ -833,38 +805,59 @@ class GoogleDocsParser:
                 "section_context": "PHRASES & VERBS",
             }
 
-        def looks_like_header(chunk: str, style: str) -> bool:
+        def looks_like_header(chunk: str, style: str, piece_index: int) -> bool:
             """
             Treat as header if:
-            - your existing is_subheader() says so (styled/all-caps), OR
-            - it ends with [n] (variant marker).
+            - ends with [n], OR
+            - (first piece only) text is ALL CAPS (ignoring Thai) and short/title-ish.
             """
             s = _strip_bullets_tabs(chunk)
-            return bool(is_subheader(s, style) or HEADER_TRAILING_VARIANT_RX.search(s))
+
+            # 1) Explicit variant marker always wins
+            if HEADER_TRAILING_VARIANT_RX.search(s):
+                return True
+
+            # Only the first split piece may be checked for ALL CAPS header
+            if piece_index > 0:
+                return False
+
+            # Remove Thai for EN-only check
+            ascii_only = TH_RX.sub("", s).strip()
+            if not ascii_only:
+                return False
+
+            # Must have at least one A–Z, and NO lowercase letters
+            if not re.search(r"[A-Z]", ascii_only):
+                return False
+            if re.search(r"[a-z]", ascii_only):
+                return False
+
+            # Token/length heuristics
+            tokens = re.findall(r"[A-Z0-9'&]+", ascii_only)
+            if not (1 <= len(tokens) <= 8):
+                return False
+            if len(ascii_only) > 50:
+                return False
+
+            return True
 
         # -------------------------- main loop --------------------------
         for raw_text, style in lines:
             if not raw_text:
                 continue
 
-            # Split so inline headers like "LET'S SEE [1]" don't get swallowed
-            for piece in re.split(r"(?:\u000b|\n)+", raw_text):
+            pieces = re.split(r"(?:\u000b|\n)+", raw_text)
+            for i, piece in enumerate(pieces):
                 text = (piece or "").strip()
                 if not text:
                     continue
 
-                # (styled/all-caps) OR (ends with [n]) → start new item
-                if looks_like_header(text, style):
+                if looks_like_header(text, style, i):
                     _flush()
                     current_phrase, current_phrase_th, current_variant = parse_phrase_and_variant(text)
                     node_buffer = []
                     text_buffer = []
                     continue
-
-                # Remove the old inline Thai translation handling since we now split in the header
-                # if text.startswith("[TH]"):
-                #     current_translation = text[4:].strip()
-                #     continue
 
                 # normal line → try to attach real node
                 text_buffer.append(text)
@@ -874,7 +867,6 @@ class GoogleDocsParser:
                         node["kind"] = "list_item"
                     node_buffer.append(node)
                 else:
-                    # fallback: infer bulletness by scanning buckets
                     is_bullet = False
                     norm_text = _norm(text)
 
@@ -899,7 +891,6 @@ class GoogleDocsParser:
 
                     node_buffer.append(_synth_node("paragraph", text, is_bullet))
 
-        # flush last item
         _flush()
         return items
 

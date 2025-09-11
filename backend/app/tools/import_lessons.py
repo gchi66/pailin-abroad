@@ -229,46 +229,68 @@ def upsert_lesson(data, lang="en", dry_run=False):
 
 
 def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
+    """
+    EN path: upsert speaker + line_text.
+    TH path: update speaker_th + line_text_th; if no row, insert with EN placeholders.
+    """
     for line in transcript:
         key = {"lesson_id": lesson_id, "sort_order": line["sort_order"]}
 
         if lang == "en":
-            record = {**key,
-                      "speaker": line.get("speaker", ""),
-                      "line_text": line.get("line_text", "")}
+            record = {
+                **key,
+                # ensure NOT NULL columns are always present
+                "speaker": (line.get("speaker") or "").strip(),
+                "line_text": (line.get("line_text") or "").strip(),
+            }
             if dry_run:
                 print(f"[DRY RUN] Transcript EN UPSERT: {record}")
                 continue
+
             (supabase.table("transcript_lines")
              .upsert(record, on_conflict="lesson_id,sort_order")
              .execute())
             continue
 
-        # TH path: update-only; insert if missing
+        # ---------- TH path ----------
+        # Only include TH fields actually provided (avoid overwriting with None)
         th_update = {}
-        if "speaker_th" in line:   th_update["speaker_th"]   = line["speaker_th"]
-        if "line_text_th" in line: th_update["line_text_th"] = line["line_text_th"]
+        if "speaker_th" in line:
+            th_update["speaker_th"] = (line["speaker_th"] or "").strip()
+        if "line_text_th" in line:
+            th_update["line_text_th"] = (line["line_text_th"] or "").strip()
+
+        if not th_update:
+            if dry_run:
+                print(f"[DRY RUN] Transcript TH SKIP (no TH fields) for {key}")
+            continue
 
         if dry_run:
             print(f"[DRY RUN] Transcript TH UPDATE where {key} set {th_update}")
-            print(f"[DRY RUN] (if no row, INSERT { {**key, **th_update} })")
+            print(f"[DRY RUN] (if no row, INSERT { {**key, 'speaker': '', 'line_text': '', **th_update} })")
             continue
 
+        # Try to UPDATE existing row and ask PostgREST to return matched rows.
         upd = (supabase.table("transcript_lines")
-               .update(th_update)
+               .update(th_update, returning="representation")  # ensures .data contains updated rows
                .eq("lesson_id", lesson_id)
                .eq("sort_order", line["sort_order"])
                .execute())
+
         rows = upd.data or []
+
         if len(rows) == 0:
-            # Insert minimal row but supply NOT NULL EN columns with safe placeholders
+            # No existing row: INSERT with safe placeholders for NOT NULL EN columns.
             ins_record = {
                 **key,
-                "speaker": line.get("speaker", "") or "",      # satisfy NOT NULL
-                "line_text": line.get("line_text", "") or "",  # satisfy NOT NULL
-                **th_update,                                   # speaker_th / line_text_th
+                "speaker": (line.get("speaker") or "").strip(),     # placeholders OK
+                "line_text": (line.get("line_text") or "").strip(), # placeholders OK
+                **th_update,
             }
-            (supabase.table("transcript_lines").insert(ins_record).execute())
+            (supabase.table("transcript_lines")
+             .insert(ins_record)
+             .execute())
+
 
 
 
@@ -439,10 +461,8 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                             updates["content_jsonb_th"] = nodes_payload
                         if text_fallback:
                             updates["content_th"] = text_fallback
-                        if phrase_th is not None:
+                        if phrase_th is not None and phrase_th.strip():
                             updates["phrase_th"] = phrase_th
-                        if notes_th is not None:
-                            updates["notes_th"] = notes_th
 
                     if updates:
                         if dry_run:
@@ -462,17 +482,14 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                             insert_payload["content_jsonb"] = nodes_payload
                         if text_fallback:
                             insert_payload["content"] = text_fallback
-                        if notes is not None:
-                            insert_payload["notes"] = notes
+
                     else:  # th
                         if nodes_payload:
                             insert_payload["content_jsonb_th"] = nodes_payload
                         if text_fallback:
                             insert_payload["content_th"] = text_fallback
-                        if phrase_th is not None:
+                        if phrase_th is not None and phrase_th.strip():
                             insert_payload["phrase_th"] = phrase_th
-                        if notes_th is not None:
-                            insert_payload["notes_th"] = notes_th
 
                     if dry_run:
                         print("[DRY RUN] Insert phrases:", insert_payload)

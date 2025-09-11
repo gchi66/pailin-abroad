@@ -6765,8 +6765,8 @@
         "items": [
           {
             "phrase": "OH!",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Oh!\nSaid when you are pleasantly surprised about something\nPailin: I baked this cake for you.\nLuke: Oh, it looks so good! Thank you!\nSee more uses of ‘Oh’",
             "content_jsonb": [
               {
@@ -8126,8 +8126,8 @@
         "items": [
           {
             "phrase": "HERE",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Here\nUsed to offer something to someone, like ‘Take this’\nLuke: My breath stinks.\nPailin: Here, I have some gum.\nPailin: I can’t find my blue pen.\nLuke: Here, you can use mine.",
             "content_jsonb": [
               {
@@ -8189,6 +8189,48 @@
                 "lesson_context_th": null,
                 "section_context": "PHRASES & VERBS",
                 "audio_seq": 2,
+                "audio_section": "phrases_verbs"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Here",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.8: Thanks, I made it",
+                "lesson_key": "1.8",
+                "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_en": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 1,
+                "audio_section": "phrases_verbs"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
+                    "text": "Pailin: I can’t find my blue pen.\u000bLuke: Here, you can use mine.",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.8: Thanks, I made it",
+                "lesson_key": "1.8",
+                "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_en": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
                 "audio_section": "phrases_verbs"
               },
               {
@@ -12756,8 +12798,8 @@
         "items": [
           {
             "phrase": "NICE!",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Nice!\nA positive expression to show enthusiasm or approval\nLuke: I applied for a few jobs today.\nPailin: Nice! I’m sure you’ll get one.\nLuke: I found some nice AirBnBs for our trip to Mexico City.\nPailin: Nice! Send them to me and I’ll take a look at them.",
             "content_jsonb": [
               {
@@ -12884,8 +12926,8 @@
           },
           {
             "phrase": "OH!",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "",
             "content_jsonb": []
           }
@@ -13840,8 +13882,8 @@
         "items": [
           {
             "phrase": "WOW",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Wow\nUsed to show surprise or admiration\nWow! This cake is beautiful. Did you make it all by yourself?\nSee more uses of ‘Wow’",
             "content_jsonb": [
               {
@@ -13934,8 +13976,8 @@
           },
           {
             "phrase": "COOL!",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Cool!\nAn informal way of saying ‘That’s great’\nLuke: I just got tickets to the concert!\nPailin: Cool! I’m so excited.\nPailin: We’re bringing a pie to the potluck.\nLuke: Cool, what kind of pie are you bringing?",
             "content_jsonb": [
               {
@@ -14004,6 +14046,27 @@
                 "level": null,
                 "inlines": [
                   {
+                    "text": "Cool!",
+                    "bold": false,
+                    "italic": false,
+                    "underline": false
+                  }
+                ],
+                "indent": 0,
+                "lesson_context": "LESSON 1.11: Where are you from?",
+                "lesson_key": "1.11",
+                "lesson_context_norm": "LESSON 1.11: Where are you from?",
+                "lesson_context_en": "LESSON 1.11: Where are you from?",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
+              },
+              {
+                "kind": "list_item",
+                "level": null,
+                "inlines": [
+                  {
                     "text": "Pailin: We’re bringing a pie to the potluck.\u000bLuke: Cool, what kind of pie are you bringing?",
                     "bold": false,
                     "italic": false,
@@ -14019,21 +14082,13 @@
                 "section_context": "PHRASES & VERBS",
                 "audio_seq": 5,
                 "audio_section": "phrases_verbs"
-              }
-            ]
-          },
-          {
-            "phrase": "WOW",
-            "variant": 1,
-            "translation_th": "",
-            "content": "Wow\nUsed to show surprise or admiration\nWow! This cake is beautiful. Did you make it all by yourself?\nSee more uses of ‘Wow’",
-            "content_jsonb": [
+              },
               {
                 "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Wow",
+                    "text": "Pailin: We’re bringing a pie to the potluck.\u000bLuke: Cool, what kind of pie are you bringing?",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -14046,79 +14101,8 @@
                 "lesson_context_en": "LESSON 1.11: Where are you from?",
                 "lesson_context_th": null,
                 "section_context": "PHRASES & VERBS",
-                "audio_seq": 6,
+                "audio_seq": 5,
                 "audio_section": "phrases_verbs"
-              },
-              {
-                "kind": "paragraph",
-                "level": null,
-                "inlines": [
-                  {
-                    "text": "Used to show surprise or admiration",
-                    "bold": false,
-                    "italic": false,
-                    "underline": false
-                  }
-                ],
-                "indent": 0,
-                "lesson_context": "LESSON 1.11: Where are you from?",
-                "lesson_key": "1.11",
-                "lesson_context_norm": "LESSON 1.11: Where are you from?",
-                "lesson_context_en": "LESSON 1.11: Where are you from?",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
-              },
-              {
-                "kind": "list_item",
-                "level": null,
-                "inlines": [
-                  {
-                    "text": "Wow! This cake is beautiful. Did you make it all by yourself?",
-                    "bold": false,
-                    "italic": false,
-                    "underline": false
-                  }
-                ],
-                "indent": 0,
-                "lesson_context": "LESSON 1.11: Where are you from?",
-                "lesson_key": "1.11",
-                "lesson_context_norm": "LESSON 1.11: Where are you from?",
-                "lesson_context_en": "LESSON 1.11: Where are you from?",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS",
-                "audio_seq": 7,
-                "audio_section": "phrases_verbs"
-              },
-              {
-                "kind": "paragraph",
-                "level": null,
-                "inlines": [
-                  {
-                    "text": "\t",
-                    "bold": false,
-                    "italic": false,
-                    "underline": false
-                  },
-                  {
-                    "text": "See more uses of ‘Wow’",
-                    "bold": false,
-                    "italic": false,
-                    "underline": true
-                  },
-                  {
-                    "text": "",
-                    "bold": false,
-                    "italic": false,
-                    "underline": false
-                  }
-                ],
-                "indent": 0,
-                "lesson_context": "LESSON 1.11: Where are you from?",
-                "lesson_key": "1.11",
-                "lesson_context_norm": "LESSON 1.11: Where are you from?",
-                "lesson_context_en": "LESSON 1.11: Where are you from?",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS"
               }
             ]
           }
@@ -18350,15 +18334,15 @@
         "items": [
           {
             "phrase": "HERE",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "",
             "content_jsonb": []
           },
           {
             "phrase": "LOOK FOR",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Look for\nTo try to find or search for something\nI’ve been looking for a new job, but not many places are hiring.\nI’m looking for my keys. Have you seen them?",
             "content_jsonb": [
               {
@@ -19773,8 +19757,8 @@
         "items": [
           {
             "phrase": "LET’S SEE",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Let’s see\nSaid when you’re trying to remember something or are thinking carefully\nNext Sunday, let’s see, I’ve got to pick up my sister from the airport.\nLet’s see, how long did it take to get to Vegas last time?",
             "content_jsonb": [
               {
@@ -19863,8 +19847,8 @@
           },
           {
             "phrase": "COME BACK",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Come back\nTo return to a place\nI want to come back to Thailand next year.\nWhat time did you come back last night?",
             "content_jsonb": [
               {
@@ -19953,8 +19937,8 @@
           },
           {
             "phrase": "SURE!",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Sure!\nAn enthusiastic way of saying ‘Yes’\nLuke: Could you help me translate these sentences into Thai?\nPailin: Sure!\nSee more uses of ‘Sure’",
             "content_jsonb": [
               {
@@ -22173,8 +22157,8 @@
         "items": [
           {
             "phrase": "CHECK OUT",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "Check out [something] / check [something] out\nTo look at or examine a person or thing that seems interesting or attractive\nDo you wanna check out this new cafe that just opened down the street?\nEmily, check it out. This camera can take photos underwater!\nSee more uses of ‘Check out’",
             "content_jsonb": [
               {
@@ -22480,8 +22464,8 @@
         "items": [
           {
             "phrase": "I SEE",
+            "phrase_th": "",
             "variant": 0,
-            "translation_th": "",
             "content": "I see\nI understand\nPailin: How did you know I work here?\nLuke: You told me the last time I saw you.\nPailin: Oh, I see.\nLuke: The reason your electricity isn't working is because someone turned off your circuit breaker.\nPailin: Oh, okay I see.",
             "content_jsonb": [
               {
