@@ -249,6 +249,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             "id": p.get("id"),
             "sort_order": row.get("sort_order"),
             "phrase": p.get("phrase"),  # no Thai version available
+            "phrase_th": p.get("phrase_th"),
             "content": _pick_lang(p.get("content"), p.get("content_th"), lang),
             "content_jsonb": merged_nodes,
             "audio_url": p.get("audio_url"),

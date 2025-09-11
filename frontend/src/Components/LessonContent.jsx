@@ -17,7 +17,6 @@ export default function LessonContent({
   lessonPhrases = [],
   activeId,
   uiLang = "en",
-  setUiLang,
   snipIdx = {},
   contentLang = "en",
   setContentLang,
@@ -126,33 +125,38 @@ if (activeId === "phrases_verbs") {
 
       <div className="markdown-section">
         {items.map((item, idx) => {
-          const hasRich = Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0;
-          const md = item.content_md?.trim?.() || item.content?.trim?.() || "";
+            const hasRich = Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0;
+            const md = item.content_md?.trim?.() || item.content?.trim?.() || "";
 
-          return (
-            <details key={idx} className="markdown-item" open={idx === 0}>
-              <summary className="markdown-summary">
-                {item.phrase || "Phrase"}
-                {/* Optional: add a ▶ play button later by mapping (section,seq)->snipIdx */}
-              </summary>
+            // Show phrase_th if contentLang is 'th', otherwise phrase
+            const phraseLabel = contentLang === "th"
+              ? item.phrase_th || item.phrase || "Phrase"
+              : item.phrase || "Phrase";
 
-              <div className="markdown-content">
-                {hasRich ? (
-                  <RichSectionRenderer
-                    nodes={item.content_jsonb}
-                    snipIdx={snipIdx}
-                    uiLang={uiLang}
-                  />
-                ) : md ? (
-                  <MarkdownSection
-                    markdown={md}
-                    defaultOpenFirst={false}
-                    sectionType="phrases_verbs_item"
-                  />
-                ) : null}
-              </div>
-            </details>
-          );
+            return (
+              <details key={idx} className="markdown-item" open={idx === 0}>
+                <summary className="markdown-summary">
+                  {phraseLabel}
+                  {/* Optional: add a ▶ play button later by mapping (section,seq)->snipIdx */}
+                </summary>
+
+                <div className="markdown-content">
+                  {hasRich ? (
+                    <RichSectionRenderer
+                      nodes={item.content_jsonb}
+                      snipIdx={snipIdx}
+                      uiLang={uiLang}
+                    />
+                  ) : md ? (
+                    <MarkdownSection
+                      markdown={md}
+                      defaultOpenFirst={false}
+                      sectionType="phrases_verbs_item"
+                    />
+                  ) : null}
+                </div>
+              </details>
+            );
         })}
       </div>
     </article>
