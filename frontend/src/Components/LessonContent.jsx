@@ -22,14 +22,90 @@ export default function LessonContent({
   setContentLang,
 }) {
   /* ===============================================================
+     HELPER: Section header by contentLang
+  =============================================================== */
+  const getSectionHeader = (section, fallbackText) => {
+    if (contentLang === "th") {
+      return (
+        section.title_th?.trim() ||
+        section.text?.th?.trim() ||
+        section.header_th?.trim() ||
+        fallbackText
+      );
+    } else {
+      return (
+        section.title?.trim() ||
+        section.text?.en?.trim() ||
+        section.header_en?.trim() ||
+        fallbackText
+      );
+    }
+  };
+
+  /* ===============================================================
+     HELPER: choose nodes by language; for TH, swap heading inlines to text_th
+  =============================================================== */
+  const selectNodesForLang = (nodesEN = [], nodesTH = [], lang = "en") => {
+    // prefer TH nodes if present; else fall back to EN nodes
+    const base =
+      lang === "th" && Array.isArray(nodesTH) && nodesTH.length > 0
+        ? nodesTH
+        : Array.isArray(nodesEN)
+        ? nodesEN
+        : [];
+
+    if (lang !== "th") return base;
+
+    // helpers to split combined EN+TH strings
+    const takeThai = (s = "") => {
+      const m = s.match(/[\u0E00-\u0E7F].*$/); // first Thai char to end
+      return m ? m[0].trim() : "";
+    };
+
+    return base.map((node) => {
+      if (!node || node.kind !== "heading" || !Array.isArray(node.inlines)) {
+        return node;
+      }
+
+      // 1) if node has a localized text map, prefer that
+      const thFromNode = node.text?.th?.trim?.();
+      if (thFromNode) {
+        return {
+          ...node,
+          inlines: node.inlines.map((inl, idx) => ({
+            ...inl,
+            // put TH on the first inline; blank the rest to avoid duplicating
+            text: idx === 0 ? thFromNode : "",
+          })),
+        };
+      }
+
+      // 2) otherwise, try to extract Thai from the existing combined inline text(s)
+      return {
+        ...node,
+        inlines: node.inlines.map((inl, idx) => {
+          const src = inl?.text || "";
+          const th = takeThai(src);
+          return { ...inl, text: idx === 0 ? th : "" };
+        }),
+      };
+    });
+  };
+
+  /* ===============================================================
      1) COMPREHENSION VIEW
   =============================================================== */
   if (activeId === "comprehension") {
+    const comprehensionSection = sections.find((s) => s.type === "comprehension");
+    const headerText = comprehensionSection
+      ? getSectionHeader(comprehensionSection, "COMPREHENSION QUESTIONS")
+      : "COMPREHENSION QUESTIONS";
+
     return (
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
-            <span className="lc-head-title">COMPREHENSION QUESTIONS</span>
+            <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
             <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
@@ -45,11 +121,16 @@ export default function LessonContent({
      2) TRANSCRIPT VIEW
   =============================================================== */
   if (activeId === "transcript") {
+    const transcriptSection = sections.find((s) => s.type === "transcript");
+    const headerText = transcriptSection
+      ? getSectionHeader(transcriptSection, "TRANSCRIPT")
+      : "TRANSCRIPT";
+
     return (
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
-            <span className="lc-head-title">TRANSCRIPT</span>
+            <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
             <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
@@ -61,9 +142,7 @@ export default function LessonContent({
             <li key={line.id}>
               <strong>{line.speaker}:</strong>{" "}
               <span>
-                {uiLang === "th" && line.line_text_th
-                  ? line.line_text_th
-                  : line.line_text}
+                {uiLang === "th" && line.line_text_th ? line.line_text_th : line.line_text}
               </span>
             </li>
           ))}
@@ -76,11 +155,14 @@ export default function LessonContent({
      3) PRACTICE PAGE
   =============================================================== */
   if (activeId === "practice") {
+    const practiceSection = sections.find((s) => s.type === "practice");
+    const headerText = practiceSection ? getSectionHeader(practiceSection, "PRACTICE") : "PRACTICE";
+
     return (
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
-            <span className="lc-head-title">PRACTICE</span>
+            <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
             <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
@@ -92,58 +174,71 @@ export default function LessonContent({
     );
   }
 
-/* ===============================================================
-   4) PHRASES & VERBS VIEW (rich)
-=============================================================== */
-if (activeId === "phrases_verbs") {
-  // Prefer reading from the "sections" shape if available; otherwise use lessonPhrases
-  const phrasesSection = Array.isArray(sections)
-    ? sections.find((s) => s?.type === "phrases_verbs")
-    : null;
+  /* ===============================================================
+     4) PHRASES & VERBS VIEW (rich) - with working audio
+  =============================================================== */
+  if (activeId === "phrases_verbs") {
+    const phrasesSection = Array.isArray(sections)
+      ? sections.find((s) => s?.type === "phrases_verbs")
+      : null;
 
-  const rawItems = (phrasesSection?.items ?? lessonPhrases ?? []).filter(Boolean);
+    const rawItems = (phrasesSection?.items ?? lessonPhrases ?? []).filter(Boolean);
 
-  // Keep only items that actually have something to render
-  const items = rawItems.filter((item) =>
-    (Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0) ||
-    (item.content_md && item.content_md.trim() !== "") ||
-    (item.content && item.content.trim() !== "")
-  );
+    // keep items that have something to render in either lang
+    const items = rawItems.filter(
+      (item) =>
+        (Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0) ||
+        (Array.isArray(item.content_jsonb_th) && item.content_jsonb_th.length > 0) ||
+        (item.content_md && item.content_md.trim() !== "") ||
+        (item.content && item.content.trim() !== "")
+    );
 
-  if (items.length === 0) return null;
+    if (items.length === 0) return null;
 
-  return (
-    <article className="lc-card">
-      <header className="lc-head">
-        <div className="lc-head-left">
-          <span className="lc-head-title">PHRASES & VERBS</span>
-        </div>
-        <div className="lc-head-right">
-          <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
-        </div>
-      </header>
+    const headerText = phrasesSection
+      ? getSectionHeader(phrasesSection, "PHRASES & VERBS")
+      : "PHRASES & VERBS";
 
-      <div className="markdown-section">
-        {items.map((item, idx) => {
-            const hasRich = Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0;
+    return (
+      <article className="lc-card">
+        <header className="lc-head">
+          <div className="lc-head-left">
+            <span className="lc-head-title">{headerText}</span>
+          </div>
+          <div className="lc-head-right">
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+          </div>
+        </header>
+
+        <div className="markdown-section">
+          {items.map((item, idx) => {
+            const nodesToRender = selectNodesForLang(
+              item.content_jsonb,
+              item.content_jsonb_th,
+              contentLang
+            );
+            const hasRich = nodesToRender.length > 0;
             const md = item.content_md?.trim?.() || item.content?.trim?.() || "";
 
-            // Show phrase_th if contentLang is 'th', otherwise phrase
-            const phraseLabel = contentLang === "th"
-              ? item.phrase_th || item.phrase || "Phrase"
-              : item.phrase || "Phrase";
+            const phraseLabel =
+              contentLang === "th"
+                ? item.phrase_th?.trim() || item.phrase || "Phrase"
+                : item.phrase || "Phrase";
 
             return (
               <details key={idx} className="markdown-item" open={idx === 0}>
                 <summary className="markdown-summary">
                   {phraseLabel}
-                  {/* Optional: add a ▶ play button later by mapping (section,seq)->snipIdx */}
+                  {snipIdx?.["phrases_verbs"] &&
+                    Object.keys(snipIdx["phrases_verbs"]).length > 0 && (
+                      <span className="audio-indicator"> ▶</span>
+                    )}
                 </summary>
 
                 <div className="markdown-content">
                   {hasRich ? (
                     <RichSectionRenderer
-                      nodes={item.content_jsonb}
+                      nodes={nodesToRender}
                       snipIdx={snipIdx}
                       uiLang={uiLang}
                     />
@@ -157,11 +252,11 @@ if (activeId === "phrases_verbs") {
                 </div>
               </details>
             );
-        })}
-      </div>
-    </article>
-  );
-}
+          })}
+        </div>
+      </article>
+    );
+  }
 
   /* ===============================================================
      5) REGULAR LESSON SECTIONS (markdown or apply)
@@ -171,22 +266,23 @@ if (activeId === "phrases_verbs") {
     return <article className="lc-card">Select a section</article>;
   }
 
-  /* choose Thai or English copy */
-   /* choose markdown or plaintext*/
+  // choose Thai or English copy for plain/markdown content
   const contentText =
     section.content_md && section.content_md.trim() !== ""
       ? section.content_md
-      : (uiLang === "th" && section.content_th
-          ? section.content_th
-          : section.content);
+      : uiLang === "th" && section.content_th
+      ? section.content_th
+      : section.content;
 
   /* ------------------ APPLY SECTION ------------------ */
   if (section.type === "apply") {
+    const headerText = getSectionHeader(section, "APPLY");
+
     return (
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
-            <span className="lc-head-title">APPLY</span>
+            <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
             <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
@@ -198,163 +294,101 @@ if (activeId === "phrases_verbs") {
     );
   }
 
-  /* ------------------ COLLAPSIBLE MARKDOWN SECTION ------------------ */
-  if (
-    ["understand", "extra_tip", "culture_note", "common_mistake"].includes(
-      section.type
-    )
-  ) {
-    // --- RICH CONTENT RENDERING ---
-    if (Array.isArray(section.content_jsonb) && section.content_jsonb.length > 0) {
-      // Get quick practice exercises for "understand" sections only
-      let quickExercises = [];
-      if (section.type === "understand") {
-        quickExercises = practiceExercises.filter(
-          (ex) =>
-            (ex.title || "").toLowerCase().startsWith("quick practice") &&
-            ex.sort_order
-        );
-      }
+  /* ------------------ COLLAPSIBLE RICH/MARKDOWN SECTION ------------------ */
+  const hasRichEN = Array.isArray(section.content_jsonb) && section.content_jsonb.length > 0;
+  const hasRichTH =
+    Array.isArray(section.content_jsonb_th) && section.content_jsonb_th.length > 0;
 
-      // Process content to insert Quick Practice exercises inline
-      const processedContent = [];
-      let quickPracticeIndex = 0;
+  if (hasRichEN || hasRichTH) {
+    const baseNodes = selectNodesForLang(
+      section.content_jsonb,
+      section.content_jsonb_th,
+      contentLang
+    );
 
-      for (let i = 0; i < section.content_jsonb.length; i++) {
-        const node = section.content_jsonb[i];
+    // Get quick practice exercises for "understand" sections only
+    let quickExercises = [];
+    if (section.type === "understand") {
+      quickExercises = practiceExercises.filter(
+        (ex) => (ex.title || "").toLowerCase().startsWith("quick practice") && ex.sort_order
+      );
+    }
 
-        // Check if this is a Quick Practice heading
-        const isQuickPracticeHeading =
-          node.kind === 'heading' &&
-          node.inlines?.some(inline =>
-            inline.text?.toLowerCase().includes('quick practice'));
+    // Process content to insert Quick Practice exercises inline
+    const processedContent = [];
+    let quickPracticeIndex = 0;
 
-        if (isQuickPracticeHeading && quickPracticeIndex < quickExercises.length) {
-          // Add the heading
+    for (let i = 0; i < baseNodes.length; i++) {
+      const node = baseNodes[i];
+
+      // Check if this is a Quick Practice heading
+      const isQuickPracticeHeading =
+        node.kind === "heading" &&
+        node.inlines?.some((inline) => inline.text?.toLowerCase().includes("quick practice"));
+
+      if (isQuickPracticeHeading && quickPracticeIndex < quickExercises.length) {
+        processedContent.push(node);
+        processedContent.push({
+          kind: "quick_practice_exercise",
+          exercise: quickExercises[quickPracticeIndex],
+          key: `quick-practice-${quickPracticeIndex}`,
+        });
+        quickPracticeIndex++;
+      } else {
+        // Skip any content that appears to be exercise data
+        const isExerciseContent =
+          node.type === "exercise" ||
+          node.title?.toLowerCase().includes("quick practice") ||
+          (node.kind === "paragraph" &&
+            node.inlines?.some((inline) =>
+              ["TYPE:", "STEM:", "ANSWER:", "QUESTION:"].some((kw) => inline.text?.includes(kw))
+            ));
+        if (!isExerciseContent) {
           processedContent.push(node);
-
-          // Add the corresponding practice exercise right after the heading
-          processedContent.push({
-            kind: 'quick_practice_exercise',
-            exercise: quickExercises[quickPracticeIndex],
-            key: `quick-practice-${quickPracticeIndex}`
-          });
-
-          quickPracticeIndex++;
-        } else {
-          // Skip any content that appears to be exercise data
-          const isExerciseContent =
-            node.type === 'exercise' ||
-            node.title?.toLowerCase().includes('quick practice') ||
-            (node.kind === 'paragraph' &&
-             node.inlines?.some(inline =>
-               inline.text?.includes('TYPE:') ||
-               inline.text?.includes('STEM:') ||
-               inline.text?.includes('ANSWER:') ||
-               inline.text?.includes('QUESTION:')
-             ));
-
-          if (!isExerciseContent) {
-            processedContent.push(node);
-          }
         }
       }
-
-      return (
-        <article className="lc-card">
-          <header className="lc-head">
-            <div className="lc-head-left">
-              <span className="lc-head-title">
-                {section.type.replace("_", " ").toUpperCase()}
-              </span>
-              {section.title_th && (
-                <span className="lc-head-title-th">{section.title_th}</span>
-              )}
-            </div>
-            <div className="lc-head-right">
-              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
-            </div>
-          </header>
-          <RichSectionRenderer
-            nodes={processedContent}
-            snipIdx={snipIdx}
-            uiLang={uiLang}
-            renderQuickPractice={(exercise) => (
-              <PracticeSection
-                exercises={[exercise]}
-                uiLang={uiLang}
-                hideQuick={false}
-                wrapInDetails={false}
-              />
-            )}
-          />
-        </article>
-      );
     }
 
-    // --- FALLBACK TO MARKDOWN ---
-    // Only build extraSections for "understand" when using markdown fallback
-    let extraSections = [];
-    if (section.type === "understand") {
-      const quickExercises = practiceExercises.filter(
-        (ex) =>
-          (ex.title || "").toLowerCase().startsWith("quick practice") &&
-          ex.sort_order
-      );
-      extraSections = quickExercises.map((ex, idx) => ({
-        key: `quick-practice-${idx}`,
-        title: ex.title || "Quick Practice 1",
-        body: (
-          <PracticeSection
-            exercises={[ex]}
-            uiLang={uiLang}
-            hideQuick={false}
-            wrapInDetails={false}
-          />
-        ),
-        preRendered: true,
-        marker: `[[QUICK_PRACTICE_${idx + 1}]]`,
-      }));
-    }
+    const defaultHeaderText = section.type.replace("_", " ").toUpperCase();
+    const headerText = getSectionHeader(section, defaultHeaderText);
 
     return (
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
-            <span className="lc-head-title">
-              {section.type.replace("_", " ").toUpperCase()}
-            </span>
-            {section.title_th && (
-              <span className="lc-head-title-th">{section.title_th}</span>
-            )}
+            <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
             <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
           </div>
         </header>
-        <MarkdownSection
-          markdown={contentText}
-          defaultOpenFirst={section.type === "understand"}
-          extraSections={extraSections}
-          sectionType={section.type}
+        <RichSectionRenderer
+          nodes={processedContent}
+          snipIdx={snipIdx}
+          uiLang={uiLang}
+          renderQuickPractice={(exercise) => (
+            <PracticeSection
+              exercises={[exercise]}
+              uiLang={uiLang}
+              hideQuick={false}
+              wrapInDetails={false}
+            />
+          )}
         />
       </article>
     );
   }
 
   /* ------------------ DEFAULT MARKDOWN SECTION -------- */
+  const defaultHeaderText = section.type.replace("_", " ").toUpperCase();
+  const headerText = getSectionHeader(section, defaultHeaderText);
+
   return (
     <article className="lc-card">
       <header className="lc-head">
         <div className="lc-head-left">
-          <span className="lc-head-title">
-            {section.type.replace("_", " ").toUpperCase()}
-          </span>
-          {section.title_th && (
-            <span className="lc-head-title-th">{section.title_th}</span>
-          )}
+          <span className="lc-head-title">{headerText}</span>
         </div>
-
         <div className="lc-head-right">
           <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
         </div>
@@ -362,8 +396,8 @@ if (activeId === "phrases_verbs") {
 
       <MarkdownSection
         markdown={contentText}
-        defaultOpenFirst={true}      // open immediately (no accordion needed)
-        sectionType={section.type}   // keeps future-proof options
+        defaultOpenFirst={true}
+        sectionType={section.type}
       />
     </article>
   );
