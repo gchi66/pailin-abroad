@@ -191,7 +191,8 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             "render_mode": s.get("render_mode"),
             "audio_url": s.get("audio_url"),
             "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
-            "content_jsonb": merged_nodes,
+            "content_jsonb": _normalize_rich_nodes(en_nodes, lang),
+            "content_jsonb_th": _normalize_rich_nodes(th_nodes, lang) if th_nodes else None,
         })
 
     # Transcript - only fields from actual example

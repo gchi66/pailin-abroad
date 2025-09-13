@@ -1,0 +1,92 @@
+HEADING COMPARISON RESULTS
+==================================================
+
+English file: /home/gchichester/code/pailin-abroad/backend/data/level_1.json
+Thai file: /home/gchichester/code/pailin-abroad/backend/data/level_1_th.json
+
+Total heading nodes in English file: 83
+Total heading nodes in Thai file: 95
+Difference: 12 more heading nodes in Thai file
+
+THAI HEADING NODES THAT DON'T MATCH ANY ENGLISH HEADINGS (16 total):
+----------------------------------------
+ 1. GREETINGS IN THE US / การทักทายกันในอเมริกา
+    Lesson: 1.1 - Hi, I’m Pailin
+    Section: culture_note
+    Context: LESSON 1.1: Hi, I’m Pailin
+
+ 2. ‘ / คำคุณศัพท์’ เป็นคำที่อธิบายลักษณะของคำนาม
+    Lesson: 1.6 - I’m excited!
+    Section: understand
+    Context: LESSON 1.6: I’m excited!บทเรียนที่ 1.6: ฉันตื่นเต้นจัง!
+
+ 3. จำไว้เสมอว่าต้องใช้ ‘I’ (ฉัน) ตอนที่พูดถึงตัวเอง
+    Lesson: 1.6 - I’m excited!
+    Section: common_mistake
+    Context: Unknown
+
+ 4. - / ‘คำคุณศัพท์’ เป็นคำที่ใช้อธิบายลักษณะของคำนาม
+    Lesson: 1.9 - You’re a great cook
+    Section: understand
+    Context: LESSON 1.9: You’re a great cookบทเรียนที่ 1.9: คุณทำอาหารเก่ง
+
+ 5. - / ‘คำคุณศัพท์’ เป็นคำที่ใช้อธิบายลักษณะของคำนาม
+    Lesson: 1.10 - He’s a student at USC
+    Section: understand
+    Context: LESSON 1.10: He’s a student at USCบทเรียนที่ 1.10: เขาเป็นนักเรียนที่ USC
+
+ 6. I’M FROM… / ฉันมาจาก…
+    Lesson: 1.11 - Where are you from?
+    Section: understand
+    Context: Unknown
+
+ 7. การพูดว่า ‘นี่คือ [อะไรสักอย่าง]’
+    Lesson: 1.12 - This is your student ID
+    Section: understand
+    Context: LESSON 1.12: This is your student IDบทเรียนที่ 1.12: นี่คือบัตรประจำตัวนักเรียนของคุณ (ID)
+
+ 8. IT’S [ADJECTIVE] / มัน [คำคุณศัพท์]
+    Lesson: 1.13 - It’s beautiful in Los Angeles
+    Section: understand
+    Context: LESSON 1.13: It’s beautiful in Los Angelesบทเรียนที่ 1.13: ลอสแอนเจลิสสวยมากเลย
+
+ 9. 1. / คำคุณศัพท์
+    Lesson: 1.14 - My wallet isn’t red
+    Section: understand
+    Context: LESSON 1.14: My wallet isn’t redบทเรียนที่ 1.14: กระเป๋าเงินของฉันไม่ใช่สีแดง
+
+10. 2. / บุพบทวลี
+    Lesson: 1.14 - My wallet isn’t red
+    Section: understand
+    Context: LESSON 1.14: My wallet isn’t redบทเรียนที่ 1.14: กระเป๋าเงินของฉันไม่ใช่สีแดง
+
+11. 3. / คำนาม หรือ นามวลี
+    Lesson: 1.14 - My wallet isn’t red
+    Section: understand
+    Context: LESSON 1.14: My wallet isn’t redบทเรียนที่ 1.14: กระเป๋าเงินของฉันไม่ใช่สีแดง
+
+12. เลข 0 สามารถออกเสียงเหมือนตัวอักษร ‘O’ หรือ ‘โอ’
+    Lesson: 1.15 - What time is it?
+    Section: understand
+    Context: LESSON 1.15: What time is it?บทเรียนที่ 1.15: ตอนนี้กี่โมงแล้ว?
+
+13. ตัวเลขชั่วโมงจะอ่านจาก 1 ถึง 12 เท่านั้น
+    Lesson: 1.15 - What time is it?
+    Section: understand
+    Context: LESSON 1.15: What time is it?บทเรียนที่ 1.15: ตอนนี้กี่โมงแล้ว?
+
+14. แฟรงค์บอกกับสาวๆว่าให้กลับมาตอน 12:00 จากเวลาที่แฟรงค์พูด เขาหมายถึง 12AM หรือ 12PM กันล่ะ?
+    Lesson: 1.15 - What time is it?
+    Section: understand
+    Context: LESSON 1.15: What time is it?บทเรียนที่ 1.15: ตอนนี้กี่โมงแล้ว?
+
+15. แม้ว่าหลายๆประเทศจะใช้ระบบเวลาแบบทหาร (การอ่านเวลาแบบ 24 ชั่วโมง แทนที่จะเป็น 12 ชั่วโมง) แต่ว่าระบบการอ่านเวลาแบบนี้จะไม่ค่อยใช้กันในอเมริกา คุณแทบจะไม่เคยได้ยินใครเรียกเวลา 9PM (สามทุ่ม) ว่า 21:00 (21 นาฬิกา) เลย
+    Lesson: 1.15 - What time is it?
+    Section: understand
+    Context: Unknown
+
+16. อย่างที่คุณทราบอยู่แล้ววว่า ‘กรรม’ ในประโยคสามารถเป็นได้สามสิ่งนี้
+    Lesson: 1.16 - Is In-N-Out near the hotel?
+    Section: understand
+    Context: LESSON 1.16: Is In-N-Out near the hotel?บทเรียนที่ 1.16: ร้าน In-N-Out อยู่ใกล้กับโรงแรมไหม?
+

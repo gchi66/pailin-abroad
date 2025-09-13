@@ -300,11 +300,29 @@ export default function LessonContent({
     Array.isArray(section.content_jsonb_th) && section.content_jsonb_th.length > 0;
 
   if (hasRichEN || hasRichTH) {
+    console.log("Debug selectNodesForLang input:", {
+      contentLang,
+      hasRichEN,
+      hasRichTH,
+      section_type: section.type,
+      content_jsonb_length: section.content_jsonb?.length || 0,
+      content_jsonb_th_length: section.content_jsonb_th?.length || 0,
+      first_few_en_nodes: section.content_jsonb?.slice(0, 3).map(n => ({ kind: n.kind, text: n.inlines?.[0]?.text?.substring(0, 30) })),
+      first_few_th_nodes: section.content_jsonb_th?.slice(0, 3).map(n => ({ kind: n.kind, text: n.inlines?.[0]?.text?.substring(0, 30) }))
+    });
+
     const baseNodes = selectNodesForLang(
       section.content_jsonb,
       section.content_jsonb_th,
       contentLang
     );
+
+    console.log("baseNodes after selectNodesForLang:", baseNodes.slice(0, 10).map((n, i) => ({
+      index: i,
+      kind: n.kind,
+      text: n.inlines?.[0]?.text?.substring(0, 50),
+      full_node: i === 8 ? n : undefined
+    })));
 
     // Get quick practice exercises for "understand" sections only
     let quickExercises = [];

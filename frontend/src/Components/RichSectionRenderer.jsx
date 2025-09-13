@@ -117,6 +117,8 @@ export default function RichSectionRenderer({
         .replace(/\s+/g, " ")
         .trim()
 
+      console.log(`Found heading at index ${idx}:`, headingText, "Node:", node);
+
       // Create a unique key for this heading based on text and position
       const headingKey = `${headingText}-${idx}`;
 
@@ -154,15 +156,17 @@ export default function RichSectionRenderer({
     sections.push(current);
   }
 
-  // // Debug: Log sections to see what's being created
-  // console.log("Sections created:", sections.map(s => ({
-  //   heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
-  //   bodyCount: s.body.length,
-  //   key: s.key
-  // })));
+  // Debug: Log sections to see what's being created
+  console.log("Sections created:", sections.map(s => ({
+    heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
+    bodyCount: s.body.length,
+    key: s.key,
+    body: s.body.map(b => ({ kind: b.kind, text: b.inlines?.[0]?.text?.substring(0, 30) }))
+  })));
 
   // If we have sections with headings, render as accordion
   const hasHeadings = sections.some(sec => sec.heading);
+  console.log("HasHeadings:", hasHeadings, "Total sections:", sections.length);
 
   if (hasHeadings) {
     return (
@@ -170,6 +174,7 @@ export default function RichSectionRenderer({
         {sections.map((sec, i) => {
           // If section has no heading, render content directly
           if (!sec.heading) {
+            console.log("Rendering no-heading section:", sec.key, "with", sec.body.length, "items");
             return (
               <div key={sec.key} className="markdown-content no-heading">
                 {sec.body.map((node, k) => renderNode(node, k))}
@@ -184,6 +189,7 @@ export default function RichSectionRenderer({
             .trim()
             .replace(/^\t+/, ""); // Remove leading tabs
 
+          console.log("Rendering accordion section:", cleanHeadingText);
           // Render as accordion section
           return (
             <details key={sec.key} className="markdown-item" open={i === 0}>
