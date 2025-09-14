@@ -267,7 +267,15 @@ def bilingualize_headers_th(nodes, default_level=3):
             s = node_plain_text(n)
             has_th = bool(TH.search(s))
             has_en = bool(re.search(r'[A-Za-z]', s))
-            looks_like_title = has_en and s.strip().upper() == s.strip()  # ALL CAPS EN
+
+            # Check if this looks like a title by examining the English part before any Thai
+            looks_like_title = False
+            if has_en:
+                en_part, _ = split_en_th(s)
+                if en_part:
+                    # Check if the extracted English part is ALL CAPS
+                    en_stripped = en_part.strip()
+                    looks_like_title = en_stripped and en_stripped.upper() == en_stripped and re.search(r'[A-Z]', en_stripped)
 
             if has_th and (looks_like_title or n.get("is_bold_header")):
                 en, th = split_en_th(s)
@@ -277,9 +285,7 @@ def bilingualize_headers_th(nodes, default_level=3):
                         "level": default_level,
                         "text": {"en": en, "th": th}
                     })
-                    continue
-
-        # FIXED: Always preserve the original node for non-paragraph types or paragraphs that don't need conversion
+                    continue        # FIXED: Always preserve the original node for non-paragraph types or paragraphs that don't need conversion
         out.append(n)
 
     return out
