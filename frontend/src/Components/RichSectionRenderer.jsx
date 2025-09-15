@@ -3,12 +3,17 @@ import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
 import AudioBullet from "./AudioBullet";
+import PhrasesAudioBullet from "./PhrasesAudioBullet";
 import LessonTable from "./LessonTable";
 
 // Renders a node array from content_jsonb (headings, paragraphs, lists, etc.)
 export default function RichSectionRenderer({
   nodes,
   snipIdx,
+  phrasesSnipIdx,
+  phraseId,
+  phraseVariant = 0,
+  isPhrasesSection = false,
   uiLang = "en",
   renderQuickPractice
 }) {
@@ -41,15 +46,29 @@ export default function RichSectionRenderer({
 
     if (node.kind === "list_item") {
       if (node.audio_seq) {
-        return (
-          <AudioBullet
-            key={key}
-            node={node}
-            indent={node.indent}
-            snipIdx={snipIdx}
-            renderInlines={renderInlines}
-          />
-        );
+        if (isPhrasesSection && phraseId) {
+          return (
+            <PhrasesAudioBullet
+              key={key}
+              node={node}
+              indent={node.indent}
+              phrasesSnipIdx={phrasesSnipIdx}
+              phraseId={phraseId}
+              variant={phraseVariant}
+              renderInlines={renderInlines}
+            />
+          );
+        } else {
+          return (
+            <AudioBullet
+              key={key}
+              node={node}
+              indent={node.indent}
+              snipIdx={snipIdx}
+              renderInlines={renderInlines}
+            />
+          );
+        }
       }
       return (
         <li key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
@@ -59,15 +78,29 @@ export default function RichSectionRenderer({
     }
     if (node.kind === "numbered_item" || node.kind === "misc_item") {
       if (node.audio_seq) {
-        return (
-          <AudioBullet
-            key={key}
-            node={node}
-            indent={node.indent}
-            snipIdx={snipIdx}
-            renderInlines={renderInlines}
-          />
-        );
+        if (isPhrasesSection && phraseId) {
+          return (
+            <PhrasesAudioBullet
+              key={key}
+              node={node}
+              indent={node.indent}
+              phrasesSnipIdx={phrasesSnipIdx}
+              phraseId={phraseId}
+              variant={phraseVariant}
+              renderInlines={renderInlines}
+            />
+          );
+        } else {
+          return (
+            <AudioBullet
+              key={key}
+              node={node}
+              indent={node.indent}
+              snipIdx={snipIdx}
+              renderInlines={renderInlines}
+            />
+          );
+        }
       }
       // Render as a div, not <li>, to avoid default bullet styling
       return (

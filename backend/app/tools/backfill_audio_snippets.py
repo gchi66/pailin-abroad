@@ -1,6 +1,13 @@
 """
-Populate the audio_snippets table from objects already uploaded to the
-lesson-audio bucket.
+Populate the audio_snippets and phrases_audio_snippets tables from objects
+already uploaded to the lesson-audio bucket.
+
+Standard sections (understand, practice, etc.) go to audio_snippets table.
+Phrases & verbs audio files go to phrases_audio_snippets table.
+
+File patterns:
+- Standard: {lesson}_{section}_{seq}_{character}.mp3
+- Phrases: phrases_verbs_{phrase_key}[{variant}]_{seq}.mp3
 
 rclone:
 ➜  pailin-abroad git:(master) ✗ rclone copy \
@@ -8,8 +15,6 @@ rclone:
   "supabase:lesson-audio/Phrases_Verbs" \
   --include "phrases_verbs_*.mp3" \
   -P
-  or some shit like that
-
 
 Run:
     python -m app.tools.backfill_audio_snippets
@@ -52,17 +57,16 @@ STANDARD_FILE_RE = re.compile(
     re.X | re.I,
 )
 
-# Phrases & verbs with variant
+# Phrases & verbs with variant - new pattern: phrases_verbs_phrase_key[variant]_seq.mp3
 PHRASES_FILE_RE = re.compile(
     r"""
-    (?P<lesson>\d+\.\d+)
-    _
     phrases_verbs
-    (?P<variant>\d+)?   # Optional variant number
     _
-    (?P<seq>\d{1,3})
-    (?:_(?P<character>[A-Za-z]+))?
-    \.mp3(?:\.mp3)?$
+    (?P<phrase_key>[a-z_]+?)     # "a_catch", "cool", etc. (non-greedy)
+    (?P<variant>\d+)?            # Optional variant number after phrase_key
+    _
+    (?P<seq>\d+)
+    \.mp3$
     """,
     re.X | re.I,
 )
@@ -74,23 +78,29 @@ SECTION_MAPPING = {
     "practice":        "practice",
 }
 
-# ─── 3. Helper function to check if phrases exist ─────────────────────────
-def phrase_exists_in_db(lesson_external_id: str, variant: int) -> bool:
-    """Check if a phrase with the given lesson and variant exists in the DB"""
+# ─── 3. Helper functions ─────────────────────────
+def normalize_phrase_for_lookup(phrase_text: str) -> str:
+    """Remove punctuation and extra whitespace for phrase matching"""
+    return re.sub(r'[^\w\s]', '', phrase_text).strip()
+
+def find_phrase_id(phrase_text: str, variant: int) -> str | None:
+    """Find phrase_id by phrase text and variant"""
     try:
-        # First get the lesson_id from lesson_external_id
-        lesson_query = sb.table("lessons").select("id").eq("lesson_external_id", lesson_external_id).execute()
-        if not lesson_query.data:
-            return False
+        # Get all phrases with the same variant
+        phrase_query = sb.table("phrases").select("id, phrase").eq("variant", variant).execute()
 
-        lesson_id = lesson_query.data[0]["id"]
+        normalized_input = normalize_phrase_for_lookup(phrase_text.upper())
 
-        # Then check if phrase exists with this lesson_id and variant
-        phrase_query = sb.table("phrases").select("id").eq("lesson_id", lesson_id).eq("variant", variant).execute()
-        return bool(phrase_query.data)
+        for row in phrase_query.data:
+            normalized_db_phrase = normalize_phrase_for_lookup(row["phrase"])
+            if normalized_db_phrase == normalized_input:
+                return row["id"]
+
+        return None
     except Exception as e:
-        print(f"Warning: Could not check phrase existence for {lesson_external_id} variant {variant}: {e}")
-        return False
+        print(f"Warning: Could not find phrase '{phrase_text}' variant {variant}: {e}")
+        return None
+
 
 # ─── 4. List objects with pagination (options-dict style) ──────────────────
 def list_objects_recursive(prefix: str = "") -> list[str]:
@@ -131,50 +141,49 @@ def main() -> None:
     all_objects = list_objects_recursive()
     print(f"Found {len(all_objects)} objects in bucket")
 
-    rows, seen, dupes = [], set(), defaultdict(list)
+    # Separate collections for different table insertions
+    audio_snippets_rows, phrases_audio_rows = [], []
+    seen_audio, seen_phrases = set(), set()
+    dupes = defaultdict(list)
 
     for path in all_objects:
         if "/Conversations/" in path or not path.lower().endswith(".mp3"):
             continue
 
         filename = path.split("/")[-1]
-        stage = path.split("/")[0]
+
+        # 1) Phrases & Verbs first (these live under Phrases_Verbs/, no stage directory)
+        phrases_match = PHRASES_FILE_RE.fullmatch(filename)
+        if phrases_match:
+            phrase_key = phrases_match["phrase_key"]
+            variant = int(phrases_match["variant"]) if phrases_match["variant"] else 0
+            seq = int(phrases_match["seq"])
+
+            phrase_text = phrase_key.replace("_", " ").upper()
+            phrase_id = find_phrase_id(phrase_text, variant)
+            if not phrase_id:
+                print(f"Skipping {filename}: phrase '{phrase_text}' variant {variant} not found in DB")
+                continue
+
+            key = (phrase_id, variant, seq)
+            if key in seen_phrases:
+                dupes[key].append(path); continue
+            seen_phrases.add(key)
+
+            phrases_audio_rows.append({
+                "phrase_id": phrase_id,
+                "variant": variant,
+                "seq": seq,
+                "storage_path": path,
+            })
+            continue  # done with phrases file
+
+        # 2) Standard sections (these live under {Stage}/L{n}/{Section}/...)
+        parts = path.split("/")
+        stage = parts[0] if parts else ""
         if stage not in STAGES:
             continue
 
-        # Try phrases_verbs pattern first
-        phrases_match = PHRASES_FILE_RE.fullmatch(filename)
-        if phrases_match:
-            lesson = phrases_match["lesson"]
-            variant = int(phrases_match["variant"]) if phrases_match["variant"] else 0  # Default to 0
-            seq = int(phrases_match["seq"])
-            character = phrases_match["character"]
-
-            # Check if this phrase variant exists in DB
-            if not phrase_exists_in_db(lesson, variant):
-                print(f"Skipping {filename}: phrase variant {variant} not found in DB for lesson {lesson}")
-                continue
-
-            key = (lesson, "phrases_verbs", variant, seq)
-
-            if key in seen:
-                dupes[key].append(path)
-                continue
-            seen.add(key)
-
-            rows.append(
-                {
-                    "lesson_external_id": lesson,
-                    "section": "phrases_verbs",
-                    "seq": seq,
-                    "variant": variant,
-                    "character": character or None,
-                    "storage_path": path,
-                }
-            )
-            continue
-
-        # Try standard pattern
         standard_match = STANDARD_FILE_RE.fullmatch(filename)
         if standard_match:
             lesson = standard_match["lesson"]
@@ -183,39 +192,48 @@ def main() -> None:
             character = standard_match["character"]
 
             key = (lesson, section, seq)
+            if key in seen_audio:
+                dupes[key].append(path); continue
+            seen_audio.add(key)
 
-            if key in seen:
-                dupes[key].append(path)
-                continue
-            seen.add(key)
+            audio_snippets_rows.append({
+                "lesson_external_id": lesson,
+                "section": section,
+                "seq": seq,
+                "character": character or None,
+                "storage_path": path,
+            })
 
-            rows.append(
-                {
-                    "lesson_external_id": lesson,
-                    "section": section,
-                    "seq": seq,
-                    "variant": None,  # Standard sections don't use variant
-                    "character": character or None,
-                    "storage_path": path,
-                }
-            )
+
+
 
     if dupes:
         print("\nSkipped duplicates:")
         for k, ps in dupes.items():
             print(" ", k, "→", ps)
 
-    print(f"\nUpserting {len(rows)} rows …")
-    if not rows:
-        print("Nothing to do.")
-        return
+    # Insert audio_snippets
+    if audio_snippets_rows:
+        print(f"\nUpserting {len(audio_snippets_rows)} rows to audio_snippets …")
+        res = (
+            sb.table("audio_snippets")
+              .upsert(audio_snippets_rows, on_conflict="lesson_external_id,section,seq")
+              .execute()
+        )
+        print(f"✅ Success – {len(res.data)} audio_snippets rows upserted/updated.")
 
-    res = (
-        sb.table("audio_snippets")
-          .upsert(rows, on_conflict="lesson_external_id,section,seq,variant")
-          .execute()
-    )
-    print(f"✅ Success – {len(res.data)} rows upserted/updated.")
+    # Insert phrases_audio_snippets
+    if phrases_audio_rows:
+        print(f"\nUpserting {len(phrases_audio_rows)} rows to phrases_audio_snippets …")
+        res = (
+            sb.table("phrases_audio_snippets")
+              .upsert(phrases_audio_rows, on_conflict="phrase_id,variant,seq")
+              .execute()
+        )
+        print(f"✅ Success – {len(res.data)} phrases_audio_snippets rows upserted/updated.")
+
+    if not audio_snippets_rows and not phrases_audio_rows:
+        print("Nothing to do.")
 
 if __name__ == "__main__":
     main()

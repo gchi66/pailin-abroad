@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchResolvedLesson } from "../lib/fetchResolvedLesson";
-import { fetchSnippets } from "../lib/fetchSnippets";
+import { fetchSnippets, fetchPhrasesSnippets } from "../lib/fetchSnippets";
 
 import LessonHeader from "../Components/LessonHeader";
 import AudioBar from "../Components/AudioBar";
@@ -189,6 +189,7 @@ export default function Lesson() {
   // Audio + snippets
   const [audioUrl, setAudioUrl] = useState(null);
   const [snipIdx, setSnipIdx] = useState({});
+  const [phrasesSnipIdx, setPhrasesSnipIdx] = useState({});
 
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
@@ -326,7 +327,20 @@ export default function Lesson() {
           setSnipIdx({});
         }
 
-        // 5) prev/next list
+        // 5) fetch phrases audio snippets
+        if (lsn.id) {
+          try {
+            const phrasesAudio = await fetchPhrasesSnippets(lsn.id);
+            setPhrasesSnipIdx(phrasesAudio || {});
+          } catch (err) {
+            console.error("Error fetching phrases audio snippets:", err);
+            setPhrasesSnipIdx({});
+          }
+        } else {
+          setPhrasesSnipIdx({});
+        }
+
+        // 6) prev/next list
         if (lsn.stage && typeof lsn.level !== "undefined") {
           const { data: allLessons, error: allLessonsError } = await supabaseClient
             .from("lessons")
@@ -421,6 +435,7 @@ export default function Lesson() {
             uiLang={uiLang}
             setUiLang={setUiLang}
             snipIdx={snipIdx}
+            phrasesSnipIdx={phrasesSnipIdx}
             contentLang={contentLang}
             setContentLang={setContentLang}
           />

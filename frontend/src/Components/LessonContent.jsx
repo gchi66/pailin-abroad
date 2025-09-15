@@ -18,6 +18,7 @@ export default function LessonContent({
   activeId,
   uiLang = "en",
   snipIdx = {},
+  phrasesSnipIdx = {},
   contentLang = "en",
   setContentLang,
 }) {
@@ -229,8 +230,8 @@ export default function LessonContent({
               <details key={idx} className="markdown-item" open={idx === 0}>
                 <summary className="markdown-summary">
                   {phraseLabel}
-                  {snipIdx?.["phrases_verbs"] &&
-                    Object.keys(snipIdx["phrases_verbs"]).length > 0 && (
+                  {phrasesSnipIdx?.idx?.[item.id] &&
+                    Object.keys(phrasesSnipIdx.idx[item.id]).length > 0 && (
                       <span className="audio-indicator"> ▶</span>
                     )}
                 </summary>
@@ -240,6 +241,10 @@ export default function LessonContent({
                     <RichSectionRenderer
                       nodes={nodesToRender}
                       snipIdx={snipIdx}
+                      phrasesSnipIdx={phrasesSnipIdx}
+                      phraseId={item.id}
+                      phraseVariant={item.variant || 0}
+                      isPhrasesSection={true}
                       uiLang={uiLang}
                     />
                   ) : md ? (
