@@ -74,8 +74,18 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
                 continue
 
             key = {"lesson_id": lesson_id, "kind": kind, "sort_order": ex.get("sort_order", 0)}
+
+            # Extract Thai title - handle both structured and string formats
+            title_raw = ex.get("title", "")
+            if isinstance(title_raw, dict) and "th" in title_raw:
+                # New structured format: {"en": "...", "th": "..."}
+                title_th = title_raw["th"] or ""
+            else:
+                # Old string format or fallback
+                title_th = title_raw or ""
+
             patch = {
-                "title_th":     ex.get("title", "") or "",
+                "title_th":     title_th,
                 "prompt_th":    (ex.get("prompt_md") or ex.get("prompt") or "") or "",
                 "paragraph_th": ex.get("paragraph", "") or "",
                 "items_th":     ex.get("items", []),

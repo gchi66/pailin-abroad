@@ -176,7 +176,7 @@ export default function LessonContent({
   }
 
   /* ===============================================================
-     4) PHRASES & VERBS VIEW (rich) - with working audio
+     4) PHRASES & VERBS VIEW
   =============================================================== */
   if (activeId === "phrases_verbs") {
     const phrasesSection = Array.isArray(sections)
@@ -221,10 +221,18 @@ export default function LessonContent({
             const hasRich = nodesToRender.length > 0;
             const md = item.content_md?.trim?.() || item.content?.trim?.() || "";
 
-            const phraseLabel =
-              contentLang === "th"
-                ? item.phrase_th?.trim() || item.phrase || "Phrase"
-                : item.phrase || "Phrase";
+            const phraseLabel = (() => {
+              const enPhrase = item.phrase?.trim() || "Phrase";
+              const thPhrase = item.phrase_th?.trim();
+
+              if (contentLang === "th" && thPhrase) {
+                // Show both English and Thai when Thai mode is active and Thai translation exists
+                return `${enPhrase} / ${thPhrase}`;
+              } else {
+                // Show only English when in English mode or no Thai translation
+                return enPhrase;
+              }
+            })();
 
             return (
               <details key={idx} className="markdown-item" open={idx === 0}>

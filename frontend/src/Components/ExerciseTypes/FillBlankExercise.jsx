@@ -108,7 +108,6 @@ export default function FillBlankExercise({ exercise }) {
   if (paragraph && typeof paragraph === 'string' && paragraph.trim() !== '') {
     return (
       <div className="fb-wrap">
-        {title && <h3 className="fb-title">{title}</h3>}
         {prompt && <p className="fb-prompt">{prompt}</p>}
 
         <p className="fb-paragraph">

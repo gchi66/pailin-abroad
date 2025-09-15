@@ -43,7 +43,6 @@ export default function SentenceTransformExercise({ exercise = {} }) {
 
   return (
     <div className="st-wrap">
-      {title && <h3 className="st-title">{title}</h3>}
       {prompt && <p className="st-prompt">{prompt}</p>}
 
       {items.map((item, idx) => {

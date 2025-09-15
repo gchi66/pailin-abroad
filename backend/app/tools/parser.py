@@ -1425,7 +1425,15 @@ class GoogleDocsParser:
                 continue
 
             if line.startswith("TITLE:"):
-                cur_ex["title"] = line.split(":", 1)[1].strip()
+                title_text = line.split(":", 1)[1].strip()
+                # Split English and Thai if both are present
+                en_title, th_title = split_en_th(title_text)
+                if en_title and th_title:
+                    # Both languages present - use structured format
+                    cur_ex["title"] = {"en": en_title, "th": th_title}
+                else:
+                    # Single language - keep as string
+                    cur_ex["title"] = title_text
                 collecting_text = False
                 collecting_paragraph = False
                 continue
