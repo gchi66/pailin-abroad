@@ -702,6 +702,8 @@ class GoogleDocsParser:
 
         LKEY = _lesson_key(lesson_header_raw)          # e.g., "1.16"
         LCTXN = _norm_header_str(lesson_header_raw)    # tolerant compare
+        consumed_node_ids = set()
+
 
         for n in doc_nodes:
             if "inlines" not in n:
@@ -760,20 +762,26 @@ class GoogleDocsParser:
             )
 
         def _take_node(raw: str) -> dict | None:
+            # Track consumed nodes to prevent duplicates
+            if not hasattr(_take_node, 'consumed_node_ids'):
+                _take_node.consumed_node_ids = set()
+
             def _try_maps(norm_key: str) -> dict | None:
                 chosen, k = _pick_with_fallback(scoped_nodes, norm_key)
-                if chosen:
+                if chosen and id(chosen) not in _take_node.consumed_node_ids:
                     result = _clone_node(chosen)
                     if chosen.get("kind") == "list_item":
                         result["kind"] = "list_item"
                     scoped_nodes[k].remove(chosen)
+                    _take_node.consumed_node_ids.add(id(chosen))
                     return result
                 chosen, k = _pick_with_fallback(lesson_wide_nodes, norm_key)
-                if chosen:
+                if chosen and id(chosen) not in _take_node.consumed_node_ids:
                     result = _clone_node(chosen)
                     if chosen.get("kind") == "list_item":
                         result["kind"] = "list_item"
                     lesson_wide_nodes[k].remove(chosen)
+                    _take_node.consumed_node_ids.add(id(chosen))
                     return result
                 return None
 
@@ -782,20 +790,24 @@ class GoogleDocsParser:
             if hit:
                 return hit
 
-            for part in re.split(r"(?:\u000b|\n)+", (raw or "").strip()):
-                p = part.strip()
-                if not p:
-                    continue
-                hit = _try_maps(_norm(p))
-                if hit:
-                    return hit
+            # Try splitting by line breaks only once
+            parts = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
+            if len(parts) > 1:  # Only try parts if we actually split something
+                for part in parts:
+                    p = part.strip()
+                    if not p:
+                        continue
+                    hit = _try_maps(_norm(p))
+                    if hit:
+                        return hit
 
+            # Try Thai/English split only if no match found yet
             m = TH_RX.search(raw or "")
             if m:
                 left = (raw[: m.start()] or "").strip()
                 right = (raw[m.start():] or "").strip()
                 for piece in (left, right):
-                    if piece:
+                    if piece and piece != raw:  # Don't retry the same text
                         hit = _try_maps(_norm(piece))
                         if hit:
                             return hit
@@ -873,29 +885,9 @@ class GoogleDocsParser:
                         node["kind"] = "list_item"
                     node_buffer.append(node)
                 else:
-                    is_bullet = False
-                    norm_text = _norm(text)
-
-                    for node_list in scoped_nodes.values():
-                        for n in node_list:
-                            node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
-                            if _norm(node_text) == norm_text and _is_bullet_node(n):
-                                is_bullet = True
-                                break
-                        if is_bullet:
-                            break
-
-                    if not is_bullet:
-                        for node_list in lesson_wide_nodes.values():
-                            for n in node_list:
-                                node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
-                                if _norm(node_text) == norm_text and _is_bullet_node(n):
-                                    is_bullet = True
-                                    break
-                            if is_bullet:
-                                break
-
-                    node_buffer.append(_synth_node("paragraph", text, is_bullet))
+                    # Create a synthetic node - just use paragraph by default
+                    # The bullet detection was causing duplicates
+                    node_buffer.append(_synth_node("paragraph", text, False))
 
         _flush()
         return items

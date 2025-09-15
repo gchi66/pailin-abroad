@@ -36,6 +36,11 @@ export default function RichSectionRenderer({
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
   const renderNode = (node, key) => {
+    // Skip heading nodes - they should only be used for accordion structure
+    if (node.kind === "heading") {
+      return null;
+    }
+
     if (node.kind === "paragraph") {
       return (
         <p key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>

@@ -8192,11 +8192,11 @@
                 "audio_section": "phrases_verbs"
               },
               {
-                "kind": "list_item",
+                "kind": "paragraph",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Here",
+                    "text": "Pailin: Here, I have some gum.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -8204,13 +8204,7 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.8: Thanks, I made it",
-                "lesson_key": "1.8",
-                "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
-                "lesson_context_en": "LESSON 1.8: Thanks, I made it",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS",
-                "audio_seq": 1,
-                "audio_section": "phrases_verbs"
+                "section_context": "PHRASES & VERBS"
               },
               {
                 "kind": "list_item",
@@ -8234,11 +8228,11 @@
                 "audio_section": "phrases_verbs"
               },
               {
-                "kind": "list_item",
+                "kind": "paragraph",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Pailin: I can’t find my blue pen.\u000bLuke: Here, you can use mine.",
+                    "text": "Luke: Here, you can use mine.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -8246,13 +8240,7 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.8: Thanks, I made it",
-                "lesson_key": "1.8",
-                "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
-                "lesson_context_en": "LESSON 1.8: Thanks, I made it",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS",
-                "audio_seq": 3,
-                "audio_section": "phrases_verbs"
+                "section_context": "PHRASES & VERBS"
               }
             ]
           }
@@ -14042,11 +14030,11 @@
                 "audio_section": "phrases_verbs"
               },
               {
-                "kind": "list_item",
+                "kind": "paragraph",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Cool!",
+                    "text": "Pailin: Cool! I’m so excited.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -14054,13 +14042,7 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.11: Where are you from?",
-                "lesson_key": "1.11",
-                "lesson_context_norm": "LESSON 1.11: Where are you from?",
-                "lesson_context_en": "LESSON 1.11: Where are you from?",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS",
-                "audio_seq": 3,
-                "audio_section": "phrases_verbs"
+                "section_context": "PHRASES & VERBS"
               },
               {
                 "kind": "list_item",
@@ -14084,11 +14066,11 @@
                 "audio_section": "phrases_verbs"
               },
               {
-                "kind": "list_item",
+                "kind": "paragraph",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Pailin: We’re bringing a pie to the potluck.\u000bLuke: Cool, what kind of pie are you bringing?",
+                    "text": "Luke: Cool, what kind of pie are you bringing?",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -14096,13 +14078,7 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.11: Where are you from?",
-                "lesson_key": "1.11",
-                "lesson_context_norm": "LESSON 1.11: Where are you from?",
-                "lesson_context_en": "LESSON 1.11: Where are you from?",
-                "lesson_context_th": null,
-                "section_context": "PHRASES & VERBS",
-                "audio_seq": 5,
-                "audio_section": "phrases_verbs"
+                "section_context": "PHRASES & VERBS"
               }
             ]
           }

@@ -232,7 +232,7 @@ export default function LessonContent({
                   {phraseLabel}
                   {phrasesSnipIdx?.idx?.[item.id] &&
                     Object.keys(phrasesSnipIdx.idx[item.id]).length > 0 && (
-                      <span className="audio-indicator"> ▶</span>
+                      <span className="audio-indicator"> </span>
                     )}
                 </summary>
 

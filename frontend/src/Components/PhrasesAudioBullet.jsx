@@ -118,7 +118,7 @@ export default function PhrasesAudioBullet({
       <span>{renderInlines(node.inlines)}</span>
       {/* Debug info - remove this later */}
       <small style={{ color: '#666', marginLeft: '8px' }}>
-        [phrase:{phraseId} v:{variant} seq:{node.audio_seq}] {hasSnip ? '✅' : '❌'}
+        [seq:{node.audio_seq}] {hasSnip ? '✅' : '❌'}
       </small>
     </li>
   );
