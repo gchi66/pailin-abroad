@@ -51,12 +51,12 @@ const Characters = () => {
 
   return (
     <section className="characters-section">
-      <div className="character-container">
+      <div className="character-card">
         <div className="character-image">
           <img src={selectedCharacter.image} alt={selectedCharacter.name} />
         </div>
-        <div className="character-card">
-          <h2 className="characters-title">MEET THE CHARACTERS</h2>
+        <div className="character-content">
+          <h2 className="characters-title">Meet the Characters</h2>
           <p className="character-description">{selectedCharacter.description}</p>
           <div className="character-thumbnails">
             {charactersData.map((character, index) => {

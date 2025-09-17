@@ -1,0 +1,147 @@
+/* FAQ Section */
+.faq-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10vh 0vw;
+  background-color: #fef8f4;
+}
+
+/* FAQ Title */
+.faq-title {
+  font-size: 3.2vw;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 6vh 0;
+  text-shadow: 0.08vw 0.08vw 0.18vw rgba(30,30,30,0.13);
+  text-align: center;
+}
+
+/* FAQ Cards Container */
+.faq-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+  max-width: 80vw;
+  width: 100%;
+}
+
+/* Individual FAQ Card */
+.faq-card {
+  background: white;
+  border-radius: 3vh;
+  border: .1rem solid #1E1E1E;
+  box-shadow: .2rem .2rem 0vw #1E1E1E;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* FAQ Header (clickable area) */
+.faq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4vh 5vh;
+  cursor: pointer;
+}
+
+/* FAQ Question */
+.faq-question {
+  font-size: 1.8vw;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: left;
+}
+
+/* FAQ Arrow */
+.faq-arrow {
+  font-size: 1.5vw;
+  color: #1E1E1E;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 2vw;
+}
+
+.faq-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* FAQ Content (expandable area) */
+.faq-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.faq-content.open {
+  max-height: 500px; /* Adjust as needed */
+}
+
+/* FAQ Answer */
+.faq-answer {
+  padding: 0 5vh 4vh 5vh;
+  font-size: 1.3vw;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .faq-title {
+    font-size: 6vw;
+    margin-bottom: 4vh;
+  }
+
+  .faq-cards-container {
+    max-width: 90vw;
+  }
+
+  .faq-header {
+    padding: 3vh 4vh;
+  }
+
+  .faq-question {
+    font-size: 3.5vw;
+  }  .faq-arrow {
+    font-size: 3vw;
+  }
+
+  .faq-answer {
+    padding: 0 4vh 3vh 4vh;
+    font-size: 3.5vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq-title {
+    font-size: 8vw;
+  }
+
+  .faq-cards-container {
+    max-width: 95vw;
+  }
+
+  .faq-header {
+    padding: 2.5vh 3vh;
+  }
+
+  .faq-question {
+    font-size: 4vw;
+  }  .faq-arrow {
+    font-size: 3.5vw;
+    margin-left: 3vw;
+  }
+
+  .faq-answer {
+    padding: 0 3vh 2.5vh 3vh;
+    font-size: 4vw;
+  }
+}

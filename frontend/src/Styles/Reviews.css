@@ -1,11 +1,9 @@
 .reviews-section {
-  padding: 10vh 2rem;
+  padding: 8vh 2rem;
 }
 
 .reviews-container {
-  background: white;
-  border-top: 0.15rem solid #1E1E1E;
-  border-bottom: 0.15rem solid #1E1E1E;
+  background: none;
   padding: 6vh 0vw 10vh 0vw;
   display: flex;
   flex-direction: column;
@@ -26,29 +24,30 @@
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
-  background: white;
+  background: none;
 }
 
 .review-card {
   max-width: 18.75rem;
   text-align: left;
-  background-color: #FDF7F4;
-  border-radius: 2.25rem;
+  background-color: white;
+  border-radius: 2.25rem 2.25rem 2.25rem 0;
   border: .1rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-
+  justify-content: space-between;
+  min-height: 25vh;
 }
 
 .review-text {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
-  font-size: .9rem;
+  font-size: 1.1rem;
   color: #1E1E1E;
   line-height: 1.5;
-  min-height: 20vh;
+  flex-grow: 1;
 }
 
 .photo-name-container {

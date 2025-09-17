@@ -2,94 +2,104 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh;
-  padding: 10vh;
+  padding: 8vh 0vw 8vh 0vw;
+  background-color: #fef8f4;
 }
 
-.character-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-  height: 80%;
-}
-
+/* Character Card - Same style as Hero card */
 .character-card {
   display: flex;
-  gap: 2rem;
-  flex-direction: column;
-  /* align-items: center; */
+  align-items: center;
   background: white;
-  padding: 8vh 12rem 8vh 10rem;
+  padding: 5vh 10vh;
   border-radius: 2vh;
   border: .1rem solid #1E1E1E;
-  box-shadow: .2rem .2rem 0px #1E1E1E;
+  box-shadow: .2rem .2rem 0vw #1E1E1E;
   position: relative;
-  max-width: 50vw;
-  width: 90%;
-  left: 25%;
-  /* margin-top: 10rem; */
+  max-width: 75vw;
+  width: 100%;
+  min-height: 44vh;
+  height: auto;
+  gap: 2vw;
+}
+
+.character-image {
+  flex-shrink: 0;
+  max-width: 36%;
+  height: auto;
+  object-fit: contain;
+  margin-left: 0;
+  margin-right: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.character-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Character Content */
+.character-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6vh;
+  text-align: left;
 }
 
 .characters-title {
-  font-size: 2.5rem;
+  font-size: 3.2vw;
+  color: #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
-  text-align: left;
-  color: #0f172a;
+  line-height: 1.15;
+  position: relative;
   margin: 0;
+  white-space: normal;
+  max-width: 100%;
+  overflow: hidden;
+  text-shadow: 0.08vw 0.08vw 0.18vw rgba(30,30,30,0.13);
+  white-space: no-wrap;
 }
 
 .character-description {
-  font-size: 1.2rem;
+  font-size: 2.5vh;
   font-family: "Poppins", sans-serif;
-  color: #1e1e1e;
-  line-height: 1.6;
-  text-align: left;
+  color: #1E1E1E;
+  font-weight: 500;
+  margin: 0;
+  white-space: normal;
+  line-height: 2.0;
 }
 
 .character-thumbnails {
   display: flex;
-  /* justify-content: center; */
-  gap: 1dvh;
+  gap: 1vh;
+  margin-top: 1vh;
 }
 
 .thumbnail {
-  width: 10rem;
-  height: 10rem;
+  width: 13vh;
+  height: 13vh;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: transform 0.2s;
+}
 
+.thumbnail:hover {
+  transform: scale(1.05);
 }
 
 .thumbnail.selected {
-  border-color: #42b4f3;
+  border: 0.2vh solid #42b4f3;
 }
 
 .thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  /* border: .3dvh solid #1E1E1E;
-  transition: border-color 0.3s; */
-}
-.character-image {
-  width: 30rem;
-  height: 30rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: -10dvh;
-  z-index: 1;
-  /* border: .1rem solid #1E1E1E;
-  box-shadow: 5px 5px 0px #1E1E1E; */
-}
-
-.character-image img {
   width: 100%;
   height: 100%;
   object-fit: contain;

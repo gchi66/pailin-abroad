@@ -6,7 +6,14 @@ import FreeLessonHeader from "../Components/FreeLessonHeader";
 import FreeLessonCards from "../Components/FreeLessonCards";
 import ReusablePlacementTest from "../Components/ReusablePlacementTest";
 import Features from "../Components/Features";
-import Method from "../Components/Method";
+import Method from "../Components/Method"
+import ChooseUs from "../Components/ChooseUs";
+import HowItWorks from '../Components/HowItWorks';
+import SignUpCTA from '../Components/SignUpCTA';
+import TakeTheLeapCTA from '../Components/TakeTheLeapCTA';
+import FAQ from '../Components/FAQ';
+
+
 // import About from "../Components/About";
 import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
@@ -46,18 +53,16 @@ const Home = () => {
   return (
     <div>
       <Hero />
-      <FreeLessonHeader />
       <FreeLessonCards />
       <ReusablePlacementTest />
-      <Features  />
-      {/* <Method /> */}
-      <CTA />
-      {/* <About /> */}
+      <ChooseUs />
+      <HowItWorks />
+      <SignUpCTA />
       <Characters />
       <Reviews />
-      {/* <button className="chat-button" onClick={handleChatClick}>
-        Let's Chat!
-      </button> */}
+      <TakeTheLeapCTA />
+      <FAQ />
+
       {message && <p className="backend-message">{message}</p>}
     </div>
   );

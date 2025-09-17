@@ -1,0 +1,66 @@
+.signup-cta {
+  background: none;
+  text-align: center;
+  padding: 8vh 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.signup-cta-title {
+  color: #1e1e1e;
+  font-size: 1.5rem; /* Smaller than the original 2rem */
+  font-weight: 600;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.signup-cta-title em {
+  font-style: italic;
+  font-weight: 600; /* Maintain the same weight for the italicized word */
+}
+
+.signup-cta-button {
+  background-color: #F65555;
+  color: white;
+  border: .3dvh solid #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 1rem 1.8rem;
+  border-radius: 8rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  min-width: 45%;
+  min-height: 5rem;
+  white-space: nowrap;
+}
+
+.signup-cta-button:hover {
+  background-color: #ff4a4a;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .signup-cta-title {
+    font-size: 1.3rem;
+  }
+
+  .signup-cta-button {
+    width: 70%;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-cta-title {
+    font-size: 1.1rem;
+  }
+
+  .signup-cta-button {
+    width: 85%;
+    font-size: 1.3rem;
+  }
+}

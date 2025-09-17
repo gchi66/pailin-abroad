@@ -4,18 +4,20 @@ import "../Styles/AudioBar.css";
 /**
  * Props
  * ─────
- * audioSrc      – full path to the MP3 (local, CDN, or Supabase signed URL)
- * description   – short sentence under the heading (falls back to "")
- * tipsOnClick   – optional handler when the user clicks “LISTENING TIPS”
+ * audioSrc        – full mix file (voices + bg)
+ * audioSrcNoBg    – voices only (optional)
+ * audioSrcBg      – background only (optional)
+ * description     – optional description
  */
 export default function AudioBar({
-  audioSrc = "/audio/sample.mp3",
+  audioSrc,
+  audioSrcNoBg,
+  audioSrcBg,
   description = "",
-  // tipsOnClick = () => alert("TODO: open tips modal"),
 }) {
-  const audio = useRef(null);
+  const voiceRef = useRef(null);
+  const bgRef = useRef(null);
 
-  /* ─── state ─────────────────────────────────────────────── */
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -23,65 +25,153 @@ export default function AudioBar({
   const [rate, setRate] = useState(1);
   const rates = [0.5, 0.75, 1, 1.25, 1.5];
 
-  /* ─── event handlers ────────────────────────────────────── */
+  // Decide mode: split or fallback
+  const hasSplit = !!(audioSrcNoBg && audioSrcBg);
+
   const togglePlay = () => {
-    if (!audio.current) return;
-    playing ? audio.current.pause() : audio.current.play();
+    if (hasSplit) {
+      if (!voiceRef.current || !bgRef.current) return;
+      if (playing) {
+        voiceRef.current.pause();
+        bgRef.current.pause();
+      } else {
+        // sync before starting
+        bgRef.current.currentTime = voiceRef.current.currentTime;
+        voiceRef.current.play();
+        bgRef.current.play();
+      }
+    } else {
+      if (!voiceRef.current) return;
+      playing ? voiceRef.current.pause() : voiceRef.current.play();
+    }
     setPlaying(!playing);
   };
 
   const seek = (pct) => {
-    if (!audio.current) return;
+    if (!voiceRef.current) return;
     const newTime = duration * pct;
-    audio.current.currentTime = newTime;
+    voiceRef.current.currentTime = newTime;
+    if (hasSplit && bgRef.current) {
+      bgRef.current.currentTime = newTime;
+    }
     setCurrent(newTime);
   };
 
   const skip = (sec) => {
-    if (!audio.current) return;
-    audio.current.currentTime = Math.max(
+    if (!voiceRef.current) return;
+    const newTime = Math.max(
       0,
-      Math.min(duration, audio.current.currentTime + sec)
+      Math.min(duration, voiceRef.current.currentTime + sec)
     );
+    voiceRef.current.currentTime = newTime;
+    if (hasSplit && bgRef.current) {
+      bgRef.current.currentTime = newTime;
+    }
   };
 
   const toggleMute = () => {
-    if (!audio.current) return;
-    audio.current.muted = !muted;
+    if (hasSplit) {
+      if (voiceRef.current) voiceRef.current.muted = !muted;
+      if (bgRef.current) bgRef.current.muted = !muted;
+    } else {
+      if (voiceRef.current) voiceRef.current.muted = !muted;
+    }
     setMuted(!muted);
   };
 
-  const cycleRate = () => {
-    // Deprecated: replaced by direct selection
+  // Handle rate change
+  const changeRate = (newRate) => {
+    setRate(newRate);
+
+    if (hasSplit) {
+      // Only change voice playback rate
+      if (voiceRef.current) {
+        voiceRef.current.playbackRate = newRate;
+      }
+      // Background stays at 1x speed for quality preservation
+      if (bgRef.current) {
+        bgRef.current.playbackRate = 1;
+      }
+    } else {
+      // Single file mode - change rate normally
+      if (voiceRef.current) {
+        voiceRef.current.playbackRate = newRate;
+      }
+    }
   };
 
-  /* ─── attach listeners once ─────────────────────────────── */
+  // Attach listeners
   useEffect(() => {
-    const el = audio.current;
-    if (!el) return;
-    const onTime = () => setCurrent(el.currentTime);
-    const onMeta = () => setDuration(el.duration || 0);
-    el.addEventListener("timeupdate", onTime);
-    el.addEventListener("loadedmetadata", onMeta);
-    // Set playback rate whenever rate changes
-    el.playbackRate = rate;
-    return () => {
-      el.removeEventListener("timeupdate", onTime);
-      el.removeEventListener("loadedmetadata", onMeta);
+    const voice = voiceRef.current;
+    if (!voice) return;
+
+    let lastSyncTime = 0;
+    const SYNC_INTERVAL = 500; // Only sync every 500ms
+    const SYNC_THRESHOLD = 0.25; // Larger threshold for less frequent syncing
+
+    const onTime = () => {
+      setCurrent(voice.currentTime);
+
+      // Dynamic time mapping for background sync with throttling
+      if (hasSplit && bgRef.current) {
+        const now = Date.now();
+        const targetBgTime = voice.currentTime;
+        const timeDiff = Math.abs(bgRef.current.currentTime - targetBgTime);
+
+        // Only sync if:
+        // 1. Enough time has passed since last sync AND there's drift
+        // 2. OR there's significant drift (> 1 second) - emergency sync
+        const shouldSync =
+          (now - lastSyncTime > SYNC_INTERVAL && timeDiff > SYNC_THRESHOLD) ||
+          timeDiff > 1.0;
+
+        if (shouldSync) {
+          bgRef.current.currentTime = targetBgTime;
+          lastSyncTime = now;
+        }
+      }
     };
-  }, [rate]);
+
+    const onMeta = () => setDuration(voice.duration || 0);
+
+    voice.addEventListener("timeupdate", onTime);
+    voice.addEventListener("loadedmetadata", onMeta);
+
+    // Apply current rate
+    changeRate(rate);
+
+    return () => {
+      voice.removeEventListener("timeupdate", onTime);
+      voice.removeEventListener("loadedmetadata", onMeta);
+    };
+  }, [rate, hasSplit]);
+
+  // Handle rate changes when rate state updates
+  useEffect(() => {
+    changeRate(rate);
+  }, [rate, hasSplit]);
 
   const fmt = (s) =>
-    !s ? "0:00" : `${Math.floor(s / 60)}:${`${Math.floor(s % 60)}`.padStart(2, "0")}`;
+    !s
+      ? "0:00"
+      : `${Math.floor(s / 60)}:${`${Math.floor(s % 60)}`.padStart(2, "0")}`;
 
   return (
     <section className="audio-card">
       <h3 className="audio-heading">LISTEN TO THE CONVERSATION</h3>
       {description && <p className="audio-desc">{description}</p>}
 
-      <audio ref={audio} src={audioSrc} preload="metadata" />
+      {/* audio elements */}
+      {hasSplit ? (
+        <>
+          <audio ref={voiceRef} src={audioSrcNoBg} preload="metadata" />
+          <audio ref={bgRef} src={audioSrcBg} preload="auto" />
+        </>
+      ) : (
+        <audio ref={voiceRef} src={audioSrc} preload="metadata" />
+      )}
 
-      {/* control row */}
+      {/* controls */}
       <div className="bar-row">
         <button className="icon-btn play-btn" onClick={togglePlay} aria-label="Play / Pause">
           {playing ? "⏸" : "▶️"}
@@ -89,7 +179,6 @@ export default function AudioBar({
 
         <span className="time-label">{fmt(current)}</span>
 
-        {/* progress track */}
         <div
           className="track"
           role="slider"
@@ -110,10 +199,10 @@ export default function AudioBar({
 
         <span className="time-label">{fmt(duration)}</span>
 
-        <button className="icon-btn" onClick={() => skip(-10)} title="Replay 10 s">
+        <button className="icon-btn" onClick={() => skip(-10)} title="Replay 10 s">
           ↺10
         </button>
-        <button className="icon-btn" onClick={() => skip(10)} title="Forward 10 s">
+        <button className="icon-btn" onClick={() => skip(10)} title="Forward 10 s">
           ↻10
         </button>
 
@@ -121,7 +210,6 @@ export default function AudioBar({
           {muted ? "🔇" : "🔊"}
         </button>
 
-        {/* Elegant playback rate control */}
         <div className="rate-group">
           {rates.map((r) => (
             <button
@@ -135,13 +223,6 @@ export default function AudioBar({
           ))}
         </div>
       </div>
-{/*
-      listening tips
-      <button className="tips-row" onClick={tipsOnClick}>
-        <span className="tips-icon">💡</span>
-        <span className="tips-text">LISTENING TIPS</span>
-      </button> */}
-
     </section>
   );
 }

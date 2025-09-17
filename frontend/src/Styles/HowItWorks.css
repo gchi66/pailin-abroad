@@ -1,0 +1,130 @@
+/* General HowItWorks Section */
+.how-it-works {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8vh 0vw;
+  background-color: #fef8f4;
+}
+
+/* Main Title */
+.how-it-works-title {
+  font-size: 3.2vw;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 6vh 0;
+  text-shadow: 0.08vw 0.08vw 0.18vw rgba(30,30,30,0.13);
+}
+
+/* Cards Container */
+.how-it-works-cards {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 3vw;
+  max-width: 80vw;
+}
+
+/* Individual Card */
+.hiw-card {
+  background: white;
+  border-radius: 3vh;
+  border: .1rem solid #1E1E1E;
+  box-shadow: .2rem .2rem 0vw #1E1E1E;
+  padding: 3vh 2vw;
+  max-width: 22vw;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2vh;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Number Image */
+.hiw-number {
+  width: 6vw;
+  height: 6vw;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Card Header */
+.hiw-header {
+  font-size: 1.7vw;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 620;
+  margin: 0;
+  text-align: center;
+}
+
+/* Card Text */
+.hiw-text {
+  font-size: 1.2vw;
+  color: #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .how-it-works-title {
+    font-size: 6vw;
+    margin-bottom: 4vh;
+  }
+
+  .how-it-works-cards {
+    flex-direction: column;
+    gap: 4vh;
+    max-width: 85vw;
+  }
+
+  .hiw-card {
+    max-width: 100%;
+    padding: 4vh 6vw;
+  }
+
+  .hiw-number {
+    width: 12vw;
+    height: 12vw;
+  }
+
+  .hiw-header {
+    font-size: 4vw;
+  }
+
+  .hiw-text {
+    font-size: 3.5vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .how-it-works-title {
+    font-size: 8vw;
+  }
+
+  .hiw-card {
+    padding: 3vh 4vw;
+  }
+
+  .hiw-number {
+    width: 15vw;
+    height: 15vw;
+  }
+
+  .hiw-header {
+    font-size: 5vw;
+  }
+
+  .hiw-text {
+    font-size: 4vw;
+  }
+}

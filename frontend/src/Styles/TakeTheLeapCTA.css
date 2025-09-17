@@ -1,0 +1,62 @@
+.take-the-leap-cta {
+  background: white;
+  border-top: 0.15rem solid #1E1E1E;
+  border-bottom: 0.15rem solid #1E1E1E;
+  text-align: center;
+  padding: 10vh 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.take-the-leap-cta-title {
+  color: #1e1e1e;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.take-the-leap-cta-button {
+  background-color: #F65555;
+  color: white;
+  border: .3dvh solid #1E1E1E;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  width: 45%;
+  min-height: 5rem;
+}
+
+.take-the-leap-cta-button:hover {
+  background-color: #ff4a4a;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .take-the-leap-cta-title {
+    font-size: 1.3rem;
+  }
+
+  .take-the-leap-cta-button {
+    width: 70%;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .take-the-leap-cta-title {
+    font-size: 1.1rem;
+  }
+
+  .take-the-leap-cta-button {
+    width: 85%;
+    font-size: 1.3rem;
+  }
+}

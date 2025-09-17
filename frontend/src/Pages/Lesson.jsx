@@ -188,6 +188,8 @@ export default function Lesson() {
 
   // Audio + snippets
   const [audioUrl, setAudioUrl] = useState(null);
+  const [audioUrlNoBg, setAudioUrlNoBg] = useState(null);
+  const [audioUrlBg, setAudioUrlBg] = useState(null);
   const [snipIdx, setSnipIdx] = useState({});
   const [phrasesSnipIdx, setPhrasesSnipIdx] = useState({});
 
@@ -294,24 +296,60 @@ export default function Lesson() {
           }
         }
 
-        // 3) sign conversation audio
+        // 3) sign conversation audio (all three versions)
         if (lsn.conversation_audio_url) {
           try {
-            const { data, error } = await supabaseClient.storage
+            // Sign the main conversation file
+            const { data: mainData, error: mainError } = await supabaseClient.storage
               .from("lesson-audio")
               .createSignedUrl(lsn.conversation_audio_url, 2 * 60 * 60);
-            if (error) {
-              console.warn("Audio signed URL error:", error);
+
+            if (mainError) {
+              console.warn("Main audio signed URL error:", mainError);
               setAudioUrl(null);
             } else {
-              setAudioUrl(data.signedUrl);
+              setAudioUrl(mainData.signedUrl);
             }
+
+            // Generate paths for split versions
+            const basePath = lsn.conversation_audio_url;
+            const noBgPath = basePath.replace('.mp3', '_no_bg.mp3');
+            const bgPath = basePath.replace('.mp3', '_bg.mp3');
+
+            // Sign the no-background version
+            const { data: noBgData, error: noBgError } = await supabaseClient.storage
+              .from("lesson-audio")
+              .createSignedUrl(noBgPath, 2 * 60 * 60);
+
+            if (noBgError) {
+              console.warn("No-bg audio signed URL error:", noBgError);
+              setAudioUrlNoBg(null);
+            } else {
+              setAudioUrlNoBg(noBgData.signedUrl);
+            }
+
+            // Sign the background-only version
+            const { data: bgData, error: bgError } = await supabaseClient.storage
+              .from("lesson-audio")
+              .createSignedUrl(bgPath, 2 * 60 * 60);
+
+            if (bgError) {
+              console.warn("Background audio signed URL error:", bgError);
+              setAudioUrlBg(null);
+            } else {
+              setAudioUrlBg(bgData.signedUrl);
+            }
+
           } catch (e) {
             console.warn("Audio signed URL exception:", e);
             setAudioUrl(null);
+            setAudioUrlNoBg(null);
+            setAudioUrlBg(null);
           }
         } else {
           setAudioUrl(null);
+          setAudioUrlNoBg(null);
+          setAudioUrlBg(null);
         }
 
         // 4) fetch audio snippet index
@@ -402,7 +440,12 @@ export default function Lesson() {
         />
 
         {/* Audio card */}
-        <AudioBar audioSrc={audioUrl} description={lesson.backstory} />
+       <AudioBar
+          audioSrc={audioUrl}
+          audioSrcNoBg={audioUrlNoBg}
+          audioSrcBg={audioUrlBg}
+          description={lesson.backstory}
+        />
 
         {/* Language toggles
         <LanguageToggle
