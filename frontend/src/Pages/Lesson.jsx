@@ -1,6 +1,6 @@
 // frontend/src/Pages/Lesson.jsx
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import { useParams, Link, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchResolvedLesson } from "../lib/fetchResolvedLesson";
 import { fetchSnippets, fetchPhrasesSnippets } from "../lib/fetchSnippets";
@@ -11,6 +11,7 @@ import LessonSidebar from "../Components/LessonSidebar";
 import LessonContent from "../Components/LessonContent";
 import LessonDiscussion from "../Components/LessonDiscussion";
 import LanguageToggle from "../Components/LanguageToggle";
+import LessonNavigationBanner from "../Components/LessonNavigationBanner";
 
 import "../Styles/Lesson.css";
 
@@ -484,26 +485,16 @@ export default function Lesson() {
           />
         </div>
 
-        {/* Prev / Next */}
-        <div
-          className="lesson-nav-buttons"
-          style={{ display: "flex", justifyContent: "center", gap: "2rem", margin: "2rem 0" }}
-        >
-          <Link
-            to={prevLesson ? `/lesson/${prevLesson.id}` : "#"}
-            className={`lesson-nav-btn${prevLesson ? "" : " disabled"}`}
-            style={{ pointerEvents: prevLesson ? "auto" : "none", opacity: prevLesson ? 1 : 0.5 }}
-          >
-            ← Previous Lesson
-          </Link>
-          <Link
-            to={nextLesson ? `/lesson/${nextLesson.id}` : "#"}
-            className={`lesson-nav-btn${nextLesson ? "" : " disabled"}`}
-            style={{ pointerEvents: nextLesson ? "auto" : "none", opacity: nextLesson ? 1 : 0.5 }}
-          >
-            Next Lesson →
-          </Link>
-        </div>
+        {/* Lesson Navigation Banner */}
+        <LessonNavigationBanner
+          prevLesson={prevLesson}
+          nextLesson={nextLesson}
+          currentLesson={lesson}
+          onMarkComplete={(isCompleted) => {
+            console.log(`Lesson ${lesson.lesson_external_id} marked as ${isCompleted ? 'completed' : 'incomplete'}`);
+            // TODO: Add actual completion tracking logic here
+          }}
+        />
 
         {/* Discussion */}
         <LessonDiscussion lessonId={lesson.id} isAdmin={false} />

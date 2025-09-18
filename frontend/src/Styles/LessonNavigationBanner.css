@@ -1,0 +1,136 @@
+.lesson-navigation-banner {
+  background: white;
+  border-top: 0.15rem solid #1E1E1E;
+  border-bottom: 0.15rem solid #1E1E1E;
+  padding: 3vh 4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Layout sections */
+.lesson-nav-left,
+.lesson-nav-right {
+  flex: 1;
+  display: flex;
+}
+
+.lesson-nav-left {
+  justify-content: flex-start;
+}
+
+.lesson-nav-right {
+  justify-content: flex-end;
+}
+
+.lesson-nav-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Navigation text links */
+.lesson-navigation-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1E1E1E;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: inline-block;
+}
+
+.lesson-navigation-text:hover:not(.disabled) {
+  color: #F65555;
+  transform: scale(1.02);
+}
+
+.lesson-navigation-text.disabled {
+  opacity: 0;
+  cursor: default;
+}
+
+/* Mark complete button */
+.lesson-mark-complete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.lesson-mark-complete-button:hover {
+  transform: scale(1.02);
+}
+
+.lesson-mark-complete-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1E1E1E;
+  white-space: nowrap;
+}
+
+.lesson-checkmark-icon {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.lesson-mark-complete-button:hover .lesson-checkmark-icon {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lesson-navigation-banner {
+    flex-direction: column;
+    gap: 2rem;
+    /* padding: 4vh 4vw; */
+  }
+
+  .lesson-nav-left,
+  .lesson-nav-right,
+  .lesson-nav-center {
+    flex: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .lesson-nav-center {
+    order: -1; /* Move to top on mobile */
+  }
+
+  .lesson-mark-complete-text {
+    font-size: 1rem;
+  }
+
+  .lesson-navigation-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .lesson-mark-complete-button {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .lesson-mark-complete-text {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .lesson-navigation-text {
+    font-size: 0.9rem;
+  }
+}
