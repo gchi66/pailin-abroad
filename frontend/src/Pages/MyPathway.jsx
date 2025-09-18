@@ -1,12 +1,108 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+import supabaseClient from "../supabaseClient";
 import "../Styles/MyPathway.css";
 
 const MyPathway = () => {
   const [activeTab, setActiveTab] = useState("pathway");
+  const [userProfile, setUserProfile] = useState(null);
+  const [completedLessons, setCompletedLessons] = useState([]);
+  const [pathwayLessons, setPathwayLessons] = useState([]);
+  const [nextLesson, setNextLesson] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { user } = useAuth();
 
-  // Mock data for demonstration
-  const userProfile = {
+  // Fetch user profile data from backend
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Get the current session to access the access token
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        if (!session?.access_token) {
+          setError("No authentication token found");
+          setLoading(false);
+          return;
+        }
+
+        // Make API call to backend for profile
+        const profileResponse = await fetch('/api/user/profile', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!profileResponse.ok) {
+          throw new Error(`HTTP error! status: ${profileResponse.status}`);
+        }
+
+        const profileData = await profileResponse.json();
+        setUserProfile(profileData.profile);
+
+        // Fetch completed lessons
+        const lessonsResponse = await fetch('/api/user/completed-lessons', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (lessonsResponse.ok) {
+          const lessonsData = await lessonsResponse.json();
+          setCompletedLessons(lessonsData.completed_lessons || []);
+        }
+
+        // Fetch next lesson
+        const nextLessonResponse = await fetch('/api/user/next-lesson', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (nextLessonResponse.ok) {
+          const nextLessonData = await nextLessonResponse.json();
+          setNextLesson(nextLessonData.next_lesson);
+        }
+
+        // Fetch pathway lessons
+        const pathwayResponse = await fetch('/api/user/pathway-lessons', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (pathwayResponse.ok) {
+          const pathwayData = await pathwayResponse.json();
+          setPathwayLessons(pathwayData.pathway_lessons || []);
+        }
+
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
+
+  // Mock data for demonstration (will be replaced with real data later)
+  const mockUserProfile = {
     name: "Sarah Johnson",
     level: "Upper Intermediate",
     plan: "Premium",
@@ -19,15 +115,6 @@ const MyPathway = () => {
     progressPercentage: 70
   };
 
-  // Mock lesson data
-  const pathwayLessons = [
-    { id: 1, number: 11, title: "Making Small Talk", subtitle: "การพูดคุยเรื่องเล็กๆ น้อยๆ", isCompleted: true },
-    { id: 2, number: 12, title: "Asking for Directions", subtitle: "การถามทาง", isCompleted: true },
-    { id: 3, number: 13, title: "Ordering Food at a Restaurant", subtitle: "การสั่งอาหารที่ร้านอาหาร", isCurrent: true },
-    { id: 4, number: 14, title: "Discussing Weekend Plans", subtitle: "การพูดคุยเกี่ยวกับแผนสุดสัปดาห์", isCompleted: false },
-    { id: 5, number: 15, title: "Making Appointments", subtitle: "การนัดหมาย", isCompleted: false }
-  ];
-
   const renderTabContent = () => {
     switch (activeTab) {
       case "pathway":
@@ -35,8 +122,10 @@ const MyPathway = () => {
           <>
             {/* Progress Section */}
             <div className="pathway-progress-section">
-              <h3 className="pathway-section-title">Your next lesson: {currentProgress.nextLesson}</h3>
-              <div className="pathway-progress-bar-container">
+              <h3 className="pathway-section-title">
+                Your next lesson: {nextLesson ? nextLesson.formatted : "Loading..."}
+              </h3>
+              {/* <div className="pathway-progress-bar-container">
                 <div className="pathway-progress-bar">
                   <div
                     className="pathway-progress-fill"
@@ -44,31 +133,41 @@ const MyPathway = () => {
                   ></div>
                 </div>
                 <span className="pathway-progress-text">{currentProgress.progressPercentage}% Complete</span>
-              </div>
+              </div> */}
             </div>
 
             {/* Lessons List */}
             <div className="pathway-lessons-section">
               <div className="pathway-lesson-list">
-                {pathwayLessons.map((lesson) => (
+                {pathwayLessons.map((lesson, index) => (
                   <Link
                     to={`/lesson/${lesson.id}`}
                     key={lesson.id}
-                    className={`pathway-lesson-item ${lesson.isCurrent ? 'current' : ''} ${lesson.isCompleted ? 'completed' : ''}`}
+                    className={`pathway-lesson-item ${index === 0 ? 'next-lesson' : ''}`}
                   >
-                    <div className="pathway-lesson-left">
-                      <span className="pathway-lesson-number">{lesson.number}</span>
-                      <div className="pathway-lesson-content">
-                        <span className="pathway-lesson-title">{lesson.title}</span>
-                        <span className="pathway-lesson-subtitle">{lesson.subtitle}</span>
+                    <div className="pathway-lesson-content">
+                      <div className="pathway-lesson-header">
+                        <span className="pathway-lesson-number">
+                          {lesson.level}.{lesson.lesson_order}
+                        </span>
+                        <div className="pathway-lesson-text">
+                          <span className="pathway-lesson-title">
+                            {lesson.title}
+                          </span>
+                          {lesson.focus && (
+                            <div className="pathway-lesson-focus">
+                              {lesson.focus}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="pathway-lesson-right">
-                      {lesson.isCompleted ? (
-                        <img src="/images/filled-checkmark-lesson-complete.png" alt="Completed" className="pathway-checkmark" />
-                      ) : (
-                        <img src="/images/CheckCircle.png" alt="Not completed" className="pathway-checkmark" />
-                      )}
+                      <img
+                        src="/images/CheckCircle.png"
+                        alt="Not completed"
+                        className="pathway-checkmark"
+                      />
                     </div>
                   </Link>
                 ))}
@@ -79,9 +178,50 @@ const MyPathway = () => {
 
       case "completed":
         return (
-          <div className="pathway-placeholder">
-            <h3>Completed Lessons</h3>
-            <p>Your completed lessons will appear here.</p>
+          <div className="pathway-completed-section">
+            <h3>Completed Lessons ({completedLessons.length})</h3>
+            {completedLessons.length > 0 ? (
+              <div className="pathway-lesson-list">
+                {completedLessons.map((progress) => (
+                  <Link
+                    to={`/lesson/${progress.lesson_id}`}
+                    key={progress.id}
+                    className="pathway-lesson-item completed"
+                  >
+                    <div className="pathway-lesson-left">
+                      <span className="pathway-lesson-number">
+                        {progress.lessons?.level && progress.lessons?.lesson_order
+                          ? `${progress.lessons.level}.${progress.lessons.lesson_order}`
+                          : progress.lessons?.external_id || progress.lesson_id}
+                      </span>
+                      <div className="pathway-lesson-content">
+                        <span className="pathway-lesson-title">
+                          {progress.lessons?.title || "Lesson Title"}
+                          {progress.lessons?.title_th && (
+                            <span className="lesson-name-th"> {progress.lessons.title_th}</span>
+                          )}
+                        </span>
+                        <span className="pathway-lesson-subtitle">
+                          {progress.lessons?.subtitle || ""}
+                          {progress.lessons?.subtitle_th && (
+                            <span className="lesson-desc-th"> {progress.lessons.subtitle_th}</span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="pathway-lesson-right">
+                      <img
+                        src="/images/filled-checkmark-lesson-complete.webp"
+                        alt="Completed"
+                        className="pathway-checkmark"
+                      />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p>No completed lessons yet. Start learning to see your progress here!</p>
+            )}
           </div>
         );
 
@@ -110,82 +250,96 @@ const MyPathway = () => {
     <main className="pathway-main">
       <div className="pathway-container">
 
-        {/* Header Section */}
-        <div className="pathway-header">
-          <div className="pathway-header-left">
-            <img
-              src="/images/characters/pailin-blue-left.png"
-              alt="Profile Avatar"
-              className="pathway-avatar"
-            />
-            <div className="pathway-user-info">
-              <h2 className="pathway-welcome">Welcome back, {userProfile.name}</h2>
-              <div className="pathway-account-info">
-                <span className="pathway-level">Level: {userProfile.level}</span>
-                <span className="pathway-plan">Plan: Full Access</span>
-                <Link to="/profile" className="pathway-settings-link">Account Settings</Link>
+        {/* Loading State */}
+        {loading && (
+          <div className="pathway-loading">
+            <p>Loading your pathway...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="pathway-error">
+            <p>Error: {error}</p>
+          </div>
+        )}
+
+        {/* Main Content - Show only when not loading and no error */}
+        {!loading && !error && (
+          <>
+            {/* Header Section */}
+            <div className="pathway-header">
+              <div className="pathway-header-left">
+                <img
+                  src="/images/characters/pailin-blue-left.png"
+                  alt="Profile Avatar"
+                  className="pathway-avatar"
+                />
+                <div className="pathway-user-info">
+                  <h2 className="pathway-welcome">Welcome back, {userProfile?.name || "User"}</h2>
+                  <div className="pathway-account-info">
+                    <span className="pathway-level">Level: {mockUserProfile.level}</span>
+                    <span className="pathway-plan">Plan: Full Access</span>
+                    <Link to="/profile" className="pathway-settings-link">Account Settings</Link>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pathway-header-right">
+                <div className="pathway-counter">
+                  <span className="pathway-counter-label">Lessons Complete</span>
+                  <span className="pathway-counter-number">{userProfile?.lessons_complete || 0}</span>
+                </div>
+                <div className="pathway-counter">
+                  <span className="pathway-counter-label">Levels Complete</span>
+                  <span className="pathway-counter-number">{mockUserProfile.levelsComplete}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="pathway-header-right">
-            <div className="pathway-counter">
-              <span className="pathway-counter-label">Lessons Complete</span>
-              <span className="pathway-counter-number">{userProfile.lessonsComplete}</span>
+            {/* Navigation Tabs */}
+            <nav className="pathway-nav">
+              <div className="pathway-tabs">
+                <button
+                  className={`pathway-tab ${activeTab === "pathway" ? "active" : ""}`}
+                  onClick={() => setActiveTab("pathway")}
+                >
+                  My Pathway
+                </button>
+                <button
+                  className={`pathway-tab ${activeTab === "completed" ? "active" : ""}`}
+                  onClick={() => setActiveTab("completed")}
+                >
+                  Completed
+                </button>
+                <button
+                  className={`pathway-tab ${activeTab === "liked" ? "active" : ""}`}
+                  onClick={() => setActiveTab("liked")}
+                >
+                  My Liked Lessons
+                </button>
+                <button
+                  className={`pathway-tab ${activeTab === "comments" ? "active" : ""}`}
+                  onClick={() => setActiveTab("comments")}
+                >
+                  Comment History
+                </button>
+              </div>
+            </nav>
+
+            {/* Tab Content */}
+            <div className="pathway-content">
+              {renderTabContent()}
             </div>
-            <div className="pathway-counter">
-              <span className="pathway-counter-label">Levels Complete</span>
-              <span className="pathway-counter-number">{userProfile.levelsComplete}</span>
+
+            {/* Footer Link */}
+            <div className="pathway-footer">
+              <Link to="/lessons" className="pathway-library-link">
+                Go to Lesson Library →
+              </Link>
             </div>
-          </div>
-        </div>
-
-
-        {/* Navigation Tabs */}
-        <nav className="pathway-nav">
-          <div className="pathway-tabs">
-            <a
-              href="#"
-              className={`pathway-tab ${activeTab === "pathway" ? "active" : ""}`}
-              onClick={(e) => { e.preventDefault(); setActiveTab("pathway"); }}
-            >
-              My Pathway
-            </a>
-            <a
-              href="#"
-              className={`pathway-tab ${activeTab === "completed" ? "active" : ""}`}
-              onClick={(e) => { e.preventDefault(); setActiveTab("completed"); }}
-            >
-              Completed
-            </a>
-            <a
-              href="#"
-              className={`pathway-tab ${activeTab === "liked" ? "active" : ""}`}
-              onClick={(e) => { e.preventDefault(); setActiveTab("liked"); }}
-            >
-              My Liked Lessons
-            </a>
-            <a
-              href="#"
-              className={`pathway-tab ${activeTab === "comments" ? "active" : ""}`}
-              onClick={(e) => { e.preventDefault(); setActiveTab("comments"); }}
-            >
-              Comment History
-            </a>
-          </div>
-        </nav>
-
-        {/* Tab Content */}
-        <div className="pathway-content">
-          {renderTabContent()}
-        </div>
-
-        {/* Footer Link */}
-        <div className="pathway-footer">
-          <Link to="/lessons" className="pathway-library-link">
-            Go to Lesson Library →
-          </Link>
-        </div>
+          </>
+        )}
 
       </div>
     </main>

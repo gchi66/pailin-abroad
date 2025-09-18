@@ -1,15 +1,25 @@
 /* MyPathway Page Styles */
 
-.pathway-main {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  font-family: "Poppins", sans-serif;
+/* Loading and Error States */
+.pathway-loading,
+.pathway-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.pathway-error {
+  color: #d32f2f;
+}
+
+.pathway-loading p,
+.pathway-error p {
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 .pathway-container {
-  width: 80%;
+  width: 75%;
   background: #FFFFFF;
   border-radius: 3.6rem;
   padding: 4vh 4vw 6vh;
@@ -36,8 +46,8 @@
 }
 
 .pathway-avatar {
-  width: 5rem;
-  height: 5rem;
+  width: 10rem;
+  height: 10rem;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -117,12 +127,12 @@
   margin-right: -4vw;
   border-top: 0.15rem solid #1E1E1E;
   border-bottom: 0.15rem solid #1E1E1E;
-  padding: 1rem 4vw;
+  padding: 1.5rem 4vw;
 }
 
 .pathway-tabs {
   display: flex;
-  gap: 2rem;
+  gap: 4rem;
   overflow-x: auto;
   justify-content: center;
 }
@@ -132,7 +142,8 @@
   font-size: 0.9rem;
   font-weight: 700;
   color: #666;
-  text-decoration: none;
+  background: none;
+  border: none;
   padding: 0.5rem 0;
   white-space: nowrap;
   cursor: pointer;
@@ -222,8 +233,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem;
-  border: 0.1rem solid #ddd;
+  padding: 1.5rem 2rem;
+  border: 0.15rem solid #1e1e1e;
   border-radius: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -235,46 +246,57 @@
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
 }
 
-.pathway-lesson-item.current {
-  background-color: #f8f9fa;
-  border-color: #F65555;
-  box-shadow: 0 0.2rem 0.4rem rgba(246, 85, 85, 0.1);
+.pathway-lesson-item.next-lesson {
+  background-color: #DEEFFF;
+  border-color: #1e1e1e;
 }
 
 .pathway-lesson-item.completed {
   opacity: 0.8;
 }
 
-.pathway-lesson-left {
+.pathway-lesson-content {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
+  flex-direction: column;
+}
+
+.pathway-lesson-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .pathway-lesson-number {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 700;
   color: #1E1E1E;
-  min-width: 2rem;
-  text-align: center;
+  min-width: 4rem;
+  text-align: left;
+  flex-shrink: 0;
 }
 
-.pathway-lesson-content {
+.pathway-lesson-text {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  flex: 1;
 }
 
 .pathway-lesson-title {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #1E1E1E;
+  line-height: 1.2;
+  font-family: "Poppins", sans-serif;
 }
 
-.pathway-lesson-subtitle {
+.pathway-lesson-focus {
   font-size: 0.9rem;
   color: #666;
   font-weight: 400;
+  line-height: 1.3;
+  font-family: "Poppins", sans-serif;
 }
 
 .pathway-lesson-right {
@@ -376,9 +398,6 @@
     gap: 1rem;
   }
 
-  .pathway-lesson-number {
-    font-size: 1.2rem;
-  }
 
   .pathway-lesson-title {
     font-size: 1rem;

@@ -46,6 +46,297 @@ def login():
         return jsonify({"error": "Internal server error"}), 500
 
 
+@routes.route('/api/user/profile', methods=['GET'])
+def get_user_profile():
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Fetch user data from users table
+        result = supabase.table('users').select('*').eq('id', user_id).execute()
+
+        if not result.data:
+            return jsonify({"error": "User not found"}), 404
+
+        user_data = result.data[0]
+
+        # Count completed lessons from user_lesson_progress table
+        lessons_complete = 0
+        try:
+            progress_result = supabase.table('user_lesson_progress').select('id', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
+            lessons_complete = progress_result.count if progress_result.count is not None else 0
+        except Exception as e:
+            print(f"Warning: Could not fetch lesson progress: {e}")
+            # Use fallback value of 0 if query fails
+
+        # Prepare profile response with username fallback to email
+        profile = {
+            "id": user_data.get("id"),
+            "name": user_data.get("username") or user_data.get("email", "User"),
+            "username": user_data.get("username"),
+            "email": user_data.get("email"),
+            "is_admin": user_data.get("is_admin", False),
+            "created_at": user_data.get("created_at"),
+            "lessons_complete": lessons_complete
+        }
+
+        return jsonify({"profile": profile}), 200
+
+    except Exception as e:
+        print(f"Error fetching user profile: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/user/completed-lessons', methods=['GET'])
+def get_completed_lessons():
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Fetch completed lessons from user_lesson_progress table
+        completed_lessons = []
+        try:
+            progress_result = supabase.table('user_lesson_progress').select('*, lessons(*)').eq('user_id', user_id).eq('is_completed', True).execute()
+            completed_lessons = progress_result.data if progress_result.data else []
+        except Exception as e:
+            print(f"Warning: Could not fetch completed lessons: {e}")
+            # Return empty list if query fails
+
+        return jsonify({"completed_lessons": completed_lessons}), 200
+
+    except Exception as e:
+        print(f"Error fetching completed lessons: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/user/next-lesson', methods=['GET'])
+def get_next_lesson():
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Find the highest completed lesson (by level and lesson_order)
+        try:
+            completed_result = supabase.table('user_lesson_progress').select('*, lessons(level, lesson_order, stage, title, title_th)').eq('user_id', user_id).eq('is_completed', True).execute()
+            completed_lessons = completed_result.data if completed_result.data else []
+
+            if not completed_lessons:
+                # No completed lessons, find the very first lesson
+                first_lesson_result = supabase.table('lessons').select('*').order('stage, level, lesson_order').limit(1).execute()
+                if first_lesson_result.data:
+                    first_lesson = first_lesson_result.data[0]
+                    return jsonify({
+                        "next_lesson": {
+                            "level": first_lesson.get("level"),
+                            "lesson_order": first_lesson.get("lesson_order"),
+                            "title": first_lesson.get("title"),
+                            "stage": first_lesson.get("stage"),
+                            "formatted": f"Level {first_lesson.get('level')} • Lesson {first_lesson.get('lesson_order')}"
+                        }
+                    }), 200
+                else:
+                    return jsonify({"next_lesson": None}), 200
+
+            # Find the highest level and lesson_order among completed lessons
+            highest_level = 0
+            highest_lesson_order = 0
+            highest_stage = "Beginner"
+
+            for progress in completed_lessons:
+                lesson = progress.get('lessons', {})
+                level = lesson.get('level', 0)
+                lesson_order = lesson.get('lesson_order', 0)
+                stage = lesson.get('stage', 'Beginner')
+
+                if level > highest_level or (level == highest_level and lesson_order > highest_lesson_order):
+                    highest_level = level
+                    highest_lesson_order = lesson_order
+                    highest_stage = stage
+
+            # Find the next lesson after the highest completed one
+            # First try to find the next lesson in the same level
+            next_lesson_result = supabase.table('lessons').select('*').eq('level', highest_level).eq('stage', highest_stage).gt('lesson_order', highest_lesson_order).order('lesson_order').limit(1).execute()
+
+            if next_lesson_result.data:
+                next_lesson = next_lesson_result.data[0]
+            else:
+                # No more lessons in this level, try the next level in the same stage
+                next_level_result = supabase.table('lessons').select('*').eq('stage', highest_stage).gt('level', highest_level).order('level, lesson_order').limit(1).execute()
+
+                if next_level_result.data:
+                    next_lesson = next_level_result.data[0]
+                else:
+                    # No more lessons in this stage, try the next stage
+                    stage_order = ['Beginner', 'Lower Intermediate', 'Upper Intermediate', 'Advanced']
+                    current_stage_index = stage_order.index(highest_stage) if highest_stage in stage_order else 0
+
+                    if current_stage_index < len(stage_order) - 1:
+                        next_stage = stage_order[current_stage_index + 1]
+                        next_stage_result = supabase.table('lessons').select('*').eq('stage', next_stage).order('level, lesson_order').limit(1).execute()
+
+                        if next_stage_result.data:
+                            next_lesson = next_stage_result.data[0]
+                        else:
+                            return jsonify({"next_lesson": None}), 200
+                    else:
+                        return jsonify({"next_lesson": None}), 200
+
+            return jsonify({
+                "next_lesson": {
+                    "level": next_lesson.get("level"),
+                    "lesson_order": next_lesson.get("lesson_order"),
+                    "title": next_lesson.get("title"),
+                    "stage": next_lesson.get("stage"),
+                    "formatted": f"Level {next_lesson.get('level')} • Lesson {next_lesson.get('lesson_order')}"
+                }
+            }), 200
+
+        except Exception as e:
+            print(f"Warning: Could not fetch next lesson: {e}")
+            return jsonify({"next_lesson": None}), 200
+
+    except Exception as e:
+        print(f"Error fetching next lesson: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/user/pathway-lessons', methods=['GET'])
+def get_pathway_lessons():
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Find the highest completed lesson to determine starting point
+        try:
+            completed_result = supabase.table('user_lesson_progress').select('*, lessons(level, lesson_order, stage)').eq('user_id', user_id).eq('is_completed', True).execute()
+            completed_lessons = completed_result.data if completed_result.data else []
+
+            # Determine starting lesson
+            start_level = 1
+            start_lesson_order = 1
+            start_stage = "Beginner"
+
+            if completed_lessons:
+                # Find the highest completed lesson
+                highest_level = 0
+                highest_lesson_order = 0
+                highest_stage = "Beginner"
+
+                for progress in completed_lessons:
+                    lesson = progress.get('lessons', {})
+                    level = lesson.get('level', 0)
+                    lesson_order = lesson.get('lesson_order', 0)
+                    stage = lesson.get('stage', 'Beginner')
+
+                    if level > highest_level or (level == highest_level and lesson_order > highest_lesson_order):
+                        highest_level = level
+                        highest_lesson_order = lesson_order
+                        highest_stage = stage
+
+                # Set starting point to the next lesson after highest completed
+                start_level = highest_level
+                start_lesson_order = highest_lesson_order + 1
+                start_stage = highest_stage
+
+            # Fetch the next 5 lessons starting from the determined point
+            pathway_lessons = []
+            lessons_found = 0
+            current_level = start_level
+            current_stage = start_stage
+
+            while lessons_found < 5:
+                # Try to get lessons from current level starting from start_lesson_order
+                lesson_order_filter = start_lesson_order if current_level == start_level else 1
+
+                lessons_result = supabase.table('lessons').select('*').eq('stage', current_stage).eq('level', current_level).gte('lesson_order', lesson_order_filter).order('lesson_order').execute()
+
+                current_lessons = lessons_result.data if lessons_result.data else []
+
+                for lesson in current_lessons:
+                    if lessons_found < 5:
+                        pathway_lessons.append(lesson)
+                        lessons_found += 1
+                    else:
+                        break
+
+                if lessons_found < 5:
+                    # Move to next level in same stage
+                    current_level += 1
+
+                    # Check if this level exists in current stage
+                    level_check = supabase.table('lessons').select('level').eq('stage', current_stage).eq('level', current_level).limit(1).execute()
+
+                    if not level_check.data:
+                        # No more levels in current stage, move to next stage
+                        stage_order = ['Beginner', 'Lower Intermediate', 'Upper Intermediate', 'Advanced']
+                        current_stage_index = stage_order.index(current_stage) if current_stage in stage_order else 0
+
+                        if current_stage_index < len(stage_order) - 1:
+                            current_stage = stage_order[current_stage_index + 1]
+                            current_level = 1
+                        else:
+                            # No more stages, break
+                            break
+
+            return jsonify({"pathway_lessons": pathway_lessons}), 200
+
+        except Exception as e:
+            print(f"Warning: Could not fetch pathway lessons: {e}")
+            return jsonify({"pathway_lessons": []}), 200
+
+    except Exception as e:
+        print(f"Error fetching pathway lessons: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
 @routes.route('/api/signup', methods=['GET', 'POST'])
 def signup():
     print("Endpoint hit!")
