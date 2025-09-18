@@ -11,6 +11,7 @@ import Contact from "./Pages/Contact";
 import Modal from "./Components/Modal";
 import ProfilePage from "./Pages/ProfilePage";
 import Membership from "./Pages/Membership";
+import MyPathway from "./Pages/MyPathway";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
@@ -52,6 +53,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/lessons" element={<LessonsIndex />} />
             <Route path="/lesson/:id" element={<Lesson />} />
+            <Route path="/pathway" element={<MyPathway />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/membership" element={<Membership />} />
