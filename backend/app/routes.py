@@ -454,3 +454,113 @@ def get_lesson_resolved(lesson_id):
     resp.headers["Cache-Control"] = "public, max-age=60"
     resp.headers["Vary"] = "Accept-Encoding, lang"
     return resp, 200
+
+
+@routes.route('/api/user/level-completion-status/<stage>/<int:level>', methods=['GET'])
+def get_level_completion_status(stage, level):
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Get all lessons for this stage and level
+        lessons_result = supabase.table('lessons').select('id').eq('stage', stage).eq('level', level).execute()
+        all_lessons = lessons_result.data if lessons_result.data else []
+
+        if not all_lessons:
+            return jsonify({"is_completed": False, "total_lessons": 0, "completed_lessons": 0}), 200
+
+        lesson_ids = [lesson['id'] for lesson in all_lessons]
+
+        # Get completed lessons for this user in this stage/level
+        completed_result = supabase.table('user_lesson_progress').select('lesson_id').eq('user_id', user_id).eq('is_completed', True).in_('lesson_id', lesson_ids).execute()
+        completed_lessons = completed_result.data if completed_result.data else []
+
+        total_lessons = len(all_lessons)
+        completed_count = len(completed_lessons)
+        is_completed = completed_count == total_lessons and total_lessons > 0
+
+        return jsonify({
+            "is_completed": is_completed,
+            "total_lessons": total_lessons,
+            "completed_lessons": completed_count
+        }), 200
+
+    except Exception as e:
+        print(f"Error checking level completion status: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/user/stats', methods=['GET'])
+def get_user_stats():
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Get total completed lessons count
+        completed_lessons_result = supabase.table('user_lesson_progress').select('lesson_id', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
+        lessons_completed = completed_lessons_result.count if completed_lessons_result.count else 0
+
+        # Calculate completed levels
+        # First, get all completed lessons with their stage/level info
+        completed_with_lessons = supabase.table('user_lesson_progress').select('*, lessons(stage, level)').eq('user_id', user_id).eq('is_completed', True).execute()
+        completed_data = completed_with_lessons.data if completed_with_lessons.data else []
+
+        # Group completed lessons by stage and level
+        completed_by_level = {}
+        for progress in completed_data:
+            lesson = progress.get('lessons', {})
+            stage = lesson.get('stage')
+            level = lesson.get('level')
+
+            if stage and level is not None:
+                key = f"{stage}_{level}"
+                if key not in completed_by_level:
+                    completed_by_level[key] = []
+                completed_by_level[key].append(progress['lesson_id'])
+
+        # Now check each stage/level combination to see if it's fully completed
+        levels_completed = 0
+        for level_key, completed_lesson_ids in completed_by_level.items():
+            stage, level = level_key.split('_')
+            level = int(level)
+
+            # Get total lessons for this stage/level
+            total_lessons_result = supabase.table('lessons').select('id', count='exact').eq('stage', stage).eq('level', level).execute()
+            total_lessons_count = total_lessons_result.count if total_lessons_result.count else 0
+
+            # If user completed all lessons in this level, count it as completed
+            if len(completed_lesson_ids) == total_lessons_count and total_lessons_count > 0:
+                levels_completed += 1
+
+        return jsonify({
+            "lessons_completed": lessons_completed,
+            "levels_completed": levels_completed
+        }), 200
+
+    except Exception as e:
+        print(f"Error fetching user stats: {e}")
+        return jsonify({"error": "Internal server error"}), 500

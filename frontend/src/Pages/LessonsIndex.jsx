@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import supabaseClient from "../supabaseClient";
 import { Link } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 import "../Styles/LessonsIndex.css";
 
 const LessonsIndex = () => {
@@ -9,11 +10,123 @@ const LessonsIndex = () => {
   const [levels, setLevels] = useState([]);
   const [selectedStage, setSelectedStage] = useState("Beginner");
   const [selectedLevel, setSelectedLevel] = useState(1);
+  const [completedLessons, setCompletedLessons] = useState([]);
+  const [levelCompletionStatus, setLevelCompletionStatus] = useState(null);
+  const { user } = useAuth();
 
   // Track whether the stage has just changed
   const isStageChanged = useRef(false);
 
   // Fetch levels for the selected stage
+  useEffect(() => {
+    const fetchLevels = async () => {
+      try {
+        const { data, error } = await supabaseClient
+          .from("lessons")
+          .select("level")
+          .eq("stage", selectedStage)
+          .order("level", { ascending: true });
+
+        if (error) throw error;
+
+        // Extract unique levels for the selected stage
+        const uniqueLevels = [...new Set(data.map((lesson) => lesson.level))];
+        setLevels(uniqueLevels);
+
+        // Automatically select the first level ONLY when the stage changes
+        if (uniqueLevels.length > 0 && isStageChanged.current) {
+          setSelectedLevel(uniqueLevels[0]); // Set the first level of the new stage
+          isStageChanged.current = false; // Reset the flag
+        }
+      } catch (error) {
+        console.error("Error fetching levels:", error.message);
+      }
+    };
+
+    fetchLevels();
+  }, [selectedStage]); // Fetch levels whenever selectedStage changes
+
+  // Fetch completed lessons for the authenticated user
+  useEffect(() => {
+    const fetchCompletedLessons = async () => {
+      if (!user) {
+        setCompletedLessons([]);
+        return;
+      }
+
+      try {
+        // Get the current session to access the access token
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        if (!session?.access_token) {
+          setCompletedLessons([]);
+          return;
+        }
+
+        // Make API call to backend for completed lessons
+        const response = await fetch('/api/user/completed-lessons', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCompletedLessons(data.completed_lessons || []);
+        }
+      } catch (error) {
+        console.error('Error fetching completed lessons:', error);
+        setCompletedLessons([]);
+      }
+    };
+
+    fetchCompletedLessons();
+  }, [user]);
+
+  // Fetch level completion status for the current stage and level
+  useEffect(() => {
+    const fetchLevelCompletionStatus = async () => {
+      if (!user || !selectedStage || !selectedLevel) {
+        setLevelCompletionStatus(null);
+        return;
+      }
+
+      try {
+        // Get the current session to access the access token
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        if (!session?.access_token) {
+          setLevelCompletionStatus(null);
+          return;
+        }
+
+        // Make API call to check level completion status
+        const response = await fetch(`/api/user/level-completion-status/${selectedStage}/${selectedLevel}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setLevelCompletionStatus(data);
+        } else {
+          setLevelCompletionStatus(null);
+        }
+      } catch (error) {
+        console.error('Error fetching level completion status:', error);
+        setLevelCompletionStatus(null);
+      }
+    };
+
+    fetchLevelCompletionStatus();
+  }, [user, selectedStage, selectedLevel]);
+
+  // Fetch lessons for the selected stage and level
   useEffect(() => {
     const fetchLevels = async () => {
       try {
@@ -69,6 +182,11 @@ const LessonsIndex = () => {
   const handleStageChange = (stage) => {
     setSelectedStage(stage);
     isStageChanged.current = true; // Set the flag to indicate a stage change
+  };
+
+  // Helper function to check if a lesson is completed
+  const isLessonCompleted = (lessonId) => {
+    return completedLessons.some(completed => completed.lesson_id === lessonId);
   };
 
   const sortedLessons = [
@@ -167,27 +285,42 @@ const LessonsIndex = () => {
                       {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
                         <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
                       ) : (
-                        <span className="lesson-number">{lesson.lesson_order}</span>
+                        <span className="lesson-number">{lesson.level}.{lesson.lesson_order}</span>
                       )}
                       <div className="name-desc-container">
                         <span className="lesson-name">
-                          {lesson.title} <span className="lesson-name-th">{lesson.title_th}</span>
+                          {lesson.title}
                         </span>
-                        <span className="lesson-desc">
-                          {lesson.subtitle} <span className="lesson-desc-th">{lesson.subtitle_th}</span>
-                        </span>
+                        {lesson.focus && (
+                          <span className="lesson-focus">
+                            {lesson.focus}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="lesson-item-right">
-                      <img src="/images/CheckCircle.png" alt="Unfilled Checkmark" className="checkmark-img" />
+                      <img
+                        src={isLessonCompleted(lesson.id) ? "/images/filled-checkmark-lesson-complete.webp" : "/images/CheckCircle.png"}
+                        alt={isLessonCompleted(lesson.id) ? "Completed" : "Not completed"}
+                        className={`checkmark-img ${isLessonCompleted(lesson.id) ? "checkmark-completed" : ""}`}
+                      />
                     </div>
                   </Link>
                 ))}
               </div>
-              <div className="mark-finished-row">
+              <div className={`mark-finished-row ${levelCompletionStatus?.is_completed ? 'completed' : ''}`}>
                 <span className="mark-finished-content">
-                  <span className="mark-finished-text">MARK LEVEL {selectedLevel} AS FINISHED</span>
-                  <img src="/images/CheckCircle.png" alt="Unfilled Checkmark" className="checkmark-img" />
+                  {levelCompletionStatus?.is_completed ? (
+                    <>
+                      <span className="mark-finished-text">LEVEL {selectedLevel} COMPLETED</span>
+                      <img src="/images/filled-checkmark-lesson-complete.webp" alt="Completed" className="checkmark-img checkmark-completed" />
+                    </>
+                  ) : (
+                    <>
+                      <span className="mark-finished-text">MARK LEVEL {selectedLevel} AS FINISHED</span>
+                      <img src="/images/CheckCircle.png" alt="Not completed" className="checkmark-img" />
+                    </>
+                  )}
                 </span>
               </div>
             </div>

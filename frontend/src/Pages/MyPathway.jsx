@@ -10,6 +10,7 @@ const MyPathway = () => {
   const [completedLessons, setCompletedLessons] = useState([]);
   const [pathwayLessons, setPathwayLessons] = useState([]);
   const [nextLesson, setNextLesson] = useState(null);
+  const [userStats, setUserStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
@@ -88,6 +89,20 @@ const MyPathway = () => {
         if (pathwayResponse.ok) {
           const pathwayData = await pathwayResponse.json();
           setPathwayLessons(pathwayData.pathway_lessons || []);
+        }
+
+        // Fetch user stats (lessons and levels completed)
+        const statsResponse = await fetch('/api/user/stats', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (statsResponse.ok) {
+          const statsData = await statsResponse.json();
+          setUserStats(statsData);
         }
 
       } catch (err) {
@@ -288,11 +303,11 @@ const MyPathway = () => {
               <div className="pathway-header-right">
                 <div className="pathway-counter">
                   <span className="pathway-counter-label">Lessons Complete</span>
-                  <span className="pathway-counter-number">{userProfile?.lessons_complete || 0}</span>
+                  <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
                 </div>
                 <div className="pathway-counter">
                   <span className="pathway-counter-label">Levels Complete</span>
-                  <span className="pathway-counter-number">{mockUserProfile.levelsComplete}</span>
+                  <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
                 </div>
               </div>
             </div>
