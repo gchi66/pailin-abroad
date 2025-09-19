@@ -560,8 +560,8 @@ class GoogleDocsParser:
     def __init__(self):
         pass
 
-    def parse_lesson_header(self, raw_header: str, stage: str) -> Tuple[Dict, str]:
-        logger.debug(f"Parsing lesson header: '{raw_header}'")
+    def parse_lesson_header(self, raw_header: str, stage: str, lang: str = 'en') -> Tuple[Dict, str]:
+        logger.debug(f"Parsing lesson header: '{raw_header}' (lang={lang})")
         m_chp = re.match(r'\s*CHECKPOINT\s+(\d+)', raw_header, re.I)
         if m_chp:
             level = int(m_chp.group(1))
@@ -587,9 +587,23 @@ class GoogleDocsParser:
         level, order = int(m.group(1)), int(m.group(2))
         title_match = re.search(r'(?:LESSON|Lesson)\s+\d+\.\d+\s*:\s*(.*)', raw_header, re.I)
         if title_match:
-            title = title_match.group(1).strip()
+            full_title = title_match.group(1).strip()
+            # For Thai documents, extract only the Thai part of the title
+            if lang == 'th':
+                en_title, th_title = split_en_th(full_title)
+                title = th_title or full_title  # Use Thai title if available, fallback to full title
+                logger.debug(f"Thai mode: extracted Thai title='{title}' from full_title='{full_title}'")
+            else:
+                title = full_title
         else:
-            title = raw_header.split(":", 1)[1].strip() if ":" in raw_header else raw_header
+            full_title = raw_header.split(":", 1)[1].strip() if ":" in raw_header else raw_header
+            # For Thai documents, extract only the Thai part of the title
+            if lang == 'th':
+                en_title, th_title = split_en_th(full_title)
+                title = th_title or full_title  # Use Thai title if available, fallback to full title
+                logger.debug(f"Thai mode: extracted Thai title='{title}' from full_title='{full_title}'")
+            else:
+                title = full_title
         logger.debug(f"Extracted level={level}, order={order}, title='{title}'")
         return ({
             "external_id": f"{level}.{order}",
@@ -906,7 +920,7 @@ class GoogleDocsParser:
         # ---- header & bucket bookkeeping -----------------------------------
         lesson_header, _ = lesson_sections[0]
         lesson_header_raw = lesson_header
-        lesson_info, _   = self.parse_lesson_header(lesson_header, stage)
+        lesson_info, _   = self.parse_lesson_header(lesson_header, stage, lang)
         lesson           = lesson_info.copy()
         lesson["focus"]      = ""
         lesson["backstory"]  = ""

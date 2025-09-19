@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { useUiLang } from "../ui-lang/UiLangContext";
 import supabaseClient from "../supabaseClient";
 import "../Styles/MyPathway.css";
 
@@ -14,7 +15,71 @@ const MyPathway = () => {
   const [userComments, setUserComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAllCompleted, setShowAllCompleted] = useState(false);
   const { user } = useAuth();
+  const { ui: uiLang } = useUiLang();
+
+  // Helper function to pick the right language content
+  const pickLang = (en, th) => {
+    if (uiLang === "th") {
+      return th || en; // fallback to English if Thai is not available
+    }
+    return en || th; // fallback to Thai if English is not available
+  };
+
+  // UI translations
+  const uiText = {
+    // Progress section
+    yourNextLesson: uiLang === "th" ? "บทเรียนถัดไป:" : "Your next lesson:",
+    checkpoint: uiLang === "th" ? "จุดตรวจสอบ" : "Checkpoint",
+    loading: uiLang === "th" ? "กำลังโหลด..." : "Loading...",
+
+    // Tab content
+    completedLessons: uiLang === "th" ? "บทเรียนที่เสร็จแล้ว" : "Completed Lessons",
+    noCompletedLessons: uiLang === "th" ? "ยังไม่มีบทเรียนที่เสร็จสิ้น เริ่มเรียนเพื่อดูความคืบหน้าของคุณที่นี่!" : "No completed lessons yet. Start learning to see your progress here!",
+    myLikedLessons: uiLang === "th" ? "บทเรียนที่ฉันชอบ" : "My Liked Lessons",
+    likedLessonsPlaceholder: uiLang === "th" ? "บทเรียนที่คุณชอบจะปรากฏที่นี่" : "Your liked lessons will appear here.",
+    commentHistory: uiLang === "th" ? "ประวัติความคิดเห็น" : "Comment History",
+    noComments: uiLang === "th" ? "ยังไม่มีความคิดเห็น เริ่มมีส่วนร่วมกับบทเรียนเพื่อดูประวัติความคิดเห็นของคุณที่นี่!" : "No comments yet. Start engaging with lessons to see your comment history here!",
+    lessonNoLongerAvailable: uiLang === "th" ? "บทเรียนไม่พร้อมใช้งานแล้ว" : "Lesson no longer available",
+    pinnedComment: uiLang === "th" ? "ความคิดเห็นที่ปักหมุด" : "Pinned comment",
+
+    // Expand/collapse
+    seeMore: uiLang === "th" ? "ดูเพิ่มเติม" : "See more",
+    seeLess: uiLang === "th" ? "ดูน้อยลง" : "See less",
+
+    // Loading and error states
+    loadingPathway: uiLang === "th" ? "กำลังโหลดเส้นทางการเรียนของคุณ..." : "Loading your pathway...",
+    errorPrefix: uiLang === "th" ? "ข้อผิดพลาด:" : "Error:",
+    noAuthToken: uiLang === "th" ? "ไม่พบโทเค็นการตรวจสอบสิทธิ์" : "No authentication token found",
+
+    // Header section
+    welcomeBack: uiLang === "th" ? "ยินดีต้อนรับกลับ," : "Welcome back,",
+    user: uiLang === "th" ? "ผู้ใช้" : "User",
+    plan: uiLang === "th" ? "แผน:" : "Plan:",
+    fullAccess: uiLang === "th" ? "เข้าถึงเต็มรูปแบบ" : "Full Access",
+    accountSettings: uiLang === "th" ? "การตั้งค่าบัญชี" : "Account Settings",
+    lessonsComplete: uiLang === "th" ? "บทเรียนที่เสร็จสิ้น" : "Lessons Complete",
+    levelsComplete: uiLang === "th" ? "ระดับที่เสร็จสิ้น" : "Levels Complete",
+
+    // Navigation tabs
+    myPathway: uiLang === "th" ? "เส้นทางของฉัน" : "My Pathway",
+    completed: uiLang === "th" ? "เสร็จสิ้นแล้ว" : "Completed",
+    myLikedLessonsTab: uiLang === "th" ? "บทเรียนที่ชอบ" : "My Liked Lessons",
+    commentHistoryTab: uiLang === "th" ? "ประวัติความคิดเห็น" : "Comment History",
+
+    // Footer
+    goToLessonLibrary: uiLang === "th" ? "ไปที่ไลบรารีบทเรียน →" : "Go to Lesson Library →",
+
+    // Alt text and accessibility
+    profileAvatar: uiLang === "th" ? "รูปโปรไฟล์" : "Profile Avatar",
+    lessonCheckpoint: uiLang === "th" ? "จุดตรวจสอบบทเรียน" : "Lesson Checkpoint",
+    notCompleted: uiLang === "th" ? "ยังไม่เสร็จสิ้น" : "Not completed",
+    completedAlt: uiLang === "th" ? "เสร็จสิ้นแล้ว" : "Completed",
+
+    // Default fallbacks
+    lessonTitle: uiLang === "th" ? "ชื่อบทเรียน" : "Lesson Title"
+  };
 
   // Fetch user profile data from backend
   useEffect(() => {
@@ -34,15 +99,29 @@ const MyPathway = () => {
           return;
         }
 
-        // Make API call to backend for profile
-        const profileResponse = await fetch('/api/user/profile', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        // Make all API calls in parallel for faster loading
+        const headers = {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        };
 
+        const [
+          profileResponse,
+          lessonsResponse,
+          nextLessonResponse,
+          pathwayResponse,
+          statsResponse,
+          commentsResponse
+        ] = await Promise.all([
+          fetch('/api/user/profile', { method: 'GET', headers }),
+          fetch('/api/user/completed-lessons', { method: 'GET', headers }),
+          fetch('/api/user/next-lesson', { method: 'GET', headers }),
+          fetch('/api/user/pathway-lessons', { method: 'GET', headers }),
+          fetch('/api/user/stats', { method: 'GET', headers }),
+          fetch('/api/user/comments', { method: 'GET', headers })
+        ]);
+
+        // Process responses
         if (!profileResponse.ok) {
           throw new Error(`HTTP error! status: ${profileResponse.status}`);
         }
@@ -50,70 +129,26 @@ const MyPathway = () => {
         const profileData = await profileResponse.json();
         setUserProfile(profileData.profile);
 
-        // Fetch completed lessons
-        const lessonsResponse = await fetch('/api/user/completed-lessons', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
         if (lessonsResponse.ok) {
           const lessonsData = await lessonsResponse.json();
+          console.log('Completed lessons data:', lessonsData.completed_lessons);
           setCompletedLessons(lessonsData.completed_lessons || []);
         }
-
-        // Fetch next lesson
-        const nextLessonResponse = await fetch('/api/user/next-lesson', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
 
         if (nextLessonResponse.ok) {
           const nextLessonData = await nextLessonResponse.json();
           setNextLesson(nextLessonData.next_lesson);
         }
 
-        // Fetch pathway lessons
-        const pathwayResponse = await fetch('/api/user/pathway-lessons', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
         if (pathwayResponse.ok) {
           const pathwayData = await pathwayResponse.json();
           setPathwayLessons(pathwayData.pathway_lessons || []);
         }
 
-        // Fetch user stats (lessons and levels completed)
-        const statsResponse = await fetch('/api/user/stats', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
         if (statsResponse.ok) {
           const statsData = await statsResponse.json();
           setUserStats(statsData);
         }
-
-        // Fetch user comments
-        const commentsResponse = await fetch('/api/user/comments', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
 
         if (commentsResponse.ok) {
           const commentsData = await commentsResponse.json();
@@ -131,20 +166,6 @@ const MyPathway = () => {
     fetchUserProfile();
   }, [user]);
 
-  // Mock data for demonstration (will be replaced with real data later)
-  const mockUserProfile = {
-    name: "Sarah Johnson",
-    level: "Upper Intermediate",
-    plan: "Premium",
-    lessonsComplete: 142,
-    levelsComplete: 8
-  };
-
-  const currentProgress = {
-    nextLesson: "Level 6 • Lesson 13",
-    progressPercentage: 70
-  };
-
   const renderTabContent = () => {
     switch (activeTab) {
       case "pathway":
@@ -153,11 +174,11 @@ const MyPathway = () => {
             {/* Progress Section */}
             <div className="pathway-progress-section">
               <h3 className="pathway-section-title">
-                Your next lesson: {nextLesson ? (
+                {uiText.yourNextLesson} {nextLesson ? (
                   (nextLesson.title || "").toLowerCase().includes("checkpoint")
-                    ? `Level ${nextLesson.level} Checkpoint`
+                    ? `Level ${nextLesson.level} ${uiText.checkpoint}`
                     : nextLesson.formatted
-                ) : "Loading..."}
+                ) : uiText.loading}
               </h3>
               {/* <div className="pathway-progress-bar-container">
                 <div className="pathway-progress-bar">
@@ -182,7 +203,7 @@ const MyPathway = () => {
                     <div className="pathway-lesson-content">
                       <div className="pathway-lesson-header">
                         {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
-                          <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="pathway-lesson-checkpoint" />
+                          <img src="/images/black-checkmark-level-checkpoint.webp" alt={uiText.lessonCheckpoint} className="pathway-lesson-checkpoint" />
                         ) : (
                           <span className="pathway-lesson-number">
                             {lesson.level}.{lesson.lesson_order}
@@ -190,11 +211,11 @@ const MyPathway = () => {
                         )}
                         <div className="pathway-lesson-text">
                           <span className="pathway-lesson-title">
-                            {lesson.title}
+                            {pickLang(lesson.title, lesson.title_th)}
                           </span>
-                          {lesson.focus && (
+                          {(lesson.focus || lesson.focus_th) && (
                             <div className="pathway-lesson-focus">
-                              {lesson.focus}
+                              {pickLang(lesson.focus, lesson.focus_th)}
                             </div>
                           )}
                         </div>
@@ -203,7 +224,7 @@ const MyPathway = () => {
                     <div className="pathway-lesson-right">
                       <img
                         src="/images/CheckCircle.png"
-                        alt="Not completed"
+                        alt={uiText.notCompleted}
                         className="pathway-checkmark"
                       />
                     </div>
@@ -215,50 +236,77 @@ const MyPathway = () => {
         );
 
       case "completed":
+        const displayedCompletedLessons = showAllCompleted ? completedLessons : completedLessons.slice(0, 5);
+        const hasMoreCompleted = completedLessons.length > 5;
+
         return (
           <div className="pathway-completed-section">
-            <h3>Completed Lessons ({completedLessons.length})</h3>
+            <h3>{uiText.completedLessons} ({completedLessons.length})</h3>
             {completedLessons.length > 0 ? (
-              <div className="pathway-lesson-list">
-                {completedLessons.map((progress) => (
-                  <Link
-                    to={`/lesson/${progress.lesson_id}`}
-                    key={progress.id}
-                    className="pathway-lesson-item completed"
-                  >
-                    <div className="pathway-lesson-left">
-                      <span className="pathway-lesson-number">
-                        {progress.lessons?.level && progress.lessons?.lesson_order
-                          ? `${progress.lessons.level}.${progress.lessons.lesson_order}`
-                          : progress.lessons?.external_id || progress.lesson_id}
-                      </span>
+              <>
+                <div className="pathway-lesson-list">
+                  {displayedCompletedLessons.map((progress) => (
+                    <Link
+                      to={`/lesson/${progress.lesson_id}`}
+                      key={progress.id}
+                      className="pathway-lesson-item completed"
+                    >
                       <div className="pathway-lesson-content">
-                        <span className="pathway-lesson-title">
-                          {progress.lessons?.title || "Lesson Title"}
-                          {progress.lessons?.title_th && (
-                            <span className="lesson-name-th"> {progress.lessons.title_th}</span>
+                        <div className="pathway-lesson-header">
+                          {(progress.lessons?.title || "").toLowerCase().includes("checkpoint") ? (
+                            <img src="/images/black-checkmark-level-checkpoint.webp" alt={uiText.lessonCheckpoint} className="pathway-lesson-checkpoint" />
+                          ) : (
+                            <span className="pathway-lesson-number">
+                              {progress.lessons?.level && progress.lessons?.lesson_order
+                                ? `${progress.lessons.level}.${progress.lessons.lesson_order}`
+                                : progress.lessons?.external_id || progress.lesson_id}
+                            </span>
                           )}
-                        </span>
-                        <span className="pathway-lesson-subtitle">
-                          {progress.lessons?.subtitle || ""}
-                          {progress.lessons?.subtitle_th && (
-                            <span className="lesson-desc-th"> {progress.lessons.subtitle_th}</span>
-                          )}
-                        </span>
+                          <div className="pathway-lesson-text">
+                            <span className="pathway-lesson-title">
+                              {pickLang(progress.lessons?.title, progress.lessons?.title_th) || uiText.lessonTitle}
+                            </span>
+                            {(progress.lessons?.focus || progress.lessons?.focus_th) && (
+                              <div className="pathway-lesson-focus">
+                                {pickLang(progress.lessons?.focus, progress.lessons?.focus_th)}
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="pathway-lesson-right">
-                      <img
-                        src="/images/filled-checkmark-lesson-complete.webp"
-                        alt="Completed"
-                        className="pathway-checkmark"
-                      />
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                      <div className="pathway-lesson-right">
+                        <img
+                          src="/images/filled-checkmark-lesson-complete.webp"
+                          alt={uiText.completedAlt}
+                          className="pathway-checkmark"
+                        />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {hasMoreCompleted && (
+                  <div className="pathway-see-more-container">
+                    <button
+                      className="pathway-see-more-btn"
+                      onClick={() => setShowAllCompleted(!showAllCompleted)}
+                    >
+                      <span>{showAllCompleted ? uiText.seeLess : uiText.seeMore}</span>
+                      <svg
+                        className={`pathway-arrow-icon ${showAllCompleted ? 'rotated' : ''}`}
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                      >
+                        <path d="M8 12l-4-4h8l-4 4z"/>
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
-              <p>No completed lessons yet. Start learning to see your progress here!</p>
+              <p>{uiText.noCompletedLessons}</p>
             )}
           </div>
         );
@@ -266,15 +314,15 @@ const MyPathway = () => {
       case "liked":
         return (
           <div className="pathway-placeholder">
-            <h3>My Liked Lessons</h3>
-            <p>Your liked lessons will appear here.</p>
+            <h3>{uiText.myLikedLessons}</h3>
+            <p>{uiText.likedLessonsPlaceholder}</p>
           </div>
         );
 
       case "comments":
         return (
           <div className="pathway-comments-section">
-            <h3>Comment History ({userComments.length})</h3>
+            <h3>{uiText.commentHistory} ({userComments.length})</h3>
             {userComments.length > 0 ? (
               <div className="pathway-comments-list">
                 {userComments.map((comment) => (
@@ -287,11 +335,11 @@ const MyPathway = () => {
                               {comment.lessons.level}.{comment.lessons.lesson_order}
                             </span>
                             <span className="pathway-comment-lesson-title">
-                              {comment.lessons.title}
+                              {pickLang(comment.lessons.title, comment.lessons.title_th)}
                             </span>
                           </Link>
                         ) : (
-                          <span className="pathway-comment-lesson-deleted">Lesson no longer available</span>
+                          <span className="pathway-comment-lesson-deleted">{uiText.lessonNoLongerAvailable}</span>
                         )}
                       </div>
                       <div className="pathway-comment-date">
@@ -309,7 +357,7 @@ const MyPathway = () => {
                     </div>
                     {comment.pinned && (
                       <div className="pathway-comment-pinned">
-                        📌 Pinned comment
+                        📌 {uiText.pinnedComment}
                       </div>
                     )}
                   </div>
@@ -317,7 +365,7 @@ const MyPathway = () => {
               </div>
             ) : (
               <div className="pathway-placeholder">
-                <p>No comments yet. Start engaging with lessons to see your comment history here!</p>
+                <p>{uiText.noComments}</p>
               </div>
             )}
           </div>
@@ -335,14 +383,14 @@ const MyPathway = () => {
         {/* Loading State */}
         {loading && (
           <div className="pathway-loading">
-            <p>Loading your pathway...</p>
+            <p>{uiText.loadingPathway}</p>
           </div>
         )}
 
         {/* Error State */}
         {error && (
           <div className="pathway-error">
-            <p>Error: {error}</p>
+            <p>{uiText.errorPrefix} {error}</p>
           </div>
         )}
 
@@ -354,26 +402,26 @@ const MyPathway = () => {
               <div className="pathway-header-left">
                 <img
                   src="/images/characters/pailin-blue-left.png"
-                  alt="Profile Avatar"
+                  alt={uiText.profileAvatar}
                   className="pathway-avatar"
                 />
                 <div className="pathway-user-info">
-                  <h2 className="pathway-welcome">Welcome back, {userProfile?.name || "User"}</h2>
+                  <h2 className="pathway-welcome">{uiText.welcomeBack} {userProfile?.name || uiText.user}</h2>
                   <div className="pathway-account-info">
-                    <span className="pathway-level">Level: {mockUserProfile.level}</span>
-                    <span className="pathway-plan">Plan: Full Access</span>
-                    <Link to="/profile" className="pathway-settings-link">Account Settings</Link>
+                    {/* <span className="pathway-level">Level: Upper Intermediate</span> */}
+                    <span className="pathway-plan">{uiText.plan} {uiText.fullAccess}</span>
+                    <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
                   </div>
                 </div>
               </div>
 
               <div className="pathway-header-right">
                 <div className="pathway-counter">
-                  <span className="pathway-counter-label">Lessons Complete</span>
+                  <span className="pathway-counter-label">{uiText.lessonsComplete}</span>
                   <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
                 </div>
                 <div className="pathway-counter">
-                  <span className="pathway-counter-label">Levels Complete</span>
+                  <span className="pathway-counter-label">{uiText.levelsComplete}</span>
                   <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
                 </div>
               </div>
@@ -386,25 +434,25 @@ const MyPathway = () => {
                   className={`pathway-tab ${activeTab === "pathway" ? "active" : ""}`}
                   onClick={() => setActiveTab("pathway")}
                 >
-                  My Pathway
+                  {uiText.myPathway}
                 </button>
                 <button
                   className={`pathway-tab ${activeTab === "completed" ? "active" : ""}`}
                   onClick={() => setActiveTab("completed")}
                 >
-                  Completed
+                  {uiText.completed}
                 </button>
                 <button
                   className={`pathway-tab ${activeTab === "liked" ? "active" : ""}`}
                   onClick={() => setActiveTab("liked")}
                 >
-                  My Liked Lessons
+                  {uiText.myLikedLessonsTab}
                 </button>
                 <button
                   className={`pathway-tab ${activeTab === "comments" ? "active" : ""}`}
                   onClick={() => setActiveTab("comments")}
                 >
-                  Comment History
+                  {uiText.commentHistoryTab}
                 </button>
               </div>
             </nav>
@@ -417,7 +465,7 @@ const MyPathway = () => {
             {/* Footer Link */}
             <div className="pathway-footer">
               <Link to="/lessons" className="pathway-library-link">
-                Go to Lesson Library →
+                {uiText.goToLessonLibrary}
               </Link>
             </div>
           </>
