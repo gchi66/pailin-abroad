@@ -276,6 +276,14 @@
   flex-shrink: 0;
 }
 
+.pathway-lesson-checkpoint {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  min-width: 4rem;
+  flex-shrink: 0;
+}
+
 .pathway-lesson-text {
   display: flex;
   flex-direction: column;
@@ -439,5 +447,117 @@
 
   .pathway-section-title {
     font-size: 1.3rem;
+  }
+}
+
+/* Comments Section */
+.pathway-comments-section {
+  width: 100%;
+}
+
+.pathway-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pathway-comment-item {
+  padding: 1.5rem;
+  border: 0.15rem solid #1e1e1e;
+  border-radius: 1rem;
+  background: white;
+}
+
+.pathway-comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.pathway-comment-lesson-info {
+  flex: 1;
+}
+
+.pathway-comment-lesson-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: #1E1E1E;
+  transition: all 0.3s ease;
+}
+
+.pathway-comment-lesson-link:hover {
+  color: #3CA0FE;
+}
+
+.pathway-comment-lesson-number {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1E1E1E;
+  min-width: 2.5rem;
+}
+
+.pathway-comment-lesson-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1E1E1E;
+}
+
+.pathway-comment-lesson-deleted {
+  font-size: 0.9rem;
+  color: #999;
+  font-style: italic;
+}
+
+.pathway-comment-date {
+  font-size: 0.85rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+.pathway-comment-body {
+  font-size: 1rem;
+  color: #1E1E1E;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.pathway-comment-pinned {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #FFF3CD;
+  border: 0.1rem solid #FFECB5;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #856404;
+}
+
+/* Responsive adjustments for comments */
+@media (max-width: 768px) {
+  .pathway-comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .pathway-comment-lesson-link {
+    gap: 0.5rem;
+  }
+
+  .pathway-comment-lesson-number {
+    font-size: 0.9rem;
+    min-width: 2rem;
+  }
+
+  .pathway-comment-lesson-title {
+    font-size: 0.9rem;
+  }
+
+  .pathway-comment-date {
+    font-size: 0.8rem;
   }
 }

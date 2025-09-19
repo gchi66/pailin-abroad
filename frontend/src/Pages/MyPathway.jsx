@@ -11,6 +11,7 @@ const MyPathway = () => {
   const [pathwayLessons, setPathwayLessons] = useState([]);
   const [nextLesson, setNextLesson] = useState(null);
   const [userStats, setUserStats] = useState(null);
+  const [userComments, setUserComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
@@ -105,6 +106,20 @@ const MyPathway = () => {
           setUserStats(statsData);
         }
 
+        // Fetch user comments
+        const commentsResponse = await fetch('/api/user/comments', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (commentsResponse.ok) {
+          const commentsData = await commentsResponse.json();
+          setUserComments(commentsData.comments || []);
+        }
+
       } catch (err) {
         console.error('Error fetching user data:', err);
         setError(err.message);
@@ -138,7 +153,11 @@ const MyPathway = () => {
             {/* Progress Section */}
             <div className="pathway-progress-section">
               <h3 className="pathway-section-title">
-                Your next lesson: {nextLesson ? nextLesson.formatted : "Loading..."}
+                Your next lesson: {nextLesson ? (
+                  (nextLesson.title || "").toLowerCase().includes("checkpoint")
+                    ? `Level ${nextLesson.level} Checkpoint`
+                    : nextLesson.formatted
+                ) : "Loading..."}
               </h3>
               {/* <div className="pathway-progress-bar-container">
                 <div className="pathway-progress-bar">
@@ -162,9 +181,13 @@ const MyPathway = () => {
                   >
                     <div className="pathway-lesson-content">
                       <div className="pathway-lesson-header">
-                        <span className="pathway-lesson-number">
-                          {lesson.level}.{lesson.lesson_order}
-                        </span>
+                        {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
+                          <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="pathway-lesson-checkpoint" />
+                        ) : (
+                          <span className="pathway-lesson-number">
+                            {lesson.level}.{lesson.lesson_order}
+                          </span>
+                        )}
                         <div className="pathway-lesson-text">
                           <span className="pathway-lesson-title">
                             {lesson.title}
@@ -250,9 +273,53 @@ const MyPathway = () => {
 
       case "comments":
         return (
-          <div className="pathway-placeholder">
-            <h3>Comment History</h3>
-            <p>Your comment history will appear here.</p>
+          <div className="pathway-comments-section">
+            <h3>Comment History ({userComments.length})</h3>
+            {userComments.length > 0 ? (
+              <div className="pathway-comments-list">
+                {userComments.map((comment) => (
+                  <div key={comment.id} className="pathway-comment-item">
+                    <div className="pathway-comment-header">
+                      <div className="pathway-comment-lesson-info">
+                        {comment.lessons ? (
+                          <Link to={`/lesson/${comment.lesson_id}`} className="pathway-comment-lesson-link">
+                            <span className="pathway-comment-lesson-number">
+                              {comment.lessons.level}.{comment.lessons.lesson_order}
+                            </span>
+                            <span className="pathway-comment-lesson-title">
+                              {comment.lessons.title}
+                            </span>
+                          </Link>
+                        ) : (
+                          <span className="pathway-comment-lesson-deleted">Lesson no longer available</span>
+                        )}
+                      </div>
+                      <div className="pathway-comment-date">
+                        {new Date(comment.created_at).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </div>
+                    </div>
+                    <div className="pathway-comment-body">
+                      {comment.body}
+                    </div>
+                    {comment.pinned && (
+                      <div className="pathway-comment-pinned">
+                        📌 Pinned comment
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="pathway-placeholder">
+                <p>No comments yet. Start engaging with lessons to see your comment history here!</p>
+              </div>
+            )}
           </div>
         );
 

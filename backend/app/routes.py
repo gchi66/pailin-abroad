@@ -564,3 +564,32 @@ def get_user_stats():
     except Exception as e:
         print(f"Error fetching user stats: {e}")
         return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/user/comments', methods=['GET'])
+def get_user_comments():
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Fetch user's comments with lesson details
+        comments_result = supabase.table('comments').select('*, lessons(id, title, level, lesson_order, stage)').eq('user_id', user_id).order('created_at', desc=True).execute()
+        comments = comments_result.data if comments_result.data else []
+
+        return jsonify({"comments": comments}), 200
+
+    except Exception as e:
+        print(f"Error fetching user comments: {e}")
+        return jsonify({"error": "Internal server error"}), 500
