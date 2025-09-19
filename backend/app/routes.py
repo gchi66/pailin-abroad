@@ -75,7 +75,7 @@ def get_user_profile():
         # Count completed lessons from user_lesson_progress table
         lessons_complete = 0
         try:
-            progress_result = supabase.table('user_lesson_progress').select('id', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
+            progress_result = supabase.table('user_lesson_progress').select('*', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
             lessons_complete = progress_result.count if progress_result.count is not None else 0
         except Exception as e:
             print(f"Warning: Could not fetch lesson progress: {e}")
@@ -521,7 +521,7 @@ def get_user_stats():
         user_id = user_response.user.id
 
         # Get total completed lessons count
-        completed_lessons_result = supabase.table('user_lesson_progress').select('lesson_id', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
+        completed_lessons_result = supabase.table('user_lesson_progress').select('*', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
         lessons_completed = completed_lessons_result.count if completed_lessons_result.count else 0
 
         # Calculate completed levels
@@ -549,7 +549,7 @@ def get_user_stats():
             level = int(level)
 
             # Get total lessons for this stage/level
-            total_lessons_result = supabase.table('lessons').select('id', count='exact').eq('stage', stage).eq('level', level).execute()
+            total_lessons_result = supabase.table('lessons').select('*', count='exact').eq('stage', stage).eq('level', level).execute()
             total_lessons_count = total_lessons_result.count if total_lessons_result.count else 0
 
             # If user completed all lessons in this level, count it as completed

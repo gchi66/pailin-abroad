@@ -25,7 +25,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
 
       <nav className="menu">
         <ul>
-          <li><NavLink to={withUi(user ? "/pathway" : "/", ui)}>{user ? "MY PATHWAY" : t("nav.home", ui)}</NavLink></li>
+          <li><NavLink to={withUi(user ? "/pathway" : "/", ui)}>{user ? t("nav.myPathway", ui) : t("nav.home", ui)}</NavLink></li>
           <li><NavLink to={withUi("/about", ui)}>{t("nav.about", ui)}</NavLink></li>
           <li><NavLink to={withUi("/lessons", ui)}>{t("nav.lessons", ui)}</NavLink></li>
           <li><NavLink to={withUi("/resources", ui)}>{t("nav.resources", ui)}</NavLink></li>

@@ -6,6 +6,7 @@ export const copy = {
     resources: { en: "RESOURCES", th: "แหล่งข้อมูล" },
     contact: { en: "CONTACT", th: "ติดต่อ" },
     pricing: { en: "PRICING", th: "ราคา" },
+    myPathway: { en: "MY PATHWAY", th: "เส้นทางของฉัน" },
   },
   uiLabel: { en: "UI:", th: "ภาษา:" },
 };

@@ -1,162 +1,304 @@
-.page-container {
-  position: relative;
+
+/* Main container */
+.membership-container {
+  background-color: #FAF5F1;
   min-height: 100vh;
-  background-color: none;
-  padding: 18vh 0 0 0;
-  display: flex;
-  flex-direction: column;
-  font-family: "Poppins", sans-serif;
-  color: #1E1E1E;
-  gap: 8vh;
-}
-
-/* header  */
-.page-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 20vw;
-  width: 100%; /* Ensures it doesn't exceed the viewport width */
-  max-width: 100vw; /* Prevents overflow */
-  background: white;
-  border-top: 0.15rem solid #1E1E1E;
-  border-bottom: 0.15rem solid #1E1E1E;
-  padding: 3rem;
-  box-sizing: border-box; /* Ensures padding is included in width calculations */
-  height: 30vh;
-  overflow-y: visible;
-}
-
-.page-header-text {
-  font-size: 7.8vh;
-  color: #1E1E1E;
-  font-weight: 600;
-  font-family: "Poppins", sans-serif;
-  width: auto;
-  white-space: nowrap; /* Prevents text from wrapping */
-}
-
-.header-image {
-  height: 50vh;
-  width: auto;
-}
-
-/* subheader */
-.subheader-container {
-  /* padding: 0rem 22rem; */
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.subheader-text {
-  font-size: 4dvh;
-  font-weight: 600;
-  text-align: center;
-  width: 45%;
-}
-
-
-
-/* join cards */
-.join-cards-container {
-  display: flex;
-  flex-direction: row;
-  gap: 3vw;
-  align-items: center;
-  justify-content: center;
-}
-
-.join-card {
-  background: white;
-  border: 0.15rem solid #1E1E1E;
-  border-radius: 1rem;
-  border-radius: 3vh;
-  box-shadow: .2rem .2rem 0px #1E1E1E;
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1vh;
-  align-items: center;
-  justify-content: center;
-}
-
-.join-card-header {
-  font-size: 3vh;
-  font-weight: 600;
-}
-
-.join-card-price {
-  font-size: 8vh;
-  color: #91CAFF;
-  font-weight: 700;
-  -webkit-text-stroke: .1rem #1e1e1e;
-}
-
-.join-card-per-month {
-  font-size: 2.3vh;
-  font-weight: 600;
-  margin-bottom: 2dvh;
-}
-
-.select-btn {
-  padding: .3rem 1.3rem;
-  border: .1rem solid #1E1E1E;
-  border-radius: 2.6rem;
-  width: 20dvh;
-  font-size: 2.3vh;
-  font-weight: 600;
-  cursor: pointer;
   font-family: 'Poppins', sans-serif;
-  background-color: #FF4545;
-  color: white;
-}
-
-
-/* guarantee */
-.guarantee-container {
-  width: 100%;
+  padding: 40px 20px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.guarantee-subcontainer {
-  /* position: relative; */
-  width: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  gap: 3vh;
+  align-items: center;
+  margin-top: 9rem;
+  gap: 50px;
 }
 
-.guarantee-header {
-  position: relative;
-  font-size: 6vh;
-  color: #1E1E1E;
+/* Header section */
+.membership-header {
+  text-align: center;
+  max-width: 80%;
+}
+
+.membership-title {
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  /* display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start; */
+  font-size: 2.5rem;
+  color: #333;
+  line-height: 1.2;
 }
 
-.guarantee-underline {
-  display: block;
+.membership-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Pricing Cards Container */
+.pricing-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+/* Individual Card Styling - Hero card inspired */
+.pricing-card {
+  position: relative;
+  background: white;
+  border: 2px solid #CCCCCC;
+  border-radius: 12px;
+  padding: 24px 32px;
+  width: 100%;
+  max-width: 600px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 4px 4px 0px #CCCCCC;
+}
+
+.pricing-card:hover,
+.pricing-card.hovered {
+  border-color: #3CA0FE;
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px #3CA0FE
+}
+
+/* Selected Card State */
+.pricing-card.selected {
+  border-color: #3CA0FE;
+  background: #f8fcff;
+}
+
+/* Card Content Layout */
+.card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.left-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Recommended card styling */
+.pricing-card.recommended {
+  border-color: #007bff;
+  position: relative;
+}
+
+.pricing-card.recommended::before {
+  content: '';
   position: absolute;
-  width: 68%;
-  /* align-self: flex-end; */
-  /* margin-top: .1rem; */
-  right: 0;
-  transform: translateY(-70%);
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border-radius: 14px;
+  z-index: -1;
+}
+
+/* Savings badge */
+.savings-badge {
+  position: absolute;
+  top: -20px;
+  right: 20px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #CCCCCC;
+  border: 2px solid #CCCCCC;
+}
+
+.recommended-badge {
+  background-color: white;
+}
+
+.regular-badge {
+  background-color: white;
+}
+
+/* Plan Duration */
+.plan-duration {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1E1E1E;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+/* Best For Section */
+.best-for-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.best-for-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.best-for-text {
+  font-size: 14px;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.4;
+}
+
+/* Price Section */
+.price-section {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1E1E1E;
+  font-family: 'Poppins', sans-serif;
+}
+
+.period {
+  font-size: 16px;
+  color: #666;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Pricing summary */
+.pricing-summary {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.crossed-out {
+  font-size: 1.2rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.discounted-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
+
+.final-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #28a745;
+}
+
+.for-6-months {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Join button */
+.join-now-btn {
+  background-color: #91CAFF;
+  color: black;
+  border: 2px solid black;
+  padding: 18px 120px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.join-now-btn:hover {
+  background-color: #7bb8ff;
+}
+
+/* Guarantee section */
+.guarantee-section {
+  max-width: 600px;
+  text-align: center;
 }
 
 .guarantee-text {
-  font-size: 2.5vh;
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  color: #1e1e1e;
-  text-align: center;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.guarantee-text strong {
+  color: #3CA0FE;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .membership-container {
+    padding: 20px 15px;
+  }
+
+  .membership-title {
+    font-size: 2rem;
+  }
+
+  .membership-subtitle {
+    font-size: 1rem;
+  }
+
+  .pricing-cards-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .pricing-card {
+    max-width: 100%;
+    min-width: auto;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .pricing-card.recommended {
+    transform: none;
+  }
+
+  .join-now-btn {
+    padding: 16px 40px;
+    font-size: 1.1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-title {
+    font-size: 1.7rem;
+  }
+
+  .pricing-card {
+    padding: 25px 20px;
+  }
+
+  .price {
+    font-size: 2.2rem;
+  }
 }
