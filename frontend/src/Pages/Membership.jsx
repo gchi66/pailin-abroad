@@ -49,10 +49,26 @@ const Membership = () => {
     setSelectedPlan(plan);
   };
 
-  // Calculate 6-month cost based on selected plan
-  const calculateSixMonthCost = () => {
+  // Calculate pricing display based on selected plan
+  const calculatePricingDisplay = () => {
     if (!selectedPlan) return null;
-    return selectedPlan.monthlyPrice * 6;
+
+    // For 1-month plan, show only final price
+    if (selectedPlan.id === "1-month") {
+      return {
+        showComparison: false,
+        finalPrice: selectedPlan.totalPrice,
+        description: `(${selectedPlan.duration.toLowerCase()})`
+      };
+    }
+
+    // For 3 and 6 month plans, show comparison
+    return {
+      showComparison: true,
+      originalPrice: selectedPlan.originalPrice,
+      finalPrice: selectedPlan.totalPrice,
+      description: `(${selectedPlan.duration.toLowerCase()})`
+    };
   };
 
   return (
@@ -104,10 +120,18 @@ const Membership = () => {
       {/* Pricing Summary - Only show when a plan is selected */}
       {selectedPlan && (
         <div className="pricing-summary">
-          <div className="discounted-price">
-            <span className="final-price">{calculateSixMonthCost()}฿</span>
-            <span className="for-6-months">(6 months at {selectedPlan.price}/month)</span>
-          </div>
+          {(() => {
+            const pricing = calculatePricingDisplay();
+            return (
+              <div className="pricing-comparison">
+                {pricing.showComparison && (
+                  <span className="original-price">{pricing.originalPrice}฿</span>
+                )}
+                <span className="final-price">{pricing.finalPrice}฿</span>
+                <span className="pricing-description">{pricing.description}</span>
+              </div>
+            );
+          })()}
         </div>
       )}
 
