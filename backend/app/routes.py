@@ -520,41 +520,49 @@ def get_user_stats():
 
         user_id = user_response.user.id
 
-        # Get total completed lessons count
-        completed_lessons_result = supabase.table('user_lesson_progress').select('*', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
-        lessons_completed = completed_lessons_result.count if completed_lessons_result.count else 0
+        # Get total completed lessons count (simple query first)
+        try:
+            completed_lessons_result = supabase.table('user_lesson_progress').select('*', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
+            lessons_completed = completed_lessons_result.count if completed_lessons_result.count else 0
+        except Exception as e:
+            print(f"Error counting completed lessons: {e}")
+            lessons_completed = 0
 
-        # Calculate completed levels
-        # First, get all completed lessons with their stage/level info
-        completed_with_lessons = supabase.table('user_lesson_progress').select('*, lessons(stage, level)').eq('user_id', user_id).eq('is_completed', True).execute()
-        completed_data = completed_with_lessons.data if completed_with_lessons.data else []
-
-        # Group completed lessons by stage and level
-        completed_by_level = {}
-        for progress in completed_data:
-            lesson = progress.get('lessons', {})
-            stage = lesson.get('stage')
-            level = lesson.get('level')
-
-            if stage and level is not None:
-                key = f"{stage}_{level}"
-                if key not in completed_by_level:
-                    completed_by_level[key] = []
-                completed_by_level[key].append(progress['lesson_id'])
-
-        # Now check each stage/level combination to see if it's fully completed
+        # Try to get levels completed (with error handling)
         levels_completed = 0
-        for level_key, completed_lesson_ids in completed_by_level.items():
-            stage, level = level_key.split('_')
-            level = int(level)
+        try:
+            # Get completed lessons with lesson details
+            completed_with_lessons = supabase.table('user_lesson_progress').select('lesson_id, lessons!inner(stage, level)').eq('user_id', user_id).eq('is_completed', True).execute()
 
-            # Get total lessons for this stage/level
-            total_lessons_result = supabase.table('lessons').select('*', count='exact').eq('stage', stage).eq('level', level).execute()
-            total_lessons_count = total_lessons_result.count if total_lessons_result.count else 0
+            if completed_with_lessons.data:
+                # Group by stage and level
+                level_groups = {}
+                for progress in completed_with_lessons.data:
+                    lesson = progress.get('lessons', {})
+                    stage = lesson.get('stage')
+                    level = lesson.get('level')
 
-            # If user completed all lessons in this level, count it as completed
-            if len(completed_lesson_ids) == total_lessons_count and total_lessons_count > 0:
-                levels_completed += 1
+                    if stage and level is not None:
+                        key = f"{stage}_{level}"
+                        if key not in level_groups:
+                            level_groups[key] = []
+                        level_groups[key].append(progress['lesson_id'])
+
+                # Count completed levels
+                for level_key, completed_lesson_ids in level_groups.items():
+                    stage, level = level_key.split('_')
+                    level = int(level)
+
+                    # Get total lessons for this level
+                    total_lessons_result = supabase.table('lessons').select('id', count='exact').eq('stage', stage).eq('level', level).execute()
+                    total_count = total_lessons_result.count if total_lessons_result.count else 0
+
+                    if len(completed_lesson_ids) == total_count and total_count > 0:
+                        levels_completed += 1
+
+        except Exception as e:
+            print(f"Error calculating levels completed: {e}")
+            # Fallback to 0 if level calculation fails
 
         return jsonify({
             "lessons_completed": lessons_completed,

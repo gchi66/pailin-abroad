@@ -9,13 +9,15 @@ import Lesson from "./Pages/Lesson";
 import Resources from "./Pages/Resources";
 import Contact from "./Pages/Contact";
 import Modal from "./Components/Modal";
-import ProfilePage from "./Pages/ProfilePage";
+import AccountSettings from "./Pages/AccountSettings";
 import Membership from "./Pages/Membership";
 import MyPathway from "./Pages/MyPathway";
+import EmailConfirmationPage from "./Pages/EmailConfirmationPage";
+import Onboarding from "./Pages/Onboarding";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
-import SignupModal from "./Components/SignupModal";
+import SignUpModal from "./Components/SignUpModal";
 import { AuthProvider } from "./AuthContext";
 
 // ⬇️ import the provider
@@ -36,37 +38,48 @@ function App() {
       <Router>
         {/* ⬇️ UiLangProvider must be inside the Router */}
         <UiLangProvider>
-          <Navbar
-            toggleLoginModal={toggleLoginModal}
-            toggleSignupModal={toggleSignupModal}
-          />
-          <LoginModal isOpen={isLoginModalOpen} onClose={toggleLoginModal} />
-          <SignupModal isOpen={isSignupModalOpen} onClose={toggleSignupModal} />
-          <Modal
-            isOpen={modalContent.isOpen}
-            title={modalContent.title}
-            message={modalContent.message}
-            onClose={closeModal}
-          />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/lessons" element={<LessonsIndex />} />
-            <Route path="/lesson/:id" element={<Lesson />} />
-            <Route path="/pathway" element={<MyPathway />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/membership" element={<Membership />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute openModal={openModal}>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
+            {/* Full-screen onboarding route - isolated from main app structure */}
+            <Route path="/onboarding" element={<Onboarding />} />
+
+            {/* Main app routes with navbar and footer */}
+            <Route path="/*" element={
+              <>
+                <Navbar
+                  toggleLoginModal={toggleLoginModal}
+                  toggleSignupModal={toggleSignupModal}
+                />
+                <LoginModal isOpen={isLoginModalOpen} onClose={toggleLoginModal} />
+                <SignUpModal isOpen={isSignupModalOpen} onClose={toggleSignupModal} />
+                <Modal
+                  isOpen={modalContent.isOpen}
+                  title={modalContent.title}
+                  message={modalContent.message}
+                  onClose={closeModal}
+                />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/lessons" element={<LessonsIndex />} />
+                  <Route path="/lesson/:id" element={<Lesson />} />
+                  <Route path="/pathway" element={<MyPathway />} />
+                  <Route path="/resources" element={<Resources />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/membership" element={<Membership />} />
+                  <Route path="/email-confirmation" element={<EmailConfirmationPage userEmail="example@test.com" />} />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute openModal={openModal}>
+                        <AccountSettings />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+                <Footer />
+              </>
+            } />
           </Routes>
-          <Footer />
         </UiLangProvider>
       </Router>
     </AuthProvider>

@@ -1,0 +1,96 @@
+/* Email Confirmation Page Styles */
+
+/* Main Layout */
+.email-confirmation-main {
+  background-color: #FAF5F1;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.email-confirmation-container {
+  background: #FFFFFF;
+  border-radius: 2rem;
+  padding: 3rem 2rem;
+  max-width: 32rem;
+  width: 100%;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 0.125rem solid #e0e0e0;
+}
+
+/* Heading */
+.email-confirmation-heading {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: 0.025em;
+}
+
+/* Main Message */
+.email-confirmation-message {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.email-confirmation-message strong {
+  color: #1e1e1e;
+  font-weight: 600;
+}
+
+/* Instructions */
+.email-confirmation-instructions {
+  font-size: 0.875rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 2.5rem 0;
+}
+
+/* Button inherits submit-btn styles from Modal.css */
+.email-confirmation-container .submit-btn {
+  margin-top: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 48rem) {
+  .email-confirmation-main {
+    padding: 1rem 0.5rem;
+  }
+
+  .email-confirmation-container {
+    padding: 2rem 1.5rem;
+    border-radius: 1.5rem;
+  }
+
+  .email-confirmation-heading {
+    font-size: 1.875rem;
+  }
+
+  .email-confirmation-message {
+    font-size: 0.9375rem;
+  }
+
+  .email-confirmation-instructions {
+    font-size: 0.8125rem;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 30rem) {
+  .email-confirmation-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .email-confirmation-heading {
+    font-size: 1.625rem;
+  }
+}

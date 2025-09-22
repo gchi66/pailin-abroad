@@ -1,0 +1,364 @@
+
+.account-main {
+  background-color: #FAF5F1;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 6rem;
+}
+
+.account-container {
+  width: 75%;
+  max-width: 75rem;
+  background: #FFFFFF;
+  border-radius: 3.6rem;
+  padding: 4vh 4vw 6vh;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+  border: 0.2rem solid #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+}
+
+/* Header */
+.account-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.account-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+/* Navigation Tabs */
+.account-nav {
+  border-bottom: 0.125rem solid #e0e0e0;
+  margin-bottom: 2rem;
+}
+
+.account-tabs {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+}
+
+.account-tab {
+  background: none;
+  border: none;
+  padding: 1rem 2rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #999;
+  border-bottom: 0.1875rem solid transparent;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.account-tab.active {
+  color: #1e1e1e;
+  border-bottom-color: #1e1e1e;
+}
+
+.account-tab:hover:not(.active) {
+  color: #666;
+}
+
+/* Content Area */
+.account-content {
+  min-height: 25rem;
+}
+
+/* Section Titles */
+.account-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  margin: 0 0 2rem 0;
+  letter-spacing: 0.05em;
+}
+
+/* Profile Section */
+.account-profile-section {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+/* Avatar */
+.account-avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.account-avatar-wrapper {
+  position: relative;
+  width: 8rem;
+  height: 8rem;
+}
+
+.account-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.1875rem solid #e0e0e0;
+}
+
+.account-avatar-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #3CA0FE;
+  color: white;
+  border: 0.125rem solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.account-avatar-edit:hover {
+  background: #2980e6;
+  transform: scale(1.1);
+}
+
+/* Form Fields */
+.account-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.account-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.account-field-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.account-field-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.account-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 0.125rem solid #e0e0e0;
+  border-radius: 2rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.account-input:focus {
+  outline: none;
+  border-color: #3CA0FE;
+  box-shadow: 0 0 0 0.1875rem rgba(60, 160, 254, 0.1);
+}
+
+.account-input.disabled {
+  background: #f8f9fa;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* Buttons */
+.account-btn {
+  padding: 0.75rem 1.5rem;
+  border: 0.125rem solid #1e1e1e;
+  border-radius: 2rem;
+  background: white;
+  color: #1e1e1e;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 7rem;
+}
+
+.account-btn:hover {
+  border-color: #3CA0FE;
+  color: #3CA0FE;
+}
+
+.account-btn.primary {
+  background: #3CA0FE;
+  border-color: #3CA0FE;
+  color: white;
+}
+
+.account-btn.primary:hover {
+  background: #2980e6;
+  border-color: #2980e6;
+}
+
+/* Manage Account Section */
+.account-manage-section {
+  border-top: 0.125rem solid #e0e0e0;
+  padding-top: 2rem;
+}
+
+.account-manage-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e1e1e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.account-manage-toggle:hover {
+  color: #3CA0FE;
+}
+
+.account-caret {
+  transition: transform 0.3s ease;
+}
+
+.account-caret.rotated {
+  transform: rotate(180deg);
+}
+
+.account-manage-content {
+  margin-top: 1rem;
+  border: 0.125rem solid #e0e0e0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: white;
+}
+
+.account-manage-item {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: white;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.3s ease;
+  border-bottom: 0.0625rem solid #f0f0f0;
+}
+
+.account-manage-item:last-child {
+  border-bottom: none;
+}
+
+.account-manage-item:hover {
+  background: #f8f9fa;
+}
+
+.account-manage-item.delete {
+  color: #dc3545;
+}
+
+.account-manage-item.delete:hover {
+  background: #fef2f2;
+}
+
+/* Billing Section */
+.account-billing-section {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.account-placeholder {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .account-container {
+    width: 95%;
+    padding: 2rem 1.5rem 3rem;
+    border-radius: 2rem;
+  }
+  .account-title {
+    font-size: 2rem;
+  }
+  .account-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .account-tab {
+    padding: 0.75rem 1rem;
+    border-bottom: none;
+    border-radius: 0.5rem;
+    border: 0.125rem solid transparent;
+  }
+  .account-tab.active {
+    border-color: #3CA0FE;
+    background: rgba(60, 160, 254, 0.1);
+  }
+  .account-field-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .account-btn {
+    min-width: auto;
+    width: 100%;
+  }
+  .account-avatar-wrapper {
+    width: 6rem;
+    height: 6rem;
+  }
+  .account-avatar-edit {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-main {
+    padding: 1rem 0.5rem;
+    margin-top: 4rem;
+  }
+  .account-container {
+    width: 98%;
+    padding: 1.5rem 1rem 2rem;
+  }
+  .account-title {
+    font-size: 1.75rem;
+  }
+  .account-section-title {
+    font-size: 1.25rem;
+  }
+}

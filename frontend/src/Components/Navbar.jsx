@@ -4,6 +4,7 @@ import "../Styles/Navbar.css";
 import LanguageToggle from "./LanguageToggle";
 import SearchBar from "./SearchBar";
 import AuthButtons from "./AuthButtons";
+import ProfileDropdown from "./ProfileDropdown";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
@@ -44,7 +45,11 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
           label={t("uiLabel", ui)}                 // <-- pass translated label
         />
         <SearchBar />
-        <AuthButtons onLogin={toggleLoginModal} onSignup={toggleSignupModal} />
+        {user ? (
+          <ProfileDropdown />
+        ) : (
+          <AuthButtons onLogin={toggleLoginModal} onSignup={toggleSignupModal} />
+        )}
       </div>
     </header>
   );
