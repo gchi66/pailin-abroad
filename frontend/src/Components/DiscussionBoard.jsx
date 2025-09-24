@@ -38,7 +38,13 @@ function CommentItem({ comment, onReply, onPin, depth = 0 }) {
   const [replyBody, setReplyBody] = useState("");
   const [postingReply, setPostingReply] = useState(false);
   const isPinned = !!comment.pinned;
-  const userDisplay = comment.user_email || comment.user_username || "Anonymous";
+
+  // Get username from the joined users table
+  const userDisplay = comment.users?.username ||
+                     comment.users?.email ||
+                     comment.user_email ||
+                     comment.user_username ||
+                     "Anonymous";
 
   async function handleReplySubmit(e) {
     e.preventDefault();
@@ -58,7 +64,17 @@ function CommentItem({ comment, onReply, onPin, depth = 0 }) {
       <div className="comment-layout">
         <div className="profile-section">
           <div className="profile-pic">
-            {userDisplay.charAt(0).toUpperCase()}
+            {comment.users?.avatar_image ? (
+              <img
+                src={comment.users.avatar_image}
+                alt={userDisplay}
+                className="profile-pic-image"
+              />
+            ) : (
+              <span className="profile-pic-letter">
+                {userDisplay.charAt(0).toUpperCase()}
+              </span>
+            )}
           </div>
         </div>
         <div className="content-section">
@@ -83,6 +99,9 @@ function CommentItem({ comment, onReply, onPin, depth = 0 }) {
           </div>
           <div className="comment-body">
             {comment.body}
+            {comment.body_th && (
+              <div className="comment-th">{comment.body_th}</div>
+            )}
           </div>
           <div className="comment-actions">
             <button

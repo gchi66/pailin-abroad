@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
-import "../Styles/Modal.css";
+import ForgotPasswordModal from "./ForgotPasswordModal";
+import "../Styles/LoginModal.css";
 
 const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
 
   if (!isOpen) return null;
@@ -58,28 +60,22 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <button className="modal-close" onClick={onClose}>
+    <div className="login-modal">
+      <div className="login-modal-content">
+        <button className="login-modal-close" onClick={onClose}>
           &times;
         </button>
         <h2>Sign In</h2>
         <form onSubmit={handleLogin}>
-          {error && <div className="error-message" style={{
-            color: '#ff4444',
-            backgroundColor: '#ffebee',
-            padding: '10px',
-            borderRadius: '5px',
-            marginBottom: '15px',
-            fontSize: '14px'
-          }}>{error}</div>}
+          {error && <div className="login-error-message">{error}</div>}
 
-          <div className="form-group">
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#333' }}>
+          <div className="login-form-group">
+            <label className="login-form-label">
               Email
             </label>
             <input
               type="email"
+              className="login-form-input"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -87,12 +83,13 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
               autoComplete="email"
             />
           </div>
-          <div className="form-group">
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#333' }}>
+          <div className="login-form-group">
+            <label className="login-form-label">
               Password
             </label>
             <input
               type="password"
+              className="login-form-input"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -100,29 +97,37 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
               autoComplete="current-password"
             />
           </div>
-          <div className="form-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <input type="checkbox" /> Remember me
+          <div className="login-form-footer">
+            <label className="login-remember-label">
+              <input type="checkbox" className="login-remember-checkbox" /> Remember me
             </label>
-            <a href="/" className="forgot-link">Forgot username/password?</a>
+            <span
+              className="login-forgot-link"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowForgotPassword(true);
+              }}
+              style={{ cursor: 'pointer' }}
+            >
+              Forgot username/password?
+            </span>
           </div>
           <button
             type="submit"
-            className="submit-btn"
+            className={`login-submit-btn ${loading ? 'loading' : ''}`}
             disabled={loading}
-            style={{ opacity: loading ? 0.6 : 1 }}
           >
             {loading ? "SIGNING IN..." : "SIGN IN"}
           </button>
         </form>
-        <div className="divider">OR</div>
-        <button className="social-button google">Sign in with Google</button>
-        <button className="social-button facebook">Sign in with Facebook</button>
+        <div className="login-divider">OR</div>
+        <button className="login-social-button google">Sign in with Google</button>
+        <button className="login-social-button facebook">Sign in with Facebook</button>
 
         {toggleSignupModal && (
-          <p className="switch-text" style={{ marginTop: '20px', textAlign: 'center' }}>
-            Don't have an account?{" "}
-            <span className="link" onClick={() => {
+          <p className="login-switch-text">
+            Don't have an account?
+            <span className="login-switch-link" onClick={() => {
               onClose(); // Close login modal
               toggleSignupModal(); // Open signup modal
             }}>
@@ -131,6 +136,13 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
           </p>
         )}
       </div>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal
+        isOpen={showForgotPassword}
+        onClose={() => setShowForgotPassword(false)}
+        onBackToLogin={() => setShowForgotPassword(false)}
+      />
     </div>
   );
 };

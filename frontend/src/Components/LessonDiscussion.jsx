@@ -32,7 +32,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
       setLoading(true);
       const { data, error } = await supabaseClient
         .from("comments")
-        .select("*")
+        .select("*, users(username, email, avatar_image)")
         .eq("lesson_id", lessonId)
         .order("pinned", { ascending: false })
         .order("created_at", { ascending: true });

@@ -42,6 +42,11 @@ function App() {
             {/* Full-screen onboarding route - isolated from main app structure */}
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/email-confirmation" element={<EmailConfirmationPage />} />
+            <Route path="/reset-password" element={<div style={{ padding: '2rem', textAlign: 'center' }}>
+              <h2>Password Reset</h2>
+              <p>This page will handle password reset functionality.</p>
+              <p>You'll be able to set a new password here after clicking the reset link in your email.</p>
+            </div>} />
 
             {/* Main app routes with navbar and footer */}
             <Route path="/*" element={

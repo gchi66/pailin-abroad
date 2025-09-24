@@ -36,6 +36,31 @@ VALID_EXERCISE_KINDS = {
 }
 
 # ______________________ HELPERS
+def _get_pailin_abroad_user_id():
+    """
+    Get the Pailin Abroad admin user ID for pinned comments.
+    You can either:
+    1. Set an environment variable PAILIN_ABROAD_USER_ID
+    2. Query the users table for a known admin email
+    3. Use a hardcoded UUID
+    """
+    # Option 1: Environment variable
+    user_id = os.getenv("PAILIN_ABROAD_USER_ID")
+    if user_id:
+        return user_id
+
+    # Option 2: Query by known admin email (replace with actual admin email)
+    try:
+        result = supabase.table("users").select("id").eq("email", "pailinabroad@gmail.com").single().execute()
+        if result.data:
+            return result.data["id"]
+    except Exception as e:
+        print(f"[WARN] Could not find Pailin Abroad user by email: {e}")
+
+    # Option 3: Fallback to a default UUID (replace with actual UUID if known)
+    print("[WARN] Using default user ID for pinned comments. Set PAILIN_ABROAD_USER_ID env var or update the admin email.")
+    return "00000000-0000-0000-0000-000000000000"
+
 def _normalize_phrase(s: str) -> str:
     """Normalize punctuation/spacing and uppercase for stable matching."""
     if not s:
@@ -544,6 +569,74 @@ def upsert_tags(lesson_id, tags, dry_run=False):
             print(f"[ERROR] lesson_tags for lesson {lesson_id}, tag {tag_name}: {e}")
 
 
+def upsert_pinned_comment(lesson_id, pinned_comment, lang="en", dry_run=False):
+    """
+    Upsert pinned comment for a lesson into the same row.
+    - If lang="en": update 'body' column
+    - If lang="th": update 'body_th' column
+    Uses upsert to ensure we update the same comment row for both languages.
+    """
+    if not pinned_comment or not pinned_comment.strip():
+        return  # No pinned comment to insert
+
+    PAILIN_ABROAD_USER_ID = _get_pailin_abroad_user_id()
+
+    lang = (lang or "en").lower()
+    if lang not in ("en", "th"):
+        raise ValueError("lang must be 'en' or 'th'")
+
+    # Build the comment data - we always include both columns
+    comment_data = {
+        "lesson_id": lesson_id,
+        "user_id": PAILIN_ABROAD_USER_ID,
+        "pinned": True
+    }
+
+    # Set the appropriate language column
+    if lang == "en":
+        comment_data["body"] = pinned_comment.strip()
+        comment_data["body_th"] = ""  # Initialize empty if not set
+    else:  # th
+        comment_data["body"] = ""  # Initialize empty if not set
+        comment_data["body_th"] = pinned_comment.strip()
+
+    if dry_run:
+        print(f"[DRY RUN] Upsert pinned comment ({lang}): {comment_data}")
+        return
+
+    try:
+        # Check if a pinned comment already exists for this lesson and user
+        existing_result = supabase.table("comments").select("id,body,body_th").eq("lesson_id", lesson_id).eq("user_id", PAILIN_ABROAD_USER_ID).eq("pinned", True).execute()
+
+        if existing_result.data:
+            # Update existing comment - preserve the other language column
+            existing_comment = existing_result.data[0]
+            comment_id = existing_comment["id"]
+
+            # Build update data preserving existing content
+            update_data = {}
+            if lang == "en":
+                update_data["body"] = pinned_comment.strip()
+                # Preserve existing Thai content if any
+                if existing_comment.get("body_th"):
+                    update_data["body_th"] = existing_comment["body_th"]
+            else:  # th
+                update_data["body_th"] = pinned_comment.strip()
+                # Preserve existing English content if any
+                if existing_comment.get("body"):
+                    update_data["body"] = existing_comment["body"]
+
+            supabase.table("comments").update(update_data).eq("id", comment_id).execute()
+            print(f"[INFO] Updated existing pinned comment for lesson {lesson_id} (lang={lang})")
+        else:
+            # Insert new comment
+            supabase.table("comments").insert(comment_data).execute()
+            print(f"[INFO] Inserted new pinned comment for lesson {lesson_id} (lang={lang})")
+
+    except Exception as e:
+        print(f"[ERROR] Failed to upsert pinned comment for lesson {lesson_id}: {e}")
+
+
 def process_lesson(data, lang="en", dry_run=False):
     keys = set(data.keys())
     if not REQUIRED_KEYS.issubset(keys):
@@ -557,6 +650,11 @@ def process_lesson(data, lang="en", dry_run=False):
     upsert_phrases(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
     upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), lang=lang, dry_run=dry_run)
     upsert_tags(lesson_id, data.get("tags", []), dry_run=dry_run)
+
+    # Handle pinned comment if present
+    pinned_comment = data.get("pinned_comment")
+    if pinned_comment:
+        upsert_pinned_comment(lesson_id, pinned_comment, lang=lang, dry_run=dry_run)
 
 
 def import_lessons_from_folder(folder_path, lang="en", dry_run=False):

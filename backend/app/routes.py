@@ -951,3 +951,96 @@ def get_user_comments():
     except Exception as e:
         print(f"Error fetching user comments: {e}")
         return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/forgot-password/magic-link', methods=['POST'])
+def send_magic_link():
+    """Send a magic link for passwordless login"""
+    print("Magic link endpoint hit!")
+    data = request.json
+    print("Received data:", data)
+
+    email = data.get('email')
+
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+
+    # Simple email validation
+    import re
+    email_regex = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
+    if not re.match(email_regex, email):
+        return jsonify({"error": "Please enter a valid email address"}), 400
+
+    try:
+        # Check if user exists
+        existing_user = supabase.table('users').select('*').eq('email', email).execute()
+
+        if not existing_user.data:
+            return jsonify({"error": "No account found with this email address"}), 404
+
+        # Send magic link using Supabase OTP
+        response = supabase.auth.sign_in_with_otp({
+            "email": email,
+            "options": {
+                "email_redirect_to": f"{Config.FRONTEND_URL}/pathway"
+            }
+        })
+
+        if hasattr(response, "error") and response.error:
+            print("Error sending magic link:", response.error)
+            return jsonify({"error": "Failed to send magic link"}), 400
+
+        print(f"Magic link sent to {email}")
+        return jsonify({
+            "message": "Magic link sent! Check your email and click the link to sign in.",
+            "email": email
+        }), 200
+
+    except Exception as e:
+        print(f"Error in magic link: {e}")
+        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+
+
+@routes.route('/api/forgot-password/reset', methods=['POST'])
+def reset_password():
+    """Send password reset email"""
+    print("Password reset endpoint hit!")
+    data = request.json
+    print("Received data:", data)
+
+    email = data.get('email')
+
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+
+    # Simple email validation
+    import re
+    email_regex = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
+    if not re.match(email_regex, email):
+        return jsonify({"error": "Please enter a valid email address"}), 400
+
+    try:
+        # Check if user exists
+        existing_user = supabase.table('users').select('*').eq('email', email).execute()
+
+        if not existing_user.data:
+            return jsonify({"error": "No account found with this email address"}), 404
+
+        # Send password reset email using Supabase
+        response = supabase.auth.reset_password_email(email, {
+            "redirect_to": f"{Config.FRONTEND_URL}/reset-password"
+        })
+
+        if hasattr(response, "error") and response.error:
+            print("Error sending reset email:", response.error)
+            return jsonify({"error": "Failed to send reset email"}), 400
+
+        print(f"Password reset email sent to {email}")
+        return jsonify({
+            "message": "Password reset email sent! Check your email and follow the instructions to reset your password.",
+            "email": email
+        }), 200
+
+    except Exception as e:
+        print(f"Error in password reset: {e}")
+        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
