@@ -33,7 +33,7 @@ const AuthButtons = ({ onLogin, onSignup }) => {
       ) : (
         <>
           <button className="join-button" onClick={onSignup}>
-            JOIN
+            SIGN UP
           </button>
           <button className="signin-button" onClick={onLogin}>
             SIGN IN

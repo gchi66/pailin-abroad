@@ -21,7 +21,7 @@
   width: 90%;
   max-width: 420px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  text-align: center;
+  text-align: left;
   font-family: "Poppins", sans-serif;
 }
 
@@ -43,6 +43,7 @@
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: #1e1e1e;
+  text-align: center;
 }
 
 .modal-content p {

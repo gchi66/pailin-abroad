@@ -167,7 +167,10 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
             <p className="switch-text">
               Already have an account?
-              <span className="link" onClick={toggleLoginModal}>
+              <span className="link" onClick={() => {
+                onClose(); // Close signup modal
+                toggleLoginModal(); // Open login modal
+              }}>
                 Sign in
               </span>
             </p>

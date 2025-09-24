@@ -19,7 +19,7 @@ import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
 import CTA from "../Components/CTA";
 
-const Home = () => {
+const Home = ({ toggleSignupModal }) => {
   const [message, setMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -52,7 +52,7 @@ const Home = () => {
 
   return (
     <div>
-      <Hero />
+      <Hero onSignupClick={toggleSignupModal} />
       <FreeLessonCards />
       <ReusablePlacementTest />
       <ChooseUs />

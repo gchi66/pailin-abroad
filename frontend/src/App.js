@@ -50,8 +50,8 @@ function App() {
                   toggleLoginModal={toggleLoginModal}
                   toggleSignupModal={toggleSignupModal}
                 />
-                <LoginModal isOpen={isLoginModalOpen} onClose={toggleLoginModal} />
-                <SignUpModal isOpen={isSignupModalOpen} onClose={toggleSignupModal} />
+                <LoginModal isOpen={isLoginModalOpen} onClose={toggleLoginModal} toggleSignupModal={toggleSignupModal} />
+                <SignUpModal isOpen={isSignupModalOpen} onClose={toggleSignupModal} toggleLoginModal={toggleLoginModal} />
                 <Modal
                   isOpen={modalContent.isOpen}
                   title={modalContent.title}
@@ -59,7 +59,7 @@ function App() {
                   onClose={closeModal}
                 />
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route path="/" element={<Home toggleSignupModal={toggleSignupModal} />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/lessons" element={<LessonsIndex />} />
                   <Route path="/lesson/:id" element={<Lesson />} />

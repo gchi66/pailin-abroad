@@ -2,7 +2,7 @@ import React from "react";
 import "../Styles/Hero.css";
 // import ProfileImage from "/images/Pailin-no-bg.png"; // Ensure this path is correct
 
-const Hero = () => {
+const Hero = ({ onSignupClick }) => {
   return (
     <section className="hero">
       <div className="hero-card">
@@ -15,7 +15,7 @@ const Hero = () => {
           </div>
           <p className="hero-subheader">Lessons based on audio conversations to teach useful, conversational, english.</p>
           <div className="hero-buttons">
-            <button className="free-lessons">SIGN UP FOR FREE</button>
+            <button className="free-lessons" onClick={onSignupClick}>SIGN UP FOR FREE</button>
           </div>
         </div>
       </div>
