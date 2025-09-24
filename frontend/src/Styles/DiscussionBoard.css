@@ -47,7 +47,7 @@
   flex-shrink: 0;
 }
 
-.discussion-profile-pic {
+.profile-pic {
   width: 2.5rem;
   height: 2.5rem;
   background-color: #d1d5db;
@@ -181,58 +181,28 @@
   color: #9ca3af;
 }
 
-.comment-submit-btn {
-  align-self: flex-start;
-  padding: 0.5rem 1rem;
-  background-color: #2563eb;
-  color: #ffffff;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
-}
-
-.comment-submit-btn:hover {
-  background-color: #1d4ed8;
-}
-
-.comment-submit-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-/* Lesson Discussion Specific Styles */
-.lesson-discussion {
-  margin: 2rem 0;
-  padding: 5rem;
-}
-
-.lesson-discussion .discussion-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #1f2937;
-}
-
-.discussion-login-msg {
-  background-color: #fef3c7;
-  border: 1px solid #f59e0b;
-  color: #92400e;
+.submit-btn {
+  background-color: #91CAFF;
+  color: #1E1E1E;
   padding: 1rem;
-  border-radius: 0.5rem;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  width: 100%;
+  border: .15rem solid #1E1E1E;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  align-self: flex-start;
 }
 
-.discussion-loading {
-  text-align: center;
-  color: #6b7280;
-  font-style: italic;
-  padding: 2rem;
-  font-size: 0.875rem;
+.submit-btn:hover {
+  background-color: #1e8ef6;
+}
+
+.submit-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(60, 160, 254, 0.35);
 }
 
 /* Responsive Design */
@@ -268,15 +238,6 @@
   }
 
   .comment-body {
-    font-size: 0.8rem;
-  }
-
-  .lesson-discussion .discussion-title {
-    font-size: 1.25rem;
-  }
-
-  .discussion-login-msg {
-    padding: 0.75rem;
     font-size: 0.8rem;
   }
 }

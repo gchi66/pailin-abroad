@@ -41,6 +41,7 @@ function App() {
           <Routes>
             {/* Full-screen onboarding route - isolated from main app structure */}
             <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/email-confirmation" element={<EmailConfirmationPage />} />
 
             {/* Main app routes with navbar and footer */}
             <Route path="/*" element={
@@ -66,7 +67,6 @@ function App() {
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/membership" element={<Membership />} />
-                  <Route path="/email-confirmation" element={<EmailConfirmationPage userEmail="example@test.com" />} />
                   <Route
                     path="/profile"
                     element={

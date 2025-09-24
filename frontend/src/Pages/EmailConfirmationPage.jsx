@@ -1,11 +1,18 @@
 import React from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import "../Styles/EmailConfirmation.css";
 
 const EmailConfirmationPage = ({ userEmail = "your email" }) => {
+  // Prefer email from URL (e.g., /email-confirmation?email=foo@bar.com) or router state
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const emailFromParams = searchParams.get("email");
+  const emailFromState = location.state?.email;
+  const effectiveEmail = emailFromParams || emailFromState || userEmail;
 
   const handleResendEmail = () => {
     // TODO: Implement resend email logic
-    console.log("Resend email clicked for:", userEmail);
+    console.log("Resend email clicked for:", effectiveEmail);
     alert("Resend email functionality will be implemented.");
   };
 
@@ -15,7 +22,7 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
         <h1 className="email-confirmation-heading">You've got mail!</h1>
 
         <p className="email-confirmation-message">
-          We just sent a message to you at <strong>{userEmail}</strong>. Click the link inside to verify your email and complete your sign-up.
+          We just sent a message to you at <strong>{effectiveEmail}</strong>. Click the link inside to verify your email and complete your sign-up.
         </p>
 
         <p className="email-confirmation-instructions">

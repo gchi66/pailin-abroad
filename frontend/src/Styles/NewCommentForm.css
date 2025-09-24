@@ -30,23 +30,25 @@
 }
 
 .submit-btn {
-  align-self: flex-start;
-  padding: 0.5rem 1rem;
-  background-color: #2563eb;
-  color: #ffffff;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  background-color: #91CAFF;
+  color: #1E1E1E;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  width: 100%;
+  border: .15rem solid #1E1E1E;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: background-color 0.2s ease;
+  align-self: flex-start;
 }
 
 .submit-btn:hover {
-  background-color: #1d4ed8;
+  background-color: #1e8ef6;
 }
 
 .submit-btn:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(60, 160, 254, 0.35);
 }

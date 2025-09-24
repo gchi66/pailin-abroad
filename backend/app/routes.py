@@ -99,6 +99,75 @@ def get_user_profile():
         return jsonify({"error": "Internal server error"}), 500
 
 
+@routes.route('/api/user/profile', methods=['PUT'])
+def update_user_profile():
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user - handle potential session issues from OTP flow
+        try:
+            user_response = supabase.auth.get_user(access_token)
+
+            if not user_response.user:
+                return jsonify({"error": "Invalid token"}), 401
+
+            user_id = user_response.user.id
+
+        except Exception as auth_error:
+            print(f"Auth error with get_user: {auth_error}")
+            # Fallback - try to decode the JWT to get user info
+            try:
+                import jwt
+                # Decode without verification since we trust our own tokens in this flow
+                decoded = jwt.decode(access_token, options={"verify_signature": False})
+                user_id = decoded.get('sub')
+                if not user_id:
+                    return jsonify({"error": "Invalid token format"}), 401
+            except Exception as jwt_error:
+                print(f"JWT decode error: {jwt_error}")
+                return jsonify({"error": "Invalid token"}), 401
+
+        # Get request data
+        data = request.json
+        username = data.get('username')
+        avatar_image = data.get('avatar_image')
+
+        # Validate required fields
+        if not username:
+            return jsonify({"error": "Username is required"}), 400
+
+        # Update user data in users table
+        update_data = {
+            "username": username.strip()
+        }
+
+        # Only update avatar_image if provided
+        if avatar_image:
+            update_data["avatar_image"] = avatar_image
+
+        result = supabase.table('users').update(update_data).eq('id', user_id).execute()
+
+        if not result.data:
+            return jsonify({"error": "Failed to update profile"}), 400
+
+        return jsonify({
+            "message": "Profile updated successfully",
+            "profile": {
+                "username": username,
+                "avatar_image": avatar_image
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"Error updating user profile: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
 @routes.route('/api/user/completed-lessons', methods=['GET'])
 def get_completed_lessons():
     try:
@@ -157,8 +226,8 @@ def get_next_lesson():
             completed_lessons = completed_result.data if completed_result.data else []
 
             if not completed_lessons:
-                # No completed lessons, find the very first lesson
-                first_lesson_result = supabase.table('lessons').select('*').order('stage, level, lesson_order').limit(1).execute()
+                # No completed lessons, find the very first lesson (Beginner Level 1 Lesson 1)
+                first_lesson_result = supabase.table('lessons').select('*').eq('stage', 'Beginner').eq('level', 1).eq('lesson_order', 1).limit(1).execute()
                 if first_lesson_result.data:
                     first_lesson = first_lesson_result.data[0]
                     return jsonify({
@@ -171,7 +240,21 @@ def get_next_lesson():
                         }
                     }), 200
                 else:
-                    return jsonify({"next_lesson": None}), 200
+                    # Fallback: try to find the first lesson in Beginner stage, level 1
+                    fallback_result = supabase.table('lessons').select('*').eq('stage', 'Beginner').order('level, lesson_order').limit(1).execute()
+                    if fallback_result.data:
+                        first_lesson = fallback_result.data[0]
+                        return jsonify({
+                            "next_lesson": {
+                                "level": first_lesson.get("level"),
+                                "lesson_order": first_lesson.get("lesson_order"),
+                                "title": first_lesson.get("title"),
+                                "stage": first_lesson.get("stage"),
+                                "formatted": f"Level {first_lesson.get('level')} • Lesson {first_lesson.get('lesson_order')}"
+                            }
+                        }), 200
+                    else:
+                        return jsonify({"next_lesson": None}), 200
 
             # Find the highest level and lesson_order among completed lessons
             highest_level = 0
@@ -337,35 +420,299 @@ def get_pathway_lessons():
         return jsonify({"error": "Internal server error"}), 500
 
 
-@routes.route('/api/signup', methods=['GET', 'POST'])
-def signup():
-    print("Endpoint hit!")
+
+@routes.route('/api/signup-email', methods=['POST'])
+def signup_email():
+    """Send magic link for account creation - no real account until onboarding complete"""
+    print("Email signup endpoint hit!")
     data = request.json
-    print("Received data:", data)  # Debug incoming data
+    print("Received data:", data)
+
+    email = data.get('email')
+
+    if not email:
+        print("Missing email")
+        return jsonify({"error": "Email is required"}), 400
+
+    try:
+        # Check if user already has a completed account
+        existing_user = supabase.table('users').select('*').eq('email', email).neq('password_hash', 'pending_onboarding').execute()
+
+        if existing_user.data:
+            return jsonify({"error": "An account with this email already exists. Please use the login form."}), 400
+
+        # Use sign_up with a temporary password that meets requirements
+        # This creates the auth user but they'll set real password in onboarding
+        response = supabase.auth.sign_up({
+            "email": email,
+            "password": "TempPass123!",  # Meets Supabase requirements, will be changed in onboarding
+            "options": {
+                "email_redirect_to": "http://localhost:3000/onboarding"
+            }
+        })
+
+        if hasattr(response, "error") and response.error:
+            print("Error from Supabase:", response.error)
+            return jsonify({"error": str(response.error)}), 400
+        print("Supabase response:", response)
+        print(f"Confirmation email sent to {email}")
+
+        return jsonify({
+            "message": "Confirmation email sent! Please check your email to verify your account.",
+            "email": email,
+            "email_sent": True
+        }), 200
+
+    except Exception as e:
+        print(f"Error in email signup: {e}")
+        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+
+
+
+@routes.route('/api/confirm-email', methods=['POST'])
+def confirm_email():
+    """Handle email confirmation and create user record in database"""
+    print("Email confirmation endpoint hit!")
+    data = request.json
+    print("Received data:", data)
+
+    # Get the access token from the confirmed user session
+    access_token = data.get('access_token')
+
+    if not access_token:
+        return jsonify({"error": "Access token is required"}), 400
+
+    try:
+        # Get user info from Supabase using the access token
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid access token"}), 400
+
+        user_id = user_response.user.id
+        user_email = user_response.user.email
+
+        # Check if user record already exists in our database
+        existing_user = supabase.table('users').select('*').eq('id', user_id).execute()
+
+        if not existing_user.data:
+            # Create user record in users table
+            user_insert_result = supabase.table('users').insert({
+                'id': user_id,
+                'email': user_email,
+                'username': user_email,  # Default username to email, can be changed in onboarding
+                'password_hash': 'pending_onboarding'  # Flag that email is confirmed but password needs to be set
+            }).execute()
+
+            if user_insert_result.data:
+                print(f"User record created successfully for {user_email}")
+            else:
+                print(f"Warning: User record creation may have failed for {user_email}")
+        else:
+            print(f"User record already exists for {user_email}")
+
+        return jsonify({
+            "message": "Email confirmed successfully!",
+            "user_id": user_id,
+            "ready_for_onboarding": True
+        }), 200
+
+    except Exception as e:
+        print(f"Error in email confirmation: {e}")
+        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+
+@routes.route('/api/set-password', methods=['POST'])
+def set_password():
+    """Set password for user during onboarding (after email confirmation)"""
+    print("Set password endpoint hit!")
+    data = request.json
+    print("Received data:", data)
+
+    # Get authorization header with access token
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({"error": "Authorization token required"}), 401
+
+    access_token = auth_header.split(' ')[1]
+    password = data.get('password')
+
+    if not password:
+        return jsonify({"error": "Password is required"}), 400
+
+    if len(password) < 8:
+        return jsonify({"error": "Password must be at least 8 characters long"}), 400
+
+    try:
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid access token"}), 401
+
+        user_id = user_response.user.id
+        user_email = user_response.user.email
+
+        # Update the user's password using Supabase admin API
+        try:
+            password_update_response = supabase.auth.admin.update_user_by_id(
+                user_id,
+                {"password": password}
+            )
+
+            if hasattr(password_update_response, "error") and password_update_response.error:
+                print("Error updating password:", password_update_response.error)
+                return jsonify({"error": "Failed to update password"}), 400
+
+        except Exception as password_error:
+            print(f"Error updating password with admin API: {password_error}")
+            return jsonify({"error": "Failed to update password"}), 400
+
+        # Ensure a user record exists and mark password as set
+        existing_user = supabase.table('users').select('*').eq('id', user_id).execute()
+        if existing_user.data:
+            supabase.table('users').update({
+                'password_hash': 'set_by_user_in_onboarding'
+            }).eq('id', user_id).execute()
+        else:
+            supabase.table('users').insert({
+                'id': user_id,
+                'email': user_email,
+                'username': user_email,
+                'password_hash': 'set_by_user_in_onboarding'
+            }).execute()
+
+        # Now sign in the user with their new password to get a fresh, valid session
+        try:
+            login_response = supabase.auth.sign_in_with_password({
+                "email": user_email,
+                "password": password
+            })
+
+            if hasattr(login_response, "error") and login_response.error:
+                print("Error signing in after password set:", login_response.error)
+                # Password was set successfully, but login failed - still return success
+                return jsonify({
+                    "message": "Password set successfully!",
+                    "password_updated": True
+                }), 200
+
+            # Return the fresh session data for the frontend to use
+            print(f"Password set and fresh session created for user {user_email}")
+
+            return jsonify({
+                "message": "Password set successfully!",
+                "password_updated": True,
+                "session": {
+                    "access_token": login_response.session.access_token,
+                    "refresh_token": login_response.session.refresh_token,
+                    "user": {
+                        "id": login_response.user.id,
+                        "email": login_response.user.email
+                    }
+                }
+            }), 200
+
+        except Exception as login_error:
+            print(f"Error creating fresh session after password set: {login_error}")
+            # Password was set successfully, return success even if session refresh failed
+            return jsonify({
+                "message": "Password set successfully!",
+                "password_updated": True
+            }), 200
+
+    except Exception as e:
+        print(f"Error in set password: {e}")
+        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+
+@routes.route('/api/complete-signup', methods=['POST'])
+def complete_signup():
+    """Complete the signup process - this creates the real account after onboarding"""
+    print("Complete signup endpoint hit!")
+    data = request.json
+    print("Received data:", data)
 
     email = data.get('email')
     password = data.get('password')
+    username = data.get('username')
+    avatar_image = data.get('avatar_image')
 
-    if not email or not password:
-        print("Missing email or password")  # Debug missing fields
-        return jsonify({"error": "Email and password are required"}), 400
+    if not all([email, password, username]):
+        return jsonify({"error": "Email, password, and username are required"}), 400
 
-    response = supabase.auth.sign_up({
-        "email": email,
-        "password": password
-    })
-    print("Supabase response:", response)  # Debug Supabase response
+    if len(password) < 8:
+        return jsonify({"error": "Password must be at least 8 characters long"}), 400
 
-    # Check for errors in the response
-    if hasattr(response, "error") and response.error:
-        print("Error from Supabase:", response.error)  # Debug Supabase error
-        return jsonify({"error": str(response.error)}), 400
+    try:
+        # Check if there's a pending user record for this email
+        pending_user = supabase.table('users').select('*').eq('email', email).eq('password_hash', 'pending_onboarding').execute()
 
-    if not response.user:
-        print("Sign-up failed: No user object returned")
-        return jsonify({"error": "Sign-up failed. Please try again."}), 400
+        if not pending_user.data:
+            return jsonify({"error": "No pending signup found for this email. Please start the signup process again."}), 400
 
-    return jsonify({"message": "Sign-up successful! Please verify your email."}), 200
+        user_record = pending_user.data[0]
+        user_id = user_record['id']
+
+        # Update the user's password in Supabase auth using admin API
+        try:
+            admin_response = supabase.auth.admin.update_user_by_id(
+                user_id,
+                {"password": password}
+            )
+
+            if hasattr(admin_response, "error") and admin_response.error:
+                print("Error updating password:", admin_response.error)
+                return jsonify({"error": "Failed to set password"}), 400
+
+        except Exception as password_error:
+            print(f"Password update error: {password_error}")
+            return jsonify({"error": "Failed to set password. Please try again."}), 400
+
+        # Update user record in users table to mark as complete
+        update_result = supabase.table('users').update({
+            'username': username,
+            'avatar_image': avatar_image,
+            'password_hash': 'set_during_onboarding',
+            'is_active': True  # Now the account is active
+        }).eq('id', user_id).execute()
+
+        if not update_result.data:
+            print(f"Warning: User record update may have failed for {email}")
+
+        print(f"Account setup completed for user {email}")
+
+        # Now sign them in to get a proper session
+        signin_response = supabase.auth.sign_in_with_password({
+            "email": email,
+            "password": password
+        })
+
+        if hasattr(signin_response, "error") and signin_response.error:
+            # Account was created but signin failed - they can still login manually
+            return jsonify({
+                "message": "Account created successfully! Please log in.",
+                "account_created": True,
+                "signin_required": True
+            }), 200
+
+        # Return session data for immediate login
+        session_data = {
+            "access_token": signin_response.session.access_token,
+            "refresh_token": signin_response.session.refresh_token,
+            "user": {
+                "id": signin_response.user.id,
+                "email": signin_response.user.email,
+            }
+        }
+
+        return jsonify({
+            "message": "Account created successfully!",
+            "session": session_data,
+            "account_created": True
+        }), 200
+
+    except Exception as e:
+        print(f"Error completing signup: {e}")
+        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
 
 @routes.route('/api/delete_account', methods=['DELETE'])
 def delete_account():
@@ -384,8 +731,11 @@ def delete_account():
 
         user_id = user_response.user.id
 
-        # Delete the user using the service role client
+        # Delete the user from auth.users
         supabase.auth.admin.delete_user(user_id)
+
+        # Delete the user from the public.users table
+        supabase.table("users").delete().eq("id", user_id).execute()
 
         # # Check if the delete action was successful
         # if delete_response is None or delete_response.error:

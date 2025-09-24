@@ -1,41 +1,66 @@
 import React, { useState } from "react";
-// import axios from "axios"; // Commented out - will be used in onboarding flow
 import "../Styles/Modal.css";
 
 const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
   const [email, setEmail] = useState("");
-  // Commented out for now - will be used in onboarding flow
-  // const [error, setError] = useState("");
-  // const [loading, setLoading] = useState(false);
-  // const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   if (!isOpen) return null;
 
   // Handle signup form submission
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    // TODO: Move this logic to onboarding flow
-    console.log("Email signup submitted:", email);
-    alert("Sign-up functionality will be implemented in onboarding flow.");
+    // Basic validation
+    if (!email) {
+      setError("Please enter your email address.");
+      return;
+    }
 
-    /* Commented out for now - will be moved to onboarding
+    // Simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     setLoading(true);
+    setError("");
+
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/signup", {
-        email,
+      const response = await fetch("http://127.0.0.1:5000/api/signup-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email
+        }),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Signup failed");
+      }
+
       setSuccess(true);
       setError("");
-      console.log("Sign Up Success:", response.data);
-      alert("Sign-up successful! Please verify your email.");
+      console.log("Email signup successful:", data);
+
+      // Redirect to email confirmation page with email parameter
+      setTimeout(() => {
+        window.location.href = `/email-confirmation?email=${encodeURIComponent(email)}`;
+      }, 2000);
+
     } catch (error) {
       console.error("Sign Up Error:", error);
-      setError(error.response?.data?.error || "An unexpected error occurred.");
+      setError(error.message || "An unexpected error occurred.");
     } finally {
       setLoading(false);
     }
-    */
   };
 
   return (
@@ -70,9 +95,23 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
             <div className="divider">OR</div>
 
             <form onSubmit={handleSignUp}>
-              {/* Error display commented out for now
-              {error && <div className="error-message">{error}</div>}
-              */}
+              {error && <div className="error-message" style={{
+                color: '#ff4444',
+                backgroundColor: '#ffebee',
+                padding: '10px',
+                borderRadius: '5px',
+                marginBottom: '15px',
+                fontSize: '14px'
+              }}>{error}</div>}
+
+              {success && <div className="success-message" style={{
+                color: '#00c851',
+                backgroundColor: '#e8f5e8',
+                padding: '10px',
+                borderRadius: '5px',
+                marginBottom: '15px',
+                fontSize: '14px'
+              }}>Account created successfully! Redirecting to complete your profile setup...</div>}
 
               <div className="form-group">
                 <div style={{ position: 'relative' }}>
@@ -102,11 +141,15 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
                 </div>
               </div>
 
+
+
               <button
                 type="submit"
                 className="submit-btn"
+                disabled={loading}
+                style={{ opacity: loading ? 0.6 : 1 }}
               >
-                SIGN UP
+                {loading ? "SIGNING UP..." : "SIGN UP"}
               </button>
 
               <div className="form-footer">

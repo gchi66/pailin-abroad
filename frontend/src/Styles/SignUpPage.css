@@ -21,21 +21,27 @@
 }
 
 .submit-btn {
+  background-color: #91CAFF;
+  color: #1E1E1E;
+  padding: 1rem;
+  margin-top: 0.5rem;
   width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  font-weight: bold;
-  background-color: #ff5050;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
+  border: .15rem solid #1E1E1E;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #1e8ef6;
 }
 
 .submit-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+  border-color: #999;
 }
 
 .success-message {
