@@ -718,6 +718,40 @@ class GoogleDocsParser:
         LCTXN = _norm_header_str(lesson_header_raw)    # tolerant compare
         consumed_node_ids = set()
 
+        def _split_dialogue_paragraph(node: dict) -> list[dict]:
+            """Split multi-line dialogue paragraphs into individual line nodes for phrases & verbs."""
+            if node.get("kind") != "paragraph" or node.get("section_context") != "PHRASES & VERBS":
+                return [node]
+
+            plain_text = "".join(s.get("text", "") for s in node.get("inlines", []))
+            lines = [line.strip() for line in plain_text.split('\n') if line.strip()]
+
+            # Only split if we have multiple lines that look like dialogue
+            if len(lines) <= 1:
+                return [node]
+
+            # Check if this looks like dialogue (has speaker patterns or mixed EN/TH)
+            dialogue_pattern = re.compile(r'^[^:]{1,50}:\s+.+')
+            has_dialogue = any(dialogue_pattern.match(line) for line in lines)
+
+            # Also check for EN/TH mixed content that should be split
+            has_mixed_lang = False
+            if len(lines) >= 2:
+                en_count = sum(1 for line in lines if re.search(r'[A-Za-z]', line))
+                th_count = sum(1 for line in lines if re.search(r'[\u0E00-\u0E7F]', line))
+                has_mixed_lang = en_count > 0 and th_count > 0
+
+            if not (has_dialogue or has_mixed_lang):
+                return [node]
+
+            # Split into individual line nodes
+            split_nodes = []
+            for line in lines:
+                new_node = node.copy()
+                new_node["inlines"] = [{"text": line, "bold": False, "italic": False, "underline": False}]
+                split_nodes.append(new_node)
+
+            return split_nodes
 
         for n in doc_nodes:
             if "inlines" not in n:
@@ -731,14 +765,18 @@ class GoogleDocsParser:
                 if lc and _norm_header_str(lc) != LCTXN:
                     continue
 
-            plain = "".join(s.get("text", "") for s in n.get("inlines", []))
-            key = _norm(plain)
-            if not key:
-                continue
+            # Split dialogue paragraphs for phrases & verbs section
+            split_nodes = _split_dialogue_paragraph(n)
 
-            lesson_wide_nodes.setdefault(key, []).append(n)
-            if n.get("section_context") == "PHRASES & VERBS":
-                scoped_nodes.setdefault(key, []).append(n)
+            for split_node in split_nodes:
+                plain = "".join(s.get("text", "") for s in split_node.get("inlines", []))
+                key = _norm(plain)
+                if not key:
+                    continue
+
+                lesson_wide_nodes.setdefault(key, []).append(split_node)
+                if split_node.get("section_context") == "PHRASES & VERBS":
+                    scoped_nodes.setdefault(key, []).append(split_node)
 
         # --------------------- node utilities ----------------------
         def _clone_node(n: dict) -> dict:
@@ -804,6 +842,26 @@ class GoogleDocsParser:
             if hit:
                 return hit
 
+            # For phrases & verbs dialogue lines, try exact text matching first
+            # This helps match the split dialogue nodes we created
+            raw_stripped = raw.strip()
+            if raw_stripped:
+                # Try exact match without normalization for dialogue patterns
+                dialogue_pattern = re.compile(r'^[^:]{1,50}:\s+.+')
+                if dialogue_pattern.match(raw_stripped):
+                    for bucket_name, bucket_map in [("scoped", scoped_nodes), ("lesson_wide", lesson_wide_nodes)]:
+                        for k, nodes in bucket_map.items():
+                            for node in nodes:
+                                if id(node) not in _take_node.consumed_node_ids:
+                                    node_text = "".join(s.get("text", "") for s in node.get("inlines", []))
+                                    if node_text.strip() == raw_stripped:
+                                        result = _clone_node(node)
+                                        if node.get("kind") == "list_item":
+                                            result["kind"] = "list_item"
+                                        bucket_map[k].remove(node)
+                                        _take_node.consumed_node_ids.add(id(node))
+                                        return result
+
             # Try splitting by line breaks only once
             parts = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
             if len(parts) > 1:  # Only try parts if we actually split something
@@ -828,10 +886,12 @@ class GoogleDocsParser:
             return None
 
         def _synth_node(kind: str, text: str, is_bullet: bool = False) -> dict:
+            # Clean up vertical tabs in text (only for Thai language processing)
+            clean_text = text.replace("\u000b", "\n") if lang == 'th' else text
             return {
                 "kind": "list_item" if is_bullet else kind,
                 "level": None,
-                "inlines": [{"text": text, "bold": False, "italic": False, "underline": False}],
+                "inlines": [{"text": clean_text, "bold": False, "italic": False, "underline": False}],
                 "indent": 0,
                 "lesson_context": lesson_header_raw,
                 "section_context": "PHRASES & VERBS",
@@ -892,16 +952,41 @@ class GoogleDocsParser:
                     continue
 
                 # normal line → try to attach real node
-                text_buffer.append(text)
                 node = _take_node(text)
                 if node is not None:
                     if _is_bullet_node(node):
                         node["kind"] = "list_item"
                     node_buffer.append(node)
+                    text_buffer.append(text)  # Only add to text_buffer if we have a matching node
                 else:
-                    # Create a synthetic node - just use paragraph by default
-                    # The bullet detection was causing duplicates
-                    node_buffer.append(_synth_node("paragraph", text, False))
+                    # Create a synthetic node for each unmatched line individually
+                    # This prevents multiple dialogue lines from being concatenated
+                    is_bullet = False
+                    norm_text = _norm(text)
+
+                    # Check if this should be a bullet by looking for bullet patterns in existing nodes
+                    for node_list in scoped_nodes.values():
+                        for n in node_list:
+                            node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
+                            if _norm(node_text) == norm_text and _is_bullet_node(n):
+                                is_bullet = True
+                                break
+                        if is_bullet:
+                            break
+
+                    if not is_bullet:
+                        for node_list in lesson_wide_nodes.values():
+                            for n in node_list:
+                                node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
+                                if _norm(node_text) == norm_text and _is_bullet_node(n):
+                                    is_bullet = True
+                                    break
+                            if is_bullet:
+                                break
+
+                    synthetic_node = _synth_node("paragraph", text, is_bullet)
+                    node_buffer.append(synthetic_node)
+                    text_buffer.append(text)  # Add to text_buffer for the content field
 
         _flush()
         return items
@@ -1110,10 +1195,12 @@ class GoogleDocsParser:
                             matching_nodes.remove(matching_nodes[0])  # Remove from original list
                         else:
                             # Synthetic heading node
+                            # Clean up vertical tabs in Thai text (only for Thai language processing)
+                            clean_title = full_title.replace("\u000b", "\n") if lang == 'th' else full_title
                             synthetic_node = {
                                 "kind": "heading",
                                 "level": None,
-                                "inlines": [{"text": full_title, "bold": False, "italic": False, "underline": False}],
+                                "inlines": [{"text": clean_title, "bold": False, "italic": False, "underline": False}],
                                 "indent": 0,
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header
@@ -1185,10 +1272,13 @@ class GoogleDocsParser:
                                     if looks_bullety:
                                         synthetic_kind = "list_item"
 
+                            # Clean up vertical tabs in Thai text (only for Thai language processing)
+                            clean_text = text_line.replace("\u000b", "\n") if lang == 'th' else text_line
+
                             node_list.append({
                                 "kind": synthetic_kind,
                                 "level": None,
-                                "inlines": [{"text": text_line, "bold": False, "italic": False, "underline": False}],
+                                "inlines": [{"text": clean_text, "bold": False, "italic": False, "underline": False}],
                                 "indent": 0,
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header

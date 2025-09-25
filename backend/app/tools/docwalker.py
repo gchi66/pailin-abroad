@@ -55,6 +55,14 @@ def _plain_text(elems: list[dict]) -> str:
     ).rstrip("\n")
 
 
+def _clean_vertical_tabs(text: str) -> str:
+    """
+    Clean up vertical tab characters (\u000b) from text.
+    Convert to newlines to preserve bilingual structure.
+    """
+    return text.replace("\u000b", "\n")
+
+
 def _is_native_bullet(doc_json: dict, bullet_info: dict, paragraph: dict) -> bool:
     """
     Decide whether a native Google-Docs list item is a bullet
@@ -132,6 +140,8 @@ def paragraph_nodes(doc_json: dict):
             if not tr:
                 continue
             txt = tr["content"].rstrip("\n")
+            # Clean vertical tabs here at the source
+            txt = _clean_vertical_tabs(txt)
             st  = tr.get("textStyle", {})
             spans.append(
                 Inline(
