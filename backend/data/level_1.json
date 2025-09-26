@@ -4432,27 +4432,27 @@
         "items": [
           {
             "number": "1",
-            "text": "(picture of a person in hot weather)",
+            "image_key": "1.6_practice_1",
             "answer": "im hot, i am hot"
           },
           {
             "number": "2",
-            "text": "(picture of a doctor)",
+            "image_key": "1.6_practice_2",
             "answer": "im a doctor, i am a doctor"
           },
           {
             "number": "3",
-            "text": "(picture of a sick person)",
+            "image_key": "1.6_practice_3",
             "answer": "im sick, i am sick"
           },
           {
             "number": "4",
-            "text": "(picture of a person at school)",
+            "image_key": "1.6_practice_4",
             "answer": "im at school, i am at school"
           },
           {
             "number": "5",
-            "text": "(picture of a sad person)",
+            "image_key": "1.6_practice_5",
             "answer": "im sad, i am sad"
           }
         ],
@@ -7108,32 +7108,32 @@
       {
         "kind": "open",
         "title": "PRACTICE GIVING THANKS",
-        "prompt": "Your friend has given you the items in the pictures. Thank her for each item. For example: Thanks for the pen.",
+        "prompt": "Your friend has given you the items in the pictures. Thank her for each item.",
         "paragraph": "",
         "items": [
           {
             "number": "1",
-            "text": "(picture of a book)",
+            "image_key": "1.8_practice_1",
             "answer": "thanks, thank you, for the book"
           },
           {
             "number": "2",
-            "text": "(picture of flowers)",
+            "image_key": "1.8_practice_2",
             "answer": "thanks, thank you, for the flowers"
           },
           {
             "number": "3",
-            "text": "(picture of chocolate)",
+            "image_key": "1.8_practice_3",
             "answer": "thanks, thank you, for the chocolate"
           },
           {
             "number": "4",
-            "text": "(picture of socks)",
+            "image_key": "1.8_practice_4",
             "answer": "thanks, thank you, for the socks"
           },
           {
             "number": "5",
-            "text": "(picture of earrings)",
+            "image_key": "1.8_practice_5",
             "answer": "thanks, thank you, for the earrings"
           }
         ],
@@ -13038,27 +13038,27 @@
         "items": [
           {
             "number": "1",
-            "text": "(Picture of Korea flag)",
+            "image_key": "1.11_practice_1",
             "answer": "im from korea, im from south korea"
           },
           {
             "number": "2",
-            "text": "(Picture of USA flag)",
+            "image_key": "1.11_practice_2",
             "answer": "im from, usa, the usa, america, us, the us"
           },
           {
             "number": "3",
-            "text": "(Picture of Japan flag)",
+            "image_key": "1.11_practice_3",
             "answer": "im from japan"
           },
           {
             "number": "4",
-            "text": "(Picture of Thailand flag)",
+            "image_key": "1.11_practice_4",
             "answer": "im from thailand"
           },
           {
             "number": "5",
-            "text": "(Picture of China flag)",
+            "image_key": "1.11_practice_5",
             "answer": "im from china"
           }
         ],
@@ -14142,11 +14142,11 @@
         "sort_order": 1,
         "prompt": "What did Frank give to Pailin? (select all that apply)",
         "options": [
-          "A. Map",
-          "B. Mug",
-          "C. ID",
-          "D. Bag",
-          "E. T-shirt"
+          "A. [img:1.12_comprehension_a]",
+          "B. [img:1.12_comprehension_b]",
+          "C. [img:1.12_comprehension_c]",
+          "D. [img:1.12_comprehension_d]",
+          "E. [img:1.12_comprehension_e]"
         ],
         "answer_key": [
           "A",
@@ -14164,17 +14164,20 @@
         "items": [
           {
             "number": "1",
-            "text": "A: What’s this?\nB: This is a _____.\n(picture of rose apple)",
+            "image_key": "1.12_practice1_1",
+            "text": "A: What’s this? B: This is a _____.",
             "answer": "rose apple"
           },
           {
             "number": "2",
-            "text": "A: What’s this?\nB: This is _____.\n(picture of green curry)",
+            "image_key": "1.12_practice1_2",
+            "text": "A: What’s this? B: This is _____.",
             "answer": "green curry"
           },
           {
             "number": "3",
-            "text": "A: What’s this?\nB: This is a _____.\n(picture of a papaya)",
+            "image_key": "1.12_practice1_3",
+            "text": "A: What’s this? B: This is a _____.",
             "answer": "papaya"
           }
         ],

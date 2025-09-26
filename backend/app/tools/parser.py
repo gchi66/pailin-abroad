@@ -1585,8 +1585,15 @@ class GoogleDocsParser:
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
                 if content:
-                    # There's content on the same line
-                    cur_items[-1]["text"] = content
+                    # Check if content contains an image reference [img:image_key]
+                    img_match = re.match(r'^\[img:([^\]]+)\]$', content)
+                    if img_match:
+                        # Extract image key and add to item
+                        cur_items[-1]["image_key"] = img_match.group(1)
+                        # Don't add text field when we have an image
+                    else:
+                        # Regular text content
+                        cur_items[-1]["text"] = content
                     collecting_text = False
                 else:
                     # Empty TEXT: line, start collecting multi-line text
@@ -1648,11 +1655,21 @@ class GoogleDocsParser:
 
             # Multi-line text collection
             if collecting_text and cur_items:
-                current_text = cur_items[-1].get("text", "")
-                if current_text:
-                    cur_items[-1]["text"] = current_text + "\n" + original_line
+                # Check if this line contains an image reference
+                img_match = re.match(r'^\[img:([^\]]+)\]$', line.strip())
+                if img_match:
+                    # Replace text with image_key and stop collecting text
+                    if "text" in cur_items[-1]:
+                        del cur_items[-1]["text"]  # Remove any existing text
+                    cur_items[-1]["image_key"] = img_match.group(1)
+                    collecting_text = False
                 else:
-                    cur_items[-1]["text"] = original_line
+                    # Regular text collection
+                    current_text = cur_items[-1].get("text", "")
+                    if current_text:
+                        cur_items[-1]["text"] = current_text + "\n" + original_line
+                    else:
+                        cur_items[-1]["text"] = original_line
                 continue
 
             # Multi-line paragraph collection

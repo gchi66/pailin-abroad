@@ -144,6 +144,13 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         .order("sort_order", desc=False)
     )
 
+    # IMAGES - fetch lesson images for practice exercises and other content
+    images = _exec(
+        supabase.table("lesson_images")
+        .select("image_key, url")
+        .eq("lesson_id", lesson_id)
+    )
+
     return {
         "lesson": lesson,
         "sections": sections,
@@ -151,6 +158,7 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         "questions": questions,
         "exercises": exercises,
         "phrase_links": phrase_links,
+        "images": images,
     }
 
 def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
@@ -257,12 +265,16 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             "variant": p.get("variant"),
         })
 
+    # Convert images list to a dictionary for easy lookup by image_key
+    images_dict = {img["image_key"]: img["url"] for img in raw["images"]}
+
     resolved.update({
         "sections": resolved_sections,
         "transcript": resolved_transcript,
         "questions": rq,
         "practice_exercises": rexs,
         "phrases": rphr,
+        "images": images_dict,
     })
 
     return resolved

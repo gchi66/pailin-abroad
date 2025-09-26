@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function SentenceTransformExercise({ exercise = {} }) {
+export default function SentenceTransformExercise({ exercise = {}, images = {} }) {
   const { title = "", prompt = "", items = [] } = exercise || {};
   const [answers, setAnswers] = useState(Array(items.length).fill(""));
   const [checked, setChecked] = useState(false);
@@ -47,9 +47,16 @@ export default function SentenceTransformExercise({ exercise = {} }) {
 
       {items.map((item, idx) => {
         const isCorrect = item.correct === "yes";
+        const imageUrl = item.image_key ? images[item.image_key] : null;
 
         return (
           <div key={`question-${idx}`} className="st-question">
+            {/* Display image if available */}
+            {imageUrl && (
+              <div className="fb-image-container">
+                <img src={imageUrl} alt={`Question ${item.number}`} className="fb-image" />
+              </div>
+            )}
             <p className="st-stem">{item.number}. {item.text}</p>
             <div className="st-input-container">
               <input

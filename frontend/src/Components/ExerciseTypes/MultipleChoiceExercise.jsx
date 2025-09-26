@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function MultipleChoiceExercise({ exercise }) {
+export default function MultipleChoiceExercise({ exercise, images = {} }) {
   const { title, prompt, items = [] } = exercise;
   const [choices, setChoices] = useState(Array(items.length).fill(null));
   const [checked, setChecked] = useState(false);
@@ -23,9 +23,18 @@ export default function MultipleChoiceExercise({ exercise }) {
     <div className="mc-wrap">
       {prompt && <p className="mc-prompt">{prompt}</p>}
 
-      {items.map((q, qIdx) => (
-        <div key={`question-${qIdx}`} className="mc-question">
-          <p className="mc-question-text">{q.number}. {q.text}</p>
+      {items.map((q, qIdx) => {
+        const imageUrl = q.image_key ? images[q.image_key] : null;
+
+        return (
+          <div key={`question-${qIdx}`} className="mc-question">
+            {/* Display image if available */}
+            {imageUrl && (
+              <div className="fb-image-container">
+                <img src={imageUrl} alt={`Question ${q.number}`} className="fb-image" />
+              </div>
+            )}
+            <p className="mc-question-text">{q.number}. {q.text}</p>
           <ul className="mc-options">
             {q.options.map((optLine) => {
               const letter = optLine.match(/^[A-Z]/)?.[0];     // "A"
@@ -61,7 +70,8 @@ export default function MultipleChoiceExercise({ exercise }) {
             </p>
           )}
         </div>
-      ))}
+        );
+      })}
 
       <div className="mc-buttons">
         {!checked ? (

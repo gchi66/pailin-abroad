@@ -21,6 +21,7 @@ export default function LessonContent({
   phrasesSnipIdx = {},
   contentLang = "en",
   setContentLang,
+  images = {},
 }) {
   /* ===============================================================
      HELPER: Section header by contentLang
@@ -170,7 +171,7 @@ export default function LessonContent({
           </div>
         </header>
 
-        <PracticeSection exercises={practiceExercises} uiLang={uiLang} />
+        <PracticeSection exercises={practiceExercises} uiLang={uiLang} images={images} />
       </article>
     );
   }
@@ -416,6 +417,7 @@ export default function LessonContent({
               uiLang={uiLang}
               hideQuick={false}
               wrapInDetails={false}
+              images={images}
             />
           )}
         />

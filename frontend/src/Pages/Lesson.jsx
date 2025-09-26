@@ -185,6 +185,7 @@ export default function Lesson() {
   const [transcript, setTranscript] = useState([]);
   const [practiceExercises, setPracticeExercises] = useState([]);
   const [lessonPhrases, setLessonPhrases] = useState([]);
+  const [images, setImages] = useState({});
 
 
   // Audio + snippets
@@ -261,6 +262,7 @@ export default function Lesson() {
         setQuestions(normalizedQuestions);
         setPracticeExercises(normalizedExercises);
         setLessonPhrases(payload.phrases || []);
+        setImages(payload.images || {});
 
         console.log("Practice exercises:", practiceExercises);
         // 2) initial active section: only set if not already chosen
@@ -483,6 +485,7 @@ export default function Lesson() {
             phrasesSnipIdx={phrasesSnipIdx}
             contentLang={contentLang}
             setContentLang={setContentLang}
+            images={images}
           />
         </div>
 

@@ -57,6 +57,7 @@ export default function PracticeSection({
   uiLang = "en",
   hideQuick = true,
   wrapInDetails = true,
+  images = {},
 }) {
   // ensure we’re working with an array
   const list0 = arr(exercises).map(transformExercise);
@@ -81,7 +82,7 @@ export default function PracticeSection({
         // Pass full normalized exercise to the renderer.
         // MultipleChoiceExercise can read ex.options / ex.answer_key; fill_blank uses ex.items; open uses ex.prompt/items.
         if (!wrapInDetails) {
-          return <Renderer key={ex.id} exercise={ex} uiLang={uiLang} />;
+          return <Renderer key={ex.id} exercise={ex} uiLang={uiLang} images={images} />;
         }
 
         return (
@@ -89,7 +90,7 @@ export default function PracticeSection({
             <summary className="ps-summary">
               {ex.title || ex.prompt || "Exercise"}
             </summary>
-            <Renderer exercise={ex} uiLang={uiLang} />
+            <Renderer exercise={ex} uiLang={uiLang} images={images} />
           </details>
         );
       })}

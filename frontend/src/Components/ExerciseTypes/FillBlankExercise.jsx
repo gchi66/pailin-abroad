@@ -4,8 +4,9 @@ import React, { useState } from "react";
  * Fill-in-the-blank component that supports
  *   • paragraph exercises  – exercise.paragraph !== ""
  *   • row exercises        – each item.text contains ____ (underscores)
+ *   • images              – items with image_key property will display images
  */
-export default function FillBlankExercise({ exercise }) {
+export default function FillBlankExercise({ exercise, images = {} }) {
   const { title, prompt, paragraph, items = [] } = exercise || {};
 
   /* ---------- state ---------- */
@@ -133,20 +134,54 @@ export default function FillBlankExercise({ exercise }) {
       {prompt && <p className="fb-prompt">{prompt}</p>}
 
       {items.map((item, idx) => {
-        // split at the first run of underscores (___ or ____)
-        const parts = item.text.split(/_+/);
+        // Check if this item has an image
+        const imageUrl = item.image_key ? images[item.image_key] : null;
+
         return (
           <div key={`${item.number}-${idx}`} className="fb-row">
-            {parts[0]}
-            <input
-              type="text"
-              className="fb-input"
-              value={inputs[idx]}
-              onChange={(e) => handleChange(idx, e.target.value)}
-              disabled={checked}
-              placeholder="___"
-            />
-            {parts[1]}
+            {/* Display image if available */}
+            {imageUrl && (
+              <div className="fb-image-container">
+                <img src={imageUrl} alt={`Exercise ${item.number}`} className="fb-image" />
+              </div>
+            )}
+
+            {/* If there's an image, display only the text. Otherwise, split on underscores for blanks */}
+            {imageUrl ? (
+              <div className="fb-text-with-input">
+                <span>{item.text}</span>
+                <input
+                  type="text"
+                  className="fb-input"
+                  value={inputs[idx]}
+                  onChange={(e) => handleChange(idx, e.target.value)}
+                  disabled={checked}
+                  placeholder="___"
+                />
+              </div>
+            ) : (
+              <>
+                {/* split at the first run of underscores (___ or ____) */}
+                {(() => {
+                  const parts = item.text.split(/_+/);
+                  return (
+                    <>
+                      {parts[0]}
+                      <input
+                        type="text"
+                        className="fb-input"
+                        value={inputs[idx]}
+                        onChange={(e) => handleChange(idx, e.target.value)}
+                        disabled={checked}
+                        placeholder="___"
+                      />
+                      {parts[1]}
+                    </>
+                  );
+                })()}
+              </>
+            )}
+
             {checked && (
               <span className={`fb-mark ${isCorrect(idx) ? "correct" : "wrong"}`}>
                 {isCorrect(idx) ? "✓" : "✗"}

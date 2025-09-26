@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function OpenEndedExercise({ exercise }) {
+export default function OpenEndedExercise({ exercise, images = {} }) {
   const { title, prompt, items = [] } = exercise;
 
   // Initialize state for each input for each question
@@ -48,9 +48,16 @@ export default function OpenEndedExercise({ exercise }) {
       {items.map((item, qIdx) => {
         // Extract keywords for this specific item
         const itemKeywords = (item.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
+        const imageUrl = item.image_key ? images[item.image_key] : null;
 
         return (
           <div key={`question-${qIdx}`} className="oe-question">
+            {/* Display image if available */}
+            {imageUrl && (
+              <div className="fb-image-container">
+                <img src={imageUrl} alt={`Question ${item.number}`} className="fb-image" />
+              </div>
+            )}
             <p className="oe-question-text">{item.number}. {item.question || item.text}</p>
 
             {/* Render the appropriate number of input fields */}
