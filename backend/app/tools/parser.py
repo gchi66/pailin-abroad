@@ -720,7 +720,7 @@ class GoogleDocsParser:
 
         def _split_dialogue_paragraph(node: dict) -> list[dict]:
             """Split multi-line dialogue paragraphs into individual line nodes for phrases & verbs."""
-            if node.get("kind") != "paragraph" or node.get("section_context") != "PHRASES & VERBS":
+            if node.get("kind") not in {"paragraph", "list_item"} or node.get("section_context") != "PHRASES & VERBS":
                 return [node]
 
             plain_text = "".join(s.get("text", "") for s in node.get("inlines", []))
@@ -746,9 +746,14 @@ class GoogleDocsParser:
 
             # Split into individual line nodes
             split_nodes = []
-            for line in lines:
+            for i, line in enumerate(lines):
                 new_node = node.copy()
                 new_node["inlines"] = [{"text": line, "bold": False, "italic": False, "underline": False}]
+
+                # First line keeps the original kind (list_item), subsequent lines become paragraphs
+                if i > 0:
+                    new_node["kind"] = "paragraph"
+
                 split_nodes.append(new_node)
 
             return split_nodes

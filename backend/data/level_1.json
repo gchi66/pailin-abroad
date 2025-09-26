@@ -1102,7 +1102,7 @@
               {
                 "text": "What’s = What is",
                 "bold": false,
-                "italic": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -1491,7 +1491,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1501,7 +1501,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1510,7 +1510,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1520,7 +1520,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1529,7 +1529,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1539,7 +1539,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1548,7 +1548,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1558,7 +1558,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1567,7 +1567,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1577,7 +1577,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1586,7 +1586,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1596,7 +1596,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1605,7 +1605,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1615,7 +1615,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1624,7 +1624,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1634,7 +1634,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -1643,7 +1643,7 @@
             "section_context": "CULTURE NOTE"
           },
           {
-            "kind": "paragraph",
+            "kind": "misc_item",
             "level": null,
             "inlines": [
               {
@@ -1653,7 +1653,7 @@
                 "underline": false
               }
             ],
-            "indent": 0,
+            "indent": 4,
             "lesson_context": "LESSON 1.2: What’s your name?",
             "lesson_key": "1.2",
             "lesson_context_norm": "LESSON 1.2: What’s your name?",
@@ -3772,7 +3772,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Pailin: How are you?\u000bDara: Not too good, I just got fired from my job.\u000bPailin: Oh, I’m sorry to hear that!\u000b",
+                "text": "Pailin: How are you?\nDara: Not too good, I just got fired from my job.\nPailin: Oh, I’m sorry to hear that!\n",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -3791,7 +3791,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "Chloe: How are you?\u000bPailin: A bit tired. I didn’t sleep well. How about you?\u000bChloe: I’m good, thanks.",
+                "text": "Chloe: How are you?\nPailin: A bit tired. I didn’t sleep well. How about you?\nChloe: I’m good, thanks.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5321,7 +5321,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "I’m Thai.\u000b",
+                "text": "I’m Thai.\n",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5345,12 +5345,6 @@
                 "text": "I’m [prepositional phrase].",
                 "bold": true,
                 "italic": false,
-                "underline": false
-              },
-              {
-                "text": "",
-                "bold": true,
-                "italic": true,
                 "underline": false
               }
             ],
@@ -5454,12 +5448,6 @@
                 "text": "I’m [noun OR noun phrase].",
                 "bold": true,
                 "italic": false,
-                "underline": false
-              },
-              {
-                "text": "",
-                "bold": true,
-                "italic": true,
                 "underline": false
               }
             ],
@@ -5705,7 +5693,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "ฉันประหม่า\u000bฉันตื่นเต้น",
+                "text": "ฉันประหม่า\nฉันตื่นเต้น",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5749,7 +5737,7 @@
                 "underline": false
               },
               {
-                "text": "\u000bI nervous. [X]",
+                "text": "\nI nervous. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -5768,7 +5756,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "\u000bฉันตื่นเต้น\u000bI excited. [X]",
+                "text": "\nฉันตื่นเต้น\nI excited. [X]",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7014,7 +7002,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "It’s more appropriate to ask about age when you’ve gotten to know someone better, they appear to be close to your age, or the topic comes up naturally in conversation. \u000b",
+                "text": "It’s more appropriate to ask about age when you’ve gotten to know someone better, they appear to be close to your age, or the topic comes up naturally in conversation. \n",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7039,7 +7027,7 @@
                 "underline": false
               },
               {
-                "text": "\u000bThere is even a saying in English, ‘Never ask a woman about her age.’ Even if your intentions are pure, asking a woman her age can get you in trouble. They might assume that they look old and that’s why you’re asking, so it’s best to avoid asking unless they bring it up.",
+                "text": "\nThere is even a saying in English, ‘Never ask a woman about her age.’ Even if your intentions are pure, asking a woman her age can get you in trouble. They might assume that they look old and that’s why you’re asking, so it’s best to avoid asking unless they bring it up.",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -7524,9 +7512,9 @@
             "level": null,
             "inlines": [
               {
-                "text": "(Means ‘You are welcome’)",
+                "text": "Means ‘You are welcome’",
                 "bold": false,
-                "italic": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -7831,7 +7819,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to thank someone\n## THANK YOU\nIn the conversation, when Pailin compliments Chloe’s bracelet, Chloe says:\nThank you!\nThis is perhaps the most important phrase you should know in English. You can say it to anyone and in all contexts.\nAlternatives\nThere are variations of ‘Thank you’ which range from casual to deep appreciation, listed below:\nThanks!\nA casual way to show appreciation.\nThanks so much!\nA more heartfelt way to say thank you.\nThank you so much!\nA strong way to show deep appreciation. Notice Pailin says this when Chloe gives her the bracelet.\n## YOU’RE WELCOME\nAfter Pailin thanks Chloe for the bracelet, Chloe responds with:\nYou’re welcome!\n(Means ‘You are welcome’)\nThis is the most standard polite response to ‘Thank you’ in both informal and formal settings.\nCasual alternatives\nHere are more casual ways to respond:\nNo problem!\nA casual response indicating it wasn’t a big deal.\nNo worries!\nA friendly, informal response.\nAnytime.\nA relaxed way of showing you’re happy to help again.\nOf course!\nA casual and positive response showing your willingness to help.\nThe above responses to ‘Thank you’ are appropriate for when you help someone or give them something.\nResponses to compliments\nIf someone says 'thank you' after you give them a compliment, the only suitable response would be ‘You’re welcome!’ or ‘Of course!’"
+        "content": "## LESSON FOCUS\nHow to thank someone\n## THANK YOU\nIn the conversation, when Pailin compliments Chloe’s bracelet, Chloe says:\nThank you!\nThis is perhaps the most important phrase you should know in English. You can say it to anyone and in all contexts.\nAlternatives\nThere are variations of ‘Thank you’ which range from casual to deep appreciation, listed below:\nThanks!\nA casual way to show appreciation.\nThanks so much!\nA more heartfelt way to say thank you.\nThank you so much!\nA strong way to show deep appreciation. Notice Pailin says this when Chloe gives her the bracelet.\n## YOU’RE WELCOME\nAfter Pailin thanks Chloe for the bracelet, Chloe responds with:\nYou’re welcome!\nMeans ‘You are welcome’\nThis is the most standard polite response to ‘Thank you’ in both informal and formal settings.\nCasual alternatives\nHere are more casual ways to respond:\nNo problem!\nA casual response indicating it wasn’t a big deal.\nNo worries!\nA friendly, informal response.\nAnytime.\nA relaxed way of showing you’re happy to help again.\nOf course!\nA casual and positive response showing your willingness to help.\nThe above responses to ‘Thank you’ are appropriate for when you help someone or give them something.\nResponses to compliments\nIf someone says 'thank you' after you give them a compliment, the only suitable response would be ‘You’re welcome!’ or ‘Of course!’"
       },
       {
         "type": "extra_tip",
@@ -8175,7 +8163,7 @@
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Luke: My breath stinks.\u000bPailin: Here, I have some gum.\u000b",
+                    "text": "Luke: My breath stinks.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -8204,14 +8192,20 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.8: Thanks, I made it",
-                "section_context": "PHRASES & VERBS"
+                "lesson_key": "1.8",
+                "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_en": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 2,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Pailin: I can’t find my blue pen.\u000bLuke: Here, you can use mine.",
+                    "text": "Pailin: I can’t find my blue pen.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -8240,7 +8234,13 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.8: Thanks, I made it",
-                "section_context": "PHRASES & VERBS"
+                "lesson_key": "1.8",
+                "lesson_context_norm": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_en": "LESSON 1.8: Thanks, I made it",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 3,
+                "audio_section": "phrases_verbs"
               }
             ]
           }
@@ -8254,7 +8254,7 @@
       "thank you",
       "appreciation",
       "gift",
-      "you’re welcome"
+      "youre welcome"
     ],
     "pinned_comment": "Think of the last gift you received. How can you thank the giver?"
   },
@@ -8350,15 +8350,15 @@
         "items": [
           {
             "number": "1",
-            "text": "They so funny.",
+            "text": "They so smart.",
             "correct": "no",
-            "answer": "they are so funny, theyre so funny"
+            "answer": "they are so smart, theyre so smart"
           },
           {
             "number": "2",
-            "text": "We at the park.",
+            "text": "We at the bank.",
             "correct": "no",
-            "answer": "we are at the park, were at the park"
+            "answer": "we are at the bank, were at the bank"
           },
           {
             "number": "3",
@@ -8367,9 +8367,9 @@
           },
           {
             "number": "4",
-            "text": "They from Bangkok.",
+            "text": "They from Paris.",
             "correct": "no",
-            "answer": "they are from bangkok, theyre from bangkok"
+            "answer": "they are from paris, theyre from paris"
           },
           {
             "number": "5",
@@ -9834,7 +9834,7 @@
                 "underline": false
               },
               {
-                "text": "\u000b",
+                "text": "\n",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -11974,7 +11974,7 @@
                 "underline": false
               },
               {
-                "text": " (this is an example of a singular noun)\u000b",
+                "text": " (this is an example of a singular noun)\n",
                 "bold": false,
                 "italic": true,
                 "underline": false
@@ -12945,7 +12945,7 @@
       {
         "sort_order": 1,
         "speaker": "Chloe",
-        "line_text": "Pailin, where are you from?",
+        "line_text": "Hey Pailin, where are you from?",
         "indent": 0
       },
       {
@@ -14013,7 +14013,7 @@
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Luke: I just got tickets to the concert!\u000bPailin: Cool! I’m so excited.\u000b",
+                    "text": "Luke: I just got tickets to the concert!",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -14042,14 +14042,20 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.11: Where are you from?",
-                "section_context": "PHRASES & VERBS"
+                "lesson_key": "1.11",
+                "lesson_context_norm": "LESSON 1.11: Where are you from?",
+                "lesson_context_en": "LESSON 1.11: Where are you from?",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 4,
+                "audio_section": "phrases_verbs"
               },
               {
                 "kind": "list_item",
                 "level": null,
                 "inlines": [
                   {
-                    "text": "Pailin: We’re bringing a pie to the potluck.\u000bLuke: Cool, what kind of pie are you bringing?",
+                    "text": "Pailin: We’re bringing a pie to the potluck.",
                     "bold": false,
                     "italic": false,
                     "underline": false
@@ -14078,7 +14084,13 @@
                 ],
                 "indent": 0,
                 "lesson_context": "LESSON 1.11: Where are you from?",
-                "section_context": "PHRASES & VERBS"
+                "lesson_key": "1.11",
+                "lesson_context_norm": "LESSON 1.11: Where are you from?",
+                "lesson_context_en": "LESSON 1.11: Where are you from?",
+                "lesson_context_th": null,
+                "section_context": "PHRASES & VERBS",
+                "audio_seq": 5,
+                "audio_section": "phrases_verbs"
               }
             ]
           }
@@ -14102,7 +14114,7 @@
       "level": 1,
       "lesson_order": 12,
       "title": "This is your student ID",
-      "focus": "How to say ‘This is (something)’",
+      "focus": "How to say ‘This is [something]’",
       "backstory": "Pailin is at the orientation for her study-abroad program in Los Angeles. She is talking with Frank, her student advisor."
     },
     "transcript": [
@@ -14242,7 +14254,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "How to say ‘This is (something)’",
+                "text": "How to say ‘This is [something]’",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -14322,7 +14334,7 @@
               {
                 "text": "What’s = What is",
                 "bold": false,
-                "italic": false,
+                "italic": true,
                 "underline": false
               }
             ],
@@ -14846,7 +14858,7 @@
             "audio_section": "understand"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to say ‘This is (something)’\n## WHAT’S THIS?\nIn the conversation, Frank gives different items to Pailin. He hands her something, and she asks him:\nWhat’s this?\nWhat’s = What is\nThis is a useful question to ask when you want to know what something is.\n## THIS IS…\nTake a look at what Frank says as he offers different items to her:\nThis is your student ID.\nThis is a welcome bag.\nThis is a map of the city.\nYou can follow this structure when explaining what something is:\nThis is [a noun].\nExamples\nPailin walks into a grocery store in the US with her friend and sees an unfamiliar food.\nPailin: What’s this?\nLuke: This is cheesecake.\nPailin is at a friend’s house and sees some beautiful fabric.\nPailin: What’s this?\nLuke: This is my mom’s favorite scarf. It’s from Japan.\nIntroducing a person\nYou can also use this sentence structure to introduce someone. In this case, the structure is:\nThis is [a person].\nThis is my friend, Chloe.\nThis is Adam.\nThis is my mom."
+        "content": "## LESSON FOCUS\nHow to say ‘This is [something]’\n## WHAT’S THIS?\nIn the conversation, Frank gives different items to Pailin. He hands her something, and she asks him:\nWhat’s this?\nWhat’s = What is\nThis is a useful question to ask when you want to know what something is.\n## THIS IS…\nTake a look at what Frank says as he offers different items to her:\nThis is your student ID.\nThis is a welcome bag.\nThis is a map of the city.\nYou can follow this structure when explaining what something is:\nThis is [a noun].\nExamples\nPailin walks into a grocery store in the US with her friend and sees an unfamiliar food.\nPailin: What’s this?\nLuke: This is cheesecake.\nPailin is at a friend’s house and sees some beautiful fabric.\nPailin: What’s this?\nLuke: This is my mom’s favorite scarf. It’s from Japan.\nIntroducing a person\nYou can also use this sentence structure to introduce someone. In this case, the structure is:\nThis is [a person].\nThis is my friend, Chloe.\nThis is Adam.\nThis is my mom."
       },
       {
         "type": "common_mistake",
@@ -15027,7 +15039,7 @@
       "useful phrase",
       "gift",
       "present",
-      "what’s this"
+      "whats this"
     ],
     "pinned_comment": "What are some of your favorite Thai fruits?"
   },
@@ -18511,7 +18523,7 @@
           {
             "number": "1",
             "text": "8:03",
-            "answer": "eight oh three"
+            "answer": "8:03"
           },
           {
             "number": "2",
@@ -18525,30 +18537,6 @@
           }
         ],
         "sort_order": 1
-      },
-      {
-        "kind": "sentence_transform",
-        "title": "QUICK PRACTICE 2",
-        "prompt": "Type out how these times should be said.",
-        "paragraph": "",
-        "items": [
-          {
-            "number": "1",
-            "text": "2:35",
-            "answer": "two thirty five"
-          },
-          {
-            "number": "2",
-            "text": "7:18",
-            "answer": "seven eighteen"
-          },
-          {
-            "number": "3",
-            "text": "9:56",
-            "answer": "nine fifty six"
-          }
-        ],
-        "sort_order": 2
       },
       {
         "kind": "open",
@@ -18569,7 +18557,7 @@
           {
             "number": "3",
             "text": "(picture of clock showing 12:05 with a moon)",
-            "answer": "12:05PM"
+            "answer": "12:05AM"
           },
           {
             "number": "4",
@@ -18582,7 +18570,7 @@
             "answer": "9:40PM"
           }
         ],
-        "sort_order": 3
+        "sort_order": 2
       },
       {
         "kind": "open",
@@ -18616,7 +18604,7 @@
             "answer": "6:30"
           }
         ],
-        "sort_order": 4
+        "sort_order": 3
       },
       {
         "kind": "open",
@@ -18630,7 +18618,7 @@
             "keywords": "asking time, stranger"
           }
         ],
-        "sort_order": 5
+        "sort_order": 4
       }
     ],
     "sections": [
@@ -19232,25 +19220,6 @@
             "level": 3,
             "inlines": [
               {
-                "text": "QUICK PRACTICE 2",
-                "bold": false,
-                "italic": false,
-                "underline": false
-              }
-            ],
-            "indent": 0,
-            "lesson_context": "LESSON 1.15: What time is it?",
-            "lesson_key": "1.15",
-            "lesson_context_norm": "LESSON 1.15: What time is it?",
-            "lesson_context_en": "LESSON 1.15: What time is it?",
-            "lesson_context_th": null,
-            "section_context": "UNDERSTAND"
-          },
-          {
-            "kind": "heading",
-            "level": 3,
-            "inlines": [
-              {
                 "text": "AM & PM",
                 "bold": false,
                 "italic": false,
@@ -19503,7 +19472,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to talk about the time\n## TELLING THE TIME\nIn the conversation, Frank asks the girls:\nWhat time is it?\nThis is the typical way to ask for the current time.\n## IT’S [TIME]\nPailin responds by saying:\nIt’s 11:05.\nThe sentence structure to tell the time is:\nIt’s [time].\nTelling the time is pretty straight-forward, although there are a few things to note.\n## O’CLOCK\nIn the conversation, Frank tells the girls:\nPlease come back at 12:00.\nOn the hour, the time can be read as:\n[#] o’clock\n5 o’clock = 5:00\nLeaving out ‘o’clock’\nOften, ‘o’clock’ is omitted. Frank could have also said:\nPlease come back at 12.\n## TELLING THE TIME: 12:01 - 12:09\nDid you notice how Pailin said the time 11:05? She didn’t say ‘eleven five’ or ‘eleven zero five.’ She said:\n11:05 = eleven-o-five\nThe 0 is pronounced as the letter ‘O’ or ‘oh.’\n## QUICK PRACTICE\n## TELLING THE TIME: 12:10 - 12:59\nAll other times are read as two numbers - the hour, the minutes.\nIn the conversation, Chloe says that her favorite restaurant opens at:\n11:30 = eleven thirty\n## QUICK PRACTICE\n## AM & PM\nTelling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:\nAM = midnight (12:00) to lunchtime (11:59)\nPM = lunchtime (12:00) to midnight (11:59)\nThe hours go from 1 to 12.\nNoon & midnight\nFrank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?\nIt would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example:\nLet’s meet at the park at noon.\nI always sleep at midnight.\nDon’t use military time\nWhile many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock)."
+        "content": "## LESSON FOCUS\nHow to talk about the time\n## TELLING THE TIME\nIn the conversation, Frank asks the girls:\nWhat time is it?\nThis is the typical way to ask for the current time.\n## IT’S [TIME]\nPailin responds by saying:\nIt’s 11:05.\nThe sentence structure to tell the time is:\nIt’s [time].\nTelling the time is pretty straight-forward, although there are a few things to note.\n## O’CLOCK\nIn the conversation, Frank tells the girls:\nPlease come back at 12:00.\nOn the hour, the time can be read as:\n[#] o’clock\n5 o’clock = 5:00\nLeaving out ‘o’clock’\nOften, ‘o’clock’ is omitted. Frank could have also said:\nPlease come back at 12.\n## TELLING THE TIME: 12:01 - 12:09\nDid you notice how Pailin said the time 11:05? She didn’t say ‘eleven five’ or ‘eleven zero five.’ She said:\n11:05 = eleven-o-five\nThe 0 is pronounced as the letter ‘O’ or ‘oh.’\n## QUICK PRACTICE\n## TELLING THE TIME: 12:10 - 12:59\nAll other times are read as two numbers - the hour, the minutes.\nIn the conversation, Chloe says that her favorite restaurant opens at:\n11:30 = eleven thirty\n## AM & PM\nTelling the time in Thai is a bit complex, as the hours of the day are broken down into different intervals. In English, the day is divided into just two sets:\nAM = midnight (12:00) to lunchtime (11:59)\nPM = lunchtime (12:00) to midnight (11:59)\nThe hours go from 1 to 12.\nNoon & midnight\nFrank tells the girls to please come back at 12:00. Would this be referred to as 12AM or 12PM?\nIt would be 12PM. This time can be referred to as ‘noon.’ Meanwhile, 12AM is often referred to as ‘midnight.’ For example:\nLet’s meet at the park at noon.\nI always sleep at midnight.\nDon’t use military time\nWhile many countries use military time (a 24-hour clock instead of the 12-hour clock), it’s not often used in the US. You will almost never hear someone refer to 9PM as 21:00 (21 o’clock)."
       },
       {
         "type": "extra_tip",
@@ -20516,7 +20485,7 @@
             "level": null,
             "inlines": [
               {
-                "text": "[To-be verb] [subject] [object].",
+                "text": "[To-be verb] [subject] [object]?",
                 "bold": false,
                 "italic": false,
                 "underline": false
@@ -21469,7 +21438,7 @@
             "section_context": "UNDERSTAND"
           }
         ],
-        "content": "## LESSON FOCUS\nHow to ask questions with to-be verbs\nSo far, you’ve learned how to make affirmative and negative sentences using the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make questions with these verbs.\n## TO-BE VERB QUESTIONS\nIn the conversation, Frank asks Pailin:\nAre you tired?\nCompare the question with this related affirmative sentence:\nYou are tired.\nDo you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question.\nTo-be question structure\nAll to-be verb questions follow this pattern:\n[To-be verb] [subject] [object].\nAs you might recall, the ‘object’ of the sentence can be one of these three things:\n- adjectives\n- prepositional phrases\n- noun OR noun phrases\nExamples\nTake a look at all the ‘to-be’ questions from the conversation:\nAre you excited for the weekend? (adjective)\nAre you tired? (adjective)\nIs In-N-Out near the hotel? (prepositional phrase)\nIs it usually busy? (adjective)\nEach of these questions follows the pattern above. For example:\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\nTurning questions into sentences\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\nYou are excited for the weekend.\nYou are tired.\nIn-N-Out is near the hotel.\nIt is usually busy.\n## STRUCTURE\nRemember that in questions, the to-be verb comes first.\nHere is the structure of questions using ‘am · are · is’, with examples:\n## TABLE-2:\n## TABLE-2:\n## YES/NO QUESTIONS\nA question like ‘Are you tired?’ is called a ‘yes/no question.’ That means you can answer it with a simple ‘Yes’ or ‘No’ answer.\nYeah\n‘Yes’ is an affirmative answer, but in casual conversation, either of these words is used more often:\nYeah\nYep\nNo\n‘No’ is a negative answer. Either of these words can be used in casual conversation, although ‘no’ is used the most often by far:\nNo\nNope\nListen to the conversation\nRelisten to the conversation and take note of the responses:\nFrank: Are you excited for the weekend?\nPailin: Yeah!\nFrank: Are you tired?\nPailin: No.\nPailin: Is In-N-Out near the hotel?\nFrank: Yep.\nPailin: Is it usually busy?\nFrank: Yeah.\n‘Yeah,’ ‘yep,’ and ‘no’ are the responses used, as they sound the most natural in everyday conversation. ‘Yes’ is perfectly fine, but it can sound a bit stiff in informal settings."
+        "content": "## LESSON FOCUS\nHow to ask questions with to-be verbs\nSo far, you’ve learned how to make affirmative and negative sentences using the to-be verbs ‘am · are · is.’ In this lesson, you’ll learn how to make questions with these verbs.\n## TO-BE VERB QUESTIONS\nIn the conversation, Frank asks Pailin:\nAre you tired?\nCompare the question with this related affirmative sentence:\nYou are tired.\nDo you see how the position of the words changed? The subject ‘you’ and the to-be verb ‘are’ swapped places to form a question.\nTo-be question structure\nAll to-be verb questions follow this pattern:\n[To-be verb] [subject] [object]?\nAs you might recall, the ‘object’ of the sentence can be one of these three things:\n- adjectives\n- prepositional phrases\n- noun OR noun phrases\nExamples\nTake a look at all the ‘to-be’ questions from the conversation:\nAre you excited for the weekend? (adjective)\nAre you tired? (adjective)\nIs In-N-Out near the hotel? (prepositional phrase)\nIs it usually busy? (adjective)\nEach of these questions follows the pattern above. For example:\nIs it usually busy?\nTo-be verb = Is\nSubject = it\nObject (adjective) = usually busy?\nTurning questions into sentences\nTry changing the questions above into affirmative sentences by swapping the to-be verb with the subject. They would be:\nYou are excited for the weekend.\nYou are tired.\nIn-N-Out is near the hotel.\nIt is usually busy.\n## STRUCTURE\nRemember that in questions, the to-be verb comes first.\nHere is the structure of questions using ‘am · are · is’, with examples:\n## TABLE-2:\n## TABLE-2:\n## YES/NO QUESTIONS\nA question like ‘Are you tired?’ is called a ‘yes/no question.’ That means you can answer it with a simple ‘Yes’ or ‘No’ answer.\nYeah\n‘Yes’ is an affirmative answer, but in casual conversation, either of these words is used more often:\nYeah\nYep\nNo\n‘No’ is a negative answer. Either of these words can be used in casual conversation, although ‘no’ is used the most often by far:\nNo\nNope\nListen to the conversation\nRelisten to the conversation and take note of the responses:\nFrank: Are you excited for the weekend?\nPailin: Yeah!\nFrank: Are you tired?\nPailin: No.\nPailin: Is In-N-Out near the hotel?\nFrank: Yep.\nPailin: Is it usually busy?\nFrank: Yeah.\n‘Yeah,’ ‘yep,’ and ‘no’ are the responses used, as they sound the most natural in everyday conversation. ‘Yes’ is perfectly fine, but it can sound a bit stiff in informal settings."
       },
       {
         "type": "extra_tip",
