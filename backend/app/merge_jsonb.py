@@ -91,6 +91,8 @@ def merge_content_nodes(en_nodes: List[Dict], th_nodes: Optional[List[Dict]]) ->
     th_by_soft = {_soft_key(n): n for n in th_nodes}
     used = set()
     out = []
+
+    # Keep all the existing matching logic exactly the same
     for idx, en in enumerate(en_nodes):
         th = None
         if en.get("id") and en["id"] in th_by_id:
@@ -105,9 +107,12 @@ def merge_content_nodes(en_nodes: List[Dict], th_nodes: Optional[List[Dict]]) ->
             used.add(id(th))
         out.append(_merge_node(en, th))
 
+    # ONLY CHANGE: Instead of appending all unmatched at end,
+    # if TH has significantly more nodes than EN (like phrases with translations),
+    # preserve TH order by returning TH nodes directly
     unmatched_th = [n for n in th_nodes if id(n) not in used and _substantive_th_node(n)]
 
-    if len(th_nodes) > len(en_nodes) * 1.5 and len(unmatched_th) > len(en_nodes) * 0.3:
+    if len(th_nodes) >= len(en_nodes) * 1.2 and len(unmatched_th) > 0:
         # This looks like a phrases-style content with interleaved translations
         # Use TH order instead of broken merged order
         return th_nodes
@@ -116,4 +121,3 @@ def merge_content_nodes(en_nodes: List[Dict], th_nodes: Optional[List[Dict]]) ->
         for n in unmatched_th:
             out.append(n)
         return out
-    return out
