@@ -213,11 +213,24 @@ export default function LessonContent({
 
         <div className="markdown-section">
           {items.map((item, idx) => {
-            const nodesToRender = selectNodesForLang(
-              item.content_jsonb,
-              item.content_jsonb_th,
-              contentLang
-            );
+            // Use the same logic as regular sections - don't use selectNodesForLang
+            const hasRichEN = Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0;
+            const hasRichTH = Array.isArray(item.content_jsonb_th) && item.content_jsonb_th.length > 0;
+
+            let nodesToRender = [];
+
+            if (hasRichEN || hasRichTH) {
+              // For Thai content, prefer the merged TH nodes if available, otherwise use EN
+              if (contentLang === "th" && hasRichTH) {
+                nodesToRender = item.content_jsonb_th;
+              } else if (hasRichEN) {
+                nodesToRender = item.content_jsonb;
+              } else if (hasRichTH) {
+                // Fallback to TH if EN is not available
+                nodesToRender = item.content_jsonb_th;
+              }
+            }
+
             const hasRich = nodesToRender.length > 0;
             const md = item.content_md?.trim?.() || item.content?.trim?.() || "";
 

@@ -217,6 +217,7 @@ export default function Lesson() {
       try {
         // 1) fetch resolved payload from backend
         const payload = await fetchResolvedLesson(id, contentLang);
+        console.log("Phrases payload:", payload.phrases);
 
         // derive safe title/subtitle variants for UI (fall back if resolver doesn’t expose *_en/_th)
         const title_en = payload.title_en ?? payload.title ?? null;

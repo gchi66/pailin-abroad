@@ -19,6 +19,13 @@ export default function RichSectionRenderer({
 }) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
+  console.log("RichSectionRenderer input nodes:", nodes.map((n, i) => ({
+  index: i,
+  kind: n.kind,
+  text: n.inlines?.[0]?.text?.substring(0, 30),
+  audio_seq: n.audio_seq
+})));
+
   // Helper for rendering inlines
   const renderInlines = (inlines) =>
     inlines.map((span, m) => (
@@ -41,7 +48,7 @@ export default function RichSectionRenderer({
       return null;
     }
 
-    if (node.kind === "paragraph") {
+    if (node.kind === "paragraph"){
       return (
         <p key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
           {renderInlines(node.inlines)}
@@ -155,7 +162,7 @@ export default function RichSectionRenderer({
         .replace(/\s+/g, " ")
         .trim()
 
-      console.log(`Found heading at index ${idx}:`, headingText, "Node:", node);
+      // console.log(`Found heading at index ${idx}:`, headingText, "Node:", node);
 
       // Create a unique key for this heading based on text and position
       const headingKey = `${headingText}-${idx}`;
@@ -195,16 +202,16 @@ export default function RichSectionRenderer({
   }
 
   // Debug: Log sections to see what's being created
-  console.log("Sections created:", sections.map(s => ({
-    heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
-    bodyCount: s.body.length,
-    key: s.key,
-    body: s.body.map(b => ({ kind: b.kind, text: b.inlines?.[0]?.text?.substring(0, 30) }))
-  })));
+  // console.log("Sections created:", sections.map(s => ({
+  //   heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
+  //   bodyCount: s.body.length,
+  //   key: s.key,
+  //   body: s.body.map(b => ({ kind: b.kind, text: b.inlines?.[0]?.text?.substring(0, 30) }))
+  // })));
 
   // If we have sections with headings, render as accordion
   const hasHeadings = sections.some(sec => sec.heading);
-  console.log("HasHeadings:", hasHeadings, "Total sections:", sections.length);
+  // console.log("HasHeadings:", hasHeadings, "Total sections:", sections.length);
 
   if (hasHeadings) {
     return (

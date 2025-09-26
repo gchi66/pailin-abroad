@@ -104,7 +104,16 @@ def merge_content_nodes(en_nodes: List[Dict], th_nodes: Optional[List[Dict]]) ->
         if th:
             used.add(id(th))
         out.append(_merge_node(en, th))
-    for n in th_nodes:
-        if id(n) not in used and _substantive_th_node(n):
+
+    unmatched_th = [n for n in th_nodes if id(n) not in used and _substantive_th_node(n)]
+
+    if len(th_nodes) > len(en_nodes) * 1.5 and len(unmatched_th) > len(en_nodes) * 0.3:
+        # This looks like a phrases-style content with interleaved translations
+        # Use TH order instead of broken merged order
+        return th_nodes
+    else:
+        # Original behavior for normal content
+        for n in unmatched_th:
             out.append(n)
+        return out
     return out
