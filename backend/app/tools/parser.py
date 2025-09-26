@@ -1413,7 +1413,8 @@ class GoogleDocsParser:
                 if m_q:
                     flush_pending()
                     if cur_q:
-                        cur_q["options"] = options
+                        # Transform collected option strings into structured objects
+                        cur_q["options"] = self._convert_comprehension_options(options)
                         cur_q["answer_key"] = answer_key
                         questions.append(cur_q)
                     cur_q = {
@@ -1453,11 +1454,64 @@ class GoogleDocsParser:
         # Final flush
         flush_pending()
         if cur_q:
-            cur_q["options"] = options
+            cur_q["options"] = self._convert_comprehension_options(options)
             cur_q["answer_key"] = answer_key
             questions.append(cur_q)
 
         return questions
+
+    def _convert_comprehension_options(self, raw_options: list[str]) -> list[dict]:
+        """Convert raw option strings (e.g. 'A. Text' or 'A. [img:1.2_key]') into
+        structured dicts: {label, text, image_key?, alt_text?}.
+
+        Rules:
+        - Label is the leading capital letter before the period (A.)
+        - text is the remainder (EN + optional TH lines) with image / ALT-TEXT markers removed
+        - If an [img:...] tag exists, capture its value as image_key and remove from text
+        - If an ALT-TEXT: segment exists (inline), capture after 'ALT-TEXT:' and remove from text
+        - If no image or alt text, those fields are omitted (or alt_text left as empty string if present but empty)
+        """
+        out: list[dict] = []
+        img_re = re.compile(r"\[img:([^\]]+)\]")
+        label_re = re.compile(r"^([A-Z])\.\s*(.*)$", re.DOTALL)
+        alt_inline_re = re.compile(r"ALT-TEXT:\s*(.*)$", re.IGNORECASE | re.DOTALL)
+        for raw in raw_options:
+            if not raw:
+                continue
+            m_label = label_re.match(raw.strip())
+            if not m_label:
+                # Fallback: treat entire line as text with implicit label?
+                out.append({"label": "", "text": raw.strip()})
+                continue
+            label, remainder = m_label.groups()
+            image_key = None
+            alt_text = None
+
+            # Extract image key
+            m_img = img_re.search(remainder)
+            if m_img:
+                image_key = m_img.group(1).strip()
+                remainder = img_re.sub("", remainder).strip()
+
+            # Extract inline ALT-TEXT if present
+            m_alt = alt_inline_re.search(remainder)
+            if m_alt:
+                alt_text = m_alt.group(1).strip()
+                # Remove the ALT-TEXT: part from visible text
+                remainder = alt_inline_re.sub("", remainder).strip()
+
+            # Normalise whitespace but preserve newlines (especially for Thai continuation)
+            # Collapse any double spaces around newlines / leftover brackets
+            cleaned_text = re.sub(r"[ \t]+", " ", remainder)
+            cleaned_text = re.sub(r" *\n *", "\n", cleaned_text).strip()
+
+            option_obj = {"label": label, "text": cleaned_text}
+            if image_key:
+                option_obj["image_key"] = image_key
+            if alt_text is not None:
+                option_obj["alt_text"] = alt_text
+            out.append(option_obj)
+        return out
 
 
     def parse_practice(self, lines: List[str]) -> List[Dict]:
@@ -1483,6 +1537,7 @@ class GoogleDocsParser:
         cur_items: List[Dict] = []
         collecting_opts = False
         collecting_text = False  # New flag for multi-line text collection
+        collecting_alt = False  # New flag for multi-line alt text collection
         collecting_paragraph = False  # New flag for multi-line paragraph collection
 
         def flush_exercise():
@@ -1573,6 +1628,7 @@ class GoogleDocsParser:
                 cur_items.append({"number": number})
                 collecting_opts = False
                 collecting_text = False
+                collecting_alt = False
                 collecting_paragraph = False
                 continue
 
@@ -1602,9 +1658,30 @@ class GoogleDocsParser:
                 collecting_opts = False
                 continue
 
+            # --- ALT-TEXT for practice exercises ---
+            if line.startswith("ALT-TEXT:"):
+                if not cur_items:
+                    cur_items.append({})
+
+                # Get the content after the colon
+                content = line.split(":", 1)[1].strip() if ":" in line else ""
+
+                if content:
+                    # Single-line alt text
+                    cur_items[-1]["alt_text"] = content
+                    collecting_alt = False
+                else:
+                    # Empty ALT-TEXT: line, start collecting multi-line alt text
+                    cur_items[-1]["alt_text"] = ""
+                    collecting_alt = True
+                collecting_opts = False
+                collecting_text = False
+                continue
+
             if line.startswith("OPTIONS:"):
                 collecting_opts = True
                 collecting_text = False
+                collecting_alt = False
                 collecting_paragraph = False
                 # Ensure the current item has an options list.
                 if not cur_items:
@@ -1621,6 +1698,7 @@ class GoogleDocsParser:
                 cur_items[-1]["correct"] = correct_value
                 collecting_opts = False
                 collecting_text = False
+                collecting_alt = False
                 collecting_paragraph = False
                 continue
 
@@ -1631,6 +1709,7 @@ class GoogleDocsParser:
                 cur_items[-1]["answer"] = line.split(":", 1)[1].strip()
                 collecting_opts = False
                 collecting_text = False
+                collecting_alt = False
                 collecting_paragraph = False
                 continue
 
@@ -1642,6 +1721,7 @@ class GoogleDocsParser:
                     cur_items[-1]["keywords"] = kw
                 collecting_opts = False
                 collecting_text = False
+                collecting_alt = False
                 collecting_paragraph = False
                 continue
 
@@ -1672,6 +1752,15 @@ class GoogleDocsParser:
                         cur_items[-1]["text"] = original_line
                 continue
 
+            # Multi-line alt text collection
+            if collecting_alt and cur_items:
+                current_alt = cur_items[-1].get("alt_text", "")
+                if current_alt:
+                    cur_items[-1]["alt_text"] = current_alt + "\n" + original_line
+                else:
+                    cur_items[-1]["alt_text"] = original_line
+                continue
+
             # Multi-line paragraph collection
             if collecting_paragraph and cur_ex:
                 current_paragraph = cur_ex.get("paragraph", "")
@@ -1681,8 +1770,8 @@ class GoogleDocsParser:
                     cur_ex["paragraph"] = original_line
                 continue
 
-            # Fallback: if not collecting options, text, or paragraph and we have items, append to current item's text
-            if cur_items and not collecting_opts and not collecting_text and not collecting_paragraph:
+            # Fallback: if not collecting options, text, alt text, or paragraph and we have items, append to current item's text
+            if cur_items and not collecting_opts and not collecting_text and not collecting_alt and not collecting_paragraph:
                 existing_text = cur_items[-1].get("text", "")
                 if existing_text:
                     cur_items[-1]["text"] = existing_text + " " + line

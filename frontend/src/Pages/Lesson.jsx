@@ -1,5 +1,5 @@
 // frontend/src/Pages/Lesson.jsx
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchResolvedLesson } from "../lib/fetchResolvedLesson";
@@ -10,7 +10,7 @@ import AudioBar from "../Components/AudioBar";
 import LessonSidebar from "../Components/LessonSidebar";
 import LessonContent from "../Components/LessonContent";
 import LessonDiscussion from "../Components/LessonDiscussion";
-import LanguageToggle from "../Components/LanguageToggle";
+// import LanguageToggle from "../Components/LanguageToggle"; // (unused)
 import LessonNavigationBanner from "../Components/LessonNavigationBanner";
 
 import "../Styles/Lesson.css";
@@ -135,11 +135,27 @@ function normalizeExercise(ex, contentLang) {
 function normalizeQuestion(q, contentLang) {
   // Use prompt and prompt_th from backend
   const prompt = pickLang(q.prompt, q.prompt_th, contentLang) || q.prompt || null;
-
+  // Options now may already be structured (array of {label,text,image_key?,alt_text?})
   let options;
   if (q.options || q.options_th) {
     const raw = contentLang === "th" && q.options_th ? q.options_th : q.options;
-    options = safeJSON(raw, []);
+    const parsed = safeJSON(raw, []);
+    if (Array.isArray(parsed)) {
+      // If they are strings, keep for backwards compatibility; else assume structured objects
+      options = parsed.map((opt) => {
+        if (typeof opt === "string") {
+          // legacy fallback: try to split 'A. text'
+            const m = opt.match(/^([A-Z])\.\s*(.*)$/s);
+            if (m) {
+              return { label: m[1], text: m[2] };
+            }
+            return { label: "", text: opt };
+        }
+        return opt;
+      });
+    } else {
+      options = [];
+    }
   } else {
     options = [];
   }
@@ -154,7 +170,7 @@ function normalizeQuestion(q, contentLang) {
     sort_order: q.sort_order ?? 0,
     question_type: q.question_type || null,
     prompt,
-    options,
+    options, // structured options available to UI
     correct_choice,
     answer_key,
     explanation,
@@ -198,11 +214,7 @@ export default function Lesson() {
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
 
-  // Pinned comment from sections
-  const pinnedComment = useMemo(() => {
-    const s = sections.find((x) => x.type === "pinned_comment");
-    return s ? s.content || "" : "";
-  }, [sections]);
+  // (pinnedComment removed - unused)
 
   // Change content language via URL
   const setContentLang = (lang) => {
@@ -264,7 +276,7 @@ export default function Lesson() {
         setLessonPhrases(payload.phrases || []);
         setImages(payload.images || {});
 
-        console.log("Practice exercises:", practiceExercises);
+  // console.log("Practice exercises:", normalizedExercises);
         // 2) initial active section: only set if not already chosen
         setActiveId(prev => {
           if (prev) return prev;
@@ -395,9 +407,7 @@ export default function Lesson() {
               l => !(l.external_id && l.external_id.endsWith('.chp'))
             );
             // If you want to show the checkpoint separately, you can find it:
-            const checkpointLesson = allLessons.find(
-              l => l.external_id && l.external_id.endsWith('.chp')
-            );
+            // checkpointLesson lookup removed (unused)
             setLessonList(normalLessons);
           }
         }

@@ -28,10 +28,22 @@
         "sort_order": 1,
         "prompt": "What is the man’s name?",
         "options": [
-          "A. His name is Fank.",
-          "B. His name is Bank.",
-          "C. His name is Frank.",
-          "D. His name is Hank."
+          {
+            "label": "A",
+            "text": "His name is Fank."
+          },
+          {
+            "label": "B",
+            "text": "His name is Bank."
+          },
+          {
+            "label": "C",
+            "text": "His name is Frank."
+          },
+          {
+            "label": "D",
+            "text": "His name is Hank."
+          }
         ],
         "answer_key": [
           "C"
@@ -931,10 +943,22 @@
         "sort_order": 1,
         "prompt": "What is the girl’s name?",
         "options": [
-          "A. Her name is Joey.",
-          "B. Her name is Claire.",
-          "C. Her name is Chloe.",
-          "D. Her name is Coco."
+          {
+            "label": "A",
+            "text": "Her name is Joey."
+          },
+          {
+            "label": "B",
+            "text": "Her name is Claire."
+          },
+          {
+            "label": "C",
+            "text": "Her name is Chloe."
+          },
+          {
+            "label": "D",
+            "text": "Her name is Coco."
+          }
         ],
         "answer_key": [
           "C"
@@ -1769,10 +1793,22 @@
         "sort_order": 1,
         "prompt": "What is the boy’s name?",
         "options": [
-          "A. His name is Steven.",
-          "B. His name is Steve.",
-          "C. His name is Chloe.",
-          "D. His name is Trevor."
+          {
+            "label": "A",
+            "text": "His name is Steven."
+          },
+          {
+            "label": "B",
+            "text": "His name is Steve."
+          },
+          {
+            "label": "C",
+            "text": "His name is Chloe."
+          },
+          {
+            "label": "D",
+            "text": "His name is Trevor."
+          }
         ],
         "answer_key": [
           "A"
@@ -2493,10 +2529,22 @@
         "sort_order": 1,
         "prompt": "How is Kevin doing?",
         "options": [
-          "A. He’s good.",
-          "B. He’s okay.",
-          "C. He’s great.",
-          "D. He’s fine."
+          {
+            "label": "A",
+            "text": "He’s good."
+          },
+          {
+            "label": "B",
+            "text": "He’s okay."
+          },
+          {
+            "label": "C",
+            "text": "He’s great."
+          },
+          {
+            "label": "D",
+            "text": "He’s fine."
+          }
         ],
         "answer_key": [
           "C"
@@ -3941,8 +3989,14 @@
         "sort_order": 1,
         "prompt": "Has Pailin eaten breakfast yet?",
         "options": [
-          "A. Yes, she has.",
-          "B. No, she hasn’t."
+          {
+            "label": "A",
+            "text": "Yes, she has."
+          },
+          {
+            "label": "B",
+            "text": "No, she hasn’t."
+          }
         ],
         "answer_key": [
           "B"
@@ -4404,8 +4458,14 @@
         "sort_order": 1,
         "prompt": "How does Pailin feel about meeting her host family?",
         "options": [
-          "A. She’s nervous.",
-          "B. She’s excited."
+          {
+            "label": "A",
+            "text": "She’s nervous."
+          },
+          {
+            "label": "B",
+            "text": "She’s excited."
+          }
         ],
         "answer_key": [
           "A"
@@ -4415,8 +4475,14 @@
         "sort_order": 2,
         "prompt": "How does Chloe feel?",
         "options": [
-          "A. She’s scared.",
-          "B. She’s excited."
+          {
+            "label": "A",
+            "text": "She’s scared."
+          },
+          {
+            "label": "B",
+            "text": "She’s excited."
+          }
         ],
         "answer_key": [
           "B"
@@ -4433,26 +4499,31 @@
           {
             "number": "1",
             "image_key": "1.6_practice_1",
+            "alt_text": "ESL practice image of a boy feeling hot and sweating for the sentence ‘I’m hot.’",
             "answer": "im hot, i am hot"
           },
           {
             "number": "2",
             "image_key": "1.6_practice_2",
+            "alt_text": "ESL practice image of a woman doctor for the sentence ‘I’m a doctor.’",
             "answer": "im a doctor, i am a doctor"
           },
           {
             "number": "3",
             "image_key": "1.6_practice_3",
+            "alt_text": "ESL practice image of a boy feeling sick for the sentence ‘I’m sick.’",
             "answer": "im sick, i am sick"
           },
           {
             "number": "4",
             "image_key": "1.6_practice_4",
+            "alt_text": "ESL practice image of a girl standing in front of a school for the sentence ‘I’m at school.’",
             "answer": "im at school, i am at school"
           },
           {
             "number": "5",
             "image_key": "1.6_practice_5",
+            "alt_text": "ESL practice image of Pailin feeling sad for the sentence ‘I’m sad.’",
             "answer": "im sad, i am sad"
           }
         ],
@@ -6288,9 +6359,18 @@
         "sort_order": 1,
         "prompt": "How old is Pailin?",
         "options": [
-          "A. Pailin is 21.",
-          "B. Pailin is 22.",
-          "C. Pailin is 23."
+          {
+            "label": "A",
+            "text": "Pailin is 21."
+          },
+          {
+            "label": "B",
+            "text": "Pailin is 22."
+          },
+          {
+            "label": "C",
+            "text": "Pailin is 23."
+          }
         ],
         "answer_key": [
           "A"
@@ -6300,9 +6380,18 @@
         "sort_order": 2,
         "prompt": "How old is Chloe?",
         "options": [
-          "A. Chloe is 21.",
-          "B. Chloe is 22.",
-          "C. Chloe is 23."
+          {
+            "label": "A",
+            "text": "Chloe is 21."
+          },
+          {
+            "label": "B",
+            "text": "Chloe is 22."
+          },
+          {
+            "label": "C",
+            "text": "Chloe is 23."
+          }
         ],
         "answer_key": [
           "C"
@@ -7095,9 +7184,18 @@
         "sort_order": 1,
         "prompt": "What did Chloe give to Pailin?",
         "options": [
-          "A. Chloe gave Pailin a necklace.",
-          "B. Chloe gave Pailin a bracelet.",
-          "C. Chloe gave Pailin a bag."
+          {
+            "label": "A",
+            "text": "Chloe gave Pailin a necklace."
+          },
+          {
+            "label": "B",
+            "text": "Chloe gave Pailin a bracelet."
+          },
+          {
+            "label": "C",
+            "text": "Chloe gave Pailin a bag."
+          }
         ],
         "answer_key": [
           "B"
@@ -7114,26 +7212,31 @@
           {
             "number": "1",
             "image_key": "1.8_practice_1",
+            "alt_text": "ESL practice image of a book for the sentence ‘Thank you for the book.’",
             "answer": "thanks, thank you, for the book"
           },
           {
             "number": "2",
             "image_key": "1.8_practice_2",
+            "alt_text": "ESL practice image of flowers for the sentence ‘Thank you for the flowers.’",
             "answer": "thanks, thank you, for the flowers"
           },
           {
             "number": "3",
             "image_key": "1.8_practice_3",
+            "alt_text": "ESL practice image of chocolate for the sentence ‘Thank you for the chocolate’",
             "answer": "thanks, thank you, for the chocolate"
           },
           {
             "number": "4",
             "image_key": "1.8_practice_4",
+            "alt_text": "ESL practice image of socks for the sentence ‘Thank you for the socks.’",
             "answer": "thanks, thank you, for the socks"
           },
           {
             "number": "5",
             "image_key": "1.8_practice_5",
+            "alt_text": "ESL practice image of earrings for the sentence ‘Thank you for the earrings.’",
             "answer": "thanks, thank you, for the earrings"
           }
         ],
@@ -8299,8 +8402,14 @@
         "sort_order": 1,
         "prompt": "Are the pancakes chocolate or blueberry?",
         "options": [
-          "A. They’re chocolate pancakes.",
-          "B. They’re blueberry pancakes."
+          {
+            "label": "A",
+            "text": "They’re chocolate pancakes."
+          },
+          {
+            "label": "B",
+            "text": "They’re blueberry pancakes."
+          }
         ],
         "answer_key": [
           "B"
@@ -10465,9 +10574,18 @@
         "sort_order": 1,
         "prompt": "How old is Steven’s brother?",
         "options": [
-          "A. He’s 21.",
-          "B. He’s 22.",
-          "C. He’s 23."
+          {
+            "label": "A",
+            "text": "He’s 21."
+          },
+          {
+            "label": "B",
+            "text": "He’s 22."
+          },
+          {
+            "label": "C",
+            "text": "He’s 23."
+          }
         ],
         "answer_key": [
           "B"
@@ -10477,9 +10595,18 @@
         "sort_order": 2,
         "prompt": "What does Pailin’s mom do?",
         "options": [
-          "A. She’s a student.",
-          "B. She’s a teacher.",
-          "C. She’s a nurse."
+          {
+            "label": "A",
+            "text": "She’s a student."
+          },
+          {
+            "label": "B",
+            "text": "She’s a teacher."
+          },
+          {
+            "label": "C",
+            "text": "She’s a nurse."
+          }
         ],
         "answer_key": [
           "C"
@@ -12996,9 +13123,18 @@
         "sort_order": 1,
         "prompt": "Where is Chloe from?",
         "options": [
-          "A. Chloe is from Bangkok.",
-          "B. Chloe is from France.",
-          "C. Chloe is from Chiang Mai."
+          {
+            "label": "A",
+            "text": "Chloe is from Bangkok."
+          },
+          {
+            "label": "B",
+            "text": "Chloe is from France."
+          },
+          {
+            "label": "C",
+            "text": "Chloe is from Chiang Mai."
+          }
         ],
         "answer_key": [
           "B"
@@ -13008,9 +13144,18 @@
         "sort_order": 2,
         "prompt": "Where is Chloe’s mom from?",
         "options": [
-          "A. Chloe’s mom is from Bangkok.",
-          "B. Chloe’s mom is from France.",
-          "C. Chloe’s mom is from Chiang Mai."
+          {
+            "label": "A",
+            "text": "Chloe’s mom is from Bangkok."
+          },
+          {
+            "label": "B",
+            "text": "Chloe’s mom is from France."
+          },
+          {
+            "label": "C",
+            "text": "Chloe’s mom is from Chiang Mai."
+          }
         ],
         "answer_key": [
           "B"
@@ -13020,9 +13165,18 @@
         "sort_order": 3,
         "prompt": "Where is Pailin from?",
         "options": [
-          "A. Pailin is from Bangkok.",
-          "B. Pailin is from France.",
-          "C. Pailin is from Chiang Mai."
+          {
+            "label": "A",
+            "text": "Pailin is from Bangkok."
+          },
+          {
+            "label": "B",
+            "text": "Pailin is from France."
+          },
+          {
+            "label": "C",
+            "text": "Pailin is from Chiang Mai."
+          }
         ],
         "answer_key": [
           "A"
@@ -13039,26 +13193,31 @@
           {
             "number": "1",
             "image_key": "1.11_practice_1",
+            "alt_text": "ESL practice image of a Korean flag for the sentence ‘I’m from South Korea.’",
             "answer": "im from korea, im from south korea"
           },
           {
             "number": "2",
             "image_key": "1.11_practice_2",
+            "alt_text": "ESL practice image of an American flag for the sentence ‘I’m from the USA.",
             "answer": "im from, usa, the usa, america, us, the us"
           },
           {
             "number": "3",
             "image_key": "1.11_practice_3",
+            "alt_text": "ESL practice image of a Japanese flag for the sentence ‘I’m from Japan.",
             "answer": "im from japan"
           },
           {
             "number": "4",
             "image_key": "1.11_practice_4",
+            "alt_text": "ESL practice image of a Thai flag for the sentence ‘I’m from Thailand.",
             "answer": "im from thailand"
           },
           {
             "number": "5",
             "image_key": "1.11_practice_5",
+            "alt_text": "ESL practice image of a Chinese flag for the sentence ‘I’m from China.",
             "answer": "im from china"
           }
         ],
@@ -14142,11 +14301,31 @@
         "sort_order": 1,
         "prompt": "What did Frank give to Pailin? (select all that apply)",
         "options": [
-          "A. [img:1.12_comprehension_a]",
-          "B. [img:1.12_comprehension_b]",
-          "C. [img:1.12_comprehension_c]",
-          "D. [img:1.12_comprehension_d]",
-          "E. [img:1.12_comprehension_e]"
+          {
+            "label": "A",
+            "text": "",
+            "image_key": "1.12_comprehension_a"
+          },
+          {
+            "label": "B",
+            "text": "",
+            "image_key": "1.12_comprehension_b"
+          },
+          {
+            "label": "C",
+            "text": "",
+            "image_key": "1.12_comprehension_c"
+          },
+          {
+            "label": "D",
+            "text": "",
+            "image_key": "1.12_comprehension_d"
+          },
+          {
+            "label": "E",
+            "text": "",
+            "image_key": "1.12_comprehension_e"
+          }
         ],
         "answer_key": [
           "A",
@@ -14166,18 +14345,21 @@
             "number": "1",
             "image_key": "1.12_practice1_1",
             "text": "A: What’s this? B: This is a _____.",
+            "alt_text": "ESL practice image of a rose apple for the sentence ‘This is rose apple.’",
             "answer": "rose apple"
           },
           {
             "number": "2",
             "image_key": "1.12_practice1_2",
             "text": "A: What’s this? B: This is _____.",
+            "alt_text": "ESL practice image of green curry for the sentence ‘This is green curry.’",
             "answer": "green curry"
           },
           {
             "number": "3",
             "image_key": "1.12_practice1_3",
             "text": "A: What’s this? B: This is a _____.",
+            "alt_text": "ESL practice image of a papaya for the sentence ‘This is a papaya.’",
             "answer": "papaya"
           }
         ],
@@ -14186,9 +14368,12 @@
       {
         "kind": "open",
         "title": "PRACTICE INTRODUCING PEOPLE",
-        "prompt": "Take a look at Pailin’s family picture. Introduce the people in the picture based on her relationship with them and their name. Use the structure ‘This is [person], [name].’ For example: This is my cousin, Pailin.",
+        "prompt": "Take a look at Pailin’s family picture. Introduce the people in the picture based on her relationship with them and their name.",
         "paragraph": "",
         "items": [
+          {
+            "alt_text": "ESL practice image of Pailin’s Thai family to learn how to introduce people by their relationship and name."
+          },
           {
             "number": "1",
             "answer": "this is my mom lek"
@@ -15105,10 +15290,22 @@
         "sort_order": 1,
         "prompt": "How is the weather in LA? (select all that apply)",
         "options": [
-          "A. It’s sunny.",
-          "B. It’s cloudy.",
-          "C. It's humid.",
-          "D. It’s dry."
+          {
+            "label": "A",
+            "text": "It’s sunny."
+          },
+          {
+            "label": "B",
+            "text": "It’s cloudy."
+          },
+          {
+            "label": "C",
+            "text": "It's humid."
+          },
+          {
+            "label": "D",
+            "text": "It’s dry."
+          }
         ],
         "answer_key": [
           "A",
@@ -15119,10 +15316,22 @@
         "sort_order": 2,
         "prompt": "How is the weather in Bangkok?",
         "options": [
-          "A. It’s hot.",
-          "B. It’s rainy.",
-          "C. It’s cold.",
-          "D. It’s windy."
+          {
+            "label": "A",
+            "text": "It’s hot."
+          },
+          {
+            "label": "B",
+            "text": "It’s rainy."
+          },
+          {
+            "label": "C",
+            "text": "It’s cold."
+          },
+          {
+            "label": "D",
+            "text": "It’s windy."
+          }
         ],
         "answer_key": [
           "B"
@@ -15138,27 +15347,32 @@
         "items": [
           {
             "number": "1",
-            "text": "(picture of something cheap)",
+            "image_key": "1.13_practice_1",
+            "alt_text": "ESL practice image of cheap shoes for the sentence ‘It’s cheap.’",
             "answer": "its cheap"
           },
           {
             "number": "2",
-            "text": "(picture of something spicy)",
+            "image_key": "1.13_practice_2",
+            "alt_text": "ESL practice image of spicy food for the sentence ‘It’s spicy.’",
             "answer": "its spicy"
           },
           {
             "number": "3",
-            "text": "(picture of something cold)",
+            "image_key": "1.13_practice_3",
+            "alt_text": "ESL practice image of a shivering child for the sentence ‘It’s cold.’",
             "answer": "its cold"
           },
           {
             "number": "4",
-            "text": "(picture of a clock)",
+            "image_key": "1.13_practice_4",
+            "alt_text": "ESL practice image of a girl waking up early in the morning for the sentence ‘It’s early.’",
             "answer": "its early"
           },
           {
             "number": "5",
-            "text": "(picture of something purple)",
+            "image_key": "1.13_practice_5",
+            "alt_text": "ESL practice image of a purple vase for the sentence ‘It’s purple.’",
             "answer": "its purple"
           }
         ],
@@ -16032,10 +16246,22 @@
         "sort_order": 1,
         "prompt": "What color is Pailin’s jacket?",
         "options": [
-          "A. Her jacket is black.",
-          "B. Her jacket is blue.",
-          "C. Her jacket is brown.",
-          "D. Her jacket is green."
+          {
+            "label": "A",
+            "text": "Her jacket is black."
+          },
+          {
+            "label": "B",
+            "text": "Her jacket is blue."
+          },
+          {
+            "label": "C",
+            "text": "Her jacket is brown."
+          },
+          {
+            "label": "D",
+            "text": "Her jacket is green."
+          }
         ],
         "answer_key": [
           "A"
@@ -18493,10 +18719,22 @@
         "sort_order": 1,
         "prompt": "What time is it right now?",
         "options": [
-          "A. It’s 11:05.",
-          "B. It’s 11:15.",
-          "C. It’s 11:30.",
-          "D. It’s 12:00."
+          {
+            "label": "A",
+            "text": "It’s 11:05."
+          },
+          {
+            "label": "B",
+            "text": "It’s 11:15."
+          },
+          {
+            "label": "C",
+            "text": "It’s 11:30."
+          },
+          {
+            "label": "D",
+            "text": "It’s 12:00."
+          }
         ],
         "answer_key": [
           "A"
@@ -18506,10 +18744,22 @@
         "sort_order": 2,
         "prompt": "What time does Chloe’s favorite restaurant open?",
         "options": [
-          "A. They open at 11:05.",
-          "B. They open at 11:15.",
-          "C. They open at 11:30.",
-          "D. They open at 12:00."
+          {
+            "label": "A",
+            "text": "They open at 11:05."
+          },
+          {
+            "label": "B",
+            "text": "They open at 11:15."
+          },
+          {
+            "label": "C",
+            "text": "They open at 11:30."
+          },
+          {
+            "label": "D",
+            "text": "They open at 12:00."
+          }
         ],
         "answer_key": [
           "C"
@@ -18549,27 +18799,32 @@
         "items": [
           {
             "number": "1",
-            "text": "(picture of clock showing 10:00 with a sun)",
+            "image_key": "1.15_practice_1",
+            "alt_text": "ESL practice image of a clock with a sun for the sentence ‘It’s 10 o’clock AM.’",
             "answer": "10:00AM"
           },
           {
             "number": "2",
-            "text": "(picture of clock showing 11:35 with a sun)",
+            "image_key": "1.15_practice_2",
+            "alt_text": "ESL practice image of a clock with a sun for the sentence ‘It’s 11:35 AM.’",
             "answer": "11:35AM"
           },
           {
             "number": "3",
-            "text": "(picture of clock showing 12:05 with a moon)",
+            "image_key": "1.15_practice_3",
+            "alt_text": "ESL practice image of a clock with a moon for the sentence ‘It’s 12:05 AM.’",
             "answer": "12:05AM"
           },
           {
             "number": "4",
-            "text": "(picture of clock showing 3:15 with a moon)",
+            "image_key": "1.15_practice_4",
+            "alt_text": "ESL practice image of a clock with a moon for the sentence ‘It’s 3:15 AM.’",
             "answer": "3:15AM"
           },
           {
             "number": "5",
-            "text": "(picture of clock showing 9:40 with a moon)",
+            "image_key": "1.15_practice_5",
+            "alt_text": "ESL practice image of a clock with a moon for the sentence ‘It’s 9:40 PM.’",
             "answer": "9:40PM"
           }
         ],
@@ -20061,10 +20316,22 @@
         "sort_order": 1,
         "prompt": "How does Pailin feel?",
         "options": [
-          "A. She’s tired.",
-          "B. She’s hungry.",
-          "C. She’s hot.",
-          "D. She’s excited."
+          {
+            "label": "A",
+            "text": "She’s tired."
+          },
+          {
+            "label": "B",
+            "text": "She’s hungry."
+          },
+          {
+            "label": "C",
+            "text": "She’s hot."
+          },
+          {
+            "label": "D",
+            "text": "She’s excited."
+          }
         ],
         "answer_key": [
           "B"
@@ -22360,10 +22627,22 @@
         "sort_order": 1,
         "prompt": "What time is it in LA?",
         "options": [
-          "A. It’s 6AM.",
-          "B. It’s 5PM.",
-          "C. It’s 6PM.",
-          "D. It’s 6:30PM."
+          {
+            "label": "A",
+            "text": "It’s 6AM."
+          },
+          {
+            "label": "B",
+            "text": "It’s 5PM."
+          },
+          {
+            "label": "C",
+            "text": "It’s 6PM."
+          },
+          {
+            "label": "D",
+            "text": "It’s 6:30PM."
+          }
         ],
         "answer_key": [
           "C"
@@ -22373,8 +22652,14 @@
         "sort_order": 2,
         "prompt": "Is it morning or night in Thailand?",
         "options": [
-          "A. It’s morning in Thailand.",
-          "B. It’s night in Thailand."
+          {
+            "label": "A",
+            "text": "It’s morning in Thailand."
+          },
+          {
+            "label": "B",
+            "text": "It’s night in Thailand."
+          }
         ],
         "answer_key": [
           "A"
@@ -22384,9 +22669,18 @@
         "sort_order": 3,
         "prompt": "How is the weather in LA now?",
         "options": [
-          "A. It’s warm.",
-          "B. It’s hot.",
-          "C. It’s cool."
+          {
+            "label": "A",
+            "text": "It’s warm."
+          },
+          {
+            "label": "B",
+            "text": "It’s hot."
+          },
+          {
+            "label": "C",
+            "text": "It’s cool."
+          }
         ],
         "answer_key": [
           "A"
@@ -22396,8 +22690,14 @@
         "sort_order": 4,
         "prompt": "Is Pailin’s mom asleep or awake?",
         "options": [
-          "A. Her mom is asleep.",
-          "B. Her mom is awake."
+          {
+            "label": "A",
+            "text": "Her mom is asleep."
+          },
+          {
+            "label": "B",
+            "text": "Her mom is awake."
+          }
         ],
         "answer_key": [
           "A"

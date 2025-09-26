@@ -217,13 +217,15 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
     # Questions - only fields from actual example
     rq: List[Dict[str, Any]] = []
     for q in raw["questions"]:
+        # Options are stored as JSON (array). We just pass through the array for the requested language.
+        opts = q.get("options_th") if (lang == "th" and q.get("options_th")) else q.get("options")
         rq.append({
             "id": q["id"],
             "lesson_id": q["lesson_id"],
             "sort_order": q.get("sort_order"),
             "prompt": _pick_lang(q.get("prompt"), q.get("prompt_th"), lang),
             "answer_key": q.get("answer_key_th") if (lang == "th" and q.get("answer_key_th")) else q.get("answer_key"),
-            "options": q.get("options_th") if (lang == "th" and q.get("options_th")) else q.get("options"),
+            "options": opts,
         })
 
     # Exercises - only fields from actual example

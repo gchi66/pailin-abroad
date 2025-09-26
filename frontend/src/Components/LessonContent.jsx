@@ -1,5 +1,4 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import LessonLanguageToggle from "./LessonLanguageToggle";
 import ComprehensionQuiz from "./ComprehensionQuiz";
 import ApplySection from "./ApplySection";
@@ -114,7 +113,7 @@ export default function LessonContent({
           </div>
         </header>
 
-        <ComprehensionQuiz questions={questions} uiLang={uiLang} />
+  <ComprehensionQuiz questions={questions} uiLang={uiLang} images={images} />
       </article>
     );
   }

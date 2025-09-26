@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import "../Styles/ComprehensionQuiz.css";
 
-export default function ComprehensionQuiz({ questions = [], uiLang = "en" }) {
+export default function ComprehensionQuiz({ questions = [], uiLang = "en", images = {} }) {
   const [selected, setSelected] = useState({});   // { [qId]: ["A","C"] }
   const [results,  setResults]  = useState({});   // { [qId]: "correct" | "incorrect" }
   const [checked,  setChecked]  = useState(false);
@@ -19,22 +19,21 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en" }) {
       return { ...prev, [qId]: nextList };
     });
 
-  /* turn options (string[] or inline) → [{letter,text}] */
+  /* Normalize options to structured objects: {label,text,image_key,alt_text} */
   const parseOptions = (q) => {
-    let optStrings =
-      uiLang === "th" && Array.isArray(q.options_th) && q.options_th.length
-        ? q.options_th
-        : q.options;
-
-    if (!Array.isArray(optStrings) || !optStrings.length) {
-      const raw = uiLang === "th" && q.prompt_th ? q.prompt_th : q.prompt;
-      const lines = raw.split("\n").map((l) => l.trim()).filter(Boolean);
-      optStrings = lines.slice(1);
-    }
-
-    return optStrings.map((str) => {
-      const [letter, ...rest] = str.split(". ");
-      return { letter: letter.trim(), text: rest.join(". ").trim() };
+    const rawOpts = Array.isArray(q.options) ? q.options : [];
+    return rawOpts.map((opt) => {
+      if (typeof opt === "string") {
+        const m = opt.match(/^([A-Z])\.\s*(.*)$/s);
+        if (m) return { label: m[1], text: m[2] };
+        return { label: "", text: opt };
+      }
+      return {
+        label: opt.label || opt.letter || "",
+        text: opt.text || "",
+        image_key: opt.image_key || null,
+        alt_text: opt.alt_text || "",
+      };
     });
   };
 
@@ -84,20 +83,34 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en" }) {
               </div>
 
               <div className="cq-option-list">
-                {opts.map(({ letter, text }) => (
-                  <div key={letter} className="cq-option-item">
+                {opts.map(({ label, text, image_key, alt_text }) => (
+                  <div key={label + text} className="cq-option-item">
                     <button
                       type="button"
                       className={
-                        (selected[q.id] || []).includes(letter)
+                        (selected[q.id] || []).includes(label)
                           ? "cq-letter selected"
                           : "cq-letter"
                       }
-                      onClick={() => toggle(q.id, letter, isMulti)}
+                      onClick={() => toggle(q.id, label, isMulti)}
                     >
-                      {letter}
+                      {label}
                     </button>
-                    <span className="cq-option-text">{text}</span>
+                    <span className="cq-option-text">
+                      {image_key ? (
+                        <>
+                          <img
+                            src={images[image_key]}
+                            alt={alt_text || text}
+                            className="cq-option-image"
+                            style={{ maxWidth: 120, display: "block" }}
+                          />
+                          {text && <span>{text}</span>}
+                        </>
+                      ) : (
+                        text
+                      )}
+                    </span>
                   </div>
                 ))}
               </div>

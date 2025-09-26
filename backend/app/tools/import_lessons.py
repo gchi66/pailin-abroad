@@ -65,10 +65,10 @@ def _normalize_phrase(s: str) -> str:
     """Normalize punctuation/spacing and uppercase for stable matching."""
     if not s:
         return ""
-    s = (s.replace("’", "'")
-           .replace("‘", "'")
-           .replace("“", '"')
-           .replace("”", '"')
+    s = (s.replace("'", "'")
+           .replace("'", "'")
+           .replace(""", '"')
+           .replace(""", '"')
            .replace("–", "-")
            .replace("—", "-"))
     s = re.sub(r"\s+", " ", s.strip())
@@ -86,12 +86,39 @@ def _find_phrase_by_norm(variant: int, phrase_raw: str):
 
 
 #______________________ REGULAR METHODS
+def _extract_th(val):
+    """Return only the Thai string from a value that might be:
+    - plain string (return stripped)
+    - dict like {"en": "..", "th": ".."}
+    - any mapping with a 'th' key
+    Falls back to first non-empty string value, else empty string.
+    """
+    if isinstance(val, dict):
+        # Preferred Thai keys
+        for k in ("th", "TH", "thai", "Thai"):
+            v = val.get(k)
+            if isinstance(v, str) and v.strip():
+                return v.strip()
+        # Fallback: first non-empty string in dict
+        for v in val.values():
+            if isinstance(v, str) and v.strip():
+                return v.strip()
+        return ""
+    if isinstance(val, str):
+        return val.strip()
+    return ""
+
 def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=False):
     lang = (lang or "en").lower()
     if lang not in ("en", "th"):
         raise ValueError("lang must be 'en' or 'th'")
 
     if lang == "th":
+        # Thai path: we ONLY localize textual fields. Image assets (image_key -> image_url resolution)
+        # are canonical from the EN ingest. We still keep the Thai items array so that per-item
+        # answers or alt text can be associated, but we never attempt to change the base EN
+        # image mappings. We optionally warn if Thai JSON's image_key disagrees with EN.
+        alt_update_rows = []  # collect (lesson_id,image_key,alt_text_th) upserts
         for ex in (practice_exercises or []):
             kind = ex.get("kind")
             if kind not in VALID_EXERCISE_KINDS:
@@ -100,20 +127,56 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
 
             key = {"lesson_id": lesson_id, "kind": kind, "sort_order": ex.get("sort_order", 0)}
 
-            # Extract Thai title - handle both structured and string formats
-            title_raw = ex.get("title", "")
-            if isinstance(title_raw, dict) and "th" in title_raw:
-                # New structured format: {"en": "...", "th": "..."}
-                title_th = title_raw["th"] or ""
-            else:
-                # Old string format or fallback
-                title_th = title_raw or ""
+            # Fetch existing EN row to validate image_key alignment (best effort; ignore errors)
+            en_items = []
+            try:
+                resp = (supabase.table("practice_exercises")
+                        .select("items")
+                        .eq("lesson_id", key["lesson_id"])
+                        .eq("kind", key["kind"])
+                        .eq("sort_order", key["sort_order"])
+                        .single()
+                        .execute())
+                if resp.data and isinstance(resp.data.get("items"), list):
+                    en_items = resp.data["items"]
+            except Exception as e:
+                # Non-fatal: just note inability to validate
+                print(f"[INFO] Could not fetch EN practice row for validation ({key}): {e}")
+
+            # Build map of EN items by number for quick comparison
+            en_by_number = {str(it.get("number")): it for it in (en_items or []) if it.get("number") is not None}
+
+            th_items_raw = ex.get("items", []) or []
+            th_items_validated = []
+            for th_item in th_items_raw:
+                # Copy as-is (do not mutate original reference)
+                item_copy = dict(th_item)
+                num = str(item_copy.get("number")) if item_copy.get("number") is not None else None
+                if num and "image_key" in item_copy and num in en_by_number:
+                    en_image_key = en_by_number[num].get("image_key")
+                    th_image_key = item_copy.get("image_key")
+                    if en_image_key and th_image_key and en_image_key != th_image_key:
+                        print(f"[WARN] TH practice item number {num} image_key '{th_image_key}' != EN '{en_image_key}'. Using EN mapping at runtime.")
+                # We intentionally keep the Thai image_key (for diagnostics) but the frontend / resolver
+                # should always rely on EN's canonical image_key when rendering.
+                # Collect alt text for lesson_images.alt_text_th if present
+                if item_copy.get("image_key") and item_copy.get("alt_text"):
+                    alt_text_val = item_copy.get("alt_text", "").strip()
+                    if alt_text_val:
+                        alt_update_rows.append({
+                            "lesson_id": lesson_id,
+                            "image_key": item_copy["image_key"],
+                            "alt_text_th": alt_text_val,
+                        })
+                th_items_validated.append(item_copy)
 
             patch = {
-                "title_th":     title_th,
-                "prompt_th":    (ex.get("prompt_md") or ex.get("prompt") or "") or "",
-                "paragraph_th": ex.get("paragraph", "") or "",
-                "items_th":     ex.get("items", []),
+                "title_th":     _extract_th(ex.get("title")),
+                "prompt_th":    _extract_th(ex.get("prompt_md") or ex.get("prompt")),
+                "paragraph_th": _extract_th(ex.get("paragraph")),
+                # Store the validated Thai items (with alt text / answers). We do NOT attempt to
+                # reconcile or alter image keys here; EN remains source-of-truth.
+                "items_th":     th_items_validated,
                 # if you ever add localized MCQ choices for practice, include options_th here
             }
 
@@ -129,6 +192,45 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
                    .execute())
             if not (upd.data or []):
                 print(f"[WARN] TH skip (no EN row yet) for practice {key}. Run EN import first.")
+        # Conditional update of Thai alt text (only if existing row & alt_text_th is empty/null)
+        if alt_update_rows:
+            # Fetch existing image rows with current alt_text_th
+            try:
+                existing_resp = (supabase.table("lesson_images")
+                                 .select("image_key,alt_text_th")
+                                 .eq("lesson_id", lesson_id)
+                                 .execute())
+                existing_map = {rec.get("image_key"): rec for rec in (existing_resp.data or [])}
+            except Exception as e:
+                print(f"[INFO] Could not fetch existing lesson_images for TH alt text conditional update: {e}")
+                existing_map = {}
+
+            # Deduplicate desired updates keeping last
+            dedup = {}
+            for r in alt_update_rows:
+                dedup[r["image_key"]] = r
+
+            for image_key, r in dedup.items():
+                existing = existing_map.get(image_key)
+                if not existing:
+                    # Skip creating new row; image backfill should run first
+                    print(f"[WARN] Skip TH alt_text (no lesson_images row yet) image_key={image_key}")
+                    continue
+                current_val = (existing.get("alt_text_th") or "").strip()
+                if current_val:
+                    # Already populated; do not overwrite
+                    continue
+                if dry_run:
+                    print(f"[DRY RUN] UPDATE lesson_images set alt_text_th (len={len(r['alt_text_th'])}) where lesson_id={lesson_id} image_key={image_key}")
+                else:
+                    try:
+                        (supabase.table("lesson_images")
+                         .update({"alt_text_th": r["alt_text_th"]})
+                         .eq("lesson_id", lesson_id)
+                         .eq("image_key", image_key)
+                         .execute())
+                    except Exception as e:
+                        print(f"[ERROR] Updating alt_text_th for {image_key}: {e}")
         return
 
     # EN (default): keep your existing UPSERT for base columns
@@ -157,6 +259,56 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
     (supabase.table("practice_exercises")
         .upsert(rows, on_conflict="lesson_id,kind,sort_order")
         .execute())
+
+    # After EN upsert, gather alt_text for lesson_images.alt_text_en
+    alt_rows = []
+    for ex in (practice_exercises or []):
+        for item in ex.get("items", []) or []:
+            if item.get("image_key") and item.get("alt_text"):
+                alt_text_val = (item.get("alt_text") or "").strip()
+                if alt_text_val:
+                    alt_rows.append({
+                        "lesson_id": lesson_id,
+                        "image_key": item["image_key"],
+                        "alt_text_en": alt_text_val,
+                    })
+    if alt_rows:
+        # Fetch existing image rows with current alt_text_en
+        try:
+            existing_resp = (supabase.table("lesson_images")
+                             .select("image_key,alt_text_en")
+                             .eq("lesson_id", lesson_id)
+                             .execute())
+            existing_map = {rec.get("image_key"): rec for rec in (existing_resp.data or [])}
+        except Exception as e:
+            print(f"[INFO] Could not fetch existing lesson_images for EN alt text conditional update: {e}")
+            existing_map = {}
+
+        # Deduplicate desired updates keeping last
+        dedup = {}
+        for r in alt_rows:
+            dedup[r["image_key"]] = r
+
+        for image_key, r in dedup.items():
+            existing = existing_map.get(image_key)
+            if not existing:
+                print(f"[WARN] Skip EN alt_text (no lesson_images row yet) image_key={image_key}")
+                continue
+            current_val = (existing.get("alt_text_en") or "").strip()
+            if current_val:
+                # Already set; do not overwrite
+                continue
+            if dry_run:
+                print(f"[DRY RUN] UPDATE lesson_images set alt_text_en (len={len(r['alt_text_en'])}) where lesson_id={lesson_id} image_key={image_key}")
+            else:
+                try:
+                    (supabase.table("lesson_images")
+                     .update({"alt_text_en": r["alt_text_en"]})
+                     .eq("lesson_id", lesson_id)
+                     .eq("image_key", image_key)
+                     .execute())
+                except Exception as e:
+                    print(f"[ERROR] Updating alt_text_en for {image_key}: {e}")
 
 def upsert_lesson(data, lang="en", dry_run=False):
     lesson = data["lesson"]
@@ -229,10 +381,10 @@ def upsert_lesson(data, lang="en", dry_run=False):
 
     # ---------------- TH path: update-only (never insert) ----------------
     th_update = {}
-    if lesson.get("title"):     th_update["title_th"]     = lesson["title"]
-    if lesson.get("subtitle"):  th_update["subtitle_th"]  = lesson["subtitle"]
-    if lesson.get("focus"):     th_update["focus_th"]     = lesson["focus"]
-    if lesson.get("backstory"): th_update["backstory_th"] = lesson["backstory"]
+    if lesson.get("title"):     th_update["title_th"]     = _extract_th(lesson.get("title"))
+    if lesson.get("subtitle"):  th_update["subtitle_th"]  = _extract_th(lesson.get("subtitle"))
+    if lesson.get("focus"):     th_update["focus_th"]     = _extract_th(lesson.get("focus"))
+    if lesson.get("backstory"): th_update["backstory_th"] = _extract_th(lesson.get("backstory"))
 
     if dry_run:
         print(f"[DRY RUN] Lesson TH UPDATE where {key} set {th_update}")
@@ -325,8 +477,6 @@ def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
             (supabase.table("transcript_lines")
              .insert(ins_record)
              .execute())
-
-
 
 
 def upsert_comprehension(lesson_id, questions, lang=None, dry_run=False):
