@@ -2,8 +2,7 @@ import React from "react";
 import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
-import AudioBullet from "./AudioBullet";
-import PhrasesAudioBullet from "./PhrasesAudioBullet";
+import AudioButton from "./AudioButton";
 import LessonTable from "./LessonTable";
 
 // Renders a node array from content_jsonb (headings, paragraphs, lists, etc.)
@@ -49,6 +48,37 @@ export default function RichSectionRenderer({
     }
 
     if (node.kind === "paragraph"){
+      console.log("Processing paragraph node:", {
+        kind: node.kind,
+        audio_key: node.audio_key,
+        audio_seq: node.audio_seq,
+        text: node.inlines?.[0]?.text?.substring(0, 50)
+      });
+
+      // Check for audio_key first, then fallback to audio_seq
+      const hasAudio = node.audio_key || node.audio_seq;
+
+      if (hasAudio) {
+        return (
+          <p
+            key={key}
+            className="audio-bullet"
+            style={{ marginLeft: (node.indent || 0) * 24, display: "flex", alignItems: "center", marginBottom: "8px" }}
+          >
+            <AudioButton
+              audioKey={node.audio_key}
+              node={node}
+              audioIndex={snipIdx}
+              phrasesSnipIdx={phrasesSnipIdx}
+              phraseId={phraseId}
+              phraseVariant={phraseVariant}
+              className="mt-0.5 h-5 w-5 select-none"
+            />
+            <span>{renderInlines(node.inlines)}</span>
+          </p>
+        );
+      }
+
       return (
         <p key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
           {renderInlines(node.inlines)}
@@ -57,30 +87,35 @@ export default function RichSectionRenderer({
     }
 
     if (node.kind === "list_item") {
-      if (node.audio_seq) {
-        if (isPhrasesSection && phraseId) {
-          return (
-            <PhrasesAudioBullet
-              key={key}
+      console.log("Processing list_item node:", {
+        kind: node.kind,
+        audio_key: node.audio_key,
+        audio_seq: node.audio_seq,
+        text: node.inlines?.[0]?.text?.substring(0, 50)
+      });
+
+      // Check for audio_key first, then fallback to audio_seq
+      const hasAudio = node.audio_key || node.audio_seq;
+
+      if (hasAudio) {
+        return (
+          <li
+            key={key}
+            className="audio-bullet"
+            style={{ marginLeft: (node.indent || 0) * 24, listStyleType: "none" }}
+          >
+            <AudioButton
+              audioKey={node.audio_key}
               node={node}
-              indent={node.indent}
+              audioIndex={snipIdx}
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
-              variant={phraseVariant}
-              renderInlines={renderInlines}
+              phraseVariant={phraseVariant}
+              className="mt-0.5 h-5 w-5 select-none"
             />
-          );
-        } else {
-          return (
-            <AudioBullet
-              key={key}
-              node={node}
-              indent={node.indent}
-              snipIdx={snipIdx}
-              renderInlines={renderInlines}
-            />
-          );
-        }
+            <span>{renderInlines(node.inlines)}</span>
+          </li>
+        );
       }
       return (
         <li key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
@@ -89,30 +124,35 @@ export default function RichSectionRenderer({
       );
     }
     if (node.kind === "numbered_item" || node.kind === "misc_item") {
-      if (node.audio_seq) {
-        if (isPhrasesSection && phraseId) {
-          return (
-            <PhrasesAudioBullet
-              key={key}
+      console.log("Processing numbered/misc_item node:", {
+        kind: node.kind,
+        audio_key: node.audio_key,
+        audio_seq: node.audio_seq,
+        text: node.inlines?.[0]?.text?.substring(0, 50)
+      });
+
+      // Check for audio_key first, then fallback to audio_seq
+      const hasAudio = node.audio_key || node.audio_seq;
+
+      if (hasAudio) {
+        return (
+          <div
+            key={key}
+            className="audio-bullet"
+            style={{ marginLeft: (node.indent || 0) * 24, display: "flex", alignItems: "center", marginBottom: "8px" }}
+          >
+            <AudioButton
+              audioKey={node.audio_key}
               node={node}
-              indent={node.indent}
+              audioIndex={snipIdx}
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
-              variant={phraseVariant}
-              renderInlines={renderInlines}
+              phraseVariant={phraseVariant}
+              className="mt-0.5 h-5 w-5 select-none"
             />
-          );
-        } else {
-          return (
-            <AudioBullet
-              key={key}
-              node={node}
-              indent={node.indent}
-              snipIdx={snipIdx}
-              renderInlines={renderInlines}
-            />
-          );
-        }
+            <span>{renderInlines(node.inlines)}</span>
+          </div>
+        );
       }
       // Render as a div, not <li>, to avoid default bullet styling
       return (

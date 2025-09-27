@@ -40,6 +40,7 @@ ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
 LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
 SPEAKER_RE_TH = re.compile(r'^([\u0E00-\u0E7F][^:]{0,50}):\s*(.+)$')
+AUDIO_KEY_RE = re.compile(r'\[audio:([^\]]+)\]', re.I)
 TH = re.compile(r'[\u0E00-\u0E7F]')
 EN = re.compile(r'[A-Za-z]')
 PRACTICE_DIRECTIVE_RE = re.compile(
@@ -486,10 +487,12 @@ def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
     return lessons
 
 
+
 def tag_nodes_with_sections(doc_json):
     """
     Walk every element (paragraph *and* table) in body.content,
     tag it with lesson / section context and (for bullets) audio indices.
+    NOW ALSO extracts audio keys from list items and other nodes.
     """
     current_lesson  = None
     current_section = None
@@ -531,11 +534,46 @@ def tag_nodes_with_sections(doc_json):
             if current_section:
                 nd["section_context"] = current_section
 
+            # AUDIO KEY EXTRACTION FOR ALL NODE TYPES
+            if "inlines" in nd:
+                # Extract text from all inlines to check for audio keys
+                full_text = "".join(inline.get("text", "") for inline in nd["inlines"])
+                audio_key_match = AUDIO_KEY_RE.search(full_text)
+
+                if audio_key_match:
+                    # Extract the audio key
+                    nd["audio_key"] = audio_key_match.group(1).strip()
+
+                    # Debug logging
+                    logger.debug(f"Extracted audio_key '{nd['audio_key']}' from {nd.get('kind', 'unknown')} node: '{full_text[:50]}...'")
+
+                    # Store visible text separately, don't mutate the original inline text
+                    visible_inlines = []
+                    for inline in nd["inlines"]:
+                        if "text" in inline:
+                            visible_inline = inline.copy()
+                            visible_inline["text"] = AUDIO_KEY_RE.sub("", inline["text"]).strip()
+                            visible_inlines.append(visible_inline)
+                        else:
+                            visible_inlines.append(inline.copy())
+                    nd["visible_inlines"] = visible_inlines
+
+            # EXISTING AUDIO SEQ LOGIC (for backward compatibility)
             if current_section in AUDIO_SECTION_HEADERS and n.kind == "list_item":
                 seq_counter[current_section] += 1
                 nd["audio_seq"]     = seq_counter[current_section]
                 nd["audio_section"] = SECTION_TYPE_MAP.get(
                     current_section, current_section.lower())
+
+                # Generate audio_key for non-phrases sections (phrases & verbs handled separately in parse_phrases_verbs)
+                if current_lesson and nd.get("lesson_key") and current_section != "PHRASES & VERBS":
+                    lesson_external_id = nd["lesson_key"]  # e.g., "1.15"
+                    section_key = nd["audio_section"]  # e.g., "understand", "practice", etc.
+                    seq = nd["audio_seq"]
+
+                    # For standard sections: {lesson}_{section}_{seq}
+                    seq_str = str(seq).zfill(2)
+                    nd["audio_key"] = f"{lesson_external_id}_{section_key}_{seq_str}"
 
             tagged_nodes.append(nd)
             continue
@@ -692,6 +730,30 @@ class GoogleDocsParser:
             nonlocal current_phrase, current_phrase_th, current_variant, node_buffer, text_buffer
             if current_phrase is None:
                 return
+
+            # Generate audio_key for list_item nodes in phrases & verbs
+            # Use the English phrase for consistency across languages
+            phrase_key = current_phrase.lower().replace(" ", "_").replace("'", "").replace("!", "").replace("?", "").replace(".", "").replace(",", "")
+            audio_seq_counter = 0
+
+            # Process nodes and add audio_key to list_items
+            for node in node_buffer:
+                if node.get("kind") == "list_item" and node.get("section_context") == "PHRASES & VERBS":
+                    audio_seq_counter += 1
+                    # Generate audio_key following the phrases format
+                    seq_str = str(audio_seq_counter).zfill(2)
+                    if current_variant > 0:
+                        audio_key = f"phrases_verbs_{phrase_key}_{current_variant}_{seq_str}"
+                    else:
+                        audio_key = f"phrases_verbs_{phrase_key}_{seq_str}"
+
+                    node["audio_key"] = audio_key
+                    # Also ensure audio_seq and audio_section are set (if not already)
+                    if "audio_seq" not in node:
+                        node["audio_seq"] = audio_seq_counter
+                    if "audio_section" not in node:
+                        node["audio_section"] = "phrases_verbs"
+
             item = {
                 "phrase": current_phrase,
                 "phrase_th": current_phrase_th,
@@ -1132,7 +1194,9 @@ class GoogleDocsParser:
                     if qp_chunk:                               # flush finished block
                         embedded_practice_lines.extend(qp_chunk)
                         qp_chunk = []
-                    keep_lines.append((text_line, style))
+                    # Always keep non-empty lines that don't match directives
+                    if text_line.strip():
+                        keep_lines.append((text_line, style))
 
                 # flush any trailing block
                 if qp_chunk:
@@ -1144,17 +1208,27 @@ class GoogleDocsParser:
                 section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
 
                 # Create a mapping of text to nodes for this lesson and section
-                text_to_nodes = {}
+                section_text_to_nodes = {}
+                lesson_text_to_nodes = {}
                 orig_kind_by_text = {}
+
                 for n in tagged_nodes:
                     if not _same_lesson(n):
                         continue
                     if "inlines" in n:
                         plain = "".join(s["text"] for s in n["inlines"])
-                        k = _norm2(plain)
+                        # Normalize by stripping audio/image tags to match what tag_nodes_with_sections() did
+                        normalized_plain = re.sub(r'\[(?:audio|img):[^\]]+\]', '', plain, flags=re.I).strip()
+                        k = _norm2(normalized_plain)
                         if not k:
                             continue
-                        text_to_nodes.setdefault(k, []).append(n)
+
+                        # Add to lesson-wide mapping
+                        lesson_text_to_nodes.setdefault(k, []).append(n)
+
+                        # Add to section-scoped mapping if it matches current section
+                        if n.get("section_context") == norm_header:
+                            section_text_to_nodes.setdefault(k, []).append(n)
                         # remember the strongest original kind we’ve seen for this text
                         if n.get("kind") in {"list_item", "numbered_item"}:
                             orig_kind_by_text[k] = n["kind"]
@@ -1180,8 +1254,22 @@ class GoogleDocsParser:
                         continue
 
                     # Find matching nodes for this text
-                    norm_key = _norm2(text_line)
-                    matching_nodes = text_to_nodes.get(norm_key, [])
+                    # Strip audio/image tags from text_line to match normalized nodes
+                    normalized_text_line = re.sub(r'\[(?:audio|img):[^\]]+\]', '', text_line, flags=re.I).strip()
+                    norm_key = _norm2(normalized_text_line)
+
+                    # STRICT same-section match first
+                    matching_nodes = section_text_to_nodes.get(norm_key, [])
+                    match_source = "section-scoped"
+                    if not matching_nodes:
+                        # only permit lesson-wide matches that are still in THIS section
+                        lw = [n for n in lesson_text_to_nodes.get(norm_key, []) if n.get("section_context") == norm_header]
+                        matching_nodes = lw
+                        match_source = "lesson-wide-same-section"
+
+                    # Debug logging for audio-tagged lines
+                    if '[audio:' in text_line:
+                        logger.debug(f"Matching audio line: '{text_line[:50]}...' -> norm_key: '{norm_key}' -> {len(matching_nodes)} nodes via {match_source}")
 
                     # --- PATCH: Replace Quick Practice heading with full title ---
                     is_quick_practice_heading = (
@@ -1223,18 +1311,20 @@ class GoogleDocsParser:
                         node_copy = chosen_node.copy()
                         if "inlines" in node_copy:
                             node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
+                        # Ensure the copied node has the correct section context
+                        node_copy["section_context"] = norm_header
                         node_list.append(node_copy)
 
                         # consume it so the same node isn't reused
                         matching_nodes.remove(chosen_node)
                     else:
-                        # --- Fallback: try a tiny fuzzy match in this lesson-wide map ---
+                        # --- Fallback: try a tiny fuzzy match in lesson-wide map ---
                         best = None
                         best_key = None
                         best_score = 0.0
                         a = set(norm_key.split())
                         if a:
-                            for k, bucket in text_to_nodes.items():
+                            for k, bucket in lesson_text_to_nodes.items():
                                 if not bucket:
                                     continue
                                 b = set(k.split())
@@ -1250,9 +1340,11 @@ class GoogleDocsParser:
                             node_copy = best.copy()
                             if "inlines" in node_copy:
                                 node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
+                            # Ensure the copied node has the correct section context
+                            node_copy["section_context"] = norm_header
                             node_list.append(node_copy)
                             # consume it
-                            text_to_nodes[best_key].remove(best)
+                            lesson_text_to_nodes[best_key].remove(best)
                         else:
                             # Last resort: synthesize, but preserve bullets if we’ve ever seen this exact text as a list/numbered item in this lesson
 
@@ -1262,8 +1354,17 @@ class GoogleDocsParser:
                             if lang == 'th' and orig in {"list_item", "numbered_item"}:
                                 synthetic_kind = orig
                             else:
+                                # Try per-piece fallback using orig_kind_by_text for better matching
                                 parts = re.split(r"(?:\u000b|\n)+", text_line.strip())
-                                part_kinds = [orig_kind_by_text.get(_norm2(p)) for p in parts if p.strip()]
+                                part_kinds = []
+                                for p in parts:
+                                    if p.strip():
+                                        # Also try with audio/image tags stripped for better matching
+                                        normalized_part = re.sub(r'\[(?:audio|img):[^\]]+\]', '', p, flags=re.I).strip()
+                                        part_kind = orig_kind_by_text.get(_norm2(normalized_part)) or orig_kind_by_text.get(_norm2(p))
+                                        if part_kind:
+                                            part_kinds.append(part_kind)
+
                                 if "numbered_item" in part_kinds:
                                     synthetic_kind = "numbered_item"  # <-- prefer numbered if seen
                                 elif "list_item" in part_kinds:
@@ -1514,31 +1615,20 @@ class GoogleDocsParser:
         return out
 
 
+
     def parse_practice(self, lines: List[str]) -> List[Dict]:
         """
         Convert the flat "directive" block into structured exercises.
-
-        Markers handled:
-        TYPE: <multiple_choice | open | fill_blank | ...>
-        TITLE: <exercise title>
-        PROMPT: <prompt shown above the items>
-        PARAGRAPH: <optional explanatory paragraph>
-        QUESTION: <n> or ITEM: <n>
-        TEXT: <stem>
-        STEM: <stem> (alternative to TEXT)
-        OPTIONS:                # the very next lines are A. / B. / …
-        ANSWER: <letter(s)>     # for MC or fill_blank
-        KEYWORDS: <kw list>     # for open items
-        PINNED COMMENT          # everything after this goes into a pinned_comment string
+        Now supports audio keys in TEXT:/STEM: fields for practice exercises.
         """
         import re
         exercises: List[Dict] = []
-        cur_ex: Dict | None = None  # current exercise being built
+        cur_ex: Dict | None = None
         cur_items: List[Dict] = []
         collecting_opts = False
-        collecting_text = False  # New flag for multi-line text collection
-        collecting_alt = False  # New flag for multi-line alt text collection
-        collecting_paragraph = False  # New flag for multi-line paragraph collection
+        collecting_text = False
+        collecting_alt = False
+        collecting_paragraph = False
 
         def flush_exercise():
             nonlocal cur_ex, cur_items
@@ -1632,7 +1722,7 @@ class GoogleDocsParser:
                 collecting_paragraph = False
                 continue
 
-            # --- TEXT/STEM for any exercise type ---
+            # --- TEXT/STEM for practice exercises with audio key support ---
             if line.startswith(("TEXT:", "STEM:")):
                 if not cur_items:
                     cur_items.append({})
@@ -1641,15 +1731,24 @@ class GoogleDocsParser:
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
                 if content:
-                    # Check if content contains an image reference [img:image_key]
-                    img_match = re.match(r'^\[img:([^\]]+)\]$', content)
-                    if img_match:
-                        # Extract image key and add to item
-                        cur_items[-1]["image_key"] = img_match.group(1)
-                        # Don't add text field when we have an image
-                    else:
-                        # Regular text content
+                    # Check for audio key in the content FIRST
+                    audio_key_match = AUDIO_KEY_RE.search(content)
+                    if audio_key_match:
+                        # Extract the audio key and store it separately
+                        cur_items[-1]["audio_key"] = audio_key_match.group(1).strip()
+                        # Keep the original text WITH the audio marker for display
+                        # This preserves the [audio:key] in the text field
                         cur_items[-1]["text"] = content
+                    else:
+                        # Check if content contains an image reference [img:image_key]
+                        img_match = re.match(r'^\[img:([^\]]+)\]$', content)
+                        if img_match:
+                            # Extract image key and add to item
+                            cur_items[-1]["image_key"] = img_match.group(1)
+                            # Don't add text field when we have an image
+                        else:
+                            # Regular text content
+                            cur_items[-1]["text"] = content
                     collecting_text = False
                 else:
                     # Empty TEXT: line, start collecting multi-line text
@@ -1733,7 +1832,7 @@ class GoogleDocsParser:
                 cur_items[-1].setdefault("options", []).append(line)
                 continue
 
-            # Multi-line text collection
+            # Multi-line text collection with audio key support
             if collecting_text and cur_items:
                 # Check if this line contains an image reference
                 img_match = re.match(r'^\[img:([^\]]+)\]$', line.strip())
@@ -1744,12 +1843,17 @@ class GoogleDocsParser:
                     cur_items[-1]["image_key"] = img_match.group(1)
                     collecting_text = False
                 else:
-                    # Regular text collection
+                    # Check for audio key in multi-line text
                     current_text = cur_items[-1].get("text", "")
-                    if current_text:
-                        cur_items[-1]["text"] = current_text + "\n" + original_line
-                    else:
-                        cur_items[-1]["text"] = original_line
+                    new_text = current_text + "\n" + original_line if current_text else original_line
+
+                    # Check if this new text contains an audio key
+                    audio_key_match = AUDIO_KEY_RE.search(new_text)
+                    if audio_key_match and "audio_key" not in cur_items[-1]:
+                        # Store the audio key separately but keep it in the text
+                        cur_items[-1]["audio_key"] = audio_key_match.group(1).strip()
+
+                    cur_items[-1]["text"] = new_text
                 continue
 
             # Multi-line alt text collection
@@ -1773,10 +1877,14 @@ class GoogleDocsParser:
             # Fallback: if not collecting options, text, alt text, or paragraph and we have items, append to current item's text
             if cur_items and not collecting_opts and not collecting_text and not collecting_alt and not collecting_paragraph:
                 existing_text = cur_items[-1].get("text", "")
-                if existing_text:
-                    cur_items[-1]["text"] = existing_text + " " + line
-                else:
-                    cur_items[-1]["text"] = line
+                line_to_add = existing_text + " " + line if existing_text else line
+
+                # Check for audio key in the combined text
+                audio_key_match = AUDIO_KEY_RE.search(line_to_add)
+                if audio_key_match and "audio_key" not in cur_items[-1]:
+                    cur_items[-1]["audio_key"] = audio_key_match.group(1).strip()
+
+                cur_items[-1]["text"] = line_to_add
 
         flush_exercise()
         return exercises

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AudioButton from "../AudioButton";
 
 /**
  * Fill-in-the-blank component that supports
@@ -6,7 +7,7 @@ import React, { useState } from "react";
  *   • row exercises        – each item.text contains ____ (underscores)
  *   • images              – items with image_key property will display images
  */
-export default function FillBlankExercise({ exercise, images = {} }) {
+export default function FillBlankExercise({ exercise, images = {}, audioIndex = {} }) {
   const { title, prompt, paragraph, items = [] } = exercise || {};
 
   /* ---------- state ---------- */
@@ -149,6 +150,7 @@ export default function FillBlankExercise({ exercise, images = {} }) {
             {/* If there's an image, display only the text. Otherwise, split on underscores for blanks */}
             {imageUrl ? (
               <div className="fb-text-with-input">
+                <AudioButton audioKey={item.audio_key} audioIndex={audioIndex} className="inline mr-2" />
                 <span>{item.text}</span>
                 <input
                   type="text"
@@ -166,6 +168,7 @@ export default function FillBlankExercise({ exercise, images = {} }) {
                   const parts = item.text.split(/_+/);
                   return (
                     <>
+                      <AudioButton audioKey={item.audio_key} audioIndex={audioIndex} className="inline mr-2" />
                       {parts[0]}
                       <input
                         type="text"

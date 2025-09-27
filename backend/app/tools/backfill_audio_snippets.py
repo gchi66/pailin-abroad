@@ -9,12 +9,17 @@ File patterns:
 - Standard: {lesson}_{section}_{seq}_{character}.mp3
 - Phrases: phrases_verbs_{phrase_key}[{variant}]_{seq}.mp3
 
-rclone:
+rclone for phrases and verbs:
 ➜  pailin-abroad git:(master) ✗ rclone copy \
   "pailin_audio:Final/Phrases_Verbs" \
   "supabase:lesson-audio/Phrases_Verbs" \
   --include "phrases_verbs_*.mp3" \
   -P
+
+rclone for standard sections:
+➜  pailin-abroad git:(master) ✗ rclone copy \
+  "pailin_audio:Final/LX" \
+  "supabase:lesson-audio/STAGE/LX"  \
 
 Run:
     python -m app.tools.backfill_audio_snippets
@@ -48,7 +53,7 @@ STANDARD_FILE_RE = re.compile(
     r"""
     (?P<lesson>\d+\.\d+)
     _
-    (?P<section>understand|practice|extra_tips|common_mistakes)
+    (?P<section>understand|practice|extra_tips|common_mistakes|apply|culture_note)
     _
     (?P<seq>\d{1,3})
     (?:_(?P<character>[A-Za-z]+))?
@@ -76,6 +81,8 @@ SECTION_MAPPING = {
     "extra_tips":      "extra_tip",
     "common_mistakes": "common_mistake",
     "practice":        "practice",
+    "apply":           "apply",
+    "culture_note":    "culture_note",
 }
 
 # ─── 3. Helper functions ─────────────────────────
@@ -135,7 +142,94 @@ def list_objects_recursive(prefix: str = "") -> list[str]:
     _walk(prefix)
     return objects
 
-# ─── 5. Main ───────────────────────────────────────────────────────────────
+# ─── 5. Update content_jsonb with audio_key ─────────────────────────────────
+def update_lesson_sections_with_audio_keys():
+    """Update content_jsonb in lesson_sections to include audio_key for nodes with audio_seq"""
+    print("\nUpdating lesson_sections content_jsonb with audio_key values...")
+
+    # First, build an index of audio snippets by lesson_external_id, section, and seq
+    print("Building audio snippet index...")
+    snippets = sb.table("audio_snippets").select("*").execute()
+
+    # Group snippets by lesson_external_id and section
+    from collections import defaultdict
+    audio_index = defaultdict(lambda: defaultdict(dict))
+
+    for snip in snippets.data:
+        lesson_id = snip.get("lesson_external_id")
+        section = snip.get("section")
+        seq = snip.get("seq")
+        audio_key = snip.get("audio_key")
+
+        # Skip if missing key data
+        if not (lesson_id and section and seq and audio_key):
+            continue
+
+        audio_index[lesson_id][section][seq] = audio_key
+
+    print(f"Built index with {len(snippets.data)} audio snippets")
+
+    # Get all lesson sections with content_jsonb
+    print("Fetching lesson sections...")
+    sections = sb.table("lesson_sections").select("id,lesson_id,type,content_jsonb").execute()
+
+    updated_count = 0
+    for section in sections.data:
+        section_id = section.get("id")
+        lesson_id_uuid = section.get("lesson_id")
+        section_type = section.get("type")
+        content_jsonb = section.get("content_jsonb")
+
+        # Skip if no content_jsonb
+        if not content_jsonb:
+            continue
+
+        # Get the lesson's external ID
+        try:
+            lesson_res = sb.table("lessons").select("stage,level,lesson_order").eq("id", lesson_id_uuid).limit(1).execute()
+            if not lesson_res.data:
+                continue
+
+            lesson_data = lesson_res.data[0]
+            lesson_external_id = f"{lesson_data['level']}.{lesson_data['lesson_order']}"
+        except Exception as e:
+            print(f"Error getting lesson external ID: {e}")
+            continue
+
+        # Map section type to audio section key
+        section_key = SECTION_MAPPING.get(section_type, section_type)
+
+        # Skip if we don't have audio for this lesson/section
+        if lesson_external_id not in audio_index or section_key not in audio_index[lesson_external_id]:
+            continue
+
+        section_audio = audio_index[lesson_external_id][section_key]
+
+        # Process content_jsonb nodes
+        if isinstance(content_jsonb, list):
+            updated = False
+            for node in content_jsonb:
+                if not isinstance(node, dict):
+                    continue
+
+                # Add audio_key if node has audio_seq but no audio_key
+                if "audio_seq" in node and node["audio_seq"] and "audio_key" not in node:
+                    seq = node["audio_seq"]
+                    if seq in section_audio:
+                        node["audio_key"] = section_audio[seq]
+                        updated = True
+
+            if updated:
+                try:
+                    sb.table("lesson_sections").update({"content_jsonb": content_jsonb}).eq("id", section_id).execute()
+                    updated_count += 1
+                    print(f"Updated section {section_id} for lesson {lesson_external_id} ({section_type})")
+                except Exception as e:
+                    print(f"Error updating section {section_id}: {e}")
+
+    print(f"Updated {updated_count} lesson sections with audio_key values")
+
+# ─── 6. Main ───────────────────────────────────────────────────────────────
 def main() -> None:
     print("Gathering objects …")
     all_objects = list_objects_recursive()
@@ -170,11 +264,20 @@ def main() -> None:
                 dupes[key].append(path); continue
             seen_phrases.add(key)
 
+            # Generate audio_key for phrases following pattern: phrases_verbs_{phrase_key}_{variant}_{seq}
+            seq_str = str(seq).zfill(2)  # Zero-pad seq to 2 digits
+            variant_str = str(variant) if variant > 0 else ""
+            if variant_str:
+                audio_key = f"phrases_verbs_{phrase_key}_{variant_str}_{seq_str}"
+            else:
+                audio_key = f"phrases_verbs_{phrase_key}_{seq_str}"
+
             phrases_audio_rows.append({
                 "phrase_id": phrase_id,
                 "variant": variant,
                 "seq": seq,
                 "storage_path": path,
+                "audio_key": audio_key,
             })
             continue  # done with phrases file
 
@@ -196,13 +299,20 @@ def main() -> None:
                 dupes[key].append(path); continue
             seen_audio.add(key)
 
-            audio_snippets_rows.append({
+            # Generate audio_key for ALL section types following the pattern: {lesson}_{section}_{seq}
+            seq_str = str(seq).zfill(2)  # Zero-pad seq to 2 digits (01, 02, etc.)
+            audio_key = f"{lesson}_{section}_{seq_str}"
+
+            row = {
                 "lesson_external_id": lesson,
                 "section": section,
                 "seq": seq,
                 "character": character or None,
                 "storage_path": path,
-            })
+                "audio_key": audio_key  # Add audio_key for all sections
+            }
+
+            audio_snippets_rows.append(row)
 
 
 
@@ -234,6 +344,9 @@ def main() -> None:
 
     if not audio_snippets_rows and not phrases_audio_rows:
         print("Nothing to do.")
+    else:
+        # After upserting audio snippets, update content_jsonb in lesson_sections
+        update_lesson_sections_with_audio_keys()
 
 if __name__ == "__main__":
     main()

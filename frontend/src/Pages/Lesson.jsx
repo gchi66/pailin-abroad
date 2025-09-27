@@ -368,10 +368,10 @@ export default function Lesson() {
           setAudioUrlBg(null);
         }
 
-        // 4) fetch audio snippet index
+        // 4) fetch audio snippet index (including phrases audio snippets)
         if (lsn.lesson_external_id) {
           try {
-            const idx = await fetchSnippets(lsn.lesson_external_id);
+            const idx = await fetchSnippets(lsn.lesson_external_id, lsn.id);
             setSnipIdx(idx || {});
           } catch (err) {
             console.error("Error fetching audio snippets:", err);

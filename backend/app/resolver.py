@@ -72,6 +72,10 @@ def _normalize_rich_nodes(nodes: Any, lang: Lang) -> List[Dict[str, Any]]:
                 else:
                     # guarantee an array so UI can safely map()
                     node["inlines"] = []
+        # Debug: check if audio_key exists
+        if node.get("audio_key"):
+            print(f"🎵 _normalize_rich_nodes preserving audio_key: {node.get('audio_key')} for kind: {kind}")
+
         # Normalize table cells (optional: keep as-is)
         out.append(node)
     return out
@@ -188,8 +192,42 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
     for s in raw["sections"]:
         en_nodes = s.get("content_jsonb") or []
         th_nodes = s.get("content_jsonb_th") or []
+        
+        # Debug: check raw data from database
+        print(f"🎵 Raw section {s.get('type')} en_nodes with audio_key: {len([n for n in en_nodes if n.get('audio_key')])}")
+        
         merged_nodes = merge_content_nodes(en_nodes, th_nodes) if lang == "th" else en_nodes
         merged_nodes = _normalize_rich_nodes(merged_nodes, lang)
+
+        # Debug: check if audio_key exists in section nodes after processing
+        audio_key_count = len([n for n in merged_nodes if n.get('audio_key')])
+        if audio_key_count > 0:
+            print(f"🎵 Section {s.get('type')} has {audio_key_count} nodes with audio_key after processing")
+        
+        # TEMPORARY FIX: Enrich nodes with audio_key from audio_snippets table
+        # This should be removed once the database is re-imported with proper audio_key fields
+        lesson_external_id = raw["lesson"].get("lesson_external_id")
+        if lesson_external_id:
+            # Fetch audio snippets for this lesson
+            audio_snippets = _exec(
+                supabase.table("audio_snippets")
+                .select("audio_key, section, seq")
+                .eq("lesson_external_id", lesson_external_id)
+            )
+            
+            # Create a lookup map: (section, seq) -> audio_key
+            audio_lookup = {}
+            for snippet in audio_snippets:
+                if snippet.get("audio_key") and snippet.get("section") and snippet.get("seq"):
+                    audio_lookup[(snippet["section"], snippet["seq"])] = snippet["audio_key"]
+            
+            # Enrich nodes with audio_key
+            for node in merged_nodes:
+                if node.get("audio_section") and node.get("audio_seq") and not node.get("audio_key"):
+                    lookup_key = (node["audio_section"], node["audio_seq"])
+                    if lookup_key in audio_lookup:
+                        node["audio_key"] = audio_lookup[lookup_key]
+                        print(f"🎵 Enriched node with audio_key: {node['audio_key']}")
 
         resolved_sections.append({
             "id": s["id"],
@@ -199,7 +237,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             "render_mode": s.get("render_mode"),
             "audio_url": s.get("audio_url"),
             "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
-            "content_jsonb": _normalize_rich_nodes(en_nodes, lang),
+            "content_jsonb": merged_nodes,  # Use the merged and normalized nodes
             "content_jsonb_th": _normalize_rich_nodes(th_nodes, lang) if th_nodes else None,
         })
 

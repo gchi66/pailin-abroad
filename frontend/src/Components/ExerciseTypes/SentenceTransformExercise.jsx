@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import AudioButton from "../AudioButton";
 
-export default function SentenceTransformExercise({ exercise = {}, images = {} }) {
+export default function SentenceTransformExercise({ exercise = {}, images = {}, audioIndex = {} }) {
   const { title = "", prompt = "", items = [] } = exercise || {};
   const [answers, setAnswers] = useState(Array(items.length).fill(""));
   const [checked, setChecked] = useState(false);
@@ -57,7 +58,10 @@ export default function SentenceTransformExercise({ exercise = {}, images = {} }
                 <img src={imageUrl} alt={`Question ${item.number}`} className="fb-image" />
               </div>
             )}
-            <p className="st-stem">{item.number}. {item.text}</p>
+            <p className="st-stem">
+              <AudioButton audioKey={item.audio_key} audioIndex={audioIndex} className="inline mr-2" />
+              {item.number}. {item.text}
+            </p>
             <div className="st-input-container">
               <input
                 type="text"

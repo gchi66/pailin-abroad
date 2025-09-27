@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import AudioButton from "../AudioButton";
 
-export default function MultipleChoiceExercise({ exercise, images = {} }) {
+export default function MultipleChoiceExercise({ exercise, images = {}, audioIndex = {} }) {
   const { title, prompt, items = [] } = exercise;
   const [choices, setChoices] = useState(Array(items.length).fill(null));
   const [checked, setChecked] = useState(false);
@@ -34,7 +35,10 @@ export default function MultipleChoiceExercise({ exercise, images = {} }) {
                 <img src={imageUrl} alt={`Question ${q.number}`} className="fb-image" />
               </div>
             )}
-            <p className="mc-question-text">{q.number}. {q.text}</p>
+            <p className="mc-question-text">
+              <AudioButton audioKey={q.audio_key} audioIndex={audioIndex} className="inline mr-2" />
+              {q.number}. {q.text}
+            </p>
           <ul className="mc-options">
             {q.options.map((optLine) => {
               const letter = optLine.match(/^[A-Z]/)?.[0];     // "A"

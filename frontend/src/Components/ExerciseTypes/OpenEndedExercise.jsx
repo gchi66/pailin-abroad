@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import AudioButton from "../AudioButton";
 
-export default function OpenEndedExercise({ exercise, images = {} }) {
+export default function OpenEndedExercise({ exercise, images = {}, audioIndex = {} }) {
   const { title, prompt, items = [] } = exercise;
 
   // Initialize state for each input for each question
@@ -58,7 +59,10 @@ export default function OpenEndedExercise({ exercise, images = {} }) {
                 <img src={imageUrl} alt={`Question ${item.number}`} className="fb-image" />
               </div>
             )}
-            <p className="oe-question-text">{item.number}. {item.question || item.text}</p>
+            <p className="oe-question-text">
+              <AudioButton audioKey={item.audio_key} audioIndex={audioIndex} className="inline mr-2" />
+              {item.number}. {item.question || item.text}
+            </p>
 
             {/* Render the appropriate number of input fields */}
             {Array.from({ length: item.inputs || 1 }).map((_, inputIdx) => (

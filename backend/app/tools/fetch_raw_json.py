@@ -1,3 +1,6 @@
+#USAGE: python -m app.tools.fetch_raw_json --doc 1USn1mSY52hCZ_f1r5fhwdvGLV8JdzVqqFmXxDAs5B0U --out data/lesson_11_raw.json
+
+
 # fetch_raw_json.py
 from __future__ import annotations
 

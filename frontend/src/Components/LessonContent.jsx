@@ -170,7 +170,7 @@ export default function LessonContent({
           </div>
         </header>
 
-        <PracticeSection exercises={practiceExercises} uiLang={uiLang} images={images} />
+        <PracticeSection exercises={practiceExercises} uiLang={uiLang} images={images} audioIndex={snipIdx} />
       </article>
     );
   }
@@ -417,6 +417,7 @@ export default function LessonContent({
               hideQuick={false}
               wrapInDetails={false}
               images={images}
+              audioIndex={snipIdx}
             />
           )}
         />
