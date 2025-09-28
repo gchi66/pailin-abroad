@@ -5,6 +5,7 @@ rclone-v*
 
 backend/.env
 backend/venv/
+backend/keys/
 
 .env
 frontend/.env
