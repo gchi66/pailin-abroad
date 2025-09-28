@@ -1,26 +1,38 @@
 # RCLONE USAGE -
 # rclone copy \
-#   pailin_audio:"Final/L1/Conversations" \
-#   supabase:"lesson-audio/Beginner/L1/Conversations" \
+#   pailin_audio:"Final/LX/Conversations" \
+#   supabase:"lesson-audio/Stage/LX/Conversations" \
 #   --include "*_conversation*.mp3" -P
 #
 # Run:
-#    python -m app.tools.backfill_conversations
+#    python -m app.tools.backfill_conversations --stage "STAGE" --level X
 
-import os, re
+import os
+import re
+import argparse
 from pathlib import PurePosixPath
 from app.config import Config
 from supabase import create_client
 
 # ── 1.  CONNECT ────────────────────────────────────────────────────────────
-SUPABASE_URL  = os.environ["SUPABASE_URL"]
-SERVICE_ROLE  = os.environ["SUPABASE_KEY"]
-BUCKET        = "lesson-audio"
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SERVICE_ROLE = os.environ["SUPABASE_KEY"]
+BUCKET = "lesson-audio"
 
 supabase = create_client(SUPABASE_URL, SERVICE_ROLE)
 
 # ── 2.  CONSTANTS ──────────────────────────────────────────────────────────
-STAGES = {"Beginner", "Intermediate", "Advanced", "Expert"}
+# Support both your older and newer stage labels
+VALID_STAGES = {
+    "Beginner",
+    "Intermediate",
+    "Advanced",
+    "Expert",
+}
+
+# Accept common folder forms (e.g., "Lower_Intermediate")
+def normalize_stage_label(s: str) -> str:
+    return s.replace("_", " ").strip()
 
 FILE_RE = re.compile(
     r"(?P<level>\d+)\.(?P<order>\d+|checkpoint|chp)_conversation(?P<suffix>_no_bg|_bg)?\.mp3$",
@@ -45,16 +57,11 @@ def list_all(bucket: str, path: str = ""):
     except Exception as e:
         print(f"Error listing path '{path}': {e}")
 
-# ── 4.  MAIN ───────────────────────────────────────────────────────────────
-def main():
-    print(f"Checking bucket: {BUCKET}")
-
-    # Restrict scan to Conversations folder
-    scan_path = "Beginner/L1/Conversations"
-
+def find_and_update_for_scan_path(scan_path: str, dry_run: bool = False):
+    print(f"\nScanning: {scan_path}")
     try:
         test_list = supabase.storage.from_(BUCKET).list(path=scan_path, options={"limit": 1})
-        print(f"Bucket access test successful: found {len(test_list)} objects in {scan_path}")
+        print(f"Bucket access OK: found {len(test_list)} objects in {scan_path}")
     except Exception as e:
         print(f"Bucket access failed: {e}")
         return
@@ -66,8 +73,8 @@ def main():
 
     updated = skipped = missing = 0
 
-    for obj in list_all(BUCKET, scan_path):
-        key  = obj["name"]                        # full bucket path
+    for obj in all_objects:
+        key = obj["name"]  # full bucket path like: Beginner/L2/Conversations/2.3_conversation.mp3
         name = PurePosixPath(key).name
         print(f"Processing: {key}")
 
@@ -90,9 +97,9 @@ def main():
             continue
 
         stage_folder, level_folder = parts[0], parts[1]
-        stage = stage_folder.replace("_", " ")
+        stage = normalize_stage_label(stage_folder)
 
-        if stage not in STAGES:
+        if stage not in VALID_STAGES:
             print(f"SKIP  unknown stage '{stage}': {key}")
             skipped += 1
             continue
@@ -137,13 +144,18 @@ def main():
         print(f"  Found lesson ID: {lesson_data['id']}")
 
         # ── update correct audio_url column ──────────────────────────────────
-        suffix = m["suffix"] or ""
-        if suffix.lower() == "_no_bg":
+        suffix = (m["suffix"] or "").lower()
+        if suffix == "_no_bg":
             col = "conversation_audio_url_no_bg"
-        elif suffix.lower() == "_bg":
+        elif suffix == "_bg":
             col = "conversation_audio_url_bg"
         else:
             col = "conversation_audio_url"
+
+        if dry_run:
+            print(f"DRY   Would update {col} to '{key}' for lesson {lesson_data['id']}")
+            updated += 1
+            continue
 
         try:
             supabase.table("lessons").update({col: key}).eq("id", lesson_data["id"]).execute()
@@ -156,6 +168,31 @@ def main():
 
     print(f"\nDONE  updated={updated}  skipped={skipped}  missing={missing}")
 
+# ── 4.  MAIN ───────────────────────────────────────────────────────────────
+def main():
+    parser = argparse.ArgumentParser(
+        description="Backfill conversation audio URLs for a given stage and level."
+    )
+    parser.add_argument("--stage", type=str, default="Beginner",
+                        help='Stage folder (e.g., "Beginner", "Lower Intermediate", "Upper Intermediate", "Advanced")')
+    parser.add_argument("--level", type=int, default=1,
+                        help="Numeric level, e.g. 1, 2, 7")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="List matches and target columns without updating the database")
+    args = parser.parse_args()
+
+    stage_label = normalize_stage_label(args.stage)
+    if stage_label not in VALID_STAGES:
+        raise SystemExit(f"Invalid --stage '{args.stage}'. Valid: {sorted(VALID_STAGES)}")
+
+    if args.level < 1:
+        raise SystemExit("--level must be a positive integer")
+
+    # Conversations subfolder for the single requested level
+    scan_path = f"{stage_label.replace(' ', '_')}/L{args.level}/Conversations"
+    print(f"Checking bucket: {BUCKET}")
+    print(f"Stage: {stage_label}  Level: {args.level}  (path: {scan_path})")
+    find_and_update_for_scan_path(scan_path, dry_run=args.dry_run)
 
 if __name__ == "__main__":
     main()
