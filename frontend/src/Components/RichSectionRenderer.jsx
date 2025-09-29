@@ -170,6 +170,10 @@ export default function RichSectionRenderer({
             cells: node.cells,
             indent: node.indent,
           }}
+          snipIdx={snipIdx}
+          phrasesSnipIdx={phrasesSnipIdx}
+          phraseId={phraseId}
+          phraseVariant={phraseVariant}
         />
       );
     }
