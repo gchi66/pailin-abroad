@@ -5,7 +5,16 @@ import "../Styles/LessonTable.css";
 import AudioButton from "./AudioButton";
 import LessonTable from "./LessonTable";
 
-// Renders a node array from content_jsonb (headings, paragraphs, lists, etc.)
+// Helper function to clean audio tags from text - FIXED to handle [audio:...] format
+function cleanAudioTags(text) {
+  if (!text || typeof text !== 'string') return text;
+  // Replace [audio:...] tags with a space, then clean up multiple spaces
+  return text
+    .replace(/\[audio:[^\]]+\]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export default function RichSectionRenderer({
   nodes,
   snipIdx,
@@ -25,20 +34,41 @@ export default function RichSectionRenderer({
   audio_seq: n.audio_seq
 })));
 
-  // Helper for rendering inlines
-  const renderInlines = (inlines) =>
-    inlines.map((span, m) => (
-      <span
-        key={m}
-        style={{
-          fontWeight: span.bold ? "bold" : undefined,
-          fontStyle: span.italic ? "italic" : undefined,
-          textDecoration: span.underline ? "underline" : undefined,
-        }}
-      >
-        {span.text}
-      </span>
-    ));
+  // Helper for rendering inlines with proper spacing AND audio tag removal
+  const renderInlines = (inlines) => {
+    return inlines.map((span, m) => {
+      const cleanText = cleanAudioTags(span.text);
+
+      // Check if we need a space before this span
+      let needsSpaceBefore = false;
+      if (m > 0) {
+        const prevSpan = inlines[m - 1];
+        const prevText = cleanAudioTags(prevSpan.text);
+
+        // Add space if previous span doesn't end with whitespace or punctuation
+        // and current span doesn't start with whitespace or punctuation
+        const prevEndsWithSpaceOrPunct = /[\s.,!?;:']$/.test(prevText);
+        const currentStartsWithSpaceOrPunct = /^[\s.,!?;:']/.test(cleanText);
+
+        needsSpaceBefore = !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && cleanText.trim();
+      }
+
+      return (
+        <React.Fragment key={m}>
+          {needsSpaceBefore && ' '}
+          <span
+            style={{
+              fontWeight: span.bold ? "bold" : undefined,
+              fontStyle: span.italic ? "italic" : undefined,
+              textDecoration: span.underline ? "underline" : undefined,
+            }}
+          >
+            {cleanText}
+          </span>
+        </React.Fragment>
+      );
+    });
+  };
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
   const renderNode = (node, key) => {
@@ -178,8 +208,6 @@ export default function RichSectionRenderer({
       );
     }
 
-    // REMOVED: heading rendering logic - headings should only be rendered as accordion headers
-
     // Handle Quick Practice exercises
     if (node.kind === "quick_practice_exercise" && renderQuickPractice) {
       return (
@@ -195,7 +223,6 @@ export default function RichSectionRenderer({
   // Group nodes by heading (for accordion/dropdown)
   const sections = [];
   let current = null;
-  // const seenHeadings = new Set();
 
   nodes.forEach((node, idx) => {
     if (node.kind === "heading") {
@@ -206,18 +233,8 @@ export default function RichSectionRenderer({
         .replace(/\s+/g, " ")
         .trim()
 
-      // console.log(`Found heading at index ${idx}:`, headingText, "Node:", node);
-
       // Create a unique key for this heading based on text and position
       const headingKey = `${headingText}-${idx}`;
-
-      // Skip only if we've seen this exact heading recently (within last 3 nodes)
-      // const recentHeadings = Array.from(seenHeadings).slice(-3);
-      // if (recentHeadings.includes(headingText)) {
-      //   return;
-      // }
-
-      // seenHeadings.add(headingText);
 
       // Close current section and start new one
       if (current) sections.push(current);
@@ -245,17 +262,8 @@ export default function RichSectionRenderer({
     sections.push(current);
   }
 
-  // Debug: Log sections to see what's being created
-  // console.log("Sections created:", sections.map(s => ({
-  //   heading: s.heading ? s.heading.inlines.map(i => i.text).join("").trim() : "no-heading",
-  //   bodyCount: s.body.length,
-  //   key: s.key,
-  //   body: s.body.map(b => ({ kind: b.kind, text: b.inlines?.[0]?.text?.substring(0, 30) }))
-  // })));
-
   // If we have sections with headings, render as accordion
   const hasHeadings = sections.some(sec => sec.heading);
-  // console.log("HasHeadings:", hasHeadings, "Total sections:", sections.length);
 
   if (hasHeadings) {
     return (
