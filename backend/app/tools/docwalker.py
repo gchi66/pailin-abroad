@@ -17,6 +17,7 @@ class Inline:
     bold: bool = False
     italic: bool = False
     underline: bool = False
+    link: str | None = None
 
 
 @dataclass
@@ -143,12 +144,18 @@ def paragraph_nodes(doc_json: dict):
             # Clean vertical tabs here at the source
             txt = _clean_vertical_tabs(txt)
             st  = tr.get("textStyle", {})
+            # Sentinel link (or any link)
+            link = None
+            if "link" in st and st["link"].get("url"):
+                link = st["link"]["url"]
+
             spans.append(
                 Inline(
                     text       = txt,
                     bold       = bool(st.get("bold")),
                     italic     = bool(st.get("italic")),
                     underline  = bool(st.get("underline")),
+                    link       = link,
                 )
             )
         plain = "".join(s.text for s in spans).strip()

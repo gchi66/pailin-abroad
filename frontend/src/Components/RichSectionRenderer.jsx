@@ -53,18 +53,39 @@ export default function RichSectionRenderer({
         needsSpaceBefore = !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && cleanText.trim();
       }
 
-      return (
-        <React.Fragment key={m}>
-          {needsSpaceBefore && ' '}
-          <span
-            style={{
-              fontWeight: span.bold ? "bold" : undefined,
-              fontStyle: span.italic ? "italic" : undefined,
-              textDecoration: span.underline ? "underline" : undefined,
-            }}
+
+      const commonStyle = {
+        fontWeight: span.bold ? "bold" : undefined,
+        fontStyle: span.italic ? "italic" : undefined,
+        textDecoration: span.underline ? "underline" : undefined,
+      };
+
+      let element;
+      if (span.link) {
+        // Rewrite sentinel → internal lesson path
+        let href = span.link;
+        if (href.startsWith("https://pa.invalid/lesson/")) {
+          href = href.replace("https://pa.invalid", "");
+        }
+
+        element = (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={commonStyle}
           >
             {cleanText}
-          </span>
+          </a>
+        );
+      } else {
+        element = <span style={commonStyle}>{cleanText}</span>;
+      }
+
+      return (
+        <React.Fragment key={m}>
+          {needsSpaceBefore && " "}
+          {element}
         </React.Fragment>
       );
     });

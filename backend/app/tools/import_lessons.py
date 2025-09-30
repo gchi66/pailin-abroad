@@ -39,25 +39,16 @@ VALID_EXERCISE_KINDS = {
 def _get_pailin_abroad_user_id():
     """
     Get the Pailin Abroad admin user ID for pinned comments.
-    You can either:
-    1. Set an environment variable PAILIN_ABROAD_USER_ID
-    2. Query the users table for a known admin email
-    3. Use a hardcoded UUID
     """
-    # Option 1: Environment variable
     user_id = os.getenv("PAILIN_ABROAD_USER_ID")
     if user_id:
         return user_id
-
-    # Option 2: Query by known admin email (replace with actual admin email)
     try:
         result = supabase.table("users").select("id").eq("email", "pailinabroad@gmail.com").single().execute()
         if result.data:
             return result.data["id"]
     except Exception as e:
         print(f"[WARN] Could not find Pailin Abroad user by email: {e}")
-
-    # Option 3: Fallback to a default UUID (replace with actual UUID if known)
     print("[WARN] Using default user ID for pinned comments. Set PAILIN_ABROAD_USER_ID env var or update the admin email.")
     return "00000000-0000-0000-0000-000000000000"
 
@@ -84,22 +75,40 @@ def _find_phrase_by_norm(variant: int, phrase_raw: str):
             return r
     return None
 
-
-#______________________ REGULAR METHODS
-def _extract_th(val):
-    """Return only the Thai string from a value that might be:
-    - plain string (return stripped)
-    - dict like {"en": "..", "th": ".."}
-    - any mapping with a 'th' key
-    Falls back to first non-empty string value, else empty string.
+def _resolve_sentinel_links(nodes, supabase_client):
     """
+    Walk through content_jsonb nodes and replace sentinel links
+    (https://pa.invalid/lesson/X.Y) with real /lesson/<uuid>.
+    """
+    if not nodes:
+        return nodes
+    for node in nodes:
+        inlines = node.get("inlines") or []
+        for span in inlines:
+            link = span.get("link")
+            if link and link.startswith("https://pa.invalid/lesson/"):
+                ext_id = link.rsplit("/", 1)[-1]
+                try:
+                    result = (
+                        supabase_client
+                        .table("lessons")
+                        .select("id")
+                        .eq("lesson_external_id", ext_id)
+                        .single()
+                        .execute()
+                    )
+                    if result.data:
+                        span["link"] = f"/lesson/{result.data['id']}"
+                except Exception as e:
+                    print(f"[WARN] Could not resolve sentinel link {link}: {e}")
+    return nodes
+
+def _extract_th(val):
     if isinstance(val, dict):
-        # Preferred Thai keys
         for k in ("th", "TH", "thai", "Thai"):
             v = val.get(k)
             if isinstance(v, str) and v.strip():
                 return v.strip()
-        # Fallback: first non-empty string in dict
         for v in val.values():
             if isinstance(v, str) and v.strip():
                 return v.strip()
@@ -107,6 +116,8 @@ def _extract_th(val):
     if isinstance(val, str):
         return val.strip()
     return ""
+
+#______________________ REGULAR METHODS
 
 def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=False):
     lang = (lang or "en").lower()
@@ -526,71 +537,50 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
     for sec in sections:
         if sec["type"] == "phrases_verbs":
             continue
-
         key = {
             "lesson_id": lesson_id,
             "type": sec["type"],
             "sort_order": sec["sort_order"],
         }
-
         if lang == "en":
-            record = {
-                **key,
-                "content": sec.get("content"),
-            }
+            record = {**key, "content": sec.get("content")}
             if "content_jsonb" in sec and sec["content_jsonb"] is not None:
+                sec["content_jsonb"] = _resolve_sentinel_links(sec["content_jsonb"], supabase)
                 record["content_jsonb"] = sec["content_jsonb"]
             if dry_run:
                 print(f"[DRY RUN] Section EN UPSERT: {record}")
                 continue
             try:
-                (supabase.table("lesson_sections")
-                    .upsert(record, on_conflict="lesson_id,type")
-                    .execute())
+                supabase.table("lesson_sections").upsert(record, on_conflict="lesson_id,type").execute()
             except Exception as e:
                 print(f"[ERROR] lesson_sections EN upsert {key}: {e}")
             continue
-
-        # --------- TH path: update only TH fields; insert if missing ----------
         th_update = {}
-
         val = sec.get("content")
         if isinstance(val, str) and val.strip():
             th_update["content_th"] = val.strip()
-
         cj = sec.get("content_jsonb")
-        if cj not in (None, "", "''", '""'):        # guard weird empties
+        if cj not in (None, "", "''", '""'):
+            cj = _resolve_sentinel_links(cj, supabase)
             th_update["content_jsonb_th"] = cj
-
-        # Only set render_mode if provided and non-empty
         rm = sec.get("render_mode")
         if isinstance(rm, str) and rm:
             th_update["render_mode"] = rm
-
         if not th_update:
-            # nothing to write for TH in this section
             continue
-
         if dry_run:
             print(f"[DRY RUN] Section TH UPDATE where {key} set {th_update}")
-            print(f"[DRY RUN] (if no row, INSERT { {**key, **th_update} })")
             continue
-
         try:
-            # UPDATE first (only TH fields)
             upd = (supabase.table("lesson_sections")
                    .update(th_update)
                    .eq("lesson_id", key["lesson_id"])
                    .eq("type", key["type"])
                    .eq("sort_order", key["sort_order"])
                    .execute())
-            rows = upd.data or []
-            if len(rows) == 0:
-                # INSERT minimal row with TH fields
+            if not (upd.data or []):
                 ins_record = {**key, **th_update}
-                (supabase.table("lesson_sections")
-                 .insert(ins_record)
-                 .execute())
+                supabase.table("lesson_sections").insert(ins_record).execute()
         except Exception as e:
             print(f"[ERROR] lesson_sections TH update/insert {key}: {e}")
 
@@ -599,26 +589,24 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
     for sec in sections:
         if sec.get("type") != "phrases_verbs":
             continue
-
         for idx, item in enumerate(sec.get("items", []), start=1):
             phrase_raw = (item.get("phrase") or "").strip()
             if not phrase_raw:
                 continue
             variant = item.get("variant", 1)
-
-            # --- pick the right JSONB payload per language ---
             if lang == "th":
                 nodes_payload = item.get("content_jsonb_th")
-                text_fallback = (item.get("content") or "").strip()  # optional
-            else:  # en
+                if nodes_payload:
+                    nodes_payload = _resolve_sentinel_links(nodes_payload, supabase)
+                text_fallback = (item.get("content") or "").strip()
+            else:
                 nodes_payload = item.get("content_jsonb")
-                text_fallback = (item.get("content") or "").strip()  # optional
-
+                if nodes_payload:
+                    nodes_payload = _resolve_sentinel_links(nodes_payload, supabase)
+                text_fallback = (item.get("content") or "").strip()
             notes     = item.get("notes")
             phrase_th = item.get("phrase_th")
             notes_th  = item.get("notes_th")
-
-            # reference path
             if item.get("reference"):
                 row = _find_phrase_by_norm(variant, phrase_raw)
                 if not row:
@@ -627,13 +615,11 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                 phrase_id = row["id"]
             else:
                 row = _find_phrase_by_norm(variant, phrase_raw)
-
                 if row:
                     updates = {}
                     norm_phrase = _normalize_phrase(phrase_raw)
                     if norm_phrase and norm_phrase != row.get("phrase"):
                         updates["phrase"] = norm_phrase
-
                     if lang == "en":
                         if nodes_payload:
                             updates["content_jsonb"] = nodes_payload
@@ -641,41 +627,33 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                             updates["content"] = text_fallback
                         if notes is not None:
                             updates["notes"] = notes
-                    else:  # th
+                    else:
                         if nodes_payload:
                             updates["content_jsonb_th"] = nodes_payload
                         if text_fallback:
                             updates["content_th"] = text_fallback
-                        if phrase_th is not None and phrase_th.strip():
+                        if phrase_th and phrase_th.strip():
                             updates["phrase_th"] = phrase_th
-
                     if updates:
                         if dry_run:
                             print("[DRY RUN] Update phrases(id=%s): %r" % (row["id"], updates))
                         else:
                             supabase.table("phrases").update(updates).eq("id", row["id"]).execute()
-
                     phrase_id = row["id"]
-
                 else:
-                    insert_payload = {
-                        "phrase":  _normalize_phrase(phrase_raw),
-                        "variant": variant,
-                    }
+                    insert_payload = {"phrase": _normalize_phrase(phrase_raw), "variant": variant}
                     if lang == "en":
                         if nodes_payload:
                             insert_payload["content_jsonb"] = nodes_payload
                         if text_fallback:
                             insert_payload["content"] = text_fallback
-
-                    else:  # th
+                    else:
                         if nodes_payload:
                             insert_payload["content_jsonb_th"] = nodes_payload
                         if text_fallback:
                             insert_payload["content_th"] = text_fallback
-                        if phrase_th is not None and phrase_th.strip():
+                        if phrase_th and phrase_th.strip():
                             insert_payload["phrase_th"] = phrase_th
-
                     if dry_run:
                         print("[DRY RUN] Insert phrases:", insert_payload)
                         phrase_id = None
@@ -685,15 +663,12 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                         if not phrase_id:
                             refetched = _find_phrase_by_norm(variant, phrase_raw)
                             phrase_id = refetched["id"] if refetched else None
-
             if phrase_id:
                 link = {"lesson_id": lesson_id, "phrase_id": phrase_id, "sort_order": idx}
                 if dry_run:
                     print("[DRY RUN] Link lesson_phrases upsert:", link)
                 else:
-                    supabase.table("lesson_phrases").upsert(
-                        link, on_conflict="lesson_id,phrase_id"
-                    ).execute()
+                    supabase.table("lesson_phrases").upsert(link, on_conflict="lesson_id,phrase_id").execute()
 
 
 def upsert_tags(lesson_id, tags, dry_run=False):
@@ -706,83 +681,52 @@ def upsert_tags(lesson_id, tags, dry_run=False):
                 .upsert({"name": tag_name}, on_conflict="name", returning="representation") \
                 .execute()
             tag_id = tr.data[0]["id"]
-
         record = {"lesson_id": lesson_id, "tag_id": tag_id}
         if dry_run:
             print(f"[DRY RUN] Upsert lesson_tags: {record}")
             continue
         try:
-            supabase.table("lesson_tags") \
-                .upsert(record, on_conflict="lesson_id,tag_id") \
-                .execute()
+            supabase.table("lesson_tags").upsert(record, on_conflict="lesson_id,tag_id").execute()
         except Exception as e:
             print(f"[ERROR] lesson_tags for lesson {lesson_id}, tag {tag_name}: {e}")
 
 
 def upsert_pinned_comment(lesson_id, pinned_comment, lang="en", dry_run=False):
-    """
-    Upsert pinned comment for a lesson into the same row.
-    - If lang="en": update 'body' column
-    - If lang="th": update 'body_th' column
-    Uses upsert to ensure we update the same comment row for both languages.
-    """
     if not pinned_comment or not pinned_comment.strip():
-        return  # No pinned comment to insert
-
+        return
     PAILIN_ABROAD_USER_ID = _get_pailin_abroad_user_id()
-
     lang = (lang or "en").lower()
     if lang not in ("en", "th"):
         raise ValueError("lang must be 'en' or 'th'")
-
-    # Build the comment data - we always include both columns
-    comment_data = {
-        "lesson_id": lesson_id,
-        "user_id": PAILIN_ABROAD_USER_ID,
-        "pinned": True
-    }
-
-    # Set the appropriate language column
+    comment_data = {"lesson_id": lesson_id, "user_id": PAILIN_ABROAD_USER_ID, "pinned": True}
     if lang == "en":
         comment_data["body"] = pinned_comment.strip()
-        comment_data["body_th"] = ""  # Initialize empty if not set
-    else:  # th
-        comment_data["body"] = ""  # Initialize empty if not set
+        comment_data["body_th"] = ""
+    else:
+        comment_data["body"] = ""
         comment_data["body_th"] = pinned_comment.strip()
-
     if dry_run:
         print(f"[DRY RUN] Upsert pinned comment ({lang}): {comment_data}")
         return
-
     try:
-        # Check if a pinned comment already exists for this lesson and user
         existing_result = supabase.table("comments").select("id,body,body_th").eq("lesson_id", lesson_id).eq("user_id", PAILIN_ABROAD_USER_ID).eq("pinned", True).execute()
-
         if existing_result.data:
-            # Update existing comment - preserve the other language column
             existing_comment = existing_result.data[0]
             comment_id = existing_comment["id"]
-
-            # Build update data preserving existing content
             update_data = {}
             if lang == "en":
                 update_data["body"] = pinned_comment.strip()
-                # Preserve existing Thai content if any
                 if existing_comment.get("body_th"):
                     update_data["body_th"] = existing_comment["body_th"]
-            else:  # th
+            else:
                 update_data["body_th"] = pinned_comment.strip()
-                # Preserve existing English content if any
                 if existing_comment.get("body"):
                     update_data["body"] = existing_comment["body"]
-
             supabase.table("comments").update(update_data).eq("id", comment_id).execute()
             print(f"[INFO] Updated existing pinned comment for lesson {lesson_id} (lang={lang})")
         else:
-            # Insert new comment
             supabase.table("comments").insert(comment_data).execute()
             print(f"[INFO] Inserted new pinned comment for lesson {lesson_id} (lang={lang})")
-
     except Exception as e:
         print(f"[ERROR] Failed to upsert pinned comment for lesson {lesson_id}: {e}")
 
@@ -792,7 +736,6 @@ def process_lesson(data, lang="en", dry_run=False):
     if not REQUIRED_KEYS.issubset(keys):
         print(f"[ERROR] Missing keys: {REQUIRED_KEYS - keys}")
         return
-
     lesson_id = upsert_lesson(data, lang=lang, dry_run=dry_run)
     upsert_transcript(lesson_id, data.get("transcript", []), lang=lang, dry_run=dry_run)
     upsert_comprehension(lesson_id, data.get("comprehension_questions", []), lang=lang, dry_run=dry_run)
@@ -800,8 +743,6 @@ def process_lesson(data, lang="en", dry_run=False):
     upsert_phrases(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
     upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), lang=lang, dry_run=dry_run)
     upsert_tags(lesson_id, data.get("tags", []), dry_run=dry_run)
-
-    # Handle pinned comment if present
     pinned_comment = data.get("pinned_comment")
     if pinned_comment:
         upsert_pinned_comment(lesson_id, pinned_comment, lang=lang, dry_run=dry_run)
@@ -812,7 +753,6 @@ def import_lessons_from_folder(folder_path, lang="en", dry_run=False):
     if not json_files:
         print(f"No JSON files found in folder: {folder_path}")
         return
-
     for path in json_files:
         print(f"Importing file: {path}")
         data = json.load(open(path, "r", encoding="utf-8"))
@@ -821,7 +761,6 @@ def import_lessons_from_folder(folder_path, lang="en", dry_run=False):
             print(json.dumps(data, indent=2, ensure_ascii=False))
             print("--- End JSON content ---\n")
         process_lesson(data, lang=lang, dry_run=dry_run)
-
     print("Folder import complete.")
 
 
@@ -831,7 +770,6 @@ def import_lessons_from_file(file_path, lang="en", dry_run=False):
     if not isinstance(lessons, list):
         print("[ERROR] Expected top-level JSON array in file.")
         return
-
     for data in lessons:
         print(f"Importing lesson: {data['lesson'].get('external_id', '<unknown>')}")
         if dry_run:
@@ -839,8 +777,8 @@ def import_lessons_from_file(file_path, lang="en", dry_run=False):
             print(json.dumps(data, indent=2, ensure_ascii=False))
             print("--- End JSON content ---\n")
         process_lesson(data, lang=lang, dry_run=dry_run)
-
     print("File import complete.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Import lessons JSON into Supabase")
@@ -848,7 +786,6 @@ if __name__ == "__main__":
     parser.add_argument("--dry-run", action="store_true", help="Print actions without writing to DB")
     parser.add_argument("--lang", choices=["en","th"], default="en", help="Language of this JSON")
     args = parser.parse_args()
-
     if os.path.isdir(args.path):
         import_lessons_from_folder(args.path, lang=args.lang, dry_run=args.dry_run)
     elif os.path.isfile(args.path):
