@@ -264,13 +264,20 @@ class TopicParser:
                 table_node = _table_block(elem, table_counter)
                 all_nodes.append(table_node)
 
-        # Split into topics based on level 3 headings
+        # Split into topics based on level 3 headings (but ignore TABLE-XX headings)
         topics = []
         current_topic = None
         current_nodes = []
 
         for node in all_nodes:
-            if node.get("kind") == "heading" and node.get("level") == 3:
+            # Check if this is a real topic heading (level 3) but not a table heading
+            is_topic_heading = (
+                node.get("kind") == "heading" and
+                node.get("level") == 3 and
+                not get_heading_text(node).upper().startswith("TABLE-")
+            )
+
+            if is_topic_heading:
                 if current_topic:
                     topics.append({
                         "name": current_topic,
