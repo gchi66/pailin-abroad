@@ -7,6 +7,8 @@ import AboutPage from "./Pages/AboutPage";
 import LessonsIndex from "./Pages/LessonsIndex";
 import Lesson from "./Pages/Lesson";
 import Resources from "./Pages/Resources";
+import TopicLibrary from "./Pages/TopicLibrary";
+import TopicDetail from "./Pages/TopicDetail";
 import Contact from "./Pages/Contact";
 import Modal from "./Components/Modal";
 import AccountSettings from "./Pages/AccountSettings";
@@ -70,6 +72,8 @@ function App() {
                   <Route path="/lesson/:id" element={<Lesson />} />
                   <Route path="/pathway" element={<MyPathway />} />
                   <Route path="/resources" element={<Resources />} />
+                  <Route path="/topic-library" element={<TopicLibrary />} />
+                  <Route path="/topic-library/:slug" element={<TopicDetail />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/membership" element={<Membership />} />
                   <Route

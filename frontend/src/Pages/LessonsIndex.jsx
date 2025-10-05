@@ -198,13 +198,12 @@ const LessonsIndex = () => {
     <div className="lessons-index-page-container">
       <header className="lessons-index-page-header">
         <h1 className="page-header-text">LESSON LIBRARY</h1>
-        <img src="/images/books-lesson-library.webp" alt="Library Books" className="header-image" />
       </header>
       <div className="lesson-library">
         {/* The level buttons and placement test header */}
         <div className="stages-levels-subtitle">
           <p className="lesson-subtitle">
-            Not sure where to start? Take our <a href="#">Free Placement Test</a>.
+            Not sure where to start? Take our <button type="button" className="placement-test-link">Free Placement Test</button>.
           </p>
 
           <div className="lesson-stages">

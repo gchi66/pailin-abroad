@@ -1,23 +1,32 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../Styles/Resources.css";
 
 const Resources = () => {
   const [activeSection, setActiveSection] = useState(null);
+  const navigate = useNavigate();
 
   const sections = [
     "GRAMMAR PRACTICE",
     "PHRASES & VERBS",
     "COMMON MISTAKES",
     "CULTURE NOTES",
-    "REFERENCES"
+    "TOPIC LIBRARY"
   ];
+
+  const handleSectionClick = (section, index) => {
+    if (section === "TOPIC LIBRARY") {
+      navigate("/topic-library");
+    } else {
+      setActiveSection(index);
+    }
+  };
 
   return (
     <div className="resources-page-container">
       {/* page header */}
       <header className="resources-page-header">
         <h1 className="resources-page-header-text">RESOURCES</h1>
-        <img src="/images/characters/pailin-blue-right.png" alt="Pailin" className="resources-header-image" />
       </header>
 
       {/* section buttons */}
@@ -26,7 +35,7 @@ const Resources = () => {
           <button
             key={index}
             className={`section-btn ${activeSection === index ? 'active' : ''}`}
-            onClick={() => setActiveSection(index)}
+            onClick={() => handleSectionClick(section, index)}
           >
             {section}
           </button>

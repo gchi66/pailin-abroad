@@ -1044,3 +1044,85 @@ def reset_password():
     except Exception as e:
         print(f"Error in password reset: {e}")
         return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+
+
+@routes.route('/api/topic-library', methods=['GET'])
+def get_topic_library():
+    """Get all topics from topic library"""
+    try:
+        lang = (request.args.get("lang") or "en").lower()
+        if lang not in ("en", "th"):
+            lang = "en"
+        
+        # Fetch all topics ordered by idx
+        result = supabase.table('topic_library').select('*').order('idx', desc=False).execute()
+        
+        if not result.data:
+            return jsonify({"topics": []}), 200
+        
+        topics = []
+        for topic in result.data:
+            # Choose the appropriate content based on language
+            if lang == "th" and topic.get('content_jsonb_th'):
+                content_jsonb = topic['content_jsonb_th']
+                name = topic.get('name_th') or topic['name']
+            else:
+                content_jsonb = topic['content_jsonb']
+                name = topic['name']
+            
+            topics.append({
+                "id": topic['id'],
+                "name": name,
+                "slug": topic['slug'],
+                "tags": topic.get('tags', []),
+                "content_jsonb": content_jsonb,
+                "created_at": topic.get('created_at'),
+                "updated_at": topic.get('updated_at')
+            })
+        
+        return jsonify({"topics": topics}), 200
+        
+    except Exception as e:
+        print(f"Error fetching topic library: {e}")
+        return jsonify({"error": "Failed to fetch topic library"}), 500
+
+
+@routes.route('/api/topic-library/<slug>', methods=['GET'])
+def get_topic_by_slug(slug):
+    """Get a specific topic by slug"""
+    try:
+        lang = (request.args.get("lang") or "en").lower()
+        if lang not in ("en", "th"):
+            lang = "en"
+        
+        # Fetch topic by slug
+        result = supabase.table('topic_library').select('*').eq('slug', slug).execute()
+        
+        if not result.data:
+            return jsonify({"error": "Topic not found"}), 404
+        
+        topic = result.data[0]
+        
+        # Choose the appropriate content based on language
+        if lang == "th" and topic.get('content_jsonb_th'):
+            content_jsonb = topic['content_jsonb_th']
+            name = topic.get('name_th') or topic['name']
+        else:
+            content_jsonb = topic['content_jsonb']
+            name = topic['name']
+        
+        response_topic = {
+            "id": topic['id'],
+            "name": name,
+            "slug": topic['slug'],
+            "tags": topic.get('tags', []),
+            "content_jsonb": content_jsonb,
+            "created_at": topic.get('created_at'),
+            "updated_at": topic.get('updated_at')
+        }
+        
+        return jsonify({"topic": response_topic}), 200
+        
+    except Exception as e:
+        print(f"Error fetching topic {slug}: {e}")
+        return jsonify({"error": "Failed to fetch topic"}), 500
