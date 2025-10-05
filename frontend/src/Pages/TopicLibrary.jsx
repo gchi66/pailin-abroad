@@ -31,7 +31,10 @@ const TopicLibrary = () => {
     return (
       <div className="topic-library-page-container">
         <header className="topic-library-page-header">
-          <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
+          <div className="topic-library-header-content">
+            <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
+            <p className="topic-library-page-subtitle">Further explanations on a range of interesting ESL topics</p>
+          </div>
         </header>
         <div className="topic-library-content">
           <p>Loading topics...</p>
@@ -44,7 +47,10 @@ const TopicLibrary = () => {
     return (
       <div className="topic-library-page-container">
         <header className="topic-library-page-header">
-          <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
+          <div className="topic-library-header-content">
+            <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
+            <p className="topic-library-page-subtitle">Further explanations on a range of interesting ESL topics</p>
+          </div>
         </header>
         <div className="topic-library-content">
           <p>Error: {error}</p>
@@ -57,7 +63,10 @@ const TopicLibrary = () => {
     <div className="topic-library-page-container">
       {/* page header */}
       <header className="topic-library-page-header">
-        <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
+        <div className="topic-library-header-content">
+          <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
+          <p className="topic-library-page-subtitle">Further explanations on a range of interesting ESL topics</p>
+        </div>
       </header>
 
       {/* Topics List */}
@@ -82,6 +91,9 @@ const TopicLibrary = () => {
                     </div>
                     <div className="topic-library-text">
                       <h3 className="topic-library-title">{topic.name}</h3>
+                      {topic.subtitle && (
+                        <p className="topic-library-subtitle">{topic.subtitle}</p>
+                      )}
                       {topic.tags && topic.tags.length > 0 && (
                         <div className="topic-library-tags">
                           {topic.tags.map((tag, tagIndex) => (

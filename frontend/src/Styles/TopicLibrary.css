@@ -23,8 +23,16 @@
   border-bottom: 0.15rem solid #1E1E1E;
   padding: 3rem;
   box-sizing: border-box;
-  height: 30vh;
+  min-height: 30vh;
   overflow-y: visible;
+}
+
+.topic-library-header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
 }
 
 .topic-library-page-header-text {
@@ -34,6 +42,17 @@
   font-family: "Poppins", sans-serif;
   width: auto;
   white-space: nowrap;
+  margin: 0;
+}
+
+.topic-library-page-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  max-width: 600px;
+  line-height: 1.4;
 }
 
 /* Content section */
@@ -113,6 +132,16 @@
   margin: 0;
 }
 
+.topic-library-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #666;
+  line-height: 1.3;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  margin-top: 0.25rem;
+}
+
 .topic-library-tags {
   display: flex;
   flex-wrap: wrap;
@@ -155,6 +184,14 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .topic-library-page-header-text {
+    font-size: 5vh;
+  }
+
+  .topic-library-page-subtitle {
+    font-size: 1rem;
+  }
+
   .topic-library-content {
     width: 90%;
     margin: 2rem auto;
@@ -173,12 +210,24 @@
     font-size: 1.1rem;
   }
 
+  .topic-library-subtitle {
+    font-size: 0.9rem;
+  }
+
   .topic-library-header {
     gap: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
+  .topic-library-page-header-text {
+    font-size: 4vh;
+  }
+
+  .topic-library-page-subtitle {
+    font-size: 0.9rem;
+  }
+
   .topic-library-content {
     width: 95%;
   }
@@ -201,5 +250,9 @@
 
   .topic-library-title {
     font-size: 1rem;
+  }
+
+  .topic-library-subtitle {
+    font-size: 0.85rem;
   }
 }

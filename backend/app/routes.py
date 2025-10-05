@@ -1053,35 +1053,38 @@ def get_topic_library():
         lang = (request.args.get("lang") or "en").lower()
         if lang not in ("en", "th"):
             lang = "en"
-        
+
         # Fetch all topics ordered by idx
         result = supabase.table('topic_library').select('*').order('idx', desc=False).execute()
-        
+
         if not result.data:
             return jsonify({"topics": []}), 200
-        
+
         topics = []
         for topic in result.data:
             # Choose the appropriate content based on language
             if lang == "th" and topic.get('content_jsonb_th'):
                 content_jsonb = topic['content_jsonb_th']
                 name = topic.get('name_th') or topic['name']
+                subtitle = topic.get('subtitle_th') or topic.get('subtitle')
             else:
                 content_jsonb = topic['content_jsonb']
                 name = topic['name']
-            
+                subtitle = topic.get('subtitle')
+
             topics.append({
                 "id": topic['id'],
                 "name": name,
+                "subtitle": subtitle,
                 "slug": topic['slug'],
                 "tags": topic.get('tags', []),
                 "content_jsonb": content_jsonb,
                 "created_at": topic.get('created_at'),
                 "updated_at": topic.get('updated_at')
             })
-        
+
         return jsonify({"topics": topics}), 200
-        
+
     except Exception as e:
         print(f"Error fetching topic library: {e}")
         return jsonify({"error": "Failed to fetch topic library"}), 500
@@ -1094,35 +1097,38 @@ def get_topic_by_slug(slug):
         lang = (request.args.get("lang") or "en").lower()
         if lang not in ("en", "th"):
             lang = "en"
-        
+
         # Fetch topic by slug
         result = supabase.table('topic_library').select('*').eq('slug', slug).execute()
-        
+
         if not result.data:
             return jsonify({"error": "Topic not found"}), 404
-        
+
         topic = result.data[0]
-        
+
         # Choose the appropriate content based on language
         if lang == "th" and topic.get('content_jsonb_th'):
             content_jsonb = topic['content_jsonb_th']
             name = topic.get('name_th') or topic['name']
+            subtitle = topic.get('subtitle_th') or topic.get('subtitle')
         else:
             content_jsonb = topic['content_jsonb']
             name = topic['name']
-        
+            subtitle = topic.get('subtitle')
+
         response_topic = {
             "id": topic['id'],
             "name": name,
+            "subtitle": subtitle,
             "slug": topic['slug'],
             "tags": topic.get('tags', []),
             "content_jsonb": content_jsonb,
             "created_at": topic.get('created_at'),
             "updated_at": topic.get('updated_at')
         }
-        
+
         return jsonify({"topic": response_topic}), 200
-        
+
     except Exception as e:
         print(f"Error fetching topic {slug}: {e}")
         return jsonify({"error": "Failed to fetch topic"}), 500

@@ -64,7 +64,12 @@ const TopicDetail = () => {
     <div className="topic-detail-page-container">
       {/* Topic header */}
       <header className="topic-detail-header">
-        <h1 className="topic-detail-header-text">{topic.name}</h1>
+        <div className="topic-detail-header-content">
+          <h1 className="topic-detail-header-text">{topic.name}</h1>
+          {topic.subtitle && (
+            <p className="topic-detail-header-subtitle">{topic.subtitle}</p>
+          )}
+        </div>
       </header>
 
       {/* Navigation */}
@@ -86,7 +91,7 @@ const TopicDetail = () => {
       {/* Topic Content */}
       <div className="topic-detail-content">
         {topic.content_jsonb && topic.content_jsonb.length > 0 ? (
-          <TopicRichSectionRenderer 
+          <TopicRichSectionRenderer
             nodes={topic.content_jsonb}
             uiLang="en"
           />

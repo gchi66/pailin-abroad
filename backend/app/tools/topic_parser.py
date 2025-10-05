@@ -85,7 +85,7 @@ def node_plain_text(node):
     return ""
 
 
-def bilingualize_headers_th(nodes, default_level=3):
+def bilingualize_headers_th(nodes, default_level=4):
     """Convert appropriate paragraphs and headings to bilingual format."""
     FOCUS_EN = "LESSON FOCUS"
     FOCUS_TH = "จุดเน้นบทเรียน"
