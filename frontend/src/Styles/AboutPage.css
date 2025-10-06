@@ -49,6 +49,8 @@
   justify-content: center;
   gap: 4vw;
   padding: 10vh 0vw 0vh 0vw;
+  max-width: 75vw;
+  margin: 0 auto;
 }
 
 .section-btn {

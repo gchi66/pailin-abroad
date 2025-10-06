@@ -1,87 +1,102 @@
-.method-cards-container {
+.about-method-cards-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 5vh;
   padding: 10vh 0vw;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
+  width: 100%;
 }
 
-.method-card-left,
-.method-card-right {
+.about-method-card {
   background: white;
   border: 0.15rem solid #1E1E1E;
-  border-radius: 1rem;
   border-radius: 2.25rem;
   box-shadow: .2rem .2rem 0px #1E1E1E;
-  padding: 3rem 2.5rem;
+  padding: 2.5rem;
   font-family: "Poppins", sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
   color: #1e1e1e;
-  width: 65%;
+  width: 75vw;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
-  align-items: top;
-  gap: 2vw;
-  min-height: 10vh;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.method-card-left {
-  flex-direction: row;
+.about-method-card.expanded {
+  width: 75vw;
 }
 
-.method-card-right {
-  flex-direction: row-reverse;
+.about-method-card-header-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 0;
+  transition: margin-bottom 0.3s ease;
+  text-align: left;
+  position: relative;
+  width: 100%;
 }
 
-.method-card-header {
+.about-method-card-header-container.expanded {
+  margin-bottom: 1.5rem;
+}
+
+.about-method-card-header {
   font-size: 1.5rem;
   font-weight: 600;
   color: #1E1E1E;
   line-height: 2rem;
+  text-align: left;
+  flex: 1;
 }
 
-.method-card-text {
+.about-method-card-arrow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.about-method-card-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.about-method-card-line {
+  width: 100%;
+  height: 0.05rem;
+  background-color: #91CAFF;
+  border: none;
+  margin: 0 0 1.5rem 0;
+}
+
+.about-method-card-content {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.about-method-card-text {
   font-size: .95rem;
   color: #1e1e1e;
   line-height: 1.55rem;
+  flex: 1;
+  min-width: 0;
 }
 
-.method-card-left .method-card-header {
-  text-align: right;
-  width: 72%;
-}
-
-.method-card-left .method-card-text {
-  text-align: left;
-}
-
-.method-card-right .method-card-header {
-  text-align: left;
-  width: 200%;
-}
-
-.method-card-left .method-card-text {
-  text-align: left;
-}
-
-.method-card-line {
-  width: 0.2vw !important;
-  background-color: #FD6969 !important;
-  border: none;
-  align-self: stretch;
-  margin: -.2rem 0;
-  /* flex-shrink: 0; */
-}
-
-.pailin-and-header-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.im-pailin-pic {
+.about-im-pailin-pic {
   width: 18vw;
   height: auto;
+  flex-shrink: 0;
+  max-width: 200px;
 }
