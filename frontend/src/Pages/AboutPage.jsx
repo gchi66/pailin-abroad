@@ -11,6 +11,7 @@ const AboutPage = () => {
       {/* Page header */}
       <header className="about-page-header">
         <h1 className="about-page-header-text">ABOUT PAILIN ABROAD</h1>
+        <p className="about-page-header-subtitle">Learn all you need to know about us - our method, our team, and our story!</p>
       </header>
 
       {/* Section navigation */}

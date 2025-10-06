@@ -1,4 +1,4 @@
-.about-page-container {
+.faq-page-container {
   position: relative;
   min-height: 100vh;
   background-color: none;
@@ -9,11 +9,10 @@
   flex-direction: column;
   z-index: 1;
   margin-top: -18vh; /* Counteract the padding to prevent double spacing */
-  /* gap: 10vh; */
 }
 
 /* header  */
-.about-page-header {
+.faq-page-header {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,7 +30,7 @@
   margin: 0;
 }
 
-.about-page-header-text {
+.faq-page-header-text {
   font-size: 5vh;
   color: #1E1E1E;
   font-weight: 600;
@@ -41,7 +40,7 @@
   margin: 0;
 }
 
-.about-page-header-subtitle {
+.faq-page-header-subtitle {
   font-size: 1.75vh;
   color: #666;
   font-weight: 400;
@@ -49,63 +48,50 @@
   margin: 0;
 }
 
-.about-header-image {
-  height: 35vh;
-  width: auto;
-}
-
-
 /* Section buttons  */
-.section-btns-container {
+.faq-section-btns-container {
   display: flex;
   justify-content: center;
-  gap: 4vw;
-  padding: 10vh 0vw 0vh 0vw;
-  max-width: 75vw;
+  gap: 2vw;
+  padding: 8vh 0vw 0vh 0vw;
+  width: 75vw;
   margin: 0 auto;
+  flex-wrap: wrap; /* allow buttons to flow to multiple lines */
 }
 
-.section-btn {
+.faq-section-btn {
   background: white;
   border: 0.15rem solid #1E1E1E;
   border-radius: 1rem;
   border-radius: 0.5rem;
   box-shadow: .2rem .2rem 0px #1E1E1E;
-  padding: 1rem 2rem;
+  padding: 1rem 1.25rem;
   font-family: "Poppins", sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #1e1e1e;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
-  min-width: 21vw;
   flex: 1 1 auto; /* allow buttons to shrink/grow */
+  min-width: 12vw; /* smaller min to allow more buttons in narrow containers */
+  max-width: 22vw;
+  text-align: center;
 }
 
-.section-btn.active {
+.faq-section-btn.active {
   background: #91CAFF;
 }
 
-.section-btn:hover {
+.faq-section-btn:hover {
   background: #91CAFF;
 }
 
-
-/* method  */
-.about-method-section {
+/* Section content */
+.faq-section-content {
   display: none;
+  padding: 5vh 10vw;
 }
 
-.about-method-section.visible {
-  display: block;
-}
-
-/* our team */
-
-.team-section {
-  display: none;
-}
-
-.team-section.visible {
+.faq-section-content.visible {
   display: block;
 }

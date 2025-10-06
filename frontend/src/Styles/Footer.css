@@ -89,3 +89,8 @@
   color: #1e1e1e; /* black text on the blue background */
   font-weight: 500;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

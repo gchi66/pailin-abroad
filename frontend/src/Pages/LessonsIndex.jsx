@@ -198,6 +198,7 @@ const LessonsIndex = () => {
     <div className="lessons-index-page-container">
       <header className="lessons-index-page-header">
         <h1 className="page-header-text">LESSON LIBRARY</h1>
+        <p className="lessons-index-page-header-subtitle">Over 150 conversation-based lessons to improve your English</p>
       </header>
       <div className="lesson-library">
         {/* The level buttons and placement test header */}

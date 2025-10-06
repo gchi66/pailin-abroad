@@ -27,6 +27,7 @@ const Resources = () => {
       {/* page header */}
       <header className="resources-page-header">
         <h1 className="resources-page-header-text">RESOURCES</h1>
+        <p className="resources-page-header-subtitle">Explore grammar, phrases, culture notes, and more</p>
       </header>
 
       {/* section buttons */}

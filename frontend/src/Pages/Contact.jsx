@@ -38,6 +38,7 @@ const Contact = () => {
       {/* page header */}
       <header className="contact-page-header">
         <h1 className="contact-page-header-text">CONTACT US</h1>
+        <p className="contact-page-header-subtitle">We'd love to hear from you! Reach out with questions or feedback</p>
       </header>
 
       <div className="contact-elements-container">

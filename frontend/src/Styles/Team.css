@@ -45,16 +45,17 @@
   font-weight: 600;
   color: #1E1E1E;
 }
-.member-location {
+
+.member-title {
   font-size: 1rem;
   color: #1E1E1E;
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .team-underline {
   width: 40%;
   height: 0.2vh;
-  background-color: #FD6969;;
+  background-color: #99CEFF;;
   margin: 0.5vh 0;
   border: none;
 }

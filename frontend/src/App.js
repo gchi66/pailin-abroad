@@ -10,6 +10,7 @@ import Resources from "./Pages/Resources";
 import TopicLibrary from "./Pages/TopicLibrary";
 import TopicDetail from "./Pages/TopicDetail";
 import Contact from "./Pages/Contact";
+import FAQPage from "./Pages/FAQPage";
 import Modal from "./Components/Modal";
 import AccountSettings from "./Pages/AccountSettings";
 import Membership from "./Pages/Membership";
@@ -75,6 +76,7 @@ function App() {
                   <Route path="/topic-library" element={<TopicLibrary />} />
                   <Route path="/topic-library/:slug" element={<TopicDetail />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/faq" element={<FAQPage />} />
                   <Route path="/membership" element={<Membership />} />
                   <Route
                     path="/profile"
