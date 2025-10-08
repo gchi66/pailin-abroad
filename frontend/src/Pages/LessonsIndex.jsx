@@ -215,22 +215,22 @@ const LessonsIndex = () => {
               BEGINNER
             </button>
             <button
-              className={`stage-btn ${selectedStage === "Lower Intermediate" ? "active" : ""}`}
-              onClick={() => handleStageChange("Lower Intermediate")}
+              className={`stage-btn ${selectedStage === "Intermediate" ? "active" : ""}`}
+              onClick={() => handleStageChange("Intermediate")}
             >
-              LOWER INTERMEDIATE
-            </button>
-            <button
-              className={`stage-btn ${selectedStage === "Upper Intermediate" ? "active" : ""}`}
-              onClick={() => handleStageChange("Upper Intermediate")}
-            >
-              UPPER INTERMEDIATE
+              INTERMEDIATE
             </button>
             <button
               className={`stage-btn ${selectedStage === "Advanced" ? "active" : ""}`}
               onClick={() => handleStageChange("Advanced")}
             >
               ADVANCED
+            </button>
+            <button
+              className={`stage-btn ${selectedStage === "Expert" ? "active" : ""}`}
+              onClick={() => handleStageChange("Expert")}
+            >
+              EXPERT
             </button>
           </div>
 

@@ -1,0 +1,290 @@
+/* Page Container */
+.free-lessons-index-page-container {
+  position: relative;
+  min-height: 100vh;
+  background-color: none;
+  padding: 30vh 0 0 0;
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+  z-index: 1;
+  margin-top: -18vh;
+}
+
+/* Header */
+.free-lessons-index-page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  width: 100%;
+  max-width: 100vw;
+  background: white;
+  border-top: 0.15rem solid #1E1E1E;
+  border-bottom: 0.15rem solid #1E1E1E;
+  padding: 3rem;
+  box-sizing: border-box;
+  height: 20vh;
+  overflow-y: visible;
+  margin: 0;
+}
+
+.free-page-header-text {
+  font-size: 5vh;
+  color: #1E1E1E;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  width: auto;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.free-lessons-index-page-header-subtitle {
+  font-size: 1.75vh;
+  color: #666;
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+}
+
+.free-upgrade-message {
+  margin: 3rem auto 0;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #1E1E1E;
+  line-height: 1.6;
+  max-width: 800px;
+  padding: 0 2rem;
+}
+
+.free-upgrade-message p {
+  margin: 0.25rem 0;
+}
+
+.upgrade-link {
+  color: #E74C3C;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.upgrade-link:hover {
+  text-decoration: underline;
+  color: #C0392B;
+}
+
+/* Content Section */
+.free-lessons-content {
+  width: 85%;
+  max-width: 1200px;
+  margin: 2rem auto 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.free-lessons-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Stage Block */
+.free-stage-block {
+  background: white;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 1rem;
+  box-shadow: 0.2rem 0.2rem 0px #1E1E1E;
+  overflow: hidden;
+}
+
+.free-stage-block.coming-soon {
+  opacity: 0.5;
+  background: #f5f5f5;
+}
+
+.free-stage-header {
+  background: white;
+  border-bottom: 0.15rem solid #1E1E1E;
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.free-stage-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1E1E1E;
+}
+
+.coming-soon-badge {
+  font-size: 1rem;
+  font-style: italic;
+  color: #666;
+  background: #e0e0e0;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Lesson List */
+.free-lesson-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.free-lesson-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.free-lesson-item {
+  background: white;
+  padding: 1.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.075rem solid #1E1E1E;
+  transition: background 0.3s ease;
+}
+
+.free-lesson-link:hover .free-lesson-item {
+  background: #91CAFF;
+}
+
+.free-lesson-item-left {
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+}
+
+.free-lesson-number {
+  font-size: 1.8rem;
+  font-weight: 500;
+  min-width: 3rem;
+}
+
+.free-name-desc-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.free-lesson-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1E1E1E;
+  line-height: 1.2;
+}
+
+.free-lesson-focus {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-top: 0.3rem;
+}
+
+.level-checkmark {
+  height: 3vh;
+  width: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .free-lessons-content {
+    width: 95%;
+    margin: 2rem auto;
+  }
+
+  .free-stage-header {
+    padding: 1.5rem 2rem;
+  }
+
+  .free-stage-title {
+    font-size: 1.5rem;
+  }
+
+  .free-lesson-item {
+    padding: 1rem 2rem;
+  }
+
+  .free-lesson-item-left {
+    gap: 1rem;
+  }
+
+  .free-lesson-number {
+    font-size: 1.4rem;
+    min-width: 2.5rem;
+  }
+
+  .free-lesson-name {
+    font-size: 1.1rem;
+  }
+
+  .free-lesson-focus {
+    font-size: 0.85rem;
+  }
+
+  .free-page-header-text {
+    font-size: 4vh;
+  }
+
+  .free-upgrade-message {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .free-lessons-content {
+    width: 95%;
+  }
+
+  .free-stage-header {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .free-stage-title {
+    font-size: 1.3rem;
+  }
+
+  .free-lesson-item {
+    padding: 0.75rem 1rem;
+  }
+
+  .free-lesson-item-left {
+    gap: 0.75rem;
+  }
+
+  .free-lesson-number {
+    font-size: 1.2rem;
+    min-width: 2rem;
+  }
+
+  .free-lesson-name {
+    font-size: 1rem;
+  }
+
+  .free-lesson-focus {
+    font-size: 0.8rem;
+  }
+
+  .free-page-header-text {
+    font-size: 3.5vh;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .free-upgrade-message {
+    font-size: 0.85rem;
+  }
+
+  .coming-soon-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+}

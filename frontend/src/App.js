@@ -5,6 +5,7 @@ import Navbar from "./Components/Navbar";
 import Home from "./Pages/Home";
 import AboutPage from "./Pages/AboutPage";
 import LessonsIndex from "./Pages/LessonsIndex";
+import FreeLessonsIndex from "./Pages/FreeLessonsIndex";
 import Lesson from "./Pages/Lesson";
 import Resources from "./Pages/Resources";
 import TopicLibrary from "./Pages/TopicLibrary";
@@ -70,6 +71,7 @@ function App() {
                   <Route path="/" element={<Home toggleSignupModal={toggleSignupModal} />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/lessons" element={<LessonsIndex />} />
+                  <Route path="/free-lessons" element={<FreeLessonsIndex />} />
                   <Route path="/lesson/:id" element={<Lesson />} />
                   <Route path="/pathway" element={<MyPathway />} />
                   <Route path="/resources" element={<Resources />} />
