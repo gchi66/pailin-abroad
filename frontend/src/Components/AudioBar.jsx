@@ -8,12 +8,14 @@ import "../Styles/AudioBar.css";
  * audioSrcNoBg    – voices only (optional)
  * audioSrcBg      – background only (optional)
  * description     – optional description
+ * isLocked        – whether the lesson is locked (disables playback)
  */
 export default function AudioBar({
   audioSrc,
   audioSrcNoBg,
   audioSrcBg,
   description = "",
+  isLocked = false,
 }) {
   const voiceRef = useRef(null);
   const bgRef = useRef(null);
@@ -29,6 +31,8 @@ export default function AudioBar({
   const hasSplit = !!(audioSrcNoBg && audioSrcBg);
 
   const togglePlay = () => {
+    if (isLocked) return; // Disable playback for locked lessons
+
     if (hasSplit) {
       if (!voiceRef.current || !bgRef.current) return;
       if (playing) {
@@ -48,6 +52,8 @@ export default function AudioBar({
   };
 
   const seek = (pct) => {
+    if (isLocked) return; // Disable seeking for locked lessons
+
     if (!voiceRef.current) return;
     const newTime = duration * pct;
     voiceRef.current.currentTime = newTime;
@@ -58,6 +64,8 @@ export default function AudioBar({
   };
 
   const skip = (sec) => {
+    if (isLocked) return; // Disable skipping for locked lessons
+
     if (!voiceRef.current) return;
     const newTime = Math.max(
       0,
@@ -157,9 +165,23 @@ export default function AudioBar({
       : `${Math.floor(s / 60)}:${`${Math.floor(s % 60)}`.padStart(2, "0")}`;
 
   return (
-    <section className="audio-card">
+    <section className={`audio-card${isLocked ? ' audio-locked' : ''}`}>
       <h3 className="audio-heading">LISTEN TO THE CONVERSATION</h3>
       {description && <p className="audio-desc">{description}</p>}
+
+      {/* Locked overlay */}
+      {isLocked && (
+        <div className="audio-locked-overlay">
+          <div className="audio-locked-message">
+            <img
+              src="/images/lock.webp"
+              alt="Locked"
+              className="audio-locked-icon"
+            />
+            <p>Audio is locked. Sign up to listen!</p>
+          </div>
+        </div>
+      )}
 
       {/* audio elements */}
       {hasSplit ? (
@@ -173,7 +195,12 @@ export default function AudioBar({
 
       {/* controls */}
       <div className="bar-row">
-        <button className="icon-btn play-btn" onClick={togglePlay} aria-label="Play / Pause">
+        <button
+          className="icon-btn play-btn"
+          onClick={togglePlay}
+          aria-label="Play / Pause"
+          disabled={isLocked}
+        >
           {playing ? "⏸" : "▶️"}
         </button>
 

@@ -484,6 +484,7 @@ export default function Lesson() {
             activeId={activeId}
             onSelect={setActiveId}
             lesson={lesson}
+            isLocked={isLocked}
           />
           <LessonContent
             sections={sections}

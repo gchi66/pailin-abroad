@@ -108,13 +108,17 @@
 /* ===============================================
    LOCKED AUDIO BAR STYLES
    =============================================== */
+.audio-card {
+  position: relative; /* For overlay positioning */
+}
+
 .audio-locked {
-  opacity: 0.6;
-  pointer-events: none;
+  opacity: 0.5;
 }
 
 .audio-locked .bar-row {
   filter: grayscale(50%);
+  pointer-events: none;
 }
 
 .audio-locked .track {
@@ -124,4 +128,39 @@
 .audio-locked .icon-btn,
 .audio-locked .rate-btn {
   cursor: not-allowed;
+}
+
+.audio-locked-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3.6rem;
+  z-index: 5;
+}
+
+.audio-locked-message {
+  text-align: center;
+  color: white;
+  padding: 2rem;
+}
+
+.audio-locked-icon {
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  filter: brightness(0) invert(1); /* Make icon white */
+}
+
+.audio-locked-message p {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
 }

@@ -110,7 +110,7 @@ export default function LessonContent({
         <div className="lesson-locked-overlay">
           <div className="lesson-locked-message">
             <img
-              src="/images/lock-icon.png"
+              src="/images/lock.webp"
               alt="Locked"
               className="lesson-locked-icon"
             />

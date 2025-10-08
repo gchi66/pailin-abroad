@@ -54,10 +54,19 @@ export default function LessonSidebar({
   activeId,
   onSelect,
   lesson, // <-- new prop
+  isLocked = false, // <-- add isLocked prop
 }) {
-  // Build the menu in the master order, skipping types with no data
+  // For locked lessons, show all sections in MASTER_ORDER
+  // For unlocked lessons, only show sections with content
   const menuItems = MASTER_ORDER
     .map((type) => {
+      // If locked, show everything
+      if (isLocked) {
+        // Return a menu item for each type, using a generated ID
+        return { id: type, type };
+      }
+
+      // Unlocked lesson - use existing logic
       if (type === "comprehension" && questions.length) {
         return { id: "comprehension", type };
       }

@@ -818,13 +818,23 @@ def get_lesson_resolved(lesson_id):
                     lesson_result = supabase.table('lessons').select('stage, level, lesson_order').eq('id', lesson_id).single().execute()
                     if lesson_result.data:
                         lesson = lesson_result.data
-                        # Get all lessons for this stage-level combination
-                        level_lessons = supabase.table('lessons').select('id, lesson_order').eq('stage', lesson['stage']).eq('level', lesson['level']).order('lesson_order').execute()
+                        print(f"Checking lesson {lesson_id}: stage={lesson['stage']}, level={lesson['level']}, lesson_order={lesson['lesson_order']}")
+
+                        # Get all lessons for this stage-level combination, ordered by lesson_order
+                        level_lessons = supabase.table('lessons').select('id, lesson_order').eq('stage', lesson['stage']).eq('level', lesson['level']).order('lesson_order', desc=False).execute()
+
                         if level_lessons.data and len(level_lessons.data) > 0:
                             # Check if this is the first lesson (lowest lesson_order)
-                            first_lesson_id = level_lessons.data[0]['id']
+                            first_lesson = level_lessons.data[0]
+                            first_lesson_id = first_lesson['id']
+                            print(f"First lesson of {lesson['stage']} Level {lesson['level']}: id={first_lesson_id}, lesson_order={first_lesson['lesson_order']}")
+                            print(f"Current lesson_id: {lesson_id}, First lesson_id: {first_lesson_id}, Match: {lesson_id == first_lesson_id}")
+
                             if lesson_id == first_lesson_id:
                                 is_locked = False
+                                print(f"✓ Unlocking lesson {lesson_id} (first lesson of level)")
+                            else:
+                                print(f"✗ Keeping lesson {lesson_id} locked (not first lesson)")
         except Exception as e:
             print(f"Auth check error: {e}")
             # If auth fails, keep is_locked = True
@@ -839,21 +849,34 @@ def get_lesson_resolved(lesson_id):
     # Add locked status to payload
     payload['locked'] = is_locked
 
-    # If locked, remove sensitive content
+    # If locked, remove sensitive content but keep metadata
     if is_locked:
-        # Keep basic metadata but remove detailed content
+        # Keep basic metadata and structure info but remove detailed content
         safe_payload = {
             'locked': True,
             'id': payload.get('id'),
             'title': payload.get('title'),
             'title_th': payload.get('title_th'),
+            'title_en': payload.get('title_en'),
             'subtitle': payload.get('subtitle'),
             'subtitle_th': payload.get('subtitle_th'),
+            'subtitle_en': payload.get('subtitle_en'),
             'stage': payload.get('stage'),
             'level': payload.get('level'),
+            'lesson_order': payload.get('lesson_order'),
+            'lesson_external_id': payload.get('lesson_external_id'),
             'focus': payload.get('focus'),
             'focus_th': payload.get('focus_th'),
             'image_url': payload.get('image_url'),
+            'conversation_audio_url': payload.get('conversation_audio_url'),
+            'backstory': payload.get('backstory'),
+            'backstory_th': payload.get('backstory_th'),
+            # Keep empty arrays so UI can show sidebar structure
+            'sections': payload.get('sections', []),
+            'questions': [],
+            'transcript': [],
+            'practice_exercises': [],
+            'phrases': [],
         }
         payload = safe_payload
 
