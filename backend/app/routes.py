@@ -793,12 +793,69 @@ def get_lesson_resolved(lesson_id):
     lang = (request.args.get("lang") or "en").lower()
     if lang not in ("en", "th"):
         return jsonify({"error": "lang must be 'en' or 'th'"}), 400
+
+    # Check if user is authenticated and has paid access
+    is_locked = True
+    user_id = None
+
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        try:
+            access_token = auth_header.split(' ')[1]
+            user_response = supabase.auth.get_user(access_token)
+
+            if user_response.user:
+                user_id = user_response.user.id
+
+                # Check if user has paid access
+                user_result = supabase.table('users').select('is_paid').eq('id', user_id).single().execute()
+                is_paid = user_result.data.get('is_paid', False) if user_result.data else False
+
+                if is_paid:
+                    is_locked = False
+                else:
+                    # For free users, check if this is a first lesson of any level
+                    lesson_result = supabase.table('lessons').select('stage, level, lesson_order').eq('id', lesson_id).single().execute()
+                    if lesson_result.data:
+                        lesson = lesson_result.data
+                        # Get all lessons for this stage-level combination
+                        level_lessons = supabase.table('lessons').select('id, lesson_order').eq('stage', lesson['stage']).eq('level', lesson['level']).order('lesson_order').execute()
+                        if level_lessons.data and len(level_lessons.data) > 0:
+                            # Check if this is the first lesson (lowest lesson_order)
+                            first_lesson_id = level_lessons.data[0]['id']
+                            if lesson_id == first_lesson_id:
+                                is_locked = False
+        except Exception as e:
+            print(f"Auth check error: {e}")
+            # If auth fails, keep is_locked = True
+
     try:
         payload = resolve_lesson(lesson_id, lang)
     except KeyError:
         return jsonify({"error": "Lesson not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+    # Add locked status to payload
+    payload['locked'] = is_locked
+
+    # If locked, remove sensitive content
+    if is_locked:
+        # Keep basic metadata but remove detailed content
+        safe_payload = {
+            'locked': True,
+            'id': payload.get('id'),
+            'title': payload.get('title'),
+            'title_th': payload.get('title_th'),
+            'subtitle': payload.get('subtitle'),
+            'subtitle_th': payload.get('subtitle_th'),
+            'stage': payload.get('stage'),
+            'level': payload.get('level'),
+            'focus': payload.get('focus'),
+            'focus_th': payload.get('focus_th'),
+            'image_url': payload.get('image_url'),
+        }
+        payload = safe_payload
 
     resp = jsonify(payload)
     resp.headers["Cache-Control"] = "public, max-age=60"

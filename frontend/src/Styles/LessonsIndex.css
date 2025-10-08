@@ -388,6 +388,14 @@
   width: auto;
 }
 
+.lesson-lock-icon {
+  width: 2rem;
+  height: 2rem;
+  margin-left: auto;
+  opacity: 0.8;
+  align-self: center;
+}
+
 .mark-finished-row {
   background: #fff;
   padding: 1.5rem;

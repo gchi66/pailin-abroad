@@ -37,7 +37,7 @@
 }
 
 .menu ul li a:hover {
-  color: #FF4545; /* Red on hover */
+  color: #1E1E1E; /* Blue on hover */
 }
 
 .menu ul li.pricing a {
@@ -140,4 +140,88 @@
 .search-bar .search-icon img {
   width: 1.6vh;
   height: 1.6vh;
+}
+
+/* Lessons Dropdown Menu */
+.menu ul li.lessons-dropdown-wrapper {
+  position: relative;
+}
+
+.menu ul li.lessons-dropdown-wrapper .lessons-dropdown-trigger {
+  color: #1E1E1E;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.menu ul li.lessons-dropdown-wrapper .lessons-dropdown-trigger:hover {
+  color: #91CAFF;
+}
+
+.menu ul li.lessons-dropdown-wrapper .lessons-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  background: white;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 180px;
+  z-index: 1001;
+  box-shadow: 0.2rem 0.2rem 0px #1E1E1E;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+/* Create an invisible bridge between trigger and dropdown */
+.menu ul li.lessons-dropdown-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 0.5rem;
+  background: transparent;
+}
+
+.menu ul li.lessons-dropdown-wrapper:hover .lessons-dropdown {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+.lessons-dropdown li {
+  margin: 0;
+  padding: 0;
+}
+
+.lessons-dropdown li a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #1E1E1E;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.2s, color 0.2s;
+  border: none;
+}
+
+.lessons-dropdown li a:hover {
+  background-color: #91CAFF;
+  color: #1E1E1E;
+}
+
+.lessons-dropdown li:first-child a {
+  border-radius: 0.3rem 0.3rem 0 0;
+}
+
+.lessons-dropdown li:last-child a {
+  border-radius: 0 0 0.3rem 0.3rem;
 }

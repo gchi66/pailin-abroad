@@ -12,10 +12,102 @@ const LessonsIndex = () => {
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [levelCompletionStatus, setLevelCompletionStatus] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [allLessons, setAllLessons] = useState([]); // Store all lessons for first lesson calculation
   const { user } = useAuth();
 
   // Track whether the stage has just changed
   const isStageChanged = useRef(false);
+
+  // Fetch user profile (is_paid status)
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) {
+        setProfile(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("is_paid")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching user profile:", error.message);
+          setProfile(null);
+        } else {
+          setProfile(data);
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        setProfile(null);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
+
+  // Fetch all lessons to determine first lessons of each level
+  useEffect(() => {
+    const fetchAllLessons = async () => {
+      try {
+        const { data, error } = await supabaseClient
+          .from("lessons")
+          .select("*")
+          .order("stage", { ascending: true })
+          .order("level", { ascending: true })
+          .order("lesson_order", { ascending: true });
+
+        if (error) throw error;
+        setAllLessons(data || []);
+      } catch (error) {
+        console.error("Error fetching all lessons:", error.message);
+      }
+    };
+
+    fetchAllLessons();
+  }, []);
+
+  // Calculate first lessons of each level
+  const getFirstLessons = () => {
+    const lessonsByLevel = {};
+
+    allLessons.forEach((lesson) => {
+      const levelKey = `${lesson.stage}-${lesson.level}`;
+      if (!lessonsByLevel[levelKey]) {
+        lessonsByLevel[levelKey] = [];
+      }
+      lessonsByLevel[levelKey].push(lesson);
+    });
+
+    const firstLessonIds = Object.values(lessonsByLevel)
+      .map((levelLessons) => {
+        const sorted = levelLessons.sort((a, b) => a.lesson_order - b.lesson_order);
+        return sorted[0]?.id;
+      })
+      .filter(Boolean);
+
+    return firstLessonIds;
+  };
+
+  // Determine if a lesson should show a lock icon
+  const shouldShowLock = (lesson) => {
+    // Not logged in → show lock
+    if (!user) {
+      return true;
+    }
+
+    // Paid user → no lock
+    if (profile?.is_paid) {
+      return false;
+    }
+
+    // Free user → lock all except first lesson of each level
+    const firstLessons = getFirstLessons();
+    return !firstLessons.includes(lesson.id);
+  };
 
   // Fetch levels for the selected stage
   useEffect(() => {
@@ -299,11 +391,19 @@ const LessonsIndex = () => {
                       </div>
                     </div>
                     <div className="lesson-item-right">
-                      <img
-                        src={isLessonCompleted(lesson.id) ? "/images/filled-checkmark-lesson-complete.webp" : "/images/CheckCircle.png"}
-                        alt={isLessonCompleted(lesson.id) ? "Completed" : "Not completed"}
-                        className={`checkmark-img ${isLessonCompleted(lesson.id) ? "checkmark-completed" : ""}`}
-                      />
+                      {shouldShowLock(lesson) ? (
+                        <img
+                          src="/images/lock.webp"
+                          alt="Locked"
+                          className="lesson-lock-icon"
+                        />
+                      ) : (
+                        <img
+                          src={isLessonCompleted(lesson.id) ? "/images/filled-checkmark-lesson-complete.webp" : "/images/CheckCircle.png"}
+                          alt={isLessonCompleted(lesson.id) ? "Completed" : "Not completed"}
+                          className={`checkmark-img ${isLessonCompleted(lesson.id) ? "checkmark-completed" : ""}`}
+                        />
+                      )}
                     </div>
                   </Link>
                 ))}

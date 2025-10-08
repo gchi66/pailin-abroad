@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import LessonLanguageToggle from "./LessonLanguageToggle";
 import ComprehensionQuiz from "./ComprehensionQuiz";
 import ApplySection from "./ApplySection";
@@ -21,6 +22,7 @@ export default function LessonContent({
   contentLang = "en",
   setContentLang,
   images = {},
+  isLocked = false,
 }) {
   /* ===============================================================
      HELPER: Section header by contentLang
@@ -92,6 +94,41 @@ export default function LessonContent({
       };
     });
   };
+
+  /* ===============================================================
+     LOCKED LESSON CHECK
+  =============================================================== */
+  if (isLocked) {
+    return (
+      <div className="lesson-locked-container">
+        <div className="lesson-content-blurred">
+          <div className="lesson-locked-placeholder">
+            <h3>This lesson is locked</h3>
+            <p>Sample content preview...</p>
+          </div>
+        </div>
+        <div className="lesson-locked-overlay">
+          <div className="lesson-locked-message">
+            <img
+              src="/images/lock-icon.png"
+              alt="Locked"
+              className="lesson-locked-icon"
+            />
+            <h2>This Lesson is Locked</h2>
+            <p>Unlock unlimited access to all lessons and features</p>
+            <div className="lesson-locked-cta-buttons">
+              <Link to="/signup" className="lesson-locked-signup-btn">
+                SIGN UP FOR FREE
+              </Link>
+              <Link to="/pricing" className="lesson-locked-member-btn">
+                BECOME A MEMBER
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   /* ===============================================================
      1) COMPREHENSION VIEW

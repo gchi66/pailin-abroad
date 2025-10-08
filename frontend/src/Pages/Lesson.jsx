@@ -202,6 +202,7 @@ export default function Lesson() {
   const [practiceExercises, setPracticeExercises] = useState([]);
   const [lessonPhrases, setLessonPhrases] = useState([]);
   const [images, setImages] = useState({});
+  const [isLocked, setIsLocked] = useState(false);
 
 
   // Audio + snippets
@@ -230,6 +231,7 @@ export default function Lesson() {
       try {
         // 1) fetch resolved payload from backend
         const payload = await fetchResolvedLesson(id, contentLang);
+        setIsLocked(payload.locked || false);
         console.log("Phrases payload:", payload.phrases);
 
         // derive safe title/subtitle variants for UI (fall back if resolver doesn’t expose *_en/_th)
@@ -459,6 +461,7 @@ export default function Lesson() {
           audioSrcNoBg={audioUrlNoBg}
           audioSrcBg={audioUrlBg}
           description={lesson.backstory}
+          isLocked={isLocked}
         />
 
         {/* Language toggles
@@ -496,6 +499,7 @@ export default function Lesson() {
             contentLang={contentLang}
             setContentLang={setContentLang}
             images={images}
+            isLocked={isLocked}
           />
         </div>
 

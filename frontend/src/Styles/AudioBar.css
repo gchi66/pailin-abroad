@@ -104,3 +104,24 @@
   letter-spacing: 0.04rem;
   color: #1e1e1e;
 }
+
+/* ===============================================
+   LOCKED AUDIO BAR STYLES
+   =============================================== */
+.audio-locked {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.audio-locked .bar-row {
+  filter: grayscale(50%);
+}
+
+.audio-locked .track {
+  cursor: not-allowed;
+}
+
+.audio-locked .icon-btn,
+.audio-locked .rate-btn {
+  cursor: not-allowed;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import supabaseClient from "../supabaseClient";
 import { Link } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 import "../Styles/FreeLessonsIndex.css";
 
 const FreeLessonsIndex = () => {
@@ -73,6 +74,8 @@ const FreeLessonsIndex = () => {
     fetchAllLessons();
   }, []);
 
+  const { user } = useAuth();
+
   // Component for a single lesson item
   const LessonItem = ({ lesson }) => {
     const isCheckpoint = (lesson.title || "").toLowerCase().includes("checkpoint");
@@ -97,6 +100,16 @@ const FreeLessonsIndex = () => {
               <span className="free-lesson-focus">{lesson.focus}</span>
             )}
           </div>
+        </div>
+        {/* right side - lock icon for non-logged-in users */}
+        <div className="free-lesson-item-right">
+          {!user && (
+            <img
+              src="/images/lock.webp"
+              alt="Locked"
+              className="free-lesson-lock-icon"
+            />
+          )}
         </div>
       </div>
     );
