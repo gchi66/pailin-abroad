@@ -29,14 +29,16 @@ const cards = [
   },
 ];
 
-const FreeLessonCards = () => (
+const FreeLessonCards = ({ showHeader = true }) => (
   <div>
-    <section className="free-lesson-header">
-      <div className="flh-line" />
-      <div className="flh-bubble">
-        <span className="flh-text">Try a free lesson now! No sign up needed.</span>
-      </div>
-    </section>
+    {showHeader && (
+      <section className="free-lesson-header">
+        <div className="flh-line" />
+        <div className="flh-bubble">
+          <span className="flh-text">Try a free lesson now! No sign up needed.</span>
+        </div>
+      </section>
+    )}
 
     <section className="free-lesson-cards">
       {cards.map((card, idx) => (
