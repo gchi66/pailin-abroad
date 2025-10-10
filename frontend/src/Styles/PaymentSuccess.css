@@ -1,0 +1,196 @@
+/* Payment Success Page Container */
+.payment-success-page {
+  position: relative;
+  min-height: 100vh;
+  background-color: #FDF7F4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* Confetti Overlay Background */
+.confetti-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background-image set via inline style in component */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Payment Success Container */
+.payment-success-container {
+  position: relative;
+  z-index: 1;
+  background: white;
+  border-radius: 2rem;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
+  padding: 3rem;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.payment-success-container.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Success Icon */
+.success-icon {
+  font-size: 5rem;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Main Title */
+.success-main-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1E1E1E;
+  margin: 0 0 0.75rem 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Subtitle */
+.success-subtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #91CAFF;
+  margin: 0 0 1.5rem 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Success Message */
+.success-message {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* CTA Button */
+.success-cta-btn {
+  display: inline-block;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.success-cta-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0.3rem 0.3rem 0 #1E1E1E;
+}
+
+.success-cta-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
+}
+
+.success-cta-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Resend Email Message */
+.resend-message {
+  font-size: 0.9rem;
+  font-family: "Poppins", sans-serif;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.resend-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.resend-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Secondary Link */
+.secondary-link {
+  display: block;
+  font-size: 0.95rem;
+  color: #91CAFF;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+  transition: color 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.secondary-link:hover {
+  color: #1E1E1E;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-success-page {
+    padding: 1rem;
+  }
+
+  .payment-success-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .success-icon {
+    font-size: 4rem;
+  }
+
+  .success-main-title {
+    font-size: 1.5rem;
+  }
+
+  .success-subtitle {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-success-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .success-icon {
+    font-size: 3.5rem;
+  }
+
+  .success-main-title {
+    font-size: 1.3rem;
+  }
+
+  .success-message {
+    font-size: 0.9rem;
+  }
+}

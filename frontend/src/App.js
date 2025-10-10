@@ -19,6 +19,9 @@ import Membership from "./Pages/Membership";
 import MyPathway from "./Pages/MyPathway";
 import EmailConfirmationPage from "./Pages/EmailConfirmationPage";
 import Onboarding from "./Pages/Onboarding";
+import Checkout from "./Pages/Checkout";
+import PaymentSuccess from "./Pages/PaymentSuccess";
+import SignUpPage from "./Pages/SignUpPage";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
@@ -82,6 +85,9 @@ function App() {
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/faq" element={<FAQPage />} />
                   <Route path="/membership" element={<Membership />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/payment-success" element={<PaymentSuccess />} />
+                  <Route path="/signup" element={<SignUpPage />} />
                   <Route
                     path="/profile"
                     element={

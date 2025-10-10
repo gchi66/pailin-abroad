@@ -120,7 +120,7 @@ export default function LessonContent({
               <Link to="/signup" className="lesson-locked-signup-btn">
                 SIGN UP FOR FREE
               </Link>
-              <Link to="/pricing" className="lesson-locked-member-btn">
+              <Link to="/membership" className="lesson-locked-member-btn">
                 BECOME A MEMBER
               </Link>
             </div>

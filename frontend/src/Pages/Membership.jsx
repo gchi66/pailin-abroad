@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MembershipFeatures from "../Components/MembershipFeatures";
+import QuickSignupModal from "../Components/QuickSignupModal";
+import { useAuth } from "../AuthContext";
 import "../Styles/Membership.css";
 
 const Membership = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [showPlanWarning, setShowPlanWarning] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Always start the membership page at the top when navigated to
+  useEffect(() => {
+    // Instant jump to top to avoid preserved scroll position from previous page
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
 
   const plans = [
     {
@@ -137,9 +150,37 @@ const Membership = () => {
 
       {/* Join Button */}
       <div className="join-section">
-        <button className="join-now-btn">
+        <button
+          className={`join-now-btn ${!selectedPlan ? 'disabled' : ''}`}
+          onClick={() => {
+            // If no plan selected, show a transient warning instead of navigating
+            if (!selectedPlan) {
+              setShowPlanWarning(true);
+              // hide after 3 seconds
+              setTimeout(() => setShowPlanWarning(false), 3000);
+              return;
+            }
+
+            // Check if user is authenticated
+            if (!user) {
+              // Show signup modal if not logged in
+              setShowSignupModal(true);
+              return;
+            }
+
+            // Pass selected plan data to checkout page
+            navigate('/checkout', { state: { selectedPlan } });
+          }}
+          aria-disabled={!selectedPlan}
+        >
           JOIN NOW!
         </button>
+
+        {showPlanWarning && (
+          <div className="plan-warning" role="status">
+            Please select a payment plan
+          </div>
+        )}
       </div>
 
       {/* Guarantee */}
@@ -150,6 +191,17 @@ const Membership = () => {
       </div>
 
       <MembershipFeatures />
+
+      {/* Quick Signup Modal */}
+      <QuickSignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+        onSuccess={() => {
+          setShowSignupModal(false);
+          // User is now logged in, proceed to checkout
+          navigate('/checkout', { state: { selectedPlan } });
+        }}
+      />
     </div>
   );
 };

@@ -57,10 +57,10 @@ const Home = ({ toggleSignupModal }) => {
       <ReusablePlacementTest />
       <ChooseUs />
       <HowItWorks />
-      <SignUpCTA />
+      <SignUpCTA onSignupClick={toggleSignupModal} />
       <Characters />
       <Reviews />
-      <TakeTheLeapCTA />
+      <TakeTheLeapCTA onSignupClick={toggleSignupModal} />
       <FAQ />
 
       {message && <p className="backend-message">{message}</p>}
