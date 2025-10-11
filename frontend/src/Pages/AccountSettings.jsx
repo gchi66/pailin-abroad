@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
+import SubscriptionBilling from "../Components/SubscriptionBilling";
 import "../Styles/AccountSettings.css";
 
 const AccountSettings = () => {
@@ -182,12 +183,7 @@ const AccountSettings = () => {
 
       case "billing":
         return (
-          <div className="account-billing-section">
-            <h3 className="account-section-title">SUBSCRIPTION & BILLING</h3>
-            <div className="account-placeholder">
-              <p>Billing information and subscription management will be available here.</p>
-            </div>
-          </div>
+          <SubscriptionBilling />
         );
 
       default:
