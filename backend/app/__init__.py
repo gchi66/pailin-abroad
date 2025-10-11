@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from app.routes import routes
 from app.stripe_routes import stripe_routes
+from app.stripe_webhook import stripe_webhook
 from app.config import Config
 
 def create_app():
@@ -15,4 +16,5 @@ def create_app():
     app.config.from_object(Config)
     app.register_blueprint(routes)  # Register Blueprint
     app.register_blueprint(stripe_routes)  # Register Stripe payment routes
+    app.register_blueprint(stripe_webhook)  # Register Stripe webhook
     return app

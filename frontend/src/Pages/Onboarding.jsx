@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
@@ -18,10 +18,93 @@ const Onboarding = () => {
     confirmPassword: false
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
   const [error, setError] = useState("");
+  const [userProfile, setUserProfile] = useState(null);
+  const [skipPasswordStep, setSkipPasswordStep] = useState(false);
   const navigate = useNavigate();
   const { ui: uiLang, setUi: setUiLang } = useUiLang();
   const withUi = useWithUi();
+
+  // Fetch user profile and determine starting step
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+
+        if (userError || !user) {
+          console.error("No user found:", userError);
+          navigate("/"); // Redirect to home if no user
+          return;
+        }
+
+        // Fetch user profile from database
+        const { data: profile, error: profileError } = await supabaseClient
+          .from("users")
+          .select("is_paid, is_verified, is_active, username, avatar_image")
+          .eq("id", user.id)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching profile:", profileError);
+          // Profile doesn't exist yet, this is OK for new users
+          setLoadingProfile(false);
+          setStep(0); // Start at welcome step
+          return;
+        }
+
+        setUserProfile(profile);
+
+        // Edge case 1: If user is already active, redirect to My Pathway
+        if (profile?.is_active) {
+          console.log("User already active, redirecting to My Pathway");
+          navigate("/pathway");
+          return;
+        }
+
+        // Edge case 2: Check if email is verified (from Supabase auth, not custom field)
+        const isEmailVerified = user.email_confirmed_at !== null;
+
+        if (!isEmailVerified) {
+          console.log("User email not verified, redirecting to verify email");
+          navigate("/verify-email");
+          return;
+        }
+
+        // Update is_verified in database if email is verified but DB field is false
+        if (isEmailVerified && !profile?.is_verified) {
+          console.log("Syncing email verification to database...");
+          await supabaseClient
+            .from("users")
+            .update({ is_verified: true })
+            .eq("id", user.id);
+
+          // Update local profile state
+          setUserProfile(prev => ({ ...prev, is_verified: true }));
+        }
+
+        // Determine if we should skip password step
+        const shouldSkipPassword = profile?.is_paid === true;
+        setSkipPasswordStep(shouldSkipPassword);
+
+        // Set starting step based on user status
+        if (shouldSkipPassword) {
+          setStep(2); // Skip welcome and password, start at username/avatar
+          console.log("Paid user - skipping password step, starting at step 2");
+        } else {
+          setStep(0); // Start at welcome for regular users
+          console.log("Regular user - starting at welcome step");
+        }
+
+        setLoadingProfile(false);
+      } catch (err) {
+        console.error("Error in fetchUserProfile:", err);
+        setLoadingProfile(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [navigate]);
 
   // Helper function to pick the right language content
   const pickLang = (en, th) => {
@@ -85,20 +168,65 @@ const Onboarding = () => {
   };
 
   const nextStep = () => {
-    if (step < 4) {
-      setStep(step + 1);
-      console.log(`Moving to step ${step + 1}`);
-    } else {
-      // Complete button clicked - redirect to My Pathway
-      console.log("Onboarding completed, redirecting to My Pathway");
-      navigate("/pathway");
+    // Handle step transitions with password skip logic
+    if (step === 0) {
+      // From welcome, go to password (step 1) or username (step 2) if skipping
+      setStep(skipPasswordStep ? 2 : 1);
+    } else if (step === 1) {
+      // From password, go to username (step 2)
+      setStep(2);
+    } else if (step === 2) {
+      // From username/avatar, go to benefits (step 3)
+      setStep(3);
+    } else if (step === 3) {
+      // From benefits, go to confirmation (step 4)
+      setStep(4);
+    } else if (step === 4) {
+      // Complete button clicked - set is_active and redirect
+      handleFinishOnboarding();
     }
   };
 
   const prevStep = () => {
-    if (step > 0) {
+    // Handle backwards navigation with password skip logic
+    if (step === 2 && skipPasswordStep) {
+      // If on username and skipped password, go back to welcome (step 0)
+      setStep(0);
+    } else if (step > 0) {
       setStep(step - 1);
       console.log(`Moving back to step ${step - 1}`);
+    }
+  };
+
+  // Finish onboarding - set is_active = true for all users
+  const handleFinishOnboarding = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+
+      if (userError || !user) {
+        throw new Error("User not found");
+      }
+
+      // Update is_active and is_verified to true
+      const { error: updateError } = await supabaseClient
+        .from("users")
+        .update({ is_active: true })
+        .eq("id", user.id);
+
+      if (updateError) {
+        throw new Error(updateError.message);
+      }
+
+      console.log("Onboarding completed, user is now active");
+      navigate("/pathway");
+    } catch (err) {
+      console.error("Error completing onboarding:", err);
+      setError(err.message || "Failed to complete onboarding");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -255,6 +383,11 @@ const Onboarding = () => {
   };
 
   const renderStepContent = () => {
+    // Don't render password step if it should be skipped
+    if (step === 1 && skipPasswordStep) {
+      return null;
+    }
+
     switch (step) {
       case 0:
         return (
@@ -466,10 +599,11 @@ const Onboarding = () => {
               {uiText.confirmationSubtitle}
             </p>
             <button
-              onClick={() => navigate(withUi("/pathway", uiLang))}
+              onClick={handleFinishOnboarding}  // ✅ Call the function that sets is_active
               className="submit-btn onboarding-confirmation-button"
+              disabled={isLoading}
             >
-              {uiText.getStarted}
+              {isLoading ? "Setting up..." : uiText.getStarted}
             </button>
           </div>
         );
@@ -480,16 +614,46 @@ const Onboarding = () => {
 
   const renderProgressDots = () => {
     const dots = [];
-    for (let i = 0; i < 4; i++) {
+    // Calculate which steps to show
+    // If skipPasswordStep, we have: 0 (welcome), 2 (username), 3 (benefits), 4 (confirmation)
+    // Map visual dots to actual steps
+    const totalVisualDots = skipPasswordStep ? 3 : 4;
+
+    let currentDotIndex;
+    if (skipPasswordStep) {
+      // Map: step 0→dot 0, step 2→dot 1, step 3→dot 2, step 4→dot 3
+      if (step === 0) currentDotIndex = 0;
+      else if (step === 2) currentDotIndex = 1;
+      else if (step === 3) currentDotIndex = 2;
+      else if (step === 4) currentDotIndex = 3;
+    } else {
+      // Normal: step 0→dot 0, step 1→dot 1, step 2→dot 2, step 3→dot 3, step 4 (no dot, just finish)
+      currentDotIndex = step;
+    }
+
+    for (let i = 0; i < totalVisualDots; i++) {
       dots.push(
         <div
           key={i}
-          className={`onboarding-dot ${i === step ? 'active' : ''}`}
+          className={`onboarding-dot ${i === currentDotIndex ? 'active' : ''}`}
         />
       );
     }
     return dots;
   };
+
+  // Show loading state while fetching profile
+  if (loadingProfile) {
+    return (
+      <div className="onboarding-main">
+        <div className="onboarding-container">
+          <div className="onboarding-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="onboarding-main">

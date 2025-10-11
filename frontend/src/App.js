@@ -21,6 +21,7 @@ import EmailConfirmationPage from "./Pages/EmailConfirmationPage";
 import Onboarding from "./Pages/Onboarding";
 import Checkout from "./Pages/Checkout";
 import PaymentSuccess from "./Pages/PaymentSuccess";
+import VerifyEmail from "./Pages/VerifyEmail";
 import SignUpPage from "./Pages/SignUpPage";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
@@ -49,6 +50,7 @@ function App() {
           <Routes>
             {/* Full-screen onboarding route - isolated from main app structure */}
             <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/email-confirmation" element={<EmailConfirmationPage />} />
             <Route path="/reset-password" element={<div style={{ padding: '2rem', textAlign: 'center' }}>
               <h2>Password Reset</h2>

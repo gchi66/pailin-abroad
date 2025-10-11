@@ -496,20 +496,28 @@ def confirm_email():
         existing_user = supabase.table('users').select('*').eq('id', user_id).execute()
 
         if not existing_user.data:
-            # Create user record in users table
+            # Create user record in users table and mark verified
             user_insert_result = supabase.table('users').insert({
                 'id': user_id,
                 'email': user_email,
                 'username': user_email,  # Default username to email, can be changed in onboarding
-                'password_hash': 'pending_onboarding'  # Flag that email is confirmed but password needs to be set
+                'password_hash': 'pending_onboarding',  # Flag that email is confirmed but password needs to be set
+                'is_verified': True
             }).execute()
 
             if user_insert_result.data:
-                print(f"User record created successfully for {user_email}")
+                print(f"User record created successfully for {user_email} and marked verified")
             else:
                 print(f"Warning: User record creation may have failed for {user_email}")
         else:
-            print(f"User record already exists for {user_email}")
+            # Ensure existing user is marked verified
+            try:
+                supabase.table('users').update({
+                    'is_verified': True
+                }).eq('id', user_id).execute()
+                print(f"User record already exists for {user_email}, updated is_verified")
+            except Exception as upd_e:
+                print(f"Warning: failed to update existing user's is_verified: {upd_e}")
 
         return jsonify({
             "message": "Email confirmed successfully!",

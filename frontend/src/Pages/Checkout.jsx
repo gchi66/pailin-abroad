@@ -67,6 +67,7 @@ const CheckoutForm = () => {
           body: JSON.stringify({
             amount: selectedPlan.totalPrice,
             currency: 'thb',
+            // Don't pass email yet - will add it when submitting
           }),
         });
 
@@ -105,6 +106,30 @@ const CheckoutForm = () => {
     setError(null);
 
     try {
+      // Extract payment_intent_id from client secret
+      const paymentIntentId = clientSecret.split('_secret_')[0];
+
+      // Update PaymentIntent with email before confirming
+      const updateResponse = await fetch('http://127.0.0.1:5000/api/update-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          payment_intent_id: paymentIntentId,
+          email: formData.email,
+        }),
+      });
+
+      const updateData = await updateResponse.json();
+
+      if (updateData.error) {
+        setError('Failed to update payment. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      // Now confirm the payment
       const cardElement = elements.getElement(CardElement);
 
       const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
@@ -125,6 +150,8 @@ const CheckoutForm = () => {
         setLoading(false);
       } else if (paymentIntent.status === 'succeeded') {
         // Payment successful - redirect to success page
+        console.log('✅ Payment succeeded!', paymentIntent);
+        console.log('Payment Intent ID:', paymentIntent.id);
         navigate('/payment-success');
       }
     } catch (err) {

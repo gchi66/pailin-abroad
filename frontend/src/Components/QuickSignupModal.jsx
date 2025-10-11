@@ -46,7 +46,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
         email: formData.email,
         password: formData.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/onboarding`,
           data: {
             is_verified: false // Set custom metadata
           }
@@ -74,10 +74,9 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="quick-signup-overlay" onClick={onClose}>
+    <div className="quick-signup-overlay">
       <div
         className="quick-signup-modal"
-        onClick={(e) => e.stopPropagation()}
       >
         <button className="close-btn" onClick={onClose}>×</button>
 
