@@ -207,11 +207,11 @@ const SubscriptionBilling = () => {
       if (response.ok) {
         const data = await response.json();
 
-        // Update local state
+        // Update local state - keep is_paid true until period ends
         setUserProfile({
           ...userProfile,
-          is_paid: false,
           subscription_status: 'canceled'
+          // is_paid stays true - user retains access until current_period_end
         });
 
         setShowCancelConfirm(false);
@@ -233,10 +233,18 @@ const SubscriptionBilling = () => {
     return `฿${(amount / 100).toFixed(0)}`;
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
+  const formatDate = (timestamp) => {
+    if (!timestamp) return "N/A";
+
     try {
-      return format(new Date(dateString), "MMMM dd, yyyy");
+      // If it's a Unix timestamp (number), convert to milliseconds
+      const date = typeof timestamp === 'number'
+        ? new Date(timestamp * 1000)  // Unix timestamps are in seconds
+        : new Date(timestamp);
+
+      if (isNaN(date.getTime())) return "N/A";
+
+      return format(date, "MMMM dd, yyyy");
     } catch {
       return "N/A";
     }

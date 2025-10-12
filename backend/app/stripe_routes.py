@@ -9,6 +9,20 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 stripe_routes = Blueprint('stripe_routes', __name__)
 
 
+def get_current_period_end(subscription):
+    """
+    Extract current_period_end from subscription.
+    For Flexible Billing mode, it's in items.data[0].
+    For standard mode, it's at subscription level.
+    """
+    # Try Flexible Billing first
+    items = getattr(subscription, 'items', None)
+    if items and hasattr(items, 'data') and len(items.data) > 0:
+        return getattr(items.data[0], 'current_period_end', None)
+    # Fallback to standard location
+    return getattr(subscription, 'current_period_end', None)
+
+
 @stripe_routes.route('/api/create-checkout-session', methods=['POST'])
 def create_checkout_session():
     """
@@ -120,16 +134,34 @@ def get_payment_method():
 
         stripe_customer_id = result.data['stripe_customer_id']
 
+        print(f"🔍 Fetching payment method for customer: {stripe_customer_id}")
+
         # Retrieve customer from Stripe
         customer = stripe.Customer.retrieve(stripe_customer_id)
 
-        if not customer.invoice_settings.default_payment_method:
+        payment_method_id = None
+
+        # First try customer's invoice_settings
+        if customer.invoice_settings.default_payment_method:
+            payment_method_id = customer.invoice_settings.default_payment_method
+            print(f"💳 Found payment method in customer.invoice_settings: {payment_method_id}")
+        else:
+            # Fallback: get from subscription
+            print("⚠️ No payment method in customer.invoice_settings, checking subscription...")
+            # Get user's subscription ID
+            user_sub_result = supabase.table('users').select('stripe_subscription_id').eq('id', user_id).single().execute()
+            if user_sub_result.data and user_sub_result.data.get('stripe_subscription_id'):
+                subscription_id = user_sub_result.data['stripe_subscription_id']
+                subscription = stripe.Subscription.retrieve(subscription_id)
+                payment_method_id = getattr(subscription, 'default_payment_method', None)
+                print(f"💳 Found payment method in subscription: {payment_method_id}")
+
+        if not payment_method_id:
+            print("⚠️ No payment method found in customer OR subscription")
             return jsonify({"payment_method": None}), 200
 
         # Get payment method details
-        payment_method = stripe.PaymentMethod.retrieve(
-            customer.invoice_settings.default_payment_method
-        )
+        payment_method = stripe.PaymentMethod.retrieve(payment_method_id)
 
         # Return card details
         return jsonify({
@@ -278,25 +310,42 @@ def cancel_subscription():
 
         stripe_subscription_id = result.data['stripe_subscription_id']
 
+        print(f"📋 Cancelling subscription: {stripe_subscription_id}")
+
         # Cancel subscription at period end (not immediately)
         subscription = stripe.Subscription.modify(
             stripe_subscription_id,
             cancel_at_period_end=True
         )
 
+        print(f"✅ Subscription modified. cancel_at_period_end: {subscription.cancel_at_period_end}")
+        print(f"📅 cancel_at: {getattr(subscription, 'cancel_at', 'N/A')}")
+
+        # Retrieve full subscription with items expanded to get current_period_end
+        full_subscription = stripe.Subscription.retrieve(
+            stripe_subscription_id,
+            expand=['items.data']
+        )
+
+        # Extract current_period_end (handles Flexible Billing mode)
+        current_period_end = get_current_period_end(full_subscription)
+        print(f"📅 current_period_end extracted: {current_period_end}")
+
         # Update database
         supabase.table('users').update({
             'subscription_status': 'canceled'
         }).eq('id', user_id).execute()
 
-        print(f"Subscription {stripe_subscription_id} scheduled for cancellation for user {user_id}")
+        print(f"✅ Subscription {stripe_subscription_id} scheduled for cancellation for user {user_id}")
 
         return jsonify({
             "message": "Subscription cancelled. You'll retain access until the end of your billing period.",
-            "cancel_at": subscription.cancel_at,
-            "current_period_end": subscription.current_period_end
+            "cancel_at": getattr(subscription, 'cancel_at', current_period_end),
+            "current_period_end": current_period_end
         }), 200
 
     except Exception as e:
-        print(f"Error cancelling subscription: {e}")
+        print(f"❌ Error cancelling subscription: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 400
