@@ -1,43 +1,72 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { useWithUi } from "../ui-lang/withUi";
+import { t } from "../ui-lang/i18n";
 import "../Styles/TopicLibrary.css";
 
 const TopicLibrary = () => {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { ui: uiLang } = useUiLang();
+  const withUi = useWithUi();
 
   useEffect(() => {
+    const controller = new AbortController();
+    let isActive = true;
     const fetchTopics = async () => {
       try {
-        const response = await fetch('/api/topic-library');
+        if (isActive) {
+          setLoading(true);
+          setError(null);
+        }
+        const response = await fetch(`/api/topic-library?lang=${uiLang}`, {
+          signal: controller.signal,
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch topics');
         }
         const data = await response.json();
-        setTopics(data.topics || []);
+        if (isActive) {
+          setTopics(data.topics || []);
+        }
       } catch (err) {
-        console.error('Error fetching topics:', err);
-        setError(err.message);
+        if (err.name !== "AbortError") {
+          console.error('Error fetching topics:', err);
+          if (isActive) {
+            setError(err.message);
+          }
+        }
       } finally {
-        setLoading(false);
+        if (isActive) {
+          setLoading(false);
+        }
       }
     };
 
     fetchTopics();
-  }, []);
+    return () => {
+      isActive = false;
+      controller.abort();
+    };
+  }, [uiLang]);
 
   if (loading) {
     return (
       <div className="topic-library-page-container">
         <header className="topic-library-page-header">
           <div className="topic-library-header-content">
-            <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
-            <p className="topic-library-page-subtitle">Further explanations on a range of interesting ESL topics</p>
+            <h1 className="topic-library-page-header-text">
+              {t("topicLibraryPage.title", uiLang)}
+            </h1>
+            <p className="topic-library-page-subtitle">
+              {t("topicLibraryPage.subtitle", uiLang)}
+            </p>
           </div>
         </header>
         <div className="topic-library-content">
-          <p>Loading topics...</p>
+          <p>{t("topicLibraryPage.loading", uiLang)}</p>
         </div>
       </div>
     );
@@ -48,12 +77,16 @@ const TopicLibrary = () => {
       <div className="topic-library-page-container">
         <header className="topic-library-page-header">
           <div className="topic-library-header-content">
-            <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
-            <p className="topic-library-page-subtitle">Further explanations on a range of interesting ESL topics</p>
+            <h1 className="topic-library-page-header-text">
+              {t("topicLibraryPage.title", uiLang)}
+            </h1>
+            <p className="topic-library-page-subtitle">
+              {t("topicLibraryPage.subtitle", uiLang)}
+            </p>
           </div>
         </header>
         <div className="topic-library-content">
-          <p>Error: {error}</p>
+          <p>{`${t("topicLibraryPage.errorTitle", uiLang)}: ${error}`}</p>
         </div>
       </div>
     );
@@ -64,8 +97,12 @@ const TopicLibrary = () => {
       {/* page header */}
       <header className="topic-library-page-header">
         <div className="topic-library-header-content">
-          <h1 className="topic-library-page-header-text">TOPIC LIBRARY</h1>
-          <p className="topic-library-page-subtitle">Further explanations on a range of interesting ESL topics</p>
+          <h1 className="topic-library-page-header-text">
+            {t("topicLibraryPage.title", uiLang)}
+          </h1>
+          <p className="topic-library-page-subtitle">
+            {t("topicLibraryPage.subtitle", uiLang)}
+          </p>
         </div>
       </header>
 
@@ -74,14 +111,14 @@ const TopicLibrary = () => {
         <div className="topic-library-list">
           {topics.length === 0 ? (
             <div className="topic-library-placeholder">
-              <h3>No topics available yet</h3>
-              <p>Topics will appear here when they are added to the library.</p>
+              <h3>{t("topicLibraryPage.emptyTitle", uiLang)}</h3>
+              <p>{t("topicLibraryPage.emptyBody", uiLang)}</p>
             </div>
           ) : (
             topics.map((topic, index) => (
               <Link
                 key={topic.id}
-                to={`/topic-library/${topic.slug}`}
+                to={withUi(`/topic-library/${topic.slug}`)}
                 className="topic-library-item"
               >
                 <div className="topic-library-content-wrapper">

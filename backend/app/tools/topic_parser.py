@@ -18,6 +18,7 @@ python -m app.tools.topic_parser <document_id> --output data/topic_library.json 
 
 from __future__ import annotations
 import argparse
+import copy
 import dataclasses
 import json
 import logging
@@ -91,16 +92,39 @@ def bilingualize_headers_th(nodes, default_level=4):
     FOCUS_TH = "จุดเน้นบทเรียน"
     out = []
 
+    def _combined_inline(node, en_text, th_text):
+        combined = " ".join(filter(None, [en_text, th_text])).strip()
+        if not combined:
+            combined = node_plain_text(node).strip()
+        template = (node.get("inlines") or [{}])[0]
+        return [{
+            "text": combined or "",
+            "bold": template.get("bold", False),
+            "italic": template.get("italic", False),
+            "underline": template.get("underline", False)
+        }]
+
+    def _update_heading(node, level, en_text, th_text):
+        heading = {**node}
+        heading["kind"] = "heading"
+        heading["level"] = level
+        text_dict = {}
+        if en_text:
+            text_dict["en"] = en_text
+        if th_text:
+            text_dict["th"] = th_text
+        if text_dict:
+            heading["text"] = text_dict
+        heading["inlines"] = _combined_inline(node, en_text, th_text)
+        heading.pop("is_bold_header", None)
+        return heading
+
     for n in nodes:
         # Handle LESSON FOCUS specifically
         if n.get("kind") == "paragraph":
             para_text = node_plain_text(n).strip()
             if para_text.upper() == FOCUS_EN:
-                out.append({
-                    "kind": "heading",
-                    "level": 3,
-                    "text": {"en": FOCUS_EN, "th": FOCUS_TH},
-                })
+                out.append(_update_heading(n, 3, FOCUS_EN, FOCUS_TH))
                 continue
 
         # For existing headings, apply bilingual split
@@ -109,21 +133,14 @@ def bilingualize_headers_th(nodes, default_level=4):
             if isinstance(n.get("text"), dict):
                 text_en = (n["text"].get("en") or "").strip().upper()
                 if text_en == FOCUS_EN and not n["text"].get("th"):
-                    n = {**n, "text": {**n["text"], "th": FOCUS_TH}}
-                    out.append(n)
+                    out.append(_update_heading(n, n.get("level", default_level), FOCUS_EN, FOCUS_TH))
                     continue
 
             # Apply bilingual split to ALL headings
             s = node_plain_text(n)
             en, th = split_en_th(s)
             if en or th:
-                new_heading = {**n}
-                new_heading.update({
-                    "kind": "heading",
-                    "level": n.get("level", default_level),
-                    "text": {"en": en, "th": th}
-                })
-                out.append(new_heading)
+                out.append(_update_heading(n, n.get("level", default_level), en, th))
             else:
                 out.append(n)
             continue
@@ -145,11 +162,7 @@ def bilingualize_headers_th(nodes, default_level=4):
             if has_th and (looks_like_title or n.get("is_bold_header")):
                 en, th = split_en_th(s)
                 if en or th:
-                    out.append({
-                        "kind": "heading",
-                        "level": default_level,
-                        "text": {"en": en, "th": th}
-                    })
+                    out.append(_update_heading(n, default_level, en, th))
                     continue
 
         out.append(n)
@@ -197,7 +210,10 @@ def _extract_title_from_doc(doc_json: dict) -> str:
     return "Untitled Topic"
 
 
-def _table_block(elem: dict, tbl_id: int) -> dict:
+TABLE_HEADING_RE = re.compile(r'^TABLE[-\s]*\d+[:：]?$' , re.IGNORECASE)
+
+
+def _table_block(elem: dict, tbl_id: int, label: str | None = None) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
     rows = []
     for row in elem["table"]["tableRows"]:
@@ -214,7 +230,7 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
             row_cells.append("\n".join(cell_lines))
         rows.append(row_cells)
 
-    return {
+    table_node = {
         "kind": "table",
         "type": "table",
         "id": f"table-{tbl_id}",
@@ -222,6 +238,11 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
         "cols": len(rows[0]) if rows else 0,
         "cells": rows,
     }
+
+    if label:
+        table_node["table_label"] = label.strip()
+
+    return table_node
 
 
 # ───────────────────────────── TopicParser class
@@ -242,6 +263,7 @@ class TopicParser:
         # Collect all nodes from the document
         all_nodes = []
         table_counter = 0
+        pending_table_label: str | None = None
 
         for elem in doc_json.get("body", {}).get("content", []):
             if "paragraph" in elem:
@@ -257,11 +279,21 @@ class TopicParser:
                         for inline in node_dict["inlines"]:
                             inline.pop("link", None)
 
+                    # Detect TABLE-XX headings and treat them as labels for the next table
+                    if node_dict.get("kind") in {"heading", "header"}:
+                        heading_text = node_plain_text(node_dict).strip()
+                        if heading_text and TABLE_HEADING_RE.match(heading_text):
+                            pending_table_label = heading_text
+                            continue
+                        else:
+                            pending_table_label = None
+
                     all_nodes.append(node_dict)
 
             elif "table" in elem:
                 table_counter += 1
-                table_node = _table_block(elem, table_counter)
+                table_node = _table_block(elem, table_counter, label=pending_table_label)
+                pending_table_label = None
                 all_nodes.append(table_node)
 
         # Split into topics based on level 3 headings (but ignore TABLE-XX headings)
@@ -279,30 +311,92 @@ class TopicParser:
 
             if is_topic_heading:
                 if current_topic:
+                    slug_value = _slugify(current_topic["slug_source"]) or _slugify(current_topic["display_name"]) or "topic"
                     topics.append({
-                        "name": current_topic,
-                        "slug": _slugify(current_topic),
+                        "name": current_topic["display_name"],
+                        "slug": slug_value,
                         "content_jsonb": current_nodes,
                         "tags": []
                     })
-                current_topic = get_heading_text(node)
+                raw_heading = node_plain_text(node).strip()
+                en_head, th_head = split_en_th(raw_heading)
+                display_name = " ".join(filter(None, [en_head, th_head])) or raw_heading
+                slug_source = en_head or raw_heading
+                current_topic = {
+                    "display_name": display_name.strip(),
+                    "slug_source": slug_source.strip() if slug_source else display_name.strip(),
+                    "en_text": en_head,
+                    "th_text": th_head
+                }
                 current_nodes = []
             else:
                 current_nodes.append(node)
 
         # Don't forget last topic
         if current_topic:
+            slug_value = _slugify(current_topic["slug_source"]) or _slugify(current_topic["display_name"]) or "topic"
             topics.append({
-                "name": current_topic,
-                "slug": _slugify(current_topic),
+                "name": current_topic["display_name"],
+                "slug": slug_value,
                 "content_jsonb": current_nodes,
                 "tags": []
             })
 
+        # Merge stray headings that produced empty topic shells back into the previous topic
+        merged_topics: list[dict] = []
+        for topic in topics:
+            name = (topic.get("name") or "").strip()
+            if not name:
+                if merged_topics:
+                    merged_topics[-1]["content_jsonb"].extend(topic.get("content_jsonb", []))
+                    logger.debug("Merged orphan topic content into previous topic (slug=%s)", merged_topics[-1].get("slug"))
+                else:
+                    # Nothing to merge into; skip entirely
+                    logger.warning("Dropping orphan topic with empty name and no previous topic to attach to.")
+                continue
+            merged_topics.append(topic)
+        topics = merged_topics
+
         # Apply bilingual processing if Thai
         if lang == 'th':
             for topic in topics:
-                topic["content_jsonb"] = bilingualize_headers_th(topic["content_jsonb"])
+                # First, split bilingual headings and paragraph titles similarly to parser.py
+                nodes_bi = bilingualize_headers_th(topic["content_jsonb"], default_level=3)
+                processed_nodes = []
+                for node in nodes_bi:
+                    n = copy.deepcopy(node)
+                    txt = n.get('text')
+                    if isinstance(txt, dict):
+                        en_text = (txt.get('en') or "").strip() or None
+                        th_text = (txt.get('th') or "").strip() or None
+                        text_dict = {}
+                        if en_text:
+                            text_dict['en'] = en_text
+                        if th_text:
+                            text_dict['th'] = th_text
+                        if text_dict:
+                            n['text'] = text_dict
+                        else:
+                            n.pop('text', None)
+
+                        combined = " ".join(filter(None, [en_text, th_text])).strip()
+                        if combined:
+                            template = (n.get('inlines') or [{}])[0]
+                            n['inlines'] = [{
+                                'text': combined,
+                                'bold': template.get('bold', False),
+                                'italic': template.get('italic', False),
+                                'underline': template.get('underline', False)
+                            }]
+                    processed_nodes.append(n)
+
+                en_name, th_name = split_en_th(topic.get('name', ''))
+                display_name = " ".join(filter(None, [en_name, th_name])).strip()
+                if display_name:
+                    topic['name'] = display_name
+
+                topic['content_jsonb'] = processed_nodes
+                topic['content_jsonb_th'] = copy.deepcopy(processed_nodes)
 
         return topics
 

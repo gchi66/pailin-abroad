@@ -20,12 +20,6 @@ export default function TopicRichSectionRenderer({
 }) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
-  console.log("TopicRichSectionRenderer input nodes:", nodes.map((n, i) => ({
-    index: i,
-    kind: n.kind,
-    text: n.inlines?.[0]?.text?.substring(0, 30)
-  })));
-
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines) => {
     return inlines.map((span, m) => {
@@ -180,7 +174,6 @@ export default function TopicRichSectionRenderer({
         {sections.map((sec, i) => {
           // If section has no heading, render content directly
           if (!sec.heading) {
-            console.log("Rendering no-heading section:", sec.key, "with", sec.body.length, "items");
             return (
               <div key={sec.key} className="markdown-content no-heading">
                 {sec.body.map((node, k) => renderNode(node, k))}
@@ -195,7 +188,6 @@ export default function TopicRichSectionRenderer({
             .trim()
             .replace(/^\t+/, ""); // Remove leading tabs
 
-          console.log("Rendering accordion section:", cleanHeadingText);
           // Render as accordion section
           return (
             <details key={sec.key} className="markdown-item" open={i === 0}>

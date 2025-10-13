@@ -180,7 +180,7 @@ def upsert_topic(data, lang="en", dry_run=False):
 
     if lang == "en":
         # Resolve sentinel links in content_jsonb
-        content_jsonb = data["content_jsonb"]
+        content_jsonb = data.get("content_jsonb") or []
         if content_jsonb:
             content_jsonb = _resolve_sentinel_links(content_jsonb, supabase)
 
@@ -194,6 +194,10 @@ def upsert_topic(data, lang="en", dry_run=False):
 
         if "idx" in data and data["idx"] is not None:
             record["idx"] = data["idx"]
+
+        subtitle = data.get("subtitle")
+        if isinstance(subtitle, str) and subtitle.strip():
+            record["subtitle"] = subtitle.strip()
 
         if dry_run:
             print(f"\n[DRY RUN] Topic EN UPSERT:")
@@ -240,19 +244,32 @@ def upsert_topic(data, lang="en", dry_run=False):
 
     # ---------- TH path: update-only ----------
     # Resolve sentinel links in content_jsonb_th
-    content_jsonb_th = data["content_jsonb"]
+    content_jsonb_th = data.get("content_jsonb_th") or data.get("content_jsonb") or []
     if content_jsonb_th:
         content_jsonb_th = _resolve_sentinel_links(content_jsonb_th, supabase)
 
+    name_th_val = data.get("name_th") or data.get("name") or ""
+    subtitle_th_val = data.get("subtitle_th") or data.get("subtitle") or ""
+
+    name_th = _extract_th(name_th_val)
+    if not name_th and isinstance(name_th_val, str):
+        name_th = name_th_val.strip()
+
     th_update = {
-        "name_th": data["name"].strip(),
+        "name_th": name_th,
         "content_jsonb_th": content_jsonb_th
     }
+
+    subtitle_th_val = _extract_th(subtitle_th_val)
+    if subtitle_th_val:
+        th_update["subtitle_th"] = subtitle_th_val
 
     if dry_run:
         print(f"\n[DRY RUN] Topic TH UPDATE where slug='{slug}':")
         print(f"  name_th: {th_update['name_th']}")
         print(f"  content_jsonb_th nodes: {len(th_update['content_jsonb_th'])}")
+        if subtitle_th_val:
+            print(f"  subtitle_th: {subtitle_th_val}")
         return True
 
     try:
