@@ -15,12 +15,25 @@ def get_current_period_end(subscription):
     For Flexible Billing mode, it's in items.data[0].
     For standard mode, it's at subscription level.
     """
+    print(f"🔍 Extracting current_period_end from subscription type: {type(subscription)}")
+
     # Try Flexible Billing first
     items = getattr(subscription, 'items', None)
-    if items and hasattr(items, 'data') and len(items.data) > 0:
-        return getattr(items.data[0], 'current_period_end', None)
+    print(f"🔍 items: {items}, type: {type(items)}")
+
+    if items and hasattr(items, 'data'):
+        print(f"🔍 items.data length: {len(items.data) if items.data else 0}")
+        if len(items.data) > 0:
+            first_item = items.data[0]
+            cpe = getattr(first_item, 'current_period_end', None)
+            print(f"🔍 Found current_period_end in items.data[0]: {cpe}")
+            if cpe:
+                return cpe
+
     # Fallback to standard location
-    return getattr(subscription, 'current_period_end', None)
+    cpe = getattr(subscription, 'current_period_end', None)
+    print(f"🔍 current_period_end at subscription level: {cpe}")
+    return cpe
 
 
 @stripe_routes.route('/api/create-checkout-session', methods=['POST'])
@@ -319,7 +332,7 @@ def cancel_subscription():
         )
 
         print(f"✅ Subscription modified. cancel_at_period_end: {subscription.cancel_at_period_end}")
-        print(f"📅 cancel_at: {getattr(subscription, 'cancel_at', 'N/A')}")
+        print(f"📅 cancel_at from modified subscription: {getattr(subscription, 'cancel_at', 'N/A')}")
 
         # Retrieve full subscription with items expanded to get current_period_end
         full_subscription = stripe.Subscription.retrieve(
@@ -329,18 +342,23 @@ def cancel_subscription():
 
         # Extract current_period_end (handles Flexible Billing mode)
         current_period_end = get_current_period_end(full_subscription)
-        print(f"📅 current_period_end extracted: {current_period_end}")
+        cancel_at = getattr(full_subscription, 'cancel_at', current_period_end)
 
-        # Update database
+        print(f"📅 current_period_end extracted: {current_period_end}")
+        print(f"📅 cancel_at extracted: {cancel_at}")
+
+        # Update database with cancellation info
         supabase.table('users').update({
-            'subscription_status': 'canceled'
+            'subscription_status': 'canceled',
+            'cancel_at_period_end': True,
+            'cancel_at': cancel_at
         }).eq('id', user_id).execute()
 
         print(f"✅ Subscription {stripe_subscription_id} scheduled for cancellation for user {user_id}")
 
         return jsonify({
             "message": "Subscription cancelled. You'll retain access until the end of your billing period.",
-            "cancel_at": getattr(subscription, 'cancel_at', current_period_end),
+            "cancel_at": cancel_at,
             "current_period_end": current_period_end
         }), 200
 

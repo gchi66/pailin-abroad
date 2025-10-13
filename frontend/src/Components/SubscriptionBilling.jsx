@@ -37,7 +37,7 @@ const SubscriptionBilling = () => {
         // Fetch user profile from Supabase
         const { data: profile, error: profileError } = await supabaseClient
           .from("users")
-          .select("stripe_subscription_id, subscription_status, current_period_end, is_paid")
+          .select("stripe_subscription_id, subscription_status, current_period_end, is_paid, cancel_at_period_end, cancel_at")
           .eq("id", user.id)
           .single();
 
@@ -210,7 +210,9 @@ const SubscriptionBilling = () => {
         // Update local state - keep is_paid true until period ends
         setUserProfile({
           ...userProfile,
-          subscription_status: 'canceled'
+          subscription_status: 'canceled',
+          cancel_at_period_end: true,
+          cancel_at: data.cancel_at
           // is_paid stays true - user retains access until current_period_end
         });
 
@@ -299,9 +301,11 @@ const SubscriptionBilling = () => {
             <span className="detail-value">Premium Monthly</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Next Billing Date</span>
+            <span className="detail-label">
+              {userProfile?.cancel_at_period_end ? 'Cancels On' : 'Next Billing Date'}
+            </span>
             <span className="detail-value">
-              {formatDate(userProfile?.current_period_end)}
+              {formatDate(userProfile?.cancel_at_period_end ? userProfile?.cancel_at : userProfile?.current_period_end)}
             </span>
           </div>
           <div className="detail-row">
@@ -312,6 +316,11 @@ const SubscriptionBilling = () => {
             <span className="detail-label">Status</span>
             <span className={`status-badge ${userProfile?.subscription_status}`}>
               {userProfile?.subscription_status?.toUpperCase() || 'ACTIVE'}
+              {userProfile?.cancel_at_period_end && userProfile?.cancel_at && (
+                <span className="cancel-notice">
+                  {' '}(Cancels {formatDate(userProfile.cancel_at)})
+                </span>
+              )}
             </span>
           </div>
         </div>
@@ -382,42 +391,44 @@ const SubscriptionBilling = () => {
       </section>
 
       {/* CANCEL MEMBERSHIP SECTION */}
-      <section className="billing-section cancel-section">
-        <h3 className="section-title warning">CANCEL MEMBERSHIP</h3>
-        <div className="cancel-warning">
-          <p>
-            Cancelling your membership will remove access to all premium features at the end of your current billing period.
-          </p>
-          {showCancelConfirm && (
-            <div className="confirm-cancel">
-              <p className="confirm-text">Are you absolutely sure? This action cannot be undone.</p>
-              <div className="confirm-actions">
-                <button
-                  className="action-btn secondary"
-                  onClick={() => setShowCancelConfirm(false)}
-                >
-                  KEEP SUBSCRIPTION
-                </button>
-                <button
-                  className="action-btn danger"
-                  onClick={handleCancelSubscription}
-                  disabled={actionLoading.cancel}
-                >
-                  {actionLoading.cancel ? "CANCELLING..." : "YES, CANCEL"}
-                </button>
+      {!userProfile?.cancel_at_period_end && (
+        <section className="billing-section cancel-section">
+          <h3 className="section-title warning">CANCEL MEMBERSHIP</h3>
+          <div className="cancel-warning">
+            <p>
+              Cancelling your membership will remove access to all premium features at the end of your current billing period.
+            </p>
+            {showCancelConfirm && (
+              <div className="confirm-cancel">
+                <p className="confirm-text">Are you absolutely sure? This action cannot be undone.</p>
+                <div className="confirm-actions">
+                  <button
+                    className="action-btn secondary"
+                    onClick={() => setShowCancelConfirm(false)}
+                  >
+                    KEEP SUBSCRIPTION
+                  </button>
+                  <button
+                    className="action-btn danger"
+                    onClick={handleCancelSubscription}
+                    disabled={actionLoading.cancel}
+                  >
+                    {actionLoading.cancel ? "CANCELLING..." : "YES, CANCEL"}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-          {!showCancelConfirm && (
-            <button
-              className="action-btn danger"
-              onClick={() => setShowCancelConfirm(true)}
-            >
-              CANCEL MEMBERSHIP
-            </button>
-          )}
-        </div>
-      </section>
+            )}
+            {!showCancelConfirm && (
+              <button
+                className="action-btn danger"
+                onClick={() => setShowCancelConfirm(true)}
+              >
+                CANCEL MEMBERSHIP
+              </button>
+            )}
+          </div>
+        </section>
+      )}
     </div>
   );
 };

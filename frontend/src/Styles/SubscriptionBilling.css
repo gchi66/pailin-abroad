@@ -125,6 +125,16 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-badge .cancel-notice {
+  font-weight: 500;
+  font-size: 0.7rem;
+  text-transform: none;
+  opacity: 0.9;
 }
 
 .status-badge.active {

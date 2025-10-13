@@ -132,7 +132,9 @@ def stripe_webhook_handler():
                 'stripe_customer_id': customer_id,
                 'stripe_subscription_id': subscription_id,
                 'subscription_status': subscription.status,
-                'current_period_end': to_iso_date(current_period_end_value)
+                'current_period_end': to_iso_date(current_period_end_value),
+                'cancel_at_period_end': getattr(subscription, 'cancel_at_period_end', False),
+                'cancel_at': to_iso_date(getattr(subscription, 'cancel_at', None))
             }).eq('email', customer_email).execute()
 
             if result.data:
@@ -183,7 +185,9 @@ def stripe_webhook_handler():
                 supabase.table('users').update({
                     'is_paid': True,
                     'subscription_status': subscription.status,
-                    'current_period_end': to_iso_date(current_period_end_value)
+                    'current_period_end': to_iso_date(current_period_end_value),
+                    'cancel_at_period_end': getattr(subscription, 'cancel_at_period_end', False),
+                    'cancel_at': to_iso_date(getattr(subscription, 'cancel_at', None))
                 }).eq('stripe_customer_id', customer_id).execute()
 
                 print(f"✅ Renewed subscription for customer: {customer_id}")
@@ -207,7 +211,9 @@ def stripe_webhook_handler():
             supabase.table('users').update({
                 'subscription_status': status,
                 'current_period_end': to_iso_date(current_period_end_value),
-                'is_paid': status in ['active', 'trialing']  # Only paid if active or trialing
+                'is_paid': status in ['active', 'trialing'],  # Only paid if active or trialing
+                'cancel_at_period_end': subscription.get('cancel_at_period_end', False),
+                'cancel_at': to_iso_date(subscription.get('cancel_at'))
             }).eq('stripe_customer_id', customer_id).execute()
 
         except Exception as e:
