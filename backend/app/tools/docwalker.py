@@ -26,6 +26,7 @@ class Node:
     level: int | None = None      # heading level (1-6) or None
     inlines: list[Inline] = field(default_factory=list)
     indent: int = 0               # nesting level
+    style: str = ""               # named style (e.g. HEADING_3, NORMAL_TEXT)
 
 
 # ────────────────────────────────────────────────────────────
@@ -176,27 +177,27 @@ def paragraph_nodes(doc_json: dict):
             lvl = 3
             if style_name.startswith("HEADING_") and style_name[-1].isdigit():
                 lvl = int(style_name[-1])
-            yield Node(kind="heading", level=lvl, inlines=spans, indent=indent)
+            yield Node(kind="heading", level=lvl, inlines=spans, indent=indent, style=style_name)
             continue
 
         # NATIVE GOOGLE LIST -------------------------------------
         if bullet_info:
             if _is_native_bullet(doc_json, bullet_info, p):
-                yield Node(kind="list_item", inlines=spans, indent=indent)
+                yield Node(kind="list_item", inlines=spans, indent=indent, style=style_name)
             else:
-                yield Node(kind="numbered_item", inlines=spans, indent=indent)
+                yield Node(kind="numbered_item", inlines=spans, indent=indent, style=style_name)
             continue
 
         # MANUAL LISTS (indented) -------------------------------
         if indent > 0:
             cls = _manual_list_class(plain)
             if cls == "bullet":
-                yield Node(kind="list_item", inlines=spans, indent=indent)
+                yield Node(kind="list_item", inlines=spans, indent=indent, style=style_name)
             elif cls == "numbered":
-                yield Node(kind="numbered_item", inlines=spans, indent=indent)
+                yield Node(kind="numbered_item", inlines=spans, indent=indent, style=style_name)
             else:
-                yield Node(kind="misc_item", inlines=spans, indent=indent)
+                yield Node(kind="misc_item", inlines=spans, indent=indent, style=style_name)
             continue
 
         # PLAIN PARAGRAPH ----------------------------------------
-        yield Node(kind="paragraph", inlines=spans, indent=indent)
+        yield Node(kind="paragraph", inlines=spans, indent=indent, style=style_name)

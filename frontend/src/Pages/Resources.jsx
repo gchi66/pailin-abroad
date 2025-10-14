@@ -7,7 +7,7 @@ const Resources = () => {
   const navigate = useNavigate();
 
   const sections = [
-    "GRAMMAR PRACTICE",
+    "EXERCISE BANK",
     "PHRASES & VERBS",
     "COMMON MISTAKES",
     "CULTURE NOTES",
