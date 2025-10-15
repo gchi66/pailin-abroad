@@ -11,6 +11,8 @@ import Lesson from "./Pages/Lesson";
 import Resources from "./Pages/Resources";
 import TopicLibrary from "./Pages/TopicLibrary";
 import TopicDetail from "./Pages/TopicDetail";
+import ExerciseBank from "./Pages/ExerciseBank";
+import ExerciseSection from "./Pages/ExerciseSection";
 import Contact from "./Pages/Contact";
 import FAQPage from "./Pages/FAQPage";
 import Modal from "./Components/Modal";
@@ -84,6 +86,8 @@ function App() {
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/topic-library" element={<TopicLibrary />} />
                   <Route path="/topic-library/:slug" element={<TopicDetail />} />
+                  <Route path="/exercise-bank" element={<ExerciseBank />} />
+                  <Route path="/exercise-bank/:categorySlug/:sectionSlug" element={<ExerciseSection />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/faq" element={<FAQPage />} />
                   <Route path="/membership" element={<Membership />} />

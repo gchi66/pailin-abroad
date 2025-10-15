@@ -1,0 +1,455 @@
+.exercise-bank-page-container,
+.exercise-section-page-container {
+  position: relative;
+  min-height: 100vh;
+  background-color: none;
+  padding: 30vh 0 0 0;
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+  z-index: 1;
+  margin-top: -18vh;
+}
+
+.exercise-bank-page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  width: 100%;
+  max-width: 100vw;
+  background: white;
+  border-top: 0.15rem solid #1E1E1E;
+  border-bottom: 0.15rem solid #1E1E1E;
+  padding: 3rem;
+  box-sizing: border-box;
+  height: 20vh;
+  margin: 0;
+}
+
+.exercise-bank-header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.exercise-bank-page-header-text {
+  font-size: 5vh;
+  color: #1E1E1E;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+}
+
+.exercise-bank-page-subtitle {
+  font-size: 1.75vh;
+  color: #666;
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  max-width: 640px;
+}
+
+.exercise-bank-content,
+.exercise-section-content {
+  width: 75%;
+  margin: 4rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.exercise-bank-toggle-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.exercise-bank-toggle-buttons .section-btn {
+  min-width: 12rem;
+  text-align: center;
+}
+
+.exercise-bank-category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.exercise-bank-category-btn {
+  background: white;
+  border: 0.12rem solid #1E1E1E;
+  border-radius: 999px;
+  padding: 0.6rem 1.25rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  color: #1E1E1E;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.exercise-bank-category-btn:hover,
+.exercise-bank-category-btn.active {
+  background: #91CAFF;
+}
+
+.exercise-bank-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.exercise-bank-placeholder {
+  border: 0.15rem dashed #ccc;
+  border-radius: 1rem;
+  padding: 3rem;
+  text-align: center;
+  color: #555;
+  background: #fafafa;
+}
+
+.exercise-bank-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.exercise-bank-card {
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 1rem;
+  background: white;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
+}
+
+.exercise-bank-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exercise-bank-card-section h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.exercise-bank-card-section-th {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.exercise-bank-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.exercise-bank-category-chip,
+.exercise-section-category-chip {
+  background: #1E1E1E;
+  color: white;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.exercise-bank-featured-count {
+  font-size: 0.85rem;
+  color: #1E1E1E;
+  background: #f1f5ff;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+}
+
+.exercise-bank-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exercise-bank-card-copy {
+  margin: 0;
+  color: #444;
+}
+
+.exercise-bank-card-link {
+  color: #1E1E1E;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.exercise-bank-card-link:hover {
+  text-decoration: underline;
+}
+
+.exercise-bank-featured-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exercise-bank-featured-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.exercise-bank-featured-title {
+  font-weight: 600;
+}
+
+.exercise-bank-featured-title-th {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.exercise-bank-featured-type {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.exercise-section-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.exercise-section-back-link {
+  font-weight: 600;
+  color: #1E1E1E;
+  text-decoration: none;
+}
+
+.exercise-section-back-link:hover {
+  text-decoration: underline;
+}
+
+.exercise-section-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.language-toggle-btn {
+  background: white;
+  border: 0.12rem solid #1E1E1E;
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.language-toggle-btn:hover {
+  background: #91CAFF;
+}
+
+.exercise-section-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 0.12rem solid #1E1E1E;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: white;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
+}
+
+.exercise-section-title {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.exercise-section-title-th {
+  margin: 0;
+  color: #666;
+}
+
+.exercise-section-meta {
+  margin: 0;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.exercise-section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.exercise-section-item {
+  border: 0.12rem solid #1E1E1E;
+  border-radius: 1rem;
+  background: white;
+  overflow: hidden;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
+}
+
+.exercise-section-item-toggle {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+}
+
+.exercise-section-item-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.exercise-section-item-heading h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.exercise-section-item-type {
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.exercise-section-item-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.exercise-section-item.open .exercise-section-item-toggle {
+  background: #f8fbff;
+}
+
+.exercise-section-item-body {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-top: 0.12rem solid #1E1E1E;
+}
+
+.exercise-section-item-prompt {
+  margin: 0;
+  color: #444;
+  font-style: italic;
+}
+
+.exercise-section-item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exercise-section-item-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.exercise-section-item-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.exercise-section-item-text {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  color: #1E1E1E;
+}
+
+.exercise-item-number {
+  font-weight: 600;
+}
+
+.exercise-item-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.exercise-item-option {
+  background: #f0f0f0;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.exercise-item-answer,
+.exercise-item-correct,
+.exercise-item-keywords {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.exercise-fallback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exercise-fallback-list {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.exercise-fallback-item {
+  color: #1E1E1E;
+}
+
+@media (max-width: 992px) {
+  .exercise-bank-content,
+  .exercise-section-content {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .exercise-bank-page-header-text {
+    font-size: 2.5rem;
+  }
+
+  .exercise-bank-toggle-buttons .section-btn {
+    flex: 1 1 100%;
+  }
+
+  .exercise-bank-card {
+    padding: 1.25rem;
+  }
+
+  .exercise-section-item-toggle {
+    padding: 1rem 1.25rem;
+  }
+}

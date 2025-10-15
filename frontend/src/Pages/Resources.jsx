@@ -17,6 +17,8 @@ const Resources = () => {
   const handleSectionClick = (section, index) => {
     if (section === "TOPIC LIBRARY") {
       navigate("/topic-library");
+    } else if (section === "EXERCISE BANK") {
+      navigate("/exercise-bank");
     } else {
       setActiveSection(index);
     }

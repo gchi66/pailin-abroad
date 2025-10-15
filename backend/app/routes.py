@@ -4,9 +4,40 @@ from app.resolver import resolve_lesson
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+import re
+from collections import defaultdict
 from app.config import Config
 
 routes = Blueprint("routes", __name__)
+
+CATEGORY_LABELS = {
+    "verbs_and_tenses": "Verbs and Tenses",
+    "nouns_and_articles": "Nouns and Articles",
+    "adjectives": "Adjectives",
+    "pronouns": "Pronouns",
+    "other_concepts": "Other Concepts",
+}
+
+
+def _slugify(value: str) -> str:
+    value = (value or "").lower()
+    value = re.sub(r"[^a-z0-9]+", "-", value)
+    value = re.sub(r"-+", "-", value)
+    return value.strip("-") or "section"
+
+
+def _category_label(key: str) -> str:
+    if not key:
+        return "Uncategorized"
+    return CATEGORY_LABELS.get(key, key.replace("_", " ").title())
+
+
+def _category_slug(key: str) -> str:
+    return _slugify(key or "category")
+
+
+def _section_slug(section: str) -> str:
+    return _slugify(section or "section")
 
 @routes.route("/", methods=["GET"])
 def home():
@@ -1132,6 +1163,192 @@ def reset_password():
     except Exception as e:
         print(f"Error in password reset: {e}")
         return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+
+
+@routes.route('/api/exercise-bank/sections', methods=['GET'])
+def get_exercise_sections():
+    """Return sections grouped by category for the exercise bank."""
+    try:
+        category_filter = (request.args.get("category") or "").strip().lower()
+
+        result = (
+            supabase.table("exercise_bank")
+            .select("id, category, section, section_th, is_featured")
+            .execute()
+        )
+
+        rows = result.data or []
+        sections_map = {}
+
+        for row in rows:
+            category = row.get("category") or ""
+            section = row.get("section") or ""
+            key = (category, section)
+
+            if key not in sections_map:
+                section_th = row.get("section_th") or None
+                sections_map[key] = {
+                    "category": category,
+                    "category_label": _category_label(category),
+                    "category_slug": _category_slug(category),
+                    "section": section,
+                    "section_th": section_th,
+                    "section_slug": _section_slug(section),
+                    "exercise_count": 0,
+                    "featured_count": 0,
+                }
+
+            sections_map[key]["exercise_count"] += 1
+            if row.get("is_featured"):
+                sections_map[key]["featured_count"] += 1
+
+        sections = list(sections_map.values())
+        if category_filter:
+            sections = [
+                section
+                for section in sections
+                if section["category_slug"] == category_filter
+                or section["category"].lower() == category_filter
+            ]
+
+        sections.sort(key=lambda item: (item["category_label"], item["section"]))
+
+        # Build the category list with aggregated data
+        categories = defaultdict(
+            lambda: {"label": "", "slug": "", "section_count": 0, "exercise_count": 0}
+        )
+        for section in sections_map.values():
+            key = section["category"]
+            cat_entry = categories[key]
+            cat_entry["label"] = _category_label(key)
+            cat_entry["slug"] = _category_slug(key)
+            cat_entry["section_count"] += 1
+            cat_entry["exercise_count"] += section["exercise_count"]
+
+        category_list = [
+            {
+                "category": key,
+                "category_label": value["label"],
+                "category_slug": value["slug"],
+                "section_count": value["section_count"],
+                "exercise_count": value["exercise_count"],
+            }
+            for key, value in categories.items()
+        ]
+        category_list.sort(key=lambda item: item["category_label"])
+
+        return jsonify({"sections": sections, "categories": category_list}), 200
+
+    except Exception as exc:
+        print(f"Error fetching exercise sections: {exc}")
+        return jsonify({"error": "Failed to fetch exercise sections"}), 500
+
+
+@routes.route('/api/exercise-bank/featured', methods=['GET'])
+def get_featured_exercises():
+    """Return featured exercises across the exercise bank."""
+    try:
+        result = (
+            supabase.table("exercise_bank")
+            .select(
+                "id, category, section, section_th, title, title_th, prompt, prompt_th, "
+                "exercise_type, items, items_th, is_featured"
+            )
+            .eq("is_featured", True)
+            .order("category")
+            .order("section")
+            .order("title")
+            .execute()
+        )
+
+        rows = result.data or []
+        featured = []
+        for row in rows:
+            featured.append(
+                {
+                    "id": row.get("id"),
+                    "category": row.get("category"),
+                    "category_label": _category_label(row.get("category")),
+                    "category_slug": _category_slug(row.get("category")),
+                    "section": row.get("section"),
+                    "section_th": row.get("section_th"),
+                    "section_slug": _section_slug(row.get("section")),
+                    "title": row.get("title"),
+                    "title_th": row.get("title_th"),
+                    "prompt": row.get("prompt"),
+                    "prompt_th": row.get("prompt_th"),
+                    "exercise_type": row.get("exercise_type"),
+                    "items": row.get("items") or [],
+                    "items_th": row.get("items_th") or [],
+                    "sort_order": row.get("sort_order"),
+                }
+            )
+
+        return jsonify({"featured": featured}), 200
+
+    except Exception as exc:
+        print(f"Error fetching featured exercises: {exc}")
+        return jsonify({"error": "Failed to fetch featured exercises"}), 500
+
+
+@routes.route('/api/exercise-bank/section/<category_slug>/<section_slug>', methods=['GET'])
+def get_exercise_section(category_slug, section_slug):
+    """Return all exercises for a specific section."""
+    try:
+        result = (
+            supabase.table("exercise_bank")
+            .select(
+                "id, category, section, section_th, title, title_th, prompt, prompt_th, "
+                "exercise_type, items, items_th, is_featured"
+            )
+            .execute()
+        )
+
+        rows = result.data or []
+        filtered = [
+            row
+            for row in rows
+            if _category_slug(row.get("category")) == category_slug
+            and _section_slug(row.get("section")) == section_slug
+        ]
+
+        if not filtered:
+            return jsonify({"error": "Section not found"}), 404
+
+        filtered.sort(key=lambda row: (row.get("sort_order") or 0, row.get("title") or ""))
+        sample = filtered[0]
+
+        exercises = [
+            {
+                "id": row.get("id"),
+                "title": row.get("title"),
+                "title_th": row.get("title_th"),
+                "prompt": row.get("prompt"),
+                "prompt_th": row.get("prompt_th"),
+                "exercise_type": row.get("exercise_type"),
+                "items": row.get("items") or [],
+                "items_th": row.get("items_th") or [],
+                "sort_order": row.get("sort_order"),
+                "is_featured": bool(row.get("is_featured")),
+            }
+            for row in filtered
+        ]
+
+        response = {
+            "category": sample.get("category"),
+            "category_label": _category_label(sample.get("category")),
+            "category_slug": _category_slug(sample.get("category")),
+            "section": sample.get("section"),
+            "section_th": sample.get("section_th"),
+            "section_slug": _section_slug(sample.get("section")),
+            "exercises": exercises,
+        }
+
+        return jsonify({"section": response}), 200
+
+    except Exception as exc:
+        print(f"Error fetching exercise section: {exc}")
+        return jsonify({"error": "Failed to fetch exercise section"}), 500
 
 
 @routes.route('/api/topic-library', methods=['GET'])

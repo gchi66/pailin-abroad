@@ -40,25 +40,25 @@ const Footer = () => {
             <div className="social-icons">
               <button className="social-icon-link">
                 <img
-                  src="images/instagram-icon-black.png"
+                  src={`${process.env.PUBLIC_URL}/images/instagram-icon-black.png`}
                   alt="Instagram"
                 />
               </button>
               <button className="social-icon-link">
                 <img
-                  src="images/youtube-icon-black.png"
+                  src={`${process.env.PUBLIC_URL}/images/youtube-icon-black.png`}
                   alt="YouTube"
                 />
               </button>
               <button className="social-icon-link">
                 <img
-                  src="images/tiktok-icon-black.png"
+                  src={`${process.env.PUBLIC_URL}/images/tiktok-icon-black.png`}
                   alt="TikTok"
                 />
               </button>
               <button className="social-icon-link">
                 <img
-                  src="images/facebook-icon-black.png"
+                  src={`${process.env.PUBLIC_URL}/images/facebook-icon-black.png`}
                   alt="Facebook"
                 />
               </button>
