@@ -1,8 +1,26 @@
 import React, { useState } from "react";
 import AudioButton from "../AudioButton";
+import { useAuth } from "../../AuthContext";
+import evaluateAnswer from "./evaluateAnswer";
+import "./evaluateAnswer.css";
 
-export default function OpenEndedExercise({ exercise, images = {}, audioIndex = {} }) {
+export default function OpenEndedExercise({
+  exercise,
+  images = {},
+  audioIndex = {},
+  sourceType = "practice",
+  exerciseId,
+  userId: userIdProp,
+}) {
   const { title, prompt, items = [] } = exercise;
+  const { user } = useAuth();
+  const userId = userIdProp || user?.id || null;
+  const evaluationSourceType = ["bank", "practice"].includes(
+    (sourceType || "").toLowerCase()
+  )
+    ? (sourceType || "").toLowerCase()
+    : "practice";
+  const resolvedExerciseId = exerciseId ?? exercise?.id ?? null;
 
   // Initialize state for each input for each question
   // Structure: [question1: [input1], question2: [input1, input2], etc]
@@ -10,11 +28,17 @@ export default function OpenEndedExercise({ exercise, images = {}, audioIndex = 
     items.map(item => Array((item.inputs || 1)).fill(""))
   );
   const [checked, setChecked] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
+  const [error, setError] = useState("");
 
   const handleChange = (qIdx, inputIdx, val) => {
     const nextResponses = [...responses];
     nextResponses[qIdx][inputIdx] = val;
     setResponses(nextResponses);
+    if (error) {
+      setError("");
+    }
   };
 
   const passed = (qIdx) => {
@@ -30,15 +54,70 @@ export default function OpenEndedExercise({ exercise, images = {}, audioIndex = 
     });
   };
 
-  const handleCheck = () => setChecked(true);
+  const handleCheck = async () => {
+    if (isChecking) return;
+    if (!userId) {
+      setError("Please log in to check your answer.");
+      return;
+    }
+    if (!allAnswered) {
+      setError("Please answer every prompt before checking.");
+      return;
+    }
+
+    setIsChecking(true);
+    setError("");
+
+    const learnerResponses = items.map((item, qIdx) => ({
+      number: item?.number ?? qIdx + 1,
+      question: item?.question || item?.text || "",
+      answers: (responses[qIdx] || []).map((value) => value || ""),
+    }));
+
+    const expectedResponses = items.map((item, qIdx) => ({
+      number: item?.number ?? qIdx + 1,
+      question: item?.question || item?.text || "",
+      sample_answer: item?.sample_answer || "",
+      keywords: item?.keywords || "",
+    }));
+
+    try {
+      const result = await evaluateAnswer({
+        userId,
+        exerciseType: "open",
+        userAnswer: {
+          title,
+          prompt,
+          responses: learnerResponses,
+        },
+        correctAnswer: {
+          title,
+          prompt,
+          expected: expectedResponses,
+        },
+        sourceType: evaluationSourceType,
+        exerciseId: resolvedExerciseId,
+      });
+      setAiResult(result);
+      setChecked(true);
+    } catch (err) {
+      setError(err.message || "Unable to check your answer right now.");
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
   const handleReset = () => {
     setResponses(items.map(item => Array((item.inputs || 1)).fill("")));
     setChecked(false);
+    setAiResult(null);
+    setError("");
   };
 
   // Determine if all questions have valid responses
   const allAnswered = responses.every((questionInputs, qIdx) => {
-    const numInputs = items[qIdx].inputs || 1;
+    const item = items[qIdx] || {};
+    const numInputs = item.inputs || 1;
     return questionInputs.filter(Boolean).length === numInputs;
   });
 
@@ -102,18 +181,45 @@ export default function OpenEndedExercise({ exercise, images = {}, audioIndex = 
       <div className="oe-buttons">
         {!checked ? (
           <button
-            className="oe-btn check"
+            className="ai-eval-button"
             onClick={handleCheck}
-            disabled={!allAnswered}
+            disabled={!allAnswered || isChecking}
           >
-            Check
+            {isChecking ? "Checking..." : "Check Answer"}
           </button>
         ) : (
-          <button className="oe-btn reset" onClick={handleReset}>
+          <button className="ai-eval-button ai-reset" onClick={handleReset}>
             Try Again
           </button>
         )}
       </div>
+      <FeedbackPanel aiResult={aiResult} error={error} />
+    </div>
+  );
+}
+
+function FeedbackPanel({ aiResult, error }) {
+  if (error) {
+    return (
+      <div className="ai-feedback-container">
+        <p className="ai-feedback-message error">{error}</p>
+      </div>
+    );
+  }
+
+  if (!aiResult) return null;
+
+  const statusClass = aiResult.correct ? "correct" : "incorrect";
+  const headline =
+    aiResult.feedback_en ||
+    (aiResult.correct ? "Great job!" : "Keep practicing!");
+
+  return (
+    <div className="ai-feedback-container">
+      <p className={`ai-feedback-message ${statusClass}`}>{headline}</p>
+      {aiResult.feedback_th && (
+        <p className="ai-feedback-th">{aiResult.feedback_th}</p>
+      )}
     </div>
   );
 }

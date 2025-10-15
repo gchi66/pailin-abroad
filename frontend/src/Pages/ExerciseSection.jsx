@@ -221,6 +221,8 @@ const ExerciseSection = () => {
                         exercise={exercise}
                         images={{}}
                         audioIndex={{}}
+                        sourceType="bank"
+                        exerciseId={exercise.id}
                       />
                     ) : (
                       <FallbackExercise exercise={exercise} renderWithBreaks={renderWithBreaks} />

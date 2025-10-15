@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import AudioButton from "../AudioButton";
+import { useAuth } from "../../AuthContext";
+import evaluateAnswer from "./evaluateAnswer";
+import "./evaluateAnswer.css";
 
 /**
  * Fill-in-the-blank component that supports
@@ -7,18 +10,39 @@ import AudioButton from "../AudioButton";
  *   • row exercises        – each item.text contains ____ (underscores)
  *   • images              – items with image_key property will display images
  */
-export default function FillBlankExercise({ exercise, images = {}, audioIndex = {} }) {
+export default function FillBlankExercise({
+  exercise,
+  images = {},
+  audioIndex = {},
+  sourceType = "practice",
+  exerciseId,
+  userId: userIdProp,
+}) {
   const { title, prompt, paragraph, items = [] } = exercise || {};
+  const { user } = useAuth();
+  const userId = userIdProp || user?.id || null;
+  const evaluationSourceType = ["bank", "practice"].includes(
+    (sourceType || "").toLowerCase()
+  )
+    ? (sourceType || "").toLowerCase()
+    : "practice";
+  const resolvedExerciseId = exerciseId ?? exercise?.id ?? null;
 
   /* ---------- state ---------- */
   const [inputs, setInputs] = useState(Array(items.length).fill(""));
   const [checked, setChecked] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
+  const [error, setError] = useState("");
 
   /* ---------- helpers ---------- */
   const handleChange = (idx, val) => {
     const next = [...inputs];
     next[idx] = val;
     setInputs(next);
+    if (error) {
+      setError("");
+    }
   };
 
   const isCorrect = (idx) => {
@@ -28,15 +52,77 @@ export default function FillBlankExercise({ exercise, images = {}, audioIndex = 
     return userAnswer && correctAnswer.includes(userAnswer);
   };
 
-  const handleCheck = () => setChecked(true);
+  const handleCheck = async () => {
+    if (isChecking) return;
+    if (!userId) {
+      setError("Please log in to check your answer.");
+      return;
+    }
+    const hasInput = inputs.some((input) => (input || "").trim());
+    if (!hasInput) {
+      setError("Please fill in at least one blank before checking.");
+      return;
+    }
+
+    setIsChecking(true);
+    setError("");
+
+    const learnerAnswers = items.map((item, idx) => ({
+      number: item?.number ?? idx + 1,
+      prompt: item?.text || item?.question || "",
+      answer: inputs[idx] || "",
+    }));
+
+    const expectedAnswers = items.map((item, idx) => ({
+      number: item?.number ?? idx + 1,
+      prompt: item?.text || item?.question || "",
+      answer: item?.answer || "",
+    }));
+
+    try {
+      const result = await evaluateAnswer({
+        userId,
+        exerciseType: "fill_blank",
+        userAnswer: {
+          title,
+          prompt,
+          paragraph,
+          answers: learnerAnswers,
+        },
+        correctAnswer: {
+          title,
+          prompt,
+          paragraph,
+          answers: expectedAnswers,
+        },
+        sourceType: evaluationSourceType,
+        exerciseId: resolvedExerciseId,
+      });
+      setAiResult(result);
+      setChecked(true);
+    } catch (err) {
+      setError(err.message || "Unable to check your answer right now.");
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
   const handleReset = () => {
     setInputs(Array(items.length).fill(""));
     setChecked(false);
+    setAiResult(null);
+    setError("");
   };
 
   // Create answer key from items array for paragraph style
   const answerKey = items.reduce((acc, item) => {
-    acc[item.number] = item.answer.toLowerCase().trim();
+    if (!item) return acc;
+    const key = item.number;
+    const answerText =
+      typeof item.answer === "string" ? item.answer.toLowerCase().trim() : "";
+    if (key != null && answerText) {
+      acc[key] = answerText;
+    }
     return acc;
   }, {});
 
@@ -119,9 +205,11 @@ export default function FillBlankExercise({ exercise, images = {}, audioIndex = 
         <Buttons
           checked={checked}
           inputs={inputs}
-          handleCheck={handleCheck}
-          handleReset={handleReset}
+          onCheck={handleCheck}
+          onReset={handleReset}
+          isChecking={isChecking}
         />
+        <FeedbackPanel aiResult={aiResult} error={error} />
       </div>
     );
   }
@@ -202,9 +290,11 @@ export default function FillBlankExercise({ exercise, images = {}, audioIndex = 
       <Buttons
         checked={checked}
         inputs={inputs}
-        handleCheck={handleCheck}
-        handleReset={handleReset}
+        onCheck={handleCheck}
+        onReset={handleReset}
+        isChecking={isChecking}
       />
+      <FeedbackPanel aiResult={aiResult} error={error} />
     </div>
   );
 }
@@ -212,21 +302,50 @@ export default function FillBlankExercise({ exercise, images = {}, audioIndex = 
 /* ------------------------------------------------
  *  Re-usable buttons block
  * ------------------------------------------------ */
-function Buttons({ checked, inputs, handleCheck, handleReset }) {
+function Buttons({ checked, inputs, onCheck, onReset, isChecking }) {
+  const disableCheck =
+    inputs.every((input) => !((input || "").trim())) || isChecking;
+
   return (
     <div className="fb-button-container">
       {!checked ? (
         <button
-          className="fb-btn check"
-          onClick={handleCheck}
-          disabled={inputs.every((input) => !input.trim())}
+          className="ai-eval-button"
+          onClick={onCheck}
+          disabled={disableCheck}
         >
-          Check Answers
+          {isChecking ? "Checking..." : "Check Answer"}
         </button>
       ) : (
-        <button className="fb-btn reset" onClick={handleReset}>
+        <button className="ai-eval-button ai-reset" onClick={onReset}>
           Try Again
         </button>
+      )}
+    </div>
+  );
+}
+
+function FeedbackPanel({ aiResult, error }) {
+  if (error) {
+    return (
+      <div className="ai-feedback-container">
+        <p className="ai-feedback-message error">{error}</p>
+      </div>
+    );
+  }
+
+  if (!aiResult) return null;
+
+  const statusClass = aiResult.correct ? "correct" : "incorrect";
+  const headline =
+    aiResult.feedback_en ||
+    (aiResult.correct ? "Great job!" : "Keep practicing!");
+
+  return (
+    <div className="ai-feedback-container">
+      <p className={`ai-feedback-message ${statusClass}`}>{headline}</p>
+      {aiResult.feedback_th && (
+        <p className="ai-feedback-th">{aiResult.feedback_th}</p>
       )}
     </div>
   );

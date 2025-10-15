@@ -1,21 +1,46 @@
 import React, { useState } from "react";
 import AudioButton from "../AudioButton";
+import { useAuth } from "../../AuthContext";
+import evaluateAnswer from "./evaluateAnswer";
+import "./evaluateAnswer.css";
 
-export default function SentenceTransformExercise({ exercise = {}, images = {}, audioIndex = {} }) {
+export default function SentenceTransformExercise({
+  exercise = {},
+  images = {},
+  audioIndex = {},
+  sourceType = "practice",
+  exerciseId,
+  userId: userIdProp,
+}) {
   const { title = "", prompt = "", items = [] } = exercise || {};
+  const { user } = useAuth();
+  const userId = userIdProp || user?.id || null;
+  const evaluationSourceType = ["bank", "practice"].includes(
+    (sourceType || "").toLowerCase()
+  )
+    ? (sourceType || "").toLowerCase()
+    : "practice";
+  const resolvedExerciseId = exerciseId ?? exercise?.id ?? null;
   const [answers, setAnswers] = useState(Array(items.length).fill(""));
   const [checked, setChecked] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
+  const [error, setError] = useState("");
 
   const handleChange = (idx, val) => {
     const next = [...answers];
     next[idx] = val;
     setAnswers(next);
+    if (error) {
+      setError("");
+    }
   };
 
   const passed = (idx) => {
     if (!checked) return null;
 
     const item = items[idx];
+    if (!item) return false;
     const isCorrect = item.correct === "yes";
 
     // For sentences that are already correct (correct === "yes"),
@@ -42,6 +67,70 @@ export default function SentenceTransformExercise({ exercise = {}, images = {}, 
     return acceptableAnswers.includes(got);
   };
 
+  const handleCheck = async () => {
+    if (isChecking) return;
+    if (!userId) {
+      setError("Please log in to check your answer.");
+      return;
+    }
+
+    const allowAllBlank = items.every((item) => (item?.correct || "").toLowerCase() === "yes");
+    const hasInput = answers.some((input) => (input || "").trim());
+    if (!hasInput && !allowAllBlank) {
+      setError("Please provide your corrections before checking.");
+      return;
+    }
+
+    setIsChecking(true);
+    setError("");
+
+    const learnerSentences = items.map((item, idx) => ({
+      number: item?.number ?? idx + 1,
+      original_sentence: item?.text || "",
+      user_answer: answers[idx] || "",
+      is_already_correct: (item?.correct || "").toLowerCase() === "yes",
+    }));
+
+    const expectedSentences = items.map((item, idx) => ({
+      number: item?.number ?? idx + 1,
+      original_sentence: item?.text || "",
+      expected_answer: item?.answer || "",
+      is_already_correct: (item?.correct || "").toLowerCase() === "yes",
+    }));
+
+    try {
+      const result = await evaluateAnswer({
+        userId,
+        exerciseType: "sentence_transform",
+        userAnswer: {
+          title,
+          prompt,
+          sentences: learnerSentences,
+        },
+        correctAnswer: {
+          title,
+          prompt,
+          sentences: expectedSentences,
+        },
+        sourceType: evaluationSourceType,
+        exerciseId: resolvedExerciseId,
+      });
+      setAiResult(result);
+      setChecked(true);
+    } catch (err) {
+      setError(err.message || "Unable to check your answer right now.");
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const handleReset = () => {
+    setAnswers(Array(items.length).fill(""));
+    setChecked(false);
+    setAiResult(null);
+    setError("");
+  };
+
   return (
     <div className="st-wrap">
       {prompt && <p className="st-prompt">{prompt}</p>}
@@ -60,7 +149,7 @@ export default function SentenceTransformExercise({ exercise = {}, images = {}, 
             )}
             <p className="st-stem">
               <AudioButton audioKey={item.audio_key} audioIndex={audioIndex} className="inline mr-2" />
-              {item.number}. {item.text}
+              {(item.number ?? idx + 1)}. {item.text}
             </p>
             <div className="st-input-container">
               <input
@@ -92,23 +181,48 @@ export default function SentenceTransformExercise({ exercise = {}, images = {}, 
       <div className="st-buttons">
         {!checked ? (
           <button
-            onClick={() => setChecked(true)}
-            className="st-btn check"
+            onClick={handleCheck}
+            className="ai-eval-button"
+            disabled={isChecking}
           >
-            Check
+            {isChecking ? "Checking..." : "Check Answer"}
           </button>
         ) : (
           <button
-            onClick={() => {
-              setAnswers(Array(items.length).fill(""));
-              setChecked(false);
-            }}
-            className="st-btn reset"
+            onClick={handleReset}
+            className="ai-eval-button ai-reset"
           >
             Try Again
           </button>
         )}
       </div>
+      <FeedbackPanel aiResult={aiResult} error={error} />
+    </div>
+  );
+}
+
+function FeedbackPanel({ aiResult, error }) {
+  if (error) {
+    return (
+      <div className="ai-feedback-container">
+        <p className="ai-feedback-message error">{error}</p>
+      </div>
+    );
+  }
+
+  if (!aiResult) return null;
+
+  const statusClass = aiResult.correct ? "correct" : "incorrect";
+  const headline =
+    aiResult.feedback_en ||
+    (aiResult.correct ? "Great job!" : "Keep practicing!");
+
+  return (
+    <div className="ai-feedback-container">
+      <p className={`ai-feedback-message ${statusClass}`}>{headline}</p>
+      {aiResult.feedback_th && (
+        <p className="ai-feedback-th">{aiResult.feedback_th}</p>
+      )}
     </div>
   );
 }
