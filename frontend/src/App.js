@@ -25,6 +25,8 @@ import Checkout from "./Pages/Checkout";
 import PaymentSuccess from "./Pages/PaymentSuccess";
 import VerifyEmail from "./Pages/VerifyEmail";
 import SignUpPage from "./Pages/SignUpPage";
+import Terms from "./Pages/Terms";
+import Privacy from "./Pages/Privacy";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
@@ -94,6 +96,8 @@ function App() {
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/payment-success" element={<PaymentSuccess />} />
                   <Route path="/signup" element={<SignUpPage />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/privacy" element={<Privacy />} />
                   <Route
                     path="/profile"
                     element={
