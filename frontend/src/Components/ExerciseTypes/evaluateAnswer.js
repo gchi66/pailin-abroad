@@ -5,6 +5,9 @@ async function evaluateAnswer({
   correctAnswer,
   sourceType,
   exerciseId,
+  questionNumber,
+  questionPrompt,
+  extra = {},
 }) {
   if (!userId) {
     throw new Error("You need to be logged in to check your answer.");
@@ -32,6 +35,18 @@ async function evaluateAnswer({
     payload.exercise_bank_id = exerciseId;
   } else if (sourceType === "practice" && exerciseId != null) {
     payload.practice_exercise_id = exerciseId;
+  }
+
+  if (typeof questionNumber !== "undefined") {
+    payload.question_number = questionNumber;
+  }
+
+  if (questionPrompt) {
+    payload.question_prompt = questionPrompt;
+  }
+
+  if (extra && typeof extra === "object") {
+    Object.assign(payload, extra);
   }
 
   const response = await fetch("/api/evaluate_answer", {

@@ -71,9 +71,163 @@
   color: #e60000;
 }
 
-.ai-feedback-th {
+.ai-feedback-box {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: rgba(0, 0, 0, 0.04);
+  color: #1f2937;
+  text-align: left;
+  box-shadow: 0 0.35rem 0.6rem rgba(15, 23, 42, 0.05);
+}
+
+.ai-feedback-box.correct {
+  background: rgba(31, 138, 0, 0.12);
+  color: #1f8a00;
+}
+
+.ai-feedback-box.partial {
+  background: rgba(230, 184, 0, 0.15);
+  color: #8a6d00;
+}
+
+.ai-feedback-box.incorrect {
+  background: rgba(230, 0, 0, 0.12);
+  color: #b00000;
+}
+
+.ai-feedback-box.checking {
+  background: rgba(148, 163, 184, 0.12);
+  color: #475569;
+}
+
+.ai-feedback-box.inline {
+  display: inline-flex;
   margin-top: 0.35rem;
+  padding: 0.65rem 0.85rem;
+  box-shadow: none;
+}
+
+.ai-feedback-icon {
+  display: inline-block;
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-top: 0.15rem;
+}
+
+.ai-feedback-icon.correct {
+  color: #1f8a00;
+}
+
+.ai-feedback-icon.incorrect {
+  color: #e60000;
+}
+
+.ai-feedback-th {
+  margin: 0.35rem 0 0;
   font-size: 0.92rem;
   font-style: italic;
   color: rgba(0, 0, 0, 0.65);
+}
+
+.ai-feedback-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ai-feedback-en {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.ai-inline-status {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.ai-inline-status.correct {
+  color: #1f8a00;
+}
+
+.ai-inline-status.partial {
+  color: #e6b800;
+}
+
+.ai-inline-status.incorrect {
+  color: #e60000;
+}
+
+.ai-inline-status.checking {
+  color: #475569;
+}
+
+.ai-error-message {
+  margin-top: 1rem;
+  color: #e60000;
+  font-weight: 600;
+  text-align: center;
+}
+
+.fb-inline {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.fb-inline-input,
+.fb-input-wrap,
+.oe-input-wrap,
+.st-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.oe-input-label {
+  display: block;
+  width: 100%;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.8);
+  margin-bottom: 0.15rem;
+}
+
+.fb-row-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fb-row-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.fb-correct-answer,
+.st-correct-answer {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  color: rgba(15, 23, 42, 0.75);
+}
+
+.oe-sample-answer {
+  margin-top: 0.5rem;
+  background: rgba(148, 163, 184, 0.12);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.6rem;
+}
+
+.oe-sample-answer summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--primary-color, #2563eb);
 }

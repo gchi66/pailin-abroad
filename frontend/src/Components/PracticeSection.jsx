@@ -24,7 +24,19 @@ const transformExercise = (row) => {
   const kind = row.exercise_type || row.kind || null;
 
   // prefer normalized fields; fall back to DB ones
-  const items = arr(row.items);
+  const normalizeInputs = (value) => {
+    const num =
+      typeof value === "number" && Number.isFinite(value)
+        ? value
+        : Number.parseInt(value, 10);
+    return Number.isFinite(num) && num > 0 ? num : 1;
+  };
+
+  const items = arr(row.items).map((item) => {
+    if (!item) return item;
+    const inputs = normalizeInputs(item.inputs);
+    return { ...item, inputs };
+  });
   const options = arr(row.options);
   const answer_key = row.answer_key || {}; // object for fill_blank/open; array for MCQ is fine too
 
@@ -82,16 +94,21 @@ export default function PracticeSection({
 
         // Pass full normalized exercise to the renderer.
         // MultipleChoiceExercise can read ex.options / ex.answer_key; fill_blank uses ex.items; open uses ex.prompt/items.
+        const rendererProps = {
+          exercise: ex,
+          uiLang,
+          images,
+          audioIndex,
+          sourceType: "practice",
+          exerciseId: ex.id,
+          showTitle: !wrapInDetails,
+        };
+
         if (!wrapInDetails) {
           return (
             <Renderer
               key={ex.id}
-              exercise={ex}
-              uiLang={uiLang}
-              images={images}
-              audioIndex={audioIndex}
-              sourceType="practice"
-              exerciseId={ex.id}
+              {...rendererProps}
             />
           );
         }
@@ -102,12 +119,7 @@ export default function PracticeSection({
               {ex.title || ex.prompt || "Exercise"}
             </summary>
             <Renderer
-              exercise={ex}
-              uiLang={uiLang}
-              images={images}
-              audioIndex={audioIndex}
-              sourceType="practice"
-              exerciseId={ex.id}
+              {...rendererProps}
             />
           </details>
         );

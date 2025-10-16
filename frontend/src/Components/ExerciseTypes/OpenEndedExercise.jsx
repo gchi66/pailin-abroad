@@ -1,8 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
+import { normalizeAiCorrect } from "./normalizeAiCorrect";
+import { InlineStatus, QuestionFeedback } from "./aiFeedback";
 import "./evaluateAnswer.css";
+
+const DEFAULT_QUESTION_STATE = {
+  answer: "",
+  answerParts: [],
+  feedback: null,
+  correct: null,
+  score: null,
+  loading: false,
+};
+
+const normalizeText = (value) =>
+  (typeof value === "string" ? value : "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+
+const getInputCount = (item) => {
+  const raw = item?.inputs;
+  if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) {
+    return raw;
+  }
+  const parsed = Number.parseInt(raw, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+};
 
 export default function OpenEndedExercise({
   exercise,
@@ -11,8 +37,9 @@ export default function OpenEndedExercise({
   sourceType = "practice",
   exerciseId,
   userId: userIdProp,
+  showTitle = true,
 }) {
-  const { title, prompt, items = [] } = exercise;
+  const { title, prompt, items = [] } = exercise || {};
   const { user } = useAuth();
   const userId = userIdProp || user?.id || null;
   const evaluationSourceType = ["bank", "practice"].includes(
@@ -22,204 +49,302 @@ export default function OpenEndedExercise({
     : "practice";
   const resolvedExerciseId = exerciseId ?? exercise?.id ?? null;
 
-  // Initialize state for each input for each question
-  // Structure: [question1: [input1], question2: [input1, input2], etc]
-  const [responses, setResponses] = useState(
-    items.map(item => Array((item.inputs || 1)).fill(""))
+  const initialQuestions = useMemo(
+    () =>
+      items.map((item) => ({
+        ...DEFAULT_QUESTION_STATE,
+        answerParts: Array(getInputCount(item)).fill(""),
+      })),
+    [items]
   );
-  const [checked, setChecked] = useState(false);
+
+  const [questions, setQuestions] = useState(initialQuestions);
   const [isChecking, setIsChecking] = useState(false);
-  const [aiResult, setAiResult] = useState(null);
+  const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (qIdx, inputIdx, val) => {
-    const nextResponses = [...responses];
-    nextResponses[qIdx][inputIdx] = val;
-    setResponses(nextResponses);
+  useEffect(() => {
+    setQuestions(initialQuestions);
+    setIsChecking(false);
+    setHasChecked(false);
+    setError("");
+  }, [initialQuestions]);
+
+  const questionHasResponse = (question, idx) => {
+    if (Array.isArray(question.answerParts) && question.answerParts.length) {
+      return question.answerParts.every((part) => part.trim());
+    }
+    return (question.answer || "").trim();
+  };
+
+  const pendingIndexes = useMemo(
+    () =>
+      questions
+        .map((question, idx) =>
+          question.correct === true ? null : { idx, question }
+        )
+        .filter(Boolean),
+    [questions]
+  );
+
+  const allPendingAnswered = pendingIndexes.every(({ question, idx }) =>
+    questionHasResponse(question, idx)
+  );
+
+  const canCheck =
+    pendingIndexes.length > 0 && allPendingAnswered && !isChecking;
+  const hasIncorrect = questions.some((question) => question.correct === false);
+
+  const handleAnswerChange = (qIdx, inputIdx, value) => {
+    setQuestions((prev) =>
+      prev.map((question, idx) => {
+        if (idx !== qIdx || question.correct === true || question.loading)
+          return question;
+
+        const desiredLength = getInputCount(items[qIdx]);
+        const baseParts = Array.isArray(question.answerParts)
+          ? question.answerParts.slice(0, desiredLength)
+          : [];
+        if (baseParts.length < desiredLength) {
+          baseParts.push(...Array(desiredLength - baseParts.length).fill(""));
+        }
+        const nextParts = [...baseParts];
+        nextParts[inputIdx] = value;
+        return {
+          ...question,
+          answerParts: nextParts,
+          answer: nextParts.join("\n"),
+        };
+      })
+    );
     if (error) {
       setError("");
     }
   };
 
-  const passed = (qIdx) => {
-    if (!checked) return null;
-
-    const item = items[qIdx];
-    const keywords = (item.keywords || "").split(",").map(k => k.trim().toLowerCase()).filter(Boolean);
-
-    // Check if all inputs for this question contain at least one of the keywords
-    return responses[qIdx].every(response => {
-      const responseLower = response.toLowerCase();
-      return keywords.some(keyword => responseLower.includes(keyword));
-    });
-  };
-
-  const handleCheck = async () => {
-    if (isChecking) return;
+  const handleCheckAnswers = async () => {
     if (!userId) {
-      setError("Please log in to check your answer.");
+      setError("Please log in to check your answers.");
       return;
     }
-    if (!allAnswered) {
+    if (!pendingIndexes.length) {
+      setHasChecked(true);
+      return;
+    }
+    if (!allPendingAnswered) {
       setError("Please answer every prompt before checking.");
       return;
     }
 
+    setError("");
     setIsChecking(true);
-    setError("");
 
-    const learnerResponses = items.map((item, qIdx) => ({
-      number: item?.number ?? qIdx + 1,
-      question: item?.question || item?.text || "",
-      answers: (responses[qIdx] || []).map((value) => value || ""),
-    }));
+    setQuestions((prev) =>
+      prev.map((question) =>
+        question.correct === true
+          ? question
+          : { ...question, loading: true }
+      )
+    );
 
-    const expectedResponses = items.map((item, qIdx) => ({
-      number: item?.number ?? qIdx + 1,
-      question: item?.question || item?.text || "",
-      sample_answer: item?.sample_answer || "",
-      keywords: item?.keywords || "",
-    }));
+    await Promise.all(
+      pendingIndexes.map(async ({ idx }) => {
+        const item = items[idx] || {};
+        const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
+        const userAnswer = questionState.answer || "";
+        const expectedAnswer =
+          item.sample_answer || item.answer || item.expected_answer || "";
 
-    try {
-      const result = await evaluateAnswer({
-        userId,
-        exerciseType: "open",
-        userAnswer: {
-          title,
-          prompt,
-          responses: learnerResponses,
-        },
-        correctAnswer: {
-          title,
-          prompt,
-          expected: expectedResponses,
-        },
-        sourceType: evaluationSourceType,
-        exerciseId: resolvedExerciseId,
-      });
-      setAiResult(result);
-      setChecked(true);
-    } catch (err) {
-      setError(err.message || "Unable to check your answer right now.");
-    } finally {
-      setIsChecking(false);
-    }
+        try {
+          const result = await evaluateAnswer({
+            userId,
+            exerciseType: "open",
+            userAnswer,
+            correctAnswer: expectedAnswer,
+            sourceType: evaluationSourceType,
+            exerciseId: resolvedExerciseId,
+            questionNumber: item.number ?? idx + 1,
+            questionPrompt:
+              item.question ||
+              item.text ||
+              prompt ||
+              title ||
+              "Respond to the prompt.",
+            extra: item.keywords
+              ? { question_keywords: item.keywords }
+              : undefined,
+          });
+
+          const normalizedCorrect = normalizeAiCorrect(result.correct);
+          const scoreValue =
+            typeof result.score === "number" ? result.score : null;
+
+          setQuestions((prev) =>
+            prev.map((question, questionIdx) => {
+              if (questionIdx !== idx) return question;
+              return {
+                ...question,
+                loading: false,
+                correct: normalizedCorrect,
+                score: scoreValue,
+                feedback: {
+                  en: result.feedback_en || "",
+                  th: result.feedback_th || "",
+                },
+              };
+            })
+          );
+        } catch (err) {
+          setQuestions((prev) =>
+            prev.map((question, questionIdx) => {
+              if (questionIdx !== idx) return question;
+              return {
+                ...question,
+                loading: false,
+                correct: false,
+                score: null,
+                feedback: {
+                  en:
+                    err?.message ||
+                    "Unable to check this answer right now. Please try again.",
+                  th: "",
+                },
+              };
+            })
+          );
+        }
+      })
+    );
+
+    setIsChecking(false);
+    setHasChecked(true);
   };
 
-  const handleReset = () => {
-    setResponses(items.map(item => Array((item.inputs || 1)).fill("")));
-    setChecked(false);
-    setAiResult(null);
+  const handleTryAgain = () => {
+    setQuestions((prev) =>
+      prev.map((question, idx) => {
+        if (question.correct === false) {
+          return {
+            ...DEFAULT_QUESTION_STATE,
+            answerParts: Array(getInputCount(items[idx])).fill(""),
+          };
+        }
+        return { ...question, loading: false };
+      })
+    );
+    setIsChecking(false);
+    setHasChecked(false);
     setError("");
   };
 
-  // Determine if all questions have valid responses
-  const allAnswered = responses.every((questionInputs, qIdx) => {
-    const item = items[qIdx] || {};
-    const numInputs = item.inputs || 1;
-    return questionInputs.filter(Boolean).length === numInputs;
-  });
+  const firstQuestionRaw = items[0]?.question || items[0]?.text || "";
+  const normalizedPrompt = normalizeText(prompt);
+  const normalizedFirstQuestion = normalizeText(firstQuestionRaw);
+  const shouldRenderPrompt =
+    normalizedPrompt.length > 0 && normalizedPrompt !== normalizedFirstQuestion;
 
   return (
     <div className="oe-wrap">
-      {prompt && <p className="oe-prompt">{prompt}</p>}
+      {title && showTitle && <h3 className="oe-title">{title}</h3>}
+      {shouldRenderPrompt && <p className="oe-prompt">{prompt}</p>}
 
       {items.map((item, qIdx) => {
-        // Extract keywords for this specific item
-        const itemKeywords = (item.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
+        const questionState = questions[qIdx] || DEFAULT_QUESTION_STATE;
+        const disabled =
+          questionState.correct === true || questionState.loading === true;
         const imageUrl = item.image_key ? images[item.image_key] : null;
+        const numberLabel = item.number ?? qIdx + 1;
+        const inputCount = getInputCount(item);
+        const answerParts =
+          questionState.answerParts?.length === inputCount
+            ? questionState.answerParts
+            : (() => {
+                const next = Array(inputCount).fill("");
+                if (Array.isArray(questionState.answerParts)) {
+                  questionState.answerParts.forEach((part, idx) => {
+                    if (idx < inputCount) next[idx] = part;
+                  });
+                } else if (questionState.answer) {
+                  next[0] = questionState.answer;
+                }
+                return next;
+              })();
 
         return (
           <div key={`question-${qIdx}`} className="oe-question">
-            {/* Display image if available */}
             {imageUrl && (
               <div className="fb-image-container">
-                <img src={imageUrl} alt={`Question ${item.number}`} className="fb-image" />
+                <img
+                  src={imageUrl}
+                  alt={`Question ${numberLabel}`}
+                  className="fb-image"
+                />
               </div>
             )}
+
             <p className="oe-question-text">
-              <AudioButton audioKey={item.audio_key} audioIndex={audioIndex} className="inline mr-2" />
-              {item.number}. {item.question || item.text}
+              <AudioButton
+                audioKey={item.audio_key}
+                audioIndex={audioIndex}
+                className="inline mr-2"
+              />
+              {numberLabel}. {item.question || item.text || ""}
             </p>
 
-            {/* Render the appropriate number of input fields */}
-            {Array.from({ length: item.inputs || 1 }).map((_, inputIdx) => (
-              <div key={`input-${qIdx}-${inputIdx}`} className="oe-input-container">
+            {answerParts.map((value, partIdx) => (
+              <div className="oe-input-wrap" key={`input-${qIdx}-${partIdx}`}>
+                {inputCount > 1 && (
+                  <label className="oe-input-label">
+                    Part {partIdx + 1} of {inputCount}
+                  </label>
+                )}
                 <textarea
                   rows={3}
-                  value={responses[qIdx][inputIdx] || ""}
-                  onChange={(e) => handleChange(qIdx, inputIdx, e.target.value)}
-                  disabled={checked}
+                  value={value}
+                  onChange={(event) =>
+                    handleAnswerChange(qIdx, partIdx, event.target.value)
+                  }
+                  disabled={disabled}
                   className="oe-textarea"
                   placeholder="Type your answer here"
                 />
+                {partIdx === 0 && <InlineStatus state={questionState} />}
               </div>
             ))}
 
-            {checked && (
-              <div className="oe-feedback">
-                <span className={`oe-mark ${passed(qIdx) ? "correct" : "wrong"}`}>
-                  {passed(qIdx) ? "✓" : "✗"}
-                </span>
-                {!passed(qIdx) && itemKeywords.length > 0 && (
-                  <p className="oe-hint">
-                    Remember to use these keywords: {itemKeywords.join(", ")}
-                  </p>
-                )}
-                {item.sample_answer && (
-                  <div className="oe-sample-answer">
-                    <p><strong>Sample answer:</strong> {item.sample_answer}</p>
-                  </div>
-                )}
-              </div>
+            <QuestionFeedback state={questionState} />
+
+            {item.sample_answer && (
+              <details className="oe-sample-answer">
+                <summary>Sample answer</summary>
+                <p>{item.sample_answer}</p>
+              </details>
             )}
           </div>
         );
       })}
 
+      {error && <p className="ai-error-message">{error}</p>}
+
       <div className="oe-buttons">
-        {!checked ? (
+        <button
+          className="ai-eval-button"
+          onClick={handleCheckAnswers}
+          disabled={!canCheck}
+        >
+          {isChecking ? "Checking..." : "Check Answers"}
+        </button>
+
+        {hasChecked && hasIncorrect && (
           <button
-            className="ai-eval-button"
-            onClick={handleCheck}
-            disabled={!allAnswered || isChecking}
+            className="ai-eval-button ai-reset"
+            onClick={handleTryAgain}
+            disabled={isChecking}
           >
-            {isChecking ? "Checking..." : "Check Answer"}
-          </button>
-        ) : (
-          <button className="ai-eval-button ai-reset" onClick={handleReset}>
             Try Again
           </button>
         )}
       </div>
-      <FeedbackPanel aiResult={aiResult} error={error} />
-    </div>
-  );
-}
-
-function FeedbackPanel({ aiResult, error }) {
-  if (error) {
-    return (
-      <div className="ai-feedback-container">
-        <p className="ai-feedback-message error">{error}</p>
-      </div>
-    );
-  }
-
-  if (!aiResult) return null;
-
-  const statusClass = aiResult.correct ? "correct" : "incorrect";
-  const headline =
-    aiResult.feedback_en ||
-    (aiResult.correct ? "Great job!" : "Keep practicing!");
-
-  return (
-    <div className="ai-feedback-container">
-      <p className={`ai-feedback-message ${statusClass}`}>{headline}</p>
-      {aiResult.feedback_th && (
-        <p className="ai-feedback-th">{aiResult.feedback_th}</p>
-      )}
     </div>
   );
 }

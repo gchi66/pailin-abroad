@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
+import { normalizeAiCorrect } from "./normalizeAiCorrect";
+import { InlineStatus, QuestionFeedback } from "./aiFeedback";
 import "./evaluateAnswer.css";
+
+const DEFAULT_QUESTION_STATE = {
+  answer: "",
+  feedback: null,
+  correct: null,
+  score: null,
+  loading: false,
+};
 
 export default function SentenceTransformExercise({
   exercise = {},
@@ -11,6 +21,7 @@ export default function SentenceTransformExercise({
   sourceType = "practice",
   exerciseId,
   userId: userIdProp,
+  showTitle = true,
 }) {
   const { title = "", prompt = "", items = [] } = exercise || {};
   const { user } = useAuth();
@@ -21,208 +32,243 @@ export default function SentenceTransformExercise({
     ? (sourceType || "").toLowerCase()
     : "practice";
   const resolvedExerciseId = exerciseId ?? exercise?.id ?? null;
-  const [answers, setAnswers] = useState(Array(items.length).fill(""));
-  const [checked, setChecked] = useState(false);
+
+  const initialQuestions = useMemo(
+    () =>
+      items.map(() => ({
+        ...DEFAULT_QUESTION_STATE,
+      })),
+    [items]
+  );
+
+  const [questions, setQuestions] = useState(initialQuestions);
   const [isChecking, setIsChecking] = useState(false);
-  const [aiResult, setAiResult] = useState(null);
+  const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (idx, val) => {
-    const next = [...answers];
-    next[idx] = val;
-    setAnswers(next);
+  useEffect(() => {
+    setQuestions(initialQuestions);
+    setIsChecking(false);
+    setHasChecked(false);
+    setError("");
+  }, [initialQuestions]);
+
+  const pendingIndexes = useMemo(
+    () =>
+      questions
+        .map((question, idx) => (question.correct === true ? null : idx))
+        .filter((idx) => idx !== null),
+    [questions]
+  );
+
+  const pendingHaveAnswers = pendingIndexes.every((idx) => {
+    const question = questions[idx];
+    const item = items[idx];
+    if (!question) return false;
+    const answerText = (question.answer || "").trim();
+    if (answerText) return true;
+    // Allow already correct sentences to be left blank
+    return (item?.correct || "").toLowerCase() === "yes";
+  });
+
+  const canCheck =
+    pendingIndexes.length > 0 && pendingHaveAnswers && !isChecking;
+  const hasIncorrect = questions.some((question) => question.correct === false);
+
+  const handleChange = (idx, value) => {
+    setQuestions((prev) =>
+      prev.map((question, questionIdx) => {
+        if (questionIdx !== idx || question.correct === true || question.loading)
+          return question;
+        return { ...question, answer: value };
+      })
+    );
     if (error) {
       setError("");
     }
   };
 
-  const passed = (idx) => {
-    if (!checked) return null;
-
-    const item = items[idx];
-    if (!item) return false;
-    const isCorrect = item.correct === "yes";
-
-    // For sentences that are already correct (correct === "yes"),
-    // the user might just leave it blank or write the original sentence
-    if (isCorrect) {
-      // If they left it blank, that's correct too
-      if (!answers[idx].trim()) return true;
-
-      // If they wrote something, it should match the original text
-      const originalText = item.text.toLowerCase().replace(/\s+/g, " ").trim();
-      const got = answers[idx].toLowerCase().replace(/\s+/g, " ").trim();
-      return got === originalText;
-    }
-
-    // For sentences that need transformation, check against possible answers
-    if (!item.answer) return false;
-
-    // Split answer by comma to handle multiple acceptable answers
-    const acceptableAnswers = item.answer.split(',').map(ans =>
-      ans.toLowerCase().replace(/\s+/g, " ").trim()
-    );
-    const got = answers[idx].toLowerCase().replace(/\s+/g, " ").trim();
-
-    return acceptableAnswers.includes(got);
-  };
-
-  const handleCheck = async () => {
-    if (isChecking) return;
+  const handleCheckAnswers = async () => {
     if (!userId) {
-      setError("Please log in to check your answer.");
+      setError("Please log in to check your answers.");
+      return;
+    }
+    if (!pendingIndexes.length) {
+      setHasChecked(true);
+      return;
+    }
+    if (!pendingHaveAnswers) {
+      setError("Please respond to each sentence before checking.");
       return;
     }
 
-    const allowAllBlank = items.every((item) => (item?.correct || "").toLowerCase() === "yes");
-    const hasInput = answers.some((input) => (input || "").trim());
-    if (!hasInput && !allowAllBlank) {
-      setError("Please provide your corrections before checking.");
-      return;
-    }
-
-    setIsChecking(true);
     setError("");
+    setIsChecking(true);
 
-    const learnerSentences = items.map((item, idx) => ({
-      number: item?.number ?? idx + 1,
-      original_sentence: item?.text || "",
-      user_answer: answers[idx] || "",
-      is_already_correct: (item?.correct || "").toLowerCase() === "yes",
-    }));
+    setQuestions((prev) =>
+      prev.map((question, idx) =>
+        pendingIndexes.includes(idx)
+          ? { ...question, loading: true }
+          : question
+      )
+    );
 
-    const expectedSentences = items.map((item, idx) => ({
-      number: item?.number ?? idx + 1,
-      original_sentence: item?.text || "",
-      expected_answer: item?.answer || "",
-      is_already_correct: (item?.correct || "").toLowerCase() === "yes",
-    }));
+    await Promise.all(
+      pendingIndexes.map(async (idx) => {
+        const item = items[idx] || {};
+        const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
+        const isAlreadyCorrect = (item.correct || "").toLowerCase() === "yes";
 
-    try {
-      const result = await evaluateAnswer({
-        userId,
-        exerciseType: "sentence_transform",
-        userAnswer: {
-          title,
-          prompt,
-          sentences: learnerSentences,
-        },
-        correctAnswer: {
-          title,
-          prompt,
-          sentences: expectedSentences,
-        },
-        sourceType: evaluationSourceType,
-        exerciseId: resolvedExerciseId,
-      });
-      setAiResult(result);
-      setChecked(true);
-    } catch (err) {
-      setError(err.message || "Unable to check your answer right now.");
-    } finally {
-      setIsChecking(false);
-    }
+        const userAnswer = questionState.answer.trim()
+          ? questionState.answer
+          : isAlreadyCorrect
+          ? item.text || ""
+          : "";
+
+        const expectedAnswer = item.answer || item.text || "";
+
+        try {
+          const result = await evaluateAnswer({
+            userId,
+            exerciseType: "sentence_transform",
+            userAnswer,
+            correctAnswer: expectedAnswer,
+            sourceType: evaluationSourceType,
+            exerciseId: resolvedExerciseId,
+            questionNumber: item.number ?? idx + 1,
+            questionPrompt:
+              item.text ||
+              prompt ||
+              title ||
+              "Transform the sentence to the correct form.",
+          });
+
+          const normalizedCorrect = normalizeAiCorrect(result.correct);
+          const scoreValue =
+            typeof result.score === "number" ? result.score : null;
+
+          setQuestions((prev) =>
+            prev.map((question, questionIdx) => {
+              if (questionIdx !== idx) return question;
+              return {
+                ...question,
+                loading: false,
+                correct: normalizedCorrect,
+                score: scoreValue,
+                feedback: {
+                  en: result.feedback_en || "",
+                  th: result.feedback_th || "",
+                },
+              };
+            })
+          );
+        } catch (err) {
+          setQuestions((prev) =>
+            prev.map((question, questionIdx) => {
+              if (questionIdx !== idx) return question;
+              return {
+                ...question,
+                loading: false,
+                correct: false,
+                score: null,
+                feedback: {
+                  en:
+                    err?.message ||
+                    "Unable to check this answer right now. Please try again.",
+                  th: "",
+                },
+              };
+            })
+          );
+        }
+      })
+    );
+
+    setIsChecking(false);
+    setHasChecked(true);
   };
 
-  const handleReset = () => {
-    setAnswers(Array(items.length).fill(""));
-    setChecked(false);
-    setAiResult(null);
+  const handleTryAgain = () => {
+    setQuestions((prev) =>
+      prev.map((question) => {
+        if (question.correct === false) {
+          return { ...DEFAULT_QUESTION_STATE };
+        }
+        return { ...question, loading: false };
+      })
+    );
+    setIsChecking(false);
+    setHasChecked(false);
     setError("");
   };
 
   return (
     <div className="st-wrap">
+      {title && showTitle && <h3 className="st-title">{title}</h3>}
       {prompt && <p className="st-prompt">{prompt}</p>}
 
       {items.map((item, idx) => {
-        const isCorrect = item.correct === "yes";
+        const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
+        const disabled =
+          questionState.correct === true || questionState.loading === true;
         const imageUrl = item.image_key ? images[item.image_key] : null;
+        const numberLabel = item.number ?? idx + 1;
 
         return (
-          <div key={`question-${idx}`} className="st-question">
-            {/* Display image if available */}
+        <div key={`sentence-${idx}`} className="st-question">
             {imageUrl && (
               <div className="fb-image-container">
-                <img src={imageUrl} alt={`Question ${item.number}`} className="fb-image" />
+                <img
+                  src={imageUrl}
+                  alt={`Question ${numberLabel}`}
+                  className="fb-image"
+                />
               </div>
             )}
             <p className="st-stem">
-              <AudioButton audioKey={item.audio_key} audioIndex={audioIndex} className="inline mr-2" />
-              {(item.number ?? idx + 1)}. {item.text}
+              <AudioButton
+                audioKey={item.audio_key}
+                audioIndex={audioIndex}
+                className="inline mr-2"
+              />
+              {numberLabel}. {item.text}
             </p>
-            <div className="st-input-container">
+            <div className="st-input-wrap">
               <input
                 type="text"
-                value={answers[idx]}
-                onChange={(e) => handleChange(idx, e.target.value)}
-                disabled={checked}
-                placeholder={isCorrect ? "This sentence is correct (leave blank or rewrite)" : "Correct this sentence"}
+                value={questionState.answer}
+                onChange={(event) => handleChange(idx, event.target.value)}
+                disabled={disabled}
+                placeholder="Rewrite this sentence"
                 className="st-input"
               />
-
-              {checked && (
-                <span className={`st-mark ${passed(idx) ? "correct" : "wrong"}`}>
-                  {passed(idx) ? "✓" : "✗"}
-                </span>
-              )}
+              <InlineStatus state={questionState} />
             </div>
-
-            {checked && !passed(idx) && (
-              <p className="st-correct-answer">
-                <span className="st-label">Correct answer:</span>{" "}
-                {isCorrect ? "(The sentence is already correct)" : item.answer}
-              </p>
-            )}
+            <QuestionFeedback state={questionState} />
           </div>
         );
       })}
 
+      {error && <p className="ai-error-message">{error}</p>}
+
       <div className="st-buttons">
-        {!checked ? (
+        <button
+          onClick={handleCheckAnswers}
+          className="ai-eval-button"
+          disabled={!canCheck}
+        >
+          {isChecking ? "Checking..." : "Check Answers"}
+        </button>
+        {hasChecked && hasIncorrect && (
           <button
-            onClick={handleCheck}
-            className="ai-eval-button"
-            disabled={isChecking}
-          >
-            {isChecking ? "Checking..." : "Check Answer"}
-          </button>
-        ) : (
-          <button
-            onClick={handleReset}
+            onClick={handleTryAgain}
             className="ai-eval-button ai-reset"
+            disabled={isChecking}
           >
             Try Again
           </button>
         )}
       </div>
-      <FeedbackPanel aiResult={aiResult} error={error} />
-    </div>
-  );
-}
-
-function FeedbackPanel({ aiResult, error }) {
-  if (error) {
-    return (
-      <div className="ai-feedback-container">
-        <p className="ai-feedback-message error">{error}</p>
-      </div>
-    );
-  }
-
-  if (!aiResult) return null;
-
-  const statusClass = aiResult.correct ? "correct" : "incorrect";
-  const headline =
-    aiResult.feedback_en ||
-    (aiResult.correct ? "Great job!" : "Keep practicing!");
-
-  return (
-    <div className="ai-feedback-container">
-      <p className={`ai-feedback-message ${statusClass}`}>{headline}</p>
-      {aiResult.feedback_th && (
-        <p className="ai-feedback-th">{aiResult.feedback_th}</p>
-      )}
     </div>
   );
 }

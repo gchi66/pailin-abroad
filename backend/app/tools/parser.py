@@ -1384,9 +1384,23 @@ class GoogleDocsParser:
         collecting_text = False  # New flag for multi-line text collection
         collecting_paragraph = False  # New flag for multi-line paragraph collection
 
+        def normalize_inputs(value) -> int:
+            """Ensure inputs is a positive int, defaulting to 1."""
+            try:
+                n = int(str(value).strip())
+                return n if n > 0 else 1
+            except (TypeError, ValueError):
+                return 1
+
         def flush_exercise():
             nonlocal cur_ex, cur_items
             if cur_ex is not None:
+                if cur_ex.get("kind") in {"open", "open_ended"}:
+                    for item in cur_items:
+                        if "inputs" not in item or item["inputs"] in (None, ""):
+                            item["inputs"] = 1
+                        else:
+                            item["inputs"] = normalize_inputs(item["inputs"])
                 cur_ex["items"] = cur_items
                 exercises.append(cur_ex)
             cur_ex, cur_items = None, []
@@ -1494,6 +1508,15 @@ class GoogleDocsParser:
                 if not cur_items:
                     cur_items.append({})
                 cur_items[-1]["options"] = []
+                continue
+
+            if line.startswith("INPUTS:"):
+                if cur_items and cur_ex and cur_ex.get("kind") in {"open", "open_ended"}:
+                    value = line.split(":", 1)[1].strip() if ":" in line else ""
+                    cur_items[-1]["inputs"] = value or 1
+                collecting_opts = False
+                collecting_text = False
+                collecting_paragraph = False
                 continue
 
             if line.startswith("CORRECT:"):
