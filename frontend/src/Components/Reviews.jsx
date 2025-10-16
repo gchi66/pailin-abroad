@@ -1,50 +1,39 @@
 import React from "react";
 import "../Styles/Reviews.css";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 
-
-
-const reviews = [
-  {
-    name: "BEER",
-    location: "Bangkok, Thailand",
-    image: "1-reviewer-image.webp", // Replace with the actual image path
-    text: "I loved using Pailin Abroad – Pailin’s adventures made learning feel fun and engaging. The lessons were easy to follow and helped me improve my listening and comprehension skills in a natural way.",
-  },
-  {
-    name: "SEEN",
-    location: "Los Angeles, CA, USA",
-    image: "2-reviewer-image.webp", // Replace with the actual image path
-    text: "I loved using Pailin Abroad – Pailin’s adventures made learning feel fun and engaging. The lessons were easy to follow and helped me improve my listening and comprehension skills in a natural way.",
-  },
-  {
-    name: "PRAEW",
-    location: "Chiang Mai, Thailand",
-    image: "3-reviewer-image.webp", // Replace with the actual image path
-    text: "Pailin Abroad quickly helped me feel comfortable speaking with restaurant customers here in LA, and helped me improve my English enough that I’ve started making good friends out here.",
-  },
+const reviewerImages = [
+  "1-reviewer-image.webp",
+  "2-reviewer-image.webp",
+  "3-reviewer-image.webp",
 ];
 
 const Reviews = () => {
+  const { ui } = useUiLang();
+  const reviewsCopy = copy.home.reviews;
+  const items = reviewsCopy.items || [];
+
   return (
     <section className="reviews-section">
       <div className="reviews-container">
-        <h2 className="reviews-title">Reviews</h2>
+        <h2 className="reviews-title">{pick(reviewsCopy.title, ui)}</h2>
         <div className="review-cards-container">
-          {reviews.map((review, index) => (
+          {items.map((review, index) => (
             <div key={index} className="review-card">
-              <p className="review-text">{review.text}</p>
+              <p className="review-text">{pick(review.text, ui)}</p>
               <div className="photo-name-container">
                 <img
-                  src={`images/${review.image}`}
-                  alt={`${review.name} - ${review.location}`}
+                  src={`images/${reviewerImages[index]}`}
+                  alt={`${pick(review.name, ui)} - ${pick(review.location, ui)}`}
                   className="review-image"
                 />
-                <div className ="name-location-container">
+                <div className="name-location-container">
                   <span className="review-name">
-                    {review.name}
+                    {pick(review.name, ui)}
                   </span>
                   <span className="review-location">
-                    {review.location}
+                    {pick(review.location, ui)}
                   </span>
                 </div>
               </div>

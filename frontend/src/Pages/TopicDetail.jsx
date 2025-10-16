@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link, useSearchParams } from "react-router-dom";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useParams, Link } from "react-router-dom";
 import TopicRichSectionRenderer from "../Components/TopicRichSectionRenderer";
 import LessonLanguageToggle from "../Components/LessonLanguageToggle";
 import { useUiLang } from "../ui-lang/UiLangContext";
@@ -15,18 +15,24 @@ const TopicDetail = () => {
   const [isRefetching, setIsRefetching] = useState(false);
   const { ui: uiLang } = useUiLang();
   const withUi = useWithUi();
-  const [searchParams, setSearchParams] = useSearchParams();
   const hasLoadedRef = useRef(false);
 
-  const rawContentLang = (searchParams.get("content_lang") || "en").toLowerCase();
-  const contentLang = rawContentLang === "th" ? "th" : "en";
+  const [contentLang, setContentLangState] = useState(() => {
+    if (typeof window === "undefined") return "en";
+    const stored = (localStorage.getItem("contentLang") || "").toLowerCase();
+    return stored === "th" ? "th" : "en";
+  });
 
-  const setContentLang = (nextLang) => {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("contentLang", contentLang);
+    }
+  }, [contentLang]);
+
+  const setContentLang = useCallback((nextLang) => {
     const normalized = nextLang === "th" ? "th" : "en";
-    const params = new URLSearchParams(searchParams);
-    params.set("content_lang", normalized);
-    setSearchParams(params, { replace: true });
-  };
+    setContentLangState(normalized);
+  }, []);
 
   useEffect(() => {
     if (!slug) return;

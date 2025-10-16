@@ -3,6 +3,7 @@ import FillBlankExercise from "./ExerciseTypes/FillBlankExercise";
 import MultipleChoiceExercise from "./ExerciseTypes/MultipleChoiceExercise";
 import OpenEndedExercise from "./ExerciseTypes/OpenEndedExercise";
 import SentenceTransformExercise from "./ExerciseTypes/SentenceTransformExercise";
+import { copy, pick } from "../ui-lang/i18n";
 
 import "../Styles/PracticeSection.css";
 
@@ -80,7 +81,7 @@ export default function PracticeSection({
     ? list0.filter((ex) => !(ex.title || "").toLowerCase().includes("quick practice"))
     : list0;
 
-  if (!list.length) return <p>No practice exercises for this lesson.</p>;
+  if (!list.length) return <p>{pick(copy.lessonPage.practice.empty, uiLang)}</p>;
 
   return (
     <div className="ps-container">

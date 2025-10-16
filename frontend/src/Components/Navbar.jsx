@@ -69,9 +69,9 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
             <li className="lessons-dropdown-wrapper">
               <span className="lessons-dropdown-trigger">{t("nav.lessons", ui)}</span>
               <ul className="lessons-dropdown">
-                <li><NavLink to={withUi("/try-lessons", ui)}>4 Sample Lessons</NavLink></li>
-                <li><NavLink to={withUi("/lessons", ui)}>Lesson Library</NavLink></li>
-                <li><NavLink to={withUi("/free-lessons", ui)}>Free Lessons</NavLink></li>
+                <li><NavLink to={withUi("/try-lessons", ui)}>{t("nav.sampleLessons", ui)}</NavLink></li>
+                <li><NavLink to={withUi("/lessons", ui)}>{t("nav.lessonLibrary", ui)}</NavLink></li>
+                <li><NavLink to={withUi("/free-lessons", ui)}>{t("nav.freeLessons", ui)}</NavLink></li>
               </ul>
             </li>
           ) : (

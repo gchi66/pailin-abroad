@@ -69,13 +69,13 @@ const ProfileDropdown = () => {
             className="dropdown-link"
             onClick={() => setIsOpen(false)}
           >
-            Account Settings
+            {t("profileDropdown.accountSettings", ui)}
           </NavLink>
           <button
             className="dropdown-link logout-link"
             onClick={handleLogout}
           >
-            Log Out
+            {t("profileDropdown.logout", ui)}
           </button>
         </div>
       )}

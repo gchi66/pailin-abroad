@@ -1,8 +1,12 @@
 import React from "react";
 import "../Styles/Hero.css";
-// import ProfileImage from "/images/Pailin-no-bg.png"; // Ensure this path is correct
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 
 const Hero = ({ onSignupClick }) => {
+  const { ui } = useUiLang();
+  const heroCopy = copy.home.hero;
+
   return (
     <section className="hero">
       <div className="hero-card">
@@ -10,12 +14,12 @@ const Hero = ({ onSignupClick }) => {
         <div className="hero-content">
           <div className="title-container">
             <h2>
-              English learning for Thai speakers
+              {pick(heroCopy.title, ui)}
             </h2>
           </div>
-          <p className="hero-subheader">Lessons based on audio conversations to teach useful, conversational, english.</p>
+          <p className="hero-subheader">{pick(heroCopy.subtitle, ui)}</p>
           <div className="hero-buttons">
-            <button className="free-lessons" onClick={onSignupClick}>SIGN UP FOR FREE</button>
+            <button className="free-lessons" onClick={onSignupClick}>{pick(heroCopy.cta, ui)}</button>
           </div>
         </div>
       </div>

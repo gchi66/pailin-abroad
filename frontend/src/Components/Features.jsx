@@ -1,29 +1,25 @@
 import React from "react";
 import "../Styles/Features.css";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 
-const features = [
-  {
-    icon: <img src="/images/headphones.webp" alt="Globe" />,
-    title: "200+ audio lessons",
-  },
-  {
-    icon: <img src="/images/globe.webp" alt="Globe" />,
-    title: "Content made by native English speakers",
-  },
-  {
-    icon: <img src="images/everyday-english.webp" alt="Globe" />,
-    title: "Useful, everyday English",
-  },
+const featureIcons = [
+  <img src="/images/headphones.webp" alt="Audio icon" />,
+  <img src="/images/globe.webp" alt="Globe icon" />,
+  <img src="images/everyday-english.webp" alt="Everyday English" />,
 ];
 
 const Features = () => {
+  const { ui } = useUiLang();
+  const featureCopy = copy.home.features.items || [];
+
   return (
     <section className="features-section">
       <div className="features-container">
-        {features.map((feature, index) => (
+        {featureCopy.map((feature, index) => (
           <div key={index} className="feature-item">
-            <div className="feature-icon">{feature.icon}</div>
-            <p className="feature-text">{feature.title}</p>
+            <div className="feature-icon">{featureIcons[index]}</div>
+            <p className="feature-text">{pick(feature.title, ui)}</p>
           </div>
         ))}
       </div>

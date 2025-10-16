@@ -8,6 +8,7 @@ import PracticeSection from "./PracticeSection";
 import RichSectionRenderer from "./RichSectionRenderer";
 
 import "../Styles/LessonContent.css";
+import { copy, pick } from "../ui-lang/i18n";
 
 export default function LessonContent({
   sections = [],
@@ -24,6 +25,8 @@ export default function LessonContent({
   images = {},
   isLocked = false,
 }) {
+  const fallbacks = copy.lessonPage.sectionFallbacks;
+  const lockedCopy = copy.lessonPage.locked;
   /* ===============================================================
      HELPER: Section header by contentLang
   =============================================================== */
@@ -103,8 +106,8 @@ export default function LessonContent({
       <div className="lesson-locked-container">
         <div className="lesson-content-blurred">
           <div className="lesson-locked-placeholder">
-            <h3>This lesson is locked</h3>
-            <p>Sample content preview...</p>
+            <h3>{pick(lockedCopy.previewTitle, uiLang)}</h3>
+            <p>{pick(lockedCopy.previewBody, uiLang)}</p>
           </div>
         </div>
         <div className="lesson-locked-overlay">
@@ -114,14 +117,14 @@ export default function LessonContent({
               alt="Locked"
               className="lesson-locked-icon"
             />
-            <h2>This Lesson is Locked</h2>
-            <p>Unlock unlimited access to all lessons and features</p>
+            <h2>{pick(lockedCopy.overlayTitle, uiLang)}</h2>
+            <p>{pick(lockedCopy.overlayBody, uiLang)}</p>
             <div className="lesson-locked-cta-buttons">
               <Link to="/signup" className="lesson-locked-signup-btn">
-                SIGN UP FOR FREE
+                {pick(lockedCopy.ctaSignUp, uiLang)}
               </Link>
               <Link to="/membership" className="lesson-locked-member-btn">
-                BECOME A MEMBER
+                {pick(lockedCopy.ctaBecomeMember, uiLang)}
               </Link>
             </div>
           </div>
@@ -136,8 +139,8 @@ export default function LessonContent({
   if (activeId === "comprehension") {
     const comprehensionSection = sections.find((s) => s.type === "comprehension");
     const headerText = comprehensionSection
-      ? getSectionHeader(comprehensionSection, "COMPREHENSION QUESTIONS")
-      : "COMPREHENSION QUESTIONS";
+      ? getSectionHeader(comprehensionSection, pick(fallbacks.comprehension, uiLang))
+      : pick(fallbacks.comprehension, uiLang);
 
     return (
       <article className="lc-card">
@@ -161,8 +164,8 @@ export default function LessonContent({
   if (activeId === "transcript") {
     const transcriptSection = sections.find((s) => s.type === "transcript");
     const headerText = transcriptSection
-      ? getSectionHeader(transcriptSection, "TRANSCRIPT")
-      : "TRANSCRIPT";
+      ? getSectionHeader(transcriptSection, pick(fallbacks.transcript, uiLang))
+      : pick(fallbacks.transcript, uiLang);
 
     return (
       <article className="lc-card">
@@ -194,7 +197,9 @@ export default function LessonContent({
   =============================================================== */
   if (activeId === "practice") {
     const practiceSection = sections.find((s) => s.type === "practice");
-    const headerText = practiceSection ? getSectionHeader(practiceSection, "PRACTICE") : "PRACTICE";
+    const headerText = practiceSection
+      ? getSectionHeader(practiceSection, pick(fallbacks.practice, uiLang))
+      : pick(fallbacks.practice, uiLang);
 
     return (
       <article className="lc-card">
@@ -234,8 +239,8 @@ export default function LessonContent({
     if (items.length === 0) return null;
 
     const headerText = phrasesSection
-      ? getSectionHeader(phrasesSection, "PHRASES & VERBS")
-      : "PHRASES & VERBS";
+      ? getSectionHeader(phrasesSection, pick(fallbacks.phrasesVerbs, uiLang))
+      : pick(fallbacks.phrasesVerbs, uiLang);
 
     return (
       <article className="lc-card">

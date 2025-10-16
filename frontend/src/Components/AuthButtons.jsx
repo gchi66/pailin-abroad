@@ -1,11 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext"; // Import the useAuth hook
-import  supabaseClient  from "../supabaseClient"; // Import the Supabase client
+import { useAuth } from "../AuthContext";
+import supabaseClient from "../supabaseClient";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 
 const AuthButtons = ({ onLogin, onSignup }) => {
-  const { user } = useAuth(); // Access the user from the AuthContext
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const { ui } = useUiLang();
 
   // const handleSignup = () => {
   //   navigate("/signup");
@@ -28,15 +31,15 @@ const AuthButtons = ({ onLogin, onSignup }) => {
     <div className="auth-buttons">
       {user ? (
         <button className="logout" onClick={handleLogout}>
-          Log Out
+          {t("authButtons.logout", ui)}
         </button>
       ) : (
         <>
           <button className="join-button" onClick={onSignup}>
-            SIGN UP
+            {t("authButtons.signUp", ui)}
           </button>
           <button className="signin-button" onClick={onLogin}>
-            SIGN IN
+            {t("authButtons.signIn", ui)}
           </button>
         </>
       )}

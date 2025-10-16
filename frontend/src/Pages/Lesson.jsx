@@ -1,6 +1,6 @@
 // frontend/src/Pages/Lesson.jsx
-import React, { useEffect, useState, useRef } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchResolvedLesson } from "../lib/fetchResolvedLesson";
 import { fetchSnippets, fetchPhrasesSnippets } from "../lib/fetchSnippets";
@@ -12,6 +12,7 @@ import LessonContent from "../Components/LessonContent";
 import LessonDiscussion from "../Components/LessonDiscussion";
 // import LanguageToggle from "../Components/LanguageToggle"; // (unused)
 import LessonNavigationBanner from "../Components/LessonNavigationBanner";
+import { useUiLang } from "../ui-lang/UiLangContext";
 
 import "../Styles/Lesson.css";
 
@@ -187,12 +188,21 @@ export default function Lesson() {
   useEffect(() => { lastActiveRef.current = activeId; }, [activeId]);
   const { id } = useParams();
 
-  // URL param → controls resolver language (content language)
-  const [searchParams, setSearchParams] = useSearchParams();
-  const contentLang = (searchParams.get("content_lang") || "en").toLowerCase(); // "en" | "th"
+  // Content language persists via localStorage (shared with exercise/topic sections)
+  const [contentLang, setContentLangState] = useState(() => {
+    if (typeof window === "undefined") return "en";
+    const stored = (localStorage.getItem("contentLang") || "").toLowerCase();
+    return stored === "th" ? "th" : "en";
+  });
 
-  // UI language for site-wide labels + header (independent of contentLang)
-  const [uiLang, setUiLang] = useState("en");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("contentLang", contentLang);
+    }
+  }, [contentLang]);
+
+  // UI language for site-wide labels + header
+  const { ui: uiLang } = useUiLang();
 
   // Resolved payload pieces
   const [lesson, setLesson] = useState(null);
@@ -217,12 +227,11 @@ export default function Lesson() {
 
   // (pinnedComment removed - unused)
 
-  // Change content language via URL
-  const setContentLang = (lang) => {
-    const next = new URLSearchParams(searchParams);
-    next.set("content_lang", lang);
-    setSearchParams(next, { replace: true });
-  };
+  // Change content language via local state/storage (matches LessonLanguageToggle contract)
+  const setContentLang = useCallback((lang) => {
+    const normalized = lang === "th" ? "th" : "en";
+    setContentLangState(normalized);
+  }, []);
 
 
 
@@ -464,15 +473,6 @@ export default function Lesson() {
           isLocked={isLocked}
         />
 
-        {/* Language toggles
-        <LanguageToggle
-          language={uiLang}
-          setLanguage={setUiLang}
-          label="UI language:"
-          showLabel={true}
-          buttonStyle={true}
-        /> */}
-
         {/* Body */}
         <div className="lesson-body">
           <LessonSidebar
@@ -494,7 +494,6 @@ export default function Lesson() {
             lessonPhrases={lessonPhrases}
             activeId={activeId}
             uiLang={uiLang}
-            setUiLang={setUiLang}
             snipIdx={snipIdx}
             phrasesSnipIdx={phrasesSnipIdx}
             contentLang={contentLang}

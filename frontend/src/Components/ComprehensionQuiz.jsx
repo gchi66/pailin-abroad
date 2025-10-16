@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import "../Styles/ComprehensionQuiz.css";
+import { copy, pick } from "../ui-lang/i18n";
 
 export default function ComprehensionQuiz({ questions = [], uiLang = "en", images = {} }) {
   const [selected, setSelected] = useState({});   // { [qId]: ["A","C"] }
   const [results,  setResults]  = useState({});   // { [qId]: "correct" | "incorrect" }
   const [checked,  setChecked]  = useState(false);
+  const quizCopy = copy.lessonPage.quiz;
 
   /* toggle one letter */
   const toggle = (qId, letter, isMulti) =>
@@ -124,7 +126,7 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en", image
         className="cq-check-btn"
         onClick={checkAnswers}
       >
-        Check answers
+        {pick(quizCopy.checkAnswers, uiLang)}
       </button>
     </>
   );

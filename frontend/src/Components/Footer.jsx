@@ -1,42 +1,43 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../Styles/Footer.css";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 
 const Footer = () => {
+  const { ui } = useUiLang();
+  const footerCopy = copy.footer;
+  const { resources, about, help } = footerCopy.sections;
+  const year = new Date().getFullYear();
+
+  const renderItems = (section) =>
+    (section.items || []).map((item, index) => (
+      <li key={index}>{pick(item.text, ui)}</li>
+    ));
+
   return (
     <footer className="footer">
-      {/* Top section in black (#1e1e1e) */}
       <div className="footer-top">
         <div className="footer-container">
           <div className="footer-column">
-            <h3 className="footer-title">RESOURCES</h3>
-            <ul>
-              <li>Lesson Library</li>
-              <li>Free Lessons</li>
-              <li>Phrases &amp; Phrasal Verbs</li>
-              <li>Culture Notes</li>
-              <li>Common Mistakes</li>
-            </ul>
+            <h3 className="footer-title">{pick(resources.title, ui)}</h3>
+            <ul>{renderItems(resources)}</ul>
           </div>
           <div className="footer-column">
-            <h3 className="footer-title">ABOUT US</h3>
-            <ul>
-              <li>Why Choose Us?</li>
-              <li>About Pailin Abroad</li>
-              <li>Our Team</li>
-              <li>Membership Options</li>
-              <li>Work With Us</li>
-            </ul>
+            <h3 className="footer-title">{pick(about.title, ui)}</h3>
+            <ul>{renderItems(about)}</ul>
           </div>
           <div className="footer-column">
-            <h3 className="footer-title">HELP CENTER</h3>
+            <h3 className="footer-title">{pick(help.title, ui)}</h3>
             <ul>
-              <li>Contact Us</li>
-              <li><Link to="/faq">FAQ</Link></li>
+              <li>{pick(help.items?.[0]?.text, ui)}</li>
+              <li>
+                <Link to="/faq">{pick(help.items?.[1]?.text, ui)}</Link>
+              </li>
             </ul>
           </div>
           <div className="footer-column follow-us">
-            <h3 className="footer-title">FOLLOW US</h3>
+            <h3 className="footer-title">{pick(footerCopy.followUsTitle, ui)}</h3>
             <div className="social-icons">
               <button className="social-icon-link">
                 <img
@@ -67,9 +68,8 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom bar in #91CAFF */}
       <div className="footer-bottom">
-        <span>Copyright © {new Date().getFullYear()}, Pailin Abroad</span>
+        <span>{pick(footerCopy.copyright, ui).replace("{year}", year)}</span>
       </div>
     </footer>
   );
