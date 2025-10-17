@@ -295,28 +295,28 @@ export const copy = {
       resources: {
         title: { en: "RESOURCES", th: "แหล่งข้อมูล" },
         items: [
-          { text: { en: "Lesson Library", th: "คลังบทเรียน" } },
-          { text: { en: "Free Lessons", th: "บทเรียนฟรี" } },
-          { text: { en: "Phrases & Phrasal Verbs", th: "วลีและ Phrasal Verbs" } },
-          { text: { en: "Culture Notes", th: "เกร็ดวัฒนธรรม" } },
-          { text: { en: "Common Mistakes", th: "ข้อผิดพลาดที่พบบ่อย" } },
+          { text: { en: "Lesson Library", th: "คลังบทเรียน" }, link: "/lessons" },
+          { text: { en: "Free Lessons", th: "บทเรียนฟรี" }, link: "/free-lessons" },
+          { text: { en: "Phrases & Phrasal Verbs", th: "วลีและ Phrasal Verbs" }, link: "/resources?section=phrases-verbs" },
+          { text: { en: "Culture Notes", th: "เกร็ดวัฒนธรรม" }, link: "/resources?section=culture-notes" },
+          { text: { en: "Common Mistakes", th: "ข้อผิดพลาดที่พบบ่อย" }, link: "/resources?section=common-mistakes" },
         ],
       },
       about: {
         title: { en: "ABOUT US", th: "เกี่ยวกับเรา" },
         items: [
           { text: { en: "Why Choose Us?", th: "ทำไมต้องเลือกเรา?" } },
-          { text: { en: "About Pailin Abroad", th: "เกี่ยวกับ Pailin Abroad" } },
-          { text: { en: "Our Team", th: "ทีมของเรา" } },
-          { text: { en: "Membership Options", th: "ตัวเลือกสมาชิก" } },
+          { text: { en: "About Pailin Abroad", th: "เกี่ยวกับ Pailin Abroad" }, link: "/about" },
+          { text: { en: "Our Team", th: "ทีมของเรา" }, link: "/about?section=our-team" },
+          { text: { en: "Membership Options", th: "ตัวเลือกสมาชิก" }, link: "/membership" },
           { text: { en: "Work With Us", th: "ร่วมงานกับเรา" } },
         ],
       },
       help: {
         title: { en: "HELP CENTER", th: "ศูนย์ช่วยเหลือ" },
         items: [
-          { text: { en: "Contact Us", th: "ติดต่อเรา" } },
-          { text: { en: "FAQ", th: "คำถามที่พบบ่อย" } },
+          { text: { en: "Contact Us", th: "ติดต่อเรา" }, link: "/contact" },
+          { text: { en: "FAQ", th: "คำถามที่พบบ่อย" }, link: "/faq" },
         ],
       },
     },

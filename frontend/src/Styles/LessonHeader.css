@@ -86,4 +86,18 @@
   right: -30%;                /* overflow by 25% */
   top: 50%;                   /* center vertically */
   transform: translateY(-50%); /* center vertically */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character-panel.has-image {
+  background: #ffffff;
+}
+
+.character-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

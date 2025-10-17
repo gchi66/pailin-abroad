@@ -1,7 +1,9 @@
 # app/resolver.py
+import os
 from typing import Any, Dict, List, Optional
 from app.supabase_client import supabase
 from app.merge_jsonb import merge_content_nodes
+from app.config import Config
 
 Lang = str  # "en" | "th"
 
@@ -87,7 +89,8 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         .select(
             "id, stage, level, lesson_order, image_url, conversation_audio_url, "
             "lesson_external_id, "
-            "title, title_th, subtitle, subtitle_th, focus, focus_th, backstory, backstory_th"
+            "title, title_th, subtitle, subtitle_th, focus, focus_th, backstory, backstory_th, "
+            "header_img"
         )
         .eq("id", lesson_id)
         .single()
@@ -186,6 +189,41 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         "focus": _pick_lang(L.get("focus"), L.get("focus_th"), lang),
         "backstory": _pick_lang(L.get("backstory"), L.get("backstory_th"), lang),
     }
+
+    raw_header_img = (L.get("header_img") or "").strip() if L else ""
+    header_image_path: Optional[str] = None
+    header_image_url: Optional[str] = None
+
+    if raw_header_img:
+        lowered = raw_header_img.lower()
+        if lowered.startswith("http://") or lowered.startswith("https://"):
+            header_image_url = raw_header_img
+        else:
+            relative = raw_header_img.lstrip("/")
+            if relative.lower().startswith("lesson-images/"):
+                # strip bucket name if present
+                relative = relative.split("/", 1)[1]
+            if "?" in relative:
+                # drop query params for normalization
+                relative = relative.split("?", 1)[0]
+            if "#" in relative:
+                relative = relative.split("#", 1)[0]
+            if not relative.lower().startswith("headers/") and "/" not in relative:
+                relative = f"headers/{relative}"
+
+            filename = relative.rsplit("/", 1)[-1]
+            root, ext = os.path.splitext(filename)
+            if not ext:
+                relative = f"{relative}.webp"
+
+            header_image_path = relative
+            base_url = (Config.SUPABASE_URL or "").rstrip("/")
+            if base_url:
+                header_image_url = f"{base_url}/storage/v1/object/public/lesson-images/{relative}"
+
+    resolved["header_img"] = raw_header_img or None
+    resolved["header_image_path"] = header_image_path
+    resolved["header_image_url"] = header_image_url
 
     # Sections: deep-merge content_jsonb when lang==th; simple for titles/plain content
     resolved_sections: List[Dict[str, Any]] = []

@@ -178,6 +178,25 @@ function normalizeQuestion(q, contentLang) {
   };
 }
 
+function normalizeHeaderImagePath(raw) {
+  if (!raw) return null;
+  let value = String(raw).trim();
+  if (!value) return null;
+  if (/^https?:\/\//i.test(value)) {
+    return null;
+  }
+  value = value.replace(/^lesson-images\//i, "");
+  value = value.replace(/^\/+/, "");
+  value = value.split(/[?#]/)[0];
+  if (!/^headers\//i.test(value) && !value.includes("/")) {
+    value = `headers/${value}`;
+  }
+  if (!/\.[a-z0-9]+$/i.test(value)) {
+    value = `${value}.webp`;
+  }
+  return value;
+}
+
 // ---------------- component ----------------
 
 export default function Lesson() {
@@ -249,6 +268,25 @@ export default function Lesson() {
         const subtitle_en = payload.subtitle_en ?? payload.subtitle ?? null;
         const subtitle_th = payload.subtitle_th ?? null;
 
+        let headerImageUrl = payload.header_image_url ?? null;
+        let headerImagePath = payload.header_image_path ?? null;
+        const headerImgRaw = payload.header_img ?? null;
+
+        if (!headerImageUrl && headerImgRaw && /^https?:\/\//i.test(headerImgRaw)) {
+          headerImageUrl = headerImgRaw;
+        }
+
+        if (!headerImageUrl) {
+          const normalizedPath = normalizeHeaderImagePath(headerImagePath || headerImgRaw);
+          if (normalizedPath) {
+            headerImagePath = normalizedPath;
+            const { data } = supabaseClient.storage
+              .from("lesson-images")
+              .getPublicUrl(normalizedPath);
+            headerImageUrl = data?.publicUrl ?? null;
+          }
+        }
+
         const lsn = {
           id: payload.id,
           stage: payload.stage,
@@ -267,6 +305,9 @@ export default function Lesson() {
           subtitle: payload.subtitle ?? null,
           focus: payload.focus ?? null,
           backstory: payload.backstory ?? null,
+          header_img: headerImgRaw,
+          header_image_path: headerImagePath,
+          header_image_url: headerImageUrl,
         };
 
         // normalize questions/exercises in case resolver sends raw DB rows
@@ -462,6 +503,7 @@ export default function Lesson() {
           lessonOrder={lesson.lesson_order}
           title={headerTitle}
           subtitle={headerSubtitle}
+          headerImageUrl={lesson.header_image_url}
         />
 
         {/* Audio card */}

@@ -350,6 +350,7 @@ def upsert_lesson(data, lang="en", dry_run=False):
             "subtitle":  lesson.get("subtitle") or None,
             "focus":     lesson.get("focus") or None,
             "backstory": lesson.get("backstory") or None,
+            "header_img": lesson.get("header_img") or None,
             # add other base fields here if you have them (e.g., conversation_audio_url)
         }
 

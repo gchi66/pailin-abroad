@@ -10,10 +10,43 @@ const Footer = () => {
   const { resources, about, help } = footerCopy.sections;
   const year = new Date().getFullYear();
 
+  const isExternalLink = (url = "") =>
+    /^https?:\/\//i.test(url) || url.startsWith("mailto:") || url.startsWith("tel:");
+
+  const buildInternalLink = (target) => {
+    const [pathname, ...rest] = target.split("?");
+    const existingSearch = rest.length ? rest.join("?") : "";
+    const params = new URLSearchParams(existingSearch);
+    params.set("ui", ui);
+    const queryString = params.toString();
+    return queryString ? `${pathname}?${queryString}` : pathname;
+  };
+
   const renderItems = (section) =>
-    (section.items || []).map((item, index) => (
-      <li key={index}>{pick(item.text, ui)}</li>
-    ));
+    (section.items || []).map((item, index) => {
+      const text = pick(item.text, ui);
+      const { link } = item || {};
+
+      if (!link) {
+        return <li key={index}>{text}</li>;
+      }
+
+      if (isExternalLink(link)) {
+        return (
+          <li key={index}>
+            <a href={link} target="_blank" rel="noopener noreferrer">
+              {text}
+            </a>
+          </li>
+        );
+      }
+
+      return (
+        <li key={index}>
+          <Link to={buildInternalLink(link)}>{text}</Link>
+        </li>
+      );
+    });
 
   return (
     <footer className="footer">
@@ -29,12 +62,7 @@ const Footer = () => {
           </div>
           <div className="footer-column">
             <h3 className="footer-title">{pick(help.title, ui)}</h3>
-            <ul>
-              <li>{pick(help.items?.[0]?.text, ui)}</li>
-              <li>
-                <Link to="/faq">{pick(help.items?.[1]?.text, ui)}</Link>
-              </li>
-            </ul>
+            <ul>{renderItems(help)}</ul>
           </div>
           <div className="footer-column follow-us">
             <h3 className="footer-title">{pick(footerCopy.followUsTitle, ui)}</h3>

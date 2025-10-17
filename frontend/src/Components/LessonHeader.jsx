@@ -2,22 +2,27 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../Styles/LessonHeader.css";
 
-export default function LessonHeader({ level, lessonOrder, title, subtitle, titleTh, subtitleTh }) {
-  // Check if this is a checkpoint lesson
+export default function LessonHeader({
+  level,
+  lessonOrder,
+  title,
+  subtitle,
+  titleTh,
+  subtitleTh,
+  headerImageUrl,
+}) {
   const isCheckpoint = (title || "").toLowerCase().includes("checkpoint");
+  const hasImage = Boolean(headerImageUrl);
 
   return (
     <section className="lesson-banner">
-      {/* left column */}
       <div className="banner-left">
         <Link to="/lessons" className="back-link">
           &lt; BACK TO LESSON LIBRARY
         </Link>
 
         <span className="lesson-number">
-          {isCheckpoint
-            ? `LESSON ${level} CHECKPOINT`
-            : `LESSON ${level}.${lessonOrder}`}
+          {isCheckpoint ? `LESSON ${level} CHECKPOINT` : `LESSON ${level}.${lessonOrder}`}
         </span>
         <h1 className="lesson-title">{title}</h1>
         <h2 className="lesson-subtitle">{subtitle}</h2>
@@ -28,10 +33,12 @@ export default function LessonHeader({ level, lessonOrder, title, subtitle, titl
         </p> */}
       </div>
 
-      {/* right column */}
       <div className="banner-right">
-        {/* placeholder panel – you'll swap in a dynamic <img /> later */}
-        <div className="character-panel" aria-hidden="true" />
+        <div className={`character-panel${hasImage ? " has-image" : ""}`}>
+          {hasImage ? (
+            <img src={headerImageUrl} alt="" className="character-image" loading="lazy" />
+          ) : null}
+        </div>
       </div>
     </section>
   );

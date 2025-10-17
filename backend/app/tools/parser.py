@@ -912,12 +912,24 @@ class GoogleDocsParser:
         lang: str = 'en'
     ) -> dict:
         # ---- header & bucket bookkeeping -----------------------------------
-        lesson_header, _ = lesson_sections[0]
+        lesson_header, header_lines = lesson_sections[0]
         lesson_header_raw = lesson_header
         lesson_info, _   = self.parse_lesson_header(lesson_header, stage)
         lesson           = lesson_info.copy()
         lesson["focus"]      = ""
         lesson["backstory"]  = ""
+
+        header_img = None
+        for raw_text, _style in (header_lines or []):
+            text = (raw_text or "").strip()
+            if not text:
+                continue
+            match = re.match(r"\[\s*header_img\s*:\s*([^\]]+)\]", text, re.IGNORECASE)
+            if match:
+                header_img = match.group(1).strip()
+                break
+        if header_img:
+            lesson["header_img"] = header_img
 
         # Add these right after the header parse:
         LKEY  = _lesson_key(lesson_header_raw)

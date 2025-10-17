@@ -1,27 +1,50 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "../Styles/Resources.css";
 
 const Resources = () => {
+  const sections = useMemo(
+    () => [
+      { label: "EXERCISE BANK", slug: "exercise-bank", path: "/exercise-bank" },
+      { label: "PHRASES & VERBS", slug: "phrases-verbs" },
+      { label: "COMMON MISTAKES", slug: "common-mistakes" },
+      { label: "CULTURE NOTES", slug: "culture-notes" },
+      { label: "TOPIC LIBRARY", slug: "topic-library", path: "/topic-library" },
+    ],
+    []
+  );
+
   const [activeSection, setActiveSection] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const sections = [
-    "EXERCISE BANK",
-    "PHRASES & VERBS",
-    "COMMON MISTAKES",
-    "CULTURE NOTES",
-    "TOPIC LIBRARY"
-  ];
+  useEffect(() => {
+    const sectionSlug = (searchParams.get("section") || "").toLowerCase();
+    if (!sectionSlug) return;
 
-  const handleSectionClick = (section, index) => {
-    if (section === "TOPIC LIBRARY") {
-      navigate("/topic-library");
-    } else if (section === "EXERCISE BANK") {
-      navigate("/exercise-bank");
-    } else {
-      setActiveSection(index);
+    const section = sections.find((entry) => entry.slug === sectionSlug);
+    if (!section) return;
+
+    if (section.path) {
+      navigate(section.path);
+      return;
     }
+
+    setActiveSection(section.slug);
+  }, [navigate, searchParams, sections]);
+
+  const handleSectionClick = (section) => {
+    if (section.path) {
+      navigate(section.path);
+      return;
+    }
+
+    setActiveSection(section.slug);
+    const nextParams = new URLSearchParams(searchParams);
+    if (section.slug) {
+      nextParams.set("section", section.slug);
+    }
+    setSearchParams(nextParams, { replace: true });
   };
 
   return (
@@ -34,13 +57,13 @@ const Resources = () => {
 
       {/* section buttons */}
       <div className="resources-sections">
-        {sections.map((section, index) => (
+        {sections.map((section) => (
           <button
-            key={index}
-            className={`section-btn ${activeSection === index ? 'active' : ''}`}
-            onClick={() => handleSectionClick(section, index)}
+            key={section.slug}
+            className={`section-btn ${activeSection === section.slug ? 'active' : ''}`}
+            onClick={() => handleSectionClick(section)}
           >
-            {section}
+            {section.label}
           </button>
         ))}
       </div>

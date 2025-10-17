@@ -14,6 +14,32 @@ const DEFAULT_QUESTION_STATE = {
   loading: false,
 };
 
+const isExampleItem = (item) => {
+  if (!item) return false;
+  if (typeof item.is_example === "boolean") {
+    return item.is_example;
+  }
+  const number = item.number;
+  if (typeof number === "string") {
+    return number.trim().toLowerCase() === "example";
+  }
+  return false;
+};
+
+const formatCorrectValue = (value) => {
+  if (typeof value !== "string") {
+    if (value === true) return "Yes";
+    if (value === false) return "No";
+    return value || "";
+  }
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "yes") return "Yes";
+  if (normalized === "no") return "No";
+  if (normalized === "true") return "Yes";
+  if (normalized === "false") return "No";
+  return value.trim();
+};
+
 export default function SentenceTransformExercise({
   exercise = {},
   images = {},
@@ -35,9 +61,18 @@ export default function SentenceTransformExercise({
 
   const initialQuestions = useMemo(
     () =>
-      items.map(() => ({
-        ...DEFAULT_QUESTION_STATE,
-      })),
+      items.map((item) => {
+        if (isExampleItem(item)) {
+          return {
+            ...DEFAULT_QUESTION_STATE,
+            answer: item?.answer || "",
+            correct: true,
+          };
+        }
+        return {
+          ...DEFAULT_QUESTION_STATE,
+        };
+      }),
     [items]
   );
 
@@ -209,13 +244,54 @@ export default function SentenceTransformExercise({
 
       {items.map((item, idx) => {
         const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
+        const exampleItem = isExampleItem(item);
+
+        if (exampleItem) {
+          const correctValue = formatCorrectValue(item?.correct);
+          const answerValue = item?.answer || "";
+          const imageUrl = item?.image_key ? images[item.image_key] : null;
+
+          return (
+            <div key={`sentence-${idx}`} className="st-question st-example">
+              <p className="st-example-label">Example</p>
+              {imageUrl && (
+                <div className="fb-image-container">
+                  <img
+                    src={imageUrl}
+                    alt="Example sentence"
+                    className="fb-image"
+                  />
+                </div>
+              )}
+              <p className="st-stem">
+                <AudioButton
+                  audioKey={item.audio_key}
+                  audioIndex={audioIndex}
+                  className="inline mr-2"
+                />
+                {item?.text}
+              </p>
+              {correctValue && (
+                <p className="st-example-meta">
+                  <strong>Correct?</strong> {correctValue}
+                </p>
+              )}
+              {answerValue && (
+                <p className="st-example-meta st-example-answer">
+                  <strong>Answer:</strong> {answerValue}
+                </p>
+              )}
+            </div>
+          );
+        }
+
         const disabled =
           questionState.correct === true || questionState.loading === true;
         const imageUrl = item.image_key ? images[item.image_key] : null;
         const numberLabel = item.number ?? idx + 1;
 
         return (
-        <div key={`sentence-${idx}`} className="st-question">
+          <div key={`sentence-${idx}`} className="st-question">
             {imageUrl && (
               <div className="fb-image-container">
                 <img

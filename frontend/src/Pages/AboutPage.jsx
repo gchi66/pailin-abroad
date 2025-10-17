@@ -1,10 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import "../Styles/AboutPage.css";
 import AboutMethod from "../Components/AboutMethod";
 import Team from "../Components/Team";
 
 const AboutPage = () => {
-  const [selectedSection, setSelectedSection] = useState("The Method");
+  const sections = useMemo(
+    () => [
+      { label: "The Method", slug: "the-method" },
+      { label: "Our Team", slug: "our-team" },
+      { label: "The Story", slug: "the-story" },
+    ],
+    []
+  );
+  const defaultSection = sections[0];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedSection, setSelectedSection] = useState(defaultSection.label);
+
+  useEffect(() => {
+    const sectionSlug = (searchParams.get("section") || "").toLowerCase();
+    const match =
+      sections.find((section) => section.slug === sectionSlug) || defaultSection;
+    setSelectedSection(match.label);
+  }, [searchParams, sections, defaultSection]);
+
+  const handleSectionClick = (section) => {
+    setSelectedSection(section.label);
+    const nextParams = new URLSearchParams(searchParams);
+    if (section.slug === defaultSection.slug) {
+      nextParams.delete("section");
+    } else {
+      nextParams.set("section", section.slug);
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
 
   return (
     <div className="about-page-container">
@@ -16,24 +45,15 @@ const AboutPage = () => {
 
       {/* Section navigation */}
       <div className="section-btns-container">
-        <button
-          className={`section-btn ${selectedSection === "The Method" ? "active" : ""}`}
-          onClick={() => setSelectedSection("The Method")}
-        >
-          THE METHOD
-        </button>
-        <button
-          className={`section-btn ${selectedSection === "Our Team" ? "active" : ""}`}
-          onClick={() => setSelectedSection("Our Team")}
-        >
-          OUR TEAM
-        </button>
-        <button
-          className={`section-btn ${selectedSection === "The Story" ? "active" : ""}`}
-          onClick={() => setSelectedSection("The Story")}
-        >
-          THE STORY
-        </button>
+        {sections.map((section) => (
+          <button
+            key={section.slug}
+            className={`section-btn ${selectedSection === section.label ? "active" : ""}`}
+            onClick={() => handleSectionClick(section)}
+          >
+            {section.label.toUpperCase()}
+          </button>
+        ))}
       </div>
       <div className={`about-method-section ${selectedSection === "The Method" ? "visible" : ""}`}>
         <AboutMethod />

@@ -176,6 +176,7 @@ class ExerciseParser:
                         "text": text,
                         "correct": current_item.get("correct") or "",
                         "answer": ", ".join(answers),
+                        "is_example": bool(current_item.get("is_example")),
                     }
                 elif kind == "multiple_choice":
                     payload = {
@@ -361,6 +362,7 @@ class ExerciseParser:
                     current_item = {
                         "kind": current_exercise["kind"],
                         "number": number,
+                        "is_example": isinstance(number, str) and number.strip().lower() == "example",
                         "text": "",
                         "answers": [],
                         "options": [],

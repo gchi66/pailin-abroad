@@ -190,6 +190,38 @@
   flex-wrap: wrap;
 }
 
+.st-example {
+  background: rgba(37, 99, 235, 0.08);
+  border-left: 4px solid var(--primary-color, #2563eb);
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.st-example-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary-color, #2563eb);
+  margin-bottom: 0.5rem;
+}
+
+.st-example-meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  color: rgba(15, 23, 42, 0.8);
+}
+
+.st-example-meta strong {
+  font-weight: 600;
+}
+
+.st-example-answer {
+  margin-top: 0.25rem;
+}
+
 .oe-input-label {
   display: block;
   width: 100%;
