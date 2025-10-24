@@ -11,7 +11,9 @@ def create_app():
     cors = CORS(app, resources={r"/*": {"origins": [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "http://172.28.154.148:3000"
+    "http://172.28.154.148:3000",
+    "https://pailin-abroad.vercel.app",
+    "https://www.pailinabroad.com"
     ]}})
     # , resources={r"/api/*": {"origins": "*"}} # Define resources later in production
     app.config.from_object(Config)
