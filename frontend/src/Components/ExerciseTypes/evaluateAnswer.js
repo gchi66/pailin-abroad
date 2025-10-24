@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../config/api";
+
 async function evaluateAnswer({
   userId,
   exerciseType,
@@ -49,7 +51,7 @@ async function evaluateAnswer({
     Object.assign(payload, extra);
   }
 
-  const response = await fetch("/api/evaluate_answer", {
+  const response = await fetch(`${API_BASE_URL}/api/evaluate_answer`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

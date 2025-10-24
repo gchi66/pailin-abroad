@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import "../Styles/LoginModal.css";
 
@@ -29,7 +30,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/login",
+        `${API_BASE_URL}/api/login`,
         { email, password },
         {
           headers: {

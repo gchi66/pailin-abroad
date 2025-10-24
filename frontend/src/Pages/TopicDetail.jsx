@@ -5,6 +5,7 @@ import LessonLanguageToggle from "../Components/LessonLanguageToggle";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/TopicDetail.css";
 
 const TopicDetail = () => {
@@ -49,7 +50,7 @@ const TopicDetail = () => {
     const fetchTopic = async () => {
       try {
         setError(null);
-        const response = await fetch(`/api/topic-library/${slug}?lang=${contentLang}`, {
+        const response = await fetch(`${API_BASE_URL}/api/topic-library/${slug}?lang=${contentLang}`, {
           signal: controller.signal,
         });
         if (!response.ok) {

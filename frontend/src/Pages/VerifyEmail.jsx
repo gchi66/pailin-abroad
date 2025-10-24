@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const VerifyEmail = () => {
 
         try {
           // Call backend to confirm email and create/sync user record
-          const resp = await fetch('/api/confirm-email', {
+          const resp = await fetch(`${API_BASE_URL}/api/confirm-email`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

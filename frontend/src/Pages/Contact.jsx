@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../Styles/Contact.css";
+import { API_BASE_URL } from "../config/api";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/contact", {
+      const response = await fetch(`${API_BASE_URL}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

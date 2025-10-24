@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../Styles/SignUpPage.css"; // We'll add minimal CSS
+import { API_BASE_URL } from "../config/api";
 
 const SignUpPage = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const SignUpPage = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/signup", {
+      const response = await axios.post(`${API_BASE_URL}/api/signup`, {
         email,
         password,
       });

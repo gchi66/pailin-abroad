@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../Styles/ForgotPasswordModal.css";
+import { API_BASE_URL } from "../config/api";
 
 const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/forgot-password/magic-link",
+        `${API_BASE_URL}/api/forgot-password/magic-link`,
         { email },
         {
           headers: {
@@ -66,7 +67,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/forgot-password/reset",
+        `${API_BASE_URL}/api/forgot-password/reset`,
         { email },
         {
           headers: {

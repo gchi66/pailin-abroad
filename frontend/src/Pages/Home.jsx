@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 import Hero from "../Components/Hero";
 import FreeLessonHeader from "../Components/FreeLessonHeader";
 import FreeLessonCards from "../Components/FreeLessonCards";
@@ -41,7 +42,7 @@ const Home = ({ toggleSignupModal }) => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/")
+      .get(`${API_BASE_URL}/`)
       .then((response) => {
         setMessage(response.data.message);
       })

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
 import { format } from "date-fns";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/SubscriptionBilling.css";
 
 const SubscriptionBilling = () => {
@@ -69,7 +70,7 @@ const SubscriptionBilling = () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session?.access_token) return;
 
-      const response = await fetch("http://127.0.0.1:5000/api/get-payment-method", {
+      const response = await fetch(`${API_BASE_URL}/api/get-payment-method`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${session.access_token}`,
@@ -93,7 +94,7 @@ const SubscriptionBilling = () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session?.access_token) return;
 
-      const response = await fetch("http://127.0.0.1:5000/api/get-invoices", {
+      const response = await fetch(`${API_BASE_URL}/api/get-invoices`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${session.access_token}`,
@@ -122,7 +123,7 @@ const SubscriptionBilling = () => {
         return;
       }
 
-      const response = await fetch("http://127.0.0.1:5000/api/create-portal-session", {
+      const response = await fetch(`${API_BASE_URL}/api/create-portal-session`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${session.access_token}`,
@@ -160,7 +161,7 @@ const SubscriptionBilling = () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session?.access_token) return;
 
-      const response = await fetch(`http://127.0.0.1:5000/api/download-invoice/${invoiceId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/download-invoice/${invoiceId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${session.access_token}`
@@ -196,7 +197,7 @@ const SubscriptionBilling = () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session?.access_token) return;
 
-      const response = await fetch("http://127.0.0.1:5000/api/cancel-subscription", {
+      const response = await fetch(`${API_BASE_URL}/api/cancel-subscription`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${session.access_token}`,

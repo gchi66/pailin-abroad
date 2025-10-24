@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../Styles/Checkout.css";
 import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 
 // ✅ Load Stripe publishable key from .env
 const STRIPE_KEY =
@@ -59,19 +60,16 @@ const Checkout = () => {
       }
 
       // ✅ Create checkout session
-      const response = await fetch(
-        "http://127.0.0.1:5000/api/create-checkout-session",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            price_id: priceId,
-            email: userEmail,
-            success_url: "http://localhost:3000/payment-success",
-            cancel_url: "http://localhost:3000/checkout",
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          price_id: priceId,
+          email: userEmail,
+          success_url: "http://localhost:3000/payment-success",
+          cancel_url: "http://localhost:3000/checkout",
+        }),
+      });
 
       const data = await response.json();
 

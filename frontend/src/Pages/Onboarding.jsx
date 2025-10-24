@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
 import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/Onboarding.css";
 
 const Onboarding = () => {
@@ -275,7 +276,7 @@ const Onboarding = () => {
       }
 
       // Call the set password API for onboarding
-      const response = await fetch("http://127.0.0.1:5000/api/set-password", {
+      const response = await fetch(`${API_BASE_URL}/api/set-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -354,7 +355,7 @@ const Onboarding = () => {
       }
 
       // Update user profile with username and avatar
-      const response = await fetch("http://127.0.0.1:5000/api/user/profile", {
+      const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

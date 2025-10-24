@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/MyPathway.css";
 
 const MyPathway = () => {
@@ -113,12 +114,12 @@ const MyPathway = () => {
           statsResponse,
           commentsResponse
         ] = await Promise.all([
-          fetch('/api/user/profile', { method: 'GET', headers }),
-          fetch('/api/user/completed-lessons', { method: 'GET', headers }),
-          fetch('/api/user/next-lesson', { method: 'GET', headers }),
-          fetch('/api/user/pathway-lessons', { method: 'GET', headers }),
-          fetch('/api/user/stats', { method: 'GET', headers }),
-          fetch('/api/user/comments', { method: 'GET', headers })
+          fetch(`${API_BASE_URL}/api/user/profile`, { method: 'GET', headers }),
+          fetch(`${API_BASE_URL}/api/user/completed-lessons`, { method: 'GET', headers }),
+          fetch(`${API_BASE_URL}/api/user/next-lesson`, { method: 'GET', headers }),
+          fetch(`${API_BASE_URL}/api/user/pathway-lessons`, { method: 'GET', headers }),
+          fetch(`${API_BASE_URL}/api/user/stats`, { method: 'GET', headers }),
+          fetch(`${API_BASE_URL}/api/user/comments`, { method: 'GET', headers })
         ]);
 
         // Process responses

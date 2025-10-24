@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/TopicLibrary.css";
 
 const TopicLibrary = () => {
@@ -21,7 +22,7 @@ const TopicLibrary = () => {
           setLoading(true);
           setError(null);
         }
-        const response = await fetch(`/api/topic-library?lang=${uiLang}`, {
+        const response = await fetch(`${API_BASE_URL}/api/topic-library?lang=${uiLang}`, {
           signal: controller.signal,
         });
         if (!response.ok) {

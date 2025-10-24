@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/ExerciseBank.css";
 
 const ExerciseBank = () => {
@@ -20,7 +21,7 @@ const ExerciseBank = () => {
     const fetchSections = async () => {
       try {
         setLoadingSections(true);
-        const response = await fetch("/api/exercise-bank/sections", {
+        const response = await fetch(`${API_BASE_URL}/api/exercise-bank/sections`, {
           signal: controller.signal,
         });
         if (!response.ok) {
@@ -59,7 +60,7 @@ const ExerciseBank = () => {
       try {
         setLoadingFeatured(true);
         setFeaturedError(null);
-        const response = await fetch("/api/exercise-bank/featured", {
+        const response = await fetch(`${API_BASE_URL}/api/exercise-bank/featured`, {
           signal: controller.signal,
         });
         if (!response.ok) {

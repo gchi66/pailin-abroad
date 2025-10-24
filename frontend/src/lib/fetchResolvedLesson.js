@@ -1,4 +1,5 @@
 import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 
 export async function fetchResolvedLesson(lessonId, lang = "en") {
   // Get the current session to include auth token
@@ -13,7 +14,7 @@ export async function fetchResolvedLesson(lessonId, lang = "en") {
     headers['Authorization'] = `Bearer ${session.access_token}`;
   }
 
-  const res = await fetch(`/api/lessons/${lessonId}/resolved?lang=${lang}`, {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/resolved?lang=${lang}`, {
     headers,
   });
 

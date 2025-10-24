@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
 import SubscriptionBilling from "../Components/SubscriptionBilling";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/AccountSettings.css";
 
 const AccountSettings = () => {
@@ -47,7 +48,7 @@ const AccountSettings = () => {
     try {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session?.access_token) {
-        const response = await fetch("http://127.0.0.1:5000/api/delete_account", {
+        const response = await fetch(`${API_BASE_URL}/api/delete_account`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ access_token: session.access_token }),

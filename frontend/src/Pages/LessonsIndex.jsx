@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import supabaseClient from "../supabaseClient";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/LessonsIndex.css";
 
 const LessonsIndex = () => {
@@ -156,7 +157,7 @@ const LessonsIndex = () => {
         }
 
         // Make API call to backend for completed lessons
-        const response = await fetch('/api/user/completed-lessons', {
+        const response = await fetch(`${API_BASE_URL}/api/user/completed-lessons`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${session.access_token}`,
@@ -195,7 +196,7 @@ const LessonsIndex = () => {
         }
 
         // Make API call to check level completion status
-        const response = await fetch(`/api/user/level-completion-status/${selectedStage}/${selectedLevel}`, {
+        const response = await fetch(`${API_BASE_URL}/api/user/level-completion-status/${selectedStage}/${selectedLevel}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${session.access_token}`,

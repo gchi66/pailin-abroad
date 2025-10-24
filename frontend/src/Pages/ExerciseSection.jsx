@@ -4,6 +4,7 @@ import LessonLanguageToggle from "../Components/LessonLanguageToggle";
 import FillBlankExercise from "../Components/ExerciseTypes/FillBlankExercise";
 import MultipleChoiceExercise from "../Components/ExerciseTypes/MultipleChoiceExercise";
 import SentenceTransformExercise from "../Components/ExerciseTypes/SentenceTransformExercise";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/ExerciseBank.css";
 
 const EXERCISE_COMPONENTS = {
@@ -35,7 +36,7 @@ const ExerciseSection = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`/api/exercise-bank/section/${categorySlug}/${sectionSlug}`, {
+        const response = await fetch(`${API_BASE_URL}/api/exercise-bank/section/${categorySlug}/${sectionSlug}`, {
           signal: controller.signal,
         });
         if (!response.ok) {
