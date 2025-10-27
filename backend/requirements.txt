@@ -10,3 +10,5 @@ pytest>=7.0,<8.0           # Testing framework
 Flask-Testing>=0.8,<1.0    # Testing utilities for Flask apps
 Flask-SocketIO>=5.0,<6.0   # Asynchronous capabilities
 stripe>=5.0,<6.0           # Stripe payment processing SDK
+supabase>=2.0.0            # Supabase client library
+openai>=1.0.0              # OpenAI API client

@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from functools import wraps
 from app.supabase_client import supabase
 from app.resolver import resolve_lesson
 from email.mime.multipart import MIMEMultipart
@@ -39,11 +40,22 @@ def _category_slug(key: str) -> str:
 def _section_slug(section: str) -> str:
     return _slugify(section or "section")
 
+
+def handle_options(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.method == 'OPTIONS':
+            return '', 204
+        return f(*args, **kwargs)
+    return decorated_function
+
 @routes.route("/", methods=["GET"])
+@handle_options
 def home():
     return jsonify({}), 204
 
 @routes.route('/api/login', methods=['GET', 'POST'])
+@handle_options
 def login():
     try:
         data = request.json
@@ -78,6 +90,7 @@ def login():
 
 
 @routes.route('/api/user/profile', methods=['GET'])
+@handle_options
 def get_user_profile():
     try:
         # Get authorization header
@@ -131,6 +144,7 @@ def get_user_profile():
 
 
 @routes.route('/api/user/profile', methods=['PUT'])
+@handle_options
 def update_user_profile():
     try:
         # Get authorization header
@@ -200,6 +214,7 @@ def update_user_profile():
 
 
 @routes.route('/api/user/completed-lessons', methods=['GET'])
+@handle_options
 def get_completed_lessons():
     try:
         # Get authorization header
@@ -234,6 +249,7 @@ def get_completed_lessons():
 
 
 @routes.route('/api/user/next-lesson', methods=['GET'])
+@handle_options
 def get_next_lesson():
     try:
         # Get authorization header
@@ -351,6 +367,7 @@ def get_next_lesson():
 
 
 @routes.route('/api/user/pathway-lessons', methods=['GET'])
+@handle_options
 def get_pathway_lessons():
     try:
         # Get authorization header
@@ -453,6 +470,7 @@ def get_pathway_lessons():
 
 
 @routes.route('/api/signup-email', methods=['POST'])
+@handle_options
 def signup_email():
     """Send magic link for account creation - no real account until onboarding complete"""
     print("Email signup endpoint hit!")
@@ -501,6 +519,7 @@ def signup_email():
 
 
 @routes.route('/api/confirm-email', methods=['POST'])
+@handle_options
 def confirm_email():
     """Handle email confirmation and create user record in database"""
     print("Email confirmation endpoint hit!")
@@ -561,6 +580,7 @@ def confirm_email():
         return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
 
 @routes.route('/api/set-password', methods=['POST'])
+@handle_options
 def set_password():
     """Set password for user during onboarding (after email confirmation)"""
     print("Set password endpoint hit!")
@@ -664,6 +684,7 @@ def set_password():
         return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
 
 @routes.route('/api/complete-signup', methods=['POST'])
+@handle_options
 def complete_signup():
     """Complete the signup process - this creates the real account after onboarding"""
     print("Complete signup endpoint hit!")
@@ -754,6 +775,7 @@ def complete_signup():
         return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
 
 @routes.route('/api/delete_account', methods=['DELETE'])
+@handle_options
 def delete_account():
     try:
         data = request.json
@@ -791,6 +813,7 @@ def delete_account():
 
 
 @routes.route("/contact", methods=["POST"])
+@handle_options
 def contact():
     data = request.get_json()
     name = data.get("name")
@@ -828,6 +851,7 @@ def contact():
 
 
 @routes.route("/api/lessons/<lesson_id>/resolved", methods=["GET"])
+@handle_options
 def get_lesson_resolved(lesson_id):
     lang = (request.args.get("lang") or "en").lower()
     if lang not in ("en", "th"):
@@ -926,6 +950,7 @@ def get_lesson_resolved(lesson_id):
 
 
 @routes.route('/api/user/level-completion-status/<stage>/<int:level>', methods=['GET'])
+@handle_options
 def get_level_completion_status(stage, level):
     try:
         # Get authorization header
@@ -972,6 +997,7 @@ def get_level_completion_status(stage, level):
 
 
 @routes.route('/api/user/stats', methods=['GET'])
+@handle_options
 def get_user_stats():
     try:
         # Get authorization header
@@ -1044,6 +1070,7 @@ def get_user_stats():
 
 
 @routes.route('/api/user/comments', methods=['GET'])
+@handle_options
 def get_user_comments():
     try:
         # Get authorization header
@@ -1073,6 +1100,7 @@ def get_user_comments():
 
 
 @routes.route('/api/forgot-password/magic-link', methods=['POST'])
+@handle_options
 def send_magic_link():
     """Send a magic link for passwordless login"""
     print("Magic link endpoint hit!")
@@ -1121,6 +1149,7 @@ def send_magic_link():
 
 
 @routes.route('/api/forgot-password/reset', methods=['POST'])
+@handle_options
 def reset_password():
     """Send password reset email"""
     print("Password reset endpoint hit!")
@@ -1166,6 +1195,7 @@ def reset_password():
 
 
 @routes.route('/api/exercise-bank/sections', methods=['GET'])
+@handle_options
 def get_exercise_sections():
     """Return sections grouped by category for the exercise bank."""
     try:
@@ -1245,6 +1275,7 @@ def get_exercise_sections():
 
 
 @routes.route('/api/exercise-bank/featured', methods=['GET'])
+@handle_options
 def get_featured_exercises():
     """Return featured exercises across the exercise bank."""
     try:
@@ -1292,6 +1323,7 @@ def get_featured_exercises():
 
 
 @routes.route('/api/exercise-bank/section/<category_slug>/<section_slug>', methods=['GET'])
+@handle_options
 def get_exercise_section(category_slug, section_slug):
     """Return all exercises for a specific section."""
     try:
@@ -1352,6 +1384,7 @@ def get_exercise_section(category_slug, section_slug):
 
 
 @routes.route('/api/topic-library', methods=['GET'])
+@handle_options
 def get_topic_library():
     """Get all topics from topic library"""
     try:
@@ -1396,6 +1429,7 @@ def get_topic_library():
 
 
 @routes.route('/api/topic-library/<slug>', methods=['GET'])
+@handle_options
 def get_topic_by_slug(slug):
     """Get a specific topic by slug"""
     try:
