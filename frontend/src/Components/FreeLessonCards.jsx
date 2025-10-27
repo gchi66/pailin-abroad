@@ -33,9 +33,9 @@ const FreeLessonCards = ({ showHeader = true }) => {
             <img src="/images/globe.webp" alt="Lesson globe" className="fl-card-img" />
             <span className="fl-card-focus">{renderText(card.focusLabel)}</span>
             <p className="fl-card-desc">{renderText(card.description)}</p>
-            <button className="fl-card-btn" disabled={idx === 3}>
+            {/* <button className="fl-card-btn" disabled={idx === 3}>
               {renderText(freeCopy.button)}
-            </button>
+            </button> */}
           </div>
         ))}
       </section>

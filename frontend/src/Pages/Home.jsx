@@ -55,7 +55,7 @@ const Home = ({ toggleSignupModal }) => {
     <div>
       <Hero onSignupClick={toggleSignupModal} />
       <FreeLessonCards />
-      <ReusablePlacementTest />
+      {/* <ReusablePlacementTest /> */}
       <ChooseUs />
       <HowItWorks />
       <SignUpCTA onSignupClick={toggleSignupModal} />

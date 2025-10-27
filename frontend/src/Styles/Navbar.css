@@ -37,11 +37,15 @@
 }
 
 .menu ul li a:hover {
-  color: #1E1E1E; /* Blue on hover */
+  color: #91CAFF; /* Blue on hover */
 }
 
 .menu ul li.pricing a {
   color: #FF4545;
+}
+
+.menu ul li.pricing a:hover {
+  color: #91CAFF;
 }
 
 /* Right Side (Language Toggle, Search Bar, Auth Buttons) */
@@ -152,7 +156,7 @@
   font-size: 1rem;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
-  cursor: pointer;
+  cursor: default;
   transition: color 0.2s;
 }
 
@@ -177,6 +181,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s, visibility 0.2s;
+  color: #1E1E1E;
 }
 
 /* Create an invisible bridge between trigger and dropdown */
@@ -215,6 +220,10 @@
 
 .lessons-dropdown li a:hover {
   background-color: #91CAFF;
+  color: #1E1E1E;
+}
+
+.menu ul li.lessons-dropdown-wrapper .lessons-dropdown li a:hover {
   color: #1E1E1E;
 }
 

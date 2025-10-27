@@ -11,9 +11,9 @@
   display: flex;
   align-items: center;
   background: white;
-  padding: 5vh 10vh;
+  padding: 10vh 10vh;
   border-radius: 2vh;
-  border: .1rem solid #1E1E1E;
+  border: .15rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0vw #1E1E1E;
   position: relative;
   max-width: 75vw;
@@ -25,7 +25,7 @@
 
 .character-image {
   flex-shrink: 0;
-  max-width: 36%;
+  max-width: 30%;
   height: auto;
   object-fit: contain;
   margin-left: 0;
@@ -95,9 +95,9 @@
   transform: scale(1.05);
 }
 
-.thumbnail.selected {
+/* .thumbnail.selected {
   border: 0.2vh solid #42b4f3;
-}
+} */
 
 .thumbnail img {
   width: 100%;

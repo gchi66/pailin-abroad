@@ -128,7 +128,7 @@ export const copy = {
       steps: [
         {
           number: "1",
-          header: { en: "Listen to the conversation.", th: "ฟังบทสนทนา" },
+          header: { en: "Listen to the conversation", th: "ฟังบทสนทนา" },
           text: {
             en: "Move from Beginner to Expert level conversations that follow Pailin as she navigates life in a new country.",
             th: "ไต่ระดับจากบทสนทนาระดับ Beginner ถึง Expert ที่ติดตามไผลินขณะใช้ชีวิตในประเทศใหม่",

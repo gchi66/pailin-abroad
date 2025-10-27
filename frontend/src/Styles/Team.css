@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 5vh;
-  padding: 10vh 0vw;
+  padding: 8vh 0vw;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
 }
@@ -19,11 +19,13 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #1e1e1e;
-  width: 65%;
+  width: 65vw;
+  max-width: 65vw;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 2vw;
+  box-sizing: border-box;
 }
 
 .team-member-image {
@@ -55,14 +57,15 @@
 .team-underline {
   width: 40%;
   height: 0.2vh;
-  background-color: #99CEFF;;
+  background-color: #99CEFF;
   margin: 0.5vh 0;
   border: none;
 }
 
 .description {
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin-top: 2vh;
   color: #1e1e1e;
   line-height: 1.5rem;
+  font-weight: 400;
 }

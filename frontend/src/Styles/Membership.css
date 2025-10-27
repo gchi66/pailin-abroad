@@ -28,9 +28,10 @@
 
 .membership-subtitle {
   font-size: 1.1rem;
-  color: #666;
+  color: #1E1E1E;
   line-height: 1.5;
   margin: 0;
+  font-weight: 500;
 }
 
 /* Pricing Cards Container */

@@ -33,8 +33,8 @@
   border-radius: 3vh;
   border: .1rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0vw #1E1E1E;
-  padding: 3vh 2vw;
-  max-width: 22vw;
+  padding: 2vh 1.2vw;
+  max-width: 20vw;
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
@@ -55,7 +55,7 @@
 
 /* Card Header */
 .hiw-header {
-  font-size: 1.7vw;
+  font-size: 1.2vw;
   color: #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 620;
@@ -65,13 +65,13 @@
 
 /* Card Text */
 .hiw-text {
-  font-size: 1.2vw;
+  font-size: .9vw;
   color: #1E1E1E;
   font-family: "Poppins", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   margin: 0;
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.6;
 }
 
 /* Responsive Design */

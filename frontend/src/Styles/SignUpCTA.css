@@ -32,8 +32,8 @@
   border-radius: 8rem;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  min-width: 45%;
-  min-height: 5rem;
+  /* min-width: 25%; */
+  min-height: 1rem;
   white-space: nowrap;
 }
 

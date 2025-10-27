@@ -34,7 +34,7 @@
   border-radius: 2.25rem 2.25rem 2.25rem 0;
   border: .1rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0px #1E1E1E;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 2.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

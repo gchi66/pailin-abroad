@@ -8,8 +8,7 @@ const AboutPage = () => {
   const sections = useMemo(
     () => [
       { label: "The Method", slug: "the-method" },
-      { label: "Our Team", slug: "our-team" },
-      { label: "The Story", slug: "the-story" },
+      { label: "Our Team", slug: "our-team" }
     ],
     []
   );

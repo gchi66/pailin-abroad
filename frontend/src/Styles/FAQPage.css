@@ -2,7 +2,7 @@
   position: relative;
   min-height: 100vh;
   background-color: none;
-  padding: 30vh 0 0 0;
+  padding: 33vh 0 0 0;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
   display: flex;
@@ -42,8 +42,8 @@
 
 .faq-page-header-subtitle {
   font-size: 1.75vh;
-  color: #666;
-  font-weight: 400;
+  color: #1E1E1E;
+  font-weight: 500;
   font-family: "Poppins", sans-serif;
   margin: 0;
 }
