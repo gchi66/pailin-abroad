@@ -218,6 +218,146 @@
   color: #1E1E1E;
 }
 
+/* ------------------------------
+   Responsive Adjustments
+   ------------------------------ */
+
+@media (max-width: 1200px) {
+  .navbar {
+    padding: 0.85rem 1.5rem;
+  }
+
+  .logo img {
+    height: 1.5rem;
+  }
+
+  .menu ul {
+    gap: 2rem;
+  }
+
+  .menu ul li a {
+    font-size: 0.95rem;
+  }
+
+  .right-side {
+    gap: 0.75rem;
+  }
+
+  .auth-buttons button {
+    padding: 0.2rem 0.85rem;
+    font-size: 0.95rem;
+  }
+
+  .search-bar input {
+    width: 10rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .menu {
+    order: 2;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .menu ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  .right-side {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+  }
+
+  .language-toggle {
+    font-size: 0.85rem;
+  }
+
+  .search-bar {
+    border-radius: 2rem;
+  }
+
+  .search-bar input {
+    width: 8.5rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .auth-buttons {
+    gap: 0.4rem;
+  }
+
+  .auth-buttons button {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu ul li a {
+    font-size: 0.9rem;
+  }
+
+  .language-toggle {
+    font-size: 0.8rem;
+  }
+
+  .search-bar {
+    max-width: 200px;
+    width: 100%;
+  }
+
+  .search-bar input {
+    width: calc(100% - 2.5rem);
+  }
+
+  .auth-buttons button {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0.65rem 1rem;
+  }
+
+  .logo img {
+    height: 1.35rem;
+  }
+
+  .menu ul {
+    gap: 0.9rem;
+  }
+
+  .menu ul li a {
+    font-size: 0.85rem;
+  }
+
+  .right-side {
+    gap: 0.5rem;
+  }
+
+  .auth-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .auth-buttons button {
+    padding: 0.3rem 0.8rem;
+    min-width: 6.5rem;
+  }
+}
+
 .lessons-dropdown li:first-child a {
   border-radius: 0.3rem 0.3rem 0 0;
 }

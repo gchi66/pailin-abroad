@@ -93,7 +93,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
           showLabel={false}
           label={t("uiLabel", ui)}                 // <-- pass translated label
         />
-        <SearchBar />
+        {/* <SearchBar /> */}
         {user ? (
           <ProfileDropdown />
         ) : (
