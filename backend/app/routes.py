@@ -492,11 +492,12 @@ def signup_email():
 
         # Use sign_up with a temporary password that meets requirements
         # This creates the auth user but they'll set real password in onboarding
+        from app.config import Config
         response = supabase.auth.sign_up({
             "email": email,
             "password": "TempPass123!",  # Meets Supabase requirements, will be changed in onboarding
             "options": {
-                "email_redirect_to": "http://localhost:3000/onboarding"
+                "email_redirect_to": f"{Config.FRONTEND_URL}/onboarding"
             }
         })
 

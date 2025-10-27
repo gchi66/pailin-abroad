@@ -2,6 +2,7 @@ import os
 import stripe
 from flask import Blueprint, request, jsonify, send_file
 from app.supabase_client import supabase
+from app.config import Config
 import io
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
@@ -45,8 +46,8 @@ def create_checkout_session():
         data = request.get_json()
         price_id = data.get('price_id')  # Pass the Stripe Price ID from frontend
         customer_email = data.get('email')
-        success_url = data.get('success_url', 'http://localhost:3000/payment-success')
-        cancel_url = data.get('cancel_url', 'http://localhost:3000/checkout')
+        success_url = data.get('success_url', f'{Config.FRONTEND_URL}/payment-success')
+        cancel_url = data.get('cancel_url', f'{Config.FRONTEND_URL}/checkout')
 
         if not price_id:
             return jsonify({'error': 'price_id is required'}), 400
@@ -104,7 +105,7 @@ def create_portal_session():
 
         # Get return URL from request
         data = request.get_json() or {}
-        return_url = data.get('return_url', 'http://localhost:3000/account-settings')
+        return_url = data.get('return_url', f'{Config.FRONTEND_URL}/account-settings')
 
         # Create portal session
         portal_session = stripe.billing_portal.Session.create(

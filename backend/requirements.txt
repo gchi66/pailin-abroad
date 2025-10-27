@@ -12,3 +12,4 @@ Flask-SocketIO>=5.0,<6.0   # Asynchronous capabilities
 stripe>=5.0,<6.0           # Stripe payment processing SDK
 supabase>=2.0.0            # Supabase client library
 openai>=1.0.0              # OpenAI API client
+gunicorn>=21.0,<22.0     # WSGI HTTP server for UNIX
