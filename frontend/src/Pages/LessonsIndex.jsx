@@ -5,6 +5,13 @@ import { useAuth } from "../AuthContext";
 import { API_BASE_URL } from "../config/api";
 import "../Styles/LessonsIndex.css";
 
+const stageClassMap = {
+  Beginner: "level-btns-Beginner",
+  Intermediate: "level-btns-Intermediate",
+  Advanced: "level-btns-Advanced",
+  Expert: "level-btns-Expert",
+};
+
 const LessonsIndex = () => {
   const [isBackstoryOpen, setIsBackstoryOpen] = useState(false);
   const [lessons, setLessons] = useState([]);
@@ -296,9 +303,9 @@ const LessonsIndex = () => {
       <div className="lesson-library">
         {/* The level buttons and placement test header */}
         <div className="stages-levels-subtitle">
-          <p className="lesson-subtitle">
+          {/* <p className="lesson-subtitle">
             Not sure where to start? Take our <button type="button" className="placement-test-link">Free Placement Test</button>.
-          </p>
+          </p> */}
 
           <div className="lesson-stages">
             <button
@@ -328,7 +335,9 @@ const LessonsIndex = () => {
           </div>
 
           {/* Level buttons */}
-          <div className={`level-btns-${selectedStage.replace(/\s+/g, "")}`}>
+          <div
+            className={`level-btns ${stageClassMap[selectedStage] || stageClassMap.Beginner}`}
+          >
             {levels.map((lvl) => (
               <button
                 key={lvl}

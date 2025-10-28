@@ -120,30 +120,30 @@
   background: #91CAFF;
 }
 
+.level-btns {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+}
+
 .level-btns-Beginner {
-  display: flex;
   justify-content: flex-start;
-  gap: 2rem;
+  transform: translateX(0);
 }
 
-.level-btns-LowerIntermediate {
-  display: flex;
+.level-btns-Intermediate {
   justify-content: center;
-  gap: 2rem;
-  transform: translateX(-10%)
-}
-
-.level-btns-UpperIntermediate {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  transform: translateX(10%);
+  transform: translateX(-10%);
 }
 
 .level-btns-Advanced {
-  display: flex;
+  justify-content: center;
+  transform: translateX(10%);
+}
+
+.level-btns-Expert {
   justify-content: flex-end;
-  gap: 2rem;
+  transform: translateX(0);
 }
 
 
