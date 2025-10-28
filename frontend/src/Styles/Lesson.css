@@ -8,7 +8,7 @@
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
   margin: 0;              /* remove extra spacing */
-  padding-top: 0;         /* remove padding pushing down content */
+  padding-top: var(--navbar-height, 80px);
 }
 
 .lesson-body {

@@ -2,8 +2,21 @@ import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 
 export async function fetchResolvedLesson(lessonId, lang = "en") {
-  // Get the current session to include auth token
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  // Get the current session to include auth token (refresh if expired)
+  let {
+    data: { session },
+    error: sessionError,
+  } = await supabaseClient.auth.getSession();
+
+  if (!sessionError && session?.expires_at) {
+    const now = Math.floor(Date.now() / 1000);
+    if (session.expires_at <= now) {
+      const { data: refreshed, error: refreshError } = await supabaseClient.auth.refreshSession();
+      if (!refreshError) {
+        session = refreshed.session ?? null;
+      }
+    }
+  }
 
   const headers = {
     'Content-Type': 'application/json',

@@ -15,47 +15,50 @@ export default function LessonHeader({
   const hasBackstory = Boolean(backstory);
   const lessonLabel = isCheckpoint
     ? `Level ${level} · Checkpoint`
-    : `Lesson ${lessonOrder} · Level ${level}`;
+    : `Level ${level} · Lesson ${lessonOrder}`;
 
   return (
     <section className={`lesson-banner${hasImage ? "" : " no-image"}`}>
-      {/* LEFT: inline graphic (no border, no separate panel) */}
-      {hasImage ? (
-        <div className="banner-graphic">
-          <img
-            src={headerImageUrl}
-            alt=""
-            className="graphic-image"
-            loading="lazy"
-          />
-        </div>
-      ) : null}
-
-      {/* RIGHT: content */}
-      <div className="banner-content">
-        {/* <Link to="/lessons" className="back-link">
+      <div className="lesson-banner-inner">
+        <Link to="/lessons" className="back-link">
           &lt; BACK TO LESSON LIBRARY
-        </Link> */}
+        </Link>
+        <div className="lesson-banner-main">
+          {/* LEFT: inline graphic */}
+          {hasImage ? (
+            <div className="banner-graphic">
+              <img
+                src={headerImageUrl}
+                alt=""
+                className="graphic-image"
+                loading="lazy"
+              />
+            </div>
+          ) : null}
 
-        <span className="lesson-number">
-          {lessonLabel}
-        </span>
+          {/* RIGHT: content */}
+          <div className="banner-content">
+            <span className="lesson-number">
+              {lessonLabel}
+            </span>
 
-        <h1 className="lesson-title">{title}</h1>
+            <h1 className="lesson-title">{title}</h1>
 
-        {focus ? (
-          <p className="lesson-focus-text">{focus}</p>
+            {focus ? (
+              <p className="lesson-focus-text">{focus}</p>
+            ) : null}
+          </div>
+        </div>
+
+        {hasBackstory ? (
+          <div className="lesson-backstory">
+            <p className="lesson-backstory-text">
+              <span className="lesson-backstory-label">Backstory</span>{" "}
+              {backstory}
+            </p>
+          </div>
         ) : null}
       </div>
-
-      {hasBackstory ? (
-        <div className="lesson-backstory">
-          <p className="lesson-backstory-text">
-            <span className="lesson-backstory-label">Backstory</span>{" "}
-            {backstory}
-          </p>
-        </div>
-      ) : null}
     </section>
   );
 }

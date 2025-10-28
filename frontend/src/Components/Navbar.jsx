@@ -1,5 +1,5 @@
 // src/Components/Navbar.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "../Styles/Navbar.css";
 import LanguageToggle from "./LanguageToggle";
 import SearchBar from "./SearchBar";
@@ -17,6 +17,14 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const { ui, setUi } = useUiLang();
   const withUi = useWithUi();
   const [profile, setProfile] = useState(null);
+  const navRef = useRef(null);
+
+  const updateNavHeightVar = useCallback(() => {
+    if (navRef.current) {
+      const { height } = navRef.current.getBoundingClientRect();
+      document.documentElement.style.setProperty("--navbar-height", `${height}px`);
+    }
+  }, []);
 
   // Fetch user profile to check is_paid status
   useEffect(() => {
@@ -48,11 +56,21 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
     fetchUserProfile();
   }, [user]);
 
+  useEffect(() => {
+    updateNavHeightVar();
+    window.addEventListener("resize", updateNavHeightVar);
+    return () => window.removeEventListener("resize", updateNavHeightVar);
+  }, [updateNavHeightVar]);
+
+  useEffect(() => {
+    updateNavHeightVar();
+  }, [updateNavHeightVar, user, profile]);
+
   // Show dropdown if user is not logged in OR is a free user
   const shouldShowLessonsDropdown = !user || !profile?.is_paid;
 
   return (
-    <header className="navbar">
+    <header className="navbar" ref={navRef}>
       <div className="logo">
         <NavLink to={withUi("/", ui)}>
           <img src="/images/full-logo.webp" alt="Pailin Abroad Logo" />
