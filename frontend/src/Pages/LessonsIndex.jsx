@@ -6,10 +6,10 @@ import { API_BASE_URL } from "../config/api";
 import "../Styles/LessonsIndex.css";
 
 const stageClassMap = {
-  Beginner: "level-btns-Beginner",
-  Intermediate: "level-btns-Intermediate",
-  Advanced: "level-btns-Advanced",
-  Expert: "level-btns-Expert",
+  Beginner: "level-buttons-Beginner",
+  Intermediate: "level-buttons-Intermediate",
+  Advanced: "level-buttons-Advanced",
+  Expert: "level-buttons-Expert",
 };
 
 const LessonsIndex = () => {
@@ -336,7 +336,7 @@ const LessonsIndex = () => {
 
           {/* Level buttons */}
           <div
-            className={`level-btns ${stageClassMap[selectedStage] || stageClassMap.Beginner}`}
+            className={`level-buttons ${stageClassMap[selectedStage] || stageClassMap.Beginner}`}
           >
             {levels.map((lvl) => (
               <button

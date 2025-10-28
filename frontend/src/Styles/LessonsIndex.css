@@ -120,28 +120,28 @@
   background: #91CAFF;
 }
 
-.level-btns {
+.level-buttons {
   display: flex;
   gap: 2rem;
   width: 100%;
 }
 
-.level-btns-Beginner {
+.level-buttons-Beginner {
   justify-content: flex-start;
   transform: translateX(0);
 }
 
-.level-btns-Intermediate {
+.level-buttons-Intermediate {
   justify-content: center;
   transform: translateX(-10%);
 }
 
-.level-btns-Advanced {
+.level-buttons-Advanced {
   justify-content: center;
   transform: translateX(10%);
 }
 
-.level-btns-Expert {
+.level-buttons-Expert {
   justify-content: flex-end;
   transform: translateX(0);
 }

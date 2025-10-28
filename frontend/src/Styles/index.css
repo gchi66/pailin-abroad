@@ -1,5 +1,6 @@
 :root {
   --navbar-height: 80px;
+  --nav-side-padding: 2rem;
 }
 
 body {
@@ -20,11 +21,4 @@ code {
 h2 {
   margin: 0;
 
-}
-
-/* Hide header and footer for specific pages (e.g., unverified payment success) */
-body.hide-header-footer header.navbar,
-body.hide-header-footer nav,
-body.hide-header-footer footer {
-  display: none !important;
 }

@@ -58,7 +58,7 @@
 /* Mark complete button */
 .lesson-mark-complete-button {
   background: none;
-  border: none;
+  border: none !important;
   cursor: pointer;
   display: flex;
   align-items: center;

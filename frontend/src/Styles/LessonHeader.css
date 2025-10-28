@@ -2,7 +2,7 @@
 .lesson-banner {
   width: 100%;
   background: #E9F4FF;
-  border-bottom: 0.2rem solid #1E1E1E;
+  border-bottom: 0.15rem solid #1E1E1E;
   margin: 0;
   padding: clamp(3rem, 5vh, 6rem) clamp(1.8rem, 6.5vw, 4.5rem) clamp(2.4rem, 5vh, 4.6rem);
   box-sizing: border-box;
@@ -21,10 +21,10 @@
 .back-link {
   position: absolute;
   top: clamp(0.6rem, 2.3vh, 1.4rem);
-  left: clamp(1.5rem, 6vw, 4rem);
+  left: var(--nav-side-padding, 2rem);
   font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.05rem;
+  letter-spacing: 0.01rem;
   color: #1E1E1E;
   text-decoration: none;
   z-index: 2;
@@ -35,7 +35,7 @@
   grid-template-columns: auto 1fr;
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
-  margin-top: clamp(1rem, 6vh, 1rem);
+  margin-top: clamp(1rem, 7vh, 1rem);
 }
 
 .lesson-banner.no-image .lesson-banner-main {
@@ -68,14 +68,14 @@
 
 .lesson-number {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.03rem;
   color: #1E1E1E;
 }
 
 .lesson-title {
   font-size: clamp(2.2rem, 4vw, 3.4rem);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
   margin: 0;
   color: #1E1E1E;
@@ -92,7 +92,7 @@
 .lesson-backstory {
   width: min(100%, 80rem);
   background: #FFFFFF;
-  border: 0.2rem solid #1E1E1E;
+  border: 0.15rem solid #1E1E1E;
   border-radius: 1rem;
   padding: clamp(1.4rem, 3vw, 2.4rem) clamp(1.8rem, 4.5vw, 3.2rem);
   color: #1E1E1E;
@@ -123,14 +123,14 @@
 
   .back-link {
     top: clamp(0.4rem, 3vh, 1rem);
-    left: clamp(1rem, 5vw, 1.8rem);
+    left: var(--nav-side-padding, 2rem);
   }
 
   .lesson-banner-main {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-    margin-top: clamp(1.8rem, 7vh, 2.6rem);
+    margin-top: clamp(2rem, 8vh, 2.8rem);
   }
 
   .banner-content {

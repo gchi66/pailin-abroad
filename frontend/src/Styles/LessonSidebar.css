@@ -1,6 +1,6 @@
 .ls-sidebar {
   background: #ffffff;
-  border: 0.2rem solid #1e1e1e;
+  border: 0.15rem solid #1E1E1E;
   border-radius: 1.6rem;
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
   font-weight: 700;
   font-size: 1.6rem;
   padding: 1.6rem;
-  border-bottom: 0.2rem solid #1e1e1e;
+  border-bottom: 0.15rem solid #1E1E1E;
 }
 
 .ls-list {
@@ -21,13 +21,13 @@
 }
 
 .ls-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.2rem 1.6rem;
-  cursor: pointer;
-  border-bottom: 0.1rem solid #e5e7eb;
-  font-size: 1.4rem;
+align-items: center;
+    border-bottom: .1rem solid #e5e7eb;
+    cursor: pointer;
+    display: flex;
+    font-size: 1.4rem;
+    justify-content: space-between;
+    padding: 1.2rem 1.6rem;
 }
 
 .ls-row:hover {

@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem var(--nav-side-padding, 2rem);
   background-color: #ffffff; /* White background */
   width: 100%; /* Full width of the screen */
   border-bottom: .15rem solid #050948; /* Navy blue bottom border */

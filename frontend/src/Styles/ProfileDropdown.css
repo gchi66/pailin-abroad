@@ -6,8 +6,8 @@
 }
 
 .profile-button {
-  background: none;
-  border: none;
+  background: none !important;
+  border: none !important;
   cursor: pointer;
   padding: 0;
   border-radius: 50%;

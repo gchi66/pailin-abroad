@@ -19,6 +19,13 @@ const Membership = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add("membership-page");
+    return () => {
+      document.body.classList.remove("membership-page");
+    };
+  }, []);
+
   const plans = [
     {
       id: "6-month",
