@@ -1,18 +1,14 @@
 .lesson-page-container {
   position: relative;
   min-height: 100vh;
-  background-color: none;
-  padding-top: 18vh;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
-  margin-top: -18vh;
-}
-
-.lesson-banner {
-  margin-top: 18vh;
+  margin: 0;              /* remove extra spacing */
+  padding-top: 0;         /* remove padding pushing down content */
 }
 
 .lesson-body {

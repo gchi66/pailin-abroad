@@ -491,9 +491,6 @@ export default function Lesson() {
   // Choose header strings by UI language (independent of contentLang)
   const headerTitle =
     uiLang === "th" ? (lesson.title_th || lesson.title_en) : (lesson.title_en || lesson.title_th);
-  const headerSubtitle =
-    uiLang === "th" ? (lesson.subtitle_th || lesson.subtitle_en) : (lesson.subtitle_en || lesson.subtitle_th);
-
   return (
     <main>
       <div className="lesson-page-container">
@@ -502,8 +499,9 @@ export default function Lesson() {
           level={lesson.level}
           lessonOrder={lesson.lesson_order}
           title={headerTitle}
-          subtitle={headerSubtitle}
           headerImageUrl={lesson.header_image_url}
+          focus={lesson.focus}
+          backstory={lesson.backstory}
         />
 
         {/* Audio card */}

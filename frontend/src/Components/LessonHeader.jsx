@@ -6,40 +6,56 @@ export default function LessonHeader({
   level,
   lessonOrder,
   title,
-  subtitle,
-  titleTh,
-  subtitleTh,
   headerImageUrl,
+  focus,
+  backstory,
 }) {
   const isCheckpoint = (title || "").toLowerCase().includes("checkpoint");
   const hasImage = Boolean(headerImageUrl);
+  const hasBackstory = Boolean(backstory);
+  const lessonLabel = isCheckpoint
+    ? `Level ${level} · Checkpoint`
+    : `Lesson ${lessonOrder} · Level ${level}`;
 
   return (
-    <section className="lesson-banner">
-      <div className="banner-left">
-        <Link to="/lessons" className="back-link">
+    <section className={`lesson-banner${hasImage ? "" : " no-image"}`}>
+      {/* LEFT: inline graphic (no border, no separate panel) */}
+      {hasImage ? (
+        <div className="banner-graphic">
+          <img
+            src={headerImageUrl}
+            alt=""
+            className="graphic-image"
+            loading="lazy"
+          />
+        </div>
+      ) : null}
+
+      {/* RIGHT: content */}
+      <div className="banner-content">
+        {/* <Link to="/lessons" className="back-link">
           &lt; BACK TO LESSON LIBRARY
-        </Link>
+        </Link> */}
 
         <span className="lesson-number">
-          {isCheckpoint ? `LESSON ${level} CHECKPOINT` : `LESSON ${level}.${lessonOrder}`}
+          {lessonLabel}
         </span>
+
         <h1 className="lesson-title">{title}</h1>
-        <h2 className="lesson-subtitle">{subtitle}</h2>
 
-        {/* <p className="thai-line">
-          {titleTh}<br />
-          {subtitleTh}
-        </p> */}
+        {focus ? (
+          <p className="lesson-focus-text">{focus}</p>
+        ) : null}
       </div>
 
-      <div className="banner-right">
-        <div className={`character-panel${hasImage ? " has-image" : ""}`}>
-          {hasImage ? (
-            <img src={headerImageUrl} alt="" className="character-image" loading="lazy" />
-          ) : null}
+      {hasBackstory ? (
+        <div className="lesson-backstory">
+          <p className="lesson-backstory-text">
+            <span className="lesson-backstory-label">Backstory</span>{" "}
+            {backstory}
+          </p>
         </div>
-      </div>
+      ) : null}
     </section>
   );
 }

@@ -167,7 +167,7 @@ export default function AudioBar({
   return (
     <section className={`audio-card${isLocked ? ' audio-locked' : ''}`}>
       <h3 className="audio-heading">LISTEN TO THE CONVERSATION</h3>
-      {description && <p className="audio-desc">{description}</p>}
+      {/* {description && <p className="audio-desc">{description}</p>} */}
 
       {/* Locked overlay */}
       {isLocked && (
