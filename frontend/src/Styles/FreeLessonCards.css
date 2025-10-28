@@ -30,6 +30,24 @@
   margin: 5vh 0;
 }
 
+.fl-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  max-width: 19vw;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fl-card-link:hover .fl-card {
+  transform: translateY(-0.4rem);
+  box-shadow: 0.35rem 0.35rem 0vw #1E1E1E;
+}
+
+.fl-card-link-disabled {
+  pointer-events: none;
+}
+
 .fl-card {
   background: white;
   border-radius: 3vh;
@@ -45,6 +63,7 @@
   justify-content: flex-start;
   box-sizing: border-box;
   overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .fl-card-img {
   width: 9vw;
