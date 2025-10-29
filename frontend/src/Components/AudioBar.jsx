@@ -199,8 +199,19 @@ export default function AudioBar({
 
     const onMeta = () => setDuration(voice.duration || 0);
 
+    const onEnded = () => {
+      setPlaying(false);
+      setCurrent(0);
+      voice.currentTime = 0;
+      if (hasSplit && bgRef.current) {
+        bgRef.current.pause();
+        bgRef.current.currentTime = 0;
+      }
+    };
+
     voice.addEventListener("timeupdate", onTime);
     voice.addEventListener("loadedmetadata", onMeta);
+    voice.addEventListener("ended", onEnded);
 
     // Apply current rate
     changeRate(rate);
@@ -208,6 +219,7 @@ export default function AudioBar({
     return () => {
       voice.removeEventListener("timeupdate", onTime);
       voice.removeEventListener("loadedmetadata", onMeta);
+      voice.removeEventListener("ended", onEnded);
     };
   }, [rate, hasSplit]);
 

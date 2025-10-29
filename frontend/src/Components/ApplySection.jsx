@@ -30,7 +30,7 @@ export default function ApplySection({ content = "", uiLang = "en" }) {
           placeholder={
             uiLang === "th"
               ? "พิมพ์คำตอบของคุณที่นี่…"
-              : "Type your answer here…"
+              : "Type your response here…"
           }
           value={text}
           onChange={(e) => setText(e.target.value)}

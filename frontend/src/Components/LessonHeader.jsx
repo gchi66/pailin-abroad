@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
@@ -11,6 +11,7 @@ export default function LessonHeader({
   lessonOrder,
   title,
   headerImageUrl,
+  headerImagePath,
   focus,
   backstory,
 }) {
@@ -84,7 +85,18 @@ export default function LessonHeader({
   const backstoryLabel = t("lessonHeader.backstoryLabel", uiLang) || "Backstory";
 
   const isCheckpoint = (title || "").toLowerCase().includes("checkpoint");
-  const hasImage = Boolean(headerImageUrl);
+  const imageSrc = useMemo(() => {
+    if (headerImageUrl) return headerImageUrl;
+    if (headerImagePath) {
+      const { data } = supabaseClient.storage
+        .from("lesson-images")
+        .getPublicUrl(headerImagePath);
+      return data?.publicUrl || "";
+    }
+    return "";
+  }, [headerImageUrl, headerImagePath]);
+
+  const hasImage = Boolean(imageSrc);
   const hasBackstory = Boolean(fallbackBackstory);
   const lessonLabel = isCheckpoint
     ? `Level ${level} · Checkpoint`
@@ -101,7 +113,7 @@ export default function LessonHeader({
           {hasImage ? (
             <div className="banner-graphic">
               <img
-                src={headerImageUrl}
+                src={imageSrc}
                 alt=""
                 className="graphic-image"
                 loading="lazy"

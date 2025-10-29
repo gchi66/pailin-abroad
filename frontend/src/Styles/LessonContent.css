@@ -80,6 +80,30 @@
   margin-bottom: 1.2rem;
 }
 
+.transcript-list {
+  list-style: none;
+  margin: 0;
+  padding: 2.4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.transcript-list li {
+  font-size: 1.1rem;
+  line-height: 1.2;
+  color: #1e1e1e;
+}
+
+.transcript-speaker {
+  font-weight: 500;
+  color: #1e1e1e;
+}
+
+.transcript-line {
+  color: inherit;
+}
+
 
 /* body that scrolls if overflow */
 .lc-body {

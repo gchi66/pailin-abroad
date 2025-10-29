@@ -500,6 +500,7 @@ export default function Lesson() {
           lessonOrder={lesson.lesson_order}
           title={headerTitle}
           headerImageUrl={lesson.header_image_url}
+          headerImagePath={lesson.header_image_path}
           focus={lesson.focus}
           backstory={lesson.backstory}
         />

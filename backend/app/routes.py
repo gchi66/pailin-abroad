@@ -935,6 +935,9 @@ def get_lesson_resolved(lesson_id):
             'conversation_audio_url': payload.get('conversation_audio_url'),
             'backstory': payload.get('backstory'),
             'backstory_th': payload.get('backstory_th'),
+            'header_img': payload.get('header_img'),
+            'header_image_path': payload.get('header_image_path'),
+            'header_image_url': payload.get('header_image_url'),
             # Keep empty arrays so UI can show sidebar structure
             'sections': payload.get('sections', []),
             'questions': [],

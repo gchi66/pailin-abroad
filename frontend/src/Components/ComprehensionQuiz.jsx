@@ -123,7 +123,7 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en", image
 
       <button
         type="button"
-        className="cq-check-btn"
+        className="cq-check-btn language-toggle-btn"
         onClick={checkAnswers}
       >
         {pick(quizCopy.checkAnswers, uiLang)}

@@ -181,8 +181,8 @@ export default function LessonContent({
         <ul className="transcript-list">
           {transcript.map((line) => (
             <li key={line.id}>
-              <strong>{line.speaker}:</strong>{" "}
-              <span>
+              <span className="transcript-speaker">{line.speaker}:</span>{" "}
+              <span className="transcript-line">
                 {uiLang === "th" && line.line_text_th ? line.line_text_th : line.line_text}
               </span>
             </li>
