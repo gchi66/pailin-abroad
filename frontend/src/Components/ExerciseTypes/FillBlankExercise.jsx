@@ -26,6 +26,64 @@ const isExampleItem = (item) => {
   return false;
 };
 
+const segmentTextWithBlanks = (text = "") => {
+  if (typeof text !== "string" || text.length === 0) {
+    return [{ type: "text", content: "" }];
+  }
+
+  const segments = [];
+  let buffer = "";
+  let index = 0;
+
+  const flushBuffer = () => {
+    if (buffer) {
+      segments.push({ type: "text", content: buffer });
+      buffer = "";
+    }
+  };
+
+  while (index < text.length) {
+    const char = text[index];
+
+    if (char === "\n") {
+      flushBuffer();
+      segments.push({ type: "line-break" });
+      index += 1;
+      continue;
+    }
+
+    if (char === "_") {
+      flushBuffer();
+
+      let underscoreCount = 0;
+      while (
+        index + underscoreCount < text.length &&
+        text[index + underscoreCount] === "_"
+      ) {
+        underscoreCount += 1;
+      }
+
+      const blankLength = Math.min(underscoreCount, 4);
+      segments.push({ type: "blank", length: blankLength });
+
+      index += underscoreCount;
+      continue;
+    }
+
+    buffer += char;
+    index += 1;
+  }
+
+  flushBuffer();
+  return segments.length ? segments : [{ type: "text", content: "" }];
+};
+
+const renderMultiline = (text = "") => {
+  if (!text) return null;
+
+  return <span className="fb-text-block">{text}</span>;
+};
+
 export default function FillBlankExercise({
   exercise,
   images = {},
@@ -241,7 +299,7 @@ export default function FillBlankExercise({
                 className="fb-input"
                 value=""
                 disabled
-                placeholder="___"
+                placeholder=""
               />
             </div>
           </span>
@@ -263,7 +321,7 @@ export default function FillBlankExercise({
                 handleAnswerChange(questionIndex, event.target.value)
               }
               disabled={disabled}
-              placeholder="___"
+              placeholder=""
             />
             <InlineStatus state={questionState} />
           </div>
@@ -276,9 +334,11 @@ export default function FillBlankExercise({
   const renderRowItems = () =>
     items.map((item, idx) => {
       const hasAudio = Boolean(item.audio_key);
+      const example = isExampleItem(item);
 
-      if (isExampleItem(item)) {
+      if (example) {
         const imageUrl = item.image_key ? images[item.image_key] : null;
+        const textSegments = segmentTextWithBlanks(item.text || "");
         return (
           <div
             key={`example-${idx}`}
@@ -302,7 +362,35 @@ export default function FillBlankExercise({
                 </div>
               )}
               <div className="fb-row-text">
-                <span>{item.text}</span>
+                {textSegments.map((segment, segmentIdx) => {
+                  if (segment.type === "text") {
+                    return (
+                      <React.Fragment key={`example-text-${idx}-${segmentIdx}`}>
+                        {renderMultiline(segment.content)}
+                      </React.Fragment>
+                    );
+                  }
+
+                  if (segment.type === "line-break") {
+                    return (
+                      <span
+                        key={`example-break-${idx}-${segmentIdx}`}
+                        className="fb-line-break"
+                        aria-hidden="true"
+                      />
+                    );
+                  }
+
+                  const blankLength = segment.length || 1;
+                  const minWidthCh = 3 + blankLength * 2;
+                  return (
+                    <span
+                      key={`example-blank-${idx}-${segmentIdx}`}
+                      className="fb-example-blank"
+                      style={{ minWidth: `${minWidthCh}ch` }}
+                    />
+                  );
+                })}
               </div>
               {item.answer && (
                 <p className="st-example-meta st-example-answer">
@@ -318,71 +406,84 @@ export default function FillBlankExercise({
       const disabled =
         questionState.correct === true || questionState.loading === true;
       const imageUrl = item.image_key ? images[item.image_key] : null;
-      const textSegments = (item.text || "").split(/_+/);
-      const before = textSegments.shift() || "";
-      const after = textSegments.join("___");
+      const textSegments = segmentTextWithBlanks(item.text || "");
+      const displayNumber = item.number ?? idx + 1;
+
       return (
         <div key={`${item.number ?? idx}-${idx}`} className="fb-row">
-          {imageUrl && (
-            <div className="fb-image-container">
-              <img
-                src={imageUrl}
-                alt={`Exercise ${item.number ?? idx + 1}`}
-                className="fb-image"
-              />
-            </div>
-          )}
+          <div className="fb-row-number">
+            <span>{displayNumber}</span>
+          </div>
 
-          <div className="fb-row-content">
-            {hasAudio && (
-              <div className="practice-audio-container">
-                <AudioButton
-                  audioKey={item.audio_key}
-                  audioIndex={audioIndex}
-                  className="practice-audio-button"
+          <div className="fb-row-main">
+            {imageUrl && (
+              <div className="fb-image-container">
+                <img
+                  src={imageUrl}
+                  alt={`Exercise ${item.number ?? idx + 1}`}
+                  className="fb-image"
                 />
               </div>
             )}
-            <div className="fb-row-text">
-              {imageUrl ? (
-                <>
-                  <span>{item.text}</span>
-                  <div className="fb-input-wrap">
-                    <input
-                      type="text"
-                      className="fb-input"
-                      value={questionState.answer}
-                      onChange={(event) =>
-                        handleAnswerChange(idx, event.target.value)
-                      }
-                      disabled={disabled}
-                      placeholder="___"
-                    />
-                    <InlineStatus state={questionState} />
-                  </div>
-                </>
-              ) : (
-                <span>
-                  {before}
-                  <div className="fb-input-wrap">
-                    <input
-                      type="text"
-                      className="fb-input"
-                      value={questionState.answer}
-                      onChange={(event) =>
-                        handleAnswerChange(idx, event.target.value)
-                      }
-                      disabled={disabled}
-                      placeholder="___"
-                    />
-                    <InlineStatus state={questionState} />
-                  </div>
-                  {after}
-                </span>
-              )}
-            </div>
 
-            <QuestionFeedback state={questionState} />
+            <div className="fb-row-content">
+              {hasAudio && (
+                <div className="practice-audio-container">
+                  <AudioButton
+                    audioKey={item.audio_key}
+                    audioIndex={audioIndex}
+                    className="practice-audio-button"
+                  />
+                </div>
+              )}
+              <div className="fb-row-text">
+                {textSegments.map((segment, segmentIdx) => {
+                  if (segment.type === "text") {
+                    return (
+                      <React.Fragment key={`text-${idx}-${segmentIdx}`}>
+                        {renderMultiline(segment.content)}
+                      </React.Fragment>
+                    );
+                  }
+
+                  if (segment.type === "line-break") {
+                    return (
+                      <span
+                        key={`break-${idx}-${segmentIdx}`}
+                        className="fb-line-break"
+                        aria-hidden="true"
+                      />
+                    );
+                  }
+
+                  const blankLength = segment.length || 1;
+                  const minWidthCh = 3 + blankLength * 2;
+                  return (
+                    <div
+                      key={`blank-${idx}-${segmentIdx}`}
+                      className="fb-input-wrap"
+                    >
+                      <input
+                        type="text"
+                        className="fb-input"
+                        value={questionState.answer}
+                        onChange={(event) =>
+                          handleAnswerChange(idx, event.target.value)
+                        }
+                        disabled={disabled}
+                        placeholder=""
+                        style={{
+                          minWidth: `${minWidthCh}ch`,
+                        }}
+                      />
+                      <InlineStatus state={questionState} />
+                    </div>
+                  );
+                })}
+              </div>
+
+              <QuestionFeedback state={questionState} />
+            </div>
           </div>
         </div>
       );
@@ -403,7 +504,7 @@ export default function FillBlankExercise({
 
       <div className="fb-button-container">
         <button
-          className="ai-eval-button"
+          className="cq-check-btn language-toggle-btn fb-check-btn"
           onClick={handleCheckAnswers}
           disabled={!canCheck}
         >
