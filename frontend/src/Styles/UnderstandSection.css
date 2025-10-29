@@ -49,6 +49,7 @@
 
 .markdown-content p {
   margin-bottom: 1em;
+  font-size: var(--lesson-core-text-size);
 }
 
 .markdown-content ul {

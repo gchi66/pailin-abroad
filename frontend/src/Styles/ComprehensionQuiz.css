@@ -21,7 +21,7 @@
 
 .cq-prompt p {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: var(--lesson-core-text-size);
 }
 
 .cq-option-list {
@@ -63,7 +63,7 @@
 }
 
 .cq-option-text {
-  font-size: 0.98rem;
+  font-size: var(--lesson-core-text-size);
   line-height: 1.4;
   display: inline-flex;
   flex-direction: column;

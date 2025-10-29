@@ -69,6 +69,7 @@ details[open] > .markdown-summary::after {
 
 .markdown-content p {
   margin-block-end: 1em;
+  font-size: var(--lesson-core-text-size);
 }
 
 .markdown-content ul,

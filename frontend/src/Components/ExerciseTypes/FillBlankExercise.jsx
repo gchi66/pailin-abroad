@@ -407,10 +407,18 @@ export default function FillBlankExercise({
         questionState.correct === true || questionState.loading === true;
       const imageUrl = item.image_key ? images[item.image_key] : null;
       const textSegments = segmentTextWithBlanks(item.text || "");
+      const hasMultiline = textSegments.some(
+        (segment) =>
+          segment.type === "line-break" ||
+          (segment.type === "text" && segment.content?.includes("\n"))
+      );
       const displayNumber = item.number ?? idx + 1;
 
       return (
-        <div key={`${item.number ?? idx}-${idx}`} className="fb-row">
+        <div
+          key={`${item.number ?? idx}-${idx}`}
+          className={`fb-row${hasMultiline ? " fb-row-multiline" : ""}`}
+        >
           <div className="fb-row-number">
             <span>{displayNumber}</span>
           </div>

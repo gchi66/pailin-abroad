@@ -176,7 +176,7 @@
 .fb-row {
   display: flex;
   gap: 1rem;
-  align-items: flex-start; /* Changed from flex-start to center */
+  align-items: center;
   margin-bottom: 1.5rem;
 }
 
@@ -185,11 +185,7 @@
   font-weight: 600;
   min-width: 2rem;
   text-align: right;
-  /* padding-top: 0.15rem; */
   color: rgba(15, 23, 42, 0.85);
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
   line-height: 1.5;
 }
 
@@ -201,7 +197,19 @@
   flex: 1;
   display: flex;
   gap: 1rem;
-  align-items: center; /* Changed from flex-start to center */
+  align-items: center;
+}
+
+.fb-row.fb-row-multiline {
+  align-items: flex-start;
+}
+
+.fb-row.fb-row-multiline .fb-row-main {
+  align-items: flex-start;
+}
+
+.fb-row.fb-row-multiline .fb-row-number {
+  padding-top: 0.4rem;
 }
 
 .fb-row.fb-example {
@@ -235,7 +243,7 @@
 
 .st-stem {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--lesson-core-text-size);
 }
 
 .st-stem-row {
@@ -401,6 +409,7 @@
   flex-wrap: wrap;
   gap: 0.25rem;
   align-items: center;
+  font-size: var(--lesson-core-text-size);
 }
 
 .fb-line-break {
@@ -551,6 +560,10 @@
   margin-top: 1.5rem;
 }
 
+.fb-prompt {
+  font-size: var(--lesson-core-text-size);
+}
+
 .fb-check-btn {
   margin: 0;
   text-transform: uppercase;
@@ -587,7 +600,35 @@
   width: min(100%, 46ch);
 }
 
+.st-question {
+  align-items: flex-start;
+}
+
 .st-question .fb-row-main {
+  align-items: flex-start;
+}
+
+.oe-question {
+  align-items: flex-start;
+}
+
+.oe-question .fb-row-main {
+  align-items: flex-start;
+}
+
+.mc-question {
+  align-items: flex-start;
+}
+
+.mc-question .fb-row-main {
+  align-items: flex-start;
+}
+
+.cq-question {
+  align-items: flex-start;
+}
+
+.cq-question .fb-row-main {
   align-items: flex-start;
 }
 
@@ -597,6 +638,7 @@
   flex-wrap: wrap;
   gap: 0.25rem;
   align-items: center; /* Changed from flex-start to center */
+  font-size: var(--lesson-core-text-size);
 }
 
 .fb-text-line {
