@@ -334,8 +334,8 @@
   border: 0.12rem solid #1e1e1e;
   border-radius: 0.5rem;
   padding: 0.35rem 0.75rem;
-  font-size: inherit;
-  font-family: inherit;
+  font-size: var(--lesson-textarea-font-size);
+  font-family: var(--lesson-textarea-font);
   line-height: 1.5;
   background: #fff;
   color: inherit;
@@ -350,6 +350,11 @@
 .fb-wrap .oe-textarea:disabled {
   background: white;
   color: rgba(15, 23, 42, 0.75);
+}
+
+.fb-wrap .oe-textarea::placeholder {
+  font-family: var(--lesson-textarea-font);
+  font-size: var(--lesson-textarea-font-size);
 }
 
 .oe-textarea-example {

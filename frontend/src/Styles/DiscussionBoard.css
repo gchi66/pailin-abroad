@@ -42,7 +42,8 @@
   border: 0.15rem solid #1E1E1E;
   border-radius: 14px;
   background: #ffffff;
-  font-size: 1rem;
+  font-size: var(--lesson-textarea-font-size);
+  font-family: var(--lesson-textarea-font);
   line-height: 1.6;
   color: #1f1f1f;
   resize: vertical;
@@ -52,6 +53,8 @@
 
 .discussion-textarea::placeholder {
   color: #8c8c8c;
+  font-family: var(--lesson-textarea-font);
+  font-size: var(--lesson-textarea-font-size);
 }
 
 .discussion-textarea:focus {
@@ -295,9 +298,15 @@
   border-radius: 10px;
   border: 1.5px solid #c5c0ba;
   resize: vertical;
-  font-size: 0.9rem;
+  font-size: var(--lesson-textarea-font-size);
+  font-family: var(--lesson-textarea-font);
   line-height: 1.5;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.comment-reply-textarea::placeholder {
+  font-family: var(--lesson-textarea-font);
+  font-size: var(--lesson-textarea-font-size);
 }
 
 .comment-reply-textarea:focus {

@@ -18,11 +18,17 @@
 
 .apply-input {
   padding: 0.8rem;
-  font-size: 1.4rem;
+  font-size: var(--lesson-textarea-font-size);
+  font-family: var(--lesson-textarea-font);
   line-height: 1.4;
   border: 0.1rem solid #1e1e1e;
   border-radius: 0.4rem;
   resize: vertical;               /* user can expand if they wish */
+}
+
+.apply-input::placeholder {
+  font-family: var(--lesson-textarea-font);
+  font-size: var(--lesson-textarea-font-size);
 }
 
 .apply-submit {

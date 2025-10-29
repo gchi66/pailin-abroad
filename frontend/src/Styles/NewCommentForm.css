@@ -12,7 +12,8 @@
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   resize: vertical;
-  font-size: 0.875rem;
+  font-size: var(--lesson-textarea-font-size);
+  font-family: var(--lesson-textarea-font);
   line-height: 1.5;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   background: #fff;
@@ -27,6 +28,8 @@
 
 .comment-textarea::placeholder {
   color: #9ca3af;
+  font-family: var(--lesson-textarea-font);
+  font-size: var(--lesson-textarea-font-size);
 }
 
 .submit-btn {

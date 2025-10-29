@@ -2,6 +2,8 @@
   --navbar-height: 80px;
   --nav-side-padding: 2rem;
   --lesson-core-text-size: 1.2rem;
+  --lesson-textarea-font: "Poppins", sans-serif;
+  --lesson-textarea-font-size: var(--lesson-core-text-size);
 }
 
 body {
