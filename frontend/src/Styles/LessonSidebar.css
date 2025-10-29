@@ -8,10 +8,14 @@
 }
 
 .ls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.6rem 2rem;
   font-weight: 700;
   font-size: 1.6rem;
-  padding: 1.6rem;
   border-bottom: 0.15rem solid #1E1E1E;
+  /* height: 2.7rem; */
 }
 
 .ls-list {
