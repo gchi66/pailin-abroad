@@ -190,6 +190,17 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         "backstory": _pick_lang(L.get("backstory"), L.get("backstory_th"), lang),
     }
 
+    resolved.update({
+        "title_en": (L.get("title") or None),
+        "title_th": (L.get("title_th") or None),
+        "subtitle_en": (L.get("subtitle") or None),
+        "subtitle_th": (L.get("subtitle_th") or None),
+        "focus_en": (L.get("focus") or None),
+        "focus_th": (L.get("focus_th") or None),
+        "backstory_en": (L.get("backstory") or None),
+        "backstory_th": (L.get("backstory_th") or None),
+    })
+
     raw_header_img = (L.get("header_img") or "").strip() if L else ""
     header_image_path: Optional[str] = None
     header_image_url: Optional[str] = None
@@ -307,19 +318,42 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
     # Exercises - only fields from actual example
     rexs: List[Dict[str, Any]] = []
     for ex in raw["exercises"]:
+        title_en = ex.get("title")
+        title_th = ex.get("title_th")
+        prompt_md = ex.get("prompt_md")
+        prompt_en = prompt_md or ex.get("prompt")
+        prompt_th = ex.get("prompt_th")
+        paragraph_en = ex.get("paragraph")
+        paragraph_th = ex.get("paragraph_th")
+        items_en = ex.get("items")
+        items_th = ex.get("items_th")
+        options_en = ex.get("options")
+        options_th = ex.get("options_th")
+        answer_key_th = ex.get("answer_key_th")
+
         rexs.append({
             "id": ex["id"],
             "lesson_id": ex["lesson_id"],
             "sort_order": ex.get("sort_order"),
             "kind": ex.get("kind"),
-            "title": _pick_lang(ex.get("title"), ex.get("title_th"), lang),
-            "prompt": _pick_lang(ex.get("prompt"), ex.get("prompt_th"), lang),
-            "prompt_md": ex.get("prompt_md"),
-            "paragraph": _pick_lang(ex.get("paragraph"), ex.get("paragraph_th"), lang),
-            # Don't use _pick_lang for JSON fields - handle them directly
-            "items": ex.get("items_th") if (lang == "th" and ex.get("items_th")) else ex.get("items"),
-            "options": ex.get("options"),
+            "title": _pick_lang(title_en, title_th, lang),
+            "title_en": title_en,
+            "title_th": title_th,
+            "prompt": _pick_lang(prompt_en, prompt_th, lang),
+            "prompt_en": prompt_en,
+            "prompt_th": prompt_th,
+            "prompt_md": prompt_md,
+            "paragraph": _pick_lang(paragraph_en, paragraph_th, lang),
+            "paragraph_en": paragraph_en,
+            "paragraph_th": paragraph_th,
+            # Localized JSON fields
+            "items": items_th if (lang == "th" and items_th) else items_en,
+            "items_en": items_en,
+            "items_th": items_th,
+            "options": options_en,
+            "options_th": options_th,
             "answer_key": ex.get("answer_key"),
+            "answer_key_th": answer_key_th,
         })
 
     # Phrases - only fields from actual example

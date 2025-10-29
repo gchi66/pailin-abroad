@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
@@ -16,71 +16,17 @@ export default function LessonHeader({
   backstory,
 }) {
   const { ui: uiLang } = useUiLang();
-  const [localized, setLocalized] = useState(() => ({
-    title: title ?? "",
-    focus: focus ?? "",
-    backstory: backstory ?? "",
-  }));
 
-  useEffect(() => {
-    let isActive = true;
-
-    async function syncLessonCopy() {
-      // For non-Thai UI or missing lesson id, just mirror the incoming props
-      if (!lessonId || uiLang !== "th") {
-        if (isActive) {
-          setLocalized({
-            title: title ?? "",
-            focus: focus ?? "",
-            backstory: backstory ?? "",
-          });
-        }
-        return;
-      }
-
-      try {
-        const { data, error } = await supabaseClient
-          .from("lessons")
-          .select("title_th, focus_th, backstory_th, title, focus, backstory")
-          .eq("id", lessonId)
-          .maybeSingle();
-
-        if (!isActive) return;
-
-        if (!error && data) {
-          setLocalized({
-            title: (data.title_th && data.title_th.trim()) || data.title || title || "",
-            focus: (data.focus_th && data.focus_th.trim()) || data.focus || focus || "",
-            backstory: (data.backstory_th && data.backstory_th.trim()) || data.backstory || backstory || "",
-          });
-        } else {
-          setLocalized({
-            title: title ?? "",
-            focus: focus ?? "",
-            backstory: backstory ?? "",
-          });
-        }
-      } catch (err) {
-        if (isActive) {
-          setLocalized({
-            title: title ?? "",
-            focus: focus ?? "",
-            backstory: backstory ?? "",
-          });
-        }
-      }
+  const trimOrEmpty = (value) => {
+    if (typeof value === "string") {
+      return value.trim();
     }
+    return value ?? "";
+  };
 
-    syncLessonCopy();
-
-    return () => {
-      isActive = false;
-    };
-  }, [lessonId, uiLang, title, focus, backstory]);
-
-  const fallbackTitle = localized.title || "";
-  const fallbackFocus = localized.focus || "";
-  const fallbackBackstory = localized.backstory || "";
+  const fallbackTitle = trimOrEmpty(title) || "";
+  const fallbackFocus = trimOrEmpty(focus) || "";
+  const fallbackBackstory = trimOrEmpty(backstory) || "";
   const backLinkText = t("lessonHeader.backLink", uiLang) || "< BACK TO LESSON LIBRARY";
   const backstoryLabel = t("lessonHeader.backstoryLabel", uiLang) || "Backstory";
 

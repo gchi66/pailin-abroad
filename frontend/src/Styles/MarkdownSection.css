@@ -63,6 +63,7 @@ details[open] > .markdown-summary::after {
 .markdown-content {
   padding: 0 2.25rem 1.4vh;          /* side + bottom padding */
   line-height: 1.6;
+  font-size: 1rem;
   animation: fadeIn .25s ease;
 }
 

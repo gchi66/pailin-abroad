@@ -181,7 +181,7 @@
 }
 
 .fb-row-number {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   min-width: 2rem;
   text-align: right;
@@ -235,6 +235,7 @@
 
 .st-stem {
   margin: 0;
+  font-size: 1rem;
 }
 
 .st-stem-row {
@@ -242,6 +243,10 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 0.5rem;
+}
+
+.st-prompt {
+  font-size: 1.2rem;
 }
 
 .st-mark-buttons {
@@ -366,6 +371,11 @@
   margin-top: 0;
 }
 
+.oe-prompt {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
 .oe-wrap .st-example .oe-input-wrap {
   margin: 0;
 }
@@ -376,6 +386,7 @@
 
 .oe-question .oe-question-text {
   margin: 0;
+  font-size: 1.2rem;
 }
 
 .fb-row-content {
@@ -437,7 +448,7 @@
 }
 
 .mc-prompt {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 400;
   margin: 0 0 0.5rem;
 }
@@ -447,7 +458,7 @@
 }
 
 .mc-question-text {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin: 0 0 0.75rem;
 }
@@ -491,7 +502,7 @@
 }
 
 .mc-option-text {
-  font-size: 0.98rem;
+  font-size: 1rem;
   line-height: 1.4;
   display: inline-flex;
   flex-direction: column;
@@ -542,6 +553,8 @@
 
 .fb-check-btn {
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .fb-check-btn:disabled {

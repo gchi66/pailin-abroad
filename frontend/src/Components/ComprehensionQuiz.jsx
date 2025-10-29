@@ -4,12 +4,11 @@ import "../Styles/ComprehensionQuiz.css";
 import { copy, pick } from "../ui-lang/i18n";
 
 export default function ComprehensionQuiz({ questions = [], uiLang = "en", images = {} }) {
-  const [selected, setSelected] = useState({});   // { [qId]: ["A","C"] }
-  const [results,  setResults]  = useState({});   // { [qId]: "correct" | "incorrect" }
-  const [checked,  setChecked]  = useState(false);
+  const [selected, setSelected] = useState({}); // { [qId]: ["A","C"] }
+  const [results, setResults] = useState({}); // { [qId]: "correct" | "incorrect" }
+  const [checked, setChecked] = useState(false);
   const quizCopy = copy.lessonPage.quiz;
 
-  /* toggle one letter */
   const toggle = (qId, letter, isMulti) =>
     setSelected((prev) => {
       const prevList = prev[qId] || [];
@@ -17,11 +16,10 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en", image
         ? prevList.includes(letter)
           ? prevList.filter((l) => l !== letter)
           : [...prevList, letter]
-        : [letter];                               // radio style
+        : [letter];
       return { ...prev, [qId]: nextList };
     });
 
-  /* Normalize options to structured objects: {label,text,image_key,alt_text} */
   const parseOptions = (q) => {
     const rawOpts = Array.isArray(q.options) ? q.options : [];
     return rawOpts.map((opt) => {
@@ -39,7 +37,6 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en", image
     });
   };
 
-  /* ---------------------------------- check answers */
   const checkAnswers = () => {
     const res = {};
     questions.forEach((q) => {
@@ -55,71 +52,80 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en", image
     setResults(res);
     setChecked(true);
   };
-  /* ------------------------------------------------- */
 
   return (
     <>
-      <ol className="cq-questions">
-        {questions.map((q) => {
-          const prompt =
-            uiLang === "th" && q.prompt_th ? q.prompt_th : q.prompt;
-          const opts    = parseOptions(q);
+      <div className="cq-questions">
+        {questions.map((q, idx) => {
+          const prompt = uiLang === "th" && q.prompt_th ? q.prompt_th : q.prompt;
+          const opts = parseOptions(q);
           const isMulti = (q.answer_key || []).length > 1;
+          const questionNumber = q.sort_order ?? idx + 1;
+          const currentSelections = selected[q.id] || [];
+          const resultState = results[q.id];
 
           return (
-            <li key={q.id} className="cq-question-item">
-              <div className="cq-prompt">
-                <ReactMarkdown>{prompt}</ReactMarkdown>
-
-                {checked && (
-                  <span
-                    className={
-                      results[q.id] === "correct"
-                        ? "cq-result correct"
-                        : "cq-result incorrect"
-                    }
-                  >
-                    {results[q.id] === "correct" ? "✓" : "✗"}
-                  </span>
-                )}
+            <div key={q.id} className="fb-row cq-question">
+              <div className="fb-row-number">
+                <span>{questionNumber}</span>
               </div>
 
-              <div className="cq-option-list">
-                {opts.map(({ label, text, image_key, alt_text }) => (
-                  <div key={label + text} className="cq-option-item">
-                    <button
-                      type="button"
-                      className={
-                        (selected[q.id] || []).includes(label)
-                          ? "cq-letter selected"
-                          : "cq-letter"
-                      }
-                      onClick={() => toggle(q.id, label, isMulti)}
-                    >
-                      {label}
-                    </button>
-                    <span className="cq-option-text">
-                      {image_key ? (
-                        <>
-                          <img
-                            src={images[image_key]}
-                            alt={alt_text || text}
-                            className="cq-option-image"
-                            style={{ maxWidth: 120, display: "block" }}
-                          />
-                          {text && <span>{text}</span>}
-                        </>
-                      ) : (
-                        text
-                      )}
-                    </span>
+              <div className="fb-row-main">
+                <div className="fb-row-content">
+                  <div className="cq-prompt">
+                    <ReactMarkdown>{prompt}</ReactMarkdown>
+
+                    {checked && (
+                      <span
+                        className={
+                          resultState === "correct"
+                            ? "cq-result correct"
+                            : "cq-result incorrect"
+                        }
+                      >
+                        {resultState === "correct" ? "✓" : "✗"}
+                      </span>
+                    )}
                   </div>
-                ))}
+
+                  <div className="cq-option-list">
+                    {opts.map(({ label, text, image_key, alt_text }) => {
+                      const isSelected = currentSelections.includes(label);
+
+                      return (
+                        <div key={label + text} className="cq-option-item">
+                          <button
+                          type="button"
+                          className={isSelected ? "cq-letter selected" : "cq-letter"}
+                          onClick={() => toggle(q.id, label, isMulti)}
+                          aria-pressed={isSelected}
+                        >
+                          {label}
+                          </button>
+                          <span className="cq-option-text">
+                            {image_key ? (
+                              <>
+                                <img
+                                  src={images[image_key]}
+                                  alt={alt_text || text}
+                                  className="cq-option-image"
+                                />
+                                {text && <span>{text}</span>}
+                              </>
+                            ) : (
+                              text
+                            )}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
-            </li>
+            </div>
           );
         })}
-      </ol>
+      </div>
 
       <button
         type="button"

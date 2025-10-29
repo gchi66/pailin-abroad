@@ -2,6 +2,10 @@
   padding: 2rem;
 }
 
+.apply-section p {
+  font-size: 1.2rem;
+}
+
 .apply-prompt {
   font-size: 1.3rem;
   line-height: 1.7;
@@ -19,14 +23,14 @@
   padding: 0.8rem;
   font-size: 1.4rem;
   line-height: 1.4;
-  border: 0.15rem solid #1e1e1e;
+  border: 0.1rem solid #1e1e1e;
   border-radius: 0.4rem;
   resize: vertical;               /* user can expand if they wish */
 }
 
 .apply-submit {
     background: white;
-    border: 0.15rem solid #1E1E1E;
+    border: 0.1rem solid #1E1E1E;
     border-radius: 999px;
     padding: 0.5rem 1.25rem;
     font-family: "Poppins", sans-serif;
@@ -35,6 +39,8 @@
     transition: background 0.2s ease;
     width: 15vw;
     height: 5vh;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .apply-submit:hover {

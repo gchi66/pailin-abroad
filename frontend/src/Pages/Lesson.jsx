@@ -83,52 +83,51 @@ function pickLang(en, th, lang) {
 
 // Normalize a single practice exercise row to the shape the UI expects.
 function normalizeExercise(ex, contentLang) {
-  const exercise_type = ex.exercise_type || ex.kind || null;
+  const exercise_type = ex.exercise_type || ex.kind || ex.type || null;
 
-  const title =
-    ex.title != null || ex.title_th != null
-      ? pickLang(ex.title, ex.title_th, contentLang)
-      : ex.title ?? null;
+  const title_en = ex.title_en ?? ex.title ?? null;
+  const title_th = ex.title_th ?? null;
+  const prompt_en = ex.prompt_en ?? ex.prompt_md ?? ex.prompt ?? null;
+  const prompt_th = ex.prompt_th ?? null;
+  const paragraph_en = ex.paragraph_en ?? ex.paragraph ?? null;
+  const paragraph_th = ex.paragraph_th ?? null;
 
-  // prefer prompt / prompt_md; if still missing and it's open-ended, use first item's text
-  const rawItems = contentLang === "th" && ex.items_th ? ex.items_th : ex.items;
-  const items    = safeJSON(rawItems, []);
-  let prompt =
-    (ex.prompt != null || ex.prompt_th != null
-      ? pickLang(ex.prompt, ex.prompt_th, contentLang)
-      : pickLang(ex.prompt_md, ex.prompt_th, contentLang) || ex.prompt_md || ex.prompt || null);
+  const items_en = safeJSON(ex.items_en ?? ex.items, []);
+  const items_th = safeJSON(ex.items_th, []);
+  const options_en = safeJSON(ex.options_en ?? ex.options, []);
+  const options_th = safeJSON(ex.options_th, []);
+  const answer_key = safeJSON(ex.answer_key, {});
+
+  const title = pickLang(title_en, title_th, contentLang) ?? null;
+  let prompt = pickLang(prompt_en, prompt_th, contentLang) ?? null;
+  const paragraph = pickLang(paragraph_en, paragraph_th, contentLang) ?? null;
+
+  const items =
+    contentLang === "th" && Array.isArray(items_th) && items_th.length
+      ? items_th
+      : items_en;
+
+  const options =
+    contentLang === "th" && Array.isArray(options_th) && options_th.length
+      ? options_th
+      : options_en;
 
   if (!prompt && (exercise_type === "open" || exercise_type === "open_ended")) {
     const first = items && items[0] && (items[0].text || items[0].prompt || items[0].question);
     if (first) prompt = String(first);
   }
 
-  const paragraph =
-    ex.paragraph != null || ex.paragraph_th != null
-      ? pickLang(ex.paragraph, ex.paragraph_th, contentLang)
-      : null;
-
-  const rawOptions = contentLang === "th" && ex.options_th ? ex.options_th : ex.options;
-  const options    = safeJSON(rawOptions, []);
-  const answer_key = safeJSON(ex.answer_key, {});
-
-  const feedback =
-    ex.feedback != null || ex.feedback_th != null
-      ? pickLang(ex.feedback, ex.feedback_th, contentLang)
-      : null;
-
   return {
     id: ex.id,
     lesson_id: ex.lesson_id,
     sort_order: ex.sort_order ?? 0,
-    exercise_type,   // "fill_blank" | "multiple_choice" | "open" | ...
+    exercise_type,
     title,
-    prompt,          // will exist for open after fallback
+    prompt,
     paragraph,
     items,
     options,
     answer_key,
-    feedback,
   };
 }
 
@@ -267,6 +266,10 @@ export default function Lesson() {
         const title_th = payload.title_th ?? null;
         const subtitle_en = payload.subtitle_en ?? payload.subtitle ?? null;
         const subtitle_th = payload.subtitle_th ?? null;
+        const focus_en = payload.focus_en ?? payload.focus ?? null;
+        const focus_th = payload.focus_th ?? null;
+        const backstory_en = payload.backstory_en ?? payload.backstory ?? null;
+        const backstory_th = payload.backstory_th ?? null;
 
         let headerImageUrl = payload.header_image_url ?? null;
         let headerImagePath = payload.header_image_path ?? null;
@@ -300,6 +303,10 @@ export default function Lesson() {
           title_th,
           subtitle_en,
           subtitle_th,
+          focus_en,
+          focus_th,
+          backstory_en,
+          backstory_th,
           // convenient content-language strings too (if you still want them)
           title: payload.title ?? null,
           subtitle: payload.subtitle ?? null,
@@ -489,7 +496,18 @@ export default function Lesson() {
       : null;
 
   // Choose header strings by UI language (independent of contentLang)
-  const headerTitle = lesson.title_en || lesson.title || lesson.title_th || "";
+  const pickUiString = (enValue, thValue, fallback = "") =>
+    uiLang === "th"
+      ? thValue ?? enValue ?? fallback ?? ""
+      : enValue ?? thValue ?? fallback ?? "";
+
+  const headerTitle = pickUiString(lesson.title_en, lesson.title_th, lesson.title);
+  const headerFocus = pickUiString(lesson.focus_en, lesson.focus_th, lesson.focus);
+  const headerBackstory = pickUiString(
+    lesson.backstory_en,
+    lesson.backstory_th,
+    lesson.backstory
+  );
   return (
     <main>
       <div className="lesson-page-container">
@@ -501,8 +519,8 @@ export default function Lesson() {
           title={headerTitle}
           headerImageUrl={lesson.header_image_url}
           headerImagePath={lesson.header_image_path}
-          focus={lesson.focus}
-          backstory={lesson.backstory}
+          focus={headerFocus}
+          backstory={headerBackstory}
         />
 
         {/* Audio card */}
@@ -510,7 +528,7 @@ export default function Lesson() {
           audioSrc={audioUrl}
           audioSrcNoBg={audioUrlNoBg}
           audioSrcBg={audioUrlBg}
-          description={lesson.backstory}
+          description={headerBackstory}
           isLocked={isLocked}
         />
 
