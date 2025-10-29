@@ -1,16 +1,18 @@
 import React from "react";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/LessonSidebar.css";
 
-const LABELS = {
-  comprehension:  "COMPREHENSION",
-  transcript:     "TRANSCRIPT",
-  apply:          "APPLY",
-  understand:     "UNDERSTAND",
-  extra_tip:      "EXTRA TIPS",
-  common_mistake: "COMMON MISTAKES",
-  phrases_verbs:  "PHRASES & VERBS",
-  culture_note:   "CULTURE NOTE",
-  practice:       "PRACTICE",
+const LABEL_KEY_MAP = {
+  comprehension: "lessonSidebar.labels.comprehension",
+  transcript: "lessonSidebar.labels.transcript",
+  apply: "lessonSidebar.labels.apply",
+  understand: "lessonSidebar.labels.understand",
+  extra_tip: "lessonSidebar.labels.extra_tip",
+  common_mistake: "lessonSidebar.labels.common_mistake",
+  phrases_verbs: "lessonSidebar.labels.phrases_verbs",
+  culture_note: "lessonSidebar.labels.culture_note",
+  practice: "lessonSidebar.labels.practice",
 };
 
 // The exact order you want in every lesson
@@ -26,23 +28,26 @@ const MASTER_ORDER = [
   "practice",
 ];
 
-function getLessonHeader(lesson) {
-  if (!lesson) return "LESSON –";
+function getLessonHeader(lesson, uiLang) {
+  const lessonLabel = t("lessonSidebar.lessonLabel", uiLang) || "LESSON";
+  const checkpointLabel = t("lessonSidebar.checkpoint", uiLang) || "CHECKPOINT";
+
+  if (!lesson) return `${lessonLabel} –`;
   const externalId = lesson.external_id || "";
   // Check for checkpoint: external_id ends with .chp or lesson_order === 0
   if (externalId.endsWith(".chp") || lesson.lesson_order === 0) {
-    return "Checkpoint";
+    return checkpointLabel;
   }
   // Try to extract the lesson number from external_id (e.g., 1.14 -> 14)
   const match = externalId.match(/^(\d+)\.(\d+)$/);
   if (match) {
-    return `LESSON ${parseInt(match[2], 10)}`;
+    return `${lessonLabel} ${parseInt(match[2], 10)}`;
   }
   // Fallback to lesson_order if available
   if (lesson.lesson_order) {
-    return `LESSON ${lesson.lesson_order}`;
+    return `${lessonLabel} ${lesson.lesson_order}`;
   }
-  return "LESSON –";
+  return `${lessonLabel} –`;
 }
 
 export default function LessonSidebar({
@@ -56,6 +61,16 @@ export default function LessonSidebar({
   lesson, // <-- new prop
   isLocked = false, // <-- add isLocked prop
 }) {
+  const { ui: uiLang } = useUiLang();
+
+  const getLabel = (type) => {
+    const key = LABEL_KEY_MAP[type];
+    if (!key) return (type || "").toUpperCase();
+    const translated = t(key, uiLang);
+    if (translated) return translated;
+    return (type || "").toUpperCase();
+  };
+
   // For locked lessons, show all sections in MASTER_ORDER
   // For unlocked lessons, only show sections with content
   const menuItems = MASTER_ORDER
@@ -96,7 +111,7 @@ export default function LessonSidebar({
   return (
     <aside className="ls-sidebar">
       <header className="ls-header">
-        {getLessonHeader(lesson)}
+        {getLessonHeader(lesson, uiLang)}
       </header>
       <ul className="ls-list">
         {menuItems.map((item) => (
@@ -106,7 +121,7 @@ export default function LessonSidebar({
             onClick={() => onSelect(item.id)}
           >
             <span className="ls-row-label">
-              {LABELS[item.type] || item.type.toUpperCase()}
+              {getLabel(item.type)}
             </span>
             {item.id === activeId && (
               <span className="ls-row-check">✔︎</span>

@@ -4,6 +4,7 @@ import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
+import { copy, pick } from "../../ui-lang/i18n";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -30,6 +31,17 @@ const getInputCount = (item) => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
 };
 
+const isExampleItem = (item) => {
+  if (!item) return false;
+  if (typeof item.is_example === "boolean") {
+    return item.is_example;
+  }
+  if (typeof item.number === "string") {
+    return item.number.trim().toLowerCase() === "example";
+  }
+  return false;
+};
+
 export default function OpenEndedExercise({
   exercise,
   images = {},
@@ -38,6 +50,7 @@ export default function OpenEndedExercise({
   exerciseId,
   userId: userIdProp,
   showTitle = true,
+  contentLang = "en",
 }) {
   const { title, prompt, items = [] } = exercise || {};
   const { user } = useAuth();
@@ -51,10 +64,27 @@ export default function OpenEndedExercise({
 
   const initialQuestions = useMemo(
     () =>
-      items.map((item) => ({
-        ...DEFAULT_QUESTION_STATE,
-        answerParts: Array(getInputCount(item)).fill(""),
-      })),
+      items.map((item) => {
+        const base = {
+          ...DEFAULT_QUESTION_STATE,
+          answerParts: Array(getInputCount(item)).fill(""),
+        };
+        if (isExampleItem(item)) {
+          const exampleAnswer =
+            item.sample_answer ||
+            item.answer ||
+            item.expected_answer ||
+            item.keywords ||
+            "";
+          return {
+            ...base,
+            correct: true,
+            loading: false,
+            answer: exampleAnswer,
+          };
+        }
+        return base;
+      }),
     [items]
   );
 
@@ -62,6 +92,8 @@ export default function OpenEndedExercise({
   const [isChecking, setIsChecking] = useState(false);
   const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
+  const checkLabel = pick(copy.lessonContent.checkAnswers, contentLang);
+  const checkingLabel = pick(copy.lessonContent.checking, contentLang);
 
   useEffect(() => {
     setQuestions(initialQuestions);
@@ -249,6 +281,52 @@ export default function OpenEndedExercise({
       {shouldRenderPrompt && <p className="oe-prompt">{prompt}</p>}
 
       {items.map((item, qIdx) => {
+        const hasAudio = Boolean(item.audio_key);
+
+        if (isExampleItem(item)) {
+          const imageUrl = item.image_key ? images[item.image_key] : null;
+          const exampleAnswer =
+            item.sample_answer ||
+            item.answer ||
+            item.expected_answer ||
+            item.keywords ||
+            "";
+          return (
+            <div
+              key={`question-${qIdx}`}
+              className="oe-question oe-example st-example"
+            >
+              <p className="st-example-label">Example</p>
+              {imageUrl && (
+                <div className="fb-image-container">
+                  <img
+                    src={imageUrl}
+                    alt="Example prompt"
+                    className="fb-image"
+                  />
+                </div>
+              )}
+              {hasAudio && (
+                <div className="practice-audio-container">
+                  <AudioButton
+                    audioKey={item.audio_key}
+                    audioIndex={audioIndex}
+                    className="practice-audio-button"
+                  />
+                </div>
+              )}
+              <p className="oe-question-text">
+                {item.question || item.text || ""}
+              </p>
+              {exampleAnswer && (
+                <p className="st-example-meta st-example-answer">
+                  <strong>Answer:</strong> {exampleAnswer}
+                </p>
+              )}
+            </div>
+          );
+        }
+
         const questionState = questions[qIdx] || DEFAULT_QUESTION_STATE;
         const disabled =
           questionState.correct === true || questionState.loading === true;
@@ -282,12 +360,17 @@ export default function OpenEndedExercise({
               </div>
             )}
 
+            {hasAudio && (
+              <div className="practice-audio-container">
+                <AudioButton
+                  audioKey={item.audio_key}
+                  audioIndex={audioIndex}
+                  className="practice-audio-button"
+                />
+              </div>
+            )}
+
             <p className="oe-question-text">
-              <AudioButton
-                audioKey={item.audio_key}
-                audioIndex={audioIndex}
-                className="inline mr-2"
-              />
               {numberLabel}. {item.question || item.text || ""}
             </p>
 
@@ -332,7 +415,7 @@ export default function OpenEndedExercise({
           onClick={handleCheckAnswers}
           disabled={!canCheck}
         >
-          {isChecking ? "Checking..." : "Check Answers"}
+          {isChecking ? checkingLabel : checkLabel}
         </button>
 
         {hasChecked && hasIncorrect && (

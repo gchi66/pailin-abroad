@@ -4,6 +4,7 @@ import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
+import { copy, pick } from "../../ui-lang/i18n";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -48,6 +49,7 @@ export default function SentenceTransformExercise({
   exerciseId,
   userId: userIdProp,
   showTitle = true,
+  contentLang = "en",
 }) {
   const { title = "", prompt = "", items = [] } = exercise || {};
   const { user } = useAuth();
@@ -80,6 +82,8 @@ export default function SentenceTransformExercise({
   const [isChecking, setIsChecking] = useState(false);
   const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
+  const checkLabel = pick(copy.lessonContent.checkAnswers, contentLang);
+  const checkingLabel = pick(copy.lessonContent.checking, contentLang);
 
   useEffect(() => {
     setQuestions(initialQuestions);
@@ -243,6 +247,7 @@ export default function SentenceTransformExercise({
       {prompt && <p className="st-prompt">{prompt}</p>}
 
       {items.map((item, idx) => {
+        const hasAudio = Boolean(item?.audio_key);
         const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
         const exampleItem = isExampleItem(item);
 
@@ -263,14 +268,16 @@ export default function SentenceTransformExercise({
                   />
                 </div>
               )}
-              <p className="st-stem">
-                <AudioButton
-                  audioKey={item.audio_key}
-                  audioIndex={audioIndex}
-                  className="inline mr-2"
-                />
-                {item?.text}
-              </p>
+              {hasAudio && (
+                <div className="practice-audio-container">
+                  <AudioButton
+                    audioKey={item.audio_key}
+                    audioIndex={audioIndex}
+                    className="practice-audio-button"
+                  />
+                </div>
+              )}
+              <p className="st-stem">{item?.text}</p>
               {correctValue && (
                 <p className="st-example-meta">
                   <strong>Correct?</strong> {correctValue}
@@ -301,12 +308,16 @@ export default function SentenceTransformExercise({
                 />
               </div>
             )}
+            {hasAudio && (
+              <div className="practice-audio-container">
+                <AudioButton
+                  audioKey={item.audio_key}
+                  audioIndex={audioIndex}
+                  className="practice-audio-button"
+                />
+              </div>
+            )}
             <p className="st-stem">
-              <AudioButton
-                audioKey={item.audio_key}
-                audioIndex={audioIndex}
-                className="inline mr-2"
-              />
               {numberLabel}. {item.text}
             </p>
             <div className="st-input-wrap">
@@ -333,7 +344,7 @@ export default function SentenceTransformExercise({
           className="ai-eval-button"
           disabled={!canCheck}
         >
-          {isChecking ? "Checking..." : "Check Answers"}
+          {isChecking ? checkingLabel : checkLabel}
         </button>
         {hasChecked && hasIncorrect && (
           <button

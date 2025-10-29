@@ -4,6 +4,7 @@ import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
+import { copy, pick } from "../../ui-lang/i18n";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -14,6 +15,17 @@ const DEFAULT_QUESTION_STATE = {
   loading: false,
 };
 
+const isExampleItem = (item) => {
+  if (!item) return false;
+  if (typeof item.is_example === "boolean") {
+    return item.is_example;
+  }
+  if (typeof item.number === "string") {
+    return item.number.trim().toLowerCase() === "example";
+  }
+  return false;
+};
+
 export default function FillBlankExercise({
   exercise,
   images = {},
@@ -22,6 +34,7 @@ export default function FillBlankExercise({
   exerciseId,
   userId: userIdProp,
   showTitle = true,
+  contentLang = "en",
 }) {
   const { title, prompt, paragraph, items = [] } = exercise || {};
   const { user } = useAuth();
@@ -35,8 +48,15 @@ export default function FillBlankExercise({
 
   const initialQuestions = useMemo(
     () =>
-      items.map(() => ({
+      items.map((item) => ({
         ...DEFAULT_QUESTION_STATE,
+        ...(isExampleItem(item)
+          ? {
+              correct: true,
+              loading: false,
+              answer: item.answer || "",
+            }
+          : {}),
       })),
     [items]
   );
@@ -68,6 +88,8 @@ export default function FillBlankExercise({
   const canCheck =
     pendingIndexes.length > 0 && allPendingAnswered && !isChecking;
   const hasIncorrect = questions.some((question) => question.correct === false);
+  const checkLabel = pick(copy.lessonContent.checkAnswers, contentLang);
+  const checkingLabel = pick(copy.lessonContent.checking, contentLang);
 
   const handleAnswerChange = (idx, value) => {
     setQuestions((prev) =>
@@ -253,6 +275,45 @@ export default function FillBlankExercise({
 
   const renderRowItems = () =>
     items.map((item, idx) => {
+      const hasAudio = Boolean(item.audio_key);
+
+      if (isExampleItem(item)) {
+        const imageUrl = item.image_key ? images[item.image_key] : null;
+        return (
+          <div
+            key={`example-${idx}`}
+            className="fb-row fb-example st-example"
+          >
+            <p className="st-example-label">Example</p>
+            {imageUrl && (
+              <div className="fb-image-container">
+                <img src={imageUrl} alt="Example item" className="fb-image" />
+              </div>
+            )}
+
+            <div className="fb-row-content">
+              {hasAudio && (
+                <div className="practice-audio-container">
+                  <AudioButton
+                    audioKey={item.audio_key}
+                    audioIndex={audioIndex}
+                    className="practice-audio-button"
+                  />
+                </div>
+              )}
+              <div className="fb-row-text">
+                <span>{item.text}</span>
+              </div>
+              {item.answer && (
+                <p className="st-example-meta st-example-answer">
+                  <strong>Answer:</strong> {item.answer}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      }
+
       const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
       const disabled =
         questionState.correct === true || questionState.loading === true;
@@ -273,12 +334,16 @@ export default function FillBlankExercise({
           )}
 
           <div className="fb-row-content">
+            {hasAudio && (
+              <div className="practice-audio-container">
+                <AudioButton
+                  audioKey={item.audio_key}
+                  audioIndex={audioIndex}
+                  className="practice-audio-button"
+                />
+              </div>
+            )}
             <div className="fb-row-text">
-              <AudioButton
-                audioKey={item.audio_key}
-                audioIndex={audioIndex}
-                className="inline mr-2"
-              />
               {imageUrl ? (
                 <>
                   <span>{item.text}</span>
@@ -342,7 +407,7 @@ export default function FillBlankExercise({
           onClick={handleCheckAnswers}
           disabled={!canCheck}
         >
-          {isChecking ? "Checking..." : "Check Answers"}
+          {isChecking ? checkingLabel : checkLabel}
         </button>
 
         {hasChecked && hasIncorrect && (

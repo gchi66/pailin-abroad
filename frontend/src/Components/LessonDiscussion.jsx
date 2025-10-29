@@ -22,8 +22,6 @@ function nestComments(comments) {
 export default function LessonDiscussion({ lessonId, isAdmin }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newComment, setNewComment] = useState("");
-  const [posting, setPosting] = useState(false);
   const { user } = useAuth();
 
   // Fetch comments for this lesson
@@ -43,14 +41,14 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   }, [lessonId]);
 
   // Add new comment (requires login)
-  async function handleNewComment(body, parentCommentId = null) {
+  async function handleNewComment(body) {
     if (!user) return;
     const { data, error } = await supabaseClient
       .from("comments")
-      .insert({ lesson_id: lessonId, user_id: user.id, body, parent_comment_id: parentCommentId })
+      .insert({ lesson_id: lessonId, user_id: user.id, body })
       .select();
     if (data) {
-      setComments(prev => [...prev, ...data]);
+      setComments((prev) => [...prev, ...data]);
     }
   }
 
@@ -77,52 +75,19 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
 
   // Nest comments for rendering
   const nested = nestComments(comments);
-
-  async function handleNewCommentSubmit(e) {
-    e.preventDefault();
-    if (!newComment.trim()) return;
-    setPosting(true);
-    await handleNewComment(newComment);
-    setNewComment("");
-    setPosting(false);
-  }
+  const canPost = Boolean(user);
 
   return (
     <section className="lesson-discussion">
-      <h3 className="discussion-title">Discussion Board</h3>
-      <section className="discussion-board">
-        {user ? (
-          <form className="new-comment-form">
-            <textarea
-              value={newComment}
-              onChange={e => setNewComment(e.target.value)}
-              placeholder="Write a new comment..."
-              rows={3}
-              className="comment-textarea"
-              required
-            />
-            <button
-              type="submit"
-              className="submit-btn"
-              disabled={posting || !newComment.trim()}
-              onClick={handleNewCommentSubmit}
-            >
-              {posting ? "Posting..." : "Post"}
-            </button>
-          </form>
-        ) : (
-          <div className="discussion-login-msg">You must be logged in to post a comment.</div>
-        )}
-        {loading ? (
-          <div className="discussion-loading">Loading comments…</div>
-        ) : (
-          <DiscussionBoard
-            comments={nested}
-            onReply={handleReply}
-            onPin={isAdmin ? handlePin : undefined}
-          />
-        )}
-      </section>
+      <DiscussionBoard
+        comments={nested}
+        onNewComment={canPost ? handleNewComment : undefined}
+        onReply={canPost ? handleReply : undefined}
+        onPin={isAdmin ? handlePin : undefined}
+        canPost={canPost}
+        loginPrompt="You must be logged in to post a comment."
+        isLoading={loading}
+      />
     </section>
   );
 }

@@ -212,7 +212,13 @@ export default function LessonContent({
           </div>
         </header>
 
-        <PracticeSection exercises={practiceExercises} uiLang={uiLang} images={images} audioIndex={snipIdx} />
+        <PracticeSection
+          exercises={practiceExercises}
+          uiLang={uiLang}
+          images={images}
+          audioIndex={snipIdx}
+          contentLang={contentLang}
+        />
       </article>
     );
   }

@@ -72,6 +72,7 @@ export default function PracticeSection({
   wrapInDetails = true,
   images = {},
   audioIndex = {},
+  contentLang = "en",
 }) {
   // ensure we’re working with an array
   const list0 = arr(exercises).map(transformExercise);
@@ -103,6 +104,7 @@ export default function PracticeSection({
           sourceType: "practice",
           exerciseId: ex.id,
           showTitle: !wrapInDetails,
+          contentLang,
         };
 
         if (!wrapInDetails) {

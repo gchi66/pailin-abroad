@@ -46,8 +46,7 @@
 }
 
 .lesson-navigation-text:hover:not(.disabled) {
-  color: #F65555;
-  transform: scale(1.02);
+  text-decoration: underline;
 }
 
 .lesson-navigation-text.disabled {
@@ -67,9 +66,9 @@
   transition: transform 0.2s ease;
 }
 
-.lesson-mark-complete-button:hover {
+/* .lesson-mark-complete-button:hover {
   transform: scale(1.02);
-}
+} */
 
 .lesson-mark-complete-text {
   font-family: "Poppins", sans-serif;
@@ -79,6 +78,10 @@
   white-space: nowrap;
 }
 
+.lesson-mark-complete-button:hover .lesson-mark-complete-text {
+  text-decoration: underline;
+}
+
 .lesson-checkmark-icon {
   width: 2rem;
   height: 2rem;
@@ -86,9 +89,6 @@
   transition: transform 0.2s ease;
 }
 
-.lesson-mark-complete-button:hover .lesson-checkmark-icon {
-  transform: scale(1.1);
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {

@@ -919,6 +919,14 @@ class GoogleDocsParser:
         lesson["focus"]      = ""
         lesson["backstory"]  = ""
 
+        if lang == "th":
+            title_text = (lesson.get("title") or "").strip()
+            rx = globals().get("TH_RX") if "TH_RX" in globals() else re.compile(r"[\u0E00-\u0E7F]")
+            match = rx.search(title_text)
+            if match:
+                lesson["title"] = title_text[match.start():].strip()
+
+
         header_img = None
         for raw_text, _style in (header_lines or []):
             text = (raw_text or "").strip()
@@ -1395,6 +1403,9 @@ class GoogleDocsParser:
         collecting_opts = False
         collecting_text = False  # New flag for multi-line text collection
         collecting_paragraph = False  # New flag for multi-line paragraph collection
+        IMG_TAG_RE = re.compile(r'\[img:\s*([^\]]+?)\s*\]', re.IGNORECASE)
+        AUDIO_TAG_RE = re.compile(r'\[audio:\s*([^\]]+?)\s*\]', re.IGNORECASE)
+        ALT_TEXT_RE = re.compile(r'ALT[\s-]*TEXT\s*:\s*(.+)', re.IGNORECASE | re.DOTALL)
 
         def normalize_inputs(value) -> int:
             """Ensure inputs is a positive int, defaulting to 1."""
@@ -1599,6 +1610,50 @@ class GoogleDocsParser:
                     cur_items[-1]["text"] = line
 
         flush_exercise()
+
+        def extract_media_fields(text: str):
+            if not isinstance(text, str):
+                return text, None, None, None
+
+            image_key = None
+            audio_key = None
+
+            def _strip_img(match):
+                nonlocal image_key
+                if image_key is None:
+                    image_key = (match.group(1) or "").strip()
+                return ""
+
+            def _strip_audio(match):
+                nonlocal audio_key
+                if audio_key is None:
+                    audio_key = (match.group(1) or "").strip()
+                return ""
+
+            cleaned = IMG_TAG_RE.sub(_strip_img, text)
+            cleaned = AUDIO_TAG_RE.sub(_strip_audio, cleaned)
+            alt_text = None
+            alt_match = ALT_TEXT_RE.search(cleaned)
+            if alt_match:
+                alt_text = (alt_match.group(1) or "").strip()
+                cleaned = cleaned[:alt_match.start()].rstrip()
+
+            cleaned = cleaned.strip()
+            return cleaned, image_key, alt_text, audio_key
+
+        for exercise in exercises:
+            for item in exercise.get("items", []):
+                text_value = item.get("text")
+                cleaned_text, image_key, alt_text, audio_key = extract_media_fields(text_value)
+                if image_key:
+                    item["image_key"] = image_key
+                if alt_text:
+                    item["alt_text"] = alt_text
+                if audio_key:
+                    item["audio_key"] = audio_key
+                if isinstance(cleaned_text, str):
+                    item["text"] = cleaned_text
+
         return exercises
 
 

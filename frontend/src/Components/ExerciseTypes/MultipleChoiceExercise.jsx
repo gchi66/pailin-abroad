@@ -26,6 +26,7 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
 
       {items.map((q, qIdx) => {
         const imageUrl = q.image_key ? images[q.image_key] : null;
+        const hasAudio = Boolean(q.audio_key);
 
         return (
           <div key={`question-${qIdx}`} className="mc-question">
@@ -35,8 +36,16 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
                 <img src={imageUrl} alt={`Question ${q.number}`} className="fb-image" />
               </div>
             )}
+            {hasAudio && (
+              <div className="practice-audio-container">
+                <AudioButton
+                  audioKey={q.audio_key}
+                  audioIndex={audioIndex}
+                  className="practice-audio-button"
+                />
+              </div>
+            )}
             <p className="mc-question-text">
-              <AudioButton audioKey={q.audio_key} audioIndex={audioIndex} className="inline mr-2" />
               {q.number}. {q.text}
             </p>
           <ul className="mc-options">

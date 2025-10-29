@@ -12,6 +12,29 @@ export const copy = {
     freeLessons: { en: "Free Lessons", th: "บทเรียนฟรี" },
   },
   uiLabel: { en: "UI:", th: "ภาษา:" },
+  lessonHeader: {
+    backLink: { en: "< BACK TO LESSON LIBRARY", th: "< กลับไปคลังบทเรียน" },
+    backstoryLabel: { en: "Backstory", th: "พื้นหลัง" },
+  },
+  lessonSidebar: {
+    lessonLabel: { en: "LESSON", th: "บทเรียน" },
+    checkpoint: { en: "CHECKPOINT", th: "จุดตรวจ" },
+    labels: {
+      comprehension: { en: "COMPREHENSION", th: "คำถามความเข้าใจ" },
+      transcript: { en: "TRANSCRIPT", th: "บทถอดเสียง" },
+      apply: { en: "APPLY", th: "นำไปใช้" },
+      understand: { en: "UNDERSTAND", th: "ทำความเข้าใจ" },
+      extra_tip: { en: "EXTRA TIPS", th: "เคล็ดลับเพิ่มเติม" },
+      common_mistake: { en: "COMMON MISTAKES", th: "ข้อผิดพลาดที่พบบ่อย" },
+      phrases_verbs: { en: "PHRASES & VERBS", th: "วลีและกริยา" },
+      culture_note: { en: "CULTURE NOTE", th: "เกร็ดวัฒนธรรม" },
+      practice: { en: "PRACTICE", th: "ฝึกฝน" },
+    },
+  },
+  lessonContent: {
+    checkAnswers: { en: "Check Answers", th: "ตรวจคำตอบ" },
+    checking: { en: "Checking...", th: "กำลังตรวจ..." },
+  },
   profileDropdown: {
     accountSettings: { en: "Account Settings", th: "การตั้งค่าบัญชี" },
     logout: { en: "Log Out", th: "ออกจากระบบ" },

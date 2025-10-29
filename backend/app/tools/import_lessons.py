@@ -35,6 +35,10 @@ VALID_EXERCISE_KINDS = {
     'open'
 }
 
+AUDIO_KEY_RE = re.compile(
+    r'^(?P<lesson>\d+\.\d+)[ _-](?P<section>[A-Za-z_]+)[ _-](?P<seq>\d{1,3})$'
+)
+
 # ______________________ HELPERS
 def _get_pailin_abroad_user_id():
     """
@@ -320,6 +324,60 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
                      .execute())
                 except Exception as e:
                     print(f"[ERROR] Updating alt_text_en for {image_key}: {e}")
+
+    audio_keys = set()
+    for ex in (practice_exercises or []):
+        for item in ex.get("items", []) or []:
+            audio_key = (item.get("audio_key") or "").strip()
+            if audio_key:
+                audio_keys.add(audio_key)
+
+    if audio_keys:
+        lesson_external_id = None
+        try:
+            lesson_row = (supabase.table("lessons")
+                          .select("lesson_external_id")
+                          .eq("id", lesson_id)
+                          .single()
+                          .execute())
+            lesson_external_id = (lesson_row.data or {}).get("lesson_external_id")
+        except Exception as e:
+            print(f"[INFO] Could not fetch lesson_external_id for lesson {lesson_id}: {e}")
+
+        for audio_key in sorted(audio_keys):
+            match = AUDIO_KEY_RE.match(audio_key)
+            if not match:
+                print(f"[WARN] Skipping audio_key with unexpected format: {audio_key}")
+                continue
+
+            parsed_lesson = match.group("lesson")
+            section = match.group("section").lower()
+            try:
+                seq = int(match.group("seq"))
+            except ValueError:
+                print(f"[WARN] Skipping audio_key with invalid seq: {audio_key}")
+                continue
+
+            target_lesson_ext = lesson_external_id or parsed_lesson
+            if lesson_external_id and lesson_external_id != parsed_lesson:
+                print(f"[WARN] audio_key {audio_key} does not match lesson external id {lesson_external_id}; using parsed value.")
+                target_lesson_ext = parsed_lesson
+
+            if dry_run:
+                print(f"[DRY RUN] Ensure audio_snippets audio_key={audio_key} for lesson={target_lesson_ext} section={section} seq={seq}")
+                continue
+
+            try:
+                resp = (supabase.table("audio_snippets")
+                        .update({"audio_key": audio_key})
+                        .eq("lesson_external_id", target_lesson_ext)
+                        .eq("section", section)
+                        .eq("seq", seq)
+                        .execute())
+                if not resp.data:
+                    print(f"[WARN] No audio_snippets row found for lesson={target_lesson_ext}, section={section}, seq={seq} (audio_key={audio_key})")
+            except Exception as e:
+                print(f"[ERROR] Updating audio_snippets for {audio_key}: {e}")
 
 def upsert_lesson(data, lang="en", dry_run=False):
     lesson = data["lesson"]

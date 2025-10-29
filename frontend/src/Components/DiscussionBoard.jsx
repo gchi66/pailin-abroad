@@ -1,146 +1,299 @@
 import React, { useState } from "react";
 import "../Styles/DiscussionBoard.css";
 
-export default function DiscussionBoard({ comments = [], onReply, onPin }) {
-  // Inline new comment form state
+function formatDateLabel(createdAt) {
+  if (!createdAt) return "";
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }).format(new Date(createdAt));
+  } catch (_error) {
+    return "";
+  }
+}
+
+function buildLocationLabel(comment) {
+  if (!comment) return "";
+
+  const metadata = comment.metadata || {};
+  const rawCandidates = [
+    comment.location,
+    comment.location_text,
+    comment.location_city,
+    comment.location_state,
+    comment.location_country,
+    comment.user_location,
+    metadata.location,
+    metadata.location_text,
+    metadata.city && metadata.country
+      ? `${metadata.city}, ${metadata.country}`
+      : null,
+    metadata.city,
+    metadata.state,
+    metadata.country,
+    comment.users?.location,
+    comment.users?.location_text,
+    comment.users?.city,
+    comment.users?.state,
+    comment.users?.country,
+  ];
+
+  const seen = new Set();
+  const parts = [];
+
+  rawCandidates.forEach((entry) => {
+    const value = typeof entry === "string" ? entry : entry?.toString?.();
+    if (!value) return;
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    const key = trimmed.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    parts.push(trimmed);
+  });
+
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0];
+
+  return parts.join(", ");
+}
+
+function buildCommentMeta(comment) {
+  const details = [];
+  const dateLabel = formatDateLabel(comment?.created_at);
+  if (dateLabel) details.push(dateLabel);
+
+  const locationLabel = buildLocationLabel(comment);
+  if (locationLabel) details.push(locationLabel);
+
+  return details.join(" · ");
+}
+
+export default function DiscussionBoard({
+  comments = [],
+  onNewComment,
+  onReply,
+  onPin,
+  canPost = false,
+  loginPrompt = "You must be logged in to post a comment.",
+  isLoading = false,
+}) {
   const [newComment, setNewComment] = useState("");
   const [posting, setPosting] = useState(false);
 
-  async function handleNewCommentSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!newComment.trim()) return;
+    const trimmed = newComment.trim();
+    if (!trimmed || !onNewComment) return;
+
     setPosting(true);
-    await onReply?.(null, newComment);
-    setNewComment("");
-    setPosting(false);
+    try {
+      await onNewComment(trimmed);
+      setNewComment("");
+    } finally {
+      setPosting(false);
+    }
   }
+
+  const commentCount = Array.isArray(comments) ? comments.length : 0;
+  const canReply = typeof onReply === "function" && canPost;
 
   return (
     <div className="discussion-container">
       <div className="discussion-wrapper">
         <section className="discussion-board">
-          {comments.map((c) => (
-            <CommentItem
-              key={c.id}
-              comment={c}
-              onReply={onReply}
-              onPin={onPin}
-            />
-          ))}
+          <div className="discussion-header">
+            <h2 className="discussion-title">Join the Discussion</h2>
+            {canPost && onNewComment ? (
+              <form className="discussion-form" onSubmit={handleSubmit}>
+                <textarea
+                  value={newComment}
+                  onChange={(event) => setNewComment(event.target.value)}
+                  placeholder="Respond to our pinned comment or leave a question!"
+                  rows={4}
+                  className="discussion-textarea"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="discussion-submit-btn"
+                  disabled={posting || !newComment.trim()}
+                >
+                  {posting ? "Submitting..." : "Submit"}
+                </button>
+              </form>
+            ) : (
+              <div className="discussion-locked">
+                <p>{loginPrompt}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="comments-section">
+            <h3 className="comments-title">
+              Comments ({commentCount})
+            </h3>
+            {isLoading ? (
+              <div className="discussion-loading">Loading comments…</div>
+            ) : commentCount === 0 ? (
+              <div className="discussion-empty">
+                Be the first to start the conversation.
+              </div>
+            ) : (
+              <div className="comments-list">
+                {comments.map((comment) => (
+                  <CommentItem
+                    key={comment.id}
+                    comment={comment}
+                    onReply={onReply}
+                    onPin={onPin}
+                    canReply={canReply}
+                    depth={0}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </section>
       </div>
     </div>
   );
 }
 
-function CommentItem({ comment, onReply, onPin, depth = 0 }) {
+function CommentItem({ comment, onReply, onPin, canReply, depth }) {
   const [showReply, setShowReply] = useState(false);
   const [replyBody, setReplyBody] = useState("");
   const [postingReply, setPostingReply] = useState(false);
-  const isPinned = !!comment.pinned;
 
-  // Get username from the joined users table
-  const userDisplay = comment.users?.username ||
-                     comment.users?.email ||
-                     comment.user_email ||
-                     comment.user_username ||
-                     "Anonymous";
+  const isPinned = Boolean(comment?.pinned);
 
-  async function handleReplySubmit(e) {
-    e.preventDefault();
-    if (!replyBody.trim()) return;
+  const userDisplay =
+    comment?.users?.username ||
+    comment?.users?.email ||
+    comment?.user_email ||
+    comment?.user_username ||
+    "Anonymous";
+
+  const metaDetails = buildCommentMeta(comment);
+
+  async function handleReplySubmit(event) {
+    event.preventDefault();
+    if (!replyBody.trim() || !onReply) return;
+
     setPostingReply(true);
-    await onReply?.(comment, replyBody);
-    setReplyBody("");
-    setPostingReply(false);
-    setShowReply(false);
+    try {
+      await onReply(comment, replyBody.trim());
+      setReplyBody("");
+      setShowReply(false);
+    } finally {
+      setPostingReply(false);
+    }
   }
 
   return (
     <div
-      className={`comment-item ${isPinned ? 'pinned' : ''}`}
-      style={{ marginLeft: `${depth * 24}px` }}
+      className={`comment-card${isPinned ? " comment-card--pinned" : ""}`}
+      style={{ "--comment-depth": depth }}
     >
-      <div className="comment-layout">
-        <div className="profile-section">
-          <div className="profile-pic">
-            {comment.users?.avatar_image ? (
-              <img
-                src={comment.users.avatar_image}
-                alt={userDisplay}
-                className="profile-pic-image"
-              />
-            ) : (
-              <span className="profile-pic-letter">
-                {userDisplay.charAt(0).toUpperCase()}
-              </span>
+      <div className="comment-avatar">
+        {comment?.users?.avatar_image ? (
+          <img
+            src={comment.users.avatar_image}
+            alt={userDisplay}
+            className="comment-avatar-image"
+          />
+        ) : (
+          <span className="comment-avatar-letter">
+            {userDisplay.charAt(0).toUpperCase()}
+          </span>
+        )}
+      </div>
+      <div className="comment-main">
+        <div className="comment-top-row">
+          <div className="comment-author-group">
+            <span className="comment-author">{userDisplay?.toUpperCase()}</span>
+            {metaDetails && (
+              <span className="comment-meta">{metaDetails}</span>
             )}
           </div>
-        </div>
-        <div className="content-section">
-          <div className="comment-header">
-            <span className="username">{userDisplay}</span>
-            <span className="timestamp">
-              {new Date(comment.created_at).toLocaleDateString()}
-            </span>
+          <div className="comment-top-actions">
             {isPinned && (
-              <span className="pinned-badge">
-                📌 Pinned
+              <span className="comment-pin-icon" aria-label="Pinned comment">
+                📌
               </span>
             )}
-            {onPin && (
+            {typeof onPin === "function" && (
               <button
-                className="pin-btn"
+                type="button"
+                className="comment-pin-toggle"
                 onClick={() => onPin(comment.id, !isPinned)}
               >
                 {isPinned ? "Unpin" : "Pin"}
               </button>
             )}
           </div>
-          <div className="comment-body">
-            {comment.body}
-            {comment.body_th && (
-              <div className="comment-th">{comment.body_th}</div>
-            )}
-          </div>
-          <div className="comment-actions">
+        </div>
+
+        <div className="comment-body">
+          {comment?.body && (
+            <p className="comment-message">{comment.body}</p>
+          )}
+          {comment?.body_th && (
+            <p className="comment-message comment-message--secondary">
+              {comment.body_th}
+            </p>
+          )}
+        </div>
+
+        {canReply && (
+          <div className="comment-footer">
             <button
-              className="reply-btn"
-              onClick={() => setShowReply(v => !v)}
+              type="button"
+              className="comment-reply-toggle"
+              onClick={() => setShowReply((visible) => !visible)}
             >
               {showReply ? "Cancel" : "Reply"}
             </button>
           </div>
-          {showReply && (
-            <form className="new-comment-form reply-form-container" onSubmit={handleReplySubmit}>
-              <textarea
-                value={replyBody}
-                onChange={e => setReplyBody(e.target.value)}
-                placeholder="Write a reply..."
-                rows={2}
-                className="comment-textarea"
-                required
-              />
-              <button type="submit" className="submit-btn" disabled={postingReply || !replyBody.trim()}>
-                {postingReply ? "Posting..." : "Reply"}
-              </button>
-            </form>
-          )}
-        </div>
-      </div>
-      {comment.replies && comment.replies.length > 0 && (
-        <div className="comment-replies">
-          {comment.replies.map(reply => (
-            <CommentItem
-              key={reply.id}
-              comment={reply}
-              onReply={onReply}
-              onPin={onPin}
-              depth={depth + 1}
+        )}
+
+        {showReply && canReply && (
+          <form className="comment-reply-form" onSubmit={handleReplySubmit}>
+            <textarea
+              value={replyBody}
+              onChange={(event) => setReplyBody(event.target.value)}
+              placeholder="Write a reply…"
+              rows={3}
+              className="comment-reply-textarea"
+              required
             />
-          ))}
-        </div>
-      )}
+            <button
+              type="submit"
+              className="comment-reply-submit"
+              disabled={postingReply || !replyBody.trim()}
+            >
+              {postingReply ? "Posting..." : "Post Reply"}
+            </button>
+          </form>
+        )}
+
+        {Array.isArray(comment?.replies) && comment.replies.length > 0 && (
+          <div className="comment-children">
+            {comment.replies.map((reply) => (
+              <CommentItem
+                key={reply.id}
+                comment={reply}
+                onReply={onReply}
+                onPin={onPin}
+                canReply={canReply}
+                depth={(depth || 0) + 1}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

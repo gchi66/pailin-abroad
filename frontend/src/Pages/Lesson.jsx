@@ -489,13 +489,13 @@ export default function Lesson() {
       : null;
 
   // Choose header strings by UI language (independent of contentLang)
-  const headerTitle =
-    uiLang === "th" ? (lesson.title_th || lesson.title_en) : (lesson.title_en || lesson.title_th);
+  const headerTitle = lesson.title_en || lesson.title || lesson.title_th || "";
   return (
     <main>
       <div className="lesson-page-container">
         {/* Header */}
         <LessonHeader
+          lessonId={lesson.id}
           level={lesson.level}
           lessonOrder={lesson.lesson_order}
           title={headerTitle}
