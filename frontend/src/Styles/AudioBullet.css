@@ -15,6 +15,6 @@
 }
 
 .audio-bullet span {
-  font-size: 1rem;
+  font-size: var(--lesson-core-text-size);
   line-height: 1.5;
 }
