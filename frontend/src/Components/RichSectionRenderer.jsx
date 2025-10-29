@@ -308,9 +308,18 @@ export default function RichSectionRenderer({
             .replace(/^\t+/, ""); // Remove leading tabs
 
           console.log("Rendering accordion section:", cleanHeadingText);
+          const normalizedHeading = cleanHeadingText.trim().toLowerCase();
+          const isLessonFocus =
+            normalizedHeading.includes("lesson focus") ||
+            normalizedHeading.includes("จุดเน้นบทเรียน");
+
           // Render as accordion section
           return (
-            <details key={sec.key} className="markdown-item" open={i === 0}>
+            <details
+              key={sec.key}
+              className={`markdown-item${isLessonFocus ? " markdown-item-focus" : ""}`}
+              open={i === 0}
+            >
               <summary className="markdown-summary">
                 {cleanHeadingText}
               </summary>

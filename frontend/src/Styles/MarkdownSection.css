@@ -7,13 +7,20 @@
 
 /* individual item “card” */
 .markdown-item {
-  border-block-end: 0.1rem solid var(--border-light, #e6e6e6);
-  padding-block-end: 1.2vh;
-  padding-inline: 0;
+  padding: 0;
   background: var(--surface, #fff);
-  border-radius: 1rem;
-  box-shadow: 0 .2rem .4rem rgba(0 0 0 / 0.05);
-  overflow: hidden;                /* keeps radius when open */
+  border-top: 0.1rem solid #1e1e1e;
+  border-radius: 0 0 1.6rem 1.6rem;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.markdown-item-focus {
+  border-top: none;
+}
+
+.markdown-section > .markdown-item:first-of-type {
+  border-top: none;
 }
 
 /* accordion header */
@@ -23,7 +30,7 @@
   font-weight: 600;
   font-size: clamp(1.05rem, 1.2vw, 1.2rem);
   color: var(--primary-color);
-  padding: 1.2vh 1.4vw;
+  padding: 2.4vh 2.25rem 1.6vh;
   display: flex;
   align-items: center;
   justify-content: space-between;  /* title left / icon right */
@@ -54,7 +61,7 @@ details[open] > .markdown-summary::after {
 
 /* main body */
 .markdown-content {
-  padding: 0 1.4vw 1.2vh;          /* side + bottom padding */
+  padding: 0 2.25rem 1.4vh;          /* side + bottom padding */
   line-height: 1.6;
   animation: fadeIn .25s ease;
 }

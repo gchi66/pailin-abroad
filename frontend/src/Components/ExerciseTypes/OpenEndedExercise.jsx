@@ -276,7 +276,7 @@ export default function OpenEndedExercise({
     normalizedPrompt.length > 0 && normalizedPrompt !== normalizedFirstQuestion;
 
   return (
-    <div className="oe-wrap">
+    <div className="fb-wrap oe-wrap">
       {title && showTitle && <h3 className="oe-title">{title}</h3>}
       {shouldRenderPrompt && <p className="oe-prompt">{prompt}</p>}
 
@@ -291,38 +291,52 @@ export default function OpenEndedExercise({
             item.expected_answer ||
             item.keywords ||
             "";
+
           return (
-            <div
-              key={`question-${qIdx}`}
-              className="oe-question oe-example st-example"
-            >
-              <p className="st-example-label">Example</p>
-              {imageUrl && (
-                <div className="fb-image-container">
-                  <img
-                    src={imageUrl}
-                    alt="Example prompt"
-                    className="fb-image"
-                  />
+            <div key={`question-${qIdx}`} className="st-example oe-example">
+              <div className="fb-row st-question">
+                <div className="fb-row-number">
+                  <span aria-hidden="true" />
                 </div>
-              )}
-              {hasAudio && (
-                <div className="practice-audio-container">
-                  <AudioButton
-                    audioKey={item.audio_key}
-                    audioIndex={audioIndex}
-                    className="practice-audio-button"
-                  />
+
+                <div className="fb-row-main">
+                  {imageUrl && (
+                    <div className="fb-image-container">
+                      <img
+                        src={imageUrl}
+                        alt="Example prompt"
+                        className="fb-image"
+                      />
+                    </div>
+                  )}
+
+                  <div className="fb-row-content">
+                    <p className="st-example-label">Example</p>
+                    {hasAudio && (
+                      <div className="practice-audio-container">
+                        <AudioButton
+                          audioKey={item.audio_key}
+                          audioIndex={audioIndex}
+                          className="practice-audio-button"
+                        />
+                      </div>
+                    )}
+                    <p className="oe-question-text">
+                      {item.question || item.text || ""}
+                    </p>
+                    {exampleAnswer && (
+                      <div className="fb-input-wrap oe-input-wrap">
+                        <textarea
+                          value={exampleAnswer}
+                          className="oe-textarea oe-textarea-example"
+                          disabled
+                          rows={3}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-              <p className="oe-question-text">
-                {item.question || item.text || ""}
-              </p>
-              {exampleAnswer && (
-                <p className="st-example-meta st-example-answer">
-                  <strong>Answer:</strong> {exampleAnswer}
-                </p>
-              )}
+              </div>
             </div>
           );
         }
@@ -349,69 +363,78 @@ export default function OpenEndedExercise({
               })();
 
         return (
-          <div key={`question-${qIdx}`} className="oe-question">
-            {imageUrl && (
-              <div className="fb-image-container">
-                <img
-                  src={imageUrl}
-                  alt={`Question ${numberLabel}`}
-                  className="fb-image"
-                />
-              </div>
-            )}
+          <div key={`question-${qIdx}`} className="fb-row oe-question">
+            <div className="fb-row-number">
+              <span>{numberLabel}</span>
+            </div>
 
-            {hasAudio && (
-              <div className="practice-audio-container">
-                <AudioButton
-                  audioKey={item.audio_key}
-                  audioIndex={audioIndex}
-                  className="practice-audio-button"
-                />
-              </div>
-            )}
+            <div className="fb-row-main">
+              {imageUrl && (
+                <div className="fb-image-container">
+                  <img
+                    src={imageUrl}
+                    alt={`Question ${numberLabel}`}
+                    className="fb-image"
+                  />
+                </div>
+              )}
 
-            <p className="oe-question-text">
-              {numberLabel}. {item.question || item.text || ""}
-            </p>
-
-            {answerParts.map((value, partIdx) => (
-              <div className="oe-input-wrap" key={`input-${qIdx}-${partIdx}`}>
-                {inputCount > 1 && (
-                  <label className="oe-input-label">
-                    Part {partIdx + 1} of {inputCount}
-                  </label>
+              <div className="fb-row-content">
+                {hasAudio && (
+                  <div className="practice-audio-container">
+                    <AudioButton
+                      audioKey={item.audio_key}
+                      audioIndex={audioIndex}
+                      className="practice-audio-button"
+                    />
+                  </div>
                 )}
-                <textarea
-                  rows={3}
-                  value={value}
-                  onChange={(event) =>
-                    handleAnswerChange(qIdx, partIdx, event.target.value)
-                  }
-                  disabled={disabled}
-                  className="oe-textarea"
-                  placeholder="Type your answer here"
-                />
-                {partIdx === 0 && <InlineStatus state={questionState} />}
+
+                <p className="oe-question-text">{item.question || item.text || ""}</p>
+
+                {answerParts.map((value, partIdx) => (
+                  <div
+                    className="fb-input-wrap oe-input-wrap"
+                    key={`input-${qIdx}-${partIdx}`}
+                  >
+                    {inputCount > 1 && (
+                      <label className="oe-input-label">
+                        Part {partIdx + 1} of {inputCount}
+                      </label>
+                    )}
+                    <textarea
+                      rows={3}
+                      value={value}
+                      onChange={(event) =>
+                        handleAnswerChange(qIdx, partIdx, event.target.value)
+                      }
+                      disabled={disabled}
+                      className="oe-textarea"
+                      placeholder="Type your answer here"
+                    />
+                    {partIdx === 0 && <InlineStatus state={questionState} />}
+                  </div>
+                ))}
+
+                <QuestionFeedback state={questionState} />
+
+                {item.sample_answer && (
+                  <details className="oe-sample-answer">
+                    <summary>Sample answer</summary>
+                    <p>{item.sample_answer}</p>
+                  </details>
+                )}
               </div>
-            ))}
-
-            <QuestionFeedback state={questionState} />
-
-            {item.sample_answer && (
-              <details className="oe-sample-answer">
-                <summary>Sample answer</summary>
-                <p>{item.sample_answer}</p>
-              </details>
-            )}
+            </div>
           </div>
         );
       })}
 
       {error && <p className="ai-error-message">{error}</p>}
 
-      <div className="oe-buttons">
+      <div className="fb-button-container">
         <button
-          className="ai-eval-button"
+          className="cq-check-btn language-toggle-btn fb-check-btn"
           onClick={handleCheckAnswers}
           disabled={!canCheck}
         >

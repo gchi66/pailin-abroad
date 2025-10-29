@@ -228,10 +228,55 @@
 
 .st-example {
   background: rgba(37, 99, 235, 0.08);
-  border-left: 4px solid var(--primary-color, #2563eb);
   padding: 1rem 1.25rem;
   border-radius: 0.75rem;
   margin-bottom: 1.5rem;
+}
+
+.st-stem {
+  margin: 0;
+}
+
+.st-stem-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.st-mark-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.st-mark-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.st-mark-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.st-mark-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.st-mark-icon {
+  height: 1.5rem;
+  width: auto;
+  display: block;
+}
+
+.st-input-wrap {
+  margin-top: 0.5rem;
 }
 
 .st-example-label {
@@ -267,10 +312,76 @@
   margin-bottom: 0.15rem;
 }
 
+.fb-wrap .oe-textarea {
+  width: min(100%, 40vw);
+  min-width: min(100%, 40vw);
+  min-height: 4.5rem;
+  resize: vertical;
+  display: block;
+  border: 0.12rem solid #1e1e1e;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 1.5;
+  background: #fff;
+  color: inherit;
+}
+
+.fb-wrap .oe-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.fb-wrap .oe-textarea:disabled {
+  background: white;
+  color: rgba(15, 23, 42, 0.75);
+}
+
+.oe-textarea-example {
+  resize: none;
+}
+
+.st-wrap .st-example .fb-row,
+.oe-wrap .st-example .fb-row {
+  margin-bottom: 0;
+}
+
+.st-wrap .st-example p,
+.oe-wrap .st-example p {
+  margin: 0;
+}
+
+.st-wrap .st-example .st-example-label,
+.oe-wrap .st-example .st-example-label {
+  margin: 0;
+}
+
+.st-wrap .st-example .st-stem-row {
+  margin-bottom: 0;
+}
+
+.st-wrap .st-example .st-input-wrap {
+  margin-top: 0;
+}
+
+.oe-wrap .st-example .oe-input-wrap {
+  margin: 0;
+}
+
+.oe-wrap .st-example .oe-question-text {
+  margin: 0;
+}
+
+.oe-question .oe-question-text {
+  margin: 0;
+}
+
 .fb-row-content {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   width: 100%;
 }
 
@@ -319,6 +430,109 @@
   color: var(--primary-color, #2563eb);
 }
 
+.mc-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mc-prompt {
+  font-size: 1.05rem;
+  font-weight: 400;
+  margin: 0 0 0.5rem;
+}
+
+.mc-question {
+  width: 100%;
+}
+
+.mc-question-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+.mc-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.mc-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.mc-letter {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 0.1rem solid #1e1e1e;
+  border-radius: 50%;
+  background: transparent;
+  color: #1e1e1e;
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mc-letter.selected {
+  background: #6b7280;
+  color: #fff;
+}
+
+.mc-letter:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+
+.mc-option-text {
+  font-size: 0.98rem;
+  line-height: 1.4;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mc-option-image {
+  max-width: 110px;
+  border-radius: 0.35rem;
+  box-shadow: 0 0.2rem 0.6rem rgba(15, 23, 42, 0.15);
+}
+
+.mc-result {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mc-result.correct {
+  color: #1f8a00;
+}
+
+.mc-result.incorrect {
+  color: #c81e1e;
+}
+
+.mc-feedback-text {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  color: rgba(15, 23, 42, 0.8);
+}
+
+.mc-score {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
 .fb-button-container {
   display: flex;
   align-items: center;
@@ -353,6 +567,15 @@
   outline: none;
   border-color: var(--primary-color, #2563eb);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.fb-wrap .st-input {
+  min-width: 28ch;
+  width: min(100%, 46ch);
+}
+
+.st-question .fb-row-main {
+  align-items: flex-start;
 }
 
 /* Ensure the text line containers align items in the center */

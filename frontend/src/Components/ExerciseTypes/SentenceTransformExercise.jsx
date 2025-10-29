@@ -13,6 +13,7 @@ const DEFAULT_QUESTION_STATE = {
   correct: null,
   score: null,
   loading: false,
+  markedAsCorrect: null, // null, true, or false
 };
 
 const isExampleItem = (item) => {
@@ -25,20 +26,6 @@ const isExampleItem = (item) => {
     return number.trim().toLowerCase() === "example";
   }
   return false;
-};
-
-const formatCorrectValue = (value) => {
-  if (typeof value !== "string") {
-    if (value === true) return "Yes";
-    if (value === false) return "No";
-    return value || "";
-  }
-  const normalized = value.trim().toLowerCase();
-  if (normalized === "yes") return "Yes";
-  if (normalized === "no") return "No";
-  if (normalized === "true") return "Yes";
-  if (normalized === "false") return "No";
-  return value.trim();
 };
 
 export default function SentenceTransformExercise({
@@ -65,10 +52,12 @@ export default function SentenceTransformExercise({
     () =>
       items.map((item) => {
         if (isExampleItem(item)) {
+          const itemCorrect = (item?.correct || "").toLowerCase();
           return {
             ...DEFAULT_QUESTION_STATE,
             answer: item?.answer || "",
             correct: true,
+            markedAsCorrect: itemCorrect === "yes" ? true : itemCorrect === "no" ? false : null,
           };
         }
         return {
@@ -106,6 +95,8 @@ export default function SentenceTransformExercise({
     if (!question) return false;
     const answerText = (question.answer || "").trim();
     if (answerText) return true;
+    // Allow marked as correct to count as answered
+    if (question.markedAsCorrect === true) return true;
     // Allow already correct sentences to be left blank
     return (item?.correct || "").toLowerCase() === "yes";
   });
@@ -120,6 +111,23 @@ export default function SentenceTransformExercise({
         if (questionIdx !== idx || question.correct === true || question.loading)
           return question;
         return { ...question, answer: value };
+      })
+    );
+    if (error) {
+      setError("");
+    }
+  };
+
+  const handleMarkCorrect = (idx, isCorrect) => {
+    setQuestions((prev) =>
+      prev.map((question, questionIdx) => {
+        if (questionIdx !== idx || question.correct === true || question.loading)
+          return question;
+        return {
+          ...question,
+          markedAsCorrect: isCorrect,
+          answer: isCorrect ? (items[idx]?.text || "") : ""
+        };
       })
     );
     if (error) {
@@ -242,7 +250,7 @@ export default function SentenceTransformExercise({
   };
 
   return (
-    <div className="st-wrap">
+    <div className="fb-wrap st-wrap">
       {title && showTitle && <h3 className="st-title">{title}</h3>}
       {prompt && <p className="st-prompt">{prompt}</p>}
 
@@ -252,42 +260,80 @@ export default function SentenceTransformExercise({
         const exampleItem = isExampleItem(item);
 
         if (exampleItem) {
-          const correctValue = formatCorrectValue(item?.correct);
-          const answerValue = item?.answer || "";
           const imageUrl = item?.image_key ? images[item.image_key] : null;
+          const answerValue =
+            questionState.answer || item?.answer || item?.text || "";
 
           return (
-            <div key={`sentence-${idx}`} className="st-question st-example">
-              <p className="st-example-label">Example</p>
-              {imageUrl && (
-                <div className="fb-image-container">
-                  <img
-                    src={imageUrl}
-                    alt="Example sentence"
-                    className="fb-image"
-                  />
+            <div key={`sentence-${idx}`} className="st-example">
+              <div className="fb-row st-question">
+                <div className="fb-row-number">
+                  <span aria-hidden="true" />
                 </div>
-              )}
-              {hasAudio && (
-                <div className="practice-audio-container">
-                  <AudioButton
-                    audioKey={item.audio_key}
-                    audioIndex={audioIndex}
-                    className="practice-audio-button"
-                  />
+
+                <div className="fb-row-main">
+                  {imageUrl && (
+                    <div className="fb-image-container">
+                      <img
+                        src={imageUrl}
+                        alt="Example sentence"
+                        className="fb-image"
+                      />
+                    </div>
+                  )}
+
+                  <div className="fb-row-content">
+                    <p className="st-example-label">Example</p>
+                    {hasAudio && (
+                      <div className="practice-audio-container">
+                        <AudioButton
+                          audioKey={item.audio_key}
+                          audioIndex={audioIndex}
+                          className="practice-audio-button"
+                        />
+                      </div>
+                    )}
+                    <div className="st-stem-row">
+                      <p className="st-stem">{item?.text}</p>
+                      <div className="st-mark-buttons">
+                        <button
+                          className={`st-mark-btn ${questionState.markedAsCorrect === false ? 'active' : ''}`}
+                          disabled={true}
+                          aria-label="Mark as incorrect"
+                          title="This sentence needs to be rewritten"
+                        >
+                          <img
+                            src={questionState.markedAsCorrect === false ? "/images/grey-x.webp" : "/images/white-x.webp"}
+                            alt="Incorrect"
+                            className="st-mark-icon"
+                          />
+                        </button>
+                        <button
+                          className={`st-mark-btn ${questionState.markedAsCorrect === true ? 'active' : ''}`}
+                          disabled={true}
+                          aria-label="Mark as correct"
+                          title="This sentence is already correct"
+                        >
+                          <img
+                            src={questionState.markedAsCorrect === true ? "/images/grey-check.webp" : "/images/white-check.webp"}
+                            alt="Correct"
+                            className="st-mark-icon"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="fb-input-wrap st-input-wrap">
+                      <input
+                        type="text"
+                        value={answerValue}
+                        disabled
+                        className="fb-input st-input"
+                      />
+                      <InlineStatus state={questionState} />
+                    </div>
+                  </div>
                 </div>
-              )}
-              <p className="st-stem">{item?.text}</p>
-              {correctValue && (
-                <p className="st-example-meta">
-                  <strong>Correct?</strong> {correctValue}
-                </p>
-              )}
-              {answerValue && (
-                <p className="st-example-meta st-example-answer">
-                  <strong>Answer:</strong> {answerValue}
-                </p>
-              )}
+              </div>
             </div>
           );
         }
@@ -298,50 +344,87 @@ export default function SentenceTransformExercise({
         const numberLabel = item.number ?? idx + 1;
 
         return (
-          <div key={`sentence-${idx}`} className="st-question">
-            {imageUrl && (
-              <div className="fb-image-container">
-                <img
-                  src={imageUrl}
-                  alt={`Question ${numberLabel}`}
-                  className="fb-image"
-                />
-              </div>
-            )}
-            {hasAudio && (
-              <div className="practice-audio-container">
-                <AudioButton
-                  audioKey={item.audio_key}
-                  audioIndex={audioIndex}
-                  className="practice-audio-button"
-                />
-              </div>
-            )}
-            <p className="st-stem">
-              {numberLabel}. {item.text}
-            </p>
-            <div className="st-input-wrap">
-              <input
-                type="text"
-                value={questionState.answer}
-                onChange={(event) => handleChange(idx, event.target.value)}
-                disabled={disabled}
-                placeholder="Rewrite this sentence"
-                className="st-input"
-              />
-              <InlineStatus state={questionState} />
+          <div key={`sentence-${idx}`} className="fb-row st-question">
+            <div className="fb-row-number">
+              <span>{numberLabel}</span>
             </div>
-            <QuestionFeedback state={questionState} />
+
+            <div className="fb-row-main">
+              {imageUrl && (
+                <div className="fb-image-container">
+                  <img
+                    src={imageUrl}
+                    alt={`Question ${numberLabel}`}
+                    className="fb-image"
+                  />
+                </div>
+              )}
+
+              <div className="fb-row-content">
+                {hasAudio && (
+                  <div className="practice-audio-container">
+                    <AudioButton
+                      audioKey={item.audio_key}
+                      audioIndex={audioIndex}
+                      className="practice-audio-button"
+                    />
+                  </div>
+                )}
+                <div className="st-stem-row">
+                  <p className="st-stem">{item.text}</p>
+                  <div className="st-mark-buttons">
+                    <button
+                      className={`st-mark-btn ${questionState.markedAsCorrect === false ? 'active' : ''}`}
+                      onClick={() => handleMarkCorrect(idx, false)}
+                      disabled={disabled}
+                      aria-label="Mark as incorrect"
+                      title="This sentence needs to be rewritten"
+                    >
+                      <img
+                        src={questionState.markedAsCorrect === false ? "/images/grey-x.webp" : "/images/white-x.webp"}
+                        alt="Incorrect"
+                        className="st-mark-icon"
+                      />
+                    </button>
+                    <button
+                      className={`st-mark-btn ${questionState.markedAsCorrect === true ? 'active' : ''}`}
+                      onClick={() => handleMarkCorrect(idx, true)}
+                      disabled={disabled}
+                      aria-label="Mark as correct"
+                      title="This sentence is already correct"
+                    >
+                      <img
+                        src={questionState.markedAsCorrect === true ? "/images/grey-check.webp" : "/images/white-check.webp"}
+                        alt="Correct"
+                        className="st-mark-icon"
+                      />
+                    </button>
+                  </div>
+                </div>
+                <div className="fb-input-wrap st-input-wrap">
+                  <input
+                    type="text"
+                    value={questionState.answer}
+                    onChange={(event) => handleChange(idx, event.target.value)}
+                    disabled={disabled || questionState.markedAsCorrect === true}
+                    placeholder={questionState.markedAsCorrect === true ? "Already correct" : "Rewrite this sentence"}
+                    className="fb-input st-input"
+                  />
+                  <InlineStatus state={questionState} />
+                </div>
+                <QuestionFeedback state={questionState} />
+              </div>
+            </div>
           </div>
         );
       })}
 
       {error && <p className="ai-error-message">{error}</p>}
 
-      <div className="st-buttons">
+      <div className="fb-button-container">
         <button
           onClick={handleCheckAnswers}
-          className="ai-eval-button"
+          className="cq-check-btn language-toggle-btn fb-check-btn"
           disabled={!canCheck}
         >
           {isChecking ? checkingLabel : checkLabel}

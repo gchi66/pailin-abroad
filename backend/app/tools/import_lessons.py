@@ -248,6 +248,19 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
                         print(f"[ERROR] Updating alt_text_th for {image_key}: {e}")
         return
 
+    if lang == "en":
+        if dry_run:
+            print(f"[INFO] Would delete existing practice exercises for lesson {lesson_id} (dry run)")
+        else:
+            try:
+                (supabase.table("practice_exercises")
+                 .delete()
+                 .eq("lesson_id", lesson_id)
+                 .execute())
+                print(f"[INFO] Deleted existing practice exercises for lesson {lesson_id}")
+            except Exception as e:
+                print(f"[ERROR] Failed to delete existing practice exercises for lesson {lesson_id}: {e}")
+
     # EN (default): keep your existing UPSERT for base columns
     rows = []
     for ex in (practice_exercises or []):

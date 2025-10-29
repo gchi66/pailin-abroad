@@ -313,7 +313,8 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             "sort_order": ex.get("sort_order"),
             "kind": ex.get("kind"),
             "title": _pick_lang(ex.get("title"), ex.get("title_th"), lang),
-            "prompt_md": _pick_lang(ex.get("prompt_md"), ex.get("prompt_th"), lang),
+            "prompt": _pick_lang(ex.get("prompt"), ex.get("prompt_th"), lang),
+            "prompt_md": ex.get("prompt_md"),
             "paragraph": _pick_lang(ex.get("paragraph"), ex.get("paragraph_th"), lang),
             # Don't use _pick_lang for JSON fields - handle them directly
             "items": ex.get("items_th") if (lang == "th" and ex.get("items_th")) else ex.get("items"),
