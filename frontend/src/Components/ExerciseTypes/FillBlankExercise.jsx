@@ -499,7 +499,7 @@ export default function FillBlankExercise({
 
   return (
     <div className="fb-wrap">
-      {title && showTitle && <h3 className="fb-title">{title}</h3>}
+      {/* {title && showTitle && <h3 className="fb-title">{title}</h3>} */}
       {prompt && <p className="fb-prompt">{prompt}</p>}
 
       {paragraph ? (

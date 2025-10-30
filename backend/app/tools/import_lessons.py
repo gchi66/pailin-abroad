@@ -15,6 +15,7 @@ import os
 import glob
 import json
 import argparse
+import unicodedata
 from app.supabase_client import supabase
 
 
@@ -56,16 +57,30 @@ def _get_pailin_abroad_user_id():
     print("[WARN] Using default user ID for pinned comments. Set PAILIN_ABROAD_USER_ID env var or update the admin email.")
     return "00000000-0000-0000-0000-000000000000"
 
+_SMART_PUNCT_TRANSLATION = str.maketrans(
+    {
+        "’": "'",
+        "‘": "'",
+        "ʼ": "'",
+        "‛": "'",
+        "“": '"',
+        "”": '"',
+        "„": '"',
+        "–": "-",
+        "—": "-",
+        "‑": "-",
+    }
+)
+
+
 def _normalize_phrase(s: str) -> str:
     """Normalize punctuation/spacing and uppercase for stable matching."""
     if not s:
         return ""
-    s = (s.replace("'", "'")
-           .replace("'", "'")
-           .replace(""", '"')
-           .replace(""", '"')
-           .replace("–", "-")
-           .replace("—", "-"))
+    # Collapse compatibility characters (e.g., full-width letters, smart quotes)
+    s = unicodedata.normalize("NFKC", s)
+    # Translate smart punctuation to ASCII equivalents
+    s = s.translate(_SMART_PUNCT_TRANSLATION)
     s = re.sub(r"\s+", " ", s.strip())
     return s.upper()
 

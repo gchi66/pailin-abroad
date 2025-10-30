@@ -1,28 +1,30 @@
 # app/resolver.py
 import os
+import re
 from typing import Any, Dict, List, Optional
 from app.supabase_client import supabase
 from app.merge_jsonb import merge_content_nodes
 from app.config import Config
 
 Lang = str  # "en" | "th"
-
 TEXT_KINDS = {"heading", "paragraph", "list_item", "misc_item"}
+AUDIO_TAG_RE = re.compile(r"\[audio:([^\]\s]+)\]", re.I)
 
 
 def _exec(q):
     res = q.execute()
-    if getattr(res, "error", None):  # supabase-py v2 errors live on res.error; stringify safely
+    if getattr(res, "error", None):
         msg = getattr(res.error, "message", None) or str(res.error)
         raise RuntimeError(msg)
     return res.data
+
 
 def _pick_lang(en: Optional[Any], th: Optional[Any], lang: Lang) -> Optional[str]:
     def clean(v):
         if v is None:
             return None
         if isinstance(v, (dict, list)):
-            return None  # don’t try to treat JSON as a string
+            return None
         s = str(v).strip()
         return s if s != "" else None
 
@@ -30,60 +32,58 @@ def _pick_lang(en: Optional[Any], th: Optional[Any], lang: Lang) -> Optional[str
         return clean(th) or clean(en)
     return clean(en) or clean(th)
 
-def _inline_from_text_value(val, lang: Lang) -> Optional[Dict[str, Any]]:
-    """Build a single inline dict from a 'text' value that may be str or {en, th}."""
-    if val is None:
-        return None
-    # if it's already a dict of language strings
-    if isinstance(val, dict):
-        # pick language-specific string
-        chosen = val.get("th") if lang == "th" else val.get("en")
-        if chosen is None:
-            # fallbacks
-            chosen = next((v for v in val.values() if isinstance(v, str) and v.strip()), None)
-        if chosen is None:
-            return None
-        return {"bold": False, "italic": False, "underline": False, "text": str(chosen)}
-    # if it's a raw string
-    s = str(val).strip()
-    if not s:
-        return None
-    return {"bold": False, "italic": False, "underline": False, "text": s}
 
 def _normalize_rich_nodes(nodes: Any, lang: Lang) -> List[Dict[str, Any]]:
-    """Ensure every text node in content_jsonb has an 'inlines' array.
-    Also tolerates malformed/mixed shapes from legacy TH JSON."""
-    out: List[Dict[str, Any]] = []
-    if not nodes:
-        return out
     if not isinstance(nodes, list):
-        # sometimes saved as JSON object accidentally; ignore rather than crash
-        return out
-    for n in nodes:
-        if not isinstance(n, dict):
-            continue
-        kind = n.get("kind") or n.get("type")
-        node = dict(n)  # shallow copy
-        # For text-ish nodes, ensure inlines exists
-        if kind in TEXT_KINDS:
-            inlines = node.get("inlines")
-            if not isinstance(inlines, list) or not inlines:
-                inline = _inline_from_text_value(node.get("text"), lang)
-                if inline:
-                    node["inlines"] = [inline]
-                else:
-                    # guarantee an array so UI can safely map()
-                    node["inlines"] = []
-        # Debug: check if audio_key exists
-        if node.get("audio_key"):
-            print(f"🎵 _normalize_rich_nodes preserving audio_key: {node.get('audio_key')} for kind: {kind}")
-
-        # Normalize table cells (optional: keep as-is)
+        return []
+    out: List[Dict[str, Any]] = []
+    for node in nodes:
+        kind = node.get("kind")
+        if kind not in TEXT_KINDS:
+            # keep non-text kinds too, just ensure shape is consistent
+            node.setdefault("inlines", [])
+        else:
+            if "inlines" not in node or not isinstance(node["inlines"], list):
+                node["inlines"] = []
         out.append(node)
     return out
 
+
+def _normalize_audio_key(raw_key: str) -> str:
+    key = (raw_key or "").strip()
+    if not key:
+        return ""
+    if "_" in key:
+        prefix, suffix = key.rsplit("_", 1)
+        if suffix.isdigit():
+            return f"{prefix}_{int(suffix):02d}"
+    return key
+
+
+def _inject_audio_metadata(nodes: List[Dict[str, Any]], fallback_section: Optional[str] = None) -> None:
+    for node in nodes:
+        if not isinstance(node, dict):
+            continue
+        inlines = node.get("inlines") or []
+        if not inlines:
+            continue
+        text_blob = " ".join(str(span.get("text", "")) for span in inlines if isinstance(span, dict))
+        match = AUDIO_TAG_RE.search(text_blob)
+        if not match:
+            continue
+        raw_key = match.group(1)
+        normalized_key = _normalize_audio_key(raw_key)
+        if normalized_key:
+            node["audio_key"] = normalized_key
+        if "_" in raw_key:
+            suffix = raw_key.rsplit("_", 1)[-1]
+            if suffix.isdigit():
+                node["audio_seq"] = int(suffix)
+        if fallback_section and not node.get("audio_section"):
+            node["audio_section"] = fallback_section
+
+
 def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
-    # LESSON (header/scalars) - keeping original structure as no example provided
     lesson = _exec(
         supabase.table("lessons")
         .select(
@@ -96,62 +96,43 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         .single()
     )
 
-    # SECTIONS - based on actual example
     sections = _exec(
         supabase.table("lesson_sections")
-        .select(
-            "id, lesson_id, type, sort_order, render_mode, audio_url, "
-            "content, content_th, content_jsonb, content_jsonb_th"
-        )
+        .select("*")
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    # TRANSCRIPT - based on actual example
     transcript = _exec(
         supabase.table("transcript_lines")
-        .select(
-            "id, lesson_id, sort_order, "
-            "speaker, speaker_th, line_text, line_text_th"
-        )
+        .select("*")
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    # QUESTIONS - based on actual example
     questions = _exec(
         supabase.table("comprehension_questions")
-        .select(
-            "id, lesson_id, sort_order, "
-            "prompt, prompt_th, answer_key, answer_key_th, "
-            "options, options_th"
-        )
+        .select("*")
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    # PRACTICE - based on actual example
     exercises = _exec(
         supabase.table("practice_exercises")
+        .select("*")
+        .eq("lesson_id", lesson_id)
+        .order("sort_order", desc=False)
+    )
+
+    phrase_links = _exec(
+        supabase.table("lesson_phrases")
         .select(
-            "id, lesson_id, sort_order, kind, "
-            "title, title_th, prompt_md, prompt_th, "
-            "paragraph, paragraph_th, items, items_th, "
-            "options, answer_key"
+            "lesson_id, phrase_id, sort_order, phrases(*)"
         )
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    # PHRASES - based on actual example
-    phrase_links = _exec(
-        supabase.table("lesson_phrases")
-        .select("sort_order, phrases(id, phrase, phrase_th, content, content_th, content_jsonb, content_jsonb_th, audio_url, variant)")
-        .eq("lesson_id", lesson_id)
-        .order("sort_order", desc=False)
-    )
-
-    # IMAGES - fetch lesson images for practice exercises and other content
     images = _exec(
         supabase.table("lesson_images")
         .select("image_key, url")
@@ -168,43 +149,37 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         "images": images,
     }
 
+
 def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
     raw = _fetch_lesson_bundle(lesson_id)
-
     L = raw["lesson"]
-    if not L:
-        raise KeyError("Lesson not found")
 
-    resolved: Dict[str, Any] = {
+    resolved = {
         "id": L["id"],
         "stage": L.get("stage"),
         "level": L.get("level"),
         "lesson_order": L.get("lesson_order"),
+        "lesson_external_id": L.get("lesson_external_id"),
         "image_url": L.get("image_url"),
         "conversation_audio_url": L.get("conversation_audio_url"),
-        "lesson_external_id": L.get("lesson_external_id"),
-        # scalar text with TH→EN fallback (or EN→TH if lang=en)
         "title": _pick_lang(L.get("title"), L.get("title_th"), lang),
         "subtitle": _pick_lang(L.get("subtitle"), L.get("subtitle_th"), lang),
         "focus": _pick_lang(L.get("focus"), L.get("focus_th"), lang),
         "backstory": _pick_lang(L.get("backstory"), L.get("backstory_th"), lang),
+        "title_en": L.get("title"),
+        "title_th": L.get("title_th"),
+        "subtitle_en": L.get("subtitle"),
+        "subtitle_th": L.get("subtitle_th"),
+        "focus_en": L.get("focus"),
+        "focus_th": L.get("focus_th"),
+        "backstory_en": L.get("backstory"),
+        "backstory_th": L.get("backstory_th"),
     }
 
-    resolved.update({
-        "title_en": (L.get("title") or None),
-        "title_th": (L.get("title_th") or None),
-        "subtitle_en": (L.get("subtitle") or None),
-        "subtitle_th": (L.get("subtitle_th") or None),
-        "focus_en": (L.get("focus") or None),
-        "focus_th": (L.get("focus_th") or None),
-        "backstory_en": (L.get("backstory") or None),
-        "backstory_th": (L.get("backstory_th") or None),
-    })
-
-    raw_header_img = (L.get("header_img") or "").strip() if L else ""
+    # header image resolution
+    raw_header_img = (L.get("header_img") or "").strip()
     header_image_path: Optional[str] = None
     header_image_url: Optional[str] = None
-
     if raw_header_img:
         lowered = raw_header_img.lower()
         if lowered.startswith("http://") or lowered.startswith("https://"):
@@ -212,112 +187,135 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         else:
             relative = raw_header_img.lstrip("/")
             if relative.lower().startswith("lesson-images/"):
-                # strip bucket name if present
                 relative = relative.split("/", 1)[1]
-            if "?" in relative:
-                # drop query params for normalization
-                relative = relative.split("?", 1)[0]
-            if "#" in relative:
-                relative = relative.split("#", 1)[0]
+            relative = relative.split("?", 1)[0].split("#", 1)[0]
             if not relative.lower().startswith("headers/") and "/" not in relative:
                 relative = f"headers/{relative}"
-
-            filename = relative.rsplit("/", 1)[-1]
-            root, ext = os.path.splitext(filename)
-            if not ext:
+            if not os.path.splitext(relative)[1]:
                 relative = f"{relative}.webp"
-
             header_image_path = relative
             base_url = (Config.SUPABASE_URL or "").rstrip("/")
             if base_url:
-                header_image_url = f"{base_url}/storage/v1/object/public/lesson-images/{relative}"
+                header_image_url = (
+                    f"{base_url}/storage/v1/object/public/lesson-images/{relative}"
+                )
 
     resolved["header_img"] = raw_header_img or None
     resolved["header_image_path"] = header_image_path
     resolved["header_image_url"] = header_image_url
 
-    # Sections: deep-merge content_jsonb when lang==th; simple for titles/plain content
+    # sections
     resolved_sections: List[Dict[str, Any]] = []
+    lesson_external_id = L.get("lesson_external_id")
+
     for s in raw["sections"]:
+        section_type = (s.get("type") or "").lower()
+
+        # ---- special case for phrases/verbs ----
+        if section_type in ["phrases_verbs", "phrases & verbs"]:
+            content_nodes = _normalize_rich_nodes(s.get("content_jsonb") or [], lang)
+            _inject_audio_metadata(content_nodes, "phrases_verbs")
+            content_nodes_th = (
+                _normalize_rich_nodes(s.get("content_jsonb_th") or [], lang)
+                if s.get("content_jsonb_th")
+                else None
+            )
+            if content_nodes_th:
+                _inject_audio_metadata(content_nodes_th, "phrases_verbs")
+            resolved_sections.append(
+                {
+                    "id": s["id"],
+                    "lesson_id": s["lesson_id"],
+                    "sort_order": s.get("sort_order"),
+                    "type": s.get("type"),
+                    "render_mode": s.get("render_mode"),
+                    "audio_url": s.get("audio_url"),
+                    "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
+                    "content_jsonb": content_nodes,
+                    "content_jsonb_th": content_nodes_th,
+                }
+            )
+            continue
+        # ----------------------------------------
+
         en_nodes = s.get("content_jsonb") or []
         th_nodes = s.get("content_jsonb_th") or []
-
-        # Debug: check raw data from database
-        print(f"🎵 Raw section {s.get('type')} en_nodes with audio_key: {len([n for n in en_nodes if n.get('audio_key')])}")
-
         merged_nodes = merge_content_nodes(en_nodes, th_nodes) if lang == "th" else en_nodes
         merged_nodes = _normalize_rich_nodes(merged_nodes, lang)
 
-        # Debug: check if audio_key exists in section nodes after processing
-        audio_key_count = len([n for n in merged_nodes if n.get('audio_key')])
-        if audio_key_count > 0:
-            print(f"🎵 Section {s.get('type')} has {audio_key_count} nodes with audio_key after processing")
-
-        # TEMPORARY FIX: Enrich nodes with audio_key from audio_snippets table
-        # This should be removed once the database is re-imported with proper audio_key fields
-        lesson_external_id = raw["lesson"].get("lesson_external_id")
+        # temporary audio enrichment
         if lesson_external_id:
-            # Fetch audio snippets for this lesson
             audio_snippets = _exec(
                 supabase.table("audio_snippets")
                 .select("audio_key, section, seq")
                 .eq("lesson_external_id", lesson_external_id)
             )
-
-            # Create a lookup map: (section, seq) -> audio_key
-            audio_lookup = {}
-            for snippet in audio_snippets:
-                if snippet.get("audio_key") and snippet.get("section") and snippet.get("seq"):
-                    audio_lookup[(snippet["section"], snippet["seq"])] = snippet["audio_key"]
-
-            # Enrich nodes with audio_key
+            audio_lookup = {
+                (a["section"], a["seq"]): a["audio_key"]
+                for a in audio_snippets
+                if a.get("audio_key")
+            }
             for node in merged_nodes:
-                if node.get("audio_section") and node.get("audio_seq") and not node.get("audio_key"):
+                if (
+                    node.get("audio_section")
+                    and node.get("audio_seq")
+                    and not node.get("audio_key")
+                ):
                     lookup_key = (node["audio_section"], node["audio_seq"])
                     if lookup_key in audio_lookup:
                         node["audio_key"] = audio_lookup[lookup_key]
-                        print(f"🎵 Enriched node with audio_key: {node['audio_key']}")
+                if not node.get("audio_key"):
+                    _inject_audio_metadata([node], s.get("type"))
 
-        resolved_sections.append({
-            "id": s["id"],
-            "lesson_id": s["lesson_id"],
-            "type": s.get("type"),
-            "sort_order": s.get("sort_order"),
-            "render_mode": s.get("render_mode"),
-            "audio_url": s.get("audio_url"),
-            "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
-            "content_jsonb": merged_nodes,  # Use the merged and normalized nodes
-            "content_jsonb_th": _normalize_rich_nodes(th_nodes, lang) if th_nodes else None,
-        })
+        resolved_sections.append(
+            {
+                "id": s["id"],
+                "lesson_id": s["lesson_id"],
+                "sort_order": s.get("sort_order"),
+                "type": s.get("type"),
+                "render_mode": s.get("render_mode"),
+                "audio_url": s.get("audio_url"),
+                "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
+                "content_jsonb": merged_nodes,
+                "content_jsonb_th": _normalize_rich_nodes(th_nodes, lang)
+                if th_nodes
+                else None,
+            }
+        )
 
-    # Transcript - only fields from actual example
+    # transcript
     resolved_transcript: List[Dict[str, Any]] = []
     for t in raw["transcript"]:
-        resolved_transcript.append({
-            "id": t["id"],
-            "lesson_id": t["lesson_id"],
-            "sort_order": t.get("sort_order"),
-            "speaker": t.get("speaker"),  # Keep original English
-            "speaker_th": t.get("speaker_th"),  # Keep Thai separately
-            "line_text": t.get("line_text"),  # Keep original English
-            "line_text_th": t.get("line_text_th"),  # Keep Thai separately
-        })
+        resolved_transcript.append(
+            {
+                "id": t["id"],
+                "lesson_id": t["lesson_id"],
+                "sort_order": t.get("sort_order"),
+                "speaker": t.get("speaker"),
+                "speaker_th": t.get("speaker_th"),
+                "line_text": t.get("line_text"),
+                "line_text_th": t.get("line_text_th"),
+            }
+        )
 
-    # Questions - only fields from actual example
+    # comprehension questions
     rq: List[Dict[str, Any]] = []
     for q in raw["questions"]:
-        # Options are stored as JSON (array). We just pass through the array for the requested language.
         opts = q.get("options_th") if (lang == "th" and q.get("options_th")) else q.get("options")
-        rq.append({
-            "id": q["id"],
-            "lesson_id": q["lesson_id"],
-            "sort_order": q.get("sort_order"),
-            "prompt": _pick_lang(q.get("prompt"), q.get("prompt_th"), lang),
-            "answer_key": q.get("answer_key_th") if (lang == "th" and q.get("answer_key_th")) else q.get("answer_key"),
-            "options": opts,
-        })
+        rq.append(
+            {
+                "id": q["id"],
+                "lesson_id": q["lesson_id"],
+                "sort_order": q.get("sort_order"),
+                "prompt": _pick_lang(q.get("prompt"), q.get("prompt_th"), lang),
+                "answer_key": q.get("answer_key_th")
+                if (lang == "th" and q.get("answer_key_th"))
+                else q.get("answer_key"),
+                "options": opts,
+            }
+        )
 
-    # Exercises - only fields from actual example
+    # exercises
     rexs: List[Dict[str, Any]] = []
     for ex in raw["exercises"]:
         title_en = ex.get("title")
@@ -333,63 +331,87 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         options_th = ex.get("options_th")
         answer_key_th = ex.get("answer_key_th")
 
-        rexs.append({
-            "id": ex["id"],
-            "lesson_id": ex["lesson_id"],
-            "sort_order": ex.get("sort_order"),
-            "kind": ex.get("kind"),
-            "title": _pick_lang(title_en, title_th, lang),
-            "title_en": title_en,
-            "title_th": title_th,
-            "prompt": _pick_lang(prompt_en, prompt_th, lang),
-            "prompt_en": prompt_en,
-            "prompt_th": prompt_th,
-            "prompt_md": prompt_md,
-            "paragraph": _pick_lang(paragraph_en, paragraph_th, lang),
-            "paragraph_en": paragraph_en,
-            "paragraph_th": paragraph_th,
-            # Localized JSON fields
-            "items": items_th if (lang == "th" and items_th) else items_en,
-            "items_en": items_en,
-            "items_th": items_th,
-            "options": options_en,
-            "options_th": options_th,
-            "answer_key": ex.get("answer_key"),
-            "answer_key_th": answer_key_th,
-        })
+        rexs.append(
+            {
+                "id": ex["id"],
+                "lesson_id": ex["lesson_id"],
+                "sort_order": ex.get("sort_order"),
+                "kind": ex.get("kind"),
+                "title": _pick_lang(title_en, title_th, lang),
+                "title_en": title_en,
+                "title_th": title_th,
+                "prompt": _pick_lang(prompt_en, prompt_th, lang),
+                "prompt_en": prompt_en,
+                "prompt_th": prompt_th,
+                "prompt_md": prompt_md,
+                "paragraph": _pick_lang(paragraph_en, paragraph_th, lang),
+                "paragraph_en": paragraph_en,
+                "paragraph_th": paragraph_th,
+                "items": items_th if (lang == "th" and items_th) else items_en,
+                "items_en": items_en,
+                "items_th": items_th,
+                "options": options_en,
+                "options_th": options_th,
+                "answer_key": ex.get("answer_key"),
+                "answer_key_th": answer_key_th,
+            }
+        )
 
-    # Phrases - only fields from actual example
+    # phrases
     rphr: List[Dict[str, Any]] = []
-    for row in raw["phrase_links"]:
-        p = (row.get("phrases") or {})
+    for link in raw["phrase_links"]:
+        phrase = link.get("phrases") or {}
+        lesson_id = link.get("lesson_id")
+        phrase_id = phrase.get("id") or link.get("phrase_id")
+        sort_order = link.get("sort_order")
 
-        # Handle content_jsonb like sections
-        en_nodes = p.get("content_jsonb") or []
-        th_nodes = p.get("content_jsonb_th") or []
+        en_nodes = phrase.get("content_jsonb") or []
+        th_nodes = phrase.get("content_jsonb_th") or []
         merged_nodes = merge_content_nodes(en_nodes, th_nodes) if lang == "th" else en_nodes
         merged_nodes = _normalize_rich_nodes(merged_nodes, lang)
+        _inject_audio_metadata(merged_nodes, "phrases_verbs")
 
-        rphr.append({
-            "id": p.get("id"),
-            "sort_order": row.get("sort_order"),
-            "phrase": p.get("phrase"),  # no Thai version available
-            "phrase_th": p.get("phrase_th"),
-            "content": _pick_lang(p.get("content"), p.get("content_th"), lang),
-            "content_jsonb": merged_nodes,
-            "audio_url": p.get("audio_url"),
-            "variant": p.get("variant"),
-        })
+        normalized_th_nodes = _normalize_rich_nodes(th_nodes, lang) if th_nodes else None
+        if normalized_th_nodes:
+            _inject_audio_metadata(normalized_th_nodes, "phrases_verbs")
 
-    # Convert images list to a dictionary for easy lookup by image_key
+        primary_id = phrase_id
+        if not primary_id:
+            # lesson_phrases rows do not expose a primary key; synthesize a stable fallback
+            lesson_part = lesson_id or ""
+            phrase_part = link.get("phrase_id") or ""
+            primary_id = f"{lesson_part}:{phrase_part}:{sort_order}"
+
+        rphr.append(
+            {
+                "id": primary_id,
+                "lesson_id": lesson_id,
+                "sort_order": sort_order,
+                "phrase_id": link.get("phrase_id") or phrase_id,
+                "phrase": phrase.get("phrase"),
+                "phrase_th": phrase.get("phrase_th"),
+                "content": _pick_lang(phrase.get("content"), phrase.get("content_th"), lang),
+                "content_th": phrase.get("content_th"),
+                "content_md": phrase.get("content_md"),
+                "content_md_th": phrase.get("content_md_th"),
+                "content_jsonb": merged_nodes,
+                "content_jsonb_th": normalized_th_nodes,
+                "audio_url": phrase.get("audio_url"),
+                "variant": phrase.get("variant"),
+            }
+        )
+
     images_dict = {img["image_key"]: img["url"] for img in raw["images"]}
 
-    resolved.update({
-        "sections": resolved_sections,
-        "transcript": resolved_transcript,
-        "questions": rq,
-        "practice_exercises": rexs,
-        "phrases": rphr,
-        "images": images_dict,
-    })
+    resolved.update(
+        {
+            "sections": resolved_sections,
+            "transcript": resolved_transcript,
+            "questions": rq,
+            "practice_exercises": rexs,
+            "phrases": rphr,
+            "images": images_dict,
+        }
+    )
 
     return resolved

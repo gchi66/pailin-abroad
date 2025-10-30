@@ -731,6 +731,27 @@ class GoogleDocsParser:
                 c["inlines"] = [i.copy() for i in c["inlines"]]
             return c
 
+        def _trim_node_text(node: dict, desired_text: str) -> None:
+            text = (desired_text or "").strip()
+            inlines = node.get("inlines") or []
+            if not inlines:
+                node["inlines"] = [
+                    {
+                        "text": text,
+                        "bold": False,
+                        "italic": False,
+                        "underline": False,
+                        "link": None,
+                    }
+                ]
+                return
+            first = inlines[0].copy()
+            first["text"] = text
+            first.setdefault("bold", False)
+            first.setdefault("italic", False)
+            first.setdefault("underline", False)
+            node["inlines"] = [first]
+
         def _pick_with_fallback(bucket_map: dict[str, list[dict]], key: str) -> tuple[dict | None, str | None]:
             if bucket_map.get(key):
                 return bucket_map[key][0], key
@@ -760,6 +781,26 @@ class GoogleDocsParser:
             )
 
         def _take_node(raw: str) -> dict | None:
+            def _remove_from_other_maps(node: dict) -> None:
+                norm_text = _norm("".join(span.get("text", "") for span in node.get("inlines", [])))
+                if norm_text in lesson_wide_nodes:
+                    bucket = lesson_wide_nodes[norm_text]
+                    for idx, candidate in enumerate(bucket):
+                        if candidate is node:
+                            bucket.pop(idx)
+                            if not bucket:
+                                lesson_wide_nodes.pop(norm_text, None)
+                            break
+
+                if norm_text in scoped_nodes:
+                    bucket = scoped_nodes[norm_text]
+                    for idx, candidate in enumerate(bucket):
+                        if candidate is node:
+                            bucket.pop(idx)
+                            if not bucket:
+                                scoped_nodes.pop(norm_text, None)
+                            break
+
             def _try_maps(norm_key: str) -> dict | None:
                 chosen, k = _pick_with_fallback(scoped_nodes, norm_key)
                 if chosen:
@@ -767,6 +808,9 @@ class GoogleDocsParser:
                     if chosen.get("kind") == "list_item":
                         result["kind"] = "list_item"
                     scoped_nodes[k].remove(chosen)
+                    if not scoped_nodes[k]:
+                        scoped_nodes.pop(k, None)
+                    _remove_from_other_maps(chosen)
                     return result
                 chosen, k = _pick_with_fallback(lesson_wide_nodes, norm_key)
                 if chosen:
@@ -774,21 +818,27 @@ class GoogleDocsParser:
                     if chosen.get("kind") == "list_item":
                         result["kind"] = "list_item"
                     lesson_wide_nodes[k].remove(chosen)
+                    if not lesson_wide_nodes[k]:
+                        lesson_wide_nodes.pop(k, None)
+                    _remove_from_other_maps(chosen)
                     return result
                 return None
 
-            norm_key = _norm(raw)
-            hit = _try_maps(norm_key)
-            if hit:
-                return hit
-
-            for part in re.split(r"(?:\u000b|\n)+", (raw or "").strip()):
+            pieces = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
+            for part in pieces:
                 p = part.strip()
                 if not p:
                     continue
                 hit = _try_maps(_norm(p))
                 if hit:
+                    _trim_node_text(hit, p)
                     return hit
+
+            norm_key = _norm(raw)
+            hit = _try_maps(norm_key)
+            if hit:
+                _trim_node_text(hit, raw)
+                return hit
 
             m = TH_RX.search(raw or "")
             if m:
@@ -798,6 +848,7 @@ class GoogleDocsParser:
                     if piece:
                         hit = _try_maps(_norm(piece))
                         if hit:
+                            _trim_node_text(hit, piece)
                             return hit
             return None
 
@@ -1022,7 +1073,7 @@ class GoogleDocsParser:
             if norm_header in RICH_AUDIO_HEADERS:
                 # Add directive regex for quick practice harvesting
                 directive_re = re.compile(
-                    r"^(TYPE:|TITLE:|PROMPT:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:)",
+                    r"^(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:|INPUTS:)",
                     re.I
                 )
                 qp_chunk, keep_lines = [], []
@@ -1444,6 +1495,7 @@ class GoogleDocsParser:
         for line in practice_text.splitlines():
             original_line = line  # Keep original for text collection
             line = line.strip()
+            upper_line = line.upper()
 
             if not line:
                 # If we're collecting text or paragraph, preserve empty lines as line breaks
@@ -1469,17 +1521,17 @@ class GoogleDocsParser:
                 # Skip lines before the first TYPE:
                 continue
 
-            if line.startswith("TITLE:"):
+            if upper_line.startswith("TITLE:"):
                 cur_ex["title"] = line.split(":", 1)[1].strip()
                 collecting_text = False
                 collecting_paragraph = False
                 continue
-            if line.startswith("PROMPT:"):
+            if upper_line.startswith("PROMPT:"):
                 cur_ex["prompt"] = line.split(":", 1)[1].strip()
                 collecting_text = False
                 collecting_paragraph = False
                 continue
-            if line.startswith("PARAGRAPH:"):
+            if upper_line.startswith("PARAGRAPH:"):
                 # Get the content after the colon
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
@@ -1495,7 +1547,7 @@ class GoogleDocsParser:
                 continue
 
             # Item-level directives - handle both QUESTION: and ITEM:
-            if line.startswith(("QUESTION:", "ITEM:")):
+            if upper_line.startswith(("QUESTION:", "ITEM:")):
                 number = line.split(":", 1)[1].strip()
                 # Create a new question/item entry.
                 cur_items.append({"number": number})
@@ -1505,7 +1557,7 @@ class GoogleDocsParser:
                 continue
 
             # --- TEXT/STEM for any exercise type ---
-            if line.startswith(("TEXT:", "STEM:")):
+            if upper_line.startswith(("TEXT:", "STEM:")):
                 if not cur_items:
                     cur_items.append({})
 
@@ -1523,7 +1575,7 @@ class GoogleDocsParser:
                 collecting_opts = False
                 continue
 
-            if line.startswith("OPTIONS:"):
+            if upper_line.startswith("OPTIONS:"):
                 collecting_opts = True
                 collecting_text = False
                 collecting_paragraph = False
@@ -1533,7 +1585,7 @@ class GoogleDocsParser:
                 cur_items[-1]["options"] = []
                 continue
 
-            if line.startswith("INPUTS:"):
+            if upper_line.startswith("INPUTS:"):
                 if cur_items and cur_ex and cur_ex.get("kind") in {"open", "open_ended"}:
                     value = line.split(":", 1)[1].strip() if ":" in line else ""
                     cur_items[-1]["inputs"] = value or 1
@@ -1542,7 +1594,7 @@ class GoogleDocsParser:
                 collecting_paragraph = False
                 continue
 
-            if line.startswith("CORRECT:"):
+            if upper_line.startswith("CORRECT:"):
                 # Handle CORRECT: directive for sentence_transform exercises
                 if not cur_items:
                     cur_items.append({})
@@ -1554,7 +1606,7 @@ class GoogleDocsParser:
                 collecting_paragraph = False
                 continue
 
-            if line.startswith("ANSWER:"):
+            if upper_line.startswith("ANSWER:"):
                 # Only update if there's an existing item.
                 if not cur_items:
                     cur_items.append({})
@@ -1564,7 +1616,7 @@ class GoogleDocsParser:
                 collecting_paragraph = False
                 continue
 
-            if line.startswith(("KEYWORDS:", "PINNED COMMENT")):
+            if upper_line.startswith("KEYWORDS:") or upper_line.startswith("PINNED COMMENT"):
                 kw = line.split(":", 1)[1].strip() if ":" in line else ""
                 if kw:
                     if not cur_items:
