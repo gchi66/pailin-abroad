@@ -25,3 +25,8 @@ frontend/lesson_docs/*
 backend/keys/*
 
 pailin-abroad.git/
+
+__pycache__/
+*.pyc
+
+.vercel/
