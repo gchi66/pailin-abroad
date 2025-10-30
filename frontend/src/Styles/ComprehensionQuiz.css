@@ -1,9 +1,8 @@
 .cq-questions {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
   margin: 0 0 2rem;
-  padding: 3.25rem 1.25rem 0;
+  padding: 3.25rem 2rem 0;
 }
 
 .cq-question {
@@ -32,7 +31,7 @@
 
 .cq-option-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
 }
 
@@ -68,12 +67,30 @@
   display: inline-flex;
   flex-direction: column;
   gap: 0.4rem;
+  align-items: flex-start;
 }
 
 .cq-option-image {
   max-width: 110px;
   border-radius: 0.35rem;
   box-shadow: 0 0.2rem 0.6rem rgba(15, 23, 42, 0.15);
+}
+
+.cq-option-text-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cq-option-text-en {
+  font-size: var(--lesson-core-text-size);
+  color: inherit;
+}
+
+.cq-option-text-th {
+  font-size: var(--lesson-core-text-size);
+  color: rgba(15, 23, 42, 0.75);
+  line-height: 1.4;
 }
 
 .cq-check-btn {

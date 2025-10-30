@@ -121,9 +121,9 @@ export default function PracticeSection({
             <summary className="ps-summary">
               {ex.title || ex.prompt || "Exercise"}
             </summary>
-            <Renderer
-              {...rendererProps}
-            />
+            <div className="ps-accordion-body">
+              <Renderer {...rendererProps} />
+            </div>
           </details>
         );
       })}

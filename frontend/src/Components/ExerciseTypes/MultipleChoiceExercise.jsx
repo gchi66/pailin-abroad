@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
 
 const normalizeOption = (option) => {
@@ -16,37 +16,120 @@ const normalizeOption = (option) => {
   };
 };
 
+const normalizeArray = (values) => {
+  const list = Array.isArray(values)
+    ? values
+    : values != null
+    ? [values]
+    : [];
+
+  const cleaned = list
+    .map((val) =>
+      String(val || "")
+        .trim()
+        .replace(/\.$/, "")
+        .toUpperCase()
+    )
+    .filter(Boolean);
+
+  return [...new Set(cleaned)].sort();
+};
+
+const parseAnswerString = (answer) => {
+  if (answer == null) return [];
+  const parts = String(answer)
+    .split(",")
+    .map((segment) => segment.trim().replace(/\.$/, ""));
+  return normalizeArray(parts);
+};
+
+const arraysMatch = (a, b) => {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i += 1) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+};
+
+const createInitialChoices = (list = []) => list.map(() => []);
+
 export default function MultipleChoiceExercise({ exercise, images = {}, audioIndex = {} }) {
   const { prompt, items = [] } = exercise;
-  const [choices, setChoices] = useState(Array(items.length).fill(null));
+  const [choices, setChoices] = useState(() => createInitialChoices(items));
   const [checked, setChecked] = useState(false);
 
   const normalizedItems = useMemo(
     () =>
-      items.map((item = {}) => ({
-        ...item,
-        options: Array.isArray(item.options)
+      items.map((item = {}) => {
+        const options = Array.isArray(item.options)
           ? item.options.map(normalizeOption)
-          : [],
-      })),
+          : [];
+        const answerLetters = parseAnswerString(item.answer);
+        const answerDisplay =
+          item.answer && String(item.answer).trim().length > 0
+            ? item.answer
+            : answerLetters.join(", ");
+
+        return {
+          ...item,
+          options,
+          answerLetters,
+          answerSet: new Set(answerLetters),
+          answerDisplay,
+        };
+      }),
     [items]
   );
+  useEffect(() => {
+    setChoices(createInitialChoices(items));
+    setChecked(false);
+  }, [items]);
 
-  const pick = (qIdx, letter) => {
-    setChoices((prev) => {
-      const next = [...prev];
-      next[qIdx] = letter;
-      return next;
-    });
+  const toggleChoice = (questionIdx, letter, allowMultiple) => {
+    const normalizedLetter = normalizeArray([letter])[0];
+    if (!normalizedLetter) return;
+
+    setChoices((prev) =>
+      prev.map((selection, idx) => {
+        if (idx !== questionIdx) {
+          return Array.isArray(selection)
+            ? selection
+            : normalizeArray(selection);
+        }
+
+        const current = normalizeArray(selection);
+
+        let nextSelection;
+        if (allowMultiple) {
+          nextSelection = current.includes(normalizedLetter)
+            ? current.filter((value) => value !== normalizedLetter)
+            : [...current, normalizedLetter];
+        } else {
+          nextSelection =
+            current.length === 1 && current[0] === normalizedLetter
+              ? []
+              : [normalizedLetter];
+        }
+
+        return normalizeArray(nextSelection);
+      })
+    );
   };
 
-  const allAnswered = choices.every((choice) => choice);
+  const allAnswered = choices.every(
+    (choice) => normalizeArray(choice).length > 0
+  );
   const score = checked
-    ? choices.filter((choice, idx) => choice === normalizedItems[idx]?.answer).length
+    ? choices.filter((choice, idx) =>
+        arraysMatch(
+          normalizeArray(choice),
+          normalizedItems[idx]?.answerLetters || []
+        )
+      ).length
     : null;
 
   const resetExercise = () => {
-    setChoices(Array(items.length).fill(null));
+    setChoices(createInitialChoices(items));
     setChecked(false);
   };
 
@@ -58,8 +141,10 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
         const imageUrl = q.image_key ? images[q.image_key] : null;
         const hasAudio = Boolean(q.audio_key);
         const numberLabel = q.number ?? qIdx + 1;
-        const selected = choices[qIdx];
-        const isCorrect = checked && selected === q.answer;
+        const selected = normalizeArray(choices[qIdx]);
+        const selectedSet = new Set(selected);
+        const allowMultiple = q.answerLetters.length > 1;
+        const isCorrect = checked && arraysMatch(selected, q.answerLetters);
 
         return (
           <div key={`mc-question-${qIdx}`} className="fb-row mc-question">
@@ -93,16 +178,34 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
 
                 <div className="mc-options">
                   {q.options.map(({ label, text, image_key, alt_text }) => {
-                    const isSelected = selected === label;
-                    const isAnswer = q.answer === label;
+                    const normalizedLabel = normalizeArray([label])[0];
+                    const isSelected = normalizedLabel
+                      ? selectedSet.has(normalizedLabel)
+                      : false;
+                    const isAnswer = normalizedLabel
+                      ? q.answerSet.has(normalizedLabel)
+                      : false;
                     const showResult = checked && (isSelected || isAnswer);
+
+                    let resultSymbol = "";
+                    let resultClass = "";
+
+                    if (showResult) {
+                      if (isAnswer) {
+                        resultSymbol = "✓";
+                        resultClass = "correct";
+                      } else if (isSelected) {
+                        resultSymbol = "✗";
+                        resultClass = "incorrect";
+                      }
+                    }
 
                     return (
                       <div key={`${qIdx}-${label}-${text}`} className="mc-option">
                         <button
                           type="button"
                           className={`mc-letter${isSelected ? " selected" : ""}`}
-                          onClick={() => pick(qIdx, label)}
+                          onClick={() => toggleChoice(qIdx, label, allowMultiple)}
                           disabled={checked}
                           aria-pressed={isSelected}
                         >
@@ -124,12 +227,14 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
                           )}
                         </span>
 
-                        {showResult && (
+                        {resultSymbol && (
                           <span
-                            className={`mc-result ${isAnswer ? "correct" : "incorrect"}`}
-                            aria-label={isAnswer ? "Correct" : "Incorrect"}
+                            className={`mc-result ${resultClass}`}
+                            aria-label={
+                              resultClass === "correct" ? "Correct" : "Incorrect"
+                            }
                           >
-                            {isAnswer ? "✓" : "✗"}
+                            {resultSymbol}
                           </span>
                         )}
                       </div>
@@ -137,9 +242,10 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
                   })}
                 </div>
 
-                {checked && selected && !isCorrect && (
+                {checked && selected.length > 0 && !isCorrect && (
                   <p className="mc-feedback-text">
-                    <strong>Correct answer:</strong> {q.answer}
+                    <strong>Correct answer:</strong>{" "}
+                    {q.answerDisplay || q.answerLetters.join(", ")}
                   </p>
                 )}
               </div>

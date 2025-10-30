@@ -1,8 +1,7 @@
 .markdown-section {
-  margin-block-start: 2vh;          /* top space */
+  /* padding-top: 1rem; */
   display: flex;
   flex-direction: column;
-  gap: 2vh;                         /* space between items */
 }
 
 /* individual item “card” */
@@ -24,8 +23,8 @@
 }
 
 /* accordion header */
-.markdown-summary {
-  list-style: none;                /* remove default arrow */
+/* .markdown-summary {
+  list-style: none;
   cursor: pointer;
   font-weight: 600;
   font-size: clamp(1.05rem, 1.2vw, 1.2rem);
@@ -33,10 +32,10 @@
   padding: 2.4vh 2.25rem 1.6vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* title left / icon right */
+  justify-content: space-between;
   user-select: none;
   transition: color .2s ease;
-}
+} */
 
 .markdown-summary:hover {
   color: var(--primary-dark);

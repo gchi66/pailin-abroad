@@ -1,17 +1,14 @@
 /* ───────── shared look & feel ───────── */
-.markdown-section,
 .ps-container {
-  margin-block-start: 2vh;          /* top space */
   display: flex;
-  flex-direction: column;
-  gap: 2vh;                         /* space between items */
+  flex-direction: column;                      /* space between items */
 }
 
 .markdown-item,
 .ps-accordion {
   padding: 0;
   background: var(--surface, #fff);
-  border-top: 0.1rem solid #1e1e1e;
+  border-top: 0.1rem solid #1e1e1e3d;
   border-radius: 0 0 1.6rem 1.6rem;
   box-shadow: none;
   overflow: hidden;
@@ -28,7 +25,7 @@
   font-weight: 600;
   font-size: clamp(1.05rem, 1.2vw, 1.2rem);
   color: var(--primary-color);
-  padding: 2.4vh 2.25rem 3vh;
+  padding: 3rem 3rem 3rem 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,12 +44,18 @@
   content: "▸";
   font-size: 1.2em;
   transition: transform .25s ease;
+  padding-bottom: 1rem;
 }
 
 /* rotate arrow when open */
 details[open] > .markdown-summary::after,
 details[open] > .ps-summary::after {
   transform: rotate(90deg);
+}
+
+details[open] > .ps-summary,
+details[open] > .markdown-summary {
+  padding-bottom: 1rem;
 }
 
 /* Chrome’s default arrow removal (belt‑and‑suspenders) */
@@ -64,7 +67,7 @@ details[open] > .ps-summary::after {
 /* body animation / padding */
 .markdown-content,
 .ps-accordion > *:not(summary) {
-  padding: 0 2.25rem 1.4vh;
+  padding: 0 3rem 1.4vh;
   line-height: 1.6;
   animation: fadeIn .25s ease;
 }
