@@ -24,6 +24,7 @@ const playPng = "/images/snippet_play_button.png";
  * @param {Object} phrasesSnipIdx - The phrases audio index for phrases sections
  * @param {string} phraseId - The phrase ID for phrases sections
  * @param {number} phraseVariant - The phrase variant for phrases sections
+ * @param {number} size - Size in rem units (default: 1.2)
  * @param {string} className - Additional CSS classes
  */
 export default function AudioButton({
@@ -33,6 +34,7 @@ export default function AudioButton({
   phrasesSnipIdx,
   phraseId,
   phraseVariant = 0,
+  size = 1.2, // rem
   className = ""
 }) {
   const [url, setUrl] = useState();
@@ -65,9 +67,8 @@ export default function AudioButton({
   async function play() {
     console.log("🎵 Universal Audio button clicked!");
     console.log("lookupMethod:", lookupMethod);
-    console.log("audioKey prop:", audioKey, "node.audio_key:", node?.audio_key, "effectiveAudioKey:", audioKey || node?.audio_key);
+    console.log("audioKey prop:", audioKey, "node.audio_key:", node?.audio_key, "effectiveAudioKey:", effectiveAudioKey);
     console.log("phraseId:", phraseId, "node.audio_section:", node?.audio_section, "node.audio_seq:", node?.audio_seq);
-    console.log("audioIndex.by_key keys:", Object.keys(audioIndex?.by_key || {}).slice(0, 5));
     console.log("snip found:", snip);
 
     if (!snip) {
@@ -85,9 +86,6 @@ export default function AudioButton({
           .from("lesson-audio")
           .createSignedUrl(snip.storage_path, 60);
 
-        console.log("Supabase response - data:", data);
-        console.log("Supabase response - error:", error);
-
         if (error) {
           console.error("❌ Supabase signed URL error:", error);
           return;
@@ -101,15 +99,8 @@ export default function AudioButton({
         console.log("✅ Successfully got signed URL:", data.signedUrl);
         setUrl(data.signedUrl);
 
-        console.log("🎵 Creating new Audio object and attempting to play...");
         const audio = new Audio(data.signedUrl);
-
-        // Add audio event listeners for debugging
-        audio.addEventListener('loadstart', () => console.log("🔄 Audio loading started"));
-        audio.addEventListener('canplay', () => console.log("✅ Audio can start playing"));
-        audio.addEventListener('play', () => console.log("▶️ Audio play event fired"));
         audio.addEventListener('error', (e) => console.error("❌ Audio error:", e));
-        audio.addEventListener('ended', () => console.log("⏹️ Audio playback ended"));
 
         try {
           await audio.play();
@@ -123,16 +114,8 @@ export default function AudioButton({
       }
     } else {
       console.log("🔄 Using cached URL:", url);
-      console.log("🎵 Creating new Audio object with cached URL...");
-
       const audio = new Audio(url);
-
-      // Add audio event listeners for debugging
-      audio.addEventListener('loadstart', () => console.log("🔄 Audio loading started (cached)"));
-      audio.addEventListener('canplay', () => console.log("✅ Audio can start playing (cached)"));
-      audio.addEventListener('play', () => console.log("▶️ Audio play event fired (cached)"));
       audio.addEventListener('error', (e) => console.error("❌ Audio error (cached):", e));
-      audio.addEventListener('ended', () => console.log("⏹️ Audio playback ended (cached)"));
 
       try {
         await audio.play();
@@ -143,15 +126,21 @@ export default function AudioButton({
     }
   }
 
-  // Visual indicator for debugging - show if snip is found
   const hasSnip = !!snip;
-  const buttonStyle = hasSnip ? {} : { opacity: 0.3, cursor: 'not-allowed' };
+  const buttonStyle = {
+    width: `${size}rem`,
+    height: `${size}rem`,
+    // marginRight: `${size * 0.42}rem`,
+    cursor: hasSnip ? 'pointer' : 'not-allowed',
+    opacity: hasSnip ? 1 : 0.3,
+    flexShrink: 0
+  };
 
   return (
     <img
       src={playPng}
       onClick={play}
-      className={`audio-button ${className} mt-0.5 h-5 w-5 select-none`.trim()}
+      className={`audio-button select-none ${className}`.trim()}
       style={buttonStyle}
       alt="Play audio"
       title={hasSnip ? "Click to play audio" : "No audio snippet found"}

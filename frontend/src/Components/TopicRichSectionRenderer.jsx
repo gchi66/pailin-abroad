@@ -95,15 +95,23 @@ export default function TopicRichSectionRenderer({
     if (currentNode.kind === "list_item") return false;
     if (!looksLikeDialogue(currentNode)) return false;
 
+    // Check if previous node was an audio list item (start of dialogue)
     const previousIsAudioList =
       previousNode.kind === "list_item" && containsAudioTag(previousNode);
 
-    if (!previousIsAudioList) return false;
+    // Check if previous node was also a dialogue continuation (paragraph with dialogue format)
+    const previousIsDialogueParagraph =
+      previousNode.kind === "paragraph" && looksLikeDialogue(previousNode);
+
+    if (!previousIsAudioList && !previousIsDialogueParagraph) return false;
 
     return true;
   };
 
-  const AUDIO_TEXT_OFFSET = 28;
+  const INDENT_PER_LEVEL = 1.5; // rem
+  const AUDIO_BUTTON_SIZE = 1.5; // rem
+  const AUDIO_BUTTON_GAP = 0.5; // rem
+  const AUDIO_TEXT_OFFSET = AUDIO_BUTTON_SIZE + AUDIO_BUTTON_GAP; // 2rem total
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
   const renderNode = (node, key, previousNode = null) => {
@@ -116,12 +124,14 @@ export default function TopicRichSectionRenderer({
     const indentValue = inheritIndent
       ? computeIndent(node, previousNode?.indent)
       : computeIndent(node, node?.indent);
-    const baseIndentPx = indentValue * 24;
-    const textIndentPx = baseIndentPx + (inheritIndent ? AUDIO_TEXT_OFFSET : 0);
+    const baseIndentRem = indentValue * INDENT_PER_LEVEL;
+    const textIndentRem = inheritIndent
+      ? baseIndentRem + AUDIO_TEXT_OFFSET
+      : baseIndentRem;
 
     if (node.kind === "paragraph") {
       return (
-        <p key={key} style={{ marginLeft: textIndentPx }}>
+        <p key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
           {renderInlines(node.inlines)}
         </p>
       );
@@ -129,7 +139,7 @@ export default function TopicRichSectionRenderer({
 
     if (node.kind === "list_item") {
       return (
-        <li key={key} style={{ marginLeft: baseIndentPx }}>
+        <li key={key} style={{ marginLeft: `${baseIndentRem}rem` }}>
           {renderInlines(node.inlines)}
         </li>
       );
@@ -138,7 +148,7 @@ export default function TopicRichSectionRenderer({
     if (node.kind === "numbered_item" || node.kind === "misc_item") {
       // Render as a div, not <li>, to avoid default bullet styling
       return (
-        <div key={key} style={{ marginLeft: textIndentPx }}>
+        <div key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
           {renderInlines(node.inlines)}
         </div>
       );

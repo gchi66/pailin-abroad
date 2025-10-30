@@ -63,13 +63,19 @@ details[open] > .markdown-summary::after {
 .markdown-content {
   padding: 0 2.25rem 1.4vh;          /* side + bottom padding */
   line-height: 1.6;
-  font-size: 1rem;
+  font-size: 1.2rem;
   animation: fadeIn .25s ease;
+}
+
+.markdown-content p,
+.markdown-content div,
+.markdown-content span,
+.markdown-content li {
+  font-size: 1.2rem;
 }
 
 .markdown-content p {
   margin-block-end: 1em;
-  font-size: var(--lesson-core-text-size);
 }
 
 .markdown-content ul,
@@ -84,6 +90,17 @@ details[open] > .markdown-summary::after {
   to   { opacity: 1; translate: 0 0; }
 }
 
+/* Audio button styling */
+.audio-bullet {
+  display: flex;
+  align-items: center;
+  gap: 0; /* gap is now handled in JS via marginRight */
+  list-style: none;
+}
+
+.audio-bullet img {
+  flex-shrink: 0;
+}
 
 /* table  */
 

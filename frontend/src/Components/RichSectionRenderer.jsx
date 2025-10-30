@@ -111,15 +111,26 @@ export default function RichSectionRenderer({
     if (currentNode.kind === "list_item") return false;
     if (!looksLikeDialogue(currentNode)) return false;
 
+    // Check if previous node was an audio list item (start of dialogue)
     const previousIsAudioList =
       previousNode.kind === "list_item" && containsAudioTag(previousNode);
 
-    if (!previousIsAudioList) return false;
+    // Check if previous node was a dialogue continuation (any non-list-item with dialogue format)
+    const previousIsDialogueContinuation =
+      (previousNode.kind === "paragraph" ||
+      previousNode.kind === "misc_item" ||
+      previousNode.kind === "numbered_item") &&
+      looksLikeDialogue(previousNode);
+
+    if (!previousIsAudioList && !previousIsDialogueContinuation) return false;
 
     return true;
   };
 
-  const AUDIO_TEXT_OFFSET = 28;
+  const INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
+  const AUDIO_BUTTON_SIZE = 1.5; // rem
+  const AUDIO_BUTTON_GAP = 0.5; // rem - gap between button and text
+  const AUDIO_TEXT_OFFSET = AUDIO_BUTTON_SIZE + AUDIO_BUTTON_GAP; // 2rem total
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
   const renderNode = (node, key, previousNode = null) => {
@@ -132,6 +143,12 @@ export default function RichSectionRenderer({
     const indentValue = inheritIndent
       ? computeIndent(node, previousNode?.indent)
       : computeIndent(node, node?.indent);
+    const baseIndentRem = indentValue * INDENT_PER_LEVEL;
+
+    // Continuation lines align with text after audio button
+    const textIndentRem = inheritIndent
+      ? baseIndentRem + AUDIO_TEXT_OFFSET
+      : baseIndentRem;
 
     if (node.kind === "paragraph"){
       console.log("Processing paragraph node:", {
@@ -143,15 +160,13 @@ export default function RichSectionRenderer({
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
-      const baseIndentPx = indentValue * 24;
-      const textIndentPx = baseIndentPx + (inheritIndent ? AUDIO_TEXT_OFFSET : 0);
 
       if (hasAudio) {
         return (
           <p
             key={key}
             className="audio-bullet"
-            style={{ marginLeft: baseIndentPx, display: "flex", alignItems: "center", marginBottom: "8px" }}
+            style={{ marginLeft: `${baseIndentRem}rem`, display: "flex", alignItems: "center", marginBottom: "0.5rem" }}
           >
             <AudioButton
               audioKey={node.audio_key}
@@ -160,7 +175,8 @@ export default function RichSectionRenderer({
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
               phraseVariant={phraseVariant}
-              className="mt-0.5 h-5 w-5 select-none"
+              size={AUDIO_BUTTON_SIZE}
+              className="select-none"
             />
             <span>{renderInlines(node.inlines)}</span>
           </p>
@@ -168,7 +184,7 @@ export default function RichSectionRenderer({
       }
 
       return (
-        <p key={key} style={{ marginLeft: textIndentPx }}>
+        <p key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
           {renderInlines(node.inlines)}
         </p>
       );
@@ -184,15 +200,13 @@ export default function RichSectionRenderer({
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
-      const baseIndentPx = indentValue * 24;
-      const textIndentPx = baseIndentPx + (inheritIndent ? AUDIO_TEXT_OFFSET : 0);
 
       if (hasAudio) {
         return (
           <li
             key={key}
             className="audio-bullet"
-            style={{ marginLeft: baseIndentPx }}
+            style={{ marginLeft: `${baseIndentRem}rem` }}
           >
             <AudioButton
               audioKey={node.audio_key}
@@ -201,14 +215,15 @@ export default function RichSectionRenderer({
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
               phraseVariant={phraseVariant}
-              className="mt-0.5 h-5 w-5 select-none"
+              size={AUDIO_BUTTON_SIZE}
+              className="select-none"
             />
             <span>{renderInlines(node.inlines)}</span>
           </li>
         );
       }
       return (
-        <li key={key} style={{ marginLeft: textIndentPx }}>
+        <li key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
           {renderInlines(node.inlines)}
         </li>
       );
@@ -223,15 +238,13 @@ export default function RichSectionRenderer({
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
-      const baseIndentPx = indentValue * 24;
-      const textIndentPx = baseIndentPx + (inheritIndent ? AUDIO_TEXT_OFFSET : 0);
 
       if (hasAudio) {
         return (
           <div
             key={key}
             className="audio-bullet"
-            style={{ marginLeft: baseIndentPx, display: "flex", alignItems: "center", marginBottom: "8px" }}
+            style={{ marginLeft: `${baseIndentRem}rem`, display: "flex", alignItems: "center", marginBottom: "0.5rem" }}
           >
             <AudioButton
               audioKey={node.audio_key}
@@ -240,7 +253,8 @@ export default function RichSectionRenderer({
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
               phraseVariant={phraseVariant}
-              className="mt-0.5 h-5 w-5 select-none"
+              size={AUDIO_BUTTON_SIZE}
+              className="select-none"
             />
             <span>{renderInlines(node.inlines)}</span>
           </div>
@@ -248,7 +262,7 @@ export default function RichSectionRenderer({
       }
       // Render as a div, not <li>, to avoid default bullet styling
       return (
-        <div key={key} style={{ marginLeft: textIndentPx }}>
+        <div key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
           {renderInlines(node.inlines)}
         </div>
       );
