@@ -42,7 +42,7 @@
 }
 
 .try-lessons-header-subtitle {
-  font-size: 1.75vh;
+  font-size: 1.5rem;
   color: #1E1E1E;
   font-weight: 500;
   font-family: "Poppins", sans-serif;
@@ -60,7 +60,7 @@
 }
 
 .try-lessons-intro {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #1E1E1E;
   font-weight: 400;
   font-family: "Poppins", sans-serif;
@@ -72,7 +72,6 @@
 /* Cards Container */
 .try-lessons-cards-container {
   width: 100%;
-  padding: 2rem 0;
   display: flex;
   justify-content: center;
 }

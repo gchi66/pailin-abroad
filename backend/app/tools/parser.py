@@ -1138,31 +1138,27 @@ class GoogleDocsParser:
                         if not line_stripped:
                             qp_chunk.append(line_stripped)
                             continue
+
+                        # Check for section headers FIRST, before checking for Thai
+                        if len(line_stripped) < 100:
+                            upper_check = line_stripped.upper()
+                            # Remove Thai to check if English part is all caps
+                            en_only = TH.sub('', line_stripped).strip()
+                            if en_only and upper_check[:len(en_only)] == en_only and not re.match(r'^[A-Z]\.\s', line_stripped):
+                                # This is a header, flush and continue
+                                embedded_practice_lines.extend(qp_chunk)
+                                qp_chunk = []
+                                last_qp_directive = None
+                                keep_lines.append((text_line, style))
+                                continue
+
                         if TH.search(line_stripped):
                             qp_chunk.append(line_stripped)
                             continue
-                        if last_qp_directive in {"TITLE", "PROMPT", "PARAGRAPH", "TEXT", "STEM"}:
-                            # Stop if this looks like a section header (all caps, potentially bilingual)
-                            if len(line_stripped) < 100:
-                                upper_check = line_stripped.upper()
-                                # Remove Thai to check if English part is all caps
-                                en_only = TH.sub('', line_stripped).strip()
-                                if en_only and upper_check[:len(en_only)] == en_only and not re.match(r'^[A-Z]\.\s', line_stripped):
-                                    # This is a header, flush and continue
-                                    embedded_practice_lines.extend(qp_chunk)
-                                    qp_chunk = []
-                                    last_qp_directive = None
-                                    keep_lines.append((text_line, style))
-                                    continue
-                            qp_chunk.append(line_stripped)
-                            continue
 
-                        # If the line doesn't look like part of the current block, flush it.
-                        if qp_chunk:                            # flush the previous block
-                            print(f"DEBUG: Flushing qp_chunk (normal prose) with {len(qp_chunk)} lines")
-                            embedded_practice_lines.extend(qp_chunk)
-                            qp_chunk = []
-                            last_qp_directive = None
+                        if last_qp_directive in {"TITLE", "PROMPT", "PARAGRAPH", "TEXT", "STEM"}:
+                            qp_chunk.append(line_stripped)
+                        continue
 
                     # ---- normal prose (including table placeholders) ----
                     if qp_chunk:                               # flush finished block
@@ -1486,6 +1482,9 @@ class GoogleDocsParser:
                         insert_position = len(content_nodes)
                         insert_idx = insert_position
                         _add_heading(title, effective_th)
+
+                    # CRITICAL: Write the modified list back to the section!
+                    section[jsonb_key] = content_nodes
 
         _inject_quick_practice_headings()
 

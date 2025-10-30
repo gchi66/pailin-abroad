@@ -52,7 +52,7 @@
 .free-upgrade-message {
   margin: 3rem auto 0;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   color: #1E1E1E;
   line-height: 1.6;
   max-width: 800px;
@@ -107,8 +107,8 @@
 
 .free-stage-header {
   background: white;
-  border-bottom: 0.15rem solid #1E1E1E;
-  padding: 2rem 3rem;
+  border-bottom: 0.075rem solid #1E1E1E;
+  padding: 1.5rem 4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -151,7 +151,7 @@
 }
 
 .free-lesson-link:hover .free-lesson-item {
-  background: #91CAFF;
+  background: #e9f4ff;
 }
 
 .free-lesson-item-left {
@@ -207,7 +207,7 @@
   }
 
   .free-stage-header {
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 4rem;
   }
 
   .free-stage-title {

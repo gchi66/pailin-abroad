@@ -81,8 +81,8 @@ const FreeLessonsIndex = () => {
     const isCheckpoint = (lesson.title || "").toLowerCase().includes("checkpoint");
 
     const content = (
-      <div className="free-lesson-item">
-        <div className="free-lesson-item-left">
+      <div className="lesson-item">
+        <div className="lesson-item-left">
           {isCheckpoint ? (
             <img
               src="/images/black-checkmark-level-checkpoint.webp"
@@ -90,24 +90,24 @@ const FreeLessonsIndex = () => {
               className="level-checkmark"
             />
           ) : (
-            <span className="free-lesson-number">
+            <span className="lesson-number">
               {lesson.level}.{lesson.lesson_order}
             </span>
           )}
-          <div className="free-name-desc-container">
-            <span className="free-lesson-name">{lesson.title}</span>
+          <div className="name-desc-container">
+            <span className="lesson-name">{lesson.title}</span>
             {lesson.focus && (
-              <span className="free-lesson-focus">{lesson.focus}</span>
+              <span className="lesson-focus">{lesson.focus}</span>
             )}
           </div>
         </div>
         {/* right side - lock icon for non-logged-in users */}
-        <div className="free-lesson-item-right">
+        <div className="lesson-item-right">
           {!user && (
             <img
               src="/images/lock.webp"
               alt="Locked"
-              className="free-lesson-lock-icon"
+              className="lesson-lock-icon"
             />
           )}
         </div>
@@ -153,9 +153,9 @@ const FreeLessonsIndex = () => {
 
   return (
     <div className="free-lessons-index-page-container">
-      <header className="free-lessons-index-page-header">
-        <h1 className="free-page-header-text">FREE LESSON LIBRARY</h1>
-        <p className="free-lessons-index-page-header-subtitle">
+      <header className="lessons-index-page-header">
+        <h1 className="page-header-text">FREE LESSON LIBRARY</h1>
+        <p className="lessons-index-page-header-subtitle">
           Explore the lessons available to you on your free plan
         </p>
       </header>
