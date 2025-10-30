@@ -176,7 +176,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
             # Build map of EN items by number for quick comparison
             en_by_number = {str(it.get("number")): it for it in (en_items or []) if it.get("number") is not None}
 
-            th_items_raw = ex.get("items", []) or []
+            th_items_raw = ex.get("items_th", []) or []
             th_items_validated = []
             for th_item in th_items_raw:
                 # Copy as-is (do not mutate original reference)
@@ -201,9 +201,9 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
                 th_items_validated.append(item_copy)
 
             patch = {
-                "title_th":     _extract_th(ex.get("title")),
+                "title_th":     _extract_th(ex.get("title_th")),
                 "prompt_th":    _extract_th(ex.get("prompt_md") or ex.get("prompt")),
-                "paragraph_th": _extract_th(ex.get("paragraph")),
+                "paragraph_th": _extract_th(ex.get("paragraph_th")),
                 # Store the validated Thai items (with alt text / answers). We do NOT attempt to
                 # reconcile or alter image keys here; EN remains source-of-truth.
                 "items_th":     th_items_validated,

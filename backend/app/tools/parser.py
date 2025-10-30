@@ -219,74 +219,102 @@ def node_plain_text(node):
 def bilingualize_headers_th(nodes, default_level=3):
     FOCUS_EN = "LESSON FOCUS"
     FOCUS_TH = "จุดเน้นบทเรียน"
+    KNOWN_TITLE_PREFIXES = {
+        "QUICK PRACTICE",
+        "AFFIRMATIVE & NEGATIVE SENTENCES",
+        "MAKING QUESTIONS",
+        "USES OF ‘WAS’ AND ‘WERE’",
+        "PAST TENSE TO-BE VERBS",
+    }
+
+    def _clone_node(node: dict) -> dict:
+        clone = dict(node)
+        if "inlines" in clone and isinstance(clone["inlines"], list):
+            clone["inlines"] = [dict(run) for run in clone["inlines"]]
+        return clone
+
+    def _apply_bilingual_text(node: dict, en: str | None, th: str | None) -> dict:
+        label_parts = [part.strip() for part in (en, th) if part and part.strip()]
+        label = " ".join(label_parts) if label_parts else node_plain_text(node)
+
+        node["kind"] = "heading"
+        node["level"] = node.get("level", default_level)
+        node["text"] = {"en": en, "th": th}
+
+        inlines = node.get("inlines")
+        if inlines:
+            first = dict(inlines[0])
+            first["text"] = label
+            first.setdefault("bold", False)
+            first.setdefault("italic", False)
+            first.setdefault("underline", False)
+            first.setdefault("link", None)
+            node["inlines"] = [first]
+        else:
+            node["inlines"] = [{
+                "text": label,
+                "bold": False,
+                "italic": False,
+                "underline": False,
+                "link": None,
+            }]
+        return node
+
+    def _looks_like_known_title(en_part: str | None) -> bool:
+        if not en_part:
+            return False
+        upper = en_part.strip().upper()
+        return any(upper.startswith(prefix) for prefix in KNOWN_TITLE_PREFIXES)
+
     out = []
 
-    for n in nodes:
-        # PATCH: Handle LESSON FOCUS specifically first
-        if n.get("kind") == "paragraph":
-            # Check if this paragraph is exactly "LESSON FOCUS"
-            para_text = node_plain_text(n).strip()
+    for original in nodes:
+        node = _clone_node(original)
+
+        if node.get("kind") == "paragraph":
+            para_text = node_plain_text(node).strip()
             if para_text.upper() == FOCUS_EN:
-                out.append({
-                    "kind": "heading",
-                    "level": 3,
-                    "text": {"en": FOCUS_EN, "th": FOCUS_TH},
-                    "lesson_context": n.get("lesson_context"),
-                    "section_context": n.get("section_context"),
-                })
+                out.append(_apply_bilingual_text(node, FOCUS_EN, FOCUS_TH))
                 continue
 
-        # PATCH: For existing headings, check if they're LESSON FOCUS and need Thai
-        if n.get("kind") in {"heading", "header"}:
-            # Check if this is a LESSON FOCUS heading that needs Thai translation
-            if isinstance(n.get("text"), dict):
-                text_en = (n["text"].get("en") or "").strip().upper()
-                if text_en == FOCUS_EN and not n["text"].get("th"):
-                    n = {**n, "text": {**n["text"], "th": FOCUS_TH}}
-                    out.append(n)
-                    continue
+        if node.get("kind") in {"heading", "header"}:
+            if isinstance(node.get("text"), dict):
+                text_en = (node["text"].get("en") or "").strip().upper()
+                if text_en == FOCUS_EN and not node["text"].get("th"):
+                    node["text"] = {**node["text"], "th": FOCUS_TH}
 
-            # Your existing heading logic - apply bilingual split to ALL headings
-            s = node_plain_text(n)
+            s = node_plain_text(node)
             en, th = split_en_th(s)
             if en or th:
-                # Preserve all other properties from the original node
-                new_heading = {**n}
-                new_heading.update({
-                    "kind": "heading",
-                    "level": n.get("level", default_level),
-                    "text": {"en": en, "th": th}
-                })
-                out.append(new_heading)
+                out.append(_apply_bilingual_text(node, en, th))
             else:
-                out.append(n)
+                out.append(node)
             continue
 
-        # FIXED: Only apply bilingual conversion to paragraphs, preserve other node types
-        if n.get("kind") == "paragraph":
-            s = node_plain_text(n)
+        if node.get("kind") == "paragraph":
+            s = node_plain_text(node)
             has_th = bool(TH.search(s))
             has_en = bool(re.search(r'[A-Za-z]', s))
 
-            # Check if this looks like a title by examining the English part before any Thai
             looks_like_title = False
+            en_part = None
             if has_en:
                 en_part, _ = split_en_th(s)
                 if en_part:
-                    # Check if the extracted English part is ALL CAPS
                     en_stripped = en_part.strip()
-                    looks_like_title = en_stripped and en_stripped.upper() == en_stripped and re.search(r'[A-Z]', en_stripped)
+                    looks_like_title = (
+                        (en_stripped and en_stripped.upper() == en_stripped and re.search(r'[A-Z]', en_stripped))
+                        or _looks_like_known_title(en_part)
+                    )
 
-            if has_th and (looks_like_title or n.get("is_bold_header")):
+            if has_th and (looks_like_title or node.get("is_bold_header")):
                 en, th = split_en_th(s)
                 if en or th:
-                    out.append({
-                        "kind": "heading",
-                        "level": default_level,
-                        "text": {"en": en, "th": th}
-                    })
-                    continue        # FIXED: Always preserve the original node for non-paragraph types or paragraphs that don't need conversion
-        out.append(n)
+                    node.pop("style", None)
+                    out.append(_apply_bilingual_text(node, en, th))
+                    continue
+
+        out.append(node)
 
     return out
 
@@ -1081,9 +1109,11 @@ class GoogleDocsParser:
                 node_list: list[dict] = []
                 # Track tables added to prevent duplicates within this section
                 table_ids_added = set()
+                last_qp_directive: str | None = None
 
                 for text_line, style in lines:
-                    upper = text_line.strip().upper()
+                    line_stripped = (text_line or "").strip()
+                    upper = line_stripped.upper()
 
                     # keep the visible header
                     if upper.startswith("QUICK PRACTICE"):
@@ -1091,27 +1121,62 @@ class GoogleDocsParser:
                         continue
 
                     # ---- start of a new directive block ----
-                    if upper.startswith("TYPE:"):
-                        if qp_chunk:                            # flush the previous block
-                            embedded_practice_lines.extend(qp_chunk)
-                            qp_chunk = []
-                        qp_chunk.append(text_line.strip())
+                    directive_match = directive_re.match(line_stripped)
+                    if directive_match:
+                        directive_name = directive_match.group(1).rstrip(":").upper()
+                        if directive_name == "TYPE":
+                            if qp_chunk:                            # flush the previous block
+                                embedded_practice_lines.extend(qp_chunk)
+                                qp_chunk = []
+                                last_qp_directive = None
+                        qp_chunk.append(line_stripped)
+                        last_qp_directive = directive_name
                         continue
 
-                    # ---- other directive lines ----
-                    if directive_re.match(upper):
-                        qp_chunk.append(text_line.strip())
-                        continue
+                    # ---- continuation lines for directives ----
+                    if qp_chunk:
+                        if not line_stripped:
+                            qp_chunk.append(line_stripped)
+                            continue
+                        if TH.search(line_stripped):
+                            qp_chunk.append(line_stripped)
+                            continue
+                        if last_qp_directive in {"TITLE", "PROMPT", "PARAGRAPH", "TEXT", "STEM"}:
+                            # Stop if this looks like a section header (all caps, potentially bilingual)
+                            if len(line_stripped) < 100:
+                                upper_check = line_stripped.upper()
+                                # Remove Thai to check if English part is all caps
+                                en_only = TH.sub('', line_stripped).strip()
+                                if en_only and upper_check[:len(en_only)] == en_only and not re.match(r'^[A-Z]\.\s', line_stripped):
+                                    # This is a header, flush and continue
+                                    embedded_practice_lines.extend(qp_chunk)
+                                    qp_chunk = []
+                                    last_qp_directive = None
+                                    keep_lines.append((text_line, style))
+                                    continue
+                            qp_chunk.append(line_stripped)
+                            continue
+
+                        # If the line doesn't look like part of the current block, flush it.
+                        if qp_chunk:                            # flush the previous block
+                            print(f"DEBUG: Flushing qp_chunk (normal prose) with {len(qp_chunk)} lines")
+                            embedded_practice_lines.extend(qp_chunk)
+                            qp_chunk = []
+                            last_qp_directive = None
 
                     # ---- normal prose (including table placeholders) ----
                     if qp_chunk:                               # flush finished block
+                        print(f"DEBUG: Flushing qp_chunk (normal prose) with {len(qp_chunk)} lines")
                         embedded_practice_lines.extend(qp_chunk)
                         qp_chunk = []
+                        last_qp_directive = None
                     keep_lines.append((text_line, style))
 
                 # flush any trailing block
                 if qp_chunk:
+                    print(f"DEBUG: Flushing trailing qp_chunk with {len(qp_chunk)} lines")
                     embedded_practice_lines.extend(qp_chunk)
+                    last_qp_directive = None
 
                 # keep_lines now holds the real prose + table placeholders in correct order
                 lines = keep_lines
@@ -1135,7 +1200,11 @@ class GoogleDocsParser:
                             orig_kind_by_text[k] = n["kind"]
 
                 # Process lines in order, preserving the original sequence
-                quick_practice_titles = [ex["title"] for ex in self.parse_practice(embedded_practice_lines + practice_lines) if (ex.get("title", "").lower().startswith("quick practice"))]
+                quick_practice_titles = [
+                    ex["title"]
+                    for ex in self.parse_practice(embedded_practice_lines + practice_lines)
+                    if (ex.get("title", "").lower().startswith("quick practice"))
+                ]
                 quick_practice_idx = 0
 
                 for text_line, style in lines:
@@ -1294,10 +1363,220 @@ class GoogleDocsParser:
             "lesson":                  lesson,
             "transcript":              parsed_transcript,
             "comprehension_questions": self.parse_comprehension(comp_lines, lang=lang),
-            "practice_exercises":      self.parse_practice(embedded_practice_lines + practice_lines),
+            "practice_exercises":      self.parse_practice(embedded_practice_lines + practice_lines, lang=lang),
             "sections":                other_sections,
             "tags":                    self.parse_tags(tags_lines),
         }
+
+        practice_titles = [
+            (idx, exercise.get("title", ""), exercise.get("title_th"))
+            for idx, exercise in enumerate(lesson_obj["practice_exercises"])
+            if isinstance(exercise.get("title"), str)
+        ]
+
+        def _inject_quick_practice_headings():
+            quick_entries = [
+                (title, title_th, p_idx)
+                for p_idx, title, title_th in practice_titles
+                if isinstance(title, str) and title.upper().startswith("QUICK PRACTICE")
+            ]
+            if not quick_entries:
+                return
+
+            for section in lesson_obj["sections"]:
+                if section.get("type") != "understand":
+                    continue
+
+                for jsonb_key in ["content_jsonb", "content_jsonb_th"]:
+                    if jsonb_key not in section:
+                        continue
+
+                    content_nodes = section.get(jsonb_key, [])
+                    if not content_nodes:
+                        continue
+
+                    context_source = content_nodes[0] if content_nodes else {}
+
+                    existing_labels = set()
+                    for node in content_nodes:
+                        node_text = node.get("text", {})
+                        if isinstance(node_text, dict):
+                            if node_text.get("en"):
+                                existing_labels.add(node_text["en"].strip())
+                            if node_text.get("th"):
+                                existing_labels.add(node_text["th"].strip())
+                        inline_text = "".join(run.get("text", "") or "" for run in node.get("inlines", [])).strip()
+                        if inline_text:
+                            existing_labels.add(inline_text)
+
+                    anchor_idx = None
+                    for idx, node in enumerate(content_nodes):
+                        node_text = node.get("text", {})
+                        inline_text = "".join(run.get("text", "") or "" for run in node.get("inlines", [])).strip()
+                        en_label = (node_text.get("en") or inline_text or "").upper()
+                        th_label = (node_text.get("th") or "").strip()
+                        if "MAKING QUESTIONS" in en_label or ("การสร้างประโยคคำถาม" in th_label):
+                            anchor_idx = idx
+                            break
+
+                    numeric_entries = []
+                    trailing_entries = []
+                    for title, title_th, p_idx in quick_entries:
+                        if re.match(r"^QUICK PRACTICE\s*\d+", (title or "").upper()):
+                            numeric_entries.append((title, title_th, p_idx))
+                        else:
+                            trailing_entries.append((title, title_th, p_idx))
+
+                    insert_idx = anchor_idx if anchor_idx is not None else len(content_nodes)
+
+                    def _add_heading(title_en: str, title_th: str | None):
+                        nonlocal insert_idx
+                        label_en = (title_en or "").strip()
+                        label_th = (title_th or "").strip() if title_th else ""
+                        display_label = label_en or label_th
+
+                        if not display_label:
+                            return
+
+                        if display_label in existing_labels:
+                            return
+                        if label_en and label_en in existing_labels:
+                            return
+                        if label_th and label_th in existing_labels:
+                            return
+
+                        heading_node = {
+                            "kind": "heading",
+                            "level": 3,
+                            "inlines": [{
+                                "text": display_label,
+                                "bold": False,
+                                "italic": False,
+                                "underline": False,
+                                "link": None,
+                            }],
+                            "lesson_context": context_source.get("lesson_context") if context_source else None,
+                            "lesson_key": context_source.get("lesson_key") if context_source else None,
+                            "lesson_context_norm": context_source.get("lesson_context_norm") if context_source else None,
+                            "lesson_context_en": context_source.get("lesson_context_en") if context_source else None,
+                            "lesson_context_th": context_source.get("lesson_context_th") if context_source else None,
+                            "section_context": "UNDERSTAND",
+                            "text": {
+                                "en": label_en or display_label,
+                                "th": label_th or None,
+                            }
+                        }
+
+                        content_nodes.insert(insert_idx, heading_node)
+                        insert_idx += 1
+                        existing_labels.add(display_label)
+                        if label_en:
+                            existing_labels.add(label_en)
+                        if label_th:
+                            existing_labels.add(label_th)
+
+                    for title, title_th, p_idx in numeric_entries:
+                        practice = lesson_obj["practice_exercises"][p_idx]
+                        effective_th = title_th or practice.get("title_th")
+                        _add_heading(title, effective_th)
+
+                    for title, title_th, p_idx in trailing_entries:
+                        practice = lesson_obj["practice_exercises"][p_idx]
+                        effective_th = title_th or practice.get("title_th")
+                        insert_position = len(content_nodes)
+                        insert_idx = insert_position
+                        _add_heading(title, effective_th)
+
+        _inject_quick_practice_headings()
+
+        def _populate_quick_practice_items_th():
+            if lang != 'th':
+                return
+
+            understand_section = next(
+                (sec for sec in lesson_obj["sections"]
+                 if sec.get("type") == "understand" and isinstance(sec.get("content_jsonb"), list)),
+                None
+            )
+            if not understand_section:
+                return
+
+            content_nodes = understand_section["content_jsonb"]
+            heading_spans = []
+            for idx, node in enumerate(content_nodes):
+                if node.get("kind") != "heading":
+                    continue
+                text_data = node.get("text", {}) or {}
+                label_en = (text_data.get("en") or "").strip()
+                if label_en.upper().startswith("QUICK PRACTICE"):
+                    heading_spans.append(idx)
+
+            if not heading_spans:
+                return
+
+            heading_spans.append(len(content_nodes))
+
+            practice_map = {
+                (exercise.get("title") or "").strip().upper(): exercise
+                for exercise in lesson_obj["practice_exercises"]
+                if (exercise.get("title") or "").strip().upper().startswith("QUICK PRACTICE")
+            }
+
+            for span_index in range(len(heading_spans) - 1):
+                start_idx = heading_spans[span_index]
+                end_idx = heading_spans[span_index + 1]
+                heading_node = content_nodes[start_idx]
+                heading_text = (heading_node.get("text", {}) or {}).get("en") or ""
+                exercise_key = heading_text.strip().upper()
+                exercise = practice_map.get(exercise_key)
+                if not exercise:
+                    continue
+                if exercise.get("items_th"):
+                    continue
+
+                candidate_nodes = content_nodes[start_idx + 1:end_idx]
+                thai_lines = []
+                for node in candidate_nodes:
+                    if node.get("kind") == "heading":
+                        break
+                    inline_text = "".join(run.get("text", "") for run in node.get("inlines", [])).strip()
+                    if not inline_text:
+                        continue
+                    for chunk in re.split(r"(?:\r?\n)+", inline_text):
+                        chunk = chunk.strip()
+                        if not chunk:
+                            continue
+                        en_part, th_part = split_en_th(chunk)
+                        if th_part:
+                            thai_lines.append(th_part)
+                        elif TH.search(chunk) and not EN.search(chunk):
+                            thai_lines.append(chunk)
+
+                if not thai_lines:
+                    continue
+
+                items_th = []
+                for idx_item, item in enumerate(exercise.get("items", [])):
+                    if idx_item >= len(thai_lines):
+                        break
+                    th_text = thai_lines[idx_item]
+                    entry = {
+                        "number": item.get("number"),
+                        "text": th_text,
+                    }
+                    if "answer" in item:
+                        entry["answer"] = item["answer"]
+                    if "keywords" in item:
+                        entry["keywords"] = item["keywords"]
+                    if "inputs" in item:
+                        entry["inputs"] = item["inputs"]
+                    items_th.append(entry)
+
+                if items_th:
+                    exercise["items_th"] = items_th
+
+        _populate_quick_practice_items_th()
+
         if pinned_comment_lines:
             lesson_obj["pinned_comment"] = "\n".join(pinned_comment_lines).strip()
 
@@ -1430,7 +1709,7 @@ class GoogleDocsParser:
         return questions
 
 
-    def parse_practice(self, lines: List[str]) -> List[Dict]:
+    def parse_practice(self, lines: List[str], lang: str = 'en') -> List[Dict]:
         """
         Convert the flat "directive" block into structured exercises.
 
@@ -1457,6 +1736,7 @@ class GoogleDocsParser:
         IMG_TAG_RE = re.compile(r'\[img:\s*([^\]]+?)\s*\]', re.IGNORECASE)
         AUDIO_TAG_RE = re.compile(r'\[audio:\s*([^\]]+?)\s*\]', re.IGNORECASE)
         ALT_TEXT_RE = re.compile(r'ALT[\s-]*TEXT\s*:\s*(.+)', re.IGNORECASE | re.DOTALL)
+        item_complete = False  # Track completion of current item
 
         def normalize_inputs(value) -> int:
             """Ensure inputs is a positive int, defaulting to 1."""
@@ -1466,8 +1746,47 @@ class GoogleDocsParser:
             except (TypeError, ValueError):
                 return 1
 
+        def append_text(target: dict, key: str, value: str, newline: bool = False):
+            if not value:
+                return
+            value = value.strip()
+            if not value:
+                return
+            existing = target.get(key)
+            if existing:
+                if newline:
+                    sep = "\n" if not existing.endswith("\n") else ""
+                    target[key] = f"{existing}{sep}{value}"
+                else:
+                    sep = " " if not existing.endswith(" ") else ""
+                    target[key] = f"{existing}{sep}{value}"
+            else:
+                target[key] = value
+
+        def set_bilingual(target: dict, key_en: str, key_th: str, value: str):
+            value = (value or "").strip()
+            if not value:
+                target[key_en] = ""
+                return
+            en_part, th_part = split_en_th(value)
+            target[key_en] = en_part if en_part is not None else value
+            if th_part:
+                target[key_th] = th_part
+
+        def append_bilingual(target: dict, key_en: str, key_th: str, value: str, newline: bool = False):
+            value = (value or "").strip()
+            if not value:
+                return
+            en_part, th_part = split_en_th(value)
+            if en_part:
+                append_text(target, key_en, en_part, newline=newline)
+            elif not th_part:
+                append_text(target, key_en, value, newline=newline)
+            if th_part:
+                append_text(target, key_th, th_part, newline=newline)
+
         def flush_exercise():
-            nonlocal cur_ex, cur_items
+            nonlocal cur_ex, cur_items, item_complete
             if cur_ex is not None:
                 if cur_ex.get("kind") in {"open", "open_ended"}:
                     for item in cur_items:
@@ -1476,8 +1795,22 @@ class GoogleDocsParser:
                         else:
                             item["inputs"] = normalize_inputs(item["inputs"])
                 cur_ex["items"] = cur_items
+                items_th_collection = []
+                for item in cur_items:
+                    th_text = item.get("text_th")
+                    if th_text:
+                        th_entry = {}
+                        if "number" in item:
+                            th_entry["number"] = item["number"]
+                        th_entry["text"] = th_text
+                        for key in ("answer", "keywords", "inputs", "options", "correct"):
+                            if key in item and item[key] not in (None, ""):
+                                th_entry[key] = item[key]
+                        items_th_collection.append(th_entry)
+                cur_ex["items_th"] = items_th_collection
                 exercises.append(cur_ex)
             cur_ex, cur_items = None, []
+            item_complete = False
 
         def new_exercise(kind: str):
             flush_exercise()
@@ -1488,6 +1821,10 @@ class GoogleDocsParser:
                 "paragraph": "",
                 "items": [],
                 "sort_order": len(exercises) + 1,
+                "title_th": None,
+                "prompt_th": "",
+                "paragraph_th": "",
+                "items_th": [],
             }
 
         # Flatten all lines into a single string and iterate line by line.
@@ -1522,12 +1859,14 @@ class GoogleDocsParser:
                 continue
 
             if upper_line.startswith("TITLE:"):
-                cur_ex["title"] = line.split(":", 1)[1].strip()
+                value = line.split(":", 1)[1].strip()
+                set_bilingual(cur_ex, "title", "title_th", value)
                 collecting_text = False
                 collecting_paragraph = False
                 continue
             if upper_line.startswith("PROMPT:"):
-                cur_ex["prompt"] = line.split(":", 1)[1].strip()
+                value = line.split(":", 1)[1].strip()
+                set_bilingual(cur_ex, "prompt", "prompt_th", value)
                 collecting_text = False
                 collecting_paragraph = False
                 continue
@@ -1536,12 +1875,12 @@ class GoogleDocsParser:
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
                 if content:
-                    # There's content on the same line
-                    cur_ex["paragraph"] = content
+                    set_bilingual(cur_ex, "paragraph", "paragraph_th", content)
                     collecting_paragraph = False
                 else:
                     # Empty PARAGRAPH: line, start collecting multi-line paragraph
                     cur_ex["paragraph"] = ""
+                    cur_ex["paragraph_th"] = cur_ex.get("paragraph_th", "")
                     collecting_paragraph = True
                 collecting_text = False
                 continue
@@ -1554,23 +1893,27 @@ class GoogleDocsParser:
                 collecting_opts = False
                 collecting_text = False
                 collecting_paragraph = False
+                item_complete = False
                 continue
 
             # --- TEXT/STEM for any exercise type ---
             if upper_line.startswith(("TEXT:", "STEM:")):
                 if not cur_items:
                     cur_items.append({})
+                    item_complete = False
 
                 # Get the content after the colon
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
                 if content:
-                    # There's content on the same line
+                    # There's content on the same line (English text)
                     cur_items[-1]["text"] = content
-                    collecting_text = False
+                    cur_items[-1]["text_th"] = ""  # Initialize empty Thai
+                    collecting_text = True  # Keep collecting for Thai on next line
                 else:
-                    # Empty TEXT: line, start collecting multi-line text
+                    # Empty TEXT: line, start collecting multi-line
                     cur_items[-1]["text"] = ""
+                    cur_items[-1]["text_th"] = ""
                     collecting_text = True
                 collecting_opts = False
                 continue
@@ -1582,6 +1925,7 @@ class GoogleDocsParser:
                 # Ensure the current item has an options list.
                 if not cur_items:
                     cur_items.append({})
+                    item_complete = False
                 cur_items[-1]["options"] = []
                 continue
 
@@ -1598,6 +1942,7 @@ class GoogleDocsParser:
                 # Handle CORRECT: directive for sentence_transform exercises
                 if not cur_items:
                     cur_items.append({})
+                    item_complete = False
                 correct_value = line.split(":", 1)[1].strip()
                 # Build the text field in the expected format
                 cur_items[-1]["correct"] = correct_value
@@ -1610,10 +1955,12 @@ class GoogleDocsParser:
                 # Only update if there's an existing item.
                 if not cur_items:
                     cur_items.append({})
+                    item_complete = False
                 cur_items[-1]["answer"] = line.split(":", 1)[1].strip()
                 collecting_opts = False
                 collecting_text = False
                 collecting_paragraph = False
+                item_complete = True
                 continue
 
             if upper_line.startswith("KEYWORDS:") or upper_line.startswith("PINNED COMMENT"):
@@ -1621,6 +1968,7 @@ class GoogleDocsParser:
                 if kw:
                     if not cur_items:
                         cur_items.append({})
+                        item_complete = False
                     cur_items[-1]["keywords"] = kw
                 collecting_opts = False
                 collecting_text = False
@@ -1637,29 +1985,41 @@ class GoogleDocsParser:
 
             # Multi-line text collection
             if collecting_text and cur_items:
-                current_text = cur_items[-1].get("text", "")
-                if current_text:
-                    cur_items[-1]["text"] = current_text + "\n" + original_line
+                stripped = line.strip()
+                if not stripped:
+                    continue
+
+                # Check if this is a directive line
+                directive_re_check = re.compile(
+                    r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
+                    r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
+                    re.I
+                )
+                if directive_re_check.match(upper_line):
+                    collecting_text = False
+                    # Don't continue - let it process this directive
                 else:
-                    cur_items[-1]["text"] = original_line
-                continue
+                    # This is a continuation line
+                    # If we already have English text but no Thai, this is the Thai line
+                    if cur_items[-1].get("text") and not cur_items[-1].get("text_th"):
+                        cur_items[-1]["text_th"] = stripped
+                        collecting_text = False  # Done collecting
+                    else:
+                        # Otherwise append to English text
+                        if cur_items[-1].get("text"):
+                            cur_items[-1]["text"] = cur_items[-1]["text"] + " " + stripped
+                        else:
+                            cur_items[-1]["text"] = stripped
+                    continue
 
             # Multi-line paragraph collection
             if collecting_paragraph and cur_ex:
-                current_paragraph = cur_ex.get("paragraph", "")
-                if current_paragraph:
-                    cur_ex["paragraph"] = current_paragraph + "\n" + original_line
-                else:
-                    cur_ex["paragraph"] = original_line
+                append_bilingual(cur_ex, "paragraph", "paragraph_th", original_line, newline=True)
                 continue
 
             # Fallback: if not collecting options, text, or paragraph and we have items, append to current item's text
-            if cur_items and not collecting_opts and not collecting_text and not collecting_paragraph:
-                existing_text = cur_items[-1].get("text", "")
-                if existing_text:
-                    cur_items[-1]["text"] = existing_text + " " + line
-                else:
-                    cur_items[-1]["text"] = line
+            if cur_items and not collecting_opts and not collecting_text and not collecting_paragraph and not item_complete:
+                append_bilingual(cur_items[-1], "text", "text_th", original_line, newline=True)
 
         flush_exercise()
 
@@ -1705,6 +2065,55 @@ class GoogleDocsParser:
                     item["audio_key"] = audio_key
                 if isinstance(cleaned_text, str):
                     item["text"] = cleaned_text
+                th_text_value = item.get("text_th")
+                if isinstance(th_text_value, str):
+                    cleaned_th, _, _, _ = extract_media_fields(th_text_value)
+                    item["text_th"] = cleaned_th
+
+            if exercise.get("items_th") is None:
+                exercise["items_th"] = []
+
+            if exercise.get("items_th"):
+                for idx, item_th in enumerate(exercise["items_th"]):
+                    if idx < len(exercise.get("items", [])):
+                        src_item = exercise["items"][idx]
+                        if src_item.get("audio_key") and "audio_key" not in item_th:
+                            item_th["audio_key"] = src_item["audio_key"]
+                        if src_item.get("image_key") and "image_key" not in item_th:
+                            item_th["image_key"] = src_item["image_key"]
+                        if src_item.get("alt_text") and "alt_text" not in item_th:
+                            item_th["alt_text"] = src_item["alt_text"]
+            else:
+                exercise["items_th"] = []
+
+            if exercise.get("prompt_th") is not None:
+                exercise["prompt_th"] = exercise["prompt_th"].strip() or ""
+            if exercise.get("paragraph_th") is not None:
+                exercise["paragraph_th"] = exercise["paragraph_th"].strip()
+
+        # Build items_th array from text_th fields in items
+        for ex in exercises:
+            if ex.get("items") and not ex.get("items_th"):
+                items_th = []
+                for item in ex["items"]:
+                    if item.get("text_th"):
+                        # Build Thai version of item
+                        th_item = {}
+                        if "number" in item:
+                            th_item["number"] = item["number"]
+                        th_item["text"] = item["text_th"]  # Thai text goes in "text" field
+                        if "answer" in item:
+                            th_item["answer"] = item["answer"]  # Answer stays same
+                        if "image_key" in item:
+                            th_item["image_key"] = item["image_key"]
+                        if "audio_key" in item:
+                            th_item["audio_key"] = item["audio_key"]
+                        if "alt_text" in item:
+                            th_item["alt_text"] = item["alt_text"]
+                        items_th.append(th_item)
+
+                if items_th:
+                    ex["items_th"] = items_th
 
         return exercises
 

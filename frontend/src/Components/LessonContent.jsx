@@ -440,8 +440,13 @@ export default function LessonContent({
 
       // Check if this is a Quick Practice heading
       const isQuickPracticeHeading =
-        node.kind === "heading" &&
-        node.inlines?.some((inline) => inline.text?.toLowerCase().includes("quick practice"));
+        node.kind === "heading" && (
+          // Check the text object if it exists (for bilingual headings)
+          (node.text?.en?.toLowerCase().includes("quick practice")) ||
+          (node.text?.th?.toLowerCase().includes("แบบฝึกหัด")) ||
+          // Fallback to inlines for older format
+          node.inlines?.some((inline) => inline.text?.toLowerCase().includes("quick practice"))
+        );
 
       if (isQuickPracticeHeading && quickPracticeIndex < quickExercises.length) {
         processedContent.push(node);
