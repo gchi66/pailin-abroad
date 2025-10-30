@@ -41,16 +41,17 @@
   color: var(--primary-dark);
 }
 
-/* custom arrow ─ rotates when open */
+/* custom arrow ─ starts pointing DOWN when closed */
 .markdown-summary::after {
   content: "▸";
   font-size: 1.2em;
   transition: transform .25s ease;
+  transform: rotate(90deg); /* DOWN when closed */
 }
 
-/* details[open] summary => arrow down */
+/* details[open] summary => arrow up */
 details[open] > .markdown-summary::after {
-  transform: rotate(90deg);
+  transform: rotate(270deg); /* UP when open */
 }
 
 /* chrom-only arrow removal (belt-and-suspenders) */

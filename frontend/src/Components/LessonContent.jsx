@@ -179,14 +179,39 @@ export default function LessonContent({
         </header>
 
         <ul className="transcript-list">
-          {transcript.map((line) => (
-            <li key={line.id}>
-              <span className="transcript-speaker">{line.speaker}:</span>{" "}
-              <span className="transcript-line">
-                {uiLang === "th" && line.line_text_th ? line.line_text_th : line.line_text}
-              </span>
-            </li>
-          ))}
+          {transcript.map((line) => {
+            const englishLine = (line.line_text || "").trim();
+            const thaiLine = (line.line_text_th || "").trim();
+            const speaker = (line.speaker || "").trim();
+            const speakerTh = (line.speaker_th || "").trim();
+
+            return (
+              <li key={line.id} className="transcript-item">
+                <div className="transcript-line-group">
+                  {englishLine.length > 0 && (
+                    <div className="transcript-line transcript-line-en">
+                      {speaker && (
+                        <span className="transcript-speaker">
+                          {speaker}:
+                        </span>
+                      )}
+                      <span className="transcript-text">{englishLine}</span>
+                    </div>
+                  )}
+                  {contentLang === "th" && thaiLine.length > 0 && (
+                    <div className="transcript-line transcript-line-th">
+                      {speakerTh && (
+                        <span className="transcript-speaker">
+                          {speakerTh}:
+                        </span>
+                      )}
+                      <span className="transcript-text">{thaiLine}</span>
+                    </div>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </article>
     );

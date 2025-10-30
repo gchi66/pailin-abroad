@@ -91,18 +91,44 @@
   gap: 1.1rem;
 }
 
-.transcript-list li {
+.transcript-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   font-size: 1.2rem;
-  line-height: 1.2;
+  line-height: 1.4;
   color: #1e1e1e;
 }
 
-.transcript-speaker {
-  font-weight: 500;
-  color: #1e1e1e;
+.transcript-line-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .transcript-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: inherit;
+}
+
+.transcript-line-en {
+  font-weight: 500;
+}
+
+.transcript-line-th {
+  font-size: 1.05rem;
+  color: rgba(15, 23, 42, 0.8);
+}
+
+.transcript-speaker {
+  font-weight: 600;
+  color: #1e1e1e;
+  flex-shrink: 0;
+}
+
+.transcript-text {
   color: inherit;
 }
 

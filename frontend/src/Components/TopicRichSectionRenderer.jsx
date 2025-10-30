@@ -76,16 +76,52 @@ export default function TopicRichSectionRenderer({
     });
   };
 
+  const getNodeText = (node) =>
+    (node?.inlines || [])
+      .map((span) => span?.text || "")
+      .join("")
+      .trim();
+
+  const containsAudioTag = (node) => /\[audio:[^\]]+\]/i.test(getNodeText(node));
+  const looksLikeDialogue = (node) => /^[A-Z][a-z]+:\s/.test(getNodeText(node));
+
+  const computeIndent = (node, defaultIndent = 0) =>
+    typeof defaultIndent === "number" && Number.isFinite(defaultIndent)
+      ? defaultIndent
+      : node?.indent || 0;
+
+  const shouldInheritIndent = (previousNode, currentNode) => {
+    if (!previousNode || !currentNode) return false;
+    if (currentNode.kind === "list_item") return false;
+    if (!looksLikeDialogue(currentNode)) return false;
+
+    const previousIsAudioList =
+      previousNode.kind === "list_item" && containsAudioTag(previousNode);
+
+    if (!previousIsAudioList) return false;
+
+    return true;
+  };
+
+  const AUDIO_TEXT_OFFSET = 28;
+
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
-  const renderNode = (node, key) => {
+  const renderNode = (node, key, previousNode = null) => {
     // Skip heading nodes - they should only be used for accordion structure
     if (node.kind === "heading") {
       return null;
     }
 
+    const inheritIndent = shouldInheritIndent(previousNode, node);
+    const indentValue = inheritIndent
+      ? computeIndent(node, previousNode?.indent)
+      : computeIndent(node, node?.indent);
+    const baseIndentPx = indentValue * 24;
+    const textIndentPx = baseIndentPx + (inheritIndent ? AUDIO_TEXT_OFFSET : 0);
+
     if (node.kind === "paragraph") {
       return (
-        <p key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
+        <p key={key} style={{ marginLeft: textIndentPx }}>
           {renderInlines(node.inlines)}
         </p>
       );
@@ -93,7 +129,7 @@ export default function TopicRichSectionRenderer({
 
     if (node.kind === "list_item") {
       return (
-        <li key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
+        <li key={key} style={{ marginLeft: baseIndentPx }}>
           {renderInlines(node.inlines)}
         </li>
       );
@@ -102,7 +138,7 @@ export default function TopicRichSectionRenderer({
     if (node.kind === "numbered_item" || node.kind === "misc_item") {
       // Render as a div, not <li>, to avoid default bullet styling
       return (
-        <div key={key} style={{ marginLeft: (node.indent || 0) * 24 }}>
+        <div key={key} style={{ marginLeft: textIndentPx }}>
           {renderInlines(node.inlines)}
         </div>
       );
@@ -176,7 +212,9 @@ export default function TopicRichSectionRenderer({
           if (!sec.heading) {
             return (
               <div key={sec.key} className="markdown-content no-heading">
-                {sec.body.map((node, k) => renderNode(node, k))}
+                {sec.body.map((node, k) =>
+                  renderNode(node, k, sec.body[k - 1] || null)
+                )}
               </div>
             );
           }
@@ -204,7 +242,9 @@ export default function TopicRichSectionRenderer({
                 {cleanHeadingText}
               </summary>
               <div className="markdown-content">
-                {sec.body.map((node, k) => renderNode(node, k))}
+                {sec.body.map((node, k) =>
+                  renderNode(node, k, sec.body[k - 1] || null)
+                )}
               </div>
             </details>
           );
@@ -217,7 +257,7 @@ export default function TopicRichSectionRenderer({
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {nodes.map((node, i) => renderNode(node, i))}
+        {nodes.map((node, i) => renderNode(node, i, nodes[i - 1] || null))}
       </div>
     </div>
   );
