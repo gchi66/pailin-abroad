@@ -211,6 +211,16 @@
   padding-top: 0.4rem;
 }
 
+.fb-row-th {
+  margin: -1rem 0 1.25rem 3rem;
+}
+
+.fb-row-th .fb-text-block {
+  display: block;
+  font-size: 1.2rem;
+  color: rgba(15, 23, 42, 0.75);
+}
+
 .fb-row.fb-example {
   display: block;
   gap: 0;
@@ -243,6 +253,16 @@
 .st-stem {
   margin: 0;
   font-size: var(--lesson-core-text-size);
+}
+
+.st-stem-th {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(15, 23, 42, 0.75);
+}
+
+.st-row-th {
+  margin: -0.5rem 0 1.5rem 3rem;
 }
 
 .st-stem-row {
@@ -404,7 +424,7 @@
 .fb-row-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: .4rem;
   width: 100%;
 }
 
@@ -560,9 +580,10 @@
 
 .fb-button-container {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin: 2rem 0 0 2.6rem;
 }
 
 .fb-prompt {
@@ -573,6 +594,7 @@
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  width: max-content;
 }
 
 .fb-check-btn:disabled {

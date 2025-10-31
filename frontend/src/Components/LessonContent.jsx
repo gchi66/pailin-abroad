@@ -52,7 +52,6 @@ export default function LessonContent({
      HELPER: choose nodes by language; for TH, swap heading inlines to text_th
   =============================================================== */
   const selectNodesForLang = (nodesEN = [], nodesTH = [], lang = "en") => {
-    // prefer TH nodes if present; else fall back to EN nodes
     const base =
       lang === "th" && Array.isArray(nodesTH) && nodesTH.length > 0
         ? nodesTH
@@ -60,43 +59,37 @@ export default function LessonContent({
         ? nodesEN
         : [];
 
-    if (lang !== "th") return base;
+    // Always normalize headings when Thai mode is active
+    if (lang === "th") {
+      return base.map((node) => {
+        if (!node || node.kind !== "heading") return node;
 
-    // helpers to split combined EN+TH strings
-    const takeThai = (s = "") => {
-      const m = s.match(/[\u0E00-\u0E7F].*$/); // first Thai char to end
-      return m ? m[0].trim() : "";
-    };
+        const thText =
+          node.text?.th?.trim?.() ||
+          node.text_th?.trim?.() ||
+          node.header_th?.trim?.() ||
+          "";
 
-    return base.map((node) => {
-      if (!node || node.kind !== "heading" || !Array.isArray(node.inlines)) {
+        // Replace inline text even if TH text already exists
+        if (thText) {
+          return {
+            ...node,
+            inlines: [
+              {
+                ...(node.inlines?.[0] || {}),
+                text: thText,
+              },
+            ],
+          };
+        }
+
         return node;
-      }
+      });
+    }
 
-      // 1) if node has a localized text map, prefer that
-      const thFromNode = node.text?.th?.trim?.();
-      if (thFromNode) {
-        return {
-          ...node,
-          inlines: node.inlines.map((inl, idx) => ({
-            ...inl,
-            // put TH on the first inline; blank the rest to avoid duplicating
-            text: idx === 0 ? thFromNode : "",
-          })),
-        };
-      }
-
-      // 2) otherwise, try to extract Thai from the existing combined inline text(s)
-      return {
-        ...node,
-        inlines: node.inlines.map((inl, idx) => {
-          const src = inl?.text || "";
-          const th = takeThai(src);
-          return { ...inl, text: idx === 0 ? th : "" };
-        }),
-      };
-    });
+    return base;
   };
+
 
   /* ===============================================================
      LOCKED LESSON CHECK
@@ -238,7 +231,7 @@ export default function LessonContent({
         </header>
 
         <PracticeSection
-          exercises={practiceExercises}
+          exercises={practiceExercises.filter((ex) => !ex?.isQuickPractice)}
           uiLang={uiLang}
           images={images}
           audioIndex={snipIdx}
@@ -426,28 +419,45 @@ export default function LessonContent({
     // Get quick practice exercises for "understand" sections only
     let quickExercises = [];
     if (section.type === "understand") {
-      quickExercises = practiceExercises.filter(
-        (ex) => (ex.title || "").toLowerCase().startsWith("quick practice") && ex.sort_order
-      );
+      quickExercises = practiceExercises.filter((ex) => {
+        if (!ex || !ex.sort_order) return false;
+        if (ex.isQuickPractice) return true;
+        const title_th = ex.title_th || "";
+        return title_th.includes("แบบฝึกหัด");
+      });
     }
 
     // Process content to insert Quick Practice exercises inline
     const processedContent = [];
     let quickPracticeIndex = 0;
 
+
     for (let i = 0; i < baseNodes.length; i++) {
       const node = baseNodes[i];
 
       // Check if this is a Quick Practice heading
       const isQuickPracticeHeading =
-        node.kind === "heading" && (
-          // Check the text object if it exists (for bilingual headings)
-          (node.text?.en?.toLowerCase().includes("quick practice")) ||
-          (node.text?.th?.toLowerCase().includes("แบบฝึกหัด")) ||
-          // Fallback to inlines for older format
-          node.inlines?.some((inline) => inline.text?.toLowerCase().includes("quick practice"))
-        );
+        node.kind === "heading" &&
+        (() => {
+          const pieces = [
+            node.text?.en,
+            node.text?.th,
+            node.header_en,
+            node.header_th,
+            ...(node.inlines || []).map((inl) => inl?.text),
+          ].filter(Boolean);
 
+          // We check English "quick practice" and Thai roots.
+          return pieces.some((raw) => {
+            const t = String(raw);
+            const tl = t.toLowerCase(); // safe for Thai, just no-ops
+            return (
+              tl.includes("quick practice") ||
+              t.includes("แบบฝึกหัด") ||
+              t.includes("ฝึกหัด")
+            );
+          });
+        })();
       if (isQuickPracticeHeading && quickPracticeIndex < quickExercises.length) {
         processedContent.push(node);
         processedContent.push({
@@ -470,6 +480,14 @@ export default function LessonContent({
         }
       }
     }
+
+        // ADD THIS DEBUG LOG:
+    console.log("DEBUG processedContent:", {
+      contentLang,
+      totalNodes: processedContent.length,
+      quickPracticeNodes: processedContent.filter(n => n.kind === "quick_practice_exercise"),
+      allNodeKinds: processedContent.map((n, i) => ({ index: i, kind: n.kind, text: n.inlines?.[0]?.text?.substring(0, 30) }))
+    });
 
     const defaultHeaderText = section.type.replace("_", " ").toUpperCase();
     const headerText = getSectionHeader(section, defaultHeaderText);
@@ -496,6 +514,7 @@ export default function LessonContent({
               wrapInDetails={false}
               images={images}
               audioIndex={snipIdx}
+              contentLang={contentLang}
             />
           )}
         />

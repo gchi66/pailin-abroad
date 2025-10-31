@@ -265,7 +265,8 @@ export default function SentenceTransformExercise({
             questionState.answer || item?.answer || item?.text || "";
 
           return (
-            <div key={`sentence-${idx}`} className="st-example">
+            <React.Fragment key={`sentence-${idx}`}>
+            <div className="st-example">
               <div className="fb-row st-question">
                 <div className="fb-row-number">
                   <span aria-hidden="true" />
@@ -335,6 +336,14 @@ export default function SentenceTransformExercise({
                 </div>
               </div>
             </div>
+            {contentLang === "th" &&
+              typeof item?.text_th === "string" &&
+              item.text_th.trim() && (
+                <div className="st-row-th">
+                  <p className="st-stem-th">{item.text_th.trim()}</p>
+                </div>
+              )}
+            </React.Fragment>
           );
         }
 
@@ -344,7 +353,8 @@ export default function SentenceTransformExercise({
         const numberLabel = item.number ?? idx + 1;
 
         return (
-          <div key={`sentence-${idx}`} className="fb-row st-question">
+          <React.Fragment key={`sentence-${idx}`}>
+          <div className="fb-row st-question">
             <div className="fb-row-number">
               <span>{numberLabel}</span>
             </div>
@@ -416,6 +426,14 @@ export default function SentenceTransformExercise({
               </div>
             </div>
           </div>
+          {contentLang === "th" &&
+            typeof item?.text_th === "string" &&
+            item.text_th.trim() && (
+              <div className="st-row-th">
+                <p className="st-stem-th">{item.text_th.trim()}</p>
+              </div>
+            )}
+          </React.Fragment>
         );
       })}
 

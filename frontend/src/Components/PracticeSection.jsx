@@ -62,6 +62,7 @@ const transformExercise = (row) => {
     options,
     answer_key,
     sort_order: row.sort_order ?? 0,
+    isQuickPractice: Boolean(row.isQuickPractice),
   };
 };
 
@@ -79,7 +80,13 @@ export default function PracticeSection({
 
   // optionally hide "Quick Practice"
   const list = hideQuick
-    ? list0.filter((ex) => !(ex.title || "").toLowerCase().includes("quick practice"))
+    ? list0.filter((ex) => {
+        if (ex && ex.isQuickPractice) {
+          return false;
+        }
+        const title = (ex?.title || "").toLowerCase();
+        return !title.includes("quick practice");
+      })
     : list0;
 
   if (!list.length) return <p>{pick(copy.lessonPage.practice.empty, uiLang)}</p>;

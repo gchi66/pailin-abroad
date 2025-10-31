@@ -102,10 +102,45 @@ function normalizeExercise(ex, contentLang) {
   let prompt = pickLang(prompt_en, prompt_th, contentLang) ?? null;
   const paragraph = pickLang(paragraph_en, paragraph_th, contentLang) ?? null;
 
-  const items =
-    contentLang === "th" && Array.isArray(items_th) && items_th.length
-      ? items_th
-      : items_en;
+  const isQuickPractice = typeof title_en === "string"
+    ? title_en.trim().toLowerCase().startsWith("quick practice")
+    : false;
+
+  const mergeItemsWithThai = (enItems, thItems) => {
+    const base = Array.isArray(enItems) && enItems.length
+      ? enItems.map((item) => ({ ...(item || {}) }))
+      : Array.isArray(thItems)
+        ? thItems.map((item) => ({ ...(item || {}) }))
+        : [];
+
+    if (!Array.isArray(thItems) || !thItems.length) {
+      return base;
+    }
+
+    const thaiByNumber = new Map();
+    thItems.forEach((thItem, idx) => {
+      if (!thItem) return;
+      const key = thItem.number != null ? String(thItem.number) : `__idx_${idx}`;
+      thaiByNumber.set(key, thItem);
+    });
+
+    return base.map((item, idx) => {
+      const key = item.number != null ? String(item.number) : `__idx_${idx}`;
+      const thItem = thaiByNumber.get(key) ?? thItems[idx];
+      if (thItem && typeof item === "object") {
+        const thaiTextCandidate =
+          (typeof thItem.text_th === "string" && thItem.text_th.trim()) ||
+          (typeof thItem.text === "string" && thItem.text.trim()) ||
+          "";
+        if (thaiTextCandidate) {
+          item.text_th = thaiTextCandidate;
+        }
+      }
+      return item;
+    });
+  };
+
+  const items = mergeItemsWithThai(items_en, items_th);
 
   const options =
     contentLang === "th" && Array.isArray(options_th) && options_th.length
@@ -123,11 +158,14 @@ function normalizeExercise(ex, contentLang) {
     sort_order: ex.sort_order ?? 0,
     exercise_type,
     title,
+    title_th,
+    title_en,
     prompt,
     paragraph,
     items,
     options,
     answer_key,
+    isQuickPractice,
   };
 }
 

@@ -340,8 +340,8 @@ export default function FillBlankExercise({
         const imageUrl = item.image_key ? images[item.image_key] : null;
         const textSegments = segmentTextWithBlanks(item.text || "");
         return (
+          <React.Fragment key={`example-${idx}`}>
           <div
-            key={`example-${idx}`}
             className="fb-row fb-example st-example"
           >
             <p className="st-example-label">Example</p>
@@ -399,6 +399,14 @@ export default function FillBlankExercise({
               )}
             </div>
           </div>
+          {contentLang === "th" &&
+            typeof item.text_th === "string" &&
+            item.text_th.trim() && (
+              <div className="fb-row-th">
+                {renderMultiline(item.text_th.trim())}
+              </div>
+            )}
+          </React.Fragment>
         );
       }
 
@@ -415,8 +423,8 @@ export default function FillBlankExercise({
       const displayNumber = item.number ?? idx + 1;
 
       return (
+        <React.Fragment key={`${item.number ?? idx}-${idx}`}>
         <div
-          key={`${item.number ?? idx}-${idx}`}
           className={`fb-row${hasMultiline ? " fb-row-multiline" : ""}`}
         >
           <div className="fb-row-number">
@@ -434,7 +442,7 @@ export default function FillBlankExercise({
               </div>
             )}
 
-            <div className="fb-row-content">
+              <div className="fb-row-content">
               {hasAudio && (
                 <div className="practice-audio-container">
                   <AudioButton
@@ -494,6 +502,14 @@ export default function FillBlankExercise({
             </div>
           </div>
         </div>
+        {contentLang === "th" &&
+          typeof item.text_th === "string" &&
+          item.text_th.trim() && (
+            <div className="fb-row-th">
+              {renderMultiline(item.text_th.trim())}
+            </div>
+          )}
+        </React.Fragment>
       );
     });
 
