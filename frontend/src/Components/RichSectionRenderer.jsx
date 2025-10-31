@@ -4,6 +4,7 @@ import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
 import AudioButton from "./AudioButton";
 import LessonTable from "./LessonTable";
+import CollapsibleDetails from "./CollapsibleDetails";
 
 // Helper function to clean audio tags from text - FIXED to handle [audio:...] format
 function cleanAudioTags(text) {
@@ -97,6 +98,9 @@ export default function RichSectionRenderer({
       .join("")
       .trim();
 
+  const nodeHasBold = (node) =>
+    Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
+
   const containsAudioTag = (node) => /\[audio:[^\]]+\]/i.test(getNodeText(node));
 
   const looksLikeDialogue = (node) => /^[A-Z][a-z]+:\s/.test(getNodeText(node));
@@ -160,13 +164,19 @@ export default function RichSectionRenderer({
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
+      const hasBold = nodeHasBold(node);
 
       if (hasAudio) {
         return (
           <p
             key={key}
             className="audio-bullet"
-            style={{ marginLeft: `${baseIndentRem}rem`, display: "flex", alignItems: "center", marginBottom: "0.5rem" }}
+            style={{
+              marginLeft: `${baseIndentRem}rem`,
+              display: "flex",
+              alignItems: "center",
+              marginBottom: hasBold ? 0 : "0.5rem",
+            }}
           >
             <AudioButton
               audioKey={node.audio_key}
@@ -184,7 +194,13 @@ export default function RichSectionRenderer({
       }
 
       return (
-        <p key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
+        <p
+          key={key}
+          style={{
+            marginLeft: `${textIndentRem}rem`,
+            marginBottom: hasBold ? 0 : undefined,
+          }}
+        >
           {renderInlines(node.inlines)}
         </p>
       );
@@ -200,13 +216,17 @@ export default function RichSectionRenderer({
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
+      const hasBold = nodeHasBold(node);
 
       if (hasAudio) {
         return (
           <li
             key={key}
             className="audio-bullet"
-            style={{ marginLeft: `${baseIndentRem}rem` }}
+            style={{
+              marginLeft: `${baseIndentRem}rem`,
+              marginBottom: hasBold ? 0 : undefined,
+            }}
           >
             <AudioButton
               audioKey={node.audio_key}
@@ -223,7 +243,13 @@ export default function RichSectionRenderer({
         );
       }
       return (
-        <li key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
+        <li
+          key={key}
+          style={{
+            marginLeft: `${textIndentRem}rem`,
+            marginBottom: nodeHasBold(node) ? 0 : undefined,
+          }}
+        >
           {renderInlines(node.inlines)}
         </li>
       );
@@ -238,13 +264,19 @@ export default function RichSectionRenderer({
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
+      const hasBold = nodeHasBold(node);
 
       if (hasAudio) {
         return (
           <div
             key={key}
             className="audio-bullet"
-            style={{ marginLeft: `${baseIndentRem}rem`, display: "flex", alignItems: "center", marginBottom: "0.5rem" }}
+            style={{
+              marginLeft: `${baseIndentRem}rem`,
+              display: "flex",
+              alignItems: "center",
+              marginBottom: hasBold ? 0 : "0.5rem",
+            }}
           >
             <AudioButton
               audioKey={node.audio_key}
@@ -262,7 +294,13 @@ export default function RichSectionRenderer({
       }
       // Render as a div, not <li>, to avoid default bullet styling
       return (
-        <div key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
+        <div
+          key={key}
+          style={{
+            marginLeft: `${textIndentRem}rem`,
+            marginBottom: nodeHasBold(node) ? 0 : undefined,
+          }}
+        >
           {renderInlines(node.inlines)}
         </div>
       );
@@ -372,20 +410,18 @@ export default function RichSectionRenderer({
 
           // Render as accordion section
           return (
-            <details
-              key={sec.key}
+            <CollapsibleDetails
+              key={i}
               className={`markdown-item${isLessonFocus ? " markdown-item-focus" : ""}`}
-              open={i === 0}
+              defaultOpen={i === 0}
+              summaryContent={cleanHeadingText}
             >
-              <summary className="markdown-summary">
-                {cleanHeadingText}
-              </summary>
               <div className="markdown-content">
                 {sec.body.map((node, k) =>
                   renderNode(node, k, sec.body[k - 1] || null)
                 )}
               </div>
-            </details>
+            </CollapsibleDetails>
           );
         })}
       </div>

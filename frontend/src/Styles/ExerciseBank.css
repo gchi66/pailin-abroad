@@ -262,6 +262,18 @@
   background: #91CAFF;
 }
 
+.language-toggle-btn--disabled,
+.language-toggle-btn:disabled {
+  cursor: default;
+  background: white;
+  pointer-events: none;
+}
+
+.language-toggle-btn--disabled:hover,
+.language-toggle-btn:disabled:hover {
+  background: white;
+}
+
 .exercise-section-summary {
   display: flex;
   flex-direction: column;

@@ -13,6 +13,14 @@
   border: 1px solid #ddd;
 }
 
+.lesson-table-wrapper tbody > tr:first-child td {
+  font-weight: 600;          /* treat first row as header */
+}
+
 .lesson-table-wrapper tr:nth-child(even) {
   background: #f8f8f8;       /* zebra striping */
+}
+
+.lesson-table-wrapper .table-line-with-audio .audio-button {
+  margin-right: 0.35rem;     /* small gap between button and text */
 }

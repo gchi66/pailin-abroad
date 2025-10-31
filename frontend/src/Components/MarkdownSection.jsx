@@ -4,6 +4,7 @@ import rehypeRaw from "rehype-raw";   // allow raw HTML (tables) in markdown
 import remarkGfm from "remark-gfm";   // lists, strikethrough, tables, etc.
 import remarkBreaks from "remark-breaks";
 import "../Styles/MarkdownSection.css";
+import CollapsibleDetails from "./CollapsibleDetails";
 
 /* ------------------------------------------------------------
    Utility: split a markdown string by second‑level headings
@@ -66,15 +67,12 @@ export default function MarkdownSection({
     <div className="markdown-section">
       {allSections.length > 0 ? (
         allSections.map(({ key, title, body, preRendered }, idx) => (
-          <details
+          <CollapsibleDetails
             key={key ?? idx}
             className="markdown-item"
-            open={defaultOpenFirst && idx === 0}
+            defaultOpen={defaultOpenFirst && idx === 0}
+            summaryContent={title || "More Information"}
           >
-            <summary className="markdown-summary">
-              {title || "More Information"}
-            </summary>
-
             <div className="markdown-content">
               {preRendered ? (
                 /* Already JSX (e.g. a Quick Practice component) */
@@ -86,18 +84,34 @@ export default function MarkdownSection({
                   rehypePlugins={[rehypeRaw]}   // enable raw HTML (tables)
                   components={{
                     /* Custom table wrapper for styling / responsiveness */
-                    table: ({ node, ...props }) => (
-                      <div className="lesson-table-wrapper">
-                        <table className="lesson-table" {...props} />
-                      </div>
-                    ),
+                    table: ({ node, ...props }) => {
+                      const { className, children, ...rest } = props;
+                      const hasThead = node?.children?.some(
+                        (child) => child.tagName === "thead"
+                      );
+                      const tableClassName = [
+                        "lesson-table",
+                        className,
+                        !hasThead ? "lesson-table--first-row-header" : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" ");
+
+                      return (
+                        <div className="lesson-table-wrapper">
+                          <table className={tableClassName} {...rest}>
+                            {children}
+                          </table>
+                        </div>
+                      );
+                    },
                   }}
                 >
                   {Array.isArray(body) ? body.join("\n").trim() : body}
                 </ReactMarkdown>
               )}
             </div>
-          </details>
+          </CollapsibleDetails>
         ))
       ) : (
         <div className="markdown-content empty-content">

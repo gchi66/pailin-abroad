@@ -5,7 +5,6 @@ import { copy, pick } from "../ui-lang/i18n";
 
 export default function ComprehensionQuiz({ questions = [], uiLang = "en", images = {} }) {
   const [selected, setSelected] = useState({}); // { [qId]: ["A","C"] }
-  const [results, setResults] = useState({}); // { [qId]: "correct" | "incorrect" }
   const [checked, setChecked] = useState(false);
   const quizCopy = copy.lessonPage.quiz;
 
@@ -17,7 +16,9 @@ export default function ComprehensionQuiz({ questions = [], uiLang = "en", image
           ? prevList.filter((l) => l !== letter)
           : [...prevList, letter]
         : [letter];
-      return { ...prev, [qId]: nextList };
+      const updated = { ...prev, [qId]: nextList };
+      setChecked(false);
+      return updated;
     });
 
 const parseOptions = (q) => {
@@ -92,18 +93,6 @@ const parseOptions = (q) => {
 };
 
   const checkAnswers = () => {
-    const res = {};
-    questions.forEach((q) => {
-      const sel = (selected[q.id] || []).sort();
-      const ans = (q.answer_key || []).sort();
-      res[q.id] =
-        sel.length &&
-        sel.length === ans.length &&
-        sel.every((l, i) => l === ans[i])
-          ? "correct"
-          : "incorrect";
-    });
-    setResults(res);
     setChecked(true);
   };
 
@@ -116,7 +105,7 @@ const parseOptions = (q) => {
           const isMulti = (q.answer_key || []).length > 1;
           const questionNumber = q.sort_order ?? idx + 1;
           const currentSelections = selected[q.id] || [];
-          const resultState = results[q.id];
+          const answerSet = new Set(q.answer_key || []);
 
           return (
             <div key={q.id} className="fb-row cq-question">
@@ -128,23 +117,14 @@ const parseOptions = (q) => {
                 <div className="fb-row-content">
                   <div className="cq-prompt">
                     <ReactMarkdown>{prompt}</ReactMarkdown>
-
-                    {checked && (
-                      <span
-                        className={
-                          resultState === "correct"
-                            ? "cq-result correct"
-                            : "cq-result incorrect"
-                        }
-                      >
-                        {resultState === "correct" ? "✓" : "✗"}
-                      </span>
-                    )}
                   </div>
 
                   <div className="cq-option-list">
                     {opts.map(({ label, text, textTh, image_key, alt_text }) => {
                       const isSelected = currentSelections.includes(label);
+
+                      const shouldShowOptionResult = checked && isSelected;
+                      const isOptionCorrect = answerSet.has(label);
 
                       return (
                         <div key={label + text} className="cq-option-item">
@@ -172,6 +152,17 @@ const parseOptions = (q) => {
                                 {textTh && (
                                   <span className="cq-option-text-th">{textTh}</span>
                                 )}
+                              </span>
+                            )}
+                            {shouldShowOptionResult && (
+                              <span
+                                className={
+                                  isOptionCorrect
+                                    ? "cq-option-result correct"
+                                    : "cq-option-result incorrect"
+                                }
+                              >
+                                {isOptionCorrect ? "✓" : "✗"}
                               </span>
                             )}
                           </span>

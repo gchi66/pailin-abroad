@@ -2,8 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "../Styles/Navbar.css";
 import LanguageToggle from "./LanguageToggle";
-import SearchBar from "./SearchBar";
-import AuthButtons from "./AuthButtons";
+import LessonLanguageToggle from "./LessonLanguageToggle";
 import ProfileDropdown from "./ProfileDropdown";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../AuthContext";
@@ -11,6 +10,7 @@ import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
+import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 
 const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const { user } = useAuth();
@@ -18,6 +18,16 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const withUi = useWithUi();
   const [profile, setProfile] = useState(null);
   const navRef = useRef(null);
+  const {
+    showStickyToggle,
+    contentLang: stickyContentLang,
+    setContentLang: stickySetContentLang,
+    isRegistered: stickyToggleRegistered,
+  } = useStickyLessonToggle();
+  const stickyToggleVisible = showStickyToggle && typeof stickySetContentLang === "function";
+  const stickySlotMounted = stickyToggleRegistered && typeof stickySetContentLang === "function";
+  const navbarStickyLang = stickyContentLang || "en";
+  const handleStickyContentLang = stickySetContentLang || (() => {});
 
   const updateNavHeightVar = useCallback(() => {
     if (navRef.current) {
@@ -105,17 +115,53 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
       </nav>
 
       <div className="right-side">
-        <LanguageToggle
-          language={ui}
-          setLanguage={setUi}
-          showLabel={false}
-          label={t("uiLabel", ui)}                 // <-- pass translated label
-        />
-        {/* <SearchBar /> */}
+        {stickySlotMounted && (
+          <div
+            className={`navbar-lesson-toggle${stickyToggleVisible ? " is-visible" : ""}`}
+            aria-hidden={stickyToggleVisible ? "false" : "true"}
+          >
+            <LessonLanguageToggle
+              contentLang={navbarStickyLang}
+              setContentLang={handleStickyContentLang}
+              disabled={!stickyToggleVisible}
+            />
+          </div>
+        )}
         {user ? (
           <ProfileDropdown />
         ) : (
-          <AuthButtons onLogin={toggleLoginModal} onSignup={toggleSignupModal} />
+          <div className="guest-menu">
+            <div className="guest-menu-wrapper">
+              <button
+                type="button"
+                className="guest-menu-trigger"
+                aria-label="Open menu"
+              >
+                <span className="guest-menu-bar" />
+                <span className="guest-menu-bar" />
+                <span className="guest-menu-bar" />
+              </button>
+              <div className="guest-menu-dropdown">
+                <button
+                  type="button"
+                  className="guest-menu-item guest-menu-signup"
+                  onClick={toggleSignupModal}
+                >
+                  {t("authButtons.signUp", ui)}
+                </button>
+                <button
+                  type="button"
+                  className="guest-menu-item guest-menu-signin"
+                  onClick={toggleLoginModal}
+                >
+                  {t("authButtons.signIn", ui)}
+                </button>
+                <div className="guest-menu-item guest-menu-language">
+                  <LanguageToggle language={ui} setLanguage={setUi} />
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </header>

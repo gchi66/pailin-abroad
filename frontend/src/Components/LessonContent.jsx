@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
 import LessonLanguageToggle from "./LessonLanguageToggle";
 import ComprehensionQuiz from "./ComprehensionQuiz";
@@ -6,6 +6,7 @@ import ApplySection from "./ApplySection";
 import MarkdownSection from "./MarkdownSection";
 import PracticeSection from "./PracticeSection";
 import RichSectionRenderer from "./RichSectionRenderer";
+import CollapsibleDetails from "./CollapsibleDetails";
 
 import "../Styles/LessonContent.css";
 import { copy, pick } from "../ui-lang/i18n";
@@ -24,6 +25,7 @@ export default function LessonContent({
   setContentLang,
   images = {},
   isLocked = false,
+  registerStickySentinel,
 }) {
   const fallbacks = copy.lessonPage.sectionFallbacks;
   const lockedCopy = copy.lessonPage.locked;
@@ -111,8 +113,22 @@ export default function LessonContent({
     </div>
   );
 
+  const handleStickySentinelRef = useCallback(
+    (node) => {
+      if (typeof registerStickySentinel === "function") {
+        registerStickySentinel(node);
+      }
+    },
+    [registerStickySentinel, activeId]
+  );
+
   const renderWithBackToTop = (contentNode) => (
     <div className="lesson-content-shell">
+      <span
+        ref={handleStickySentinelRef}
+        className="lesson-sticky-sentinel"
+        aria-hidden="true"
+      />
       {contentNode}
       <BackToTopButton />
     </div>
@@ -125,6 +141,11 @@ export default function LessonContent({
   if (isLocked) {
     return (
       <div className="lesson-locked-container">
+        <span
+          ref={handleStickySentinelRef}
+          className="lesson-sticky-sentinel"
+          aria-hidden="true"
+        />
         <div className="lesson-content-blurred">
           <div className="lesson-locked-placeholder">
             <h3>{pick(lockedCopy.previewTitle, uiLang)}</h3>
@@ -342,15 +363,20 @@ export default function LessonContent({
             })();
 
             return (
-              <details key={idx} className="markdown-item" open={idx === 0}>
-                <summary className="markdown-summary">
-                  {phraseLabel}
-                  {phrasesSnipIdx?.idx?.[item.id] &&
-                    Object.keys(phrasesSnipIdx.idx[item.id]).length > 0 && (
-                      <span className="audio-indicator"> </span>
-                    )}
-                </summary>
-
+              <CollapsibleDetails
+                key={idx}
+                className="markdown-item"
+                defaultOpen={idx === 0}
+                summaryContent={
+                  <>
+                    {phraseLabel}
+                    {phrasesSnipIdx?.idx?.[item.id] &&
+                      Object.keys(phrasesSnipIdx.idx[item.id]).length > 0 && (
+                        <span className="audio-indicator"> </span>
+                      )}
+                  </>
+                }
+              >
                 <div className="markdown-content">
                   {hasRich ? (
                     <RichSectionRenderer
@@ -370,7 +396,7 @@ export default function LessonContent({
                     />
                   ) : null}
                 </div>
-              </details>
+              </CollapsibleDetails>
             );
           })}
         </div>

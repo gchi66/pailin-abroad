@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import supabaseClient from "../supabaseClient";
 import "../Styles/AudioBullet.css";
 
 // Use public URL for image instead of import
 const playPng = "/images/snippet_play_button.png";
+const pausePng = "/images/blue-pause-button.webp";
 
 /**
  * Universal AudioButton component for all sections
@@ -37,7 +38,11 @@ export default function AudioButton({
   size = 1.2, // rem
   className = ""
 }) {
-  const [url, setUrl] = useState();
+  const [signedUrl, setSignedUrl] = useState();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+  const listenersRef = useRef(null);
+  const fetchPromiseRef = useRef(null);
 
   // Try audio_key first (preferred method) - now includes both standard and phrases audio
   let snip = null;
@@ -61,10 +66,68 @@ export default function AudioButton({
     lookupMethod = "audio_seq_legacy";
   }
 
-  // Don't render anything if no snippet found
-  if (!snip) return null;
+  async function fetchSignedUrl() {
+    if (signedUrl) return signedUrl;
+    if (fetchPromiseRef.current) return fetchPromiseRef.current;
 
-  async function play() {
+    const fetchPromise = (async () => {
+      try {
+        const { data, error } = await supabaseClient.storage
+          .from("lesson-audio")
+          .createSignedUrl(snip.storage_path, 60);
+
+        if (error) {
+          console.error("❌ Supabase signed URL error:", error);
+          return null;
+        }
+
+        if (!data || !data.signedUrl) {
+          console.error("❌ No signed URL returned from Supabase");
+          return null;
+        }
+
+        setSignedUrl(data.signedUrl);
+        return data.signedUrl;
+      } catch (fetchError) {
+        console.error("❌ Error in fetch process:", fetchError);
+        return null;
+      } finally {
+        fetchPromiseRef.current = null;
+      }
+    })();
+
+    fetchPromiseRef.current = fetchPromise;
+    return fetchPromise;
+  }
+
+  async function ensureAudio() {
+    if (audioRef.current) return audioRef.current;
+
+    const urlToUse = await fetchSignedUrl();
+    if (!urlToUse) return null;
+
+    const audio = new Audio(urlToUse);
+    audioRef.current = audio;
+
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => {
+      setIsPlaying(false);
+      audio.currentTime = 0;
+    };
+    const handleError = (e) => console.error("❌ Audio error:", e);
+
+    listenersRef.current = { handlePlay, handlePause, handleEnded, handleError };
+
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("error", handleError);
+
+    return audio;
+  }
+
+  async function togglePlayback() {
     console.log("🎵 Universal Audio button clicked!");
     console.log("lookupMethod:", lookupMethod);
     console.log("audioKey prop:", audioKey, "node.audio_key:", node?.audio_key, "effectiveAudioKey:", effectiveAudioKey);
@@ -78,51 +141,25 @@ export default function AudioButton({
 
     console.log("snip.storage_path:", snip.storage_path);
 
-    if (!url) {
-      console.log("🔄 No cached URL, fetching signed URL...");
+    const audio = await ensureAudio();
+    if (!audio) return;
 
-      try {
-        const { data, error } = await supabaseClient.storage
-          .from("lesson-audio")
-          .createSignedUrl(snip.storage_path, 60);
+    if (!audio.paused && !audio.ended) {
+      console.log("⏸️ Pausing audio");
+      audio.pause();
+      return;
+    }
 
-        if (error) {
-          console.error("❌ Supabase signed URL error:", error);
-          return;
-        }
+    if (audio.ended) {
+      console.log("🔁 Restarting audio from beginning");
+      audio.currentTime = 0;
+    }
 
-        if (!data || !data.signedUrl) {
-          console.error("❌ No signed URL returned from Supabase");
-          return;
-        }
-
-        console.log("✅ Successfully got signed URL:", data.signedUrl);
-        setUrl(data.signedUrl);
-
-        const audio = new Audio(data.signedUrl);
-        audio.addEventListener('error', (e) => console.error("❌ Audio error:", e));
-
-        try {
-          await audio.play();
-          console.log("✅ Audio.play() completed successfully");
-        } catch (playError) {
-          console.error("❌ Audio.play() failed:", playError);
-        }
-
-      } catch (fetchError) {
-        console.error("❌ Error in fetch process:", fetchError);
-      }
-    } else {
-      console.log("🔄 Using cached URL:", url);
-      const audio = new Audio(url);
-      audio.addEventListener('error', (e) => console.error("❌ Audio error (cached):", e));
-
-      try {
-        await audio.play();
-        console.log("✅ Audio.play() completed successfully (cached)");
-      } catch (playError) {
-        console.error("❌ Audio.play() failed (cached):", playError);
-      }
+    try {
+      await audio.play();
+      console.log("✅ Audio.play() completed successfully");
+    } catch (playError) {
+      console.error("❌ Audio.play() failed:", playError);
     }
   }
 
@@ -136,14 +173,50 @@ export default function AudioButton({
     flexShrink: 0
   };
 
+  useEffect(() => {
+    // Reset cached data when the underlying audio snippet changes
+    setIsPlaying(false);
+    setSignedUrl(undefined);
+    fetchPromiseRef.current = null;
+
+    const cleanup = () => {
+      const audio = audioRef.current;
+      const listeners = listenersRef.current;
+
+      if (audio) {
+        if (listeners) {
+          audio.removeEventListener("play", listeners.handlePlay);
+          audio.removeEventListener("pause", listeners.handlePause);
+          audio.removeEventListener("ended", listeners.handleEnded);
+          audio.removeEventListener("error", listeners.handleError);
+        }
+        audio.pause();
+      }
+
+      audioRef.current = null;
+      listenersRef.current = null;
+    };
+
+    return cleanup;
+  }, [snip?.storage_path]);
+
+  // Don't render anything if no snippet found
+  if (!snip) return null;
+
   return (
     <img
-      src={playPng}
-      onClick={play}
+      src={isPlaying ? pausePng : playPng}
+      onClick={togglePlayback}
       className={`audio-button select-none ${className}`.trim()}
       style={buttonStyle}
-      alt="Play audio"
-      title={hasSnip ? "Click to play audio" : "No audio snippet found"}
+      alt={isPlaying ? "Pause audio" : "Play audio"}
+      title={
+        hasSnip
+          ? isPlaying
+            ? "Click to pause audio"
+            : "Click to play audio"
+          : "No audio snippet found"
+      }
     />
   );
 }

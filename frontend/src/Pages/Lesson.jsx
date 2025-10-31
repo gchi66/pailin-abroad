@@ -13,6 +13,7 @@ import LessonDiscussion from "../Components/LessonDiscussion";
 // import LanguageToggle from "../Components/LanguageToggle"; // (unused)
 import LessonNavigationBanner from "../Components/LessonNavigationBanner";
 import { useUiLang } from "../ui-lang/UiLangContext";
+import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 
 import "../Styles/Lesson.css";
 
@@ -288,6 +289,66 @@ export default function Lesson() {
     const normalized = lang === "th" ? "th" : "en";
     setContentLangState(normalized);
   }, []);
+
+  const {
+    registerLessonToggle,
+    unregisterLessonToggle,
+    updateContentLang: updateStickyContentLang,
+    setShowStickyToggle,
+  } = useStickyLessonToggle();
+  const sentinelObserverRef = useRef(null);
+
+  const registerStickySentinel = useCallback((node) => {
+    if (sentinelObserverRef.current) {
+      sentinelObserverRef.current.disconnect();
+      sentinelObserverRef.current = null;
+    }
+
+    if (!node) {
+      setShowStickyToggle(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        const navbarHeightRaw =
+          typeof window !== "undefined"
+            ? getComputedStyle(document.documentElement).getPropertyValue("--navbar-height")
+            : "0";
+        const parsed = parseFloat(navbarHeightRaw);
+        const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
+        const shouldShow = entry.boundingClientRect.bottom <= navbarHeight;
+        setShowStickyToggle(shouldShow);
+      },
+      { threshold: [0, 1] }
+    );
+
+    observer.observe(node);
+    sentinelObserverRef.current = observer;
+  }, [setShowStickyToggle]);
+
+  useEffect(() => {
+    registerLessonToggle({ contentLang, setContentLang });
+    return () => {
+      unregisterLessonToggle();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registerLessonToggle, unregisterLessonToggle, setContentLang]);
+
+  useEffect(() => {
+    updateStickyContentLang(contentLang);
+  }, [contentLang, updateStickyContentLang]);
+
+  useEffect(() => {
+    return () => {
+      if (sentinelObserverRef.current) {
+        sentinelObserverRef.current.disconnect();
+        sentinelObserverRef.current = null;
+      }
+      setShowStickyToggle(false);
+    };
+  }, [setShowStickyToggle]);
 
 
 
@@ -597,6 +658,7 @@ export default function Lesson() {
             setContentLang={setContentLang}
             images={images}
             isLocked={isLocked}
+            registerStickySentinel={registerStickySentinel}
           />
         </div>
 

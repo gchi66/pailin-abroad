@@ -11,7 +11,8 @@ export function UiLangProvider({ children }) {
   const [ui, setUiState] = useState(() => {
     if (urlUi === "th" || urlUi === "en") return urlUi;
     const stored = (localStorage.getItem("ui") || "").toLowerCase();
-    return stored === "th" ? "th" : "en";
+    if (stored === "th" || stored === "en") return stored;
+    return "th";
   });
 
   // if user manually edits URL (?ui=th), reflect that in state

@@ -450,10 +450,10 @@ export default function SentenceTransformExercise({
         {hasChecked && hasIncorrect && (
           <button
             onClick={handleTryAgain}
-            className="ai-eval-button ai-reset"
-            disabled={isChecking}
+            className="apply-submit st-try-again"
+            type="button"
           >
-            Try Again
+            TRY AGAIN
           </button>
         )}
       </div>

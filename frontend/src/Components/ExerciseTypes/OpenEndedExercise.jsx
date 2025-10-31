@@ -443,11 +443,11 @@ export default function OpenEndedExercise({
 
         {hasChecked && hasIncorrect && (
           <button
-            className="ai-eval-button ai-reset"
+            className="apply-submit oe-try-again"
             onClick={handleTryAgain}
-            disabled={isChecking}
+            type="button"
           >
-            Try Again
+            TRY AGAIN
           </button>
         )}
       </div>

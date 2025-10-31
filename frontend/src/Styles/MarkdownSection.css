@@ -139,7 +139,12 @@ details[open] > .markdown-summary::after {
   background: rgba(0, 0, 0, 0.025);
 }
 
-/* 6) Make long words wrap instead of overflowing */
+/* 6) Bold first row for tables without explicit headers */
+.lesson-table--first-row-header tbody > tr:first-child td {
+  font-weight: 600;
+}
+
+/* 7) Make long words wrap instead of overflowing */
 .lesson-table th,
 .lesson-table td {
   word-break: break-word;

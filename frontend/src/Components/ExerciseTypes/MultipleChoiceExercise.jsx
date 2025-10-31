@@ -114,6 +114,7 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
         return normalizeArray(nextSelection);
       })
     );
+    setChecked(false);
   };
 
   const allAnswered = choices.every(
@@ -185,20 +186,7 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
                     const isAnswer = normalizedLabel
                       ? q.answerSet.has(normalizedLabel)
                       : false;
-                    const showResult = checked && (isSelected || isAnswer);
-
-                    let resultSymbol = "";
-                    let resultClass = "";
-
-                    if (showResult) {
-                      if (isAnswer) {
-                        resultSymbol = "✓";
-                        resultClass = "correct";
-                      } else if (isSelected) {
-                        resultSymbol = "✗";
-                        resultClass = "incorrect";
-                      }
-                    }
+                    const shouldShowResult = checked && isSelected;
 
                     return (
                       <div key={`${qIdx}-${label}-${text}`} className="mc-option">
@@ -206,48 +194,45 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
                           type="button"
                           className={`mc-letter${isSelected ? " selected" : ""}`}
                           onClick={() => toggleChoice(qIdx, label, allowMultiple)}
-                          disabled={checked}
                           aria-pressed={isSelected}
                         >
                           {label}
                         </button>
 
                         <span className="mc-option-text">
-                          {image_key ? (
-                            <>
-                              <img
-                                src={images[image_key]}
-                                alt={alt_text || text}
-                                className="mc-option-image"
-                              />
-                              {text && <span>{text}</span>}
-                            </>
-                          ) : (
-                            text
+                          {image_key && (
+                            <img
+                              src={images[image_key]}
+                              alt={alt_text || text}
+                              className="mc-option-image"
+                            />
+                          )}
+                          {text && (
+                            <span className="mc-option-text-lines">{text}</span>
+                          )}
+
+                          {shouldShowResult && (
+                            <span
+                              className={`mc-option-result ${
+                                isAnswer ? "correct" : "incorrect"
+                              }`}
+                              aria-label={isAnswer ? "Correct" : "Incorrect"}
+                            >
+                              {isAnswer ? "✓" : "✗"}
+                            </span>
                           )}
                         </span>
-
-                        {resultSymbol && (
-                          <span
-                            className={`mc-result ${resultClass}`}
-                            aria-label={
-                              resultClass === "correct" ? "Correct" : "Incorrect"
-                            }
-                          >
-                            {resultSymbol}
-                          </span>
-                        )}
                       </div>
                     );
                   })}
                 </div>
 
-                {checked && selected.length > 0 && !isCorrect && (
+                {/* {checked && selected.length > 0 && !isCorrect && (
                   <p className="mc-feedback-text">
                     <strong>Correct answer:</strong>{" "}
                     {q.answerDisplay || q.answerLetters.join(", ")}
                   </p>
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -265,10 +250,10 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
           </button>
         ) : (
           <>
-            <p className="mc-score">You got {score} / {items.length} correct.</p>
-            <button className="ai-eval-button ai-reset" onClick={resetExercise}>
-              Try Again
+            <button className="apply-submit mc-try-again" type="button" onClick={resetExercise}>
+              TRY AGAIN
             </button>
+            <p className="mc-score">You got {score} / {items.length} correct.</p>
           </>
         )}
       </div>

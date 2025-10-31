@@ -6,11 +6,12 @@ import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
 import "../Styles/ProfileDropdown.css";
 import supabaseClient from "../supabaseClient";
+import LanguageToggle from "./LanguageToggle";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
-  const { ui } = useUiLang();
+  const { ui, setUi } = useUiLang();
   const withUi = useWithUi();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -57,6 +58,13 @@ const ProfileDropdown = () => {
 
       {isOpen && (
         <div className="dropdown-menu">
+          <div className="dropdown-section">
+            <LanguageToggle
+              language={ui}
+              setLanguage={setUi}
+            />
+          </div>
+          <div className="dropdown-divider" />
           <NavLink
             to={withUi("/pathway", ui)}
             className="dropdown-link"

@@ -3,6 +3,7 @@ import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
 import LessonTable from "./LessonTable";
+import CollapsibleDetails from "./CollapsibleDetails";
 
 // Helper function to clean audio tags from text - FIXED to handle [audio:...] format
 function cleanAudioTags(text) {
@@ -90,6 +91,9 @@ export default function TopicRichSectionRenderer({
       ? defaultIndent
       : node?.indent || 0;
 
+  const nodeHasBold = (node) =>
+    Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
+
   const shouldInheritIndent = (previousNode, currentNode) => {
     if (!previousNode || !currentNode) return false;
     if (currentNode.kind === "list_item") return false;
@@ -128,10 +132,17 @@ export default function TopicRichSectionRenderer({
     const textIndentRem = inheritIndent
       ? baseIndentRem + AUDIO_TEXT_OFFSET
       : baseIndentRem;
+    const hasBold = nodeHasBold(node);
 
     if (node.kind === "paragraph") {
       return (
-        <p key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
+        <p
+          key={key}
+          style={{
+            marginLeft: `${textIndentRem}rem`,
+            marginBottom: hasBold ? 0 : undefined,
+          }}
+        >
           {renderInlines(node.inlines)}
         </p>
       );
@@ -139,7 +150,13 @@ export default function TopicRichSectionRenderer({
 
     if (node.kind === "list_item") {
       return (
-        <li key={key} style={{ marginLeft: `${baseIndentRem}rem` }}>
+        <li
+          key={key}
+          style={{
+            marginLeft: `${baseIndentRem}rem`,
+            marginBottom: hasBold ? 0 : undefined,
+          }}
+        >
           {renderInlines(node.inlines)}
         </li>
       );
@@ -148,7 +165,13 @@ export default function TopicRichSectionRenderer({
     if (node.kind === "numbered_item" || node.kind === "misc_item") {
       // Render as a div, not <li>, to avoid default bullet styling
       return (
-        <div key={key} style={{ marginLeft: `${textIndentRem}rem` }}>
+        <div
+          key={key}
+          style={{
+            marginLeft: `${textIndentRem}rem`,
+            marginBottom: hasBold ? 0 : undefined,
+          }}
+        >
           {renderInlines(node.inlines)}
         </div>
       );
@@ -243,20 +266,18 @@ export default function TopicRichSectionRenderer({
 
           // Render as accordion section
           return (
-            <details
-              key={sec.key}
+            <CollapsibleDetails
+              key={i}
               className={`markdown-item${isLessonFocus ? " markdown-item-focus" : ""}`}
-              open={i === 0}
+              defaultOpen={i === 0}
+              summaryContent={cleanHeadingText}
             >
-              <summary className="markdown-summary">
-                {cleanHeadingText}
-              </summary>
               <div className="markdown-content">
                 {sec.body.map((node, k) =>
                   renderNode(node, k, sec.body[k - 1] || null)
                 )}
               </div>
-            </details>
+            </CollapsibleDetails>
           );
         })}
       </div>

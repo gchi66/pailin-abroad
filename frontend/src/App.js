@@ -36,6 +36,7 @@ import { AuthProvider } from "./AuthContext";
 
 // ⬇️ import the provider
 import { UiLangProvider } from "./ui-lang/UiLangContext";
+import { StickyLessonToggleProvider } from "./StickyLessonToggleContext";
 
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -52,8 +53,9 @@ function App() {
       <Router>
         {/* ⬇️ UiLangProvider must be inside the Router */}
         <UiLangProvider>
-          <ScrollToTop />
-          <Routes>
+          <StickyLessonToggleProvider>
+            <ScrollToTop />
+            <Routes>
             {/* Full-screen onboarding route - isolated from main app structure */}
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
@@ -113,6 +115,7 @@ function App() {
               </>
             } />
           </Routes>
+          </StickyLessonToggleProvider>
         </UiLangProvider>
       </Router>
     </AuthProvider>

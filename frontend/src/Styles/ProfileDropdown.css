@@ -45,6 +45,33 @@
   overflow: hidden;
 }
 
+.dropdown-section {
+  padding: 0.75rem 1rem 0.5rem;
+}
+
+.dropdown-divider {
+  height: 0.0625rem;
+  background-color: #f0f0f0;
+  margin: 0 1rem 0.5rem;
+}
+
+.dropdown-menu .language-toggle {
+  margin: 0;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.dropdown-menu .language-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.dropdown-menu .language-toggle span:not(.language-label) {
+  padding: 0.25rem 0.4rem;
+  border-radius: 0.375rem;
+}
+
 .dropdown-link {
   display: block;
   padding: 0.75rem 1rem;

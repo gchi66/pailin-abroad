@@ -537,11 +537,11 @@ export default function FillBlankExercise({
 
         {hasChecked && hasIncorrect && (
           <button
-            className="ai-eval-button ai-reset"
+            className="apply-submit fb-try-again"
+            type="button"
             onClick={handleTryAgain}
-            disabled={isChecking}
           >
-            Try Again
+            TRY AGAIN
           </button>
         )}
       </div>
