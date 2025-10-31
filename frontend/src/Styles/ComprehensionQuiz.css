@@ -94,11 +94,17 @@
 }
 
 .cq-check-btn {
-  display: block;
-  margin: 2rem 0 0 2.6rem;
-  width: max-content;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  margin: 2rem 0 0 calc(2rem + 1rem);
+}
+
+.cq-check-btn:hover {
+  background: #91CAFF;
+}
+
+@media (max-width: 768px) {
+  .cq-check-btn {
+    margin-left: 0;
+  }
 }
 
 .cq-result {

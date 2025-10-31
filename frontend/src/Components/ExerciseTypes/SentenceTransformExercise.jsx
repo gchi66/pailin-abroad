@@ -442,7 +442,7 @@ export default function SentenceTransformExercise({
       <div className="fb-button-container">
         <button
           onClick={handleCheckAnswers}
-          className="cq-check-btn language-toggle-btn fb-check-btn"
+          className="apply-submit"
           disabled={!canCheck}
         >
           {isChecking ? checkingLabel : checkLabel}

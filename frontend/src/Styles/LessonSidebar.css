@@ -1,7 +1,8 @@
 .ls-sidebar {
   background: #ffffff;
   border: 0.15rem solid #1E1E1E;
-  border-radius: 1.6rem;
+  border-radius: 1rem;
+      box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
   display: flex;
   flex-direction: column;
   overflow: hidden;

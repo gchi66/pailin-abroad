@@ -257,7 +257,7 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
       <div className="fb-button-container">
         {!checked ? (
           <button
-            className="cq-check-btn language-toggle-btn fb-check-btn"
+            className="apply-submit"
             disabled={!allAnswered}
             onClick={() => setChecked(true)}
           >

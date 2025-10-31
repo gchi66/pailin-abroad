@@ -528,7 +528,7 @@ export default function FillBlankExercise({
 
       <div className="fb-button-container">
         <button
-          className="cq-check-btn language-toggle-btn fb-check-btn"
+          className="apply-submit"
           onClick={handleCheckAnswers}
           disabled={!canCheck}
         >

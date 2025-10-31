@@ -369,7 +369,7 @@ export default function AudioBar({
 
         <div className="volume-control">
           <button
-            className="icon-btn volume-btn"
+            className={`icon-btn volume-btn${muted ? " is-muted" : ""}`}
             onClick={toggleMute}
             aria-label="Mute / Un-mute"
           >

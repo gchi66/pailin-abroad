@@ -75,6 +75,25 @@ const LessonNavigationBanner = ({
     }
   };
 
+  const isCheckpointLesson = (lesson) => {
+    if (!lesson) return false;
+    const externalId =
+      lesson.lesson_external_id ||
+      lesson.external_id ||
+      lesson.lessonId ||
+      "";
+    if (typeof externalId === "string" && externalId.endsWith(".chp")) {
+      return true;
+    }
+    if (lesson.lesson_order === 0) {
+      return true;
+    }
+    const title = (lesson.title_en || lesson.title || "").toLowerCase();
+    return title.includes("checkpoint");
+  };
+
+  const isCurrentCheckpoint = isCheckpointLesson(currentLesson);
+
   // Extract lesson numbers from lesson_external_id (e.g., "1.1")
   const getCurrentLessonNumber = () => {
     return currentLesson?.lesson_external_id || currentLesson?.external_id || "X";
@@ -86,6 +105,24 @@ const LessonNavigationBanner = ({
 
   const getNextLessonNumber = () => {
     return nextLesson?.lesson_order || "";
+  };
+
+  const getNextLessonLabel = () => {
+    if (!nextLesson) return "";
+    if (isCheckpointLesson(nextLesson)) {
+      return "CHECKPOINT";
+    }
+    const nextNumber = getNextLessonNumber();
+    return nextNumber ? `LESSON ${nextNumber}` : "LESSON";
+  };
+
+  const getMarkCompleteLabel = () => {
+    if (isCurrentCheckpoint) {
+      const level = currentLesson?.level;
+      const levelPrefix = level ? `LEVEL ${level} ` : "";
+      return `MARK ${levelPrefix}CHECKPOINT AS FINISHED`;
+    }
+    return `MARK LESSON ${getCurrentLessonNumber()} AS FINISHED`;
   };
 
   return (
@@ -111,7 +148,7 @@ const LessonNavigationBanner = ({
           onClick={handleMarkComplete}
         >
           <span className="lesson-mark-complete-text">
-            MARK LESSON {getCurrentLessonNumber()} AS FINISHED
+            {getMarkCompleteLabel()}
           </span>
           <img
             src={
@@ -132,7 +169,7 @@ const LessonNavigationBanner = ({
             to={`/lesson/${nextLesson.id}`}
             className="lesson-navigation-text next"
           >
-            LESSON {getNextLessonNumber()} →
+            {getNextLessonLabel()} →
           </Link>
         ) : (
           <div className="lesson-navigation-text disabled"></div>

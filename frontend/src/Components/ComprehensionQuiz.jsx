@@ -187,7 +187,7 @@ const parseOptions = (q) => {
 
         <button
           type="button"
-          className="cq-check-btn language-toggle-btn"
+          className="apply-submit cq-check-btn"
           onClick={checkAnswers}
         >
           {pick(quizCopy.checkAnswers, uiLang)}

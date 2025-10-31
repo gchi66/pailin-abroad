@@ -583,7 +583,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  margin: 2rem 0 0 2.6rem;
+  margin: 2rem 0 0 calc(2rem + 1rem);
 }
 
 .fb-prompt {
@@ -671,4 +671,10 @@
 .fb-text-line {
   display: inline-flex;
   align-items: center; /* Vertically center contents */
+}
+
+@media (max-width: 768px) {
+  .fb-button-container {
+    margin-left: 0;
+  }
 }

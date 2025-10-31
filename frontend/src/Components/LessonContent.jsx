@@ -90,6 +90,34 @@ export default function LessonContent({
     return base;
   };
 
+  const handleBackToTop = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const BackToTopButton = () => (
+    <div className="lesson-back-to-top-wrapper">
+      <button
+        type="button"
+        className="lesson-back-to-top"
+        onClick={handleBackToTop}
+      >
+        <span className="lesson-back-to-top-label">BACK TO TOP</span>
+        <span aria-hidden="true" className="lesson-back-to-top-arrow">
+          ▸
+        </span>
+      </button>
+    </div>
+  );
+
+  const renderWithBackToTop = (contentNode) => (
+    <div className="lesson-content-shell">
+      {contentNode}
+      <BackToTopButton />
+    </div>
+  );
+
 
   /* ===============================================================
      LOCKED LESSON CHECK
@@ -135,7 +163,7 @@ export default function LessonContent({
       ? getSectionHeader(comprehensionSection, pick(fallbacks.comprehension, uiLang))
       : pick(fallbacks.comprehension, uiLang);
 
-    return (
+    return renderWithBackToTop(
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
@@ -146,7 +174,7 @@ export default function LessonContent({
           </div>
         </header>
 
-  <ComprehensionQuiz questions={questions} uiLang={uiLang} images={images} />
+        <ComprehensionQuiz questions={questions} uiLang={uiLang} images={images} />
       </article>
     );
   }
@@ -160,7 +188,7 @@ export default function LessonContent({
       ? getSectionHeader(transcriptSection, pick(fallbacks.transcript, uiLang))
       : pick(fallbacks.transcript, uiLang);
 
-    return (
+    return renderWithBackToTop(
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
@@ -219,7 +247,7 @@ export default function LessonContent({
       ? getSectionHeader(practiceSection, pick(fallbacks.practice, uiLang))
       : pick(fallbacks.practice, uiLang);
 
-    return (
+    return renderWithBackToTop(
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
@@ -266,7 +294,7 @@ export default function LessonContent({
       ? getSectionHeader(phrasesSection, pick(fallbacks.phrasesVerbs, uiLang))
       : pick(fallbacks.phrasesVerbs, uiLang);
 
-    return (
+    return renderWithBackToTop(
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
@@ -370,7 +398,7 @@ export default function LessonContent({
   if (section.type === "apply") {
     const headerText = getSectionHeader(section, "APPLY");
 
-    return (
+    return renderWithBackToTop(
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
@@ -492,7 +520,7 @@ export default function LessonContent({
     const defaultHeaderText = section.type.replace("_", " ").toUpperCase();
     const headerText = getSectionHeader(section, defaultHeaderText);
 
-    return (
+    return renderWithBackToTop(
       <article className="lc-card">
         <header className="lc-head">
           <div className="lc-head-left">
@@ -526,7 +554,7 @@ export default function LessonContent({
   const defaultHeaderText = section.type.replace("_", " ").toUpperCase();
   const headerText = getSectionHeader(section, defaultHeaderText);
 
-  return (
+  return renderWithBackToTop(
     <article className="lc-card">
       <header className="lc-head">
         <div className="lc-head-left">

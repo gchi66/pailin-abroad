@@ -1,7 +1,8 @@
 .lc-card {
   background: #ffffff;
   border: 0.15rem solid #1e1e1e;
-  border-radius: 1.6rem;
+  border-radius: 1rem;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
   display: flex;
   flex-direction: column;
   min-height: 60vh;
@@ -66,6 +67,14 @@
   font-size: 1.4rem;
   margin-left: 0.8rem;
   color: #6b7280;
+}
+
+.lesson-content-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  flex: 1 1 auto;
 }
 
 /* comprehension questions */
@@ -265,4 +274,46 @@
   background: #91CAFF;
   transform: translateY(-0.2rem);
   box-shadow: 0.3rem 0.3rem 0px #1e1e1e;
+}
+.lesson-back-to-top-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.2rem;
+  padding-top: 0;
+  width: 100%;
+}
+
+.lesson-back-to-top {
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #1e1e1e;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.lesson-back-to-top-label {
+  text-decoration: none;
+}
+
+.lesson-back-to-top:hover .lesson-back-to-top-label,
+.lesson-back-to-top:focus .lesson-back-to-top-label {
+  text-decoration: underline;
+}
+
+.lesson-back-to-top:focus-visible {
+  outline: 0.15rem solid rgba(30, 30, 30, 0.4);
+  outline-offset: 0.2rem;
+}
+
+.lesson-back-to-top-arrow {
+  display: inline-block;
+  transform: rotate(270deg);
+  text-decoration: none;
 }
