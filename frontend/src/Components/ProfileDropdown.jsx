@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
@@ -65,22 +65,28 @@ const ProfileDropdown = () => {
             />
           </div>
           <div className="dropdown-divider" />
-          <NavLink
-            to={withUi("/pathway", ui)}
+          <button
+            type="button"
             className="dropdown-link"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              navigate(withUi("/pathway", ui));
+              setIsOpen(false);
+            }}
           >
-            {t("nav.myPathway", ui)}
-          </NavLink>
-          <NavLink
-            to={withUi("/profile", ui)}
+            {t("nav.myPathwayDropdown", ui)}
+          </button>
+          <button
+            type="button"
             className="dropdown-link"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              navigate(withUi("/profile", ui));
+              setIsOpen(false);
+            }}
           >
             {t("profileDropdown.accountSettings", ui)}
-          </NavLink>
+          </button>
           <button
-            className="dropdown-link logout-link"
+            className="dropdown-link"
             onClick={handleLogout}
           >
             {t("profileDropdown.logout", ui)}

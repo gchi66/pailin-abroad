@@ -296,37 +296,127 @@ export default function Lesson() {
     updateContentLang: updateStickyContentLang,
     setShowStickyToggle,
   } = useStickyLessonToggle();
-  const sentinelObserverRef = useRef(null);
 
-  const registerStickySentinel = useCallback((node) => {
-    if (sentinelObserverRef.current) {
-      sentinelObserverRef.current.disconnect();
-      sentinelObserverRef.current = null;
+  const observerRef = useRef(null);
+  const observerMarginRef = useRef("");
+  const headNodesRef = useRef(new Map());
+  const visibleHeadIdsRef = useRef(new Set());
+  const headIdCounterRef = useRef(0);
+
+  const computeNavbarMargin = useCallback(() => {
+    if (typeof window === "undefined") return "0px 0px 0px 0px";
+    const raw = getComputedStyle(document.documentElement).getPropertyValue("--navbar-height");
+    const parsed = parseFloat(raw);
+    const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
+    return `-${navbarHeight}px 0px 0px 0px`;
+  }, []);
+
+  const handleIntersection = useCallback((entries) => {
+    let changed = false;
+    entries.forEach((entry) => {
+      const id = entry.target.getAttribute("data-sticky-head-id");
+      if (!id) return;
+      if (entry.isIntersecting) {
+        if (!visibleHeadIdsRef.current.has(id)) {
+          visibleHeadIdsRef.current.add(id);
+          changed = true;
+        }
+      } else if (visibleHeadIdsRef.current.has(id)) {
+        visibleHeadIdsRef.current.delete(id);
+        changed = true;
+      }
+    });
+    if (changed) {
+      setShowStickyToggle(visibleHeadIdsRef.current.size === 0);
     }
-
-    if (!node) {
-      setShowStickyToggle(false);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        const navbarHeightRaw =
-          typeof window !== "undefined"
-            ? getComputedStyle(document.documentElement).getPropertyValue("--navbar-height")
-            : "0";
-        const parsed = parseFloat(navbarHeightRaw);
-        const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
-        const shouldShow = entry.boundingClientRect.bottom <= navbarHeight;
-        setShowStickyToggle(shouldShow);
-      },
-      { threshold: [0, 1] }
-    );
-
-    observer.observe(node);
-    sentinelObserverRef.current = observer;
   }, [setShowStickyToggle]);
+
+  const rebuildObserver = useCallback(() => {
+    const margin = computeNavbarMargin();
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      threshold: 0,
+      rootMargin: margin,
+    });
+    observerRef.current = observer;
+    observerMarginRef.current = margin;
+    headNodesRef.current.forEach((node) => {
+      observer.observe(node);
+    });
+  }, [computeNavbarMargin, handleIntersection]);
+
+  const ensureObserver = useCallback(() => {
+    const margin = computeNavbarMargin();
+    if (!observerRef.current || observerMarginRef.current !== margin) {
+      rebuildObserver();
+    }
+    return observerRef.current;
+  }, [computeNavbarMargin, rebuildObserver]);
+
+  const registerStickyHeaders = useCallback((nodes) => {
+    const observer = ensureObserver();
+    const map = headNodesRef.current;
+    const incomingIds = new Set();
+
+    nodes.forEach((node) => {
+      if (!node) return;
+      if (!node.getAttribute("data-sticky-head-id")) {
+        const newId = `lesson-head-${headIdCounterRef.current++}`;
+        node.setAttribute("data-sticky-head-id", newId);
+      }
+      incomingIds.add(node.getAttribute("data-sticky-head-id"));
+    });
+
+    map.forEach((node, id) => {
+      if (!incomingIds.has(id)) {
+        if (observer) observer.unobserve(node);
+        map.delete(id);
+        visibleHeadIdsRef.current.delete(id);
+      }
+    });
+
+    nodes.forEach((node) => {
+      if (!node) return;
+      const id = node.getAttribute("data-sticky-head-id");
+      const existing = map.get(id);
+      if (existing === node) return;
+      if (existing && observer) {
+        observer.unobserve(existing);
+      }
+      map.set(id, node);
+      if (observer) {
+        observer.observe(node);
+      }
+    });
+
+    const navbarHeightRaw =
+      typeof window !== "undefined"
+        ? getComputedStyle(document.documentElement).getPropertyValue("--navbar-height")
+        : "0";
+    const parsed = parseFloat(navbarHeightRaw);
+    const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
+    const viewportHeight =
+      typeof window !== "undefined" ? window.innerHeight : 0;
+
+    const visibleNow = new Set();
+    nodes.forEach((node) => {
+      if (!node) return;
+      const id = node.getAttribute("data-sticky-head-id");
+      if (!id) return;
+      const rect = node.getBoundingClientRect();
+      const isVisible =
+        rect.bottom > navbarHeight && rect.top < viewportHeight;
+      if (isVisible) {
+        visibleNow.add(id);
+      }
+    });
+
+    visibleHeadIdsRef.current = visibleNow;
+    setShowStickyToggle(visibleHeadIdsRef.current.size === 0);
+  }, [ensureObserver, setShowStickyToggle]);
 
   useEffect(() => {
     registerLessonToggle({ contentLang, setContentLang });
@@ -341,11 +431,27 @@ export default function Lesson() {
   }, [contentLang, updateStickyContentLang]);
 
   useEffect(() => {
+    const handleResize = () => {
+      rebuildObserver();
+    };
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", handleResize);
+    }
     return () => {
-      if (sentinelObserverRef.current) {
-        sentinelObserverRef.current.disconnect();
-        sentinelObserverRef.current = null;
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", handleResize);
       }
+    };
+  }, [rebuildObserver]);
+
+  useEffect(() => {
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+      headNodesRef.current.clear();
+      visibleHeadIdsRef.current.clear();
       setShowStickyToggle(false);
     };
   }, [setShowStickyToggle]);
@@ -653,13 +759,13 @@ export default function Lesson() {
             activeId={activeId}
             uiLang={uiLang}
             snipIdx={snipIdx}
-            phrasesSnipIdx={phrasesSnipIdx}
-            contentLang={contentLang}
-            setContentLang={setContentLang}
-            images={images}
-            isLocked={isLocked}
-            registerStickySentinel={registerStickySentinel}
-          />
+          phrasesSnipIdx={phrasesSnipIdx}
+          contentLang={contentLang}
+          setContentLang={setContentLang}
+          images={images}
+          isLocked={isLocked}
+          registerStickyHeaders={registerStickyHeaders}
+        />
         </div>
 
         {/* Lesson Navigation Banner */}

@@ -7,6 +7,7 @@ export const copy = {
     contact: { en: "CONTACT", th: "ติดต่อ" },
     pricing: { en: "PRICING", th: "ราคา" },
     myPathway: { en: "MY PATHWAY", th: "เส้นทางของฉัน" },
+    myPathwayDropdown: { en: "My Pathway", th: "เส้นทางของฉัน" },
     sampleLessons: { en: "4 Sample Lessons", th: "บทเรียนตัวอย่าง 4 บท" },
     lessonLibrary: { en: "Lesson Library", th: "คลังบทเรียน" },
     freeLessons: { en: "Free Lessons", th: "บทเรียนฟรี" },

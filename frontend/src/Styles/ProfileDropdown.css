@@ -52,7 +52,7 @@
 .dropdown-divider {
   height: 0.0625rem;
   background-color: #f0f0f0;
-  margin: 0 1rem 0.5rem;
+  /* margin: 0 1rem 0.5rem; */
 }
 
 .dropdown-menu .language-toggle {
@@ -74,11 +74,11 @@
 
 .dropdown-link {
   display: block;
-  padding: 0.75rem 1rem;
-  color: #333;
+  padding: 0.8rem 1rem;
+  color: #1e1e1e;
   text-decoration: none;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   transition: background-color 0.2s ease;
   border: none;
@@ -89,7 +89,7 @@
 }
 
 .dropdown-link:hover {
-  background-color: #f8f9fa;
+  background-color: #91caff;
 }
 
 .dropdown-link:not(:last-child) {

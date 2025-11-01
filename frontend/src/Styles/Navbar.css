@@ -75,7 +75,7 @@
 .navbar-lesson-toggle .language-toggle-btn {
   padding: 0.4rem 1.1rem;
   font-size: 0.95rem;
-  box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
+  /* box-shadow: 0.15rem 0.15rem 0 #1E1E1E; */
 }
 
 .navbar-lesson-toggle .language-toggle-btn:hover {

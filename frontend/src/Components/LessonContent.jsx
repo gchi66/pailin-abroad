@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import LessonLanguageToggle from "./LessonLanguageToggle";
 import ComprehensionQuiz from "./ComprehensionQuiz";
@@ -25,7 +25,7 @@ export default function LessonContent({
   setContentLang,
   images = {},
   isLocked = false,
-  registerStickySentinel,
+  registerStickyHeaders,
 }) {
   const fallbacks = copy.lessonPage.sectionFallbacks;
   const lockedCopy = copy.lessonPage.locked;
@@ -113,22 +113,31 @@ export default function LessonContent({
     </div>
   );
 
-  const handleStickySentinelRef = useCallback(
-    (node) => {
-      if (typeof registerStickySentinel === "function") {
-        registerStickySentinel(node);
-      }
-    },
-    [registerStickySentinel, activeId]
-  );
+  const shellRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof registerStickyHeaders !== "function") return undefined;
+    const container = shellRef.current;
+    const heads = container
+      ? Array.from(container.querySelectorAll(".lc-head"))
+      : [];
+    registerStickyHeaders(heads);
+    return () => {
+      registerStickyHeaders([]);
+    };
+  }, [
+    registerStickyHeaders,
+    sections,
+    questions,
+    transcript,
+    practiceExercises,
+    lessonPhrases,
+    activeId,
+    isLocked,
+  ]);
 
   const renderWithBackToTop = (contentNode) => (
-    <div className="lesson-content-shell">
-      <span
-        ref={handleStickySentinelRef}
-        className="lesson-sticky-sentinel"
-        aria-hidden="true"
-      />
+    <div className="lesson-content-shell" ref={shellRef}>
       {contentNode}
       <BackToTopButton />
     </div>
@@ -140,12 +149,7 @@ export default function LessonContent({
   =============================================================== */
   if (isLocked) {
     return (
-      <div className="lesson-locked-container">
-        <span
-          ref={handleStickySentinelRef}
-          className="lesson-sticky-sentinel"
-          aria-hidden="true"
-        />
+      <div className="lesson-locked-container" ref={shellRef}>
         <div className="lesson-content-blurred">
           <div className="lesson-locked-placeholder">
             <h3>{pick(lockedCopy.previewTitle, uiLang)}</h3>
