@@ -9,11 +9,11 @@ import CollapsibleDetails from "./CollapsibleDetails";
 // Helper function to clean audio tags from text - FIXED to handle [audio:...] format
 function cleanAudioTags(text) {
   if (!text || typeof text !== 'string') return text;
-  // Replace [audio:...] tags with a space, then clean up multiple spaces
+  // Replace [audio:...] tags with a space, then clean up spacing without collapsing newlines
   return text
     .replace(/\[audio:[^\]]+\]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/[^\S\r\n]+/g, ' ')   // collapse spaces/tabs but keep newlines
+    .replace(/\s*\n\s*/g, '\n');   // trim stray spaces around newlines
 }
 
 export default function RichSectionRenderer({
@@ -59,6 +59,7 @@ export default function RichSectionRenderer({
         fontWeight: span.bold ? "bold" : undefined,
         fontStyle: span.italic ? "italic" : undefined,
         textDecoration: span.underline ? "underline" : undefined,
+        whiteSpace: "pre-line",
       };
 
       let element;
@@ -102,6 +103,10 @@ export default function RichSectionRenderer({
     Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
 
   const containsAudioTag = (node) => /\[audio:[^\]]+\]/i.test(getNodeText(node));
+
+  const hasLineBreak = (node) =>
+    Array.isArray(node?.inlines) &&
+    node.inlines.some((span) => cleanAudioTags(span.text).includes("\n"));
 
   const looksLikeDialogue = (node) => /^[A-Z][a-z]+:\s/.test(getNodeText(node));
 
@@ -167,6 +172,7 @@ export default function RichSectionRenderer({
       const hasBold = nodeHasBold(node);
 
       if (hasAudio) {
+        const multiline = hasLineBreak(node);
         return (
           <p
             key={key}
@@ -174,7 +180,7 @@ export default function RichSectionRenderer({
             style={{
               marginLeft: `${baseIndentRem}rem`,
               display: "flex",
-              alignItems: "center",
+              alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasBold ? 0 : "0.5rem",
             }}
           >
@@ -219,12 +225,15 @@ export default function RichSectionRenderer({
       const hasBold = nodeHasBold(node);
 
       if (hasAudio) {
+        const multiline = hasLineBreak(node);
         return (
           <li
             key={key}
             className="audio-bullet"
             style={{
               marginLeft: `${baseIndentRem}rem`,
+              display: "flex",
+              alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasBold ? 0 : undefined,
             }}
           >
@@ -267,6 +276,7 @@ export default function RichSectionRenderer({
       const hasBold = nodeHasBold(node);
 
       if (hasAudio) {
+        const multiline = hasLineBreak(node);
         return (
           <div
             key={key}
@@ -274,7 +284,7 @@ export default function RichSectionRenderer({
             style={{
               marginLeft: `${baseIndentRem}rem`,
               display: "flex",
-              alignItems: "center",
+              alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasBold ? 0 : "0.5rem",
             }}
           >
