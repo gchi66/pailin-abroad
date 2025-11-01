@@ -18,6 +18,7 @@ class Inline:
     italic: bool = False
     underline: bool = False
     link: str | None = None
+    highlight: str | None = None  # Add this field
 
 
 @dataclass
@@ -145,10 +146,23 @@ def paragraph_nodes(doc_json: dict):
             # Clean vertical tabs here at the source
             txt = _clean_vertical_tabs(txt)
             st  = tr.get("textStyle", {})
+
             # Sentinel link (or any link)
             link = None
             if "link" in st and st["link"].get("url"):
                 link = st["link"]["url"]
+
+            # Extract highlight/background color
+            highlight = None
+            if 'backgroundColor' in st:
+                bg_color = st['backgroundColor']
+                if 'color' in bg_color and 'rgbColor' in bg_color['color']:
+                    rgb = bg_color['color']['rgbColor']
+                    # Convert RGB to hex
+                    r = int(rgb.get('red', 0) * 255)
+                    g = int(rgb.get('green', 0) * 255)
+                    b = int(rgb.get('blue', 0) * 255)
+                    highlight = f"#{r:02x}{g:02x}{b:02x}"
 
             spans.append(
                 Inline(
@@ -157,6 +171,7 @@ def paragraph_nodes(doc_json: dict):
                     italic     = bool(st.get("italic")),
                     underline  = bool(st.get("underline")),
                     link       = link,
+                    highlight  = highlight,  # Add this field
                 )
             )
         plain = "".join(s.text for s in spans).strip()

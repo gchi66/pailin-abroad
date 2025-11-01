@@ -84,16 +84,15 @@ details[open] > .markdown-summary::after {
   margin-block-end: 1em;
 }
 
-/* kill the bottom gap on the bold-only paragraph */
-.markdown-content p:has(> span:only-child[style*="font-weight: bold"]) {
+.markdown-content p:has(> span[style*="font-weight: bold"]:last-child) {
   margin-block-start: 2rem;
-  margin-block-end: 0;
+  margin-block-end: 2rem;
 }
 
-/* kill the top gap on whatever follows it */
-.markdown-content p:has(> span:only-child[style*="font-weight: bold"]) + * {
+.markdown-content p:has(> span[style*="font-weight: bold"]:last-child) + * {
   margin-block-start: 0;
 }
+
 
 
 /* ---------- tiny fade-in on open ---------- */

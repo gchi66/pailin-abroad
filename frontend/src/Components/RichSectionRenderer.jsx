@@ -60,6 +60,7 @@ export default function RichSectionRenderer({
         fontStyle: span.italic ? "italic" : undefined,
         textDecoration: span.underline ? "underline" : undefined,
         whiteSpace: "pre-line",
+        // DON'T render the highlight color - it's just a spacing flag
       };
 
       let element;
@@ -101,6 +102,11 @@ export default function RichSectionRenderer({
 
   const nodeHasBold = (node) =>
     Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
+
+  // NEW: Check if any inline in the node has yellow highlight (#ffff00)
+  const hasYellowHighlight = (node) =>
+    Array.isArray(node?.inlines) &&
+    node.inlines.some((span) => span?.highlight?.toLowerCase() === '#ffff00');
 
   const containsAudioTag = (node) => /\[audio:[^\]]+\]/i.test(getNodeText(node));
 
@@ -170,6 +176,7 @@ export default function RichSectionRenderer({
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
+      const hasSpacing = hasYellowHighlight(node); // NEW: Check for yellow highlight
 
       if (hasAudio) {
         const multiline = hasLineBreak(node);
@@ -181,7 +188,7 @@ export default function RichSectionRenderer({
               marginLeft: `${baseIndentRem}rem`,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasBold ? 0 : "0.5rem",
+              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
             }}
           >
             <AudioButton
@@ -204,7 +211,7 @@ export default function RichSectionRenderer({
           key={key}
           style={{
             marginLeft: `${textIndentRem}rem`,
-            marginBottom: hasBold ? 0 : undefined,
+            marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
           }}
         >
           {renderInlines(node.inlines)}
@@ -223,6 +230,7 @@ export default function RichSectionRenderer({
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
+      const hasSpacing = hasYellowHighlight(node); // NEW: Check for yellow highlight
 
       if (hasAudio) {
         const multiline = hasLineBreak(node);
@@ -234,7 +242,7 @@ export default function RichSectionRenderer({
               marginLeft: `${baseIndentRem}rem`,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasBold ? 0 : undefined,
+              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
             }}
           >
             <AudioButton
@@ -256,7 +264,7 @@ export default function RichSectionRenderer({
           key={key}
           style={{
             marginLeft: `${textIndentRem}rem`,
-            marginBottom: nodeHasBold(node) ? 0 : undefined,
+            marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
           }}
         >
           {renderInlines(node.inlines)}
@@ -274,6 +282,7 @@ export default function RichSectionRenderer({
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
+      const hasSpacing = hasYellowHighlight(node); // NEW: Check for yellow highlight
 
       if (hasAudio) {
         const multiline = hasLineBreak(node);
@@ -285,7 +294,7 @@ export default function RichSectionRenderer({
               marginLeft: `${baseIndentRem}rem`,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasBold ? 0 : "0.5rem",
+              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
             }}
           >
             <AudioButton
@@ -308,7 +317,7 @@ export default function RichSectionRenderer({
           key={key}
           style={{
             marginLeft: `${textIndentRem}rem`,
-            marginBottom: nodeHasBold(node) ? 0 : undefined,
+            marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
           }}
         >
           {renderInlines(node.inlines)}
