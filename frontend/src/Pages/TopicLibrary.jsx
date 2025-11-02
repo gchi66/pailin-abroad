@@ -124,9 +124,9 @@ const TopicLibrary = () => {
               >
                 <div className="topic-library-content-wrapper">
                   <div className="topic-library-header">
-                    <div className="topic-library-number">
+                    {/* <div className="topic-library-number">
                       {(index + 1).toString().padStart(2, '0')}
-                    </div>
+                    </div> */}
                     <div className="topic-library-text">
                       <h3 className="topic-library-title">{topic.name}</h3>
                       {topic.subtitle && (

@@ -69,7 +69,7 @@ export default function LessonHeader({
 
           {/* RIGHT: content */}
           <div className="banner-content">
-            <span className="lesson-number">
+            <span className="header-lesson-number">
               {lessonLabel}
             </span>
 

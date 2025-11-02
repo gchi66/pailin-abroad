@@ -127,3 +127,11 @@ details[open] > .markdown-summary {
   border-color: var(--primary-color, #007bff);
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
+
+.fb-paragraph span{
+   font-size: 1.2rem;
+}
+
+.fb-paragraph .fb-input{
+   margin: .2rem 0;
+}

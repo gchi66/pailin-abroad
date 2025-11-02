@@ -77,6 +77,7 @@
   gap: 1rem;
   width: 100%;
   max-width: 800px;
+  align-items: center;
 }
 
 .topic-library-item {
@@ -90,6 +91,7 @@
   transition: all 0.3s ease;
   background: white;
   color: #1E1E1E;
+  min-width: 45vw;
 }
 
 .topic-library-item:hover {
