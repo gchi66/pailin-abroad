@@ -5,6 +5,7 @@ import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
 import { copy, pick } from "../../ui-lang/i18n";
+import CheckAnswersButton from "./CheckAnswersButton";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -142,6 +143,8 @@ export default function FillBlankExercise({
   const allPendingAnswered = pendingIndexes.every((idx) =>
     (questions[idx]?.answer || "").trim()
   );
+  const hasIncompleteAnswers =
+    pendingIndexes.length > 0 && !allPendingAnswered;
 
   const canCheck =
     pendingIndexes.length > 0 && allPendingAnswered && !isChecking;
@@ -527,13 +530,15 @@ export default function FillBlankExercise({
       {error && <p className="ai-error-message">{error}</p>}
 
       <div className="fb-button-container">
-        <button
-          className="apply-submit"
+        <CheckAnswersButton
           onClick={handleCheckAnswers}
           disabled={!canCheck}
-        >
-          {isChecking ? checkingLabel : checkLabel}
-        </button>
+          isChecking={isChecking}
+          label={checkLabel}
+          checkingLabel={checkingLabel}
+          hasIncompleteAnswers={hasIncompleteAnswers}
+          contentLang={contentLang}
+        />
 
         {hasChecked && hasIncorrect && (
           <button

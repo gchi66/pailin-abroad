@@ -22,6 +22,42 @@ const normalizeText = (value) =>
     .trim()
     .toLowerCase();
 
+const isNonEmptyString = (value) =>
+  typeof value === "string" && value.trim().length > 0;
+
+const pickFieldByLang = (entity, field, lang) => {
+  if (!entity || typeof entity !== "object") return null;
+
+  const base = isNonEmptyString(entity[field]) ? entity[field].trim() : null;
+  const en = isNonEmptyString(entity[`${field}_en`])
+    ? entity[`${field}_en`].trim()
+    : null;
+  const th = isNonEmptyString(entity[`${field}_th`])
+    ? entity[`${field}_th`].trim()
+    : null;
+
+  if (lang === "th") {
+    return th ?? base ?? en ?? null;
+  }
+  if (lang === "en") {
+    return en ?? base ?? th ?? null;
+  }
+  return base ?? en ?? th ?? null;
+};
+
+const resolveQuestionText = (item, lang) => {
+  if (!item) return "";
+  const keys = ["question", "text", "prompt"];
+  for (const key of keys) {
+    const value = pickFieldByLang(item, key, lang);
+    if (value) return value;
+  }
+  return "";
+};
+
+const resolvePlaceholder = (item, lang) =>
+  pickFieldByLang(item, "placeholder", lang);
+
 const getInputCount = (item) => {
   const raw = item?.inputs;
   if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) {
@@ -53,6 +89,10 @@ export default function OpenEndedExercise({
   contentLang = "en",
 }) {
   const { title, prompt, items = [] } = exercise || {};
+  const displayTitle =
+    pickFieldByLang(exercise, "title", contentLang) || title || "";
+  const displayPrompt =
+    pickFieldByLang(exercise, "prompt", contentLang) || prompt || "";
   const { user } = useAuth();
   const userId = userIdProp || user?.id || null;
   const evaluationSourceType = ["bank", "practice"].includes(
@@ -186,6 +226,11 @@ export default function OpenEndedExercise({
         const userAnswer = questionState.answer || "";
         const expectedAnswer =
           item.sample_answer || item.answer || item.expected_answer || "";
+        const evaluationPrompt =
+          resolveQuestionText(item, "en") ||
+          pickFieldByLang(exercise, "prompt", "en") ||
+          pickFieldByLang(exercise, "title", "en") ||
+          "Respond to the prompt.";
 
         try {
           const result = await evaluateAnswer({
@@ -196,12 +241,7 @@ export default function OpenEndedExercise({
             sourceType: evaluationSourceType,
             exerciseId: resolvedExerciseId,
             questionNumber: item.number ?? idx + 1,
-            questionPrompt:
-              item.question ||
-              item.text ||
-              prompt ||
-              title ||
-              "Respond to the prompt.",
+            questionPrompt: evaluationPrompt,
             extra: item.keywords
               ? { question_keywords: item.keywords }
               : undefined,
@@ -269,19 +309,25 @@ export default function OpenEndedExercise({
     setError("");
   };
 
-  const firstQuestionRaw = items[0]?.question || items[0]?.text || "";
-  const normalizedPrompt = normalizeText(prompt);
+  const firstQuestionRaw = resolveQuestionText(items[0], contentLang);
+  const normalizedPrompt = normalizeText(displayPrompt);
   const normalizedFirstQuestion = normalizeText(firstQuestionRaw);
   const shouldRenderPrompt =
     normalizedPrompt.length > 0 && normalizedPrompt !== normalizedFirstQuestion;
 
+  const defaultPlaceholder =
+    contentLang === "th" ? "พิมพ์คำตอบของคุณที่นี่" : "Type your answer here";
+
   return (
     <div className="fb-wrap oe-wrap">
-      {title && showTitle && <h3 className="oe-title">{title}</h3>}
-      {shouldRenderPrompt && <p className="oe-prompt">{prompt}</p>}
+      {displayTitle && showTitle && (
+        <h3 className="oe-title">{displayTitle}</h3>
+      )}
+      {shouldRenderPrompt && <p className="oe-prompt">{displayPrompt}</p>}
 
       {items.map((item, qIdx) => {
         const hasAudio = Boolean(item.audio_key);
+        const displayQuestion = resolveQuestionText(item, contentLang);
 
         if (isExampleItem(item)) {
           const imageUrl = item.image_key ? images[item.image_key] : null;
@@ -322,7 +368,7 @@ export default function OpenEndedExercise({
                       </div>
                     )}
                     <p className="oe-question-text">
-                      {item.question || item.text || ""}
+                      {displayQuestion}
                     </p>
                     {exampleAnswer && (
                       <div className="fb-input-wrap oe-input-wrap">
@@ -347,6 +393,8 @@ export default function OpenEndedExercise({
         const imageUrl = item.image_key ? images[item.image_key] : null;
         const numberLabel = item.number ?? qIdx + 1;
         const inputCount = getInputCount(item);
+        const placeholder =
+          resolvePlaceholder(item, contentLang) || defaultPlaceholder;
         const answerParts =
           questionState.answerParts?.length === inputCount
             ? questionState.answerParts
@@ -390,7 +438,7 @@ export default function OpenEndedExercise({
                   </div>
                 )}
 
-                <p className="oe-question-text">{item.question || item.text || ""}</p>
+                <p className="oe-question-text">{displayQuestion}</p>
 
                 {answerParts.map((value, partIdx) => (
                   <div
@@ -410,7 +458,7 @@ export default function OpenEndedExercise({
                       }
                       disabled={disabled}
                       className="oe-textarea"
-                      placeholder="Type your answer here"
+                      placeholder={placeholder}
                     />
                     {partIdx === 0 && <InlineStatus state={questionState} />}
                   </div>

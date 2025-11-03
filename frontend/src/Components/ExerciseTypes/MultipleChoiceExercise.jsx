@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
+import { copy, pick } from "../../ui-lang/i18n";
+import CheckAnswersButton from "./CheckAnswersButton";
 
 const normalizeOption = (option) => {
   if (typeof option === "string") {
@@ -53,7 +55,12 @@ const arraysMatch = (a, b) => {
 
 const createInitialChoices = (list = []) => list.map(() => []);
 
-export default function MultipleChoiceExercise({ exercise, images = {}, audioIndex = {} }) {
+export default function MultipleChoiceExercise({
+  exercise,
+  images = {},
+  audioIndex = {},
+  contentLang = "en",
+}) {
   const { prompt, items = [] } = exercise;
   const [choices, setChoices] = useState(() => createInitialChoices(items));
   const [checked, setChecked] = useState(false);
@@ -128,6 +135,9 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
         )
       ).length
     : null;
+  const checkLabel = pick(copy.lessonContent.checkAnswers, contentLang);
+  const hasIncompleteAnswers =
+    normalizedItems.length > 0 && !allAnswered;
 
   const resetExercise = () => {
     setChoices(createInitialChoices(items));
@@ -241,13 +251,13 @@ export default function MultipleChoiceExercise({ exercise, images = {}, audioInd
 
       <div className="fb-button-container">
         {!checked ? (
-          <button
-            className="apply-submit"
-            disabled={!allAnswered}
+          <CheckAnswersButton
             onClick={() => setChecked(true)}
-          >
-            Check Answers
-          </button>
+            disabled={!allAnswered}
+            label={checkLabel}
+            hasIncompleteAnswers={hasIncompleteAnswers}
+            contentLang={contentLang}
+          />
         ) : (
           <>
             <button className="apply-submit mc-try-again" type="button" onClick={resetExercise}>

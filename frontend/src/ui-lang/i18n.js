@@ -35,6 +35,10 @@ export const copy = {
   lessonContent: {
     checkAnswers: { en: "Check Answers", th: "ตรวจคำตอบ" },
     checking: { en: "Checking...", th: "กำลังตรวจ..." },
+    completeBeforeCheck: {
+      en: "Answer all the questions before checking your answers.",
+      th: "กรุณาตอบคำถามทุกข้อก่อนตรวจคำตอบ",
+    },
   },
   profileDropdown: {
     accountSettings: { en: "Account Settings", th: "การตั้งค่าบัญชี" },

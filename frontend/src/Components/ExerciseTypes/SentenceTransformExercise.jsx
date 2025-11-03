@@ -5,6 +5,7 @@ import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
 import { copy, pick } from "../../ui-lang/i18n";
+import CheckAnswersButton from "./CheckAnswersButton";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -100,6 +101,9 @@ export default function SentenceTransformExercise({
     // Allow already correct sentences to be left blank
     return (item?.correct || "").toLowerCase() === "yes";
   });
+
+  const hasIncompleteAnswers =
+    pendingIndexes.length > 0 && !pendingHaveAnswers;
 
   const canCheck =
     pendingIndexes.length > 0 && pendingHaveAnswers && !isChecking;
@@ -258,6 +262,10 @@ export default function SentenceTransformExercise({
         const hasAudio = Boolean(item?.audio_key);
         const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
         const exampleItem = isExampleItem(item);
+        const thaiStem =
+          contentLang === "th" && typeof item?.text_th === "string"
+            ? item.text_th.trim()
+            : "";
 
         if (exampleItem) {
           const imageUrl = item?.image_key ? images[item.image_key] : null;
@@ -320,9 +328,10 @@ export default function SentenceTransformExercise({
                             alt="Correct"
                             className="st-mark-icon"
                           />
-                        </button>
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    {thaiStem && <p className="st-stem-th">{thaiStem}</p>}
                     <div className="fb-input-wrap st-input-wrap">
                       <input
                         type="text"
@@ -336,13 +345,6 @@ export default function SentenceTransformExercise({
                 </div>
               </div>
             </div>
-            {contentLang === "th" &&
-              typeof item?.text_th === "string" &&
-              item.text_th.trim() && (
-                <div className="st-row-th">
-                  <p className="st-stem-th">{item.text_th.trim()}</p>
-                </div>
-              )}
             </React.Fragment>
           );
         }
@@ -411,6 +413,7 @@ export default function SentenceTransformExercise({
                     </button>
                   </div>
                 </div>
+                {thaiStem && <p className="st-stem-th">{thaiStem}</p>}
                 <div className="fb-input-wrap st-input-wrap">
                   <input
                     type="text"
@@ -426,13 +429,6 @@ export default function SentenceTransformExercise({
               </div>
             </div>
           </div>
-          {contentLang === "th" &&
-            typeof item?.text_th === "string" &&
-            item.text_th.trim() && (
-              <div className="st-row-th">
-                <p className="st-stem-th">{item.text_th.trim()}</p>
-              </div>
-            )}
           </React.Fragment>
         );
       })}
@@ -440,13 +436,15 @@ export default function SentenceTransformExercise({
       {error && <p className="ai-error-message">{error}</p>}
 
       <div className="fb-button-container">
-        <button
+        <CheckAnswersButton
           onClick={handleCheckAnswers}
-          className="apply-submit"
           disabled={!canCheck}
-        >
-          {isChecking ? checkingLabel : checkLabel}
-        </button>
+          isChecking={isChecking}
+          label={checkLabel}
+          checkingLabel={checkingLabel}
+          hasIncompleteAnswers={hasIncompleteAnswers}
+          contentLang={contentLang}
+        />
         {hasChecked && hasIncorrect && (
           <button
             onClick={handleTryAgain}
