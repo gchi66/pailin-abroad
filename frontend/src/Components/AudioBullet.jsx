@@ -6,7 +6,7 @@ import "../Styles/AudioBullet.css";
 // Use public URL for image instead of import
 const playPng = "/images/snippet_play_button.png";
 
-export default function AudioBullet({ node, indent = 0, snipIdx, renderInlines }) {
+export default function AudioBullet({ node, snipIdx, renderInlines }) {
   const snip = snipIdx?.[node.audio_section]?.[node.audio_seq];
 
   const [url, setUrl] = useState();
@@ -97,7 +97,6 @@ export default function AudioBullet({ node, indent = 0, snipIdx, renderInlines }
   return (
     <li
       className="audio-bullet"
-      style={{ marginLeft: indent * 24, listStyleType: "none" }}
     >
       <img
         src={playPng}

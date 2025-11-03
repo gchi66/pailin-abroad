@@ -7,7 +7,6 @@ const playPng = "/images/snippet_play_button.png";
 
 export default function PhrasesAudioBullet({
   node,
-  indent = 0,
   phrasesSnipIdx,
   renderInlines,
   phraseId,
@@ -105,7 +104,6 @@ export default function PhrasesAudioBullet({
   return (
     <li
       className="audio-bullet"
-      style={{ marginLeft: indent * 24, listStyleType: "none" }}
     >
       <img
         src={playPng}

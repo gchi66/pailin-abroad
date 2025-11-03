@@ -48,8 +48,8 @@ export default function RichSectionRenderer({
 
         // Add space if previous span doesn't end with whitespace or punctuation
         // and current span doesn't start with whitespace or punctuation
-        const prevEndsWithSpaceOrPunct = /[\s.,!?;:']$/.test(prevText);
-        const currentStartsWithSpaceOrPunct = /^[\s.,!?;:']/.test(cleanText);
+        const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]$/.test(prevText);
+        const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]/.test(cleanText);
 
         needsSpaceBefore = !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && cleanText.trim();
       }
@@ -108,68 +108,33 @@ export default function RichSectionRenderer({
     Array.isArray(node?.inlines) &&
     node.inlines.some((span) => span?.highlight?.toLowerCase() === '#ffff00');
 
-  const containsAudioTag = (node) => /\[audio:[^\]]+\]/i.test(getNodeText(node));
+const hasLineBreak = (node) =>
+  Array.isArray(node?.inlines) &&
+  node.inlines.some((span) => cleanAudioTags(span.text).includes("\n"));
 
-  const hasLineBreak = (node) =>
-    Array.isArray(node?.inlines) &&
-    node.inlines.some((span) => cleanAudioTags(span.text).includes("\n"));
+const INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
+const AUDIO_BUTTON_SIZE = 1.5; // rem
 
-  const looksLikeDialogue = (node) => /^[A-Z][a-z]+:\s/.test(getNodeText(node));
+const computeIndent = (node) =>
+  typeof node?.indent === "number" && Number.isFinite(node.indent)
+    ? node.indent
+    : 0;
 
-  const computeIndent = (node, defaultIndent = 0) =>
-    typeof defaultIndent === "number" && Number.isFinite(defaultIndent)
-      ? defaultIndent
-      : node?.indent || 0;
+// Helper for rendering individual nodes (NON-HEADING NODES ONLY)
+const renderNode = (node, key) => {
+  // Skip heading nodes - they should only be used for accordion structure
+  if (node.kind === "heading") {
+    return null;
+  }
 
-  const shouldInheritIndent = (previousNode, currentNode) => {
-    if (!previousNode || !currentNode) return false;
-    if (currentNode.kind === "list_item") return false;
-    if (!looksLikeDialogue(currentNode)) return false;
+  const indentValue = computeIndent(node);
+  const baseIndentRem = indentValue * INDENT_PER_LEVEL;
 
-    // Check if previous node was an audio list item (start of dialogue)
-    const previousIsAudioList =
-      previousNode.kind === "list_item" && containsAudioTag(previousNode);
-
-    // Check if previous node was a dialogue continuation (any non-list-item with dialogue format)
-    const previousIsDialogueContinuation =
-      (previousNode.kind === "paragraph" ||
-      previousNode.kind === "misc_item" ||
-      previousNode.kind === "numbered_item") &&
-      looksLikeDialogue(previousNode);
-
-    if (!previousIsAudioList && !previousIsDialogueContinuation) return false;
-
-    return true;
-  };
-
-  const INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
-  const AUDIO_BUTTON_SIZE = 1.5; // rem
-  const AUDIO_BUTTON_GAP = 0.5; // rem - gap between button and text
-  const AUDIO_TEXT_OFFSET = AUDIO_BUTTON_SIZE + AUDIO_BUTTON_GAP; // 2rem total
-
-  // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
-  const renderNode = (node, key, previousNode = null) => {
-    // Skip heading nodes - they should only be used for accordion structure
-    if (node.kind === "heading") {
-      return null;
-    }
-
-    const inheritIndent = shouldInheritIndent(previousNode, node);
-    const indentValue = inheritIndent
-      ? computeIndent(node, previousNode?.indent)
-      : computeIndent(node, node?.indent);
-    const baseIndentRem = indentValue * INDENT_PER_LEVEL;
-
-    // Continuation lines align with text after audio button
-    const textIndentRem = inheritIndent
-      ? baseIndentRem + AUDIO_TEXT_OFFSET
-      : baseIndentRem;
-
-    if (node.kind === "paragraph"){
-      console.log("Processing paragraph node:", {
-        kind: node.kind,
-        audio_key: node.audio_key,
-        audio_seq: node.audio_seq,
+  if (node.kind === "paragraph"){
+    console.log("Processing paragraph node:", {
+      kind: node.kind,
+      audio_key: node.audio_key,
+      audio_seq: node.audio_seq,
         text: node.inlines?.[0]?.text?.substring(0, 50)
       });
 
@@ -185,7 +150,7 @@ export default function RichSectionRenderer({
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: `${baseIndentRem}rem`,
+              marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
@@ -210,7 +175,7 @@ export default function RichSectionRenderer({
         <p
           key={key}
           style={{
-            marginLeft: `${textIndentRem}rem`,
+            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
             marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
           }}
         >
@@ -239,7 +204,7 @@ export default function RichSectionRenderer({
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: `${baseIndentRem}rem`,
+              marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
@@ -263,7 +228,7 @@ export default function RichSectionRenderer({
         <li
           key={key}
           style={{
-            marginLeft: `${textIndentRem}rem`,
+            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
             marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
           }}
         >
@@ -291,7 +256,7 @@ export default function RichSectionRenderer({
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: `${baseIndentRem}rem`,
+              marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
@@ -316,7 +281,7 @@ export default function RichSectionRenderer({
         <div
           key={key}
           style={{
-            marginLeft: `${textIndentRem}rem`,
+            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
             marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
           }}
         >
@@ -407,9 +372,7 @@ export default function RichSectionRenderer({
             console.log("Rendering no-heading section:", sec.key, "with", sec.body.length, "items");
             return (
               <div key={sec.key} className="markdown-content no-heading">
-                {sec.body.map((node, k) =>
-                  renderNode(node, k, sec.body[k - 1] || null)
-                )}
+                {sec.body.map((node, k) => renderNode(node, k))}
               </div>
             );
           }
@@ -436,9 +399,7 @@ export default function RichSectionRenderer({
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">
-                {sec.body.map((node, k) =>
-                  renderNode(node, k, sec.body[k - 1] || null)
-                )}
+                {sec.body.map((node, k) => renderNode(node, k))}
               </div>
             </CollapsibleDetails>
           );
@@ -451,7 +412,7 @@ export default function RichSectionRenderer({
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {nodes.map((node, i) => renderNode(node, i, nodes[i - 1] || null))}
+        {nodes.map((node, i) => renderNode(node, i))}
       </div>
     </div>
   );

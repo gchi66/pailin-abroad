@@ -1,12 +1,17 @@
 .audio-bullet {
   display: flex;
   align-items: center;
+  padding-left: 0;
 }
 
 .audio-bullet img {
-  margin-right: 8px;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: calc(-1.5rem - 0.5rem);
+  margin-right: 0.5rem;
   cursor: pointer;
   transition: filter 0.2s;
+  flex-shrink: 0;
 }
 
 .audio-bullet img:hover {

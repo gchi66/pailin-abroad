@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useRef } from "react";
 import FillBlankExercise from "./ExerciseTypes/FillBlankExercise";
 import MultipleChoiceExercise from "./ExerciseTypes/MultipleChoiceExercise";
 import OpenEndedExercise from "./ExerciseTypes/OpenEndedExercise";
@@ -75,19 +75,38 @@ export default function PracticeSection({
   audioIndex = {},
   contentLang = "en",
 }) {
-  // ensure we’re working with an array
-  const list0 = arr(exercises).map(transformExercise);
+  const normalizedCacheRef = useRef(new WeakMap());
 
-  // optionally hide "Quick Practice"
-  const list = hideQuick
-    ? list0.filter((ex) => {
-        if (ex && ex.isQuickPractice) {
-          return false;
-        }
-        const title = (ex?.title || "").toLowerCase();
-        return !title.includes("quick practice");
-      })
-    : list0;
+  const list = useMemo(() => {
+    const cache = normalizedCacheRef.current;
+    const normalized = arr(exercises).map((row) => {
+      if (!row || typeof row !== "object") {
+        return row;
+      }
+      const cached = cache.get(row);
+      if (cached) {
+        return cached;
+      }
+      const transformed = transformExercise(row);
+      cache.set(row, transformed);
+      return transformed;
+    });
+
+    if (!hideQuick) {
+      return normalized;
+    }
+
+    return normalized.filter((ex) => {
+      if (!ex) {
+        return false;
+      }
+      if (ex.isQuickPractice) {
+        return false;
+      }
+      const title = (ex.title || "").toLowerCase();
+      return !title.includes("quick practice");
+    });
+  }, [exercises, hideQuick]);
 
   if (!list.length) return <p>{pick(copy.lessonPage.practice.empty, uiLang)}</p>;
 

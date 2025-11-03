@@ -83,63 +83,33 @@ export default function TopicRichSectionRenderer({
       .join("")
       .trim();
 
-  const containsAudioTag = (node) => /\[audio:[^\]]+\]/i.test(getNodeText(node));
-  const looksLikeDialogue = (node) => /^[A-Z][a-z]+:\s/.test(getNodeText(node));
+const computeIndent = (node) =>
+  typeof node?.indent === "number" && Number.isFinite(node.indent)
+    ? node.indent
+    : 0;
 
-  const computeIndent = (node, defaultIndent = 0) =>
-    typeof defaultIndent === "number" && Number.isFinite(defaultIndent)
-      ? defaultIndent
-      : node?.indent || 0;
+const nodeHasBold = (node) =>
+  Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
 
-  const nodeHasBold = (node) =>
-    Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
+const INDENT_PER_LEVEL = 1.5; // rem
 
-  const shouldInheritIndent = (previousNode, currentNode) => {
-    if (!previousNode || !currentNode) return false;
-    if (currentNode.kind === "list_item") return false;
-    if (!looksLikeDialogue(currentNode)) return false;
+// Helper for rendering individual nodes (NON-HEADING NODES ONLY)
+const renderNode = (node, key) => {
+  // Skip heading nodes - they should only be used for accordion structure
+  if (node.kind === "heading") {
+    return null;
+  }
 
-    // Check if previous node was an audio list item (start of dialogue)
-    const previousIsAudioList =
-      previousNode.kind === "list_item" && containsAudioTag(previousNode);
+  const indentValue = computeIndent(node);
+  const baseIndentRem = indentValue * INDENT_PER_LEVEL;
+  const hasBold = nodeHasBold(node);
 
-    // Check if previous node was also a dialogue continuation (paragraph with dialogue format)
-    const previousIsDialogueParagraph =
-      previousNode.kind === "paragraph" && looksLikeDialogue(previousNode);
-
-    if (!previousIsAudioList && !previousIsDialogueParagraph) return false;
-
-    return true;
-  };
-
-  const INDENT_PER_LEVEL = 1.5; // rem
-  const AUDIO_BUTTON_SIZE = 1.5; // rem
-  const AUDIO_BUTTON_GAP = 0.5; // rem
-  const AUDIO_TEXT_OFFSET = AUDIO_BUTTON_SIZE + AUDIO_BUTTON_GAP; // 2rem total
-
-  // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
-  const renderNode = (node, key, previousNode = null) => {
-    // Skip heading nodes - they should only be used for accordion structure
-    if (node.kind === "heading") {
-      return null;
-    }
-
-    const inheritIndent = shouldInheritIndent(previousNode, node);
-    const indentValue = inheritIndent
-      ? computeIndent(node, previousNode?.indent)
-      : computeIndent(node, node?.indent);
-    const baseIndentRem = indentValue * INDENT_PER_LEVEL;
-    const textIndentRem = inheritIndent
-      ? baseIndentRem + AUDIO_TEXT_OFFSET
-      : baseIndentRem;
-    const hasBold = nodeHasBold(node);
-
-    if (node.kind === "paragraph") {
+  if (node.kind === "paragraph") {
       return (
         <p
           key={key}
           style={{
-            marginLeft: `${textIndentRem}rem`,
+            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
             marginBottom: hasBold ? 0 : undefined,
           }}
         >
@@ -153,7 +123,7 @@ export default function TopicRichSectionRenderer({
         <li
           key={key}
           style={{
-            marginLeft: `${baseIndentRem}rem`,
+            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
             marginBottom: hasBold ? 0 : undefined,
           }}
         >
@@ -168,7 +138,7 @@ export default function TopicRichSectionRenderer({
         <div
           key={key}
           style={{
-            marginLeft: `${textIndentRem}rem`,
+            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
             marginBottom: hasBold ? 0 : undefined,
           }}
         >
@@ -245,9 +215,7 @@ export default function TopicRichSectionRenderer({
           if (!sec.heading) {
             return (
               <div key={sec.key} className="markdown-content no-heading">
-                {sec.body.map((node, k) =>
-                  renderNode(node, k, sec.body[k - 1] || null)
-                )}
+                {sec.body.map((node, k) => renderNode(node, k))}
               </div>
             );
           }
@@ -273,9 +241,7 @@ export default function TopicRichSectionRenderer({
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">
-                {sec.body.map((node, k) =>
-                  renderNode(node, k, sec.body[k - 1] || null)
-                )}
+                {sec.body.map((node, k) => renderNode(node, k))}
               </div>
             </CollapsibleDetails>
           );
@@ -288,7 +254,7 @@ export default function TopicRichSectionRenderer({
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {nodes.map((node, i) => renderNode(node, i, nodes[i - 1] || null))}
+        {nodes.map((node, i) => renderNode(node, i))}
       </div>
     </div>
   );
