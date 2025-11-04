@@ -1,7 +1,7 @@
 import re
 
 TH_RX = re.compile(r'[\u0E00-\u0E7F]')  # Thai block
-UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&/()'‘’\-!?$%#\[\]:…]{2,80}$")
+UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&/()++'‘’\-!?$%#\[\]:…]{2,80}$")
 HEADER_WITH_COLON_RE = re.compile(r"^[A-Z][A-Z0-9 ,.&'‘’\-!?$%#]+: [0-9]{1,2}:[0-9]{2} ?- ?[0-9]{1,2}:[0-9]{2}$")
 HEADER_TRAILING_VARIANT_RE = re.compile(r"\[\s*\d+\s*\]\s*$")  # e.g. [1], [ 2 ]
 

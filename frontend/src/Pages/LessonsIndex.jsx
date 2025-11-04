@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import supabaseClient from "../supabaseClient";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { API_BASE_URL } from "../config/api";
+import PlanNotice from "../Components/PlanNotice";
 import "../Styles/LessonsIndex.css";
+import "../Styles/LessonNavigationBanner.css";
 
 const stageClassMap = {
   Beginner: "level-buttons-Beginner",
@@ -117,6 +119,17 @@ const LessonsIndex = () => {
     return !firstLessons.includes(lesson.id);
   };
 
+  const currentLevelIndex = levels.findIndex((lvl) => lvl === selectedLevel);
+  const prevLevel = currentLevelIndex > 0 ? levels[currentLevelIndex - 1] : null;
+  const nextLevel =
+    currentLevelIndex !== -1 && currentLevelIndex < levels.length - 1
+      ? levels[currentLevelIndex + 1]
+      : null;
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
+
   // Fetch levels for the selected stage
   useEffect(() => {
     const fetchLevels = async () => {
@@ -136,6 +149,7 @@ const LessonsIndex = () => {
         // Automatically select the first level ONLY when the stage changes
         if (uniqueLevels.length > 0 && isStageChanged.current) {
           setSelectedLevel(uniqueLevels[0]); // Set the first level of the new stage
+          scrollToTop();
           isStageChanged.current = false; // Reset the flag
         }
       } catch (error) {
@@ -144,7 +158,7 @@ const LessonsIndex = () => {
     };
 
     fetchLevels();
-  }, [selectedStage]); // Fetch levels whenever selectedStage changes
+  }, [selectedStage, scrollToTop]); // Fetch levels whenever selectedStage changes
 
   // Fetch completed lessons for the authenticated user
   useEffect(() => {
@@ -228,35 +242,6 @@ const LessonsIndex = () => {
 
   // Fetch lessons for the selected stage and level
   useEffect(() => {
-    const fetchLevels = async () => {
-      try {
-        const { data, error } = await supabaseClient
-          .from("lessons")
-          .select("level")
-          .eq("stage", selectedStage)
-          .order("level", { ascending: true });
-
-        if (error) throw error;
-
-        // Extract unique levels for the selected stage
-        const uniqueLevels = [...new Set(data.map((lesson) => lesson.level))];
-        setLevels(uniqueLevels);
-
-        // Automatically select the first level ONLY when the stage changes
-        if (uniqueLevels.length > 0 && isStageChanged.current) {
-          setSelectedLevel(uniqueLevels[0]); // Set the first level of the new stage
-          isStageChanged.current = false; // Reset the flag
-        }
-      } catch (error) {
-        console.error("Error fetching levels:", error.message);
-      }
-    };
-
-    fetchLevels();
-  }, [selectedStage]); // Fetch levels whenever selectedStage changes
-
-  // Fetch lessons for the selected stage and level
-  useEffect(() => {
     const fetchLessons = async () => {
       if (!selectedLevel) return; // Don't fetch if no level is selected
 
@@ -282,6 +267,12 @@ const LessonsIndex = () => {
   const handleStageChange = (stage) => {
     setSelectedStage(stage);
     isStageChanged.current = true; // Set the flag to indicate a stage change
+    scrollToTop();
+  };
+
+  const handleLevelSelect = (level) => {
+    setSelectedLevel(level);
+    scrollToTop();
   };
 
   // Helper function to check if a lesson is completed
@@ -294,6 +285,65 @@ const LessonsIndex = () => {
     ...lessons.filter((l) => (l.title || "").toLowerCase().includes("checkpoint")),
   ];
 
+  const stages = ["Beginner", "Intermediate", "Advanced", "Expert"];
+
+  const { levelCompletionMap, stageCompletionMap } = useMemo(() => {
+    const completionIds = new Set(
+      (completedLessons || [])
+        .map((entry) => entry.lesson_id || entry.lessons?.id)
+        .filter(Boolean)
+    );
+
+    const levelAggregates = {};
+    const stageAggregates = {};
+
+    (allLessons || []).forEach((lesson) => {
+      if (!lesson) return;
+      const { id, stage, level } = lesson;
+      if (!stage || typeof level === "undefined" || level === null) {
+        return;
+      }
+
+      const levelKey = `${stage}-${level}`;
+      if (!levelAggregates[levelKey]) {
+        levelAggregates[levelKey] = { total: 0, completed: 0 };
+      }
+      levelAggregates[levelKey].total += 1;
+      if (id && completionIds.has(id)) {
+        levelAggregates[levelKey].completed += 1;
+      }
+
+      if (!stageAggregates[stage]) {
+        stageAggregates[stage] = { total: 0, completed: 0 };
+      }
+      stageAggregates[stage].total += 1;
+      if (id && completionIds.has(id)) {
+        stageAggregates[stage].completed += 1;
+      }
+    });
+
+    const levelCompletion = {};
+    Object.entries(levelAggregates).forEach(([key, counts]) => {
+      levelCompletion[key] = counts.total > 0 && counts.completed >= counts.total;
+    });
+
+    const stageCompletion = {};
+    Object.entries(stageAggregates).forEach(([key, counts]) => {
+      stageCompletion[key] = counts.total > 0 && counts.completed >= counts.total;
+    });
+
+    return {
+      levelCompletionMap: levelCompletion,
+      stageCompletionMap: stageCompletion,
+    };
+  }, [allLessons, completedLessons]);
+
+  const handleLessonClick = (event) => {
+    if (selectedStage === "Expert") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <div className="lessons-index-page-container">
       <header className="lessons-index-page-header">
@@ -301,6 +351,45 @@ const LessonsIndex = () => {
         <p className="lessons-index-page-header-subtitle">Over 150 conversation-based lessons to improve your English</p>
       </header>
       <div className="lesson-library">
+        {!user && (
+          <PlanNotice
+            heading="Unlock our full Lesson Library."
+            subtext={[
+              "All our lessons are locked. Create a free account to access our",
+              "free lessons, or become a member for full access to over 150 lessons!",
+            ]}
+            cta={{
+              label: "SIGN UP FOR FREE",
+              to: "/signup",
+            }}
+            secondaryCta={{
+              label: "BECOME A MEMBER",
+              to: "/membership",
+            }}
+            footerNote={
+              <>
+                <span>Not ready to create an account?</span>
+                <span>
+                  <Link to="/try-lessons">Click here</Link> to try 4 free lessons, no sign-up required!
+                </span>
+              </>
+            }
+          />
+        )}
+        {user && profile?.is_paid === false && (
+          <PlanNotice
+            heading="You're on our free plan."
+            subtext={[
+              <>
+                <Link to="/membership">Upgrade</Link> to enjoy access to our full lesson library.
+              </>,
+              <>
+                Or, explore the lessons available to you in our{" "}
+                <Link to="/free-lessons">free lesson library</Link>.
+              </>,
+            ]}
+          />
+        )}
         {/* The level buttons and placement test header */}
         <div className="stages-levels-subtitle">
           {/* <p className="lesson-subtitle">
@@ -308,30 +397,23 @@ const LessonsIndex = () => {
           </p> */}
 
           <div className="lesson-stages">
-            <button
-              className={`stage-btn ${selectedStage === "Beginner" ? "active" : ""}`}
-              onClick={() => handleStageChange("Beginner")}
-            >
-              BEGINNER
-            </button>
-            <button
-              className={`stage-btn ${selectedStage === "Intermediate" ? "active" : ""}`}
-              onClick={() => handleStageChange("Intermediate")}
-            >
-              INTERMEDIATE
-            </button>
-            <button
-              className={`stage-btn ${selectedStage === "Advanced" ? "active" : ""}`}
-              onClick={() => handleStageChange("Advanced")}
-            >
-              ADVANCED
-            </button>
-            <button
-              className={`stage-btn ${selectedStage === "Expert" ? "active" : ""}`}
-              onClick={() => handleStageChange("Expert")}
-            >
-              EXPERT
-            </button>
+            {stages.map((stage) => (
+              <button
+                key={stage}
+                className={`stage-btn ${selectedStage === stage ? "active" : ""}`}
+                onClick={() => handleStageChange(stage)}
+              >
+                {stage.toUpperCase()}
+                {stage === "Expert" && (
+                  <span className="stage-coming-soon-badge">COMING SOON!</span>
+                )}
+                {stageCompletionMap[stage] && (
+                  <span className="completion-checkmark" aria-hidden="true">
+                    ✓
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
 
           {/* Level buttons */}
@@ -342,9 +424,14 @@ const LessonsIndex = () => {
               <button
                 key={lvl}
                 className={`level-btn ${selectedLevel === lvl ? "active" : ""}`}
-                onClick={() => setSelectedLevel(lvl)}
+                onClick={() => handleLevelSelect(lvl)}
               >
                 LEVEL {lvl}
+                {levelCompletionMap[`${selectedStage}-${lvl}`] && (
+                  <span className="completion-checkmark" aria-hidden="true">
+                    ✓
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -356,17 +443,21 @@ const LessonsIndex = () => {
             <section className="level-backstory">
               <div className={`level-header ${isBackstoryOpen ? "backstory-open" : ""}`} onClick={() => setIsBackstoryOpen(!isBackstoryOpen)}>
                 <div className="level-text-graphic">
-                  <span className="level-header-text">LEVEL {selectedLevel}</span>
+                  <div className="level-title-group">
+                    <span className="level-header-text">
+                      LEVEL {selectedLevel}
+                    </span>
+                    {levelCompletionStatus?.is_completed && (
+                      <span className="level-complete-badge">
+                        LEVEL COMPLETE <span role="img" aria-label="Party popper">🎉</span>
+                      </span>
+                    )}
+                  </div>
                   <img src="/images/red-level-icon-clipboard.webp" alt="Red Clipboard" className="level-header-image" />
                 </div>
 
                 <div className="backstory-arrow-group">
                   <span className="backstory-header-text">{isBackstoryOpen ? "HIDE BACKSTORY" : "VIEW BACKSTORY"}</span>
-                  <img
-                    src={isBackstoryOpen ? "/images/collapse-collapsible-box.webp" : "/images/expand-collapsible-box.webp"}
-                    alt={isBackstoryOpen ? "Collapse backstory" : "Expand backstory"}
-                    className="backstory-arrow-icon"
-                  />
                 </div>
               </div>
 
@@ -382,13 +473,20 @@ const LessonsIndex = () => {
             <div className="level-content">
               <div className="lesson-list">
                 {sortedLessons.map((lesson) => (
-                  <Link to={`/lesson/${lesson.id}`} key={lesson.id} className="lesson-item">
+                  <Link
+                    to={`/lesson/${lesson.id}`}
+                    key={lesson.id}
+                    className="lesson-item"
+                    onClick={handleLessonClick}
+                  >
                     <div className="lesson-item-left">
-                      {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
-                        <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
-                      ) : (
-                        <span className="lesson-number">{lesson.level}.{lesson.lesson_order}</span>
-                      )}
+                      <div className="lesson-index-slot">
+                        {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
+                          <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
+                        ) : (
+                          <span className="lesson-number">{lesson.level}.{lesson.lesson_order}</span>
+                        )}
+                      </div>
                       <div className="name-desc-container">
                         <span className="lesson-name">
                           {lesson.title}
@@ -418,22 +516,41 @@ const LessonsIndex = () => {
                   </Link>
                 ))}
               </div>
-              <div className={`mark-finished-row ${levelCompletionStatus?.is_completed ? 'completed' : ''}`}>
-                <span className="mark-finished-content">
-                  {levelCompletionStatus?.is_completed ? (
-                    <>
-                      <span className="mark-finished-text">LEVEL {selectedLevel} COMPLETED</span>
-                      <img src="/images/filled-checkmark-lesson-complete.webp" alt="Completed" className="checkmark-img checkmark-completed" />
-                    </>
-                  ) : (
-                    <>
-                      <span className="mark-finished-text">MARK LEVEL {selectedLevel} AS FINISHED</span>
-                      <img src="/images/CheckCircle.png" alt="Not completed" className="checkmark-img" />
-                    </>
-                  )}
-                </span>
-              </div>
             </div>
+          </div>
+        </div>
+        <div className="level-navigation-row">
+          <div className="level-nav-left">
+            {prevLevel !== null ? (
+              <button
+                type="button"
+                className="lesson-navigation-text prev level-nav-button"
+                onClick={() => handleLevelSelect(prevLevel)}
+                aria-label={`Go to level ${prevLevel}`}
+              >
+                ← LEVEL {prevLevel}
+              </button>
+            ) : (
+              <span className="lesson-navigation-text prev disabled" aria-hidden="true">
+                ← LEVEL {selectedLevel}
+              </span>
+            )}
+          </div>
+          <div className="level-nav-right">
+            {nextLevel !== null ? (
+              <button
+                type="button"
+                className="lesson-navigation-text next level-nav-button"
+                onClick={() => handleLevelSelect(nextLevel)}
+                aria-label={`Go to level ${nextLevel}`}
+              >
+                LEVEL {nextLevel} →
+              </button>
+            ) : (
+              <span className="lesson-navigation-text next disabled" aria-hidden="true">
+                LEVEL {selectedLevel} →
+              </span>
+            )}
           </div>
         </div>
       </div>

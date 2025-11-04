@@ -3,6 +3,9 @@ import supabaseClient from "../supabaseClient";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import "../Styles/FreeLessonsIndex.css";
+import PlanNotice from "../Components/PlanNotice";
+import "../Styles/LessonsIndex.css";
+import { API_BASE_URL } from "../config/api";
 
 const FreeLessonsIndex = () => {
   const [lessonsByStage, setLessonsByStage] = useState({
@@ -10,6 +13,7 @@ const FreeLessonsIndex = () => {
     Intermediate: [],
     Advanced: [],
   });
+  const [completedLessons, setCompletedLessons] = useState([]);
 
   // Fetch all lessons and group by stage, filtering to only first lesson of each level
   useEffect(() => {
@@ -76,13 +80,58 @@ const FreeLessonsIndex = () => {
 
   const { user } = useAuth();
 
+  useEffect(() => {
+    const fetchCompletedLessons = async () => {
+      if (!user) {
+        setCompletedLessons([]);
+        return;
+      }
+
+      try {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+
+        if (!session?.access_token) {
+          setCompletedLessons([]);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/user/completed-lessons`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCompletedLessons(data.completed_lessons || []);
+        } else {
+          setCompletedLessons([]);
+        }
+      } catch (error) {
+        console.error("Error fetching completed lessons:", error);
+        setCompletedLessons([]);
+      }
+    };
+
+    fetchCompletedLessons();
+  }, [user]);
+
+  const isLessonCompleted = (lessonId) =>
+    completedLessons.some((completed) => completed.lesson_id === lessonId);
+
   // Component for a single lesson item
   const LessonItem = ({ lesson }) => {
     const isCheckpoint = (lesson.title || "").toLowerCase().includes("checkpoint");
+    const showLock = !user;
+    const completed = isLessonCompleted(lesson.id);
 
     const content = (
-      <div className="lesson-item">
-        <div className="lesson-item-left">
+      <div className="lesson-item-left">
+        <div className="lesson-index-slot">
           {isCheckpoint ? (
             <img
               src="/images/black-checkmark-level-checkpoint.webp"
@@ -90,33 +139,42 @@ const FreeLessonsIndex = () => {
               className="level-checkmark"
             />
           ) : (
-            <span className="lesson-number">
+            <span className="lesson-number" style={{ width: "auto" }}>
               {lesson.level}.{lesson.lesson_order}
             </span>
           )}
-          <div className="name-desc-container">
-            <span className="lesson-name">{lesson.title}</span>
+        </div>
+        <div className="name-desc-container">
+          <span className="lesson-name">{lesson.title}</span>
             {lesson.focus && (
               <span className="lesson-focus">{lesson.focus}</span>
             )}
-          </div>
-        </div>
-        {/* right side - lock icon for non-logged-in users */}
-        <div className="lesson-item-right">
-          {!user && (
-            <img
-              src="/images/lock.webp"
-              alt="Locked"
-              className="lesson-lock-icon"
-            />
-          )}
         </div>
       </div>
     );
 
+    const rightContent = showLock ? (
+      <img
+        src="/images/lock.webp"
+        alt="Locked"
+        className="lesson-lock-icon"
+      />
+    ) : (
+      <img
+        src={
+          completed
+            ? "/images/filled-checkmark-lesson-complete.webp"
+            : "/images/CheckCircle.png"
+        }
+        alt={completed ? "Completed" : "Not completed"}
+        className={`checkmark-img ${completed ? "checkmark-completed" : ""}`}
+      />
+    );
+
     return (
-      <Link to={`/lesson/${lesson.id}`} className="free-lesson-link">
+      <Link to={`/lesson/${lesson.id}`} className="lesson-item free-lesson-link">
         {content}
+        <div className="lesson-item-right">{rightContent}</div>
       </Link>
     );
   };
@@ -160,15 +218,41 @@ const FreeLessonsIndex = () => {
         </p>
       </header>
 
-      <div className="free-upgrade-message">
-        <p>Your free plan gives you access to the first lesson of each level!</p>
-        <p>
-          <Link to="/membership" className="upgrade-link">
-            Upgrade
-          </Link>{" "}
-          to enjoy access to our full lesson library.
-        </p>
-      </div>
+      {!user ? (
+        <div className="free-plan-notice-wrapper">
+          <PlanNotice
+            heading="Looks like you don't have an account."
+            subtext={[
+              <>
+                Make a <em>free</em> account to access all the lessons below, along with access to our featured resources!
+              </>,
+            ]}
+            cta={{
+              label: "SIGN UP FOR FREE",
+              to: "/signup",
+            }}
+            footerNote={
+              <span>
+                Not ready to create an account? <a href="/try-lessons">Click here</a> to try 4 free lessons, no sign-up required!
+              </span>
+            }
+          />
+        </div>
+      ) : (
+        <div className="free-upgrade-message">
+          <p>Your free plan gives you access to the first lesson of each level!</p>
+          <p className="free-upgrade-actions">
+            <Link to="/membership" className="upgrade-link upgrade-link--primary">
+              Upgrade
+            </Link>{" "}
+            to enjoy access to our{" "}
+            <Link to="/lessons" className="upgrade-link upgrade-link--secondary">
+              full lesson library
+            </Link>
+            .
+          </p>
+        </div>
+      )}
 
       <div className="free-lessons-content">
         <section className="free-lessons-section">

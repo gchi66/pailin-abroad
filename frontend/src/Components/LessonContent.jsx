@@ -354,16 +354,11 @@ export default function LessonContent({
             const md = item.content_md?.trim?.() || item.content?.trim?.() || "";
 
             const phraseLabel = (() => {
-              const enPhrase = item.phrase?.trim() || "Phrase";
+              const enPhrase = item.phrase?.trim();
               const thPhrase = item.phrase_th?.trim();
 
-              if (contentLang === "th" && thPhrase) {
-                // Show both English and Thai when Thai mode is active and Thai translation exists
-                return `${enPhrase} / ${thPhrase}`;
-              } else {
-                // Show only English when in English mode or no Thai translation
-                return enPhrase;
-              }
+              // Keep headers in English, falling back to other data when necessary
+              return enPhrase || thPhrase || "Phrase";
             })();
 
             return (

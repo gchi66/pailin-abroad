@@ -59,20 +59,42 @@
   padding: 0 2rem;
 }
 
+.free-upgrade-actions {
+  display: inline-block;
+}
+
+.free-plan-notice-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.free-plan-notice-wrapper .plan-notice {
+  padding-top: 3rem;
+  padding-bottom: 0;
+}
+
 .free-upgrade-message p {
   margin: 0.25rem 0;
 }
 
 .upgrade-link {
-  color: #E74C3C;
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
   transition: all 0.2s ease;
 }
 
 .upgrade-link:hover {
-  text-decoration: underline;
   color: #C0392B;
+}
+
+.upgrade-link--primary {
+  color: #FF4545;
+}
+
+.upgrade-link--secondary {
+  color: #1E1E1E;
 }
 
 /* Content Section */
@@ -140,6 +162,10 @@
   color: inherit;
 }
 
+.free-lesson-link .lesson-number {
+  width: auto;
+}
+
 .free-lesson-item {
   background: white;
   padding: 1.5rem 4rem;
@@ -158,6 +184,12 @@
   display: flex;
   align-items: center;
   gap: 3vw;
+}
+
+.free-lesson-item-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .free-lesson-number {

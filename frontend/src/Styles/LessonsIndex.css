@@ -57,10 +57,9 @@
   width: 90%;
   max-width: 90%;
   margin: 0 auto;
-  padding: 2rem 4rem;
+  padding: 3rem 4rem 0rem 4rem;
   display: flex;
   flex-direction: column;
-  gap: 5vh;
   align-items: center;
   /* text-align: center; */
   /* justify-content: space-between; */
@@ -74,7 +73,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 1rem 0rem 2rem 0rem;
+  padding: 0rem 0rem 3rem 0rem;
 }
 
 .lesson-subtitle {
@@ -108,8 +107,10 @@
   font-weight: 600;
   color: #1e1e1e;
   cursor: pointer;
+  height: 3.5vw;
   transition: background 0.3s ease-in-out;
   min-width: 20vw;
+  position: relative;
 }
 
 .stage-btn.active {
@@ -175,6 +176,31 @@
   background: #91CAFF;
 }
 
+.stage-coming-soon-badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 1rem;
+  color: #FF4545;
+  font-size: 0.78rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.completion-checkmark {
+  color: #FF4545;
+  font-weight: 700;
+  pointer-events: none;
+  margin-left: 0.5rem;
+}
+
+.stage-btn .completion-checkmark {
+  font-size: 1.2rem;
+}
+
+.level-btn .completion-checkmark {
+  font-size: 1rem;
+}
+
 
 /* Level Section */
 .level-wrapper {
@@ -200,7 +226,8 @@
   justify-content: space-between;
   /* border-bottom: 0.075rem solid #1E1E1E; */
   padding: 2rem 4rem;
-  transition: all 0.5s ease-in-out;
+  /* transition: all 0.5s ease-in-out; */
+  position: relative;
 }
 
 .level-text-graphic {
@@ -209,9 +236,32 @@
   align-items: center;
   gap: 2vw;
 }
+.level-title-group {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
 .level-header-text {
   font-size: 2.5rem;
   font-weight: 600;
+}
+
+.level-complete-badge {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1E1E1E;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.level-complete-badge span[role="img"] {
+  font-size: 1.6rem;
 }
 
 .level-header-image {
@@ -226,6 +276,18 @@
   gap: 1vw;
 }
 
+.backstory-arrow-group::after {
+  content: "▸";
+  font-size: 1.4rem;
+  transition: transform .25s ease;
+  transform: rotate(90deg);
+  line-height: 1;
+}
+
+.level-header.backstory-open .backstory-arrow-group::after {
+  transform: rotate(270deg);
+}
+
 .backstory-header-text  {
   font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
@@ -233,7 +295,10 @@
 }
 
 .level-content {
-  padding: 0
+  padding: 0;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  overflow: hidden;
 }
 
 /* Backstory stuff */
@@ -244,30 +309,26 @@
   display: flex;
   flex-direction: column;
   border-bottom: 0.075rem solid #1E1E1E;
-  transition: all 0.3s ease-in-out;
-}
-
-.backstory-arrow-icon {
-  height: 3vh;
-  width: auto;
+  /* transition: all 0.3s ease-in-out; */
 }
 
 .backstory-container {
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   text-align: left;
-  transition: all 0.3s ease-in-out;
+  padding: 0 4rem;
+  box-sizing: border-box;
 }
 
 .backstory-content {
   text-align: left;
   padding: 2rem 0rem;
-  font-size: 1.05rem;
-  line-height: 4vh;
+  font-size: 1.2rem;
+  line-height: 2.5vh;
   font-family: "Poppins", sans-serif;
   color: #1e1e1e;
   font-weight: 500;
-  transition: all 0.3s ease-in-out;
+  /* transition: all 0.3s ease-in-out; */
   margin: 0;
 }
 
@@ -310,6 +371,7 @@
   justify-content: space-between;
   text-decoration: none;
   color: inherit;
+  min-height: 5rem;
 }
 
 .lesson-item:hover {
@@ -319,20 +381,32 @@
 .lesson-item-left {
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: flex-start;
   align-items: center;
-  gap: 3vw;
+  gap: 2rem;
+  width: 100%;
+}
+
+.lesson-index-slot {
+  width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .lesson-number {
   font-size: 2rem;
   font-weight: 500;
+  text-align: center;
+  width: 100%;
 }
 
 .name-desc-container {
   display: flex;
   flex-direction: column;
   align-items: left;
+  flex: 1;
 }
 
 .lesson-name {
@@ -348,6 +422,7 @@
   font-weight: 600;
   line-height: 1.3;
   margin-top: 0.3rem;
+  white-space: pre-line;
 }
 
 .lesson-desc {
@@ -373,6 +448,12 @@
   justify-content: center;
 }
 
+.lesson-item:last-of-type {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-bottom: none;
+}
+
 .checkmark-img {
   height: 3vh;
   width: auto;
@@ -385,7 +466,9 @@
 
 .level-checkmark {
   height: 3vh;
-  width: auto;
+  max-height: 3vh;
+  width: 100%;
+  object-fit: contain;
 }
 
 .lesson-lock-icon {
@@ -396,35 +479,59 @@
   align-self: center;
 }
 
-.mark-finished-row {
-  background: #fff;
-  padding: 1.5rem;
-  transition: background 0.3s ease-in-out;
-  max-width: 100vw; /* Prevents overflow */
-  background: white;
-  border-top: 0.075rem solid #1E1E1E;
-  border-radius: 0 0 1rem 1rem;
-  height: 9vh;
+.level-navigation-row {
+  width: 85%;
+  max-width: 85%;
+  margin: auto 0;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 4rem 0rem 4rem;
+}
+
+.level-nav-left,
+.level-nav-right {
+  flex: 1;
+  display: flex;
   align-items: center;
 }
 
-.mark-finished-row.completed {
-  background: #DEEFFF;
+.level-nav-left {
+  justify-content: flex-start;
 }
 
-.mark-finished-content {
-  display: flex;
-  flex-direction: row;
-  gap: 2vw;
-  justify-content: center;
+.level-nav-right {
+  justify-content: flex-end;
+}
+
+.level-nav-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  display: inline-flex;
   align-items: center;
+  cursor: pointer;
 }
 
-.mark-finished-text {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1e1e1e;
-  font-family: "Poppins", sans-serif;
+.level-nav-button:focus-visible {
+  outline: 2px solid #1E1E1E;
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .level-navigation-row {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .level-nav-left,
+  .level-nav-right {
+    flex: none;
+    width: 100%;
+    justify-content: center;
+  }
+
 }

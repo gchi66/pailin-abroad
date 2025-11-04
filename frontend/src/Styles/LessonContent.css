@@ -5,7 +5,7 @@
   box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
   display: flex;
   flex-direction: column;
-  min-height: 60vh;
+  /* min-height: 60vh; */
   padding: 0 0 1.4rem;
 }
 
