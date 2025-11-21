@@ -26,9 +26,48 @@ const Onboarding = () => {
   const navigate = useNavigate();
   const { ui: uiLang, setUi: setUiLang } = useUiLang();
   const withUi = useWithUi();
+  const isDevPreview =
+    process.env.NODE_ENV === "development" &&
+    typeof window !== "undefined" &&
+    window.location.search.includes("previewOnboarding=1");
+
+  const passwordValue = passwords.newPassword;
+  const confirmPasswordValue = passwords.confirmPassword;
+  const meetsLength = passwordValue.length >= 8;
+  const meetsNumberOrSymbol = /[\d!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
+  const meetsUppercase = /[A-Z]/.test(passwordValue);
+  const allPasswordRequirementsMet = meetsLength && meetsNumberOrSymbol && meetsUppercase;
+  const passwordsMatch =
+    passwordValue.length > 0 &&
+    confirmPasswordValue.length > 0 &&
+    passwordValue === confirmPasswordValue;
+  const shouldShowMismatch =
+    confirmPasswordValue.length > 0 &&
+    passwordValue.length > 0 &&
+    passwordValue !== confirmPasswordValue;
+  const canProceedFromPassword = isDevPreview || (allPasswordRequirementsMet && passwordsMatch);
+  const canProceedProfile = username.trim() && selectedAvatar;
+  const isNextDisabled =
+    isLoading ||
+    (step === 1 && !canProceedFromPassword) ||
+    (step === 2 && !canProceedProfile);
 
   // Fetch user profile and determine starting step
   useEffect(() => {
+    if (isDevPreview) {
+      setUserProfile({
+        username: "Preview Student",
+        avatar_image: "",
+        is_verified: true,
+        is_paid: false,
+        is_active: false
+      });
+      setSkipPasswordStep(false);
+      setStep(0);
+      setLoadingProfile(false);
+      return;
+    }
+
     const fetchUserProfile = async () => {
       try {
         const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
@@ -105,7 +144,7 @@ const Onboarding = () => {
     };
 
     fetchUserProfile();
-  }, [navigate]);
+  }, [isDevPreview, navigate]);
 
   // Helper function to pick the right language content
   const pickLang = (en, th) => {
@@ -123,7 +162,7 @@ const Onboarding = () => {
     welcomeDescription: pickLang("In a few quick steps, we'll get you ready to explore my world and the language I use every day.", "ในไม่กี่ขั้นตอนง่ายๆ เราจะเตรียมคุณให้พร้อมสำหรับการสำรวจโลกของฉันและภาษาที่ฉันใช้ทุกวัน"),
 
     // Password Step (Step 1)
-    passwordTitle: pickLang("Let's set up your account", "มาตั้งค่าบัญชีของคุณกันเถอะ"),
+    passwordTitle: pickLang("Let's set up your password", "มาตั้งค่ารหัสผ่านของคุณกันเถอะ"),
     emailLabel: pickLang("Email address", "ที่อยู่อีเมล"),
     newPassword: pickLang("New password", "รหัสผ่านใหม่"),
     confirmPassword: pickLang("Confirm password", "ยืนยันรหัสผ่าน"),
@@ -174,11 +213,11 @@ const Onboarding = () => {
       // From welcome, go to password (step 1) or username (step 2) if skipping
       setStep(skipPasswordStep ? 2 : 1);
     } else if (step === 1) {
-      // From password, go to username (step 2)
-      setStep(2);
+      // From password, trigger password creation before advancing
+      handleSetPassword();
     } else if (step === 2) {
-      // From username/avatar, go to benefits (step 3)
-      setStep(3);
+      // From username/avatar, save profile before advancing
+      handleCompleteProfile();
     } else if (step === 3) {
       // From benefits, go to confirmation (step 4)
       setStep(4);
@@ -201,6 +240,12 @@ const Onboarding = () => {
 
   // Finish onboarding - set is_active = true for all users
   const handleFinishOnboarding = async () => {
+    if (isDevPreview) {
+      setError("");
+      navigate("/pathway");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
 
@@ -246,22 +291,26 @@ const Onboarding = () => {
   };
 
   const handleSetPassword = async () => {
-    // Clear previous errors
+    // Clear previous errors upfront
     setError("");
 
-    // Validation
-    if (!passwords.newPassword || !passwords.confirmPassword) {
-      setError("Please fill in all fields.");
+    if (isLoading) {
       return;
     }
 
-    if (passwords.newPassword !== passwords.confirmPassword) {
+    if (isDevPreview) {
+      setStep(2);
+      return;
+    }
+
+    // Validation is handled prior to calling the API.
+    if (!allPasswordRequirementsMet) {
+      setError("Please meet all password requirements.");
+      return;
+    }
+
+    if (!passwordsMatch) {
       setError("Passwords don't match.");
-      return;
-    }
-
-    if (passwords.newPassword.length < 8) {
-      setError("Password must be at least 8 characters long.");
       return;
     }
 
@@ -328,6 +377,12 @@ const Onboarding = () => {
   };
 
   const handleCompleteProfile = async () => {
+    if (isDevPreview) {
+      setError("");
+      setStep(3);
+      return;
+    }
+
     // Clear previous errors
     setError("");
 
@@ -435,7 +490,12 @@ const Onboarding = () => {
                 <label className="onboarding-input-label">{uiText.newPassword}</label>
                 <div className="onboarding-input-wrapper">
                   <div className="onboarding-input-icon-left">
-                    🔒
+                    <img
+                      src="/images/password-lock.webp"
+                      alt=""
+                      aria-hidden="true"
+                      className="onboarding-input-icon-image"
+                    />
                   </div>
                   <input
                     type={showPasswords.newPassword ? "text" : "password"}
@@ -448,7 +508,11 @@ const Onboarding = () => {
                     onClick={() => togglePasswordVisibility("newPassword")}
                     className="onboarding-input-icon-right"
                   >
-                    {showPasswords.newPassword ? "🙈" : "👁️"}
+                    <img
+                      src={showPasswords.newPassword ? "/images/hide-password.webp" : "/images/show-password.webp"}
+                      alt={showPasswords.newPassword ? "Hide password" : "Show password"}
+                      className="onboarding-input-icon-image"
+                    />
                   </button>
                 </div>
               </div>
@@ -458,7 +522,12 @@ const Onboarding = () => {
                 <label className="onboarding-input-label">{uiText.confirmPassword}</label>
                 <div className="onboarding-input-wrapper">
                   <div className="onboarding-input-icon-left">
-                    🔒
+                    <img
+                      src="/images/password-lock.webp"
+                      alt=""
+                      aria-hidden="true"
+                      className="onboarding-input-icon-image"
+                    />
                   </div>
                   <input
                     type={showPasswords.confirmPassword ? "text" : "password"}
@@ -471,35 +540,53 @@ const Onboarding = () => {
                     onClick={() => togglePasswordVisibility("confirmPassword")}
                     className="onboarding-input-icon-right"
                   >
-                    {showPasswords.confirmPassword ? "🙈" : "👁️"}
+                    <img
+                      src={showPasswords.confirmPassword ? "/images/hide-password.webp" : "/images/show-password.webp"}
+                      alt={showPasswords.confirmPassword ? "Hide password" : "Show password"}
+                      className="onboarding-input-icon-image"
+                    />
                   </button>
                 </div>
+                {shouldShowMismatch && (
+                  <div className="onboarding-password-mismatch" role="alert">
+                    Passwords don't match
+                  </div>
+                )}
               </div>
 
               {/* Password Rules */}
               <div className="onboarding-password-rules">
                 <div className="onboarding-password-rule">
-                  <span className="onboarding-rule-icon">✓</span>
-                  <span className="onboarding-rule-text">{uiText.passwordRule1}</span>
+                  <img
+                    src={meetsLength ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsLength ? "✓ Length requirement met" : "Length requirement not met"}
+                    className={`onboarding-rule-icon ${meetsLength ? "met" : ""}`}
+                  />
+                  <span className={`onboarding-rule-text ${meetsLength ? "met" : ""}`}>
+                    {uiText.passwordRule1}
+                  </span>
                 </div>
                 <div className="onboarding-password-rule">
-                  <span className="onboarding-rule-icon">✓</span>
-                  <span className="onboarding-rule-text">{uiText.passwordRule2}</span>
+                  <img
+                    src={meetsNumberOrSymbol ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsNumberOrSymbol ? "✓ Number or symbol requirement met" : "Number or symbol requirement not met"}
+                    className={`onboarding-rule-icon ${meetsNumberOrSymbol ? "met" : ""}`}
+                  />
+                  <span className={`onboarding-rule-text ${meetsNumberOrSymbol ? "met" : ""}`}>
+                    {uiText.passwordRule2}
+                  </span>
                 </div>
                 <div className="onboarding-password-rule">
-                  <span className="onboarding-rule-icon">✓</span>
-                  <span className="onboarding-rule-text">{uiText.passwordRule3}</span>
+                  <img
+                    src={meetsUppercase ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsUppercase ? "✓ Uppercase letter requirement met" : "Uppercase letter requirement not met"}
+                    className={`onboarding-rule-icon ${meetsUppercase ? "met" : ""}`}
+                  />
+                  <span className={`onboarding-rule-text ${meetsUppercase ? "met" : ""}`}>
+                    {uiText.passwordRule3}
+                  </span>
                 </div>
               </div>
-
-              {/* Set Password Button */}
-              <button
-                onClick={handleSetPassword}
-                className="submit-btn onboarding-password-submit"
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating Account..." : uiText.setPassword}
-              </button>
             </div>
           </div>
         );
@@ -530,11 +617,11 @@ const Onboarding = () => {
                   </div>
                 </div>
               </div>
-            </div>
+              </div>
 
-            {/* Avatar Selection Section */}
-            <div className="onboarding-section">
-              <h2 className="onboarding-section-title">{uiText.chooseAvatar}</h2>
+              {/* Avatar Selection Section */}
+              <div className="onboarding-section">
+                <h2 className="onboarding-section-title">{uiText.chooseAvatar}</h2>
               <div className="onboarding-avatar-grid">
                 {avatarOptions.map((avatar, index) => (
                   <div
@@ -551,47 +638,39 @@ const Onboarding = () => {
                   </div>
                 ))}
               </div>
-
-              {/* Continue Button */}
-              <button
-                onClick={handleCompleteProfile}
-                className="submit-btn onboarding-continue-btn"
-                disabled={isLoading || !username.trim() || !selectedAvatar}
-              >
-                {isLoading ? "Saving..." : "CONTINUE"}
-              </button>
             </div>
           </div>
         );
-      case 3:
+      case 3: {
+        const resourceBenefits = [
+          uiText.resource1,
+          uiText.resource2,
+          uiText.resource3,
+          uiText.resource4,
+          uiText.resource5
+        ];
+        const coreBenefits = [uiText.benefit1, uiText.benefit2, uiText.benefit3];
         return (
           <div className="onboarding-benefits">
             <h2 className="onboarding-section-title">{uiText.benefitsTitle}</h2>
             <div className="onboarding-benefits-list">
-              <div className="onboarding-benefit-item">
-                <span className="onboarding-benefit-check">✓</span>
-                <span className="onboarding-benefit-text">{uiText.benefit1}</span>
-              </div>
-              <div className="onboarding-benefit-item">
-                <span className="onboarding-benefit-check">✓</span>
-                <span className="onboarding-benefit-text">{uiText.benefit2}</span>
-              </div>
-              <div className="onboarding-benefit-item">
-                <span className="onboarding-benefit-check">✓</span>
-                <div className="onboarding-benefit-text">
-                  <span>{uiText.benefit3}</span>
-                  <ul className="onboarding-benefit-sublist">
-                    <li>{uiText.resource1}</li>
-                    <li>{uiText.resource2}</li>
-                    <li>{uiText.resource3}</li>
-                    <li>{uiText.resource4}</li>
-                    <li>{uiText.resource5}</li>
-                  </ul>
+              {[...coreBenefits, ...resourceBenefits].map((benefit, index) => (
+                <div className="onboarding-benefit-item" key={`benefit-${index}`}>
+                  <span className="onboarding-benefit-check">
+                    <img
+                      src="/images/blue-checkmark.webp"
+                      alt=""
+                      aria-hidden="true"
+                      className="onboarding-benefit-check-icon"
+                    />
+                  </span>
+                  <span className="onboarding-benefit-text">{benefit}</span>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         );
+      }
       case 4:
         return (
           <div className="onboarding-confirmation">
@@ -658,18 +737,16 @@ const Onboarding = () => {
 
   return (
     <div className="onboarding-main">
-      {/* Logo positioned outside and above the container */}
-      <div className="onboarding-top-logo">
-        <img
-          src="/images/full-logo.webp"
-          alt="Pailin Abroad Logo"
-          className="onboarding-full-logo"
-        />
-      </div>
-
       <div className="onboarding-container">
         {/* Top Navigation - now just language toggle */}
         <nav className="onboarding-nav">
+          <div className="onboarding-nav-logo">
+            <img
+              src="/images/full-logo.webp"
+              alt="Pailin Abroad Logo"
+              className="onboarding-nav-logo-image"
+            />
+          </div>
           <div className="onboarding-language-toggle">
             <button
               className={`onboarding-lang-btn ${uiLang === 'en' ? 'active' : ''}`}
@@ -712,8 +789,9 @@ const Onboarding = () => {
               <button
                 className="onboarding-next-btn"
                 onClick={nextStep}
+                disabled={isNextDisabled}
               >
-                {uiText.next} →
+                {step === 1 && isLoading ? "..." : `${uiText.next} →`}
               </button>
             </div>
           )}

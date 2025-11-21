@@ -253,6 +253,11 @@ export default function Lesson() {
   });
 
   useEffect(() => {
+    // Reset active section when navigating to a different lesson
+    setActiveId(null);
+  }, [id]);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("contentLang", contentLang);
     }

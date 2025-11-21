@@ -2,7 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../Styles/PlanNotice.css";
 
-const PlanNotice = ({ heading, subtext, cta, secondaryCta, footerNote }) => {
+const PlanNotice = ({
+  heading,
+  subtext,
+  cta,
+  secondaryCta,
+  footerNote,
+  ctaDivider,
+}) => {
   const renderCTA = (buttonProps, isSecondary = false) => {
     if (!buttonProps) return null;
 
@@ -68,9 +75,12 @@ const PlanNotice = ({ heading, subtext, cta, secondaryCta, footerNote }) => {
     <section className="plan-notice">
       {heading && <h2 className="plan-notice-heading">{heading}</h2>}
       {renderSubtext()}
-      {(primaryCTA || secondaryCTA) && (
+      {(primaryCTA || secondaryCTA || ctaDivider) && (
         <div className="plan-notice-cta-group">
           {primaryCTA}
+          {ctaDivider && (
+            <p className="plan-notice-cta-divider">{ctaDivider}</p>
+          )}
           {secondaryCTA}
         </div>
       )}

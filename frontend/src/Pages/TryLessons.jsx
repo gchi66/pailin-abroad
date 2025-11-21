@@ -1,9 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import FreeLessonCards from "../Components/FreeLessonCards";
+import PlanNotice from "../Components/PlanNotice";
+import { useAuth } from "../AuthContext";
 import "../Styles/TryLessons.css";
+import FreeLessonCards from "../Components/FreeLessonCards";
+import MembershipFeatures from "../Components/MembershipFeatures";
 
 const TryLessons = () => {
+  const { user } = useAuth();
+
   return (
     <div className="try-lessons-page-container">
       {/* Header */}
@@ -27,15 +31,44 @@ const TryLessons = () => {
         <FreeLessonCards showHeader={false} />
       </div>
 
-      {/* Call-to-Action Buttons */}
-      <div className="try-lessons-cta">
-        <Link to="/signup" className="try-lessons-cta-link">
-          <button className="signup-cta-button">SIGN UP FOR FREE</button>
-        </Link>
-        <Link to="/membership" className="try-lessons-cta-link">
-          <button className="member-cta-button">BECOME A MEMBER</button>
-        </Link>
+      <div className="try-lessons-plan-notice-wrapper">
+        {!user ? (
+          <PlanNotice
+            heading="Ready to continue your journey?"
+            subtext={[
+              "You can create a free account to unlock our entire library of free lessons.",
+            ]}
+            cta={{
+              label: "SIGN UP FOR FREE",
+              to: "/signup",
+            }}
+            secondaryCta={{
+              label: "BECOME A MEMBER",
+              to: "/membership",
+            }}
+            ctaDivider={
+              <>
+                Or, get full access to <strong>all 150+ lessons</strong> and take your English to the next level with a full membership.
+              </>
+            }
+          />
+        ) : (
+          <PlanNotice
+            heading="Ready to continue your journey?"
+            subtext={
+              <>
+                Get full access to <strong>all 150+ lessons</strong> and take your English to the next level with a full membership.
+              </>
+            }
+            cta={{
+              label: "BECOME A MEMBER",
+              to: "/membership",
+            }}
+          />
+        )}
       </div>
+
+      <MembershipFeatures />
     </div>
   );
 };

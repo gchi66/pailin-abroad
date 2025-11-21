@@ -46,6 +46,15 @@
   padding: 1rem 0;
 }
 
+.plan-notice-cta-divider {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  color: #1E1E1E;
+  margin: 2.5rem 0 0 0;
+  text-align: center;
+  max-width: 98%;
+}
+
 .plan-notice-cta {
   display: inline-flex;
   align-items: center;
@@ -116,6 +125,10 @@
   }
 
   .plan-notice-subtext-line {
+    font-size: 0.95rem;
+  }
+
+  .plan-notice-cta-divider {
     font-size: 0.95rem;
   }
 

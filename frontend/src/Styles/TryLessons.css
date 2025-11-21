@@ -76,60 +76,18 @@
   justify-content: center;
 }
 
-/* CTA Section */
-.try-lessons-cta {
+.try-lessons-plan-notice-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  padding: 4rem 2rem;
-  margin: 2rem 0;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
 }
 
-.try-lessons-cta-link {
-  text-decoration: none;
-}
-
-/* Sign Up CTA Button */
-.signup-cta-button {
-  background-color: #F65555;
-  color: white;
-  border: 0.15rem solid #1E1E1E;
-  font-family: "Poppins", sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding: 1.2rem 2.5rem;
-  border-radius: 8rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  width: 31vw;
-}
-
-.signup-cta-button:hover {
-  background-color: #ff4a4a;
-  transform: translateY(-2px);
-}
-
-/* Member CTA Button */
-.member-cta-button {
-  background-color: white;
-  color: #1E1E1E;
-  border: 0.15rem solid #1E1E1E;
-  font-family: "Poppins", sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding: 1.2rem 2.5rem;
-  border-radius: 8rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0.2rem 0.2rem 0px #1E1E1E;
-  min-width: 250px;
-}
-
-.member-cta-button:hover {
-  background-color: #f5f5f5;
-  transform: translateY(-2px);
-  box-shadow: 0.3rem 0.3rem 0px #1E1E1E;
+.try-lessons-plan-notice-wrapper .plan-notice {
+  gap: 0.5rem;
+  margin-top: 2rem;
 }
 
 /* Responsive Design */
@@ -150,21 +108,17 @@
     font-size: 1.1rem;
   }
 
-  .try-lessons-cta {
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 3rem 1rem;
-  }
-
-  .signup-cta-button,
-  .member-cta-button {
-    width: 100%;
-    max-width: 350px;
-    font-size: 1.1rem;
+  .try-lessons-plan-notice-wrapper {
+    padding: 0 1rem;
   }
 }
 
 @media (max-width: 480px) {
+  .try-lessons-plan-notice-wrapper {
+    width: 100%;
+    padding: 0 0.75rem;
+  }
+
   .try-lessons-page-container {
     padding: 25vh 0 0 0;
     margin-top: -15vh;
@@ -187,16 +141,5 @@
   .try-lessons-intro {
     font-size: 1rem;
     line-height: 1.6;
-  }
-
-  .try-lessons-cta {
-    padding: 2rem 1rem;
-  }
-
-  .signup-cta-button,
-  .member-cta-button {
-    font-size: 1rem;
-    padding: 1rem 2rem;
-    min-width: unset;
   }
 }

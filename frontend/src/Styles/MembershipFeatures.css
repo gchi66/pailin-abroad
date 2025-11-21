@@ -2,56 +2,80 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* min-height: 90vh; */
+  padding: 0 1rem;
   height: auto;
-  padding: 0 0;
-  flex-direction: row-reverse; /* Mirrors the layout */
+  width: 100%;
 }
 
 .membership-features-card {
   display: flex;
   align-items: center;
+  justify-content: center;
   background: white;
-  padding: 5vh 8rem 5vh 7rem;
+  padding: 4rem 8rem;
   border-radius: 2vh;
   border: 0.1rem solid #1E1E1E;
   box-shadow: 0.2rem 0.2rem 0px #1E1E1E;
-  position: relative;
-  max-width: 66vw;
+  max-width: 48rem;
   width: 100%;
-  left: 20%; /* Mirrored from `right: 20%` */
+  margin: 0 auto;
 }
 
 .membership-features-box {
   background: none;
-  padding: 3rem;
-  max-width: 50vw;
+  padding: 0;
+  max-width: 100%;
   border-radius: 1.5rem;
+  width: 100%;
 }
 
 .membership-features-title {
   font-size: 2.5rem;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
-  text-align: left; /* Changed from right */
+  text-align: center; /* Changed from right */
   color: #0f172a;
 }
 
 .membership-features-text {
-  font-size: 1.2rem;
-  font-family: "Poppins", sans-serif;
-  color: #1e1e1e;
-  line-height: 1.6;
-  text-align: left; /* Changed from right */
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    color: #1e1e1e;
+    line-height: 1.6;
+    text-align: left;
+    list-style: none;
+    padding: 1.5rem 0 0 6rem;
+    margin: 0;
 }
 
-.membership-graphic-container {
-  position: absolute;
-  left: 10%; /* Moved to the left */
+.membership-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.stars-graphic {
-  max-width: 25vw;
-  height: auto;
-  max-height: 50dvh;
+.membership-feature-item:last-child {
+  margin-bottom: 0;
+}
+
+.membership-feature-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .membership-features-card {
+    padding: 2.5rem 2rem;
+  }
+
+  .membership-features-title {
+    font-size: 2rem;
+  }
+
+  .membership-features-text {
+    font-size: 1.05rem;
+  }
 }

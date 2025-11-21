@@ -37,21 +37,48 @@ export default function RichSectionRenderer({
 
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines) => {
-    return inlines.map((span, m) => {
+    const processedInlines = inlines.map((span, idx) => {
       const cleanText = cleanAudioTags(span.text);
+      let displayText = cleanText;
+      const nextSpan = inlines[idx + 1];
+
+      // Check if there's NO trailing space in the ORIGINAL text (before cleanAudioTags)
+      const originalHadTrailingSpace = typeof span.text === "string" && /[ \t]+$/.test(span.text);
+
+      const styleChangesNext =
+        nextSpan &&
+        (nextSpan?.underline !== span?.underline ||
+          nextSpan?.bold !== span?.bold ||
+          nextSpan?.italic !== span?.italic);
+
+      // If style changes AND original had no space, suppress auto-spacing on next span
+      const suppressSpaceBefore = styleChangesNext && !originalHadTrailingSpace;
+
+      return { span, cleanText, displayText, suppressSpaceBefore };
+    });
+
+    return processedInlines.map((entry, m) => {
+      const { span, displayText } = entry;
+      const currentText = typeof displayText === "string" ? displayText : "";
 
       // Check if we need a space before this span
       let needsSpaceBefore = false;
       if (m > 0) {
-        const prevSpan = inlines[m - 1];
-        const prevText = cleanAudioTags(prevSpan.text);
+        const prevEntry = processedInlines[m - 1];
+        if (prevEntry.suppressSpaceBefore) {
+          needsSpaceBefore = false;
+        } else {
+          const prevDisplay = prevEntry.displayText;
+          const prevText = typeof prevDisplay === "string" ? prevDisplay : "";
 
-        // Add space if previous span doesn't end with whitespace or punctuation
-        // and current span doesn't start with whitespace or punctuation
-        const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]$/.test(prevText);
-        const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]/.test(cleanText);
+          // Add space if previous span doesn't end with whitespace or punctuation
+          // and current span doesn't start with whitespace or punctuation
+          const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]$/.test(prevText);
+          const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]/.test(currentText);
 
-        needsSpaceBefore = !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && cleanText.trim();
+          needsSpaceBefore =
+            !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && currentText.trim();
+        }
       }
 
 
@@ -78,11 +105,11 @@ export default function RichSectionRenderer({
             rel="noopener noreferrer"
             style={commonStyle}
           >
-            {cleanText}
+            {displayText}
           </a>
         );
       } else {
-        element = <span style={commonStyle}>{cleanText}</span>;
+        element = <span style={commonStyle}>{displayText}</span>;
       }
 
       return (
