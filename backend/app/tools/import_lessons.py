@@ -660,11 +660,10 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
             continue
         try:
             upd = (supabase.table("lesson_sections")
-                   .update(th_update)
-                   .eq("lesson_id", key["lesson_id"])
-                   .eq("type", key["type"])
-                   .eq("sort_order", key["sort_order"])
-                   .execute())
+                .update(th_update)
+                .eq("lesson_id", key["lesson_id"])
+                .eq("type", key["type"])
+                .execute())
             if not (upd.data or []):
                 ins_record = {**key, **th_update}
                 supabase.table("lesson_sections").insert(ins_record).execute()

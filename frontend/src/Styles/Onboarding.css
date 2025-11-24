@@ -85,7 +85,7 @@
   flex: 1;
   min-height: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   padding: 2rem 7rem;
   overflow-y: auto;
@@ -223,6 +223,14 @@
   border-radius: 0.75rem;
   overflow: hidden;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.onboarding-password-setup .onboarding-input-wrapper {
+  border-color: #d5d5d5;
+}
+
+.onboarding-password-setup .onboarding-input-wrapper:focus-within {
+  border-color: #1e1e1e;
 }
 
 .onboarding-input-icon-left {
