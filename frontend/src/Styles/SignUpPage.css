@@ -8,23 +8,20 @@
   text-align: center;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
+/*
 .form-group input {
   width: 100%;
   padding: 10px;
   font-size: 1em;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
+} */
 
 .submit-btn {
   background-color: #91CAFF;
   color: #1E1E1E;
   padding: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
   width: 100%;
   border: .15rem solid #1E1E1E;
   border-radius: 999px;

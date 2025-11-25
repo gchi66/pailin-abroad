@@ -98,7 +98,6 @@
 .stage-btn {
   background: white;
   border: 0.15rem solid #1E1E1E;
-  border-radius: 1rem;
   border-radius: 0.5rem;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 1rem 2rem;
@@ -107,10 +106,15 @@
   font-weight: 600;
   color: #1e1e1e;
   cursor: pointer;
-  height: 3.5vw;
   transition: background 0.3s ease-in-out;
+  height: 3.5vw;
   min-width: 20vw;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.35rem; /* keeps the checkmark from crowding the text */
 }
 
 .stage-btn.active {
@@ -119,6 +123,12 @@
 
 .stage-btn:hover {
   background: #91CAFF;
+}
+
+.stage-btn-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .level-buttons {
@@ -178,12 +188,13 @@
 
 .stage-coming-soon-badge {
   position: absolute;
-  top: 0.6rem;
-  right: 1rem;
+  top: -0.9rem;
+  right: -0.1rem;
   color: #FF4545;
   font-size: 0.78rem;
   font-weight: 700;
   pointer-events: none;
+  white-space: nowrap;
 }
 
 .completion-checkmark {

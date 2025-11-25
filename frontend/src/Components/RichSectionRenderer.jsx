@@ -231,10 +231,10 @@ const renderNode = (node, key) => {
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+              marginLeft: baseIndentRem ? `${baseIndentRem + 2.5}rem` : "1.5rem", // Extra indent for list bullet
               display: "flex",
-              alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
+              alignItems: multiline ? "flex-start" : "flex-start",
+              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
             }}
           >
             <AudioButton

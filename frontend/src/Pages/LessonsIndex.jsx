@@ -398,21 +398,22 @@ const LessonsIndex = () => {
 
           <div className="lesson-stages">
             {stages.map((stage) => (
-              <button
-                key={stage}
-                className={`stage-btn ${selectedStage === stage ? "active" : ""}`}
-                onClick={() => handleStageChange(stage)}
-              >
-                {stage.toUpperCase()}
+              <div className="stage-btn-wrapper" key={stage}>
+                <button
+                  className={`stage-btn ${selectedStage === stage ? "active" : ""}`}
+                  onClick={() => handleStageChange(stage)}
+                >
+                  {stage.toUpperCase()}
+                  {stageCompletionMap[stage] && (
+                    <span className="completion-checkmark" aria-hidden="true">
+                      ✓
+                    </span>
+                  )}
+                </button>
                 {stage === "Expert" && (
                   <span className="stage-coming-soon-badge">COMING SOON!</span>
                 )}
-                {stageCompletionMap[stage] && (
-                  <span className="completion-checkmark" aria-hidden="true">
-                    ✓
-                  </span>
-                )}
-              </button>
+              </div>
             ))}
           </div>
 

@@ -333,7 +333,7 @@ def get_next_lesson():
                     next_lesson = next_level_result.data[0]
                 else:
                     # No more lessons in this stage, try the next stage
-                    stage_order = ['Beginner', 'Lower Intermediate', 'Upper Intermediate', 'Advanced']
+                    stage_order = ['Beginner', 'Intermediate', 'Advanced', 'Expert']
                     current_stage_index = stage_order.index(highest_stage) if highest_stage in stage_order else 0
 
                     if current_stage_index < len(stage_order) - 1:
@@ -447,7 +447,7 @@ def get_pathway_lessons():
 
                     if not level_check.data:
                         # No more levels in current stage, move to next stage
-                        stage_order = ['Beginner', 'Lower Intermediate', 'Upper Intermediate', 'Advanced']
+                        stage_order = ['Beginner', 'Intermediate', 'Advanced', 'Expert']
                         current_stage_index = stage_order.index(current_stage) if current_stage in stage_order else 0
 
                         if current_stage_index < len(stage_order) - 1:

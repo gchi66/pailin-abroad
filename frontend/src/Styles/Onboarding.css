@@ -181,7 +181,7 @@
   color: #1e1e1e;
   text-align: center;
   margin-bottom: 3rem;
-  letter-spacing: 0.025em;
+  letter-spacing: 0em;
 }
 
 .onboarding-password-form {
@@ -348,7 +348,7 @@
   color: #1e1e1e;
   text-align: center;
   margin-bottom: 2rem;
-  letter-spacing: 0.025em;
+  letter-spacing: 0em;
 }
 
 .onboarding-username-form {
@@ -669,6 +669,7 @@
   .onboarding-password-title {
     font-size: 1.75rem;
     margin-bottom: 2rem;
+    letter-spacing: .1rem;
   }
 
   .onboarding-password-form {

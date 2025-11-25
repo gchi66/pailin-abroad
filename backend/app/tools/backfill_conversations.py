@@ -174,7 +174,7 @@ def main():
         description="Backfill conversation audio URLs for a given stage and level."
     )
     parser.add_argument("--stage", type=str, default="Beginner",
-                        help='Stage folder (e.g., "Beginner", "Lower Intermediate", "Upper Intermediate", "Advanced")')
+                        help='Stage folder (e.g., "Beginner", "Intermediate", "Advanced", "Expert")')
     parser.add_argument("--level", type=int, default=1,
                         help="Numeric level, e.g. 1, 2, 7")
     parser.add_argument("--dry-run", action="store_true",

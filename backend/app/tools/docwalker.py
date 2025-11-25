@@ -178,10 +178,36 @@ def paragraph_nodes(doc_json: dict):
 
         # ─── indent / nesting ─────────────────────────────────────
         bullet_info = p.get("bullet")
-        indent = bullet_info.get("nestingLevel", 0) if bullet_info else 0
-        if indent == 0:
-            pts = p.get("paragraphStyle", {}).get("indentStart", {}).get("magnitude", 0)
-            indent = round(pts / 18)
+        para_style = p.get("paragraphStyle", {})
+
+        # Get raw indent values
+        base_indent_pts = para_style.get("indentStart", {}).get("magnitude", 0)
+        first_line_indent_pts = para_style.get("indentFirstLine", {}).get("magnitude", 0)
+
+        # Normalize: subtract the accidental 36 PT base from levels 3-12
+        if base_indent_pts >= 36:
+            normalized_base_pts = base_indent_pts - 36
+        else:
+            normalized_base_pts = base_indent_pts
+
+        # Calculate base indent (for non-bullets or additional nesting)
+        base_indent = round(max(0, normalized_base_pts) / 18)
+
+        # Handle bullets separately
+        if bullet_info:
+            # Check nestingLevel first
+            bullet_nesting = bullet_info.get("nestingLevel", 0)
+
+            # If no explicit nesting but has indentFirstLine, use that
+            if bullet_nesting == 0 and first_line_indent_pts > 0:
+                # Bullets should be indented by indentFirstLine
+                indent = round(first_line_indent_pts / 18)
+            else:
+                # Use nesting level, or add to base if both exist
+                indent = max(bullet_nesting, base_indent)
+        else:
+            # Non-bullets just use normalized base
+            indent = base_indent
 
         # ─── classify ─────────────────────────────────────────────
         style_name = p.get("paragraphStyle", {}).get("namedStyleType", "")

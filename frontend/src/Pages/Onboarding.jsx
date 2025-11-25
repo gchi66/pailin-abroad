@@ -169,6 +169,7 @@ const Onboarding = () => {
     passwordRule1: pickLang("At least 8 characters", "อย่างน้อย 8 ตัวอักษร"),
     passwordRule2: pickLang("At least 1 number or special character", "อย่างน้อย 1 ตัวเลขหรือสัญลักษณ์พิเศษ"),
     passwordRule3: pickLang("At least 1 uppercase letter", "อย่างน้อย 1 ตัวอักษรพิมพ์ใหญ่"),
+    passwordMismatch: pickLang("Passwords don't match.", "รหัสผ่านไม่ตรงกัน"),
     setPassword: pickLang("CREATE ACCOUNT", "สร้างบัญชี"),
 
     // Username & Avatar Step (Step 2)
@@ -310,7 +311,7 @@ const Onboarding = () => {
     }
 
     if (!passwordsMatch) {
-      setError("Passwords don't match.");
+      setError(uiText.passwordMismatch);
       return;
     }
 
@@ -549,7 +550,7 @@ const Onboarding = () => {
                 </div>
                 {shouldShowMismatch && (
                   <div className="onboarding-password-mismatch" role="alert">
-                    Passwords don't match
+                    {uiText.passwordMismatch}
                   </div>
                 )}
               </div>

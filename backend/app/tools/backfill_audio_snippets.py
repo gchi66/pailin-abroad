@@ -33,9 +33,9 @@ from supabase import create_client, Client
 # ─── 1. Config ─────────────────────────────────────────────────────────────
 STAGES = {
     "Beginner",
-    "Lower Intermediate",
-    "Upper Intermediate",
+    "Intermediate",
     "Advanced",
+    "Expert",
 }
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -283,8 +283,12 @@ def main() -> None:
 
         # 2) Standard sections (these live under {Stage}/L{n}/{Section}/...)
         parts = path.split("/")
-        stage = parts[0] if parts else ""
+        stage_raw = parts[0] if parts else ""
+        stage = stage_raw.strip()  # remove any weird spaces
+
         if stage not in STAGES:
+            # Debug log so we can see what’s actually coming back
+            print(f"Skipping path with unexpected stage={stage_raw!r}: {path}")
             continue
 
         standard_match = STANDARD_FILE_RE.fullmatch(filename)
