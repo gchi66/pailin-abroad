@@ -140,6 +140,7 @@ const hasLineBreak = (node) =>
   node.inlines.some((span) => cleanAudioTags(span.text).includes("\n"));
 
 const INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
+const MANUAL_INDENT_REM = 3;   // rem applied to flagged paragraphs
 const AUDIO_BUTTON_SIZE = 1.5; // rem
 
 const computeIndent = (node) =>
@@ -156,6 +157,9 @@ const renderNode = (node, key) => {
 
   const indentValue = computeIndent(node);
   const baseIndentRem = indentValue * INDENT_PER_LEVEL;
+  const manualIndentRem =
+    node.kind === "paragraph" && node.is_indented ? MANUAL_INDENT_REM : 0;
+  const paragraphIndentRem = baseIndentRem + manualIndentRem;
 
   if (node.kind === "paragraph"){
     console.log("Processing paragraph node:", {
@@ -177,7 +181,7 @@ const renderNode = (node, key) => {
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+              marginLeft: paragraphIndentRem ? `${paragraphIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
@@ -202,7 +206,7 @@ const renderNode = (node, key) => {
         <p
           key={key}
           style={{
-            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+            marginLeft: paragraphIndentRem ? `${paragraphIndentRem}rem` : undefined,
             marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
           }}
         >
@@ -231,7 +235,7 @@ const renderNode = (node, key) => {
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: baseIndentRem ? `${baseIndentRem + 2.5}rem` : "1.5rem", // Extra indent for list bullet
+              marginLeft: baseIndentRem ? `${baseIndentRem + 4.5}rem` : "2rem", // Extra indent for list bullet
               display: "flex",
               alignItems: multiline ? "flex-start" : "flex-start",
               marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
@@ -263,8 +267,8 @@ const renderNode = (node, key) => {
         </li>
       );
     }
-    if (node.kind === "numbered_item" || node.kind === "misc_item") {
-      console.log("Processing numbered/misc_item node:", {
+    if (node.kind === "misc_item") {
+      console.log("Processing misc_item node:", {
         kind: node.kind,
         audio_key: node.audio_key,
         audio_seq: node.audio_seq,
@@ -303,7 +307,6 @@ const renderNode = (node, key) => {
           </div>
         );
       }
-      // Render as a div, not <li>, to avoid default bullet styling
       return (
         <div
           key={key}
@@ -315,6 +318,11 @@ const renderNode = (node, key) => {
           {renderInlines(node.inlines)}
         </div>
       );
+    }
+
+    if (node.kind === "numbered_item") {
+      // This should be handled by renderNodesWithNumberedLists
+      return null;
     }
 
     if (node.kind === "table") {
@@ -343,6 +351,98 @@ const renderNode = (node, key) => {
     }
 
     return null;
+  };
+
+  const renderNumberedListItem = (node, key, groupIndent) => {
+    const hasAudio = node.audio_key || node.audio_seq;
+    const hasBold = nodeHasBold(node);
+    const hasSpacing = hasYellowHighlight(node);
+    const multiline = hasLineBreak(node);
+    const baseIndent = computeIndent(node);
+    const extraIndent = baseIndent - groupIndent;
+    const extraIndentRem = extraIndent * INDENT_PER_LEVEL;
+
+    if (hasAudio) {
+      return (
+        <li
+          key={key}
+          className="audio-bullet"
+          style={{
+            marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
+            display: "flex",
+            alignItems: multiline ? "flex-start" : "flex-start",
+            marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"),
+          }}
+        >
+          <AudioButton
+            audioKey={node.audio_key}
+            node={node}
+            audioIndex={snipIdx}
+            phrasesSnipIdx={phrasesSnipIdx}
+            phraseId={phraseId}
+            phraseVariant={phraseVariant}
+            size={AUDIO_BUTTON_SIZE}
+            className="select-none"
+          />
+          <span>{renderInlines(node.inlines)}</span>
+        </li>
+      );
+    }
+
+    return (
+      <li
+        key={key}
+        style={{
+          marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
+          marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined),
+        }}
+      >
+        {renderInlines(node.inlines)}
+      </li>
+    );
+  };
+
+  const renderNumberedGroup = (items, keyPrefix) => {
+    if (!items.length) return null;
+    const groupIndent = computeIndent(items[0]);
+    const listIndentRem = groupIndent * INDENT_PER_LEVEL;
+
+    return (
+      <ol
+        key={keyPrefix}
+        className="rich-numbered-list"
+        style={{
+          marginLeft: listIndentRem ? `${listIndentRem}rem` : undefined,
+        }}
+      >
+        {items.map((item, idx) =>
+          renderNumberedListItem(item, `${keyPrefix}-item-${idx}`, groupIndent)
+        )}
+      </ol>
+    );
+  };
+
+  const renderNodesWithNumberedLists = (nodeList) => {
+    const elements = [];
+    let i = 0;
+    let groupIndex = 0;
+
+    while (i < nodeList.length) {
+      const node = nodeList[i];
+      if (node.kind === "numbered_item") {
+        const group = [];
+        while (i < nodeList.length && nodeList[i].kind === "numbered_item") {
+          group.push(nodeList[i]);
+          i++;
+        }
+        elements.push(renderNumberedGroup(group, `numbered-group-${groupIndex++}`));
+      } else {
+        elements.push(renderNode(node, i));
+        i++;
+      }
+    }
+
+    return elements;
   };
 
   // Group nodes by heading (for accordion/dropdown)
@@ -399,7 +499,7 @@ const renderNode = (node, key) => {
             console.log("Rendering no-heading section:", sec.key, "with", sec.body.length, "items");
             return (
               <div key={sec.key} className="markdown-content no-heading">
-                {sec.body.map((node, k) => renderNode(node, k))}
+                {renderNodesWithNumberedLists(sec.body)}
               </div>
             );
           }
@@ -426,7 +526,7 @@ const renderNode = (node, key) => {
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">
-                {sec.body.map((node, k) => renderNode(node, k))}
+                {renderNodesWithNumberedLists(sec.body)}
               </div>
             </CollapsibleDetails>
           );
@@ -439,7 +539,7 @@ const renderNode = (node, key) => {
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {nodes.map((node, i) => renderNode(node, i))}
+        {renderNodesWithNumberedLists(nodes)}
       </div>
     </div>
   );

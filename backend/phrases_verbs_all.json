@@ -1,9 +1,9 @@
 [
   {
-    "section_index": 1142,
+    "section_index": 293,
     "paragraphs": [
       {
-        "index": 1143,
+        "index": 294,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -14,8 +14,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1144,
-        "text": "OH!",
+        "index": 295,
+        "text": "THAT SOUNDS FUN ฟังดูน่าสนุกดีนะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -25,14 +25,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1145,
-        "text": "Oh! [audio:phrases_verbs_oh_1]",
+        "index": 296,
+        "text": "That sounds fun ฟังดูน่าสนุกดีนะ [audio:phrases_verbs_that_sounds_fun_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.2zrttexrwmed",
-          "textStyle": {
-            "underline": false
-          }
+          "listId": "kix.aiy8up6huxq",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -41,8 +39,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1146,
-        "text": "Said when you are pleasantly surprised about something",
+        "index": 297,
+        "text": "ใช้เพื่อแสดงว่าข้อเสนอของคนๆนั้นเป็นข้อเสนอที่ดูดี ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -52,7 +50,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1147,
+        "index": 298,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -63,14 +61,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1148,
-        "text": "Pailin: I baked this cake for you. [audio:phrases_verbs_oh_2]",
+        "index": 299,
+        "text": "Pailin: Do you wanna play mini-golf with us tonight? [audio:phrases_verbs_that_sounds_fun_2]\u000bไพลิน: คุณอยากไปเล่นมินิกอล์ฟกับเราคืนนี้ไหม?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.2zrttexrwmed",
-          "textStyle": {
-            "underline": false
-          }
+          "listId": "kix.ujhsgbaaxlt4",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -79,8 +75,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1149,
-        "text": "Luke: Oh, it looks so good! Thank you!",
+        "index": 300,
+        "text": "Luke: Sure, that sounds fun.\u000bลูค: ได้สิ ฟังดูน่าสนุกดีนะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -90,7 +86,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1150,
+        "index": 301,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -101,18 +97,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1151,
-        "text": "See more uses of ‘Oh’ ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1152,
+        "index": 302,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -125,10 +110,10 @@
     ]
   },
   {
-    "section_index": 1345,
+    "section_index": 478,
     "paragraphs": [
       {
-        "index": 1346,
+        "index": 479,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -139,8 +124,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1347,
-        "text": "HERE",
+        "index": 480,
+        "text": "WOW ว้าว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -150,34 +135,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1348,
-        "text": "Here [audio:phrases_verbs_here_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.aswzubkn1r2p",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1349,
-        "text": "Used to offer something to someone, like ‘Take this’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1350,
+        "index": 481,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -188,11 +146,22 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1351,
-        "text": "Luke: My breath stinks. [audio:phrases_verbs_here_2]\u000bPailin: Here, I have some gum.\u000b",
+        "index": 482,
+        "text": "GOOD IDEA ความคิดดีมากเลย แจ๋วเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 483,
+        "text": "Good idea ความคิดดีมากเลย แจ๋วเลย [audio:phrases_verbs_good_idea_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.yiuzcdkbqgcu",
+          "listId": "kix.v20op722xz3t",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -202,253 +171,33 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1352,
-        "text": "Pailin: I can’t find my blue pen. [audio:phrases_verbs_here_3]\u000bLuke: Here, you can use mine.",
+        "index": 484,
+        "text": "ใช้พูดเพื่อแสดงความเห็นด้วยอย่างกระตือรือร้นกับข้อเสนอหรือแผนการ  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 485,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 486,
+        "text": "Luke: Parking around the venue is hard to find. Maybe we should park nearby, and take a taxi to the venue. [audio:phrases_verbs_good_idea_2]\u000bลูค: การหาที่จอดรถแถวๆที่จัดงานนั้นยากมากเลย บางทีเราน่าจะจอดรถไว้ใกล้ๆแถวนี้ และนั่งแท็กซี่ไปที่สถานที่จัดงานแทนนะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.yiuzcdkbqgcu",
-          "textStyle": {}
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      }
-    ]
-  },
-  {
-    "section_index": 1876,
-    "paragraphs": [
-      {
-        "index": 1877,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1878,
-        "text": "NICE! ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1879,
-        "text": "Nice! [audio:phrases_verbs_nice_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.97iyrm9u1hp4",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1880,
-        "text": "A positive expression to show enthusiasm or approval",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1881,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1882,
-        "text": "Luke: I applied for a few jobs today. [audio:phrases_verbs_nice_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.4kjq3ug4447l",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1883,
-        "text": "Pailin: Nice! I’m sure you’ll get one.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1884,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1885,
-        "text": "Luke: I found some nice AirBnBs for our trip to Mexico City. [audio:phrases_verbs_nice_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.jkh2psk6fm88",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1886,
-        "text": "Pailin: Nice! Send them to me and I’ll take a look at them.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1887,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1888,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1889,
-        "text": "OH! ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      }
-    ]
-  },
-  {
-    "section_index": 2180,
-    "paragraphs": [
-      {
-        "index": 2181,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2182,
-        "text": "WOW",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2183,
-        "text": "Wow [audio:phrases_verbs_wow_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.hakg713j3n3d",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2184,
-        "text": "Used to show surprise or admiration",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2185,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2186,
-        "text": "Wow! This cake is beautiful. Did you make it all by yourself? [audio:phrases_verbs_wow_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.hakg713j3n3d",
+          "listId": "kix.v20op722xz3t",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -458,7 +207,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2187,
+        "index": 487,
+        "text": "Pailin: Good idea.\u000bไพลิน: ความคิดดีมากเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 488,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -469,93 +229,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2188,
-        "text": "\tSee more uses of ‘Wow’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2189,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2190,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2191,
-        "text": "COOL!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2192,
-        "text": "Cool! [audio:phrases_verbs_cool_1]",
+        "index": 489,
+        "text": "Luke: You should buy it second-hand. It’ll be way cheaper. [audio:phrases_verbs_good_idea_3]\u000bลูค: คุณควรจะซื้อสินค้าตัวนี้แบบมือสองนะ มันจะถูกกว่าเยอะมากๆเลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.qitr8ez9cswd",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2193,
-        "text": "An informal way of saying ‘That’s great’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2194,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2195,
-        "text": "Luke: I just got tickets to the concert! [audio:phrases_verbs_cool_2]\u000bPailin: Cool! I’m so excited.\u000b",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.4ue19efhbzy4",
+          "listId": "kix.xdcef4bfeaxl",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -565,21 +243,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2196,
-        "text": "Pailin: We’re bringing a pie to the potluck. [audio:phrases_verbs_cool_3]\u000bLuke: Cool, what kind of pie are you bringing?",
+        "index": 490,
+        "text": "Pailin: Yeah, good idea. I’ll look into it.\u000bไพลิน: นั่นสิ ความคิดดีมากเลย เดี๋ยวฉันจะไปลองดูนะ",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.4ue19efhbzy4",
-          "textStyle": {}
-        },
+        "bullet": null,
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": "●"
+          "glyphSymbol": null
         },
-        "docwalker_kind_guess": "list_item"
+        "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2197,
+        "index": 491,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -592,10 +267,10 @@
     ]
   },
   {
-    "section_index": 2800,
+    "section_index": 740,
     "paragraphs": [
       {
-        "index": 2801,
+        "index": 741,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -606,8 +281,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2802,
-        "text": "HERE ",
+        "index": 742,
+        "text": "\tSURE! ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -617,7 +292,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2803,
+        "index": 743,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -628,8 +303,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2804,
-        "text": "LOOK FOR",
+        "index": 744,
+        "text": "TO GO เอากลับ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -639,49 +314,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2805,
-        "text": "Look for [audio:phrases_verbs_look_for_1]",
+        "index": 745,
+        "text": "To go เอากลับ [audio:phrases_verbs_to_go_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.lzhxf19m0nbf",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2806,
-        "text": "To try to find or search for something",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2807,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2808,
-        "text": "I’ve been looking for a new job, but not many places are hiring. [audio:phrases_verbs_look_for_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.lzhxf19m0nbf",
+          "listId": "kix.lxu42nkrgcd",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -691,11 +328,33 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2809,
-        "text": "I’m looking for my keys. Have you seen them? [audio:phrases_verbs_look_for_3]",
+        "index": 746,
+        "text": "เมื่อใช้ในบริบทด้านการบริการอาหาร หมายถึงการรับอาหารแล้วนำออกไปกินนอกร้านอาหาร",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 747,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 748,
+        "text": "I’ll take one wonton soup, please. Could I get that to go? [audio:phrases_verbs_to_go_2]\u000bฉันขอเกี๊ยวน้ำหนึ่งที่ค่ะ ฉันขอสั่งกลับบ้านได้ไหมคะ?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.lzhxf19m0nbf",
+          "listId": "kix.lxu42nkrgcd",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -705,7 +364,54 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2810,
+        "index": 749,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 750,
+        "text": "Cashier: Would you like that for here or to go? [audio:phrases_verbs_to_go_3]\u000bพนักงานคิดเงิน: คุณอยากกินที่นี่หรือเอากลับบ้านครับ?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.a62znbdbtma3",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 751,
+        "text": "Pailin: I’ll have it to go, please\u000bไพลิน: ฉันขอเอากลับบ้านนะคะ\u000b",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 752,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 753,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -718,10 +424,10 @@
     ]
   },
   {
-    "section_index": 3152,
+    "section_index": 987,
     "paragraphs": [
       {
-        "index": 3153,
+        "index": 988,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -732,8 +438,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3154,
-        "text": "LET’S SEE ",
+        "index": 989,
+        "text": "SURE! ได้เลย แน่นอน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -743,268 +449,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3155,
-        "text": "Let’s see [audio:phrases_verbs_lets_see_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.803vggxfk8lt",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3156,
-        "text": "Said when you’re trying to remember something or are thinking carefully",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3157,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3158,
-        "text": "Next Sunday, let’s see, I’ve got to pick up my sister from the airport. [audio:phrases_verbs_lets_see_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.nxykzchfvtv9",
-          "textStyle": {}
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3159,
-        "text": "Let’s see, how long did it take to get to Vegas last time? [audio:phrases_verbs_lets_see_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.nxykzchfvtv9",
-          "textStyle": {}
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3160,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3161,
-        "text": "COME BACK ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3162,
-        "text": "Come back [audio:phrases_verbs_come_back_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.umwz3clal0xc",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3163,
-        "text": "To return to a place",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3164,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3165,
-        "text": "I want to come back to Thailand next year. [audio:phrases_verbs_come_back_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.umwz3clal0xc",
-          "textStyle": {}
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3166,
-        "text": "What time did you come back last night? [audio:phrases_verbs_come_back_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.umwz3clal0xc",
-          "textStyle": {}
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3167,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3168,
-        "text": "SURE! ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3169,
-        "text": "Sure! [audio:phrases_verbs_sure_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.b8edug2b9ibe",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3170,
-        "text": "An enthusiastic way of saying ‘Yes’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3171,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3172,
-        "text": "Luke: Could you help me translate these sentences into Thai? [audio:phrases_verbs_sure_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.alzmp8krngk8",
-          "textStyle": {}
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3173,
-        "text": "Pailin: Sure!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3174,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3175,
-        "text": "See more uses of ‘Sure’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3176,
+        "index": 990,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1017,10 +462,10 @@
     ]
   },
   {
-    "section_index": 3456,
+    "section_index": 1478,
     "paragraphs": [
       {
-        "index": 3457,
+        "index": 1479,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1031,8 +476,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3458,
-        "text": "CHECK OUT",
+        "index": 1480,
+        "text": "MOVE BACK ย้ายกลับไป",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1042,49 +487,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3459,
-        "text": "Check out [something] / check [something] out [audio:phrases_verbs_check_out_1]",
+        "index": 1481,
+        "text": "Move back ย้ายกลับไป [audio:phrases_verbs_move_back_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.xem8a5102lk7",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3460,
-        "text": "To look at or examine a person or thing that seems interesting or attractive",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3461,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3462,
-        "text": "Do you wanna check out this new cafe that just opened down the street? [audio:phrases_verbs_check_out_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.hjsdvomaqhrj",
+          "listId": "kix.z0ygvv7si1rs",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -1094,11 +501,33 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3463,
-        "text": "Emily, check it out. This camera can take photos underwater! [audio:phrases_verbs_check_out_3]",
+        "index": 1482,
+        "text": "เป็นการย้ายกลับไปยังสถานที่ที่คุณเคยอาศัยอยู่ ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1483,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1484,
+        "text": "I’m moving back in with my parents this year. [audio:phrases_verbs_move_back_2]\u000bปีนี้ฉันจะย้ายกลับไปอยู่กับพ่อแม่ของฉัน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.hjsdvomaqhrj",
+          "listId": "kix.lp8tx4qnnocf",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -1108,7 +537,21 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3464,
+        "index": 1485,
+        "text": "We’re going to move back to Texas at the end of the month. [audio:phrases_verbs_move_back_3]\u000bพวกเราจะย้ายกลับไปเท็กซัสช่วงสิ้นเดือนนี้",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.lp8tx4qnnocf",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1486,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1119,29 +562,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3465,
-        "text": "\tSee more uses of ‘Check out’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3466,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3467,
+        "index": 1487,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1154,10 +575,10 @@
     ]
   },
   {
-    "section_index": 3730,
+    "section_index": 1868,
     "paragraphs": [
       {
-        "index": 3731,
+        "index": 1869,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1168,8 +589,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3732,
-        "text": "I SEE",
+        "index": 1870,
+        "text": "LET’S SEE ขอลองดูแปปนึงนะ มาดูกัน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1179,24 +600,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3733,
-        "text": "I see [audio:phrases_verbs_i_see_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.f2s6yqvwttqw",
-          "textStyle": {
-            "underline": false
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3734,
-        "text": "I understand",
+        "index": 1871,
+        "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1204,9 +609,14 @@
           "glyphSymbol": null
         },
         "docwalker_kind_guess": "paragraph"
-      },
+      }
+    ]
+  },
+  {
+    "section_index": 2240,
+    "paragraphs": [
       {
-        "index": 3735,
+        "index": 2241,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1217,11 +627,60 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3736,
-        "text": "Pailin: How did you know I work here? [audio:phrases_verbs_i_see_2]",
+        "index": 2242,
+        "text": "NICE! เยี่ยม เจ๋ง!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2243,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 2557,
+    "paragraphs": [
+      {
+        "index": 2558,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2559,
+        "text": "AWW อุ้ยยย งุ้ยยยย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2560,
+        "text": "Aww อุ้ยยย งุ้ยยยย [audio:phrases_verbs_aww_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.604yjj8xj29i",
+          "listId": "kix.77kkh22wcycm",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -1231,8 +690,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3737,
-        "text": "Luke: You told me the last time I saw you.",
+        "index": 2561,
+        "text": "เป็นเสียงที่เปล่งออกมาเมื่อเจอสิ่งที่น่ารักหรือน่าเอ็นดู  ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1242,18 +701,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3738,
-        "text": "Pailin: Oh, I see.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3739,
+        "index": 2562,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1264,11 +712,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3740,
-        "text": "Luke: The reason your electricity isn't working is because someone turned off your circuit breaker. [audio:phrases_verbs_i_see_3]",
+        "index": 2563,
+        "text": "Awww, look how cute this puppy is! [audio:phrases_verbs_aww_2]\u000bอุ้ยยย ดูสิว่าลูกหมาตัวนี้น่ารักขนาดไหน!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.qop7mgojvvc",
+          "listId": "kix.77kkh22wcycm",
           "textStyle": {}
         },
         "resolvedListGlyph": {
@@ -1278,18 +726,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3741,
-        "text": "Pailin: Oh, okay I see.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3742,
+        "index": 2564,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1300,7 +737,43 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3743,
+        "index": 2565,
+        "text": "Pailin: My parents sent me a care package to get me through my midterms. [audio:phrases_verbs_aww_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.9a41txmgxg0o",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2566,
+        "text": "ไพลิน: พ่อแม่ของฉันส่งกล่องห่วงใยเพื่อช่วยให้ฉันผ่านช่วงสอบกลางภาค",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2567,
+        "text": "Luke: Aww, that’s so sweet!\u000bลูค: อุ้ยยย น่ารักจัง!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2568,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1311,7 +784,213 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3744,
+        "index": 2569,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 2831,
+    "paragraphs": [
+      {
+        "index": 2832,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2833,
+        "text": "\tWOW ว้าว",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2834,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 2959,
+    "paragraphs": [
+      {
+        "index": 2960,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2961,
+        "text": "WOW ว้าว",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2962,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2963,
+        "text": "ANYWAY จะว่าไปแล้ว อย่างไรก็ตาม ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2964,
+        "text": "Anyway จะว่าไปแล้ว อย่างไรก็ตาม [audio:phrases_verbs_anyway_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.ogtf3ha6p6j5",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2965,
+        "text": "เป็นคำพูดที่เอาไว้ใช้พูดเพื่อเปลี่ยนเรื่องพูด หรือพูดเพื่อดึงบทสนทนาให้กลับเข้าเรื่องที่คุยไว้ก่อนหน้านี้  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2966,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2967,
+        "text": "You haven’t studied for the test yet either? We should probably start studying for it. Anyway, what did you get up to today? [audio:phrases_verbs_anyway_2]\u000bคุณยังไม่ได้อ่านหนังสือเตรียมสอบเหมือนกันใช่ไหม? เราควรจะเริ่มเตรียมตัวสอบได้แล้ว อย่างไรก็ตาม แล้ววันนี้คุณทำอะไรบ้างล่ะ?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.ogtf3ha6p6j5",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2968,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2969,
+        "text": "Pailin: The store was so crowded. It was so hard to find parking. [audio:phrases_verbs_anyway_3]\u000bไพลิน: ที่ร้านคนเยอะมากเลย มันหาที่จอดรถยากมาก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.diw0qgmbgita",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2970,
+        "text": "Luke: Yeah, it's always packed on Saturdays. Anyway, what are your plans for dinner?\u000bลูค: ใช่ มันมักจะคนเยอะทุกวันเสาร์น่ะ ยังไงก็ตาม แล้วคุณมีแผนจะกินอะไรเป็นมื้อค่ำล่ะ? ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2971,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2972,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2973,
         "text": "PINNED COMMENT",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1322,7 +1001,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3745,
+        "index": 2974,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1333,8 +1012,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3746,
-        "text": "\tWhat’s your best friend’s name? How old is he or she?",
+        "index": 2975,
+        "text": "\tคุณเป็นคนที่ชอบแพ็คกระเป๋าแบบเบาๆ หรือแบบเยอะๆ เวลาที่คุณไปเที่ยว?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1344,7 +1023,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3747,
+        "index": 2976,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1355,7 +1034,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3748,
+        "index": 2977,
         "text": "TAGS",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1366,7 +1045,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3749,
+        "index": 2978,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1377,8 +1056,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3750,
-        "text": "\ttime, weather, phone call, family, friends, parents",
+        "index": 2979,
+        "text": "การจราจร, การชวนคุย, อากาศ, ดนตรี, การพบปะผู้คน, การแนะนำตัว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1388,7 +1067,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3751,
+        "index": 2980,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,

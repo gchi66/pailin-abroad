@@ -28,6 +28,7 @@ class Node:
     inlines: list[Inline] = field(default_factory=list)
     indent: int = 0               # nesting level
     style: str = ""               # named style (e.g. HEADING_3, NORMAL_TEXT)
+    is_indented: bool = False     # flag true for manually-indented paragraphs
 
 
 # ────────────────────────────────────────────────────────────
@@ -120,6 +121,38 @@ def _manual_list_class(text: str) -> str | None:
     return None
 
 
+def _dominant_indent_threshold(doc_json: dict) -> int:
+    """
+    Return the most common indentFirstLine magnitude (≥36 PT) among
+    non-bullet paragraphs that contain text. Falls back to 0 if no
+    qualifying paragraphs exist.
+    """
+    from collections import Counter
+
+    indent_values = []
+    for elem in doc_json.get("body", {}).get("content", []):
+        paragraph = elem.get("paragraph")
+        if not paragraph or paragraph.get("bullet"):
+            continue
+
+        text = _plain_text(paragraph.get("elements", [])).strip()
+        if not text:
+            continue
+
+        first_line = (
+            paragraph.get("paragraphStyle", {})
+            .get("indentFirstLine", {})
+            .get("magnitude", 0)
+        )
+        if first_line >= 36:
+            indent_values.append(first_line)
+
+    if not indent_values:
+        return 0
+
+    return Counter(indent_values).most_common(1)[0][0]
+
+
 # ────────────────────────────────────────────────────────────
 #   Public generator
 # ────────────────────────────────────────────────────────────
@@ -131,6 +164,8 @@ def paragraph_nodes(doc_json: dict):
     sub-headers), bullets become list_item, numbered become
     numbered_item, everything else indented → misc_item.
     """
+    indent_threshold = _dominant_indent_threshold(doc_json)
+
     for elem in doc_json.get("body", {}).get("content", []):
         p = elem.get("paragraph")
         if not p:
@@ -175,6 +210,7 @@ def paragraph_nodes(doc_json: dict):
                 )
             )
         plain = "".join(s.text for s in spans).strip()
+        has_text = bool(plain)
 
         # ─── indent / nesting ─────────────────────────────────────
         bullet_info = p.get("bullet")
@@ -241,4 +277,16 @@ def paragraph_nodes(doc_json: dict):
             continue
 
         # PLAIN PARAGRAPH ----------------------------------------
-        yield Node(kind="paragraph", inlines=spans, indent=indent, style=style_name)
+        is_indented = (
+            not bullet_info
+            and has_text
+            and indent_threshold > 0
+            and first_line_indent_pts >= indent_threshold
+        )
+        yield Node(
+            kind="paragraph",
+            inlines=spans,
+            indent=indent,
+            style=style_name,
+            is_indented=is_indented,
+        )

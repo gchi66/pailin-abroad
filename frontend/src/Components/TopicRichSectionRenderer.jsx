@@ -132,8 +132,7 @@ const renderNode = (node, key) => {
       );
     }
 
-    if (node.kind === "numbered_item" || node.kind === "misc_item") {
-      // Render as a div, not <li>, to avoid default bullet styling
+    if (node.kind === "misc_item") {
       return (
         <div
           key={key}
@@ -145,6 +144,10 @@ const renderNode = (node, key) => {
           {renderInlines(node.inlines)}
         </div>
       );
+    }
+
+    if (node.kind === "numbered_item") {
+      return null;
     }
 
     if (node.kind === "table") {
@@ -160,6 +163,68 @@ const renderNode = (node, key) => {
     }
 
     return null;
+  };
+
+  const renderNumberedListItem = (node, key, groupIndent) => {
+    const hasBold = nodeHasBold(node);
+    const baseIndent = computeIndent(node);
+    const extraIndent = baseIndent - groupIndent;
+    const extraIndentRem = extraIndent * INDENT_PER_LEVEL;
+
+    return (
+      <li
+        key={key}
+        style={{
+          marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
+          marginBottom: hasBold ? 0 : undefined,
+        }}
+      >
+        {renderInlines(node.inlines)}
+      </li>
+    );
+  };
+
+  const renderNumberedGroup = (items, keyPrefix) => {
+    if (!items.length) return null;
+    const groupIndent = computeIndent(items[0]);
+    const listIndentRem = groupIndent * INDENT_PER_LEVEL;
+
+    return (
+      <ol
+        key={keyPrefix}
+        className="rich-numbered-list"
+        style={{
+          marginLeft: listIndentRem ? `${listIndentRem}rem` : undefined,
+        }}
+      >
+        {items.map((item, idx) =>
+          renderNumberedListItem(item, `${keyPrefix}-item-${idx}`, groupIndent)
+        )}
+      </ol>
+    );
+  };
+
+  const renderNodesWithNumberedLists = (nodeList) => {
+    const elements = [];
+    let i = 0;
+    let groupIndex = 0;
+
+    while (i < nodeList.length) {
+      const node = nodeList[i];
+      if (node.kind === "numbered_item") {
+        const group = [];
+        while (i < nodeList.length && nodeList[i].kind === "numbered_item") {
+          group.push(nodeList[i]);
+          i++;
+        }
+        elements.push(renderNumberedGroup(group, `numbered-group-${groupIndex++}`));
+      } else {
+        elements.push(renderNode(node, i));
+        i++;
+      }
+    }
+
+    return elements;
   };
 
   // Group nodes by heading (for accordion/dropdown)
@@ -215,7 +280,7 @@ const renderNode = (node, key) => {
           if (!sec.heading) {
             return (
               <div key={sec.key} className="markdown-content no-heading">
-                {sec.body.map((node, k) => renderNode(node, k))}
+                {renderNodesWithNumberedLists(sec.body)}
               </div>
             );
           }
@@ -241,7 +306,7 @@ const renderNode = (node, key) => {
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">
-                {sec.body.map((node, k) => renderNode(node, k))}
+                {renderNodesWithNumberedLists(sec.body)}
               </div>
             </CollapsibleDetails>
           );
@@ -254,7 +319,7 @@ const renderNode = (node, key) => {
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {nodes.map((node, i) => renderNode(node, i))}
+        {renderNodesWithNumberedLists(nodes)}
       </div>
     </div>
   );
