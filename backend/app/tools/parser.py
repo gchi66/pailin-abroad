@@ -37,6 +37,7 @@ QUESTION_NUM_RE = re.compile(r'^\s*\d+\.\s*(.+)$')
 OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
 BULLET_RE = re.compile(r"^\s*[–—\-*•●▪◦·・►»]\s+")
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
+AUDIO_TAG_RE = re.compile(r'\[audio:\s*([^\]]+?)\s*\]', re.IGNORECASE)
 LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
 SPEAKER_RE_TH = re.compile(r'^([\u0E00-\u0E7F][^:]{0,50}):\s*(.+)$')
@@ -135,6 +136,19 @@ def _lesson_key(s: str | None) -> str | None:
     if not s: return None
     m = LESSON_ID_RE.search(s)
     return f"{m.group(1)}.{m.group(2)}" if m else None
+
+def _extract_audio_key(inlines: list[dict] | None) -> str | None:
+    """Return the first [audio:...] key found in inline text."""
+    if not inlines:
+        return None
+    for inline in inlines:
+        text = inline.get("text")
+        if not text:
+            continue
+        match = AUDIO_TAG_RE.search(text)
+        if match:
+            return (match.group(1) or "").strip()
+    return None
 
 def _norm2(s: str) -> str:
     # robust normalization for matching docwalker nodes to section lines
@@ -558,6 +572,10 @@ def tag_nodes_with_sections(doc_json):
                 nd["lesson_context_th"]    = current_lesson_th       # NEW
             if current_section:
                 nd["section_context"] = current_section
+
+            audio_key = _extract_audio_key(nd.get("inlines"))
+            if audio_key:
+                nd["audio_key"] = audio_key
 
             if current_section in AUDIO_SECTION_HEADERS and n.kind == "list_item":
                 seq_counter[current_section] += 1
@@ -1733,7 +1751,6 @@ class GoogleDocsParser:
         collecting_text = False  # New flag for multi-line text collection
         collecting_paragraph = False  # New flag for multi-line paragraph collection
         IMG_TAG_RE = re.compile(r'\[img:\s*([^\]]+?)\s*\]', re.IGNORECASE)
-        AUDIO_TAG_RE = re.compile(r'\[audio:\s*([^\]]+?)\s*\]', re.IGNORECASE)
         ALT_TEXT_RE = re.compile(r'ALT[\s-]*TEXT\s*:\s*(.+)', re.IGNORECASE | re.DOTALL)
         item_complete = False  # Track completion of current item
 
