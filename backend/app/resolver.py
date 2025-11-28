@@ -49,6 +49,18 @@ def _normalize_rich_nodes(nodes: Any, lang: Lang) -> List[Dict[str, Any]]:
     return out
 
 
+def _enrich_image_nodes(nodes: Any, image_lookup: Dict[str, str]) -> None:
+    if not image_lookup or not isinstance(nodes, list):
+        return
+    for node in nodes:
+        if not isinstance(node, dict):
+            continue
+        if node.get("kind") == "image":
+            key = (node.get("image_key") or "").strip()
+            if key and key in image_lookup:
+                node["image_url"] = image_lookup[key]
+
+
 def _normalize_audio_key(raw_key: str) -> str:
     key = (raw_key or "").strip()
     if not key:
@@ -139,6 +151,12 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         .eq("lesson_id", lesson_id)
     )
 
+    global_images = _exec(
+        supabase.table("lesson_images")
+        .select("image_key, url")
+        .is_("lesson_id", None)
+    )
+
     return {
         "lesson": lesson,
         "sections": sections,
@@ -147,12 +165,24 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         "exercises": exercises,
         "phrase_links": phrase_links,
         "images": images,
+        "global_images": global_images,
     }
 
 
 def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
     raw = _fetch_lesson_bundle(lesson_id)
     L = raw["lesson"]
+    images_lookup: Dict[str, str] = {}
+    for img in raw.get("global_images", []) or []:
+        key = img.get("image_key")
+        url = img.get("url")
+        if key and url:
+            images_lookup[key] = url
+    for img in raw.get("images", []) or []:
+        key = img.get("image_key")
+        url = img.get("url")
+        if key and url:
+            images_lookup[key] = url
 
     resolved = {
         "id": L["id"],
@@ -242,6 +272,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         th_nodes = s.get("content_jsonb_th") or []
         merged_nodes = merge_content_nodes(en_nodes, th_nodes) if lang == "th" else en_nodes
         merged_nodes = _normalize_rich_nodes(merged_nodes, lang)
+        _enrich_image_nodes(merged_nodes, images_lookup)
 
         # temporary audio enrichment
         if lesson_external_id:
@@ -267,6 +298,10 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
                 if not node.get("audio_key"):
                     _inject_audio_metadata([node], s.get("type"))
 
+        normalized_th_nodes = _normalize_rich_nodes(th_nodes, lang) if th_nodes else None
+        if normalized_th_nodes:
+            _enrich_image_nodes(normalized_th_nodes, images_lookup)
+
         resolved_sections.append(
             {
                 "id": s["id"],
@@ -277,9 +312,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
                 "audio_url": s.get("audio_url"),
                 "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
                 "content_jsonb": merged_nodes,
-                "content_jsonb_th": _normalize_rich_nodes(th_nodes, lang)
-                if th_nodes
-                else None,
+                "content_jsonb_th": normalized_th_nodes,
             }
         )
 
@@ -369,11 +402,13 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         th_nodes = phrase.get("content_jsonb_th") or []
         merged_nodes = merge_content_nodes(en_nodes, th_nodes) if lang == "th" else en_nodes
         merged_nodes = _normalize_rich_nodes(merged_nodes, lang)
+        _enrich_image_nodes(merged_nodes, images_lookup)
         _inject_audio_metadata(merged_nodes, "phrases_verbs")
 
         normalized_th_nodes = _normalize_rich_nodes(th_nodes, lang) if th_nodes else None
         if normalized_th_nodes:
             _inject_audio_metadata(normalized_th_nodes, "phrases_verbs")
+            _enrich_image_nodes(normalized_th_nodes, images_lookup)
 
         primary_id = phrase_id
         if not primary_id:
@@ -401,7 +436,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             }
         )
 
-    images_dict = {img["image_key"]: img["url"] for img in raw["images"]}
+    images_dict = images_lookup
 
     resolved.update(
         {

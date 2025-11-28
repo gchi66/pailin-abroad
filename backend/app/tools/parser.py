@@ -38,6 +38,8 @@ OPTION_RE = re.compile(r'^\s*([A-Z])\.\s*(.+)$')
 BULLET_RE = re.compile(r"^\s*[–—\-*•●▪◦·・►»]\s+")
 ANSWER_KEY_RE = re.compile(r'^\s*Answer key\s*:?\s*(.*)$', re.IGNORECASE)
 AUDIO_TAG_RE = re.compile(r'\[audio:\s*([^\]]+?)\s*\]', re.IGNORECASE)
+IMG_TAG_RE = re.compile(r'\[img:\s*([^\]]+?)\s*\]', re.IGNORECASE)
+ALT_TEXT_RE = re.compile(r'ALT[\s-]*TEXT\s*:\s*(.+)', re.IGNORECASE | re.DOTALL)
 LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
 SPEAKER_RE_TH = re.compile(r'^([\u0E00-\u0E7F][^:]{0,50}):\s*(.+)$')
@@ -1221,9 +1223,45 @@ class GoogleDocsParser:
                 ]
                 quick_practice_idx = 0
 
-                for text_line, style in lines:
+                skip_alt_indexes: set[int] = set()
+                line_idx = 0
+                while line_idx < len(lines):
+                    if line_idx in skip_alt_indexes:
+                        line_idx += 1
+                        continue
+
+                    text_line, style = lines[line_idx]
                     text_line = text_line.strip()
                     if not text_line:
+                        line_idx += 1
+                        continue
+
+                    # Inline image detection
+                    img_match = IMG_TAG_RE.search(text_line)
+                    if img_match:
+                        image_key = (img_match.group(1) or "").strip()
+                        if image_key:
+                            alt_text = None
+                            lookahead = line_idx + 1
+                            while lookahead < len(lines):
+                                next_text = (lines[lookahead][0] or "").strip()
+                                if not next_text:
+                                    lookahead += 1
+                                    continue
+                                alt_match = ALT_TEXT_RE.match(next_text)
+                                if alt_match:
+                                    alt_text = (alt_match.group(1) or "").strip()
+                                    skip_alt_indexes.add(lookahead)
+                                break
+
+                            node_list.append({
+                                "kind": "image",
+                                "image_key": image_key,
+                                "alt_text": alt_text,
+                                "lesson_context": lesson_header_raw,
+                                "section_context": norm_header
+                            })
+                        line_idx += 1
                         continue
 
                     # ── Handle table placeholders in their correct position ──
@@ -1235,6 +1273,7 @@ class GoogleDocsParser:
                             table_copy = tbl.copy()
                             node_list.append(table_copy)
                             table_ids_added.add(table_id)
+                        line_idx += 1
                         continue
 
                     # Find matching nodes for this text
@@ -1267,6 +1306,7 @@ class GoogleDocsParser:
                                 "section_context": norm_header
                             }
                             node_list.append(synthetic_node)
+                        line_idx += 1
                         continue
 
                     if matching_nodes:
@@ -1341,12 +1381,22 @@ class GoogleDocsParser:
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header
                             })
+                    line_idx += 1
 
                 # fallback plain-text (Markdown) version
-                body_parts = [
-                    f"## {t.strip()}" if is_subheader(t, style) else t
-                    for t, style in lines
-                ]
+                body_parts = []
+                for t, style in lines:
+                    stripped = (t or "").strip()
+                    if not stripped:
+                        body_parts.append(t)
+                        continue
+                    if IMG_TAG_RE.search(stripped):
+                        continue
+                    if ALT_TEXT_RE.match(stripped):
+                        continue
+                    body_parts.append(
+                        f"## {t.strip()}" if is_subheader(t, style) else t
+                    )
 
                 other_sections.append({
                     "type":          section_key,
@@ -1750,8 +1800,6 @@ class GoogleDocsParser:
         collecting_opts = False
         collecting_text = False  # New flag for multi-line text collection
         collecting_paragraph = False  # New flag for multi-line paragraph collection
-        IMG_TAG_RE = re.compile(r'\[img:\s*([^\]]+?)\s*\]', re.IGNORECASE)
-        ALT_TEXT_RE = re.compile(r'ALT[\s-]*TEXT\s*:\s*(.+)', re.IGNORECASE | re.DOTALL)
         item_complete = False  # Track completion of current item
 
         def normalize_inputs(value) -> int:

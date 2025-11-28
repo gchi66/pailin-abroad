@@ -69,7 +69,7 @@ def main() -> None:
     print(f"Found {len(all_objects)} objects in bucket")
 
     rows = []
-    seen = set()
+    seen_keys = set()
 
     for path in all_objects:
         if not path.lower().endswith(".webp"):
@@ -78,24 +78,31 @@ def main() -> None:
         # Strip extension → becomes your image_key
         image_key = os.path.splitext(path.split("/")[-1])[0]
 
-        # Lesson ID lookup: assumes "1.6" is the start of the filename
+        lesson_id = None
         lesson_external_id = image_key.split("_")[0]  # "1.6"
 
-        # Look up the lesson UUID from lesson_external_id
         try:
-            lesson_query = sb.table("lessons").select("id").eq("lesson_external_id", lesson_external_id).execute()
-            if not lesson_query.data:
-                print(f"SKIP: No lesson found for external_id '{lesson_external_id}' (file: {path})")
-                continue
-            lesson_id = lesson_query.data[0]["id"]
+            lesson_query = (
+                sb.table("lessons")
+                .select("id")
+                .eq("lesson_external_id", lesson_external_id)
+                .execute()
+            )
+            if lesson_query.data:
+                lesson_id = lesson_query.data[0]["id"]
+            else:
+                if path.lower().startswith("headers/"):
+                    print(f"SKIP: No lesson found for header external_id '{lesson_external_id}' (file: {path})")
+                    continue
+                else:
+                    print(f"[INFO] No lesson found for external_id '{lesson_external_id}' (file: {path}); storing as global asset.")
         except Exception as e:
             print(f"ERROR: Failed to lookup lesson '{lesson_external_id}': {e}")
             continue
 
-        key = (lesson_id, image_key)
-        if key in seen:
+        if image_key in seen_keys:
             continue
-        seen.add(key)
+        seen_keys.add(image_key)
 
         # Construct the public URL for the image
         url = f"{SUPABASE_URL}/storage/v1/object/public/{BUCKET}/{path}"
@@ -114,7 +121,7 @@ def main() -> None:
     try:
         res = (
             sb.table("lesson_images")
-              .upsert(rows, on_conflict="lesson_id,image_key")
+              .upsert(rows, on_conflict="image_key")
               .execute()
         )
         print(f"✅ Success – {len(res.data)} rows upserted/updated.")

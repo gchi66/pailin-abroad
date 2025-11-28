@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
@@ -160,6 +160,22 @@ const renderNode = (node, key) => {
   const manualIndentRem =
     node.kind === "paragraph" && node.is_indented ? MANUAL_INDENT_REM : 0;
   const paragraphIndentRem = baseIndentRem + manualIndentRem;
+
+  if (node.kind === "image") {
+    const src =
+      node.image_url ||
+      (node.image_key ? `/api/images/${encodeURIComponent(node.image_key)}` : null);
+    if (!src) {
+      return null;
+    }
+    return (
+      <RichImage
+        key={key}
+        src={src}
+        altText={node.alt_text}
+      />
+    );
+  }
 
   if (node.kind === "paragraph"){
     console.log("Processing paragraph node:", {
@@ -541,6 +557,48 @@ const renderNode = (node, key) => {
       <div className="markdown-content">
         {renderNodesWithNumberedLists(nodes)}
       </div>
+    </div>
+  );
+}
+function RichImage({ src, altText }) {
+  const [showAlt, setShowAlt] = useState(false);
+
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    if (!altText) return;
+    setShowAlt((prev) => !prev);
+  };
+
+  return (
+    <div
+      style={{
+        margin: "1.5rem 0",
+        textAlign: "center",
+      }}
+      onContextMenu={handleContextMenu}
+    >
+      <img
+        src={src}
+        alt={altText || "Lesson image"}
+        style={{
+          maxWidth: "100%",
+          height: "auto",
+          borderRadius: "0.5rem",
+          cursor: altText ? "context-menu" : "default",
+        }}
+      />
+      {showAlt && altText && (
+        <p
+          style={{
+            fontSize: "0.9rem",
+            color: "#4b5563",
+            marginTop: "0.5rem",
+            fontStyle: "italic",
+          }}
+        >
+          {altText}
+        </p>
+      )}
     </div>
   );
 }
