@@ -407,16 +407,16 @@
 }
 
 .onboarding-avatar-option:hover {
-  transform: scale(1.1);
+  transform: scale(1.25);
   box-shadow: 0 0.25rem 1rem rgba(60, 160, 254, 0.3);
   /* border-color: #3CA0FE; */
 }
 
 .onboarding-avatar-option.selected {
-  transform: scale(1.1);
-  box-shadow: 0 0.25rem 1rem rgba(60, 160, 254, 0.5);
+  transform: scale(1.25);
+  /* box-shadow: 0 0.25rem 1rem rgba(60, 160, 254, 0.5);
   border-color: #3CA0FE;
-  border-width: 0.1875rem;
+  border-width: 0.1875rem; */
 }
 
 .onboarding-continue-btn {
@@ -503,7 +503,6 @@
   font-size: 3rem;
   font-weight: 700;
   color: #1e1e1e;
-  letter-spacing: 0.025em;
   margin: 0;
 }
 

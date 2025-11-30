@@ -29,6 +29,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  letter-spacing: 0;
 }
 
 .submit-btn:hover {
