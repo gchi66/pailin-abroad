@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
@@ -23,6 +23,8 @@ const Onboarding = () => {
   const [error, setError] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [skipPasswordStep, setSkipPasswordStep] = useState(false);
+  const [hasSyncedUser, setHasSyncedUser] = useState(false);
+  const [syncingUser, setSyncingUser] = useState(false);
   const navigate = useNavigate();
   const { ui: uiLang, setUi: setUiLang } = useUiLang();
   const withUi = useWithUi();
@@ -52,6 +54,37 @@ const Onboarding = () => {
     (step === 1 && !canProceedFromPassword) ||
     (step === 2 && !canProceedProfile);
 
+  const ensureUserRecord = useCallback(async (session) => {
+    if (isDevPreview || hasSyncedUser || !session?.access_token) {
+      return;
+    }
+
+    setSyncingUser(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/confirm-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ access_token: session.access_token })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to sync account record.");
+      }
+
+      setHasSyncedUser(true);
+    } catch (syncError) {
+      console.error("Error syncing user record:", syncError);
+      throw syncError;
+    } finally {
+      setSyncingUser(false);
+    }
+  }, [hasSyncedUser, isDevPreview]);
+
   // Fetch user profile and determine starting step
   useEffect(() => {
     if (isDevPreview) {
@@ -70,26 +103,39 @@ const Onboarding = () => {
 
     const fetchUserProfile = async () => {
       try {
-        const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
 
-        if (userError || !user) {
-          console.error("No user found:", userError);
+        if (sessionError || !session) {
+          console.error("No session found:", sessionError);
           navigate("/"); // Redirect to home if no user
           return;
         }
+
+        try {
+          await ensureUserRecord(session);
+          setError("");
+        } catch (syncErr) {
+          setError(syncErr.message || "Unable to verify your account. Please refresh the page.");
+          setLoadingProfile(false);
+          return;
+        }
+
+        const provider = session.user?.app_metadata?.provider;
+        const isOAuthUser = provider && provider !== "email";
 
         // Fetch user profile from database
         const { data: profile, error: profileError } = await supabaseClient
           .from("users")
           .select("is_paid, is_verified, is_active, username, avatar_image")
-          .eq("id", user.id)
+          .eq("id", session.user.id)
           .single();
 
         if (profileError) {
           console.error("Error fetching profile:", profileError);
           // Profile doesn't exist yet, this is OK for new users
+          setSkipPasswordStep(Boolean(isOAuthUser));
+          setStep(isOAuthUser ? 2 : 0);
           setLoadingProfile(false);
-          setStep(0); // Start at welcome step
           return;
         }
 
@@ -103,7 +149,7 @@ const Onboarding = () => {
         }
 
         // Edge case 2: Check if email is verified (from Supabase auth, not custom field)
-        const isEmailVerified = user.email_confirmed_at !== null;
+        const isEmailVerified = session.user.email_confirmed_at !== null;
 
         if (!isEmailVerified) {
           console.log("User email not verified, redirecting to verify email");
@@ -117,14 +163,14 @@ const Onboarding = () => {
           await supabaseClient
             .from("users")
             .update({ is_verified: true })
-            .eq("id", user.id);
+            .eq("id", session.user.id);
 
           // Update local profile state
           setUserProfile(prev => ({ ...prev, is_verified: true }));
         }
 
         // Determine if we should skip password step
-        const shouldSkipPassword = profile?.is_paid === true;
+        const shouldSkipPassword = profile?.is_paid === true || Boolean(isOAuthUser);
         setSkipPasswordStep(shouldSkipPassword);
 
         // Set starting step based on user status
@@ -144,7 +190,7 @@ const Onboarding = () => {
     };
 
     fetchUserProfile();
-  }, [isDevPreview, navigate]);
+  }, [ensureUserRecord, isDevPreview, navigate]);
 
   // Helper function to pick the right language content
   const pickLang = (en, th) => {
@@ -197,15 +243,15 @@ const Onboarding = () => {
     back: pickLang("BACK", "ย้อนกลับ"),
     next: pickLang("NEXT", "ถัดไป"),
 
-    // Character names for tooltips
-    pailin: pickLang("Pailin", "ไผลิน"),
-    markDad: pickLang("Mark (Dad)", "มาร์ค (พ่อ)"),
-    sylvieMom: pickLang("Sylvie (Mom)", "ซิลวี่ (แม่)"),
-    tylerBrother: pickLang("Tyler (Brother)", "ไทเลอร์ (พี่ชาย)"),
-    emilySister: pickLang("Emily (Sister)", "เอมิลี่ (น้องสาว)"),
-    lukeCoworker: pickLang("Luke (Coworker)", "ลุค (เพื่อนร่วมงาน)"),
-    chloeFriend: pickLang("Chloe (Friend)", "โคลอี้ (เพื่อน)"),
-    thaiDad: pickLang("Thai Dad", "พ่อไทย")
+    // Avatar labels for accessibility/tooltips
+    avatar1: pickLang("Avatar 1", "อวตาร 1"),
+    avatar2: pickLang("Avatar 2", "อวตาร 2"),
+    avatar3: pickLang("Avatar 3", "อวตาร 3"),
+    avatar4: pickLang("Avatar 4", "อวตาร 4"),
+    avatar5: pickLang("Avatar 5", "อวตาร 5"),
+    avatar6: pickLang("Avatar 6", "อวตาร 6"),
+    avatar7: pickLang("Avatar 7", "อวตาร 7"),
+    avatar8: pickLang("Avatar 8", "อวตาร 8")
   };
 
   const nextStep = () => {
@@ -363,14 +409,14 @@ const Onboarding = () => {
 
   // Available avatars for selection
   const avatarOptions = [
-    { path: "/images/characters/pailin-blue-left.png", name: "pailin" },
-    { path: "/images/characters/mark-dad-blue-left.png", name: "markDad" },
-    { path: "/images/characters/sylvie-mom-blue-left.png", name: "sylvieMom" },
-    { path: "/images/characters/tyler-brother-blue-left.png", name: "tylerBrother" },
-    { path: "/images/characters/emily-sister-blue-left.png", name: "emilySister" },
-    { path: "/images/characters/luke-coworker-blue-left.png", name: "lukeCoworker" },
-    { path: "/images/characters/chloe-friend-blue-left.png", name: "chloeFriend" },
-    { path: "/images/characters/pailin-thai-dad-blue-left.png", name: "thaiDad" }
+    { path: "/images/characters/avatar_1.webp", name: "avatar1" },
+    { path: "/images/characters/avatar_2.webp", name: "avatar2" },
+    { path: "/images/characters/avatar_3.webp", name: "avatar3" },
+    { path: "/images/characters/avatar_4.webp", name: "avatar4" },
+    { path: "/images/characters/avatar_5.webp", name: "avatar5" },
+    { path: "/images/characters/avatar_6.webp", name: "avatar6" },
+    { path: "/images/characters/avatar_7.webp", name: "avatar7" },
+    { path: "/images/characters/avatar_8.webp", name: "avatar8" }
   ];
 
   const handleAvatarSelect = (avatarPath) => {
@@ -724,12 +770,19 @@ const Onboarding = () => {
   };
 
   // Show loading state while fetching profile
-  if (loadingProfile) {
+  if (loadingProfile || syncingUser) {
     return (
       <div className="onboarding-main">
         <div className="onboarding-container">
           <div className="onboarding-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
-            <p>Loading...</p>
+            <div style={{ textAlign: 'center' }}>
+              <p>{syncingUser ? "Preparing your account..." : "Loading..."}</p>
+              {error && (
+                <p className="onboarding-error-message" style={{ marginTop: '1rem' }}>
+                  {error}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
