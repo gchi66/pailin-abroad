@@ -12,6 +12,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [socialLoading, setSocialLoading] = useState("");
   const navigate = useNavigate();
 
   if (!isOpen) return null;
@@ -57,6 +58,28 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
       setError(error.response?.data?.error || error.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSocialSignIn = async (provider) => {
+    setError("");
+    setSocialLoading(provider);
+
+    try {
+      const { error: oauthError } = await supabaseClient.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/onboarding`
+        }
+      });
+
+      if (oauthError) {
+        throw oauthError;
+      }
+    } catch (oauthErr) {
+      console.error(`Social login failed (${provider}):`, oauthErr);
+      setError(oauthErr.message || "Failed to sign in with social login.");
+      setSocialLoading("");
     }
   };
 
@@ -122,8 +145,22 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
           </button>
         </form>
         <div className="login-divider">OR</div>
-        <button className="login-social-button google">Sign in with Google</button>
-        <button className="login-social-button facebook">Sign in with Facebook</button>
+        <button
+          className="login-social-button google"
+          onClick={() => handleSocialSignIn("google")}
+          disabled={socialLoading === "google"}
+          style={{ opacity: socialLoading === "google" ? 0.6 : 1 }}
+        >
+          {socialLoading === "google" ? "Connecting to Google..." : "Sign in with Google"}
+        </button>
+        <button
+          className="login-social-button facebook"
+          onClick={() => handleSocialSignIn("facebook")}
+          disabled={socialLoading === "facebook"}
+          style={{ opacity: socialLoading === "facebook" ? 0.6 : 1 }}
+        >
+          {socialLoading === "facebook" ? "Connecting to Facebook..." : "Sign in with Facebook"}
+        </button>
 
         {toggleSignupModal && (
           <p className="login-switch-text">

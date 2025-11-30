@@ -4,18 +4,19 @@
 .onboarding-main {
   background-color: #FAF5F1;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
   max-width: 100vw;
   font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   padding: 1.5rem;
-  overflow-y: auto;
+  overflow: hidden;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
+  box-sizing: border-box;
 }
 
 .onboarding-container {
@@ -388,9 +389,9 @@
 .onboarding-avatar-grid {
   display: grid;
   grid-template-columns: repeat(8, minmax(3.25rem, 1fr));
-  /* gap: 1rem; */
+  gap: .5rem;
   width: 100%;
-  max-width: 48rem;
+  max-width: 60rem;
   justify-items: center;
 }
 
@@ -408,7 +409,7 @@
 .onboarding-avatar-option:hover {
   transform: scale(1.1);
   box-shadow: 0 0.25rem 1rem rgba(60, 160, 254, 0.3);
-  border-color: #3CA0FE;
+  /* border-color: #3CA0FE; */
 }
 
 .onboarding-avatar-option.selected {
