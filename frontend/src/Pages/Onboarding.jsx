@@ -134,7 +134,7 @@ const Onboarding = () => {
           console.error("Error fetching profile:", profileError);
           // Profile doesn't exist yet, this is OK for new users
           setSkipPasswordStep(Boolean(isOAuthUser));
-          setStep(isOAuthUser ? 2 : 0);
+          setStep(0);
           setLoadingProfile(false);
           return;
         }
@@ -174,13 +174,8 @@ const Onboarding = () => {
         setSkipPasswordStep(shouldSkipPassword);
 
         // Set starting step based on user status
-        if (shouldSkipPassword) {
-          setStep(2); // Skip welcome and password, start at username/avatar
-          console.log("Paid user - skipping password step, starting at step 2");
-        } else {
-          setStep(0); // Start at welcome for regular users
-          console.log("Regular user - starting at welcome step");
-        }
+        setStep(0);
+        console.log(shouldSkipPassword ? "Skipping password step but showing welcome" : "Regular user - starting at welcome step");
 
         setLoadingProfile(false);
       } catch (err) {

@@ -79,6 +79,20 @@
   font-weight: 500;
 }
 
+.pathway-plan {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pathway-plan-upgrade-link {
+  color: #FF4545;
+  text-decoration: underline;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
 .pathway-settings-link {
   color: #999;
   text-decoration: none;
@@ -165,6 +179,22 @@
 /* Content Section */
 .pathway-content {
   min-height: 30vh;
+}
+
+.pathway-plan-notice-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pathway-plan-notice-wrapper .plan-notice {
+  margin: 0;
+  padding-bottom: 1.5rem; /* reduce overall padding-bottom for this context */
+}
+
+.pathway-plan-notice-wrapper .plan-notice-cta-group {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* Progress Section */

@@ -4,6 +4,7 @@ import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
+import PlanNotice from "../Components/PlanNotice";
 import "../Styles/MyPathway.css";
 
 const MyPathway = () => {
@@ -17,8 +18,12 @@ const MyPathway = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAllCompleted, setShowAllCompleted] = useState(false);
+  const [isPaidMember, setIsPaidMember] = useState(null);
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
+  const isFreePlanUser = Boolean(user) && isPaidMember === false;
+  const lessonsCompletedCount = userStats?.lessons_completed ?? userProfile?.lessons_complete ?? 0;
+  const isFirstVisit = lessonsCompletedCount <= 0;
 
   // Helper function to pick the right language content
   const pickLang = (en, th) => {
@@ -56,9 +61,12 @@ const MyPathway = () => {
 
     // Header section
     welcomeBack: uiLang === "th" ? "ยินดีต้อนรับกลับ," : "Welcome back,",
+    welcome: uiLang === "th" ? "ยินดีต้อนรับ" : "Welcome",
     user: uiLang === "th" ? "ผู้ใช้" : "User",
     plan: uiLang === "th" ? "แผน:" : "Plan:",
     fullAccess: uiLang === "th" ? "เข้าถึงเต็มรูปแบบ" : "Full Access",
+    freeAccess: uiLang === "th" ? "ฟรี" : "Free",
+    upgrade: uiLang === "th" ? "อัปเกรด" : "Upgrade",
     accountSettings: uiLang === "th" ? "การตั้งค่าบัญชี" : "Account Settings",
     lessonsComplete: uiLang === "th" ? "บทเรียนที่เสร็จสิ้น" : "Lessons Complete",
     levelsComplete: uiLang === "th" ? "ระดับที่เสร็จสิ้น" : "Levels Complete",
@@ -71,6 +79,11 @@ const MyPathway = () => {
 
     // Footer
     goToLessonLibrary: uiLang === "th" ? "ไปที่ไลบรารีบทเรียน →" : "Go to Lesson Library →",
+    freePlanNoticeHeading: uiLang === "th" ? "คุณอยู่ในแผนฟรี" : "You're on our free plan.",
+    freePlanNoticeCopy: uiLang === "th"
+      ? "อัปเกรดเพื่อเข้าถึงคลังบทเรียนทั้งหมดของเรา!"
+      : "Upgrade to enjoy access to our full lesson library!",
+    ctaBecomeMember: uiLang === "th" ? "สมัครเป็นสมาชิก" : "BECOME A MEMBER",
 
     // Alt text and accessibility
     profileAvatar: uiLang === "th" ? "รูปโปรไฟล์" : "Profile Avatar",
@@ -87,6 +100,7 @@ const MyPathway = () => {
     const fetchUserProfile = async () => {
       if (!user) {
         setLoading(false);
+        setIsPaidMember(null);
         return;
       }
 
@@ -167,11 +181,52 @@ const MyPathway = () => {
     fetchUserProfile();
   }, [user]);
 
+  // Fetch paid status so we can surface free-plan UI
+  useEffect(() => {
+    const fetchPlanStatus = async () => {
+      if (!user) {
+        setIsPaidMember(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("is_paid")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        setIsPaidMember(data?.is_paid ?? null);
+      } catch (planError) {
+        console.error("Error fetching plan status:", planError.message || planError);
+        setIsPaidMember(null);
+      }
+    };
+
+    fetchPlanStatus();
+  }, [user]);
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "pathway":
         return (
           <>
+            {isFreePlanUser && (
+              <div className="pathway-plan-notice-wrapper">
+                <PlanNotice
+                  heading={uiText.freePlanNoticeHeading}
+                  subtext={uiText.freePlanNoticeCopy}
+                  cta={{
+                    label: uiText.ctaBecomeMember,
+                    to: "/membership",
+                  }}
+                />
+              </div>
+            )}
             {/* Progress Section */}
             <div className="pathway-progress-section">
               <h3 className="pathway-section-title">
@@ -407,10 +462,21 @@ const MyPathway = () => {
                   className="pathway-avatar"
                 />
                 <div className="pathway-user-info">
-                  <h2 className="pathway-welcome">{uiText.welcomeBack} {userProfile?.name || uiText.user}</h2>
+                  <h2 className="pathway-welcome">
+                    {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
+                  </h2>
                   <div className="pathway-account-info">
                     {/* <span className="pathway-level">Level: Upper Intermediate</span> */}
-                    <span className="pathway-plan">{uiText.plan} {uiText.fullAccess}</span>
+                    <div className="pathway-plan">
+                      <span className="pathway-plan-text">
+                        {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
+                      </span>
+                      {isFreePlanUser && (
+                        <Link to="/membership" className="pathway-plan-upgrade-link">
+                          {uiText.upgrade}
+                        </Link>
+                      )}
+                    </div>
                     <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
                   </div>
                 </div>
