@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
@@ -19,6 +19,7 @@ const MyPathway = () => {
   const [error, setError] = useState(null);
   const [showAllCompleted, setShowAllCompleted] = useState(false);
   const [isPaidMember, setIsPaidMember] = useState(null);
+  const [allLessons, setAllLessons] = useState([]);
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
   const isFreePlanUser = Boolean(user) && isPaidMember === false;
@@ -78,7 +79,7 @@ const MyPathway = () => {
     commentHistoryTab: uiLang === "th" ? "ประวัติความคิดเห็น" : "Comment History",
 
     // Footer
-    goToLessonLibrary: uiLang === "th" ? "ไปที่ไลบรารีบทเรียน →" : "Go to Lesson Library →",
+    goToFreeLessonLibrary: uiLang === "th" ? "ไปที่ไลบรารีบทเรียนฟรี →" : "Go to Free Lesson Library →",
     freePlanNoticeHeading: uiLang === "th" ? "คุณอยู่ในแผนฟรี" : "You're on our free plan.",
     freePlanNoticeCopy: uiLang === "th"
       ? "อัปเกรดเพื่อเข้าถึงคลังบทเรียนทั้งหมดของเรา!"
@@ -90,6 +91,7 @@ const MyPathway = () => {
     lessonCheckpoint: uiLang === "th" ? "จุดตรวจสอบบทเรียน" : "Lesson Checkpoint",
     notCompleted: uiLang === "th" ? "ยังไม่เสร็จสิ้น" : "Not completed",
     completedAlt: uiLang === "th" ? "เสร็จสิ้นแล้ว" : "Completed",
+    locked: uiLang === "th" ? "ถูกล็อก" : "Locked",
 
     // Default fallbacks
     lessonTitle: uiLang === "th" ? "ชื่อบทเรียน" : "Lesson Title"
@@ -210,6 +212,68 @@ const MyPathway = () => {
     fetchPlanStatus();
   }, [user]);
 
+  // Fetch all lessons to determine first lesson in each level (for lock logic)
+  useEffect(() => {
+    const fetchAllLessons = async () => {
+      try {
+        const { data, error } = await supabaseClient
+          .from("lessons")
+          .select("id, stage, level, lesson_order")
+          .order("stage", { ascending: true })
+          .order("level", { ascending: true })
+          .order("lesson_order", { ascending: true });
+
+        if (error) {
+          throw error;
+        }
+
+        setAllLessons(data || []);
+      } catch (lessonsError) {
+        console.error("Error fetching lessons for lock logic:", lessonsError.message || lessonsError);
+        setAllLessons([]);
+      }
+    };
+
+    fetchAllLessons();
+  }, []);
+
+  const firstLessonIds = useMemo(() => {
+    if (!allLessons?.length) return [];
+
+    const lessonsByLevel = {};
+
+    allLessons.forEach((lesson) => {
+      const levelKey = `${lesson.stage}-${lesson.level}`;
+      if (!lessonsByLevel[levelKey]) {
+        lessonsByLevel[levelKey] = [];
+      }
+      lessonsByLevel[levelKey].push(lesson);
+    });
+
+    return Object.values(lessonsByLevel)
+      .map((levelLessons) => {
+        const sorted = levelLessons.sort((a, b) => a.lesson_order - b.lesson_order);
+        return sorted[0]?.id;
+      })
+      .filter(Boolean);
+  }, [allLessons]);
+
+  const shouldShowLock = (lesson) => {
+    if (!user) {
+      return true;
+    }
+
+    if (isPaidMember) {
+      return false;
+    }
+
+    if (!lesson?.id || !firstLessonIds.length) {
+      return false;
+    }
+
+    return !firstLessonIds.includes(lesson.id);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "pathway":
@@ -278,11 +342,19 @@ const MyPathway = () => {
                       </div>
                     </div>
                     <div className="pathway-lesson-right">
-                      <img
-                        src="/images/CheckCircle.png"
-                        alt={uiText.notCompleted}
-                        className="pathway-checkmark"
-                      />
+                      {shouldShowLock(lesson) ? (
+                        <img
+                          src="/images/lock.webp"
+                          alt={uiText.locked}
+                          className="lesson-lock-icon pathway-lock-icon"
+                        />
+                      ) : (
+                        <img
+                          src="/images/CheckCircle.png"
+                          alt={uiText.notCompleted}
+                          className="pathway-checkmark"
+                        />
+                      )}
                     </div>
                   </Link>
                 ))}
@@ -531,8 +603,8 @@ const MyPathway = () => {
 
             {/* Footer Link */}
             <div className="pathway-footer">
-              <Link to="/lessons" className="pathway-library-link">
-                {uiText.goToLessonLibrary}
+              <Link to="/free-lessons" className="pathway-library-link">
+                {uiText.goToFreeLessonLibrary}
               </Link>
             </div>
           </>

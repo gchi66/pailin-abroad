@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../Styles/FAQ.css";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
@@ -11,6 +12,31 @@ const FAQ = () => {
 
   const toggleCard = (cardId) => {
     setOpenCard(openCard === cardId ? null : cardId);
+  };
+
+  const renderAnswerContent = (faq) => {
+    const text = pick(faq.answer, ui);
+    if (!faq.answerLinks) {
+      return text;
+    }
+
+    const parts = text.split(/(\{\{.*?\}\})/g).filter(Boolean);
+
+    return parts.map((part, idx) => {
+      const match = part.match(/^\{\{(.+?)\}\}$/);
+      if (match) {
+        const linkKey = match[1];
+        const linkDef = faq.answerLinks[linkKey];
+        if (linkDef) {
+          return (
+            <Link key={`${faq.id}-${linkKey}-${idx}`} to={linkDef.to} className="faq-answer-link">
+              {pick(linkDef.text, ui)}
+            </Link>
+          );
+        }
+      }
+      return <span key={`${faq.id}-text-${idx}`}>{part}</span>;
+    });
   };
 
   return (
@@ -29,7 +55,7 @@ const FAQ = () => {
               </span>
             </div>
             <div className={`faq-content ${openCard === faq.id ? "open" : ""}`}>
-              <p className="faq-answer">{pick(faq.answer, ui)}</p>
+              <p className="faq-answer">{renderAnswerContent(faq)}</p>
             </div>
           </div>
         ))}

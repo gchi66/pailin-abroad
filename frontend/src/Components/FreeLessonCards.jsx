@@ -6,6 +6,13 @@ import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
 
 const FreeLessonCards = ({ showHeader = true }) => {
+  const cardImages = [
+    "/images/free-lesson-beginner-surfing.webp",
+    "/images/free-lesson-intermediate-hollywood.webp",
+    "/images/free-lesson-advanced-baseball.webp",
+    "/images/free-lesson-expert-spaghetti.webp",
+  ];
+
   const { ui } = useUiLang();
   const freeCopy = copy.home.freeLessons;
   const cards = freeCopy.cards || [];
@@ -41,7 +48,11 @@ const FreeLessonCards = ({ showHeader = true }) => {
               )}
               <span className="fl-card-level">{renderText(card.level)}</span>
               <h3 className="fl-card-title">{renderText(card.title)}</h3>
-              <img src="/images/globe.webp" alt="Lesson globe" className="fl-card-img" />
+              <img
+                src={cardImages[idx]}
+                alt={`Illustration for ${renderText(card.title)}`}
+                className="fl-card-img"
+              />
               <span className="fl-card-focus">{renderText(card.focusLabel)}</span>
               <p className="fl-card-desc">{renderText(card.description)}</p>
             </div>

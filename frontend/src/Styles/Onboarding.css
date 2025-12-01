@@ -403,7 +403,6 @@
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 0.125rem solid transparent;
 }
 
 .onboarding-avatar-option:hover {

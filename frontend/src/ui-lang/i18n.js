@@ -311,8 +311,18 @@ export const copy = {
             th: "แพ็กเกจสมาชิกมีอะไรบ้าง?",
           },
           answer: {
-            en: "We offer 3 affordable membership options, which you can check out here. For the cost of one private English lesson, you can get a whole month of Pailin Abroad! If you're not ready for membership, you can sign up to access our library of free lessons! Click here to sign up - no credit card needed!",
-            th: "เรามีตัวเลือกสมาชิก 3 แบบในราคาย่อมเยา คุณสามารถดูรายละเอียดได้ที่นี่ จ่ายเท่าค่าเรียนตัวต่อตัวหนึ่งครั้งก็ได้ใช้ Pailin Abroad ทั้งเดือน! หากยังไม่พร้อมเป็นสมาชิก คุณก็ลงทะเบียนเพื่อเข้าถึงคลังบทเรียนฟรีของเราได้เลย คลิกที่นี่เพื่อลงทะเบียนโดยไม่ต้องใช้บัตรเครดิต!",
+            en: "We offer 3 affordable membership options, which you can check out {{membershipLink}}. For the cost of one private English lesson, you can get a whole month of Pailin Abroad! If you're not ready for membership, you can sign up to access our library of free lessons! {{signupLink}} to sign up - no credit card needed!",
+            th: "เรามีตัวเลือกสมาชิก 3 แบบในราคาย่อมเยา คุณสามารถดูรายละเอียดได้ที่{{membershipLink}} จ่ายเท่าค่าเรียนตัวต่อตัวหนึ่งครั้งก็ได้ใช้ Pailin Abroad ทั้งเดือน! หากยังไม่พร้อมเป็นสมาชิก คุณก็ลงทะเบียนเพื่อเข้าถึงคลังบทเรียนฟรีของเราได้เลย {{signupLink}}เพื่อลงทะเบียนโดยไม่ต้องใช้บัตรเครดิต!",
+          },
+          answerLinks: {
+            membershipLink: {
+              text: { en: "here", th: "ที่นี่" },
+              to: "/membership",
+            },
+            signupLink: {
+              text: { en: "Click here", th: "คลิกที่นี่" },
+              to: "/signup",
+            },
           },
         },
       ],

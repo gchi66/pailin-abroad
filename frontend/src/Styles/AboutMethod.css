@@ -18,8 +18,8 @@
   padding: 2rem 2.5rem;
   font-family: "Poppins", sans-serif;
   color: #1e1e1e;
-  width: 65vw;
-  max-width: 65vw;
+  width: 75vw;
+  max-width: 75vw;
   margin: 0 auto;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -30,7 +30,7 @@
 }
 
 .about-method-card.expanded {
-  width: 65vw;
+  width: 75vw;
   padding: 3rem 2.5rem;
 }
 

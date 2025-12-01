@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10vh 0vw;
+  padding: 8vh 0vw 4vh;
   background-color: #fef8f4;
 }
 
@@ -91,6 +91,12 @@
   font-weight: 500;
   margin: 0;
   line-height: 1.7;
+}
+
+.faq-answer-link {
+  color: #1E1E1E;
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 /* Responsive Design */
