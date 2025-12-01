@@ -42,7 +42,8 @@
   z-index: 1000;
   min-width: 12rem;
   margin-top: 0.5rem;
-  overflow: hidden;
+  max-height: 75vh;
+  overflow-y: auto;
 }
 
 .dropdown-section {
@@ -99,14 +100,33 @@
   background-color: #91caff;
 }
 
-.dropdown-link:not(:last-child) {
-  border-bottom: 0.0625rem solid #f0f0f0;
+.dropdown-navlinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.5rem 0 0.25rem;
 }
 
-.logout-link {
-  color: #dc3545;
+.dropdown-subsection {
+  padding: 0 1rem 0.5rem;
 }
 
-.logout-link:hover {
-  background-color: #fef2f2;
+.dropdown-subtitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #1E1E1E;
+}
+
+.dropdown-subsection ul {
+  list-style: none;
+  padding: 0.25rem 0 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dropdown-subsection li button {
+  padding-left: 0;
 }

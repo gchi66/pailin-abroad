@@ -24,7 +24,12 @@ const MyPathway = () => {
   const { ui: uiLang } = useUiLang();
   const isFreePlanUser = Boolean(user) && isPaidMember === false;
   const lessonsCompletedCount = userStats?.lessons_completed ?? userProfile?.lessons_complete ?? 0;
-  const isFirstVisit = lessonsCompletedCount <= 0;
+  const hasPreviousSignIn = Boolean(
+    user?.last_sign_in_at &&
+      user?.created_at &&
+      user.last_sign_in_at !== user.created_at
+  );
+  const isFirstVisit = lessonsCompletedCount <= 0 && !hasPreviousSignIn;
 
   // Helper function to pick the right language content
   const pickLang = (en, th) => {
@@ -32,6 +37,21 @@ const MyPathway = () => {
       return th || en; // fallback to English if Thai is not available
     }
     return en || th; // fallback to Thai if English is not available
+  };
+
+  // Force a line break after the first word (e.g., "Lessons" + line break + "Complete")
+  const withLineBreakAfterFirstWord = (label) => {
+    if (!label?.trim()) return label;
+    const words = label.split(" ");
+    if (words.length <= 1) return label;
+
+    return (
+      <>
+        {words[0]}
+        <br />
+        {words.slice(1).join(" ")}
+      </>
+    );
   };
 
   // UI translations
@@ -62,7 +82,7 @@ const MyPathway = () => {
 
     // Header section
     welcomeBack: uiLang === "th" ? "ยินดีต้อนรับกลับ," : "Welcome back,",
-    welcome: uiLang === "th" ? "ยินดีต้อนรับ" : "Welcome",
+    welcome: uiLang === "th" ? "ยินดีต้อนรับ" : "Welcome,",
     user: uiLang === "th" ? "ผู้ใช้" : "User",
     plan: uiLang === "th" ? "แผน:" : "Plan:",
     fullAccess: uiLang === "th" ? "เข้าถึงเต็มรูปแบบ" : "Full Access",
@@ -294,7 +314,8 @@ const MyPathway = () => {
             {/* Progress Section */}
             <div className="pathway-progress-section">
               <h3 className="pathway-section-title">
-                {uiText.yourNextLesson} {nextLesson ? (
+                <span className="pathway-next-lesson-label">{uiText.yourNextLesson}</span>
+                {nextLesson ? (
                   (nextLesson.title || "").toLowerCase().includes("checkpoint")
                     ? `Level ${nextLesson.level} ${uiText.checkpoint}`
                     : nextLesson.formatted
@@ -556,11 +577,11 @@ const MyPathway = () => {
 
               <div className="pathway-header-right">
                 <div className="pathway-counter">
-                  <span className="pathway-counter-label">{uiText.lessonsComplete}</span>
+                  <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.lessonsComplete)}</span>
                   <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
                 </div>
                 <div className="pathway-counter">
-                  <span className="pathway-counter-label">{uiText.levelsComplete}</span>
+                  <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.levelsComplete)}</span>
                   <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
                 </div>
               </div>

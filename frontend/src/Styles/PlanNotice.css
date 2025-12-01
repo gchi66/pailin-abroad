@@ -1,5 +1,5 @@
 .plan-notice {
-  padding: 0rem 2.5rem 3rem 2.5rem;
+  padding: 1rem 2.5rem 3rem 2.5rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -15,6 +15,7 @@
   font-weight: 600;
   color: #1E1E1E;
   margin: 0;
+  line-height: 1.8rem;
 }
 
 .plan-notice-subtext {
@@ -29,6 +30,7 @@
   font-size: 1.2rem;
   color: #1E1E1E;
   margin: 0;
+  line-height: 1.2rem;
 }
 
 .plan-notice-subtext-line a {
@@ -72,6 +74,7 @@
   box-shadow: 0.15rem 0.15rem 0px #1E1E1E;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   min-width: 20vw;
+  margin-top: .2rem;
 }
 
 .plan-notice-cta:hover {

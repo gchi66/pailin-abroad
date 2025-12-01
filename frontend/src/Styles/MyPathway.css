@@ -28,10 +28,10 @@
   background: #FFFFFF;
   border-radius: 3.6rem;
   padding: 4vh 4vw 6vh;
-  border: 0.2rem solid #1e1e1e;
+  border: 0.15rem solid #1e1e1e;
   display: flex;
   flex-direction: column;
-  gap: 3vh;
+  gap: 2rem;
   margin: 14vh auto 4vh auto;
 }
 
@@ -114,7 +114,7 @@
 
 .pathway-header-right {
   display: flex;
-  gap: 3rem;
+  gap: 1.5rem;
 }
 
 .pathway-counter {
@@ -125,14 +125,14 @@
 }
 
 .pathway-counter-label {
-  font-size: 0.9rem;
-  color: #666;
+  font-size: 1rem;
+  color: #1e1e1e;
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
 .pathway-counter-number {
-  font-size: 2rem;
+  font-size: 2.7rem;
   color: #1E1E1E;
   font-weight: 600;
 }
@@ -193,7 +193,7 @@
 
 .pathway-plan-notice-wrapper .plan-notice {
   margin: 0;
-  padding-bottom: 1.5rem; /* reduce overall padding-bottom for this context */
+  padding-bottom: 2.5rem; /* reduce overall padding-bottom for this context */
 }
 
 .pathway-plan-notice-wrapper .plan-notice-cta-group {
@@ -204,12 +204,13 @@
 .pathway-lock-icon {
   width: 3rem;
   height: 3rem;
-  margin-left: auto;
+  margin-left: 1.5rem;
+  margin-right: -.5rem;
 }
 
 /* Progress Section */
 .pathway-progress-section {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -217,12 +218,19 @@
 }
 
 .pathway-section-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #1E1E1E;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
   flex-shrink: 0;
   font-family: "Poppins", sans-serif;
+}
+
+.pathway-next-lesson-label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1rem;
+  font-weight: 600;
 }
 
 .pathway-progress-bar-container {
@@ -313,6 +321,7 @@
   min-width: 4rem;
   text-align: left;
   flex-shrink: 0;
+  line-height: 2rem;
 }
 
 .pathway-lesson-checkpoint {

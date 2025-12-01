@@ -8,7 +8,7 @@ import "../Styles/ProfileDropdown.css";
 import supabaseClient from "../supabaseClient";
 import LanguageToggle from "./LanguageToggle";
 
-const ProfileDropdown = () => {
+const ProfileDropdown = ({ extraLinks = null }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const { ui, setUi } = useUiLang();
@@ -91,6 +91,52 @@ const ProfileDropdown = () => {
           >
             {t("profileDropdown.logout", ui)}
           </button>
+          {Array.isArray(extraLinks) && extraLinks.length > 0 && (
+            <>
+              <div className="dropdown-divider" />
+              <div className="dropdown-navlinks">
+                {extraLinks.map((link, index) => {
+                  if (link.dropdown) {
+                    return (
+                      <div className="dropdown-subsection" key={`dropdown-sub-${index}`}>
+                        <div className="dropdown-subtitle">{link.label}</div>
+                        <ul>
+                          {link.dropdown.map((child, childIndex) => (
+                            <li key={`dropdown-sub-item-${childIndex}`}>
+                              <button
+                                type="button"
+                                className="dropdown-link"
+                                onClick={() => {
+                                  navigate(child.href);
+                                  setIsOpen(false);
+                                }}
+                              >
+                                {child.label}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={`dropdown-nav-${index}`}
+                      type="button"
+                      className={`dropdown-link ${link.className ?? ""}`}
+                      onClick={() => {
+                        navigate(link.href);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {link.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

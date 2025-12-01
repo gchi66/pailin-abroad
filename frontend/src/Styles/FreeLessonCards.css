@@ -66,8 +66,8 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .fl-card-img {
-  width: 12vw;
-  height: 12vw;
+  width: 15vw;
+  height: 15vw;
   object-fit: contain;
   border-radius: 1vw;
   display: block;

@@ -92,22 +92,23 @@
 
 .hero-buttons .free-lessons {
   font-size: 2.7vh;
-  border-radius: 4vh;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: transform 0.2s;
-  border: .3dvh solid #1E1E1E;
+  border: 0.15rem solid #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   min-width: 18rem;
   padding: 2vh 5vw;
-  background-color: #F65555;
-  color: white;
+  background-color: #FF4545;
+  color: #FFFFFF;
+  box-shadow: 0.15rem 0.15rem 0px #1E1E1E;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .hero-buttons .free-lessons:hover {
-  transform: scale(1.05);
-  background-color: white;
-  color: #1E1E1E;
+  background-color: #ff4a4a;
+  transform: translateY(-2px);
+  box-shadow: 0.3rem 0.3rem 0px #1E1E1E;
 }
 
 

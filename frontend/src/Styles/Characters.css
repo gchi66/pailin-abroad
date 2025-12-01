@@ -2,37 +2,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4vh 0vw 4vh 0vw;
+  padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 6vw, 4rem);
   background-color: #fef8f4;
 }
 
 /* Character Card - Same style as Hero card */
 .character-card {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   background: white;
-  padding: 10vh 10vh;
+  padding: clamp(2rem, 5vw, 6rem);
   border-radius: 2vh;
   border: .15rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0vw #1E1E1E;
   position: relative;
-  max-width: 75vw;
   width: 100%;
-  min-height: 44vh;
-  height: auto;
-  gap: 2vw;
+  max-width: 75rem;
+  gap: clamp(1rem, 3vw, 3rem);
 }
 
 .character-image {
-  flex-shrink: 0;
-  max-width: 30%;
-  height: auto;
-  object-fit: contain;
-  margin-left: 0;
-  margin-right: 2vw;
+  flex: 1 1 220px;
+  max-width: clamp(200px, 28vw, 320px);
+  width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-start;
 }
 
 .character-image img {
@@ -43,46 +39,42 @@
 
 /* Character Content */
 .character-content {
+  flex: 1 1 320px;
   display: flex;
   flex-direction: column;
-  gap: 6vh;
+  gap: clamp(1.5rem, 4vh, 3rem);
   text-align: left;
 }
 
 .characters-title {
-  font-size: 3.2vw;
+  font-size: clamp(2rem, 4vw, 3.2rem);
   color: #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   line-height: 1.15;
-  position: relative;
   margin: 0;
-  white-space: normal;
-  max-width: 100%;
-  overflow: hidden;
   text-shadow: 0.08vw 0.08vw 0.18vw rgba(30,30,30,0.13);
-  white-space: no-wrap;
 }
 
 .character-description {
-  font-size: 2.5vh;
+  font-size: clamp(1rem, 2vw, 1.4rem);
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
   font-weight: 500;
   margin: 0;
-  white-space: normal;
-  line-height: 2.0;
+  line-height: 1.8;
 }
 
 .character-thumbnails {
   display: flex;
-  gap: 1vh;
-  margin-top: 1vh;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: clamp(0.5rem, 1.5vw, 1.5rem);
 }
 
 .thumbnail {
-  width: 13vh;
-  height: 13vh;
+  flex: 0 1 clamp(3.5rem, 10vw, 5.5rem);
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -95,12 +87,24 @@
   transform: scale(1.05);
 }
 
-/* .thumbnail.selected {
-  border: 0.2vh solid #42b4f3;
-} */
-
 .thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .character-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .character-content {
+    text-align: center;
+    align-items: center;
+  }
+
+  .character-thumbnails {
+    justify-content: center;
+  }
 }
