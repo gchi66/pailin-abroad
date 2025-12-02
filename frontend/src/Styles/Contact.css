@@ -130,16 +130,21 @@
   cursor: pointer;
   width: 50%;
   margin-top: 1.5rem;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
-  box-shadow: 0.2rem 0.2rem 0px #1E1E1E;
+  box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
 }
 
 .contact-form button:hover {
   background-color: #E63E3E;
-  transform: translate(0.1rem, 0.1rem);
-  box-shadow: 0.1rem 0.1rem 0px #1E1E1E;
+  transform: translateY(-2px);
+  box-shadow: 0.3rem 0.3rem 0 #1E1E1E;
+}
+
+.contact-form button:active {
+  transform: translate(0.15rem, 0.15rem);
+  box-shadow: 0.05rem 0.05rem 0 #1E1E1E;
 }
 
 

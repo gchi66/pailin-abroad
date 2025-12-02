@@ -111,6 +111,16 @@
   box-shadow: 0.3rem 0.3rem 0px #1E1E1E;
 }
 
+.hero-buttons .free-lessons:active {
+  transform: translate(0.15rem, 0.15rem);
+  box-shadow: 0.05rem 0.05rem 0px #1E1E1E;
+}
+
+.hero-buttons .free-lessons:focus-visible {
+  outline: 0.15rem solid #1E1E1E;
+  outline-offset: 0.15rem;
+}
+
 
 
 

@@ -43,6 +43,16 @@
   box-shadow: 0.3rem 0.3rem 0px #1E1E1E;
 }
 
+.signup-cta-button:active {
+  transform: translate(0.15rem, 0.15rem);
+  box-shadow: 0.05rem 0.05rem 0px #1E1E1E;
+}
+
+.signup-cta-button:focus-visible {
+  outline: 0.15rem solid #1E1E1E;
+  outline-offset: 0.15rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .signup-cta-title {

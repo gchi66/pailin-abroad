@@ -75,20 +75,27 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .discussion-submit-btn:hover:not(:disabled) {
   background-color: #ff7b83;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 0 rgba(30, 30, 30, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0.3rem 0.3rem 0 #1E1E1E;
 }
 
 .discussion-submit-btn:disabled {
   cursor: not-allowed;
   opacity: 0.65;
-  box-shadow: none;
+  box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
   background-color: #f6a3a5;
+  transform: none;
+}
+
+.discussion-submit-btn:active:not(:disabled) {
+  transform: translate(0.15rem, 0.15rem);
+  box-shadow: 0.05rem 0.05rem 0 #1E1E1E;
 }
 
 .discussion-locked {

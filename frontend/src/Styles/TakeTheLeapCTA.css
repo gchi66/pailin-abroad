@@ -25,11 +25,12 @@
   font-family: "Poppins", sans-serif;
   font-size: 1.3rem;
   font-weight: 600;
-  padding: 0.9rem 2.5rem;
+  padding: 1rem 2.5rem;
   border-radius: 9999px;
   cursor: pointer;
-  width: 31vw;
-  min-height: 5rem;
+  width: auto;
+  min-height: 1rem;
+  white-space: nowrap;
   box-shadow: 0.15rem 0.15rem 0px #1E1E1E;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
@@ -38,6 +39,16 @@
   background-color: #ff4a4a;
   transform: translateY(-2px);
   box-shadow: 0.3rem 0.3rem 0px #1E1E1E;
+}
+
+.take-the-leap-cta-button:active {
+  transform: translate(0.15rem, 0.15rem);
+  box-shadow: 0.05rem 0.05rem 0px #1E1E1E;
+}
+
+.take-the-leap-cta-button:focus-visible {
+  outline: 0.15rem solid #1E1E1E;
+  outline-offset: 0.15rem;
 }
 
 /* Responsive Design */

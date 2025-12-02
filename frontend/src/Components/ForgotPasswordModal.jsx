@@ -128,7 +128,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
         {/* Magic Link Section */}
         <div className="forgot-password-section">
           <button
-            className="submit-btn forgot-password-magic-btn"
+            className="submit-btn forgot-password-magic-btn modal-form-submit"
             onClick={handleMagicLink}
             disabled={magicLinkLoading || loading}
           >
@@ -149,7 +149,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
           <form onSubmit={handleResetPassword}>
             <button
               type="submit"
-              className="submit-btn"
+              className="submit-btn modal-form-submit"
               disabled={loading || magicLinkLoading}
             >
               {loading ? "SENDING..." : "RESET PASSWORD"}

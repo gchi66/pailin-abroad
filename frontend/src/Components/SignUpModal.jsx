@@ -121,6 +121,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
         {showEmailForm && (
           <button
             type="button"
+            className="modal-back-button"
             onClick={handleBackToOptions}
             style={{
               position: 'absolute',
@@ -196,7 +197,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
                 <button
                   type="submit"
-                  className="submit-btn"
+                  className="submit-btn modal-form-submit"
                   disabled={loading}
                   style={{ opacity: loading ? 0.6 : 1, fontSize: '0.9rem' }}
                 >
