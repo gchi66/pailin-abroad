@@ -4,7 +4,7 @@ import "../Styles/Navbar.css";
 import LanguageToggle from "./LanguageToggle";
 import LessonLanguageToggle from "./LessonLanguageToggle";
 import ProfileDropdown from "./ProfileDropdown";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
@@ -16,6 +16,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const { user } = useAuth();
   const { ui, setUi } = useUiLang();
   const withUi = useWithUi();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const navRef = useRef(null);
   const {
@@ -30,6 +31,14 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const handleStickyContentLang = stickySetContentLang || (() => {});
 
   const [isCompactNav, setIsCompactNav] = useState(false);
+  const [compactNavDropdowns, setCompactNavDropdowns] = useState({});
+
+  const toggleCompactNavDropdown = useCallback((key) => {
+    setCompactNavDropdowns((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  }, []);
 
   const updateNavHeightVar = useCallback(() => {
     if (navRef.current) {
@@ -47,6 +56,12 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
 
     return () => mediaQuery.removeEventListener("change", handleMediaChange);
   }, []);
+
+  useEffect(() => {
+    if (!isCompactNav) {
+      setCompactNavDropdowns({});
+    }
+  }, [isCompactNav]);
 
   // Fetch user profile to check is_paid status
   useEffect(() => {
@@ -93,11 +108,13 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
 
   const staticNavLinks = [
     {
+      id: user ? "myPathway" : "home",
       label: user ? t("nav.myPathway", ui) : t("nav.home", ui),
       href: withUi(user ? "/pathway" : "/", ui),
     },
     shouldShowLessonsDropdown
       ? {
+          id: "lessons",
           label: t("nav.lessons", ui),
           dropdown: [
             { label: t("nav.sampleLessons", ui), href: withUi("/try-lessons", ui) },
@@ -105,11 +122,11 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
             { label: t("nav.freeLessons", ui), href: withUi("/free-lessons", ui) },
           ],
         }
-      : { label: t("nav.lessons", ui), href: withUi("/lessons", ui) },
-    { label: t("nav.resources", ui), href: withUi("/resources", ui) },
-    { label: t("nav.about", ui), href: withUi("/about", ui) },
-    { label: t("nav.contact", ui), href: withUi("/contact", ui) },
-    { label: t("nav.membership", ui), href: withUi("/membership", ui), className: "pricing" },
+      : { id: "lessons", label: t("nav.lessons", ui), href: withUi("/lessons", ui) },
+    { id: "resources", label: t("nav.resources", ui), href: withUi("/resources", ui) },
+    { id: "about", label: t("nav.about", ui), href: withUi("/about", ui) },
+    { id: "contact", label: t("nav.contact", ui), href: withUi("/contact", ui) },
+    { id: "membership", label: t("nav.membership", ui), href: withUi("/membership", ui), className: "pricing" },
   ];
 
   return (
@@ -168,60 +185,93 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
           />
         ) : (
           <div className="guest-menu">
-            <div className="guest-menu-wrapper">
-              <button
-                type="button"
-                className="guest-menu-trigger"
-                aria-label="Open menu"
-              >
-                <span className="guest-menu-bar" />
-                <span className="guest-menu-bar" />
-                <span className="guest-menu-bar" />
-              </button>
-              <div className="guest-menu-dropdown">
+            <div className="guest-menu-inner">
+              <div className="guest-menu-wrapper">
                 <button
                   type="button"
-                  className="guest-menu-item guest-menu-signup"
+                  className="guest-menu-trigger"
+                  aria-label="Open menu"
+                >
+                  <span className="guest-menu-bar" />
+                  <span className="guest-menu-bar" />
+                  <span className="guest-menu-bar" />
+                </button>
+              </div>
+              <div className="guest-menu-dropdown dropdown-menu">
+                <div className="dropdown-section">
+                  <LanguageToggle language={ui} setLanguage={setUi} />
+                </div>
+                <button
+                  type="button"
+                  className="dropdown-link"
                   onClick={toggleSignupModal}
                 >
                   {t("authButtons.signUp", ui)}
                 </button>
                 <button
                   type="button"
-                  className="guest-menu-item guest-menu-signin"
+                  className="dropdown-link"
                   onClick={toggleLoginModal}
                 >
                   {t("authButtons.signIn", ui)}
                 </button>
-                <div className="guest-menu-item guest-menu-language">
-                  <LanguageToggle language={ui} setLanguage={setUi} />
-                </div>
                 {isCompactNav && (
                   <>
-                    <div className="guest-menu-divider" />
-                    <div className="guest-menu-navlinks">
-                      {staticNavLinks.map((link, index) => (
-                        link.dropdown ? (
-                          <div key={`guest-dropdown-${index}`} className="guest-menu-subsection">
-                            <div className="guest-menu-subtitle">{link.label}</div>
-                            <ul>
-                              {link.dropdown.map((child, childIndex) => (
-                                <li key={`guest-dropdown-item-${childIndex}`}>
-                                  <NavLink to={child.href}>{child.label}</NavLink>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : (
-                          <NavLink
-                            key={`guest-nav-${index}`}
-                            to={link.href}
-                            className={`guest-menu-item-link ${link.className ?? ""}`}
+                    <div className="dropdown-divider" />
+                    <div className="dropdown-navlinks">
+                      {staticNavLinks.map((link, index) => {
+                        if (link.dropdown) {
+                          const dropdownKey = link.id ?? link.href ?? `dropdown-${index}`;
+                          const isDropdownOpen = Boolean(compactNavDropdowns[dropdownKey]);
+                          return (
+                            <div
+                              key={`guest-nav-${link.id ?? index}`}
+                              className={`dropdown-collapsible${isDropdownOpen ? " is-open" : ""}`}
+                            >
+                              <button
+                                type="button"
+                                className="dropdown-link dropdown-collapsible-trigger"
+                                onClick={() => toggleCompactNavDropdown(dropdownKey)}
+                                aria-expanded={isDropdownOpen}
+                              >
+                                <span>{link.label}</span>
+                                <span
+                                  className={`dropdown-arrow${isDropdownOpen ? " is-open" : ""}`}
+                                  aria-hidden="true"
+                                >
+                                  ▸
+                                </span>
+                              </button>
+                              <div
+                                className={`dropdown-collapsible-content${isDropdownOpen ? " is-open" : ""}`}
+                              >
+                                <ul>
+                                  {link.dropdown.map((child, childIndex) => (
+                                    <li key={`guest-dropdown-item-${childIndex}`}>
+                                      <NavLink to={child.href} className="dropdown-sub-link">
+                                        {child.label}
+                                      </NavLink>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <button
+                            key={`guest-nav-${link.id ?? index}`}
+                            type="button"
+                            className={`dropdown-link ${link.className ?? ""}`}
+                            onClick={() => {
+                              navigate(link.href);
+                            }}
                           >
                             {link.label}
-                          </NavLink>
-                        )
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                   </>
                 )}

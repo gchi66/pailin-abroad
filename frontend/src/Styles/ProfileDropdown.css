@@ -91,9 +91,9 @@
   transition: background-color 0.2s, color 0.2s;
   border: none;
   background: none;
-  width: 100%;
   text-align: left;
   cursor: pointer;
+  width: 100%;
 }
 
 .dropdown-link:hover {
@@ -105,34 +105,61 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  padding: 0.25rem 1rem 0.75rem;
 }
 
-.dropdown-subsection {
-  padding-bottom: 0.5rem;
+.dropdown-navlinks > .dropdown-link,
+.dropdown-navlinks > .dropdown-collapsible > .dropdown-link {
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.dropdown-collapsible {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
 }
 
-.dropdown-subtitle {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #1E1E1E;
+.dropdown-link.dropdown-collapsible-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-.dropdown-subsection ul {
+
+.dropdown-arrow {
+  display: inline-flex;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.25s ease;
+  transform: rotate(90deg);
+}
+
+.dropdown-arrow.is-open {
+  transform: rotate(270deg);
+}
+
+.dropdown-collapsible-content {
+  display: none;
+  padding-left: 0.5rem;
+}
+
+.dropdown-collapsible-content.is-open {
+  display: block;
+}
+
+.dropdown-collapsible-content ul {
   list-style: none;
-  padding: 0;
+  padding: 0.25rem 0 0.5rem;
   margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.dropdown-subsection li button {
-  padding: 0.5rem 0;
+.dropdown-sub-link {
+  padding: 0.4rem 0.75rem;
   font-size: 0.9rem;
 }
 

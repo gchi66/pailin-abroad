@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
@@ -10,6 +10,7 @@ import LanguageToggle from "./LanguageToggle";
 
 const ProfileDropdown = ({ extraLinks = null }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [extraDropdowns, setExtraDropdowns] = useState({});
   const { user } = useAuth();
   const { ui, setUi } = useUiLang();
   const withUi = useWithUi();
@@ -29,6 +30,21 @@ const ProfileDropdown = ({ extraLinks = null }) => {
       console.error("Logout Error:", error.message);
     }
   };
+
+  const filteredExtraLinks = Array.isArray(extraLinks)
+    ? extraLinks.filter((link) => link.id !== "myPathway")
+    : [];
+
+  const toggleExtraDropdown = useCallback((key) => {
+    setExtraDropdowns((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  }, []);
+
+  useEffect(() => {
+    setExtraDropdowns({});
+  }, [extraLinks]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -91,37 +107,57 @@ const ProfileDropdown = ({ extraLinks = null }) => {
             {t("profileDropdown.logout", ui)}
           </button>
           <div className="dropdown-divider" />
-          {Array.isArray(extraLinks) && extraLinks.length > 0 && (
+          {filteredExtraLinks.length > 0 && (
             <>
               <div className="dropdown-navlinks">
-                {extraLinks.map((link, index) => {
+                {filteredExtraLinks.map((link, index) => {
                   if (link.dropdown) {
+                    const dropdownKey = link.id ?? link.href ?? `dropdown-${index}`;
+                    const isDropdownOpen = Boolean(extraDropdowns[dropdownKey]);
                     return (
-                      <div className="dropdown-subsection" key={`dropdown-sub-${index}`}>
-                        <div className="dropdown-subtitle">{link.label}</div>
-                        <ul>
-                          {link.dropdown.map((child, childIndex) => (
-                            <li key={`dropdown-sub-item-${childIndex}`}>
-                              <button
-                                type="button"
-                                className="dropdown-link"
-                                onClick={() => {
-                                  navigate(child.href);
-                                  setIsOpen(false);
-                                }}
-                              >
-                                {child.label}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
+                      <div
+                        className={`dropdown-collapsible${isDropdownOpen ? " is-open" : ""}`}
+                        key={`dropdown-nav-${link.id ?? index}`}
+                      >
+                        <button
+                          type="button"
+                          className="dropdown-link dropdown-collapsible-trigger"
+                          onClick={() => toggleExtraDropdown(dropdownKey)}
+                          aria-expanded={isDropdownOpen}
+                        >
+                          <span>{link.label}</span>
+                          <span
+                            className={`dropdown-arrow${isDropdownOpen ? " is-open" : ""}`}
+                            aria-hidden="true"
+                          >
+                            ▸
+                          </span>
+                        </button>
+                        <div className={`dropdown-collapsible-content${isDropdownOpen ? " is-open" : ""}`}>
+                          <ul>
+                            {link.dropdown.map((child, childIndex) => (
+                              <li key={`dropdown-sub-item-${childIndex}`}>
+                                <button
+                                  type="button"
+                                  className="dropdown-link dropdown-sub-link"
+                                  onClick={() => {
+                                    navigate(child.href);
+                                    setIsOpen(false);
+                                  }}
+                                >
+                                  {child.label}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     );
                   }
 
                   return (
                     <button
-                      key={`dropdown-nav-${index}`}
+                      key={`dropdown-nav-${link.id ?? index}`}
                       type="button"
                       className={`dropdown-link ${link.className ?? ""}`}
                       onClick={() => {
