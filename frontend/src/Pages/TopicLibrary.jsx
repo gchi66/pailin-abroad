@@ -6,6 +6,59 @@ import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
 import "../Styles/TopicLibrary.css";
 
+const MINOR_WORDS = new Set([
+  "a",
+  "an",
+  "and",
+  "as",
+  "at",
+  "but",
+  "by",
+  "for",
+  "in",
+  "nor",
+  "of",
+  "on",
+  "or",
+  "per",
+  "the",
+  "to",
+  "vs",
+  "via",
+]);
+
+const formatTopicTitle = (title = "") => {
+  if (!title) return "";
+  const words = title.trim().split(/\s+/);
+  return words
+    .map((word, index) => {
+      const leading = word.match(/^[^A-Za-z0-9]*/)?.[0] ?? "";
+      const trailing = word.match(/[^A-Za-z0-9]*$/)?.[0] ?? "";
+      const core = word.slice(leading.length, word.length - trailing.length);
+      if (!core) {
+        return word;
+      }
+      const lowerCore = core.toLowerCase();
+      const shouldCapitalize =
+        index === 0 ||
+        index === words.length - 1 ||
+        !MINOR_WORDS.has(lowerCore);
+
+      const capitalizeSegment = (segment) =>
+        segment ? segment[0].toUpperCase() + segment.slice(1) : segment;
+
+      const formattedCore = shouldCapitalize
+        ? lowerCore
+            .split("-")
+            .map((segment) => capitalizeSegment(segment))
+            .join("-")
+        : lowerCore;
+
+      return `${leading}${formattedCore}${trailing}`;
+    })
+    .join(" ");
+};
+
 const TopicLibrary = () => {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -191,7 +244,7 @@ const TopicLibrary = () => {
                       {(index + 1).toString().padStart(2, '0')}
                     </div> */}
                     <div className="topic-library-text">
-                      <h3 className="topic-library-title">{topic.name}</h3>
+                      <h3 className="topic-library-title">{formatTopicTitle(topic.name)}</h3>
                       {topic.subtitle && (
                         <p className="topic-library-subtitle">{topic.subtitle}</p>
                       )}
@@ -207,7 +260,7 @@ const TopicLibrary = () => {
                     </div>
                   </div>
                 </div>
-                <div className="topic-library-arrow">→</div>
+                <div className="topic-library-arrow">▸</div>
               </Link>
             ))
           )}
