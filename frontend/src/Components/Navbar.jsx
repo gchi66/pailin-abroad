@@ -96,7 +96,6 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
       label: user ? t("nav.myPathway", ui) : t("nav.home", ui),
       href: withUi(user ? "/pathway" : "/", ui),
     },
-    { label: t("nav.about", ui), href: withUi("/about", ui) },
     shouldShowLessonsDropdown
       ? {
           label: t("nav.lessons", ui),
@@ -108,8 +107,9 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
         }
       : { label: t("nav.lessons", ui), href: withUi("/lessons", ui) },
     { label: t("nav.resources", ui), href: withUi("/resources", ui) },
+    { label: t("nav.about", ui), href: withUi("/about", ui) },
     { label: t("nav.contact", ui), href: withUi("/contact", ui) },
-    { label: t("nav.pricing", ui), href: withUi("/membership", ui), className: "pricing" },
+    { label: t("nav.membership", ui), href: withUi("/membership", ui), className: "pricing" },
   ];
 
   return (

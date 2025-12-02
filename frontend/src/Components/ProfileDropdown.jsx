@@ -64,7 +64,6 @@ const ProfileDropdown = ({ extraLinks = null }) => {
               setLanguage={setUi}
             />
           </div>
-          <div className="dropdown-divider" />
           <button
             type="button"
             className="dropdown-link"
@@ -91,9 +90,9 @@ const ProfileDropdown = ({ extraLinks = null }) => {
           >
             {t("profileDropdown.logout", ui)}
           </button>
+          <div className="dropdown-divider" />
           {Array.isArray(extraLinks) && extraLinks.length > 0 && (
             <>
-              <div className="dropdown-divider" />
               <div className="dropdown-navlinks">
                 {extraLinks.map((link, index) => {
                   if (link.dropdown) {
