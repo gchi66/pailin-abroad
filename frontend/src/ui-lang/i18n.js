@@ -56,6 +56,13 @@ export const copy = {
       en: "Further explanations on a range of interesting ESL topics",
       th: "คำอธิบายเพิ่มเติมเกี่ยวกับหัวข้อภาษาอังกฤษ ESL ที่น่าสนใจหลากหลาย",
     },
+    backToResources: {
+      en: "← BACK TO ALL RESOURCES",
+      th: "← กลับไปยังแหล่งข้อมูลทั้งหมด",
+    },
+    featuredButton: { en: "Featured Topics", th: "หัวข้อแนะนำ" },
+    allButton: { en: "View All Topics", th: "ดูหัวข้อทั้งหมด" },
+    searchPlaceholder: { en: "Search topics", th: "ค้นหาหัวข้อ" },
     loading: { en: "Loading topics...", th: "กำลังโหลดหัวข้อ..." },
     emptyTitle: { en: "No topics available yet", th: "ยังไม่มีหัวข้อ" },
     emptyBody: {

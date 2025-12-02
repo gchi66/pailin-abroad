@@ -34,6 +34,7 @@ const ProfileDropdown = ({ extraLinks = null }) => {
   const filteredExtraLinks = Array.isArray(extraLinks)
     ? extraLinks.filter((link) => link.id !== "myPathway")
     : [];
+  const hasExtraLinks = filteredExtraLinks.length > 0;
 
   const toggleExtraDropdown = useCallback((key) => {
     setExtraDropdowns((prev) => ({
@@ -106,8 +107,8 @@ const ProfileDropdown = ({ extraLinks = null }) => {
           >
             {t("profileDropdown.logout", ui)}
           </button>
-          <div className="dropdown-divider" />
-          {filteredExtraLinks.length > 0 && (
+          {hasExtraLinks && <div className="dropdown-divider" />}
+          {hasExtraLinks && (
             <>
               <div className="dropdown-navlinks">
                 {filteredExtraLinks.map((link, index) => {

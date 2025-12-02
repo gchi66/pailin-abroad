@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
@@ -10,6 +10,8 @@ const TopicLibrary = () => {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filterMode, setFilterMode] = useState("featured");
+  const [searchTerm, setSearchTerm] = useState("");
   const { ui: uiLang } = useUiLang();
   const withUi = useWithUi();
 
@@ -52,6 +54,25 @@ const TopicLibrary = () => {
       controller.abort();
     };
   }, [uiLang]);
+
+  const visibleTopics = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    return topics
+      .filter((topic) => (filterMode === "featured" ? topic.is_featured : true))
+      .filter((topic) => {
+        if (!normalizedSearch) {
+          return true;
+        }
+        const haystack = [
+          topic.name || "",
+          topic.subtitle || "",
+          ...(Array.isArray(topic.tags) ? topic.tags : []),
+        ]
+          .join(" ")
+          .toLowerCase();
+        return haystack.includes(normalizedSearch);
+      });
+  }, [topics, filterMode, searchTerm]);
 
   if (loading) {
     return (
@@ -107,16 +128,58 @@ const TopicLibrary = () => {
         </div>
       </header>
 
-      {/* Topics List */}
       <div className="topic-library-content">
+        <div className="topic-library-toolbar-wrapper">
+          <Link to={withUi("/resources")} className="topic-library-back-link">
+            {t("topicLibraryPage.backToResources", uiLang)}
+          </Link>
+          <div className="topic-library-toolbar">
+            <div className="topic-library-toolbar-left">
+              <div className="topic-library-filters">
+                <button
+                  type="button"
+                  className={`topic-filter-button ${filterMode === "featured" ? "active" : ""}`}
+                  onClick={() => setFilterMode("featured")}
+                >
+                  {t("topicLibraryPage.featuredButton", uiLang)}
+                </button>
+                <button
+                  type="button"
+                  className={`topic-filter-button ${filterMode === "all" ? "active" : ""}`}
+                  onClick={() => setFilterMode("all")}
+                >
+                  {t("topicLibraryPage.allButton", uiLang)}
+                </button>
+              </div>
+            </div>
+            <div className="topic-library-toolbar-right">
+              <div className="topic-library-search">
+                <label htmlFor="topic-library-search-input" className="sr-only">
+                  {t("topicLibraryPage.searchPlaceholder", uiLang)}
+                </label>
+                <input
+                  id="topic-library-search-input"
+                  type="search"
+                  placeholder={t("topicLibraryPage.searchPlaceholder", uiLang)}
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                />
+                <span className="topic-library-search-icon" aria-hidden="true">
+                  🔍
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Topics List */}
         <div className="topic-library-list">
-          {topics.length === 0 ? (
+          {visibleTopics.length === 0 ? (
             <div className="topic-library-placeholder">
               <h3>{t("topicLibraryPage.emptyTitle", uiLang)}</h3>
               <p>{t("topicLibraryPage.emptyBody", uiLang)}</p>
             </div>
           ) : (
-            topics.map((topic, index) => (
+            visibleTopics.map((topic) => (
               <Link
                 key={topic.id}
                 to={withUi(`/topic-library/${topic.slug}`)}

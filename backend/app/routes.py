@@ -1420,6 +1420,7 @@ def get_topic_library():
                 "subtitle": subtitle,
                 "slug": topic['slug'],
                 "tags": topic.get('tags', []),
+                "is_featured": bool(topic.get('is_featured')),
                 "content_jsonb": content_jsonb,
                 "created_at": topic.get('created_at'),
                 "updated_at": topic.get('updated_at')
@@ -1465,6 +1466,7 @@ def get_topic_by_slug(slug):
             "subtitle": subtitle,
             "slug": topic['slug'],
             "tags": topic.get('tags', []),
+            "is_featured": bool(topic.get('is_featured')),
             "content_jsonb": content_jsonb,
             "created_at": topic.get('created_at'),
             "updated_at": topic.get('updated_at')
