@@ -4,6 +4,8 @@
   --lesson-core-text-size: 1.2rem;
   --lesson-textarea-font: "Poppins", sans-serif;
   --lesson-textarea-font-size: var(--lesson-core-text-size);
+  --rich-text-font-size: 1rem;
+  --rich-text-line-height: 1.6;
 }
 
 html {
@@ -86,6 +88,7 @@ h2 {
   .icon-btn,
   .rate-btn,
   .lesson-back-to-top,
+  .topic-detail-back-to-top,
   .level-btn,
   .stage-btn,
   .level-nav-button
@@ -148,6 +151,7 @@ h2 {
   .icon-btn,
   .rate-btn,
   .lesson-back-to-top,
+  .topic-detail-back-to-top,
   .level-btn,
   .stage-btn,
   .level-nav-button
@@ -266,6 +270,7 @@ h2 {
   .icon-btn,
   .rate-btn,
   .lesson-back-to-top,
+  .topic-detail-back-to-top,
   .level-btn,
   .stage-btn,
   .level-nav-button

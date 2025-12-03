@@ -32,8 +32,17 @@
   margin: 0 0 4vh 0;
 }
 
+.page-header-text {
+  font-size: 2.5rem;
+  color: #1E1E1E;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  white-space: nowrap;
+}
+
 .checkout-page-header-subtitle {
-  font-size: 1.75vh;
+  font-size: 1.5rem;
   color: #666;
   font-weight: 400;
   font-family: "Poppins", sans-serif;
@@ -248,11 +257,11 @@
   }
 
   .page-header-text {
-    font-size: 4vh;
+    font-size: 2.5rem;
   }
 
   .checkout-page-header-subtitle {
-    font-size: 1.5vh;
+    font-size: 1.5rem;
     text-align: center;
   }
 }

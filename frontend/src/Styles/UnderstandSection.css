@@ -43,13 +43,13 @@
 .markdown-content {
   white-space: pre-wrap;
   margin-top: 1rem;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: var(--rich-text-font-size, 1rem);
+  line-height: var(--rich-text-line-height, 1.6);
 }
 
 .markdown-content p {
   margin-bottom: 1em;
-  font-size: var(--lesson-core-text-size);
+  font-size: inherit;
 }
 
 .markdown-content ul {

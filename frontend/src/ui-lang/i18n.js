@@ -1,17 +1,17 @@
 export const copy = {
   nav: {
-    home: { en: "HOME", th: "หน้าแรก" },
-    about: { en: "ABOUT", th: "เกี่ยวกับ" },
-    lessons: { en: "LESSONS", th: "บทเรียน" },
-    resources: { en: "RESOURCES", th: "แหล่งข้อมูล" },
-    contact: { en: "CONTACT", th: "ติดต่อ" },
-    pricing: { en: "PRICING", th: "ราคา" },
-    membership: { en: "MEMBERSHIP", th: "สมาชิก" },
-    myPathway: { en: "MY PATHWAY", th: "เส้นทางของฉัน" },
-    myPathwayDropdown: { en: "My Pathway", th: "เส้นทางของฉัน" },
+    home: { en: "Home", th: "หน้าแรก" },
+    about: { en: "About", th: "เกี่ยวกับ" },
+    lessons: { en: "Lessons", th: "บทเรียน" },
+    resources: { en: "Resources", th: "แหล่งข้อมูล" },
+    contact: { en: "Contact", th: "ติดต่อ" },
+    pricing: { en: "Pricing", th: "ราคา" },
+    membership: { en: "Membership", th: "สมาชิก" },
+    myPathway: { en: "My pathway", th: "เส้นทางของฉัน" },
+    myPathwayDropdown: { en: "My pathway", th: "เส้นทางของฉัน" },
     sampleLessons: { en: "4 Sample Lessons", th: "บทเรียนตัวอย่าง 4 บท" },
-    lessonLibrary: { en: "Lesson Library", th: "คลังบทเรียน" },
-    freeLessons: { en: "Free Lessons", th: "บทเรียนฟรี" },
+    lessonLibrary: { en: "Lesson library", th: "คลังบทเรียน" },
+    freeLessons: { en: "Free lessons", th: "บทเรียนฟรี" },
   },
   uiLabel: { en: "UI:", th: "ภาษา:" },
   lessonHeader: {
@@ -42,13 +42,13 @@ export const copy = {
     },
   },
   profileDropdown: {
-    accountSettings: { en: "Account Settings", th: "การตั้งค่าบัญชี" },
-    logout: { en: "Log Out", th: "ออกจากระบบ" },
+    accountSettings: { en: "Account settings", th: "การตั้งค่าบัญชี" },
+    logout: { en: "Log out", th: "ออกจากระบบ" },
   },
   authButtons: {
-    signUp: { en: "SIGN UP", th: "สมัครสมาชิก" },
-    signIn: { en: "SIGN IN", th: "เข้าสู่ระบบ" },
-    logout: { en: "LOG OUT", th: "ออกจากระบบ" },
+    signUp: { en: "Sign up", th: "สมัครสมาชิก" },
+    signIn: { en: "Sign in", th: "เข้าสู่ระบบ" },
+    logout: { en: "Log out", th: "ออกจากระบบ" },
   },
   topicLibraryPage: {
     title: { en: "TOPIC LIBRARY", th: "คลังหัวข้อ" },
@@ -78,6 +78,111 @@ export const copy = {
     notFoundBody: { en: "Topic not found", th: "ไม่พบหัวข้อ" },
     backToLibrary: { en: "← Back to Topic Library", th: "← กลับไปยังคลังหัวข้อ" },
     emptyContent: { en: "No content available for this topic yet.", th: "ยังไม่มีเนื้อหาสำหรับหัวข้อนี้" },
+  },
+  resourcesPage: {
+    title: { en: "Resources", th: "แหล่งข้อมูล" },
+    subtitle: {
+      en: "Extra materials to guide your English-learning journey with Pailin",
+      th: "สื่อเสริมเพื่อพัฒนาการเรียนภาษาอังกฤษของคุณไปกับไพลิน",
+    },
+  },
+  membershipPage: {
+    title: { en: "Choose the best plan for you", th: "เลือกแผนที่เหมาะกับคุณที่สุด" },
+    subtitle: {
+      en: "For the price of one private English lesson, get a whole month of Pailin Abroad!",
+      th: "จ่ายเท่ากับเรียนตัวต่อตัวหนึ่งครั้ง ก็ได้ใช้ Pailin Abroad ได้ทั้งเดือน!",
+    },
+    bestForLabel: { en: "BEST FOR:", th: "เหมาะสำหรับ:" },
+    periods: {
+      month: { en: "month", th: "เดือน" },
+    },
+    joinCta: { en: "JOIN NOW!", th: "เข้าร่วมตอนนี้!" },
+    planWarning: {
+      en: "Please select a payment plan",
+      th: "กรุณาเลือกแผนการชำระเงิน",
+    },
+    guarantee: {
+      strong: { en: "100% money-back guarantee", th: "รับประกันคืนเงิน 100%" },
+      body: {
+        en: "within 30 days of your purchase if you're not completely satisfied with your membership. But, we're confident you'll love Pailin Abroad!",
+        th: "ภายใน 30 วันหลังการซื้อ หากคุณไม่พอใจกับสมาชิกภาพของคุณ แต่เราเชื่อว่าคุณจะต้องหลงรัก Pailin Abroad อย่างแน่นอน!",
+      },
+    },
+    plans: {
+      sixMonth: {
+        duration: { en: "6 MONTHS", th: "6 เดือน" },
+        bestFor: {
+          en: "Achieving long-term fluency and mastery",
+          th: "พัฒนาความคล่องแคล่วและความชำนาญในระยะยาว",
+        },
+        savings: { en: "Save 25%", th: "ประหยัด 25%" },
+      },
+      threeMonth: {
+        duration: { en: "3 MONTHS", th: "3 เดือน" },
+        bestFor: {
+          en: "Committing to consistent progress",
+          th: "มุ่งมั่นพัฒนาอย่างต่อเนื่อง",
+        },
+        savings: { en: "Save 12.5%", th: "ประหยัด 12.5%" },
+      },
+      oneMonth: {
+        duration: { en: "1 MONTH", th: "1 เดือน" },
+        bestFor: {
+          en: "Improving your English at your own pace",
+          th: "พัฒนาภาษาอังกฤษตามจังหวะของตัวเอง",
+        },
+      },
+    },
+    features: {
+      title: {
+        en: "Membership includes access to:",
+        th: "สมาชิกจะได้รับสิทธิ์เข้าถึง:",
+      },
+      items: [
+        {
+          text: {
+            en: "Our whole lesson library - that’s over 150 lessons!",
+            th: "คลังบทเรียนทั้งหมดของเรา มากกว่า 150 บท!",
+          },
+        },
+        {
+          text: {
+            en: "Our extensive Exercise bank",
+            th: "คลังแบบฝึกหัดขนาดใหญ่ของเรา",
+          },
+        },
+        {
+          text: {
+            en: "Common mistakes made by Thai speakers",
+            th: "ข้อผิดพลาดที่คนไทยมักทำ",
+          },
+        },
+        {
+          text: {
+            en: "Often-used phrases and phrasal verbs",
+            th: "วลีและคำกริยาวลีที่ใช้บ่อย",
+          },
+        },
+        {
+          text: {
+            en: "Our ESL Topic Library",
+            th: "คลังหัวข้อ ESL ของเรา",
+          },
+        },
+        {
+          text: {
+            en: "Cultural notes to help you understand English in context",
+            th: "เกร็ดวัฒนธรรมช่วยให้เข้าใจภาษาอังกฤษตามบริบท",
+          },
+        },
+        {
+          text: {
+            en: "Comment on any lesson and get feedback from us!",
+            th: "คอมเมนต์ในทุกบทเรียนและรับคำแนะนำจากเรา!",
+          },
+        },
+      ],
+    },
   },
   home: {
     hero: {

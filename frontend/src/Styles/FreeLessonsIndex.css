@@ -32,7 +32,7 @@
 }
 
 .free-page-header-text {
-  font-size: 5vh;
+  font-size: 2.5rem;
   color: #1E1E1E;
   font-weight: 600;
   font-family: "Poppins", sans-serif;
@@ -42,7 +42,7 @@
 }
 
 .free-lessons-index-page-header-subtitle {
-  font-size: 1.75vh;
+  font-size: 1.5rem;
   color: #1E1E1E;
   font-weight: 500;
   font-family: "Poppins", sans-serif;
@@ -268,7 +268,7 @@
   }
 
   .free-page-header-text {
-    font-size: 4vh;
+    font-size: 2.5rem;
   }
 
   .free-upgrade-message {
@@ -314,7 +314,7 @@
   }
 
   .free-page-header-text {
-    font-size: 3.5vh;
+    font-size: 2.5rem;
     white-space: normal;
     text-align: center;
   }

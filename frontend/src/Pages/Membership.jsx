@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import MembershipFeatures from "../Components/MembershipFeatures";
 import QuickSignupModal from "../Components/QuickSignupModal";
 import { useAuth } from "../AuthContext";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 import "../Styles/Membership.css";
 
 const Membership = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { ui } = useUiLang();
+  const membershipCopy = copy.membershipPage;
 
   // Always start the membership page at the top when navigated to
   useEffect(() => {
@@ -26,68 +30,73 @@ const Membership = () => {
     };
   }, []);
 
-  const plans = [
+  const planDefinitions = [
     {
       id: "6-month",
-      duration: "6 MONTHS",
       price: "300฿",
-      period: "month",
-      savings: "Save 25%",
-      bestFor: "Achieving long-term fluency and mastery",
+      periodKey: "month",
       isRecommended: true,
       totalPrice: 1800,
       originalPrice: 2400,
-      monthlyPrice: 300
+      monthlyPrice: 300,
+      copyKey: "sixMonth"
     },
     {
       id: "3-month",
-      duration: "3 MONTHS",
       price: "350฿",
-      period: "month",
-      savings: "Save 12.5%",
-      bestFor: "Committing to consistent progress",
+      periodKey: "month",
       isRecommended: false,
       totalPrice: 1050,
       originalPrice: 1200,
-      monthlyPrice: 350
+      monthlyPrice: 350,
+      copyKey: "threeMonth"
     },
     {
       id: "1-month",
-      duration: "1 MONTH",
       price: "400฿",
-      period: "month",
-      savings: null,
-      bestFor: "Trying out our lessons at your own pace",
+      periodKey: "month",
       isRecommended: false,
       totalPrice: 400,
       originalPrice: null,
-      monthlyPrice: 400
+      monthlyPrice: 400,
+      copyKey: "oneMonth"
     }
   ];
 
-  const handleCardClick = (plan) => {
-    setSelectedPlan(plan);
+  const plans = planDefinitions.map((plan) => {
+    const planCopy = membershipCopy.plans?.[plan.copyKey] ?? {};
+    return {
+      ...plan,
+      duration: pick(planCopy.duration, ui),
+      bestFor: pick(planCopy.bestFor, ui),
+      savings: planCopy.savings ? pick(planCopy.savings, ui) : null,
+      period: pick(membershipCopy.periods?.[plan.periodKey], ui)
+    };
+  });
+
+  const selectedPlan = plans.find((plan) => plan.id === selectedPlanId) || null;
+
+  const handleCardClick = (planId) => {
+    setSelectedPlanId(planId);
   };
 
   // Calculate pricing display based on selected plan
-  const calculatePricingDisplay = () => {
-    if (!selectedPlan) return null;
+  const calculatePricingDisplay = (plan) => {
+    if (!plan) return null;
 
     // For 1-month plan, show only final price
-    if (selectedPlan.id === "1-month") {
+    if (plan.id === "1-month") {
       return {
         showComparison: false,
-        finalPrice: selectedPlan.totalPrice,
-        description: `(${selectedPlan.duration.toLowerCase()})`
+        finalPrice: plan.totalPrice
       };
     }
 
     // For 3 and 6 month plans, show comparison
     return {
       showComparison: true,
-      originalPrice: selectedPlan.originalPrice,
-      finalPrice: selectedPlan.totalPrice,
-      description: `(${selectedPlan.duration.toLowerCase()})`
+      originalPrice: plan.originalPrice,
+      finalPrice: plan.totalPrice
     };
   };
 
@@ -95,9 +104,9 @@ const Membership = () => {
     <div className="membership-container">
       {/* Header Section */}
       <div className="membership-header">
-        <h1 className="membership-title">Choose the best plan for you</h1>
+        <h1 className="membership-title">{pick(membershipCopy.title, ui)}</h1>
         <p className="membership-subtitle">
-          For the price of one private English lesson, get a whole month of Pailin Abroad!
+          {pick(membershipCopy.subtitle, ui)}
         </p>
       </div>
 
@@ -106,10 +115,10 @@ const Membership = () => {
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`pricing-card ${selectedPlan?.id === plan.id ? 'selected' : ''} ${hoveredCard === plan.id ? 'hovered' : ''}`}
+            className={`pricing-card ${selectedPlanId === plan.id ? 'selected' : ''} ${hoveredCard === plan.id ? 'hovered' : ''}`}
             onMouseEnter={() => setHoveredCard(plan.id)}
             onMouseLeave={() => setHoveredCard(null)}
-            onClick={() => handleCardClick(plan)}
+            onClick={() => handleCardClick(plan.id)}
           >
             {plan.savings && (
               <div className={`savings-badge ${plan.isRecommended ? 'recommended-badge' : 'regular-badge'}`}>
@@ -121,7 +130,7 @@ const Membership = () => {
               <div className="left-section">
                 <div className="plan-duration">{plan.duration}</div>
                 <div className="best-for-section">
-                  <span className="best-for-label">BEST FOR:</span>
+                  <span className="best-for-label">{pick(membershipCopy.bestForLabel, ui)}</span>
                   <span className="best-for-text">{plan.bestFor}</span>
                 </div>
               </div>
@@ -141,14 +150,13 @@ const Membership = () => {
       {selectedPlan && (
         <div className="pricing-summary">
           {(() => {
-            const pricing = calculatePricingDisplay();
+            const pricing = calculatePricingDisplay(selectedPlan);
             return (
               <div className="pricing-comparison">
                 {pricing.showComparison && (
                   <span className="original-price">{pricing.originalPrice}฿</span>
                 )}
                 <span className="final-price">{pricing.finalPrice}฿</span>
-                <span className="pricing-description">{pricing.description}</span>
               </div>
             );
           })()}
@@ -156,44 +164,43 @@ const Membership = () => {
       )}
 
       {/* Join Button */}
-      <div className="join-section">
-        <button
-          className={`join-now-btn ${!selectedPlan ? 'disabled' : ''}`}
-          onClick={() => {
-            // If no plan selected, show a transient warning instead of navigating
-            if (!selectedPlan) {
-              setShowPlanWarning(true);
-              // hide after 3 seconds
-              setTimeout(() => setShowPlanWarning(false), 3000);
-              return;
-            }
+      <button
+        className={`join-now-btn ${!selectedPlan ? 'disabled' : ''}`}
+        onClick={() => {
+          // If no plan selected, show a transient warning instead of navigating
+          if (!selectedPlan) {
+            setShowPlanWarning(true);
+            // hide after 3 seconds
+            setTimeout(() => setShowPlanWarning(false), 3000);
+            return;
+          }
 
-            // Check if user is authenticated
-            if (!user) {
-              // Show signup modal if not logged in
-              setShowSignupModal(true);
-              return;
-            }
+          // Check if user is authenticated
+          if (!user) {
+            // Show signup modal if not logged in
+            setShowSignupModal(true);
+            return;
+          }
 
-            // Pass selected plan data to checkout page
-            navigate('/checkout', { state: { selectedPlan } });
-          }}
-          aria-disabled={!selectedPlan}
+          // Pass selected plan data to checkout page
+          navigate('/checkout', { state: { selectedPlan } });
+        }}
+        aria-disabled={!selectedPlan}
         >
-          JOIN NOW!
-        </button>
+        {pick(membershipCopy.joinCta, ui)}
+      </button>
 
-        {showPlanWarning && (
-          <div className="plan-warning" role="status">
-            Please select a payment plan
-          </div>
-        )}
-      </div>
+      {showPlanWarning && (
+        <div className="plan-warning" role="status">
+          {pick(membershipCopy.planWarning, ui)}
+        </div>
+      )}
 
       {/* Guarantee */}
       <div className="guarantee-section">
         <p className="guarantee-text">
-          <strong>100% money-back guarantee</strong> within 30 days of your purchase if you're not completely satisfied with your membership. But, we're confident you'll love Pailin Abroad!
+          <strong>{pick(membershipCopy.guarantee?.strong, ui)}</strong>{" "}
+          {pick(membershipCopy.guarantee?.body, ui)}
         </p>
       </div>
 

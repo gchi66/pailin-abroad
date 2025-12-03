@@ -62,8 +62,8 @@ details[open] > .markdown-summary::after {
 /* main body */
 .markdown-content {
   padding: 0 2.25rem 1.4vh;          /* side + bottom padding */
-  line-height: 1.6;
-  font-size: 1.2rem;
+  line-height: var(--rich-text-line-height, 1.6);
+  font-size: var(--rich-text-font-size, 1rem);
   animation: fadeIn .25s ease;
 }
 
@@ -71,7 +71,7 @@ details[open] > .markdown-summary::after {
 .markdown-content div,
 .markdown-content span,
 .markdown-content li {
-  font-size: 1.2rem;
+  font-size: inherit;
 }
 
 .markdown-content p {

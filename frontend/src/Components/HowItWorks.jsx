@@ -15,8 +15,8 @@ const HowItWorks = () => {
         {steps.map((step, index) => (
           <div key={index} className="hiw-card">
             <img
-              src={`/images/number-${step.number}.png`}
-              alt={`Step ${step.number}`}
+              src={`/images/how_it_works_${index + 1}.png`}
+              alt={`How it works step ${index + 1}`}
               className="hiw-number"
             />
             <h3 className="hiw-header">{pick(step.header, ui)}</h3>

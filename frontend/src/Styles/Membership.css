@@ -8,8 +8,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 9rem;
-  gap: 3.125rem;
+  margin-top: 5rem;
+  gap: 1rem;
+}
+
+.membership-container * {
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Header section */
@@ -38,9 +42,9 @@
 .pricing-cards-container {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 3rem;
   align-items: center;
-  margin-bottom: 2rem;
+  margin: 2rem 0;
 }
 
 /* Individual Card Styling - Hero card inspired */
@@ -48,10 +52,9 @@
   position: relative;
   background: white;
   border: 0.125rem solid #9D9D9D;
-  border-radius: 0.75rem;
-  padding: 1.5rem 2rem;
-  width: 100%;
-  max-width: 40vw;
+  border-radius: 1.5rem;
+  padding: 2rem 2rem;
+  min-width: 60vw;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0.25rem 0.25rem 0rem #9D9D9D;
@@ -115,10 +118,11 @@
   position: absolute;
   top: -1.25rem;
   right: 1.25rem;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 4rem;
   border-radius: 1.25rem;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
+  text-align: center;
   color: #9D9D9D;
   border: 0.125rem solid #9D9D9D;
   transition: all 0.3s ease;
@@ -141,8 +145,8 @@
 
 /* Plan Duration */
 .plan-duration {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.6rem;
+  font-weight: 500;
   color: #1E1E1E;
   font-family: 'Poppins', sans-serif;
   margin: 0;
@@ -151,24 +155,23 @@
 /* Best For Section */
 .best-for-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
   gap: 0.25rem;
 }
 
 .best-for-label {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #666;
+  color: #1e1e1e;
   letter-spacing: 0.0625rem;
   font-family: 'Poppins', sans-serif;
 }
 
 .best-for-text {
-  font-size: 0.875rem;
-  color: #333;
+  font-size: 0.9rem;
+  color: #1e1e1e;
   font-family: 'Poppins', sans-serif;
-  line-height: 1.4;
 }
 
 /* Price Section */
@@ -179,7 +182,7 @@
 }
 
 .price {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #1E1E1E;
   font-family: 'Poppins', sans-serif;
@@ -194,18 +197,13 @@
 /* Pricing summary */
 .pricing-summary {
   text-align: center;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 0.5rem;
-  border: 0.0625rem solid #e0e0e0;
 }
 
 .pricing-comparison {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 0.75rem;
+  gap:1.52rem;
   flex-wrap: wrap;
 }
 
@@ -234,14 +232,17 @@
 .join-now-btn {
   background-color: #91CAFF;
   color: black;
-  border: 2px solid black;
-  padding: 18px 120px;
-  border-radius: 50px;
+  border: 0.125rem solid black;
+  padding: 1.125rem 3rem;
+  border-radius: 3.125rem;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
   font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin: 1rem 0 2rem 0;
+  width: 65%;
+
 }
 
 .join-now-btn:hover {
@@ -285,7 +286,7 @@
   font-size: 0.95rem;
   color: #666;
   line-height: 1.6;
-  margin: 0;
+  margin: 0 0 1rem 0;
 }
 
 .guarantee-text strong {

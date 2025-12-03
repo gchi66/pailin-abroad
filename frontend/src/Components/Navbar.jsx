@@ -192,9 +192,11 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
                   className="guest-menu-trigger"
                   aria-label="Open menu"
                 >
-                  <span className="guest-menu-bar" />
-                  <span className="guest-menu-bar" />
-                  <span className="guest-menu-bar" />
+                  <img
+                    src="/images/menu_hamburger_icon_desktop.png"
+                    alt="Guest menu icon"
+                    className="guest-menu-icon"
+                  />
                 </button>
               </div>
               <div className="guest-menu-dropdown dropdown-menu">

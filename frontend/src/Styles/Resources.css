@@ -31,7 +31,7 @@
 }
 
 .resources-page-header-text {
-  font-size: 5vh;
+  font-size: 2.5rem;
   color: #1E1E1E;
   font-weight: 600;
   font-family: "Poppins", sans-serif;
@@ -41,11 +41,12 @@
 }
 
 .resources-page-header-subtitle {
-  font-size: 1.75vh;
+  font-size: 1.5rem;
   color: #1E1E1E;
   font-weight: 500;
   font-family: "Poppins", sans-serif;
   margin: 0;
+  white-space: nowrap;
 }
 
 .resources-header-image {
@@ -68,7 +69,7 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 3.2rem;
   border: 0.15rem solid #1E1E1E;
   background: #fff;
    box-shadow: .2rem .2rem 0vw #1E1E1E;
@@ -80,14 +81,14 @@
 }
 
 .resources-card:hover {
-  background: #FFFCF6;
   transform: translateY(-2px);
-  box-shadow: 6px 6px 0px #1E1E1E;
+  box-shadow: .3rem .3rem 0vw #1E1E1E;
+  background-color: #e9f4ff;
 }
 
 .resources-card:active {
   transform: translate(3px, 3px);
-  box-shadow: 2px 2px 0px #1E1E1E;
+  box-shadow: .2rem .2rem 0vw #1E1E1E;
 }
 
 .resources-card:focus-visible {
@@ -98,8 +99,7 @@
 .resources-card-disabled {
   opacity: 0.6;
   pointer-events: none;
-  background: #f3f3f3;
-  box-shadow: 4px 4px 0px #1E1E1E;
+  box-shadow: .2rem .2rem 0vw #1E1E1E;;
 }
 
 .resources-card-media {
@@ -124,13 +124,13 @@
 }
 
 .resources-card-title {
-  font-size: 1.3rem;
+  font-size: 2rem;
   font-weight: 700;
   margin: 0;
 }
 
 .resources-card-desc {
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin: 0;
   color: #1E1E1E;
   line-height: 1.5;

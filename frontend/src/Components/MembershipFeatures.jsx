@@ -1,25 +1,21 @@
 import React from "react";
 import "../Styles/MembershipFeatures.css";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 
 const MembershipFeatures = () => {
-  const features = [
-    "Our whole lesson library - that’s over 150 lessons!",
-    "Our extensive Exercise bank",
-    "Common mistakes made by Thai speakers",
-    "Often-used phrases and phrasal verbs",
-    "Our ESL Topic Library",
-    "Cultural notes to help you understand English in context",
-    "Comment on any lesson and get feedback from us!",
-  ];
+  const { ui } = useUiLang();
+  const featuresCopy = copy.membershipPage?.features ?? {};
+  const features = (featuresCopy.items || []).map((item) => pick(item.text, ui));
 
   return (
     <section className="membership-features-section">
       <div className="membership-features-card">
         <div className="membership-features-box">
-          <h2 className="membership-features-title">Membership includes access to:</h2>
+          <h2 className="membership-features-title">{pick(featuresCopy.title, ui)}</h2>
           <ul className="membership-features-text">
-            {features.map((feature) => (
-              <li key={feature} className="membership-feature-item">
+            {features.map((feature, index) => (
+              <li key={`${index}-${feature}`} className="membership-feature-item">
                 <img
                   src="/images/blue-checkmark.webp"
                   alt=""

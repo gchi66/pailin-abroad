@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   background: white;
-  padding: 9vh 10vh;
+  padding: 9vh 10vh 9vh 7vh;
   border-radius: 2vh;
   border: .15rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0vw #1E1E1E;
@@ -27,11 +27,11 @@
 
 .hero-img {
   flex-shrink: 0;
-  max-width: 36%;
+  max-width: 48%;
+  width: clamp(320px, 48%, 520px);
   height: auto;
   object-fit: contain;
   margin-left: 0;
-  margin-right: 2vw;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -91,15 +91,16 @@
 }
 
 .hero-buttons .free-lessons {
-  font-size: 2.7vh;
+  font-size: clamp(1rem, 2.2vh, 1.55rem);
   border-radius: 4vh;
   cursor: pointer;
   transition: transform 0.2s;
   border: .3dvh solid #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
-  min-width: 18rem;
-  padding: 2vh 5vw;
+  width: clamp(12rem, 28vw, 20rem);
+  min-width: 0;
+  padding: clamp(0.75rem, 1.5vh, 1.4rem) clamp(1.8rem, 5vw, 3.5rem);
   background-color: #F65555;
   color: white;
 }

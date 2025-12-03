@@ -7,10 +7,10 @@ import { copy, pick } from "../ui-lang/i18n";
 
 const FreeLessonCards = ({ showHeader = true }) => {
   const cardImages = [
-    "/images/free-lesson-beginner-surfing.webp",
-    "/images/free-lesson-intermediate-hollywood.webp",
-    "/images/free-lesson-advanced-baseball.webp",
-    "/images/free-lesson-expert-spaghetti.webp",
+    "/images/free_lesson_beginner_surf.webp",
+    "/images/free_lesson_intermediate_hollywood.webp",
+    "/images/free_lesson_advanced_baseball.webp",
+    "/images/free_lesson_expert_spaghetti.webp",
   ];
 
   const { ui } = useUiLang();
