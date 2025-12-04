@@ -69,19 +69,12 @@
   width: 75%;
   margin: 2rem auto 0;
   padding: 0 2rem;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
 }
 
-.topic-detail-back-link {
-  color: #1E1E1E;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.topic-detail-back-link:hover {
-  color: inherit;
-  text-decoration: underline;
+.topic-detail-breadcrumbs .breadcrumbs-item {
+  font-size: 0.95rem;
 }
 
 .topic-detail-tags {
@@ -184,10 +177,6 @@
 
   .topic-detail-back-to-top-row {
     width: 90%;
-  }
-
-  .topic-detail-back-link {
-    font-size: 0.9rem;
   }
 }
 

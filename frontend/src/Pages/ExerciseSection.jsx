@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import LessonLanguageToggle from "../Components/LessonLanguageToggle";
 import FillBlankExercise from "../Components/ExerciseTypes/FillBlankExercise";
 import MultipleChoiceExercise from "../Components/ExerciseTypes/MultipleChoiceExercise";
 import SentenceTransformExercise from "../Components/ExerciseTypes/SentenceTransformExercise";
 import { API_BASE_URL } from "../config/api";
+import Breadcrumbs from "../Components/Breadcrumbs";
 import "../Styles/ExerciseBank.css";
 
 const EXERCISE_COMPONENTS = {
@@ -151,9 +152,14 @@ const ExerciseSection = () => {
         <div className="exercise-section-content">
           <div className="exercise-bank-placeholder">
             <p>{error || "We couldn't find that section."}</p>
-            <Link to="/exercise-bank" className="exercise-section-back-link">
-              ← Back to Exercise Bank
-            </Link>
+            <Breadcrumbs
+              className="exercise-section-breadcrumbs"
+              items={[
+                { label: "Resources", to: "/resources" },
+                { label: "Exercise Bank", to: "/exercise-bank" },
+                { label: section?.section || "Section" },
+              ]}
+            />
           </div>
         </div>
       </div>
@@ -173,9 +179,14 @@ const ExerciseSection = () => {
 
       <div className="exercise-section-content">
         <div className="exercise-section-nav">
-          <Link to="/exercise-bank" className="exercise-section-back-link">
-            ← Back to Exercise Bank
-          </Link>
+          <Breadcrumbs
+            className="exercise-section-breadcrumbs"
+            items={[
+              { label: "Resources", to: "/resources" },
+              { label: "Exercise Bank", to: "/exercise-bank" },
+              { label: section.section || "Section" },
+            ]}
+          />
           <div className="exercise-section-nav-actions">
             <span className="exercise-section-category-chip">{section.category_label}</span>
             <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />

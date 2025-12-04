@@ -1,0 +1,45 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  color: #1E1E1E;
+}
+
+.breadcrumbs-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.breadcrumbs-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.breadcrumbs-link {
+  color: #1E1E1E;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.breadcrumbs-link:hover,
+.breadcrumbs-link:focus-visible {
+  text-decoration: underline;
+}
+
+.breadcrumbs-current {
+  color: #444;
+  font-weight: 600;
+}
+
+.breadcrumbs-separator {
+  color: #888;
+  font-weight: 600;
+}

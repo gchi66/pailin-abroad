@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   padding: 8vh 0vw 4vh;
-  background-color: #fef8f4;
+  background-color: var(--app-bg);
 }
 
 /* FAQ Title */

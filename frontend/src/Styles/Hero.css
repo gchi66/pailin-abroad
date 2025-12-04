@@ -5,7 +5,7 @@
   align-items: center;
   /* height: 100vh; */
   padding: 15vh 0vw 4vh 0vw;
-  background-color: #fef8f4;
+  background-color: var(--app-bg);
 }
 
 /* Hero Card */

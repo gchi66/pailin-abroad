@@ -138,7 +138,8 @@
 
 /* Savings badge hover effect */
 .pricing-card:hover .savings-badge,
-.pricing-card.hovered .savings-badge {
+.pricing-card.hovered .savings-badge,
+.pricing-card.selected .savings-badge {
   color: #3CA0FE;
   border-color: #3CA0FE;
 }

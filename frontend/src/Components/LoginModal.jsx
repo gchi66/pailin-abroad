@@ -151,7 +151,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
           disabled={socialLoading === "google"}
           style={{ opacity: socialLoading === "google" ? 0.6 : 1 }}
         >
-          {socialLoading === "google" ? "Connecting to Google..." : "Sign in with Google"}
+          {socialLoading === "google" ? "Connecting to Google..." : "Sign In with Google"}
         </button>
         <button
           className="login-social-button facebook"
@@ -159,7 +159,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
           disabled={socialLoading === "facebook"}
           style={{ opacity: socialLoading === "facebook" ? 0.6 : 1 }}
         >
-          {socialLoading === "facebook" ? "Connecting to Facebook..." : "Sign in with Facebook"}
+          {socialLoading === "facebook" ? "Connecting to Facebook..." : "Sign In with Facebook"}
         </button>
 
         {toggleSignupModal && (
@@ -169,7 +169,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
               onClose(); // Close login modal
               toggleSignupModal(); // Open signup modal
             }}>
-              Sign up
+              Sign Up
             </span>
           </p>
         )}

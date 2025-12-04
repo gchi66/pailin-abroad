@@ -4,6 +4,7 @@ import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
+import Breadcrumbs from "../Components/Breadcrumbs";
 import "../Styles/TopicLibrary.css";
 
 const MINOR_WORDS = new Set([
@@ -183,9 +184,13 @@ const TopicLibrary = () => {
 
       <div className="topic-library-content">
         <div className="topic-library-toolbar-wrapper">
-          <Link to={withUi("/resources")} className="topic-library-back-link">
-            {t("topicLibraryPage.backToResources", uiLang)}
-          </Link>
+          <Breadcrumbs
+            className="topic-library-breadcrumbs"
+            items={[
+              { label: t("resourcesPage.title", uiLang), to: withUi("/resources") },
+              { label: t("topicLibraryPage.title", uiLang) },
+            ]}
+          />
           <div className="topic-library-toolbar">
             <div className="topic-library-toolbar-left">
               <div className="topic-library-filters">
@@ -218,7 +223,7 @@ const TopicLibrary = () => {
                   onChange={(event) => setSearchTerm(event.target.value)}
                 />
                 <span className="topic-library-search-icon" aria-hidden="true">
-                  🔍
+                  <img src="/images/search_icon.webp" alt="" />
                 </span>
               </div>
             </div>

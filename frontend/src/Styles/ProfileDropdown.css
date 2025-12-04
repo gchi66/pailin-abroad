@@ -41,8 +41,8 @@
   box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
   z-index: 1000;
   white-space: nowrap;
-  max-height: 75vh;
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
   padding: 0.4rem 0 0 0;
 }
 
@@ -109,10 +109,10 @@
 
 .dropdown-navlinks > .dropdown-link,
 .dropdown-navlinks > .dropdown-collapsible > .dropdown-link {
-  text-transform: uppercase;
+  text-transform: none;
   font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: normal;
 }
 
 .dropdown-collapsible {

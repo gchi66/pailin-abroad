@@ -9,7 +9,7 @@ import "../Styles/Membership.css";
 
 const Membership = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [selectedPlanId, setSelectedPlanId] = useState(null);
+  const [selectedPlanId, setSelectedPlanId] = useState("6-month");
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const navigate = useNavigate();

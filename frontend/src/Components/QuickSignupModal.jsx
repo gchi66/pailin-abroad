@@ -83,7 +83,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
         {!success ? (
           <>
             <h2 className="modal-title">Create an Account</h2>
-            <p className="modal-subtitle">Sign up to continue to checkout</p>
+            <p className="modal-subtitle">Sign Up to continue to checkout</p>
 
             <form onSubmit={handleSubmit} className="signup-form">
               <div className="form-group">

@@ -1,7 +1,23 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import "../Styles/ExerciseBank.css";
+
+const CATEGORY_OPTIONS = [
+  { slug: "verbs-and-tenses", label: "Verbs & Tenses" },
+  { slug: "nouns-and-articles", label: "Nouns & Articles" },
+  { slug: "pronouns", label: "Pronouns" },
+  { slug: "adjectives", label: "Adjectives" },
+  { slug: "conjunctions", label: "Conjunctions" },
+  { slug: "prepositions", label: "Prepositions" },
+  { slug: "other-concepts", label: "Other Concepts" },
+  { slug: "all", label: "View All" },
+];
+
+const CATEGORY_ORDER_INDEX = CATEGORY_OPTIONS.reduce((acc, option, index) => {
+  acc[option.slug] = index;
+  return acc;
+}, {});
 
 const ExerciseBank = () => {
   const [sections, setSections] = useState([]);
@@ -13,6 +29,9 @@ const ExerciseBank = () => {
   const [featuredError, setFeaturedError] = useState(null);
   const [activeView, setActiveView] = useState("featured");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const categoryMenuRef = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -91,14 +110,29 @@ const ExerciseBank = () => {
 
   useEffect(() => {
     if (!selectedCategory && categories.length > 0) {
-      setSelectedCategory(categories[0].category_slug);
+      const preferred = CATEGORY_OPTIONS.find(
+        (option) =>
+          option.slug !== "all" && categories.some((cat) => cat.category_slug === option.slug)
+      );
+      const fallback = categories[0];
+      setSelectedCategory((preferred && preferred.slug) || (fallback && fallback.category_slug) || "all");
     }
   }, [categories, selectedCategory]);
 
-  const sectionsForSelectedCategory = useMemo(() => {
-    if (!selectedCategory) return [];
-    return sections.filter((section) => section.category_slug === selectedCategory);
-  }, [selectedCategory, sections]);
+  useEffect(() => {
+    if (!isCategoryMenuOpen) return;
+
+    const handleClickOutside = (event) => {
+      if (categoryMenuRef.current && !categoryMenuRef.current.contains(event.target)) {
+        setIsCategoryMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCategoryMenuOpen]);
 
   const featuredBySection = useMemo(() => {
     const map = new Map();
@@ -120,7 +154,105 @@ const ExerciseBank = () => {
     return Array.from(map.values());
   }, [featured]);
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const orderedCategoryOptions = useMemo(() => {
+    const known = CATEGORY_OPTIONS.filter(
+      (option) => option.slug === "all" || categories.some((cat) => cat.category_slug === option.slug)
+    );
+    const extras = categories
+      .filter((cat) => !CATEGORY_OPTIONS.some((option) => option.slug === cat.category_slug))
+      .map((cat) => ({
+        slug: cat.category_slug,
+        label: cat.category_label || cat.category || cat.category_slug,
+      }));
+
+    return [...known, ...extras];
+  }, [categories]);
+
+  const filteredSectionsForSelectedCategory = useMemo(() => {
+    if (!selectedCategory) return [];
+
+    const inCategory =
+      selectedCategory === "all"
+        ? sections
+        : sections.filter((section) => section.category_slug === selectedCategory);
+
+    if (!normalizedSearch) return inCategory;
+
+    return inCategory.filter((section) => {
+      const haystack = [
+        section.section,
+        section.section_th,
+        section.category_label,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(normalizedSearch);
+    });
+  }, [normalizedSearch, sections, selectedCategory]);
+
+  const sortedSections = useMemo(() => {
+    const sorted = [...filteredSectionsForSelectedCategory];
+    sorted.sort((a, b) => {
+      const orderA = CATEGORY_ORDER_INDEX[a.category_slug] ?? 999;
+      const orderB = CATEGORY_ORDER_INDEX[b.category_slug] ?? 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return (a.section || "").localeCompare(b.section || "");
+    });
+    return sorted;
+  }, [filteredSectionsForSelectedCategory]);
+
+  const filteredFeaturedBySection = useMemo(() => {
+    if (!normalizedSearch) return featuredBySection;
+
+    return featuredBySection
+      .map((group) => {
+        const filteredExercises = group.exercises.filter((exercise) => {
+          const haystack = [
+            exercise.title,
+            exercise.title_th,
+            exercise.prompt,
+            exercise.prompt_th,
+            exercise.exercise_type,
+            group.category_label,
+            group.section,
+            group.section_th,
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+          return haystack.includes(normalizedSearch);
+        });
+
+        const groupMatches =
+          filteredExercises.length > 0 ||
+          [group.section, group.section_th, group.category_label]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase()
+            .includes(normalizedSearch);
+
+        if (!groupMatches) {
+          return null;
+        }
+
+        return {
+          ...group,
+          exercises: filteredExercises.length > 0 ? filteredExercises : group.exercises,
+        };
+      })
+      .filter(Boolean);
+  }, [featuredBySection, normalizedSearch]);
+
   const isLoading = loadingSections;
+
+  const handleCategorySelect = (slug) => {
+    setSelectedCategory(slug);
+    setActiveView("categories");
+    setIsCategoryMenuOpen(false);
+  };
 
   return (
     <div className="exercise-bank-page-container">
@@ -134,39 +266,70 @@ const ExerciseBank = () => {
       </header>
 
       <div className="exercise-bank-content">
-        <div className="exercise-bank-toggle-buttons">
-          <button
-            type="button"
-            className={`section-btn ${activeView === "featured" ? "active" : ""}`}
-            onClick={() => setActiveView("featured")}
-          >
-            FEATURED EXERCISES
-          </button>
-          <button
-            type="button"
-            className={`section-btn ${activeView === "categories" ? "active" : ""}`}
-            onClick={() => setActiveView("categories")}
-          >
-            VIEW BY CATEGORY
-          </button>
-        </div>
-
-        {activeView === "categories" && categories.length > 0 && (
-          <div className="exercise-bank-category-buttons">
-            {categories.map((category) => (
-              <button
-                key={category.category_slug}
-                type="button"
-                className={`exercise-bank-category-btn ${
-                  selectedCategory === category.category_slug ? "active" : ""
-                }`}
-                onClick={() => setSelectedCategory(category.category_slug)}
-              >
-                {category.category_label}
-              </button>
-            ))}
+        <div className="exercise-bank-toolbar-wrapper">
+          <div className="exercise-bank-toolbar">
+            <div className="exercise-bank-toolbar-left">
+              <div className="exercise-bank-filters">
+                <button
+                  type="button"
+                  className={`exercise-bank-filter-button ${activeView === "featured" ? "active" : ""}`}
+                  onClick={() => {
+                    setActiveView("featured");
+                    setIsCategoryMenuOpen(false);
+                  }}
+                >
+                  Featured Exercises
+                </button>
+                <div className="exercise-bank-category-dropdown" ref={categoryMenuRef}>
+                  <button
+                    type="button"
+                    className={`exercise-bank-filter-button ${activeView === "categories" ? "active" : ""}`}
+                    onClick={() => {
+                      setActiveView("categories");
+                      setIsCategoryMenuOpen((prev) => !prev);
+                    }}
+                  >
+                    View by Category
+                    <span className="exercise-bank-caret" aria-hidden="true">▾</span>
+                  </button>
+                  {isCategoryMenuOpen && (
+                    <div className="exercise-bank-category-menu">
+                      {orderedCategoryOptions.map((option) => (
+                        <button
+                          key={option.slug}
+                          type="button"
+                          className={`exercise-bank-category-menu-item ${
+                            selectedCategory === option.slug ? "active" : ""
+                          }`}
+                          onClick={() => handleCategorySelect(option.slug)}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="exercise-bank-toolbar-right">
+              <div className="exercise-bank-search">
+                <label htmlFor="exercise-bank-search-input" className="sr-only">
+                  Search exercises
+                </label>
+                <input
+                  id="exercise-bank-search-input"
+                  type="search"
+                  placeholder="Search exercises"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                />
+                <span className="exercise-bank-search-icon" aria-hidden="true">
+                  <img src="/images/search_icon.webp" alt="" />
+                </span>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
 
         <div className="exercise-bank-main">
           {isLoading && (
@@ -193,14 +356,14 @@ const ExerciseBank = () => {
                   <p>{featuredError}</p>
                 </div>
               )}
-              {!loadingFeatured && !featuredError && featuredBySection.length === 0 && (
+              {!loadingFeatured && !featuredError && filteredFeaturedBySection.length === 0 && (
                 <div className="exercise-bank-placeholder">
-                  <p>No featured exercises yet. Check back soon!</p>
+                  <p>{normalizedSearch ? "No exercises match your search." : "No featured exercises yet. Check back soon!"}</p>
                 </div>
               )}
-              {!loadingFeatured && !featuredError && featuredBySection.length > 0 && (
+              {!loadingFeatured && !featuredError && filteredFeaturedBySection.length > 0 && (
                 <div className="exercise-bank-card-grid">
-                  {featuredBySection.map((group) => (
+                  {filteredFeaturedBySection.map((group) => (
                     <div key={`${group.category_slug}-${group.section_slug}`} className="exercise-bank-card">
                       <div className="exercise-bank-card-header">
                         <div className="exercise-bank-card-section">
@@ -239,17 +402,21 @@ const ExerciseBank = () => {
 
           {!isLoading && !error && activeView === "categories" && (
             <>
-              {sectionsForSelectedCategory.length === 0 ? (
+              {sortedSections.length === 0 ? (
                 <div className="exercise-bank-placeholder">
                   <p>
-                    {categories.length === 0
-                      ? "We’re loading categories for the exercise bank. Check back soon!"
-                      : "Pick a category to see the available sections."}
+                    {normalizedSearch
+                      ? "No exercises match your search."
+                      : categories.length === 0
+                        ? "We’re loading categories for the exercise bank. Check back soon!"
+                        : selectedCategory === "all"
+                          ? "No exercises available yet."
+                          : "No exercises available in this category yet."}
                   </p>
                 </div>
               ) : (
                 <div className="exercise-bank-card-grid">
-                  {sectionsForSelectedCategory.map((section) => (
+                  {sortedSections.map((section) => (
                     <div key={`${section.category_slug}-${section.section_slug}`} className="exercise-bank-card">
                       <div className="exercise-bank-card-header">
                         <div className="exercise-bank-card-section">

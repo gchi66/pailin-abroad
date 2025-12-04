@@ -301,7 +301,7 @@ export default function AudioBar({
               alt="Locked"
               className="audio-locked-icon"
             />
-            <p>Audio is locked. Sign up to listen!</p>
+            <p>Audio is locked. Sign Up to listen!</p>
           </div>
         </div>
       )}

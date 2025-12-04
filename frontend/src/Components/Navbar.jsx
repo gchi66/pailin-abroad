@@ -250,7 +250,10 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
                                 <ul>
                                   {link.dropdown.map((child, childIndex) => (
                                     <li key={`guest-dropdown-item-${childIndex}`}>
-                                      <NavLink to={child.href} className="dropdown-sub-link">
+                                      <NavLink
+                                        to={child.href}
+                                        className="dropdown-link dropdown-sub-link"
+                                      >
                                         {child.label}
                                       </NavLink>
                                     </li>

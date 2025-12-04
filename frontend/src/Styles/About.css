@@ -4,7 +4,7 @@
   align-items: center;
   gap: 4vh;
   padding: 5vh;
-  background-color: #fef8f4;
+  background-color: var(--app-bg);
 }
 
 .about-card {

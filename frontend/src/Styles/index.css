@@ -6,6 +6,7 @@
   --lesson-textarea-font-size: var(--lesson-core-text-size);
   --rich-text-font-size: 1rem;
   --rich-text-line-height: 1.6;
+  --app-bg: #F7FAFD;
 }
 
 html {
@@ -20,7 +21,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fef8f4;
+  background-color: var(--app-bg);
   width: 100%;
   overflow-x: hidden;
 }

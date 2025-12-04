@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TopicRichSectionRenderer from "../Components/TopicRichSectionRenderer";
 import LessonLanguageToggle from "../Components/LessonLanguageToggle";
 import { useUiLang } from "../ui-lang/UiLangContext";
@@ -7,6 +7,7 @@ import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
+import Breadcrumbs from "../Components/Breadcrumbs";
 import "../Styles/TopicDetail.css";
 
 const TopicDetail = () => {
@@ -313,9 +314,14 @@ const TopicDetail = () => {
             {t("topicDetailPage.notFoundBody", uiLang)}
             {error ? ` (${error})` : ""}
           </p>
-          <Link to={withUi("/topic-library")} className="topic-detail-back-link">
-            {t("topicDetailPage.backToLibrary", uiLang)}
-          </Link>
+          <Breadcrumbs
+            className="topic-detail-breadcrumbs"
+            items={[
+              { label: t("resourcesPage.title", uiLang), to: withUi("/resources") },
+              { label: t("topicLibraryPage.title", uiLang), to: withUi("/topic-library") },
+              { label: t("topicDetailPage.notFoundTitle", uiLang) },
+            ]}
+          />
         </div>
       </div>
     );
@@ -337,9 +343,14 @@ const TopicDetail = () => {
 
       {/* Navigation */}
       <div className="topic-detail-nav" ref={topicNavRef}>
-        <Link to={withUi("/topic-library")} className="topic-detail-back-link">
-          {t("topicDetailPage.backToLibrary", uiLang)}
-        </Link>
+        <Breadcrumbs
+          className="topic-detail-breadcrumbs"
+          items={[
+            { label: t("resourcesPage.title", uiLang), to: withUi("/resources") },
+            { label: t("topicLibraryPage.title", uiLang), to: withUi("/topic-library") },
+            { label: topic?.name },
+          ]}
+        />
         <div className="topic-detail-nav-right">
           {topic.tags && topic.tags.length > 0 && (
             <div className="topic-detail-tags">
