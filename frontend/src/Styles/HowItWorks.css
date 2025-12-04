@@ -13,6 +13,7 @@
   color: #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
+  text-align: center;
   line-height: 1.15;
   margin: 0 0 6vh 0;
   text-shadow: 0.08vw 0.08vw 0.18vw rgba(30,30,30,0.13);
@@ -24,7 +25,7 @@
   justify-content: center;
   align-items: stretch;
   gap: 3vw;
-  max-width: 80vw;
+  max-width: 95vw;
 }
 
 /* Individual Card */
@@ -34,23 +35,26 @@
   border: .1rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0vw #1E1E1E;
   padding: 3vh 3vw;
-  max-width: 25vw;
+  /* width: 27vw; */
   flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2vh;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 1.5vh;
+  align-items: start;
+  justify-items: center;
   box-sizing: border-box;
   text-align: center;
 }
 
 /* Number Image */
 .hiw-number {
-  width: 6vw;
-  height: 6vw;
+  width: 5vw;
+  height: 5vw;
   object-fit: contain;
   flex-shrink: 0;
+  justify-self: center;
+  align-self: center;
+  display: block;
 }
 
 /* Card Header */
@@ -61,6 +65,7 @@
   font-weight: 620;
   margin: 0;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Card Text */
@@ -91,6 +96,8 @@
   .hiw-card {
     max-width: 100%;
     padding: 4vh 6vw;
+    grid-template-rows: auto auto 1fr;
+    row-gap: 2.5vh;
   }
 
   .hiw-number {

@@ -12,7 +12,7 @@ const TryLessons = () => {
     <div className="try-lessons-page-container">
       {/* Header */}
       <header className="try-lessons-page-header">
-        <h1 className="try-lessons-header-text">TRY OUR LESSONS</h1>
+        <h1 className="try-lessons-header-text">Try Our Lessons</h1>
         <p className="try-lessons-header-subtitle">
           4 free lessons for you to try, no sign-up needed!
         </p>

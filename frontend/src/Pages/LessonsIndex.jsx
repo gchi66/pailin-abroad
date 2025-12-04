@@ -347,7 +347,7 @@ const LessonsIndex = () => {
   return (
     <div className="lessons-index-page-container">
       <header className="lessons-index-page-header">
-        <h1 className="page-header-text">LESSON LIBRARY</h1>
+        <h1 className="page-header-text">Lesson Library</h1>
         <p className="lessons-index-page-header-subtitle">Over 150 conversation-based lessons to improve your English</p>
       </header>
       <div className="lesson-library">

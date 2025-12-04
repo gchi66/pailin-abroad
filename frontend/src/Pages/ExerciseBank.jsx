@@ -126,7 +126,7 @@ const ExerciseBank = () => {
     <div className="exercise-bank-page-container">
       <header className="exercise-bank-page-header">
         <div className="exercise-bank-header-content">
-          <h1 className="exercise-bank-page-header-text">EXERCISE BANK</h1>
+          <h1 className="exercise-bank-page-header-text">Exercise Bank</h1>
           <p className="exercise-bank-page-subtitle">
             Additional practice exercises for those difficult grammar topics.
           </p>

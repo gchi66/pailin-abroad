@@ -17,7 +17,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1vh;
+  gap: 2vh;
   width: 100%;
   max-width: 100vw;
   background: white;
@@ -25,7 +25,6 @@
   border-bottom: 0.15rem solid #1E1E1E;
   padding: 3rem;
   box-sizing: border-box;
-  height: 20vh;
   overflow-y: visible;
   margin: 0;
 }
@@ -35,17 +34,19 @@
   color: #1E1E1E;
   font-weight: 600;
   font-family: "Poppins", sans-serif;
+  line-height: 2.5rem;
   width: auto;
   white-space: nowrap;
   margin: 0;
 }
 
 .contact-page-header-subtitle {
-  font-size: 1.5rem;
-  color: #1E1E1E;
-  font-weight: 500;
+  font-size: 1.1rem;
+  color: #434343;
+  font-weight: 300;
   font-family: "Poppins", sans-serif;
   margin: 0;
+  white-space: nowrap;
 }
 
 .contact-header-image {

@@ -3,31 +3,14 @@ import "../Styles/Characters.css";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
 
-const characterAssets = [
-  {
-    image: "images/characters/pailin-blue-left.png",
-    thumbnail: "images/characters/pailin-white-left.png",
-  },
-  {
-    image: "images/characters/chloe-friend-blue-left.png",
-    thumbnail: "images/characters/chloe-friend-white-left.png",
-  },
-  {
-    image: "images/characters/tyler-brother-blue-left.png",
-    thumbnail: "images/characters/tyler-brother-white-left.png",
-  },
-  {
-    image: "images/characters/emily-sister-blue-left.png",
-    thumbnail: "images/characters/emily-sister-white-left.png",
-  },
-  {
-    image: "images/characters/sylvie-mom-blue-left.png",
-    thumbnail: "images/characters/sylvie-mom-white-left.png",
-  },
-  {
-    image: "images/characters/mark-dad-blue-left.png",
-    thumbnail: "images/characters/mark-dad-white-left.png",
-  },
+const characterConfig = [
+  { slug: "pailin" },
+  { slug: "luke" },
+  { slug: "chloe" },
+  { slug: "mark" },
+  { slug: "emily" },
+  { slug: "tyler" },
+  { slug: "sylvie" },
 ];
 
 const Characters = () => {
@@ -35,12 +18,18 @@ const Characters = () => {
   const charactersCopy = copy.home.characters;
   const entries = charactersCopy.entries || [];
 
-  const characters = entries.map((entry, index) => ({
-    image: characterAssets[index]?.image,
-    thumbnail: characterAssets[index]?.thumbnail,
-    name: pick(entry.name, ui),
-    description: pick(entry.description, ui),
-  }));
+  const characters = characterConfig.map(({ slug }, index) => {
+    const entry = entries[index] || {};
+    return {
+      name: pick(entry.name, ui),
+      description: pick(entry.description, ui),
+      image: `/images/characters/${slug}_meet_the_characters.webp`,
+      thumbnail: {
+        default: `/images/characters/${slug}_white_circle.webp`,
+        active: `/images/characters/${slug}_blue_circle.webp`,
+      },
+    };
+  });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selectedCharacter = characters[selectedIndex] || {};
@@ -60,8 +49,8 @@ const Characters = () => {
             {characters.map((character, index) => {
               const isSelected = index === selectedIndex;
               const thumbnailSrc = isSelected
-                ? character.thumbnail?.replace("white", "blue")
-                : character.thumbnail;
+                ? character.thumbnail?.active
+                : character.thumbnail?.default;
 
               return (
                 <div

@@ -8,7 +8,7 @@ const FAQPage = () => {
     <div className="faq-page-container">
       {/* Page header */}
       <header className="faq-page-header">
-        <h1 className="faq-page-header-text">FREQUENTLY ASKED QUESTIONS</h1>
+        <h1 className="faq-page-header-text">Frequently Asked Questions</h1>
         <p className="faq-page-header-subtitle">All your questions, answered here!</p>
       </header>
 

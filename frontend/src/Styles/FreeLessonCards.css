@@ -66,13 +66,12 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .fl-card-img {
-  width: 15vw;
-  height: 15vw;
+  height: 11vh;
+  width: auto;
   object-fit: contain;
   border-radius: 1vw;
   display: block;
-  background: white;
-  margin: -.5rem 0rem;
+  margin: 2.5vh 0rem;
 }
  .fl-card-title {
   text-align: left;

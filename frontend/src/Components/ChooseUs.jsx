@@ -17,7 +17,7 @@ const ChooseUs = () => {
             {reasons.map((reason, index) => (
               <li key={index} className="reason-item">
                 <img
-                  src="/images/filled-checkmark-lesson-complete.webp"
+                  src="/images/graphics_check_blue.webp"
                   alt="checkmark"
                   className="checkmark-icon"
                 />

@@ -51,7 +51,7 @@ export const copy = {
     logout: { en: "Log out", th: "ออกจากระบบ" },
   },
   topicLibraryPage: {
-    title: { en: "TOPIC LIBRARY", th: "คลังหัวข้อ" },
+    title: { en: "Topic Library", th: "คลังหัวข้อ" },
     subtitle: {
       en: "Further explanations on a range of interesting ESL topics",
       th: "คำอธิบายเพิ่มเติมเกี่ยวกับหัวข้อภาษาอังกฤษ ESL ที่น่าสนใจหลากหลาย",
@@ -311,29 +311,43 @@ export const copy = {
         {
           name: { en: "Pailin", th: "ไผลิน" },
           description: {
-            en: "I’m Pailin! I’m a 21-year-old girl from Bangkok. I’ll be studying abroad in Los Angeles for a year. I’m easy-going and so excited to try new experiences. I think I’ll fit right in in LA!",
+            en: "Hi, I’m Pailin! I’m a 21-year-old girl from Bangkok. I’m studying abroad at UCLA and living with a host family in Los Angeles. I’m excited to explore the city, meet new friends, and experience everything LA has to offer. I love cooking Thai food, going to concerts, and geeking out at art museums. I know this is going to be an amazing adventure!",
             th: "ฉันชื่อไผลิน อายุ 21 ปีจากกรุงเทพฯ ฉันจะไปเรียนต่อที่ลอสแอนเจลิสเป็นเวลา 1 ปี ฉันเป็นคนสบาย ๆ และตื่นเต้นมากที่จะได้ลองประสบการณ์ใหม่ ๆ ฉันคิดว่าฉันจะเข้ากับที่นั่นได้ดีแน่นอน!",
+          },
+        },
+        {
+          name: { en: "Luke", th: "ลุค" },
+          description: {
+            en: "Meet Luke! He’s Pailin’s 22-year-old host brother. He was born and raised in Los Angeles and is also a student at UCLA. With his friendly personality, he’s the perfect guide to help Pailin navigate life in the US, and he quickly becomes one of Pailin’s closest friends. Luke is into basketball, hip-hop music, and late-night taco runs.",
+            th: "",
           },
         },
         {
           name: { en: "Chloe", th: "โคลอี้" },
           description: {
-            en: "I'm Chloe, Pailin's new friend in LA. My dad is Thai, and my mom is French, but I grew up in Thailand. I'm outgoing and lots of fun. I can be a bit clumsy and a bit sassy.",
+            en: "Meet Chloe! She’s a 23-year-old girl from Chiang Mai - half Thai, half French. Chloe and Pailin meet at their student orientation and quickly become best friends. Chloe loves to have a good time and always seems to have a funny story about her dating life in LA. She loves fashion and soccer, and she loves a good party!",
             th: "ฉันคือโคลอี้ เพื่อนใหม่ของไผลินที่ลอสแอนเจลิส พ่อของฉันเป็นคนไทย แม่เป็นชาวฝรั่งเศส แต่ฉันเติบโตที่ประเทศไทย ฉันเป็นคนร่าเริงและสนุกสนาน บางทีก็ซุ่มซ่ามนิดหน่อยและมีความกวน ๆ อยู่บ้าง",
           },
         },
         {
-          name: { en: "Tyler", th: "ไทเลอร์" },
+          name: { en: "Mark", th: "มาร์ค" },
           description: {
-            en: "I'm Tyler, Pailin's host brother. I'm also a student at UCLA. I can't make up my mind what I want to study - I keep switching my major! I'm a loyal friend who's always up for an adventure.",
-            th: "ผมคือไทเลอร์ พี่ชายโฮสต์ของไผลิน ผมก็เรียนอยู่ที่ UCLA เช่นกัน ผมยังตัดสินใจไม่ได้ว่าจะเรียนสาขาอะไรดีเลยเปลี่ยนเอกอยู่เรื่อย ๆ ผมเป็นเพื่อนที่ไว้ใจได้และพร้อมลุยเสมอ",
+            en: "Meet Mark! He’s Pailin’s host dad. He’s a lawyer and makes sure Pailin is settling into her new life in LA. He enjoys skiing and playing pickleball, and he’s a great source of knowledge for Pailin to learn about American culture! He’s also a big history buff and loves game nights with his family.",
+            th: "ผมคือมาร์ค คุณพ่อโฮสต์ของไผลิน ผมเป็นทนายที่ยุ่งมาก แต่ถ้าไม่ได้ทำงาน ผมชอบซ้อมวิ่งมาราธอนและอ่านนวนิยายไซไฟ",
           },
         },
         {
           name: { en: "Emily", th: "เอมิลี่" },
           description: {
-            en: "I'm Emily, Pailin's host sister. I'm a curious 13-year-old, and I'm super chatty. Sometimes I get myself into trouble, but for the most part, I'm very lovable (I think).",
+            en: "Meet Emily! She’s Pailin’s 13-year-old host sister, just a freshman in high school. Emily is quirky and always getting herself into trouble. She loves opening up to Pailin and telling her about her school and boy problems. She’s obsessed with K-Pop music and TikTok videos of Moo Deng.",
             th: "ฉันคือเอมิลี่ น้องสาวโฮสต์ของไผลิน ฉันเป็นเด็กวัย 13 ที่ช่างสงสัยและพูดเก่งมาก บางครั้งก็สร้างเรื่องวุ่นวาย แต่โดยรวมแล้วฉันน่ารักนะ (ฉันว่าอย่างนั้น)",
+          },
+        },
+        {
+          name: { en: "Tyler", th: "ไทเลอร์" },
+          description: {
+            en: "Meet Tyler, Pailin’s coworker at Skylight Books. He’s a bit shy at first, but once you get to know him, he’s an open book. He studies computer programming when he’s not working, and hopes to be able to work from anywhere in the world. And, Pailin might have a little crush on him.",
+            th: "ผมคือไทเลอร์ พี่ชายโฮสต์ของไผลิน ผมก็เรียนอยู่ที่ UCLA เช่นกัน ผมยังตัดสินใจไม่ได้ว่าจะเรียนสาขาอะไรดีเลยเปลี่ยนเอกอยู่เรื่อย ๆ ผมเป็นเพื่อนที่ไว้ใจได้และพร้อมลุยเสมอ",
           },
         },
         {
@@ -341,13 +355,6 @@ export const copy = {
           description: {
             en: "I'm Sylvie, Pailin's host mom. I'm from France, and I'm a wine importer. I enjoy trying new foods, warm days at the beach, and spending time with my family.",
             th: "ฉันคือซิลวี่ แม่โฮสต์ของไผลิน ฉันมาจากฝรั่งเศสและทำงานนำเข้าไวน์ ฉันชอบลองอาหารใหม่ ๆ ชอบอากาศอุ่น ๆ ที่ชายหาด และชอบใช้เวลากับครอบครัว",
-          },
-        },
-        {
-          name: { en: "Mark", th: "มาร์ค" },
-          description: {
-            en: "I'm Mark, Pailin's host dad. I'm a busy lawyer, but when I'm not working, I like training for marathons and reading science-fiction novels.",
-            th: "ผมคือมาร์ค คุณพ่อโฮสต์ของไผลิน ผมเป็นทนายที่ยุ่งมาก แต่ถ้าไม่ได้ทำงาน ผมชอบซ้อมวิ่งมาราธอนและอ่านนวนิยายไซไฟ",
           },
         },
       ],

@@ -212,7 +212,7 @@ const FreeLessonsIndex = () => {
   return (
     <div className="free-lessons-index-page-container">
       <header className="lessons-index-page-header">
-        <h1 className="page-header-text">FREE LESSON LIBRARY</h1>
+        <h1 className="page-header-text">Free Lesson Library</h1>
         <p className="lessons-index-page-header-subtitle">
           Explore the lessons available to you on your free plan
         </p>

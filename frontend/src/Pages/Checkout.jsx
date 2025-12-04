@@ -94,7 +94,7 @@ const Checkout = () => {
   return (
     <div className="checkout-page-container">
       <header className="checkout-page-header">
-        <h1 className="page-header-text">CHECKOUT</h1>
+        <h1 className="page-header-text">Checkout</h1>
         <p className="checkout-page-header-subtitle">
           Complete your payment to activate your membership.
         </p>

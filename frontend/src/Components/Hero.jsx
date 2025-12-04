@@ -14,7 +14,14 @@ const Hero = ({ onSignupClick }) => {
         <div className="hero-content">
           <div className="title-container">
             <h2>
-              {pick(heroCopy.title, ui)}
+              {ui === "en" ? (
+                <>
+                  <span className="no-wrap">English learning</span>{" "}
+                  <span className="no-wrap">for Thai speakers</span>
+                </>
+              ) : (
+                pick(heroCopy.title, ui)
+              )}
             </h2>
           </div>
           <p className="hero-subheader">{pick(heroCopy.subtitle, ui)}</p>

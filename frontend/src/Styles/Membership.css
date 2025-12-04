@@ -54,7 +54,7 @@
   border: 0.125rem solid #9D9D9D;
   border-radius: 1.5rem;
   padding: 2rem 2rem;
-  min-width: 60vw;
+  width: 100%;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0.25rem 0.25rem 0rem #9D9D9D;
