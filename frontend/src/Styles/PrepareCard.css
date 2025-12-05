@@ -1,0 +1,80 @@
+.prepare-card {
+  margin: 1.6rem auto;
+  width: 85%;
+}
+
+.prepare-head {
+  gap: 1.6rem;
+}
+
+.prepare-head-left {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.prepare-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.prepare-subtitle {
+  font-size: 1.2rem;
+  color: #4b5563;
+}
+
+.prepare-body {
+  padding: 1.2rem 1.6rem 1.6rem;
+}
+
+.prepare-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.prepare-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.prepare-item-locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.prepare-audio-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  border: 0.12rem solid #3b82f6;
+  color: #3b82f6;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  opacity: 0.6;
+}
+
+.prepare-text {
+  color: #1e1e1e;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .prepare-grid {
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  }
+}

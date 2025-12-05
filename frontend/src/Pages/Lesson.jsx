@@ -14,6 +14,7 @@ import LessonDiscussion from "../Components/LessonDiscussion";
 import LessonNavigationBanner from "../Components/LessonNavigationBanner";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
+import PrepareCard from "../Components/PrepareCard";
 
 import "../Styles/Lesson.css";
 
@@ -283,6 +284,7 @@ export default function Lesson() {
   const [audioUrlBg, setAudioUrlBg] = useState(null);
   const [snipIdx, setSnipIdx] = useState({});
   const [phrasesSnipIdx, setPhrasesSnipIdx] = useState({});
+  const [showStickyPlayer, setShowStickyPlayer] = useState(false);
 
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
@@ -718,6 +720,7 @@ export default function Lesson() {
     lesson.backstory_th,
     lesson.backstory
   );
+  const prepareSection = sections.find((s) => s.type === "prepare");
   return (
     <main>
       <div className="lesson-page-container">
@@ -733,14 +736,34 @@ export default function Lesson() {
           backstory={headerBackstory}
         />
 
-        {/* Audio card */}
-       <AudioBar
-          audioSrc={audioUrl}
-          audioSrcNoBg={audioUrlNoBg}
-          audioSrcBg={audioUrlBg}
-          description={headerBackstory}
-          isLocked={isLocked}
-        />
+        {/* Prepare (vocab) card */}
+        {prepareSection && (
+          <PrepareCard
+            section={prepareSection}
+            audioIndex={snipIdx}
+            uiLang={uiLang}
+            isLocked={isLocked}
+          />
+        )}
+
+        {/* Listen CTA */}
+        {(audioUrl || audioUrlNoBg || audioUrlBg) && (
+          <div className="listen-cta-wrapper">
+            <button
+              type="button"
+              className="listen-cta"
+              onClick={() => setShowStickyPlayer(true)}
+              disabled={isLocked}
+            >
+              <img
+                src="/images/play-audio-lesson.webp"
+                alt="Play"
+                className="listen-cta-icon"
+              />
+              <span>LISTEN TO THE CONVERSATION</span>
+            </button>
+          </div>
+        )}
 
         {/* Body */}
         <div className="lesson-body">
@@ -764,13 +787,13 @@ export default function Lesson() {
             activeId={activeId}
             uiLang={uiLang}
             snipIdx={snipIdx}
-          phrasesSnipIdx={phrasesSnipIdx}
-          contentLang={contentLang}
-          setContentLang={setContentLang}
-          images={images}
-          isLocked={isLocked}
-          registerStickyHeaders={registerStickyHeaders}
-        />
+            phrasesSnipIdx={phrasesSnipIdx}
+            contentLang={contentLang}
+            setContentLang={setContentLang}
+            images={images}
+            isLocked={isLocked}
+            registerStickyHeaders={registerStickyHeaders}
+          />
         </div>
 
         {/* Lesson Navigation Banner */}
@@ -787,6 +810,19 @@ export default function Lesson() {
         {/* Discussion */}
         <LessonDiscussion lessonId={lesson.id} isAdmin={false} />
       </div>
+
+      {/* Sticky audio bar */}
+      {showStickyPlayer && (audioUrl || audioUrlNoBg || audioUrlBg) && (
+        <AudioBar
+          audioSrc={audioUrl}
+          audioSrcNoBg={audioUrlNoBg}
+          audioSrcBg={audioUrlBg}
+          description={headerBackstory}
+          isLocked={isLocked}
+          variant="sticky"
+          focusText={headerFocus}
+        />
+      )}
     </main>
   );
 }

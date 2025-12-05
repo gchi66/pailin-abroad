@@ -92,7 +92,8 @@ h2 {
   .topic-detail-back-to-top,
   .level-btn,
   .stage-btn,
-  .level-nav-button
+  .level-nav-button,
+  .account-avatar-option
 )) {
   box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
@@ -155,7 +156,8 @@ h2 {
   .topic-detail-back-to-top,
   .level-btn,
   .stage-btn,
-  .level-nav-button
+  .level-nav-button,
+  .account-avatar-option
 )):hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0.3rem 0.3rem 0 #1E1E1E;
@@ -212,7 +214,8 @@ h2 {
   .placement-test-link,
   .level-btn,
   .stage-btn,
-  .level-nav-button
+  .level-nav-button,
+  .account-avatar-option
 )):active:not(:disabled) {
   transform: translate(0.15rem, 0.15rem);
   box-shadow: 0.05rem 0.05rem 0 #1E1E1E;
@@ -274,7 +277,8 @@ h2 {
   .topic-detail-back-to-top,
   .level-btn,
   .stage-btn,
-  .level-nav-button
+  .level-nav-button,
+  .account-avatar-option
 )):focus-visible {
   outline: 0.15rem solid #1E1E1E;
   outline-offset: 0.15rem;
@@ -331,7 +335,8 @@ h2 {
   .placement-test-link,
   .level-btn,
   .stage-btn,
-  .level-nav-button
+  .level-nav-button,
+  .account-avatar-option
 )) {
   cursor: not-allowed;
   transform: translateY(0);

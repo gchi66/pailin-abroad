@@ -9,25 +9,35 @@ import "../Styles/AccountSettings.css";
 const AccountSettings = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const avatarOptions = [
+    "/images/characters/avatar_1.webp",
+    "/images/characters/avatar_2.webp",
+    "/images/characters/avatar_3.webp",
+    "/images/characters/avatar_4.webp",
+    "/images/characters/avatar_5.webp",
+    "/images/characters/avatar_6.webp",
+    "/images/characters/avatar_7.webp",
+  ];
   const [activeTab, setActiveTab] = useState("profile");
   const [firstName, setFirstName] = useState("John");
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [showManageAccount, setShowManageAccount] = useState(false);
-  const [profileImage, setProfileImage] = useState("/images/characters/pailin-blue-right.png");
+  const [profileImage, setProfileImage] = useState(avatarOptions[0]);
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
   const handleSaveFirstName = () => {
     // TODO: Save to backend
     setIsEditingFirstName(false);
   };
 
-  const handleChangeEmail = () => {
-    // TODO: Implement email change
-    console.log("Change email clicked");
-  };
-
   const handleChangePassword = () => {
     // TODO: Implement password change
     console.log("Change password clicked");
+  };
+
+  const handleAvatarSelect = (src) => {
+    setProfileImage(src);
+    setShowAvatarPicker(false);
   };
 
   const handleLogout = async () => {
@@ -77,18 +87,40 @@ const AccountSettings = () => {
             <h3 className="account-section-title">MY PROFILE</h3>
 
             {/* Avatar Section */}
-            <div className="account-avatar-container">
-              <div className="account-avatar-wrapper">
-                <img
-                  src={profileImage}
-                  alt="Profile Avatar"
-                  className="account-avatar"
-                />
-                <button className="account-avatar-edit">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                  </svg>
-                </button>
+            <div className="account-field">
+              <label className="account-field-label">Avatar</label>
+              <div className="account-avatar-row">
+                <div className="account-avatar-wrapper">
+                  <img
+                    src={profileImage}
+                    alt="Profile Avatar"
+                    className="account-avatar"
+                  />
+                  <button
+                    className="account-avatar-edit"
+                    onClick={() => setShowAvatarPicker(!showAvatarPicker)}
+                    aria-label="Change avatar"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                  </button>
+                </div>
+
+                {showAvatarPicker && (
+                  <div className="account-avatar-grid two-rows">
+                    {avatarOptions.map((avatar) => (
+                      <button
+                        key={avatar}
+                        className="account-avatar-option"
+                        onClick={() => handleAvatarSelect(avatar)}
+                        aria-label="Choose avatar"
+                      >
+                        <img src={avatar} alt="Selectable avatar" />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -127,9 +159,6 @@ const AccountSettings = () => {
                     disabled
                     className="account-input disabled"
                   />
-                  <button className="account-btn" onClick={handleChangeEmail}>
-                    Change Email
-                  </button>
                 </div>
               </div>
 

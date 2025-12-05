@@ -283,7 +283,7 @@ const SubscriptionBilling = () => {
         <div className="no-subscription">
           <h3>No Active Subscription</h3>
           <p>You don't currently have an active subscription.</p>
-          <button className="primary-btn" onClick={() => window.location.href = "/membership"}>
+          <button className="subscription-view-plans-btn" onClick={() => window.location.href = "/membership"}>
             View Plans
           </button>
         </div>

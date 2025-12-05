@@ -55,6 +55,7 @@ SECTION_ORDER = [
     "FOCUS",
     "BACKSTORY",
     "CONVERSATION",
+    "PREPARE",
     "COMPREHENSION",
     "APPLY",
     "UNDERSTAND",
@@ -69,6 +70,7 @@ SECTION_ORDER = [
 
 AUDIO_SECTION_HEADERS = {
     "PRACTICE",
+    "PREPARE",
     "COMMON MISTAKES",
     "CULTURE NOTE",
     "UNDERSTAND",
@@ -86,6 +88,7 @@ SECTION_TYPE_MAP = {
     "PRACTICE": "practice",
     "PINNED COMMENT": "pinned_comment",
     "PHRASES & VERBS": "phrases_verbs",
+    "PREPARE": "prepare",
 }
 
 
@@ -1116,7 +1119,7 @@ class GoogleDocsParser:
 
             # ---- rich-text + (optional) audio bullets ----------------------
             RICH_AUDIO_HEADERS = {
-                "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES"
+                "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES", "PREPARE"
             }
             if norm_header in RICH_AUDIO_HEADERS:
                 # Add directive regex for quick practice harvesting

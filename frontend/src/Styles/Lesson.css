@@ -18,3 +18,50 @@
   padding: 0 4rem;
   align-items: start;
 }
+
+.listen-cta-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.listen-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #FF4545;
+  color: #ffffff;
+  font-size: 1.4rem;
+  padding: 0.9rem 2.6rem;
+  border: 0.15rem solid #1E1E1E;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  font-weight: 700;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
+}
+
+.listen-cta:hover {
+  background-color: #e63e3e;
+  transform: translateY(-2px);
+  box-shadow: 0.32rem 0.32rem 0 #1E1E1E;
+}
+
+.listen-cta:active {
+  transform: translate(0.15rem, 0.15rem);
+  box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
+}
+
+.listen-cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
+}
+
+.listen-cta-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  object-fit: contain;
+  filter: drop-shadow(0 0 0 #1E1E1E);
+}

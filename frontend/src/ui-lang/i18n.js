@@ -18,6 +18,13 @@ export const copy = {
     backLink: { en: "< BACK TO LESSON LIBRARY", th: "< กลับไปคลังบทเรียน" },
     backstoryLabel: { en: "Backstory", th: "พื้นหลัง" },
   },
+  prepareCard: {
+    title: { en: "BEFORE YOU LISTEN", th: "ก่อนฟัง" },
+    subtitle: {
+      en: "Get familiar with the words you'll hear in the conversation.",
+      th: "ทำความคุ้นเคยกับคำที่คุณจะได้ยินในการสนทนา",
+    },
+  },
   lessonSidebar: {
     lessonLabel: { en: "LESSON", th: "บทเรียน" },
     checkpoint: { en: "CHECKPOINT", th: "จุดตรวจ" },

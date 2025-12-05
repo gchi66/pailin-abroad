@@ -16,6 +16,8 @@ export default function AudioBar({
   audioSrcBg,
   description = "",
   isLocked = false,
+  variant = "card", // "card" (legacy) | "sticky"
+  focusText = "",
 }) {
   const voiceRef = useRef(null);
   const bgRef = useRef(null);
@@ -287,10 +289,32 @@ export default function AudioBar({
     bottom: `calc(${((muted ? 0 : volume) * 100).toFixed(2)}% - 0.5rem)`
   };
 
+  const pauseAll = () => {
+    if (voiceRef.current) {
+      voiceRef.current.pause();
+    }
+    if (bgRef.current) {
+      bgRef.current.pause();
+    }
+    setPlaying(false);
+  };
+
+  const isSticky = variant === "sticky";
+
+  useEffect(() => {
+    return () => pauseAll();
+  }, []);
+
   return (
-    <section className={`audio-card${isLocked ? ' audio-locked' : ''}`}>
-      <h3 className="audio-heading">LISTEN TO THE CONVERSATION</h3>
-      {/* {description && <p className="audio-desc">{description}</p>} */}
+    <section
+      className={`audio-card${isLocked ? ' audio-locked' : ''}${isSticky ? ' audio-card-sticky' : ''}`}
+    >
+      {variant === "card" && (
+        <>
+          <h3 className="audio-heading">LISTEN TO THE CONVERSATION</h3>
+          {/* {description && <p className="audio-desc">{description}</p>} */}
+        </>
+      )}
 
       {/* Locked overlay */}
       {isLocked && (
@@ -317,109 +341,115 @@ export default function AudioBar({
       )}
 
       {/* controls */}
-      <div className="bar-row">
-        <button
-          className="icon-btn play-btn"
-          onClick={togglePlay}
-          aria-label="Play / Pause"
-          disabled={isLocked}
-        >
-          <img
-            src={playing ? "/images/pause-audio-lesson.webp" : "/images/play-audio-lesson.webp"}
-            alt={playing ? "Pause" : "Play"}
-            className="play-pause-icon"
-          />
-        </button>
+      <div className={`bar-row${isSticky ? " bar-row-sticky" : ""}`}>
+        <div className={isSticky ? "audio-controls audio-sticky-controls" : "audio-controls"}>
+          <div className="audio-controls-primary">
+            <button
+              className="icon-btn play-btn"
+              onClick={togglePlay}
+              aria-label="Play / Pause"
+              disabled={isLocked}
+            >
+              <img
+                src={playing ? "/images/pause-audio-lesson.webp" : "/images/play-audio-lesson.webp"}
+                alt={playing ? "Pause" : "Play"}
+                className="play-pause-icon"
+              />
+            </button>
 
-        <span className="time-label">{fmt(current)}</span>
+            <span className="time-label">{fmt(current)}</span>
 
-        <div
-          className="track"
-          role="slider"
-          aria-valuemin={0}
-          aria-valuemax={duration}
-          aria-valuenow={current}
-          onClick={handleTrackClick}
-          onMouseMove={handleTrackDrag}
-        >
-          <div
-            className="track-fill"
-            style={{ width: duration ? `${(current / duration) * 100}%` : 0 }}
-          >
-            <div className="track-handle" />
-          </div>
-        </div>
-
-        <span className="time-label">{fmt(duration)}</span>
-
-        <button className="icon-btn skip-btn" onClick={() => skip(-10)} title="Replay 10 s">
-          <img
-            src="/images/rewind-audio-10-seconds.webp"
-            alt="Rewind 10 seconds"
-            className="skip-icon"
-          />
-        </button>
-        <button className="icon-btn skip-btn" onClick={() => skip(10)} title="Forward 10 s">
-          <img
-            src="/images/forward-audio-10-seconds.webp"
-            alt="Forward 10 seconds"
-            className="skip-icon"
-          />
-        </button>
-
-        <div className="volume-control">
-          <button
-            className={`icon-btn volume-btn${muted ? " is-muted" : ""}`}
-            onClick={toggleMute}
-            aria-label="Mute / Un-mute"
-          >
-            <img
-              src="/images/adjust-volume-audio-lesson.webp"
-              alt="Volume"
-              className="volume-icon"
-            />
-          </button>
-          <div className="volume-slider-container">
             <div
-              className="volume-slider-wrapper"
-              ref={volumeTrackRef}
-              onMouseDown={handleVolumeMouseDown}
-              onTouchStart={handleVolumeMouseDown}
+              className="track"
+              role="slider"
+              aria-valuemin={0}
+              aria-valuemax={duration}
+              aria-valuenow={current}
+              onClick={handleTrackClick}
+              onMouseMove={handleTrackDrag}
             >
               <div
-                className="volume-slider-fill"
-                style={{ height: `${(muted ? 0 : volume) * 100}%` }}
+                className="track-fill"
+                style={{ width: duration ? `${(current / duration) * 100}%` : 0 }}
+              >
+                <div className="track-handle" />
+              </div>
+            </div>
+
+            <span className="time-label">{fmt(duration)}</span>
+          </div>
+
+          <div className="audio-controls-secondary">
+            <button className="icon-btn skip-btn" onClick={() => skip(-10)} title="Replay 10 s">
+              <img
+                src="/images/rewind-audio-10-seconds.webp"
+                alt="Rewind 10 seconds"
+                className="skip-icon"
               />
-              <div className="volume-handle" style={volumeHandleStyle} />
+            </button>
+            <button className="icon-btn skip-btn" onClick={() => skip(10)} title="Forward 10 s">
+              <img
+                src="/images/forward-audio-10-seconds.webp"
+                alt="Forward 10 seconds"
+                className="skip-icon"
+              />
+            </button>
+
+            <div className="volume-control">
+              <button
+                className={`icon-btn volume-btn${muted ? " is-muted" : ""}`}
+                onClick={toggleMute}
+                aria-label="Mute / Un-mute"
+              >
+                <img
+                  src="/images/adjust-volume-audio-lesson.webp"
+                  alt="Volume"
+                  className="volume-icon"
+                />
+              </button>
+              <div className="volume-slider-container">
+                <div
+                  className="volume-slider-wrapper"
+                  ref={volumeTrackRef}
+                  onMouseDown={handleVolumeMouseDown}
+                  onTouchStart={handleVolumeMouseDown}
+                >
+                  <div
+                    className="volume-slider-fill"
+                    style={{ height: `${(muted ? 0 : volume) * 100}%` }}
+                  />
+                  <div className="volume-handle" style={volumeHandleStyle} />
+                </div>
+              </div>
+            </div>
+
+            <div className="rate-group">
+              <button
+                className="rate-btn current-rate"
+                onClick={() => setShowRates(!showRates)}
+                aria-label="Toggle playback rates"
+              >
+                {rate}x
+              </button>
+              {showRates && (
+                <div className="rate-options">
+                  {rates.filter(r => r !== rate).map((r) => (
+                    <button
+                      key={r}
+                      className="rate-btn rate-option"
+                      onClick={() => {
+                        setRate(r);
+                        setShowRates(false);
+                      }}
+                      aria-label={`Set playback rate to ${r}x`}
+                    >
+                      {r}x
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-        </div>
-
-        <div className="rate-group">
-          <button
-            className="rate-btn current-rate"
-            onClick={() => setShowRates(!showRates)}
-            aria-label="Toggle playback rates"
-          >
-            {rate}x
-          </button>
-          {showRates && (
-            <div className="rate-options">
-              {rates.filter(r => r !== rate).map((r) => (
-                <button
-                  key={r}
-                  className="rate-btn rate-option"
-                  onClick={() => {
-                    setRate(r);
-                    setShowRates(false);
-                  }}
-                  aria-label={`Set playback rate to ${r}x`}
-                >
-                  {r}x
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </section>

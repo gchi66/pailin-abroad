@@ -93,12 +93,6 @@
 }
 
 /* Avatar */
-.account-avatar-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 3rem;
-}
-
 .account-avatar-wrapper {
   position: relative;
   width: 8rem;
@@ -135,12 +129,44 @@
   transform: scale(1.1);
 }
 
+.account-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.account-avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(4rem, 5rem));
+  gap: 0.75rem 1rem;
+}
+
+.account-avatar-grid.two-rows {
+  grid-auto-rows: auto;
+}
+
+.account-avatar-option {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.account-avatar-option img {
+  width: 100%;
+  height: 100%;
+  max-height: 6rem;
+  object-fit: contain;
+}
+
 /* Form Fields */
 .account-form-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 3rem;
+  margin-top: 2rem;
 }
 
 .account-field {
@@ -331,6 +357,9 @@
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
+  }
+  .account-avatar-row {
+    justify-content: flex-start;
   }
   .account-btn {
     min-width: auto;
