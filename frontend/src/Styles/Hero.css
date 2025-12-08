@@ -10,7 +10,12 @@
 
 /* Hero Card */
 .hero-card {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "image title"
+    "image subtitle"
+    "image buttons";
   align-items: center;
   background: white;
   padding: 9vh 10vh 9vh 7vh;
@@ -22,11 +27,11 @@
   width: 100%;
   min-height: 44vh;
   height: auto;
-  gap: 3vw;
+  gap: 1.5rem 3vw;
 }
 
 .hero-img {
-  flex-shrink: 0;
+  grid-area: image;
   max-width: 48%;
   width: clamp(320px, 48%, 520px);
   height: auto;
@@ -37,23 +42,16 @@
   justify-content: flex-start;
 }
 
-/* Hero Content */
-.hero-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3vh;
-  text-align: left;
-}
-
 .title-container {
+  grid-area: title;
   display: block;
   text-align: left;
   position: relative;
-  margin-bottom: 1.2vh;
+  margin-bottom: 0.5rem;
   max-width: 70vw;
 }
 
-.hero-content h2 {
+.title-container h2 {
   font-size: clamp(1.4rem, 4vw, 3.6rem);
   color: #1E1E1E;
   font-family: "Poppins", sans-serif;
@@ -75,21 +73,19 @@
   white-space: nowrap;
 }
 
-/* Ensure text does not overlap the image */
-/* .hero-content p {
-  display: none;
-} */
 .hero-subheader {
+  grid-area: subtitle;
   font-size: 2.9vh;
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
   font-weight: 500;
-  margin-top: -.2vh;
+  margin-top: 0;
   white-space: normal;
 }
 
 /* Buttons */
 .hero-buttons {
+  grid-area: buttons;
   display: flex;
   gap: 2vh;
 }
@@ -113,6 +109,62 @@
   transform: scale(1.05);
   background-color: white;
   color: #1E1E1E;
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: calc(var(--navbar-height, 80px) + 2.5rem) 1.25rem 3rem;
+  }
+
+  .hero-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "image"
+      "subtitle"
+      "buttons";
+    row-gap: 1.5rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    max-width: 100%;
+    padding: 0;
+    gap: 0;
+  }
+
+  .hero-img {
+    max-width: 80%;
+    width: 100%;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .title-container {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    justify-self: center;
+    max-width: 90%
+  }
+
+  .title-container h2 {
+    font-size: clamp(2.2rem, 7vw, 2.6rem);
+    line-height: 1.2;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero-subheader {
+    text-align: center;
+    font-size: clamp(1rem, 4.2vw, 1.2rem);
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-buttons .free-lessons {
+    width: min(100%, 18rem);
+  }
 }
 
 

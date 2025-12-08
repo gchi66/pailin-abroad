@@ -10,24 +10,22 @@ const Hero = ({ onSignupClick }) => {
   return (
     <section className="hero">
       <div className="hero-card">
+        <div className="title-container">
+          <h2>
+            {ui === "en" ? (
+              <>
+                <span className="no-wrap">English learning</span>{" "}
+                <span className="no-wrap">for Thai speakers</span>
+              </>
+            ) : (
+              pick(heroCopy.title, ui)
+            )}
+          </h2>
+        </div>
         <img src="/images/characters/hero_audio_bar.webp" alt="Pailin hero audio bar" className="hero-img" />
-        <div className="hero-content">
-          <div className="title-container">
-            <h2>
-              {ui === "en" ? (
-                <>
-                  <span className="no-wrap">English learning</span>{" "}
-                  <span className="no-wrap">for Thai speakers</span>
-                </>
-              ) : (
-                pick(heroCopy.title, ui)
-              )}
-            </h2>
-          </div>
-          <p className="hero-subheader">{pick(heroCopy.subtitle, ui)}</p>
-          <div className="hero-buttons">
-            <button className="free-lessons" onClick={onSignupClick}>{pick(heroCopy.cta, ui)}</button>
-          </div>
+        <p className="hero-subheader">{pick(heroCopy.subtitle, ui)}</p>
+        <div className="hero-buttons">
+          <button className="free-lessons" onClick={onSignupClick}>{pick(heroCopy.cta, ui)}</button>
         </div>
       </div>
     </section>
