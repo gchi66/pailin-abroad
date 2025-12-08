@@ -11,12 +11,26 @@
   padding-top: var(--navbar-height, 80px);
 }
 
+.lesson-content-container {
+  width: min(100%, 80rem);
+  margin: 0 auto;
+  padding: 0 1.8rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  box-sizing: border-box;
+}
+
 .lesson-body {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 2rem;
-  padding: 0 4rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+}
+
+.lesson-nav-banner-wrapper {
+  margin-top: 1.6rem;
+  width: 100%;
 }
 
 .listen-cta-wrapper {

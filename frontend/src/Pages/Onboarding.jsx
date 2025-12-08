@@ -199,7 +199,7 @@ const Onboarding = () => {
   const uiText = {
     // Welcome Step (Step 0)
     welcomeTitle: pickLang("Welcome to Pailin Abroad!", "ยินดีต้อนรับสู่ Pailin Abroad!"),
-    welcomeSubtitle: pickLang("Hi, I'm Pailin! I'm so excited to be your guide on this English journey.", "สวัสดีค่ะ ฉันไผลิน! ฉันตื่นเต้นมากที่จะเป็นไกด์ในการเรียนภาษาอังกฤษของคุณ"),
+    welcomeSubtitle: pickLang("Hi, I'm Pailin! I'm so excited to be your guide on this English journey.", "สวัสดีค่ะ ฉันไพลิน! ฉันตื่นเต้นมากที่จะเป็นไกด์ในการเรียนภาษาอังกฤษของคุณ"),
     welcomeDescription: pickLang("In a few quick steps, we'll get you ready to explore my world and the language I use every day.", "ในไม่กี่ขั้นตอนง่ายๆ เราจะเตรียมคุณให้พร้อมสำหรับการสำรวจโลกของฉันและภาษาที่ฉันใช้ทุกวัน"),
 
     // Password Step (Step 1)

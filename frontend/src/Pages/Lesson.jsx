@@ -13,6 +13,7 @@ import LessonDiscussion from "../Components/LessonDiscussion";
 // import LanguageToggle from "../Components/LanguageToggle"; // (unused)
 import LessonNavigationBanner from "../Components/LessonNavigationBanner";
 import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 import PrepareCard from "../Components/PrepareCard";
 
@@ -31,6 +32,18 @@ const MASTER_ORDER = [
   "culture_note",
   "practice",
 ];
+
+const LABEL_KEY_MAP = {
+  comprehension: "lessonSidebar.labels.comprehension",
+  transcript: "lessonSidebar.labels.transcript",
+  apply: "lessonSidebar.labels.apply",
+  understand: "lessonSidebar.labels.understand",
+  extra_tip: "lessonSidebar.labels.extra_tip",
+  common_mistake: "lessonSidebar.labels.common_mistake",
+  phrases_verbs: "lessonSidebar.labels.phrases_verbs",
+  culture_note: "lessonSidebar.labels.culture_note",
+  practice: "lessonSidebar.labels.practice",
+};
 
 function tabExists({ id, sections, questions, transcript, practiceExercises, lessonPhrases }) {
   if (id === "comprehension") return (questions?.length ?? 0) > 0;
@@ -63,6 +76,51 @@ function computeDefaultActiveId({ sections, questions, transcript, practiceExerc
     if (sec) return sec.id;
   }
   return null;
+}
+
+function getSectionLabel(type, uiLang) {
+  const key = LABEL_KEY_MAP[type];
+  if (!key) return (type || "").toUpperCase();
+  const translated = t(key, uiLang);
+  if (translated) return translated;
+  return (type || "").toUpperCase();
+}
+
+function buildSectionMenu({ sections = [], questions = [], transcript = [], practiceExercises = [], lessonPhrases = [], isLocked = false, uiLang = "en" }) {
+  const items = MASTER_ORDER
+    .map((type) => {
+      if (isLocked) {
+        return { id: type, type };
+      }
+      if (type === "comprehension" && questions.length) {
+        return { id: "comprehension", type };
+      }
+      if (type === "transcript" && transcript.length) {
+        return { id: "transcript", type };
+      }
+      if (type === "practice" && practiceExercises.length) {
+        return { id: "practice", type };
+      }
+      if (type === "phrases_verbs") {
+        const hasPhrases = lessonPhrases.some(
+          (item) =>
+            (item.content_md && item.content_md.trim() !== "") ||
+            (item.content && item.content.trim() !== "")
+        );
+        if (hasPhrases) {
+          return { id: "phrases_verbs", type };
+        }
+        return null;
+      }
+      const sec = sections.find((s) => s.type === type);
+      return sec ? { id: sec.id, type } : null;
+    })
+    .filter(Boolean);
+
+  return items.map((item) => ({
+    ...item,
+    label: getSectionLabel(item.type, uiLang),
+  }));
 }
 
 function safeJSON(v, fallback) {
@@ -309,6 +367,10 @@ export default function Lesson() {
   const headNodesRef = useRef(new Map());
   const visibleHeadIdsRef = useRef(new Set());
   const headIdCounterRef = useRef(0);
+  const reachedHeadsRef = useRef(false); // track if user has ever reached the lesson heads
+  const topSentinelRef = useRef(null);
+  const topSentinelVisibleRef = useRef(false);
+  const topObserverRef = useRef(null);
 
   const computeNavbarMargin = useCallback(() => {
     if (typeof window === "undefined") return "0px 0px 0px 0px";
@@ -318,12 +380,23 @@ export default function Lesson() {
     return `-${navbarHeight}px 0px 0px 0px`;
   }, []);
 
+  const recomputeStickyVisibility = useCallback(() => {
+    const noHeadsVisible = visibleHeadIdsRef.current.size === 0;
+    const shouldShow =
+      reachedHeadsRef.current &&
+      noHeadsVisible &&
+      !topSentinelVisibleRef.current;
+    setShowStickyToggle(shouldShow);
+  }, [setShowStickyToggle]);
+
   const handleIntersection = useCallback((entries) => {
+    if (headNodesRef.current.size === 0) return;
     let changed = false;
     entries.forEach((entry) => {
       const id = entry.target.getAttribute("data-sticky-head-id");
       if (!id) return;
       if (entry.isIntersecting) {
+        reachedHeadsRef.current = true;
         if (!visibleHeadIdsRef.current.has(id)) {
           visibleHeadIdsRef.current.add(id);
           changed = true;
@@ -334,9 +407,9 @@ export default function Lesson() {
       }
     });
     if (changed) {
-      setShowStickyToggle(visibleHeadIdsRef.current.size === 0);
+      recomputeStickyVisibility();
     }
-  }, [setShowStickyToggle]);
+  }, [recomputeStickyVisibility]);
 
   const rebuildObserver = useCallback(() => {
     const margin = computeNavbarMargin();
@@ -364,6 +437,14 @@ export default function Lesson() {
   }, [computeNavbarMargin, rebuildObserver]);
 
   const registerStickyHeaders = useCallback((nodes) => {
+    if (!nodes || nodes.length === 0) {
+      headNodesRef.current.clear();
+      visibleHeadIdsRef.current.clear();
+      reachedHeadsRef.current = false;
+      setShowStickyToggle(false);
+      return;
+    }
+
     const observer = ensureObserver();
     const map = headNodesRef.current;
     const incomingIds = new Set();
@@ -418,12 +499,41 @@ export default function Lesson() {
         rect.bottom > navbarHeight && rect.top < viewportHeight;
       if (isVisible) {
         visibleNow.add(id);
+        reachedHeadsRef.current = true;
       }
     });
 
     visibleHeadIdsRef.current = visibleNow;
-    setShowStickyToggle(visibleHeadIdsRef.current.size === 0);
-  }, [ensureObserver, setShowStickyToggle]);
+    recomputeStickyVisibility();
+  }, [ensureObserver, recomputeStickyVisibility]);
+
+  // Observe the top sentinel to know when the lesson is at the top of the screen
+  useEffect(() => {
+    const node = topSentinelRef.current;
+    if (!node) return undefined;
+
+    const margin = computeNavbarMargin();
+    // turn "-80px 0px 0px 0px" into "80px 0px 0px 0px" to extend the root upward
+    const positiveMargin = margin.startsWith("-") ? margin.slice(1) : margin;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          topSentinelVisibleRef.current = entry.isIntersecting;
+        });
+        recomputeStickyVisibility();
+      },
+      { threshold: 0, rootMargin: positiveMargin }
+    );
+
+    topObserverRef.current = observer;
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+      topObserverRef.current = null;
+    };
+  }, [recomputeStickyVisibility]);
 
   useEffect(() => {
     registerLessonToggle({ contentLang, setContentLang });
@@ -720,6 +830,15 @@ export default function Lesson() {
     lesson.backstory_th,
     lesson.backstory
   );
+  const sectionMenu = buildSectionMenu({
+    sections,
+    questions,
+    transcript,
+    practiceExercises,
+    lessonPhrases,
+    isLocked,
+    uiLang,
+  });
   const prepareSection = sections.find((s) => s.type === "prepare");
   return (
     <main>
@@ -736,76 +855,85 @@ export default function Lesson() {
           backstory={headerBackstory}
         />
 
-        {/* Prepare (vocab) card */}
-        {prepareSection && (
-          <PrepareCard
-            section={prepareSection}
-            audioIndex={snipIdx}
-            uiLang={uiLang}
-            isLocked={isLocked}
-          />
-        )}
+        <div className="lesson-content-container">
+          {/* Prepare (vocab) card */}
+          {prepareSection && (
+            <PrepareCard
+              section={prepareSection}
+              audioIndex={snipIdx}
+              uiLang={uiLang}
+              isLocked={isLocked}
+            />
+          )}
 
-        {/* Listen CTA */}
-        {(audioUrl || audioUrlNoBg || audioUrlBg) && (
-          <div className="listen-cta-wrapper">
-            <button
-              type="button"
-              className="listen-cta"
-              onClick={() => setShowStickyPlayer(true)}
-              disabled={isLocked}
-            >
-              <img
-                src="/images/play-audio-lesson.webp"
-                alt="Play"
-                className="listen-cta-icon"
-              />
-              <span>LISTEN TO THE CONVERSATION</span>
-            </button>
+          {/* Listen CTA */}
+          {(audioUrl || audioUrlNoBg || audioUrlBg) && (
+            <div className="listen-cta-wrapper">
+              <button
+                type="button"
+                className="listen-cta"
+                onClick={() => setShowStickyPlayer(true)}
+                disabled={isLocked}
+              >
+                <img
+                  src="/images/play-audio-lesson.webp"
+                  alt="Play"
+                  className="listen-cta-icon"
+                />
+                <span>LISTEN TO THE CONVERSATION</span>
+              </button>
+            </div>
+          )}
+
+          <div ref={topSentinelRef} className="lesson-top-sentinel" aria-hidden="true" />
+
+          {/* Body */}
+          <div className="lesson-body">
+            <LessonSidebar
+              sections={sections}
+              questions={questions}
+              transcript={transcript}
+              practiceExercises={practiceExercises}
+              lessonPhrases={lessonPhrases}
+              activeId={activeId}
+              onSelect={setActiveId}
+              lesson={lesson}
+              isLocked={isLocked}
+            />
+            <LessonContent
+              sections={sections}
+              questions={questions}
+              transcript={transcript}
+              practiceExercises={practiceExercises}
+              lessonPhrases={lessonPhrases}
+              activeId={activeId}
+              sectionMenu={sectionMenu}
+              uiLang={uiLang}
+              snipIdx={snipIdx}
+              phrasesSnipIdx={phrasesSnipIdx}
+              contentLang={contentLang}
+              setContentLang={setContentLang}
+              images={images}
+              isLocked={isLocked}
+              registerStickyHeaders={registerStickyHeaders}
+              topSentinelRef={topSentinelRef}
+              onSelectSection={setActiveId}
+            />
           </div>
-        )}
-
-        {/* Body */}
-        <div className="lesson-body">
-          <LessonSidebar
-            sections={sections}
-            questions={questions}
-            transcript={transcript}
-            practiceExercises={practiceExercises}
-            lessonPhrases={lessonPhrases}
-            activeId={activeId}
-            onSelect={setActiveId}
-            lesson={lesson}
-            isLocked={isLocked}
-          />
-          <LessonContent
-            sections={sections}
-            questions={questions}
-            transcript={transcript}
-            practiceExercises={practiceExercises}
-            lessonPhrases={lessonPhrases}
-            activeId={activeId}
-            uiLang={uiLang}
-            snipIdx={snipIdx}
-            phrasesSnipIdx={phrasesSnipIdx}
-            contentLang={contentLang}
-            setContentLang={setContentLang}
-            images={images}
-            isLocked={isLocked}
-            registerStickyHeaders={registerStickyHeaders}
-          />
         </div>
 
         {/* Lesson Navigation Banner */}
-        <LessonNavigationBanner
-          prevLesson={prevLesson}
-          nextLesson={nextLesson}
-          currentLesson={lesson}
-          onMarkComplete={(isCompleted) => {
-            console.log(`Lesson ${lesson.lesson_external_id} marked as ${isCompleted ? 'completed' : 'incomplete'}`);
-            // TODO: Add actual completion tracking logic here
-          }}
-        />
+        <div className="lesson-nav-banner-wrapper">
+          <LessonNavigationBanner
+            prevLesson={prevLesson}
+            nextLesson={nextLesson}
+            currentLesson={lesson}
+            onMarkComplete={(isCompleted) => {
+              console.log(`Lesson ${lesson.lesson_external_id} marked as ${isCompleted ? 'completed' : 'incomplete'}`);
+              // TODO: Add actual completion tracking logic here
+            }}
+          />
+        </div>
 
         {/* Discussion */}
         <LessonDiscussion lessonId={lesson.id} isAdmin={false} />

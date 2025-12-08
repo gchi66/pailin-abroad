@@ -506,7 +506,13 @@ const MyPathway = () => {
                     </div>
                     {comment.pinned && (
                       <div className="pathway-comment-pinned">
-                        📌 {uiText.pinnedComment}
+                        <img
+                          src="/images/pinned_comment_pin.png"
+                          alt=""
+                          aria-hidden="true"
+                          className="pathway-comment-pin-icon"
+                        />
+                        <span>{uiText.pinnedComment}</span>
                       </div>
                     )}
                   </div>

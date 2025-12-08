@@ -18,6 +18,7 @@ export default function LessonContent({
   practiceExercises = [],
   lessonPhrases = [],
   activeId,
+  sectionMenu = [],
   uiLang = "en",
   snipIdx = {},
   phrasesSnipIdx = {},
@@ -26,6 +27,7 @@ export default function LessonContent({
   images = {},
   isLocked = false,
   registerStickyHeaders,
+  onSelectSection,
 }) {
   const fallbacks = copy.lessonPage.sectionFallbacks;
   const lockedCopy = copy.lessonPage.locked;
@@ -113,6 +115,54 @@ export default function LessonContent({
     </div>
   );
 
+  const SectionNav = () => {
+    if (!Array.isArray(sectionMenu) || !sectionMenu.length) return null;
+    const idx = sectionMenu.findIndex((item) => item.id === activeId);
+    if (idx === -1) return null;
+    const prev = idx > 0 ? sectionMenu[idx - 1] : null;
+    const next = idx < sectionMenu.length - 1 ? sectionMenu[idx + 1] : null;
+    if (!prev && !next) return null;
+
+    const handleSelect = (id) => {
+      if (typeof onSelectSection === "function") {
+        onSelectSection(id);
+      }
+    };
+
+    return (
+      <nav className="lc-section-nav" aria-label="Section navigation">
+        <div className="lc-section-nav-item lc-section-nav-prev">
+          {prev ? (
+            <button
+              type="button"
+              className="lc-section-nav-btn"
+              onClick={() => handleSelect(prev.id)}
+            >
+              <span aria-hidden="true">←</span>
+              <span className="lc-section-nav-label">{prev.label}</span>
+            </button>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+        </div>
+        <div className="lc-section-nav-item lc-section-nav-next">
+          {next ? (
+            <button
+              type="button"
+              className="lc-section-nav-btn"
+              onClick={() => handleSelect(next.id)}
+            >
+              <span className="lc-section-nav-label">{next.label}</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+        </div>
+      </nav>
+    );
+  };
+
   const shellRef = useRef(null);
 
   useEffect(() => {
@@ -121,7 +171,13 @@ export default function LessonContent({
     const heads = container
       ? Array.from(container.querySelectorAll(".lc-head"))
       : [];
-    registerStickyHeaders(heads);
+    const headerNode =
+      typeof document !== "undefined"
+        ? document.querySelector('[data-sticky-head-id="lesson-header"]')
+        : null;
+    const nodes = headerNode ? [headerNode, ...heads] : heads;
+
+    registerStickyHeaders(nodes);
     return () => {
       registerStickyHeaders([]);
     };
@@ -136,12 +192,24 @@ export default function LessonContent({
     isLocked,
   ]);
 
-  const renderWithBackToTop = (contentNode) => (
-    <div className="lesson-content-shell" ref={shellRef}>
-      {contentNode}
-      <BackToTopButton />
-    </div>
-  );
+  const renderWithBackToTop = (contentNode) => {
+    if (!React.isValidElement(contentNode)) return contentNode;
+    const cardWithNav = React.cloneElement(
+      contentNode,
+      {},
+      <>
+        {contentNode.props.children}
+        <SectionNav />
+      </>
+    );
+
+    return (
+      <div className="lesson-content-shell" ref={shellRef}>
+        {cardWithNav}
+        <BackToTopButton />
+      </div>
+    );
+  };
 
 
   /* ===============================================================

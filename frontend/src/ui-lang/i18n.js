@@ -258,7 +258,7 @@ export const copy = {
       title: { en: "THE METHOD", th: "วิธีเรียนรู้" },
       body: {
         en: "Pailin Abroad offers English lessons based on audio conversations designed to teach natural, practical, and conversational English. Each lesson focuses on a grammar point or key concept, seamlessly integrated into real-world dialogue. The dialogues follow Pailin, a 21-year-old girl from Thailand, who will be studying abroad at UCLA while staying with a host family in Los Angeles. Through her journey navigating friendships, love, family, school, work, and life in a new country, you’ll gain rich insights into American culture, avoid common mistakes Thai learners often face, and most importantly, improve your English.",
-        th: "Pailin Abroad นำเสนอบทเรียนภาษาอังกฤษจากบทสนทนาเสียงที่ออกแบบมาเพื่อสอนภาษาอังกฤษที่เป็นธรรมชาติ ใช้งานได้จริง และใช้ในชีวิตประจำวัน ทุกบทเรียนจะเน้นจุดไวยากรณ์หรือแนวคิดสำคัญที่ผสานอยู่ในบทสนทนาที่เกิดขึ้นจริง เนื้อเรื่องติดตามไผลิน วัย 21 ปีจากกรุงเทพฯ ที่เดินทางมาเรียนต่อที่ UCLA และพักกับโฮสต์แฟมิลี่ในลอสแอนเจลิส ผ่านการเดินทางของเธอทั้งมิตรภาพ ความรัก ครอบครัว โรงเรียน การทำงาน และการใช้ชีวิตในประเทศใหม่ คุณจะได้เข้าใจวัฒนธรรมอเมริกันอย่างลึกซึ้ง เลี่ยงข้อผิดพลาดที่ผู้เรียนชาวไทยมักเจอ และที่สำคัญที่สุดคือพัฒนาภาษาอังกฤษของคุณ",
+        th: "Pailin Abroad นำเสนอบทเรียนภาษาอังกฤษจากบทสนทนาเสียงที่ออกแบบมาเพื่อสอนภาษาอังกฤษที่เป็นธรรมชาติ ใช้งานได้จริง และใช้ในชีวิตประจำวัน ทุกบทเรียนจะเน้นจุดไวยากรณ์หรือแนวคิดสำคัญที่ผสานอยู่ในบทสนทนาที่เกิดขึ้นจริง เนื้อเรื่องติดตามไพลิน วัย 21 ปีจากกรุงเทพฯ ที่เดินทางมาเรียนต่อที่ UCLA และพักกับโฮสต์แฟมิลี่ในลอสแอนเจลิส ผ่านการเดินทางของเธอทั้งมิตรภาพ ความรัก ครอบครัว โรงเรียน การทำงาน และการใช้ชีวิตในประเทศใหม่ คุณจะได้เข้าใจวัฒนธรรมอเมริกันอย่างลึกซึ้ง เลี่ยงข้อผิดพลาดที่ผู้เรียนชาวไทยมักเจอ และที่สำคัญที่สุดคือพัฒนาภาษาอังกฤษของคุณ",
       },
     },
     chooseUs: {
@@ -279,7 +279,7 @@ export const copy = {
           header: { en: "Listen to the conversation", th: "ฟังบทสนทนา" },
           text: {
             en: "Move from Beginner to Expert level conversations that follow Pailin as she navigates life in a new country.",
-            th: "ไต่ระดับจากบทสนทนาระดับ Beginner ถึง Expert ที่ติดตามไผลินขณะใช้ชีวิตในประเทศใหม่",
+            th: "ไต่ระดับจากบทสนทนาระดับ Beginner ถึง Expert ที่ติดตามไพลินขณะใช้ชีวิตในประเทศใหม่",
           },
         },
         {
@@ -309,17 +309,17 @@ export const copy = {
       cta: { en: "SIGN UP FOR FREE", th: "สมัครสมาชิกฟรี" },
     },
     takeTheLeap: {
-      title: { en: "Take the leap with Pailin and sign up today!", th: "ก้าวไปกับไผลินและสมัครวันนี้เลย!" },
+      title: { en: "Take the leap with Pailin and sign up today!", th: "ก้าวไปกับไพลินและสมัครวันนี้เลย!" },
       cta: { en: "SIGN UP FOR FREE", th: "สมัครสมาชิกฟรี" },
     },
     characters: {
       title: { en: "Meet the Characters", th: "ทำความรู้จักตัวละคร" },
       entries: [
         {
-          name: { en: "Pailin", th: "ไผลิน" },
+          name: { en: "Pailin", th: "ไพลิน" },
           description: {
             en: "Hi, I’m Pailin! I’m a 21-year-old girl from Bangkok. I’m studying abroad at UCLA and living with a host family in Los Angeles. I’m excited to explore the city, meet new friends, and experience everything LA has to offer. I love cooking Thai food, going to concerts, and geeking out at art museums. I know this is going to be an amazing adventure!",
-            th: "ฉันชื่อไผลิน อายุ 21 ปีจากกรุงเทพฯ ฉันจะไปเรียนต่อที่ลอสแอนเจลิสเป็นเวลา 1 ปี ฉันเป็นคนสบาย ๆ และตื่นเต้นมากที่จะได้ลองประสบการณ์ใหม่ ๆ ฉันคิดว่าฉันจะเข้ากับที่นั่นได้ดีแน่นอน!",
+            th: "ฉันชื่อไพลิน อายุ 21 ปีจากกรุงเทพฯ ฉันจะไปเรียนต่อที่ลอสแอนเจลิสเป็นเวลา 1 ปี ฉันเป็นคนสบาย ๆ และตื่นเต้นมากที่จะได้ลองประสบการณ์ใหม่ ๆ ฉันคิดว่าฉันจะเข้ากับที่นั่นได้ดีแน่นอน!",
           },
         },
         {
@@ -333,35 +333,35 @@ export const copy = {
           name: { en: "Chloe", th: "โคลอี้" },
           description: {
             en: "Meet Chloe! She’s a 23-year-old girl from Chiang Mai - half Thai, half French. Chloe and Pailin meet at their student orientation and quickly become best friends. Chloe loves to have a good time and always seems to have a funny story about her dating life in LA. She loves fashion and soccer, and she loves a good party!",
-            th: "ฉันคือโคลอี้ เพื่อนใหม่ของไผลินที่ลอสแอนเจลิส พ่อของฉันเป็นคนไทย แม่เป็นชาวฝรั่งเศส แต่ฉันเติบโตที่ประเทศไทย ฉันเป็นคนร่าเริงและสนุกสนาน บางทีก็ซุ่มซ่ามนิดหน่อยและมีความกวน ๆ อยู่บ้าง",
-          },
-        },
-        {
-          name: { en: "Mark", th: "มาร์ค" },
-          description: {
-            en: "Meet Mark! He’s Pailin’s host dad. He’s a lawyer and makes sure Pailin is settling into her new life in LA. He enjoys skiing and playing pickleball, and he’s a great source of knowledge for Pailin to learn about American culture! He’s also a big history buff and loves game nights with his family.",
-            th: "ผมคือมาร์ค คุณพ่อโฮสต์ของไผลิน ผมเป็นทนายที่ยุ่งมาก แต่ถ้าไม่ได้ทำงาน ผมชอบซ้อมวิ่งมาราธอนและอ่านนวนิยายไซไฟ",
+            th: "ฉันคือโคลอี้ เพื่อนใหม่ของไพลินที่ลอสแอนเจลิส พ่อของฉันเป็นคนไทย แม่เป็นชาวฝรั่งเศส แต่ฉันเติบโตที่ประเทศไทย ฉันเป็นคนร่าเริงและสนุกสนาน บางทีก็ซุ่มซ่ามนิดหน่อยและมีความกวน ๆ อยู่บ้าง",
           },
         },
         {
           name: { en: "Emily", th: "เอมิลี่" },
           description: {
-            en: "Meet Emily! She’s Pailin’s 13-year-old host sister, just a freshman in high school. Emily is quirky and always getting herself into trouble. She loves opening up to Pailin and telling her about her school and boy problems. She’s obsessed with K-Pop music and TikTok videos of Moo Deng.",
-            th: "ฉันคือเอมิลี่ น้องสาวโฮสต์ของไผลิน ฉันเป็นเด็กวัย 13 ที่ช่างสงสัยและพูดเก่งมาก บางครั้งก็สร้างเรื่องวุ่นวาย แต่โดยรวมแล้วฉันน่ารักนะ (ฉันว่าอย่างนั้น)",
+            en: "Meet Emily! She’s Pailin’s 13-year-old host sister, just a freshman in high school. Emily is quirky and always getting herself into trouble. Pailin feels like a big sister to her, and she loves opening up to Pailin about her school and boy problems. She’s obsessed with K-Pop music, TikTok videos of Moo Deng, and doing cute nail designs.",
+            th: "ฉันคือเอมิลี่ น้องสาวโฮสต์ของไพลิน ฉันเป็นเด็กวัย 13 ที่ช่างสงสัยและพูดเก่งมาก บางครั้งก็สร้างเรื่องวุ่นวาย แต่โดยรวมแล้วฉันน่ารักนะ (ฉันว่าอย่างนั้น)",
           },
         },
         {
-          name: { en: "Tyler", th: "ไทเลอร์" },
+          name: { en: "Mark", th: "มาร์ค" },
           description: {
-            en: "Meet Tyler, Pailin’s coworker at Skylight Books. He’s a bit shy at first, but once you get to know him, he’s an open book. He studies computer programming when he’s not working, and hopes to be able to work from anywhere in the world. And, Pailin might have a little crush on him.",
-            th: "ผมคือไทเลอร์ พี่ชายโฮสต์ของไผลิน ผมก็เรียนอยู่ที่ UCLA เช่นกัน ผมยังตัดสินใจไม่ได้ว่าจะเรียนสาขาอะไรดีเลยเปลี่ยนเอกอยู่เรื่อย ๆ ผมเป็นเพื่อนที่ไว้ใจได้และพร้อมลุยเสมอ",
+            en: "Meet Mark! He’s Pailin’s host dad. He’s a lawyer and makes sure Pailin is settling into her new life in LA. He enjoys skiing and playing pickleball, and he’s a great source of knowledge for Pailin to learn about American culture! He’s also a big history buff and loves game nights with his family, especially trivia nights.",
+            th: "ผมคือมาร์ค คุณพ่อโฮสต์ของไพลิน ผมเป็นทนายที่ยุ่งมาก แต่ถ้าไม่ได้ทำงาน ผมชอบซ้อมวิ่งมาราธอนและอ่านนวนิยายไซไฟ",
           },
         },
         {
           name: { en: "Sylvie", th: "ซิลวี่" },
           description: {
-            en: "I'm Sylvie, Pailin's host mom. I'm from France, and I'm a wine importer. I enjoy trying new foods, warm days at the beach, and spending time with my family.",
-            th: "ฉันคือซิลวี่ แม่โฮสต์ของไผลิน ฉันมาจากฝรั่งเศสและทำงานนำเข้าไวน์ ฉันชอบลองอาหารใหม่ ๆ ชอบอากาศอุ่น ๆ ที่ชายหาด และชอบใช้เวลากับครอบครัว",
+            en: "Meet Sylvie! She’s Pailin’s host mom. She’s originally from France, and she owns a wine business. She’s easygoing and super welcoming of Pailin, and often gives Pailin heartfelt advice about finding her place in a new country. When she’s not having a glass of red wine, she loves gardening, baking, and hosting dinner parties for her clients.",
+            th: "ฉันคือซิลวี่ แม่โฮสต์ของไพลิน ฉันมาจากฝรั่งเศสและทำงานนำเข้าไวน์ ฉันชอบลองอาหารใหม่ ๆ ชอบอากาศอุ่น ๆ ที่ชายหาด และชอบใช้เวลากับครอบครัว",
+          },
+        },
+        {
+          name: { en: "Tyler", th: "ไทเลอร์" },
+          description: {
+            en: "Meet Tyler, Pailin’s coworker at Skylight Books. He’s a bit shy at first, but once you get to know him, he’s funny, thoughtful, and charming. He loves hiking and the outdoors, but he also studies computer programming when he’s not working, and hopes to be able to work from anywhere in the world. And, Pailin might have a little crush on him.",
+            th: "ผมคือไทเลอร์ พี่ชายโฮสต์ของไพลิน ผมก็เรียนอยู่ที่ UCLA เช่นกัน ผมยังตัดสินใจไม่ได้ว่าจะเรียนสาขาอะไรดีเลยเปลี่ยนเอกอยู่เรื่อย ๆ ผมเป็นเพื่อนที่ไว้ใจได้และพร้อมลุยเสมอ",
           },
         },
       ],
@@ -374,7 +374,7 @@ export const copy = {
           location: { en: "Bangkok, Thailand", th: "กรุงเทพฯ ประเทศไทย" },
           text: {
             en: "I loved using Pailin Abroad – Pailin’s adventures made learning feel fun and engaging. The lessons were easy to follow and helped me improve my listening and comprehension skills in a natural way.",
-            th: "ฉันชอบใช้ Pailin Abroad มาก การผจญภัยของไผลินทำให้การเรียนสนุกและน่าติดตาม บทเรียนเข้าใจง่ายและช่วยให้ฉันพัฒนาทักษะการฟังและการจับใจความได้อย่างเป็นธรรมชาติ",
+            th: "ฉันชอบใช้ Pailin Abroad มาก การผจญภัยของไพลินทำให้การเรียนสนุกและน่าติดตาม บทเรียนเข้าใจง่ายและช่วยให้ฉันพัฒนาทักษะการฟังและการจับใจความได้อย่างเป็นธรรมชาติ",
           },
         },
         {
@@ -382,7 +382,7 @@ export const copy = {
           location: { en: "Los Angeles, CA, USA", th: "ลอสแอนเจลิส แคลิฟอร์เนีย สหรัฐอเมริกา" },
           text: {
             en: "I loved using Pailin Abroad – Pailin’s adventures made learning feel fun and engaging. The lessons were easy to follow and helped me improve my listening and comprehension skills in a natural way.",
-            th: "ฉันชอบใช้ Pailin Abroad มาก การผจญภัยของไผลินทำให้การเรียนสนุกและน่าติดตาม บทเรียนเข้าใจง่ายและช่วยให้ฉันพัฒนาทักษะการฟังและการจับใจความได้อย่างเป็นธรรมชาติ",
+            th: "ฉันชอบใช้ Pailin Abroad มาก การผจญภัยของไพลินทำให้การเรียนสนุกและน่าติดตาม บทเรียนเข้าใจง่ายและช่วยให้ฉันพัฒนาทักษะการฟังและการจับใจความได้อย่างเป็นธรรมชาติ",
           },
         },
         {
@@ -406,7 +406,7 @@ export const copy = {
           },
           answer: {
             en: "Pailin Abroad focuses on real-world conversational English through engaging storytelling. Unlike traditional platforms that rely on isolated grammar lessons, we follow Pailin's authentic journey in America, giving you context for every phrase and expression. Our content is created by native English speakers and fully translated to Thai, making complex concepts accessible while teaching you the natural flow of American English conversations.",
-            th: "Pailin Abroad เน้นภาษาอังกฤษที่ใช้จริงผ่านการเล่าเรื่องที่สนุกสนาน ต่างจากแพลตฟอร์มทั่วไปที่สอนไวยากรณ์แยกส่วน เราติดตามการเดินทางจริงของไผลินที่อเมริกา ทำให้คุณเข้าใจบริบทของทุกวลีและสำนวน เนื้อหาของเราสร้างโดยเจ้าของภาษาและมีคำแปลภาษาไทยครบถ้วน จึงเข้าถึงเนื้อหาที่ซับซ้อนได้ง่าย พร้อมเรียนรู้จังหวะภาษาที่เจ้าของภาษาใช้จริง",
+            th: "Pailin Abroad เน้นภาษาอังกฤษที่ใช้จริงผ่านการเล่าเรื่องที่สนุกสนาน ต่างจากแพลตฟอร์มทั่วไปที่สอนไวยากรณ์แยกส่วน เราติดตามการเดินทางจริงของไพลินที่อเมริกา ทำให้คุณเข้าใจบริบทของทุกวลีและสำนวน เนื้อหาของเราสร้างโดยเจ้าของภาษาและมีคำแปลภาษาไทยครบถ้วน จึงเข้าถึงเนื้อหาที่ซับซ้อนได้ง่าย พร้อมเรียนรู้จังหวะภาษาที่เจ้าของภาษาใช้จริง",
           },
         },
         {
@@ -428,7 +428,7 @@ export const copy = {
           },
           answer: {
             en: "Yes! We offer a comprehensive library of free lessons that you can access immediately - no credit card required. Simply sign up with your email to start learning with Pailin right away. Our free content gives you a great taste of our teaching style and the quality of our lessons before you decide on a membership.",
-            th: "มีแน่นอน! เรามีคลังบทเรียนฟรีที่คุณเข้าถึงได้ทันทีโดยไม่ต้องใช้บัตรเครดิต เพียงลงทะเบียนด้วยอีเมลก็เริ่มเรียนกับไผลินได้เลย เนื้อหาฟรีเหล่านี้จะทำให้คุณเห็นแนวการสอนและคุณภาพบทเรียนก่อนตัดสินใจสมัครสมาชิก",
+            th: "มีแน่นอน! เรามีคลังบทเรียนฟรีที่คุณเข้าถึงได้ทันทีโดยไม่ต้องใช้บัตรเครดิต เพียงลงทะเบียนด้วยอีเมลก็เริ่มเรียนกับไพลินได้เลย เนื้อหาฟรีเหล่านี้จะทำให้คุณเห็นแนวการสอนและคุณภาพบทเรียนก่อนตัดสินใจสมัครสมาชิก",
           },
         },
         {

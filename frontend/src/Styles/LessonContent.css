@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   /* min-height: 60vh; */
-  padding: 0 0 1.4rem;
+  padding: 0;
 }
 
 /* top bar */
@@ -23,6 +23,16 @@
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+
+.lc-pin-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.pinned-comment-head {
+  gap: 0.85rem;
 }
 
 /* Language Toggle */
@@ -75,6 +85,17 @@
   align-items: stretch;
   height: 100%;
   flex: 1 1 auto;
+  position: relative;
+}
+
+/* Invisible sentinel used for sticky navbar logic; keep it out of layout */
+.lesson-top-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
 /* comprehension questions */
@@ -149,6 +170,61 @@
   font-size: 1.6rem;
   line-height: 1.6;
   overflow-y: auto;
+}
+
+.lc-section-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  border-top: 0.1rem solid #e5e7eb;
+  font-size: 1.25rem;
+  box-sizing: border-box;
+}
+
+.lc-section-nav-item {
+  flex: 1;
+}
+
+.lc-section-nav-prev {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.lc-section-nav-next {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.lc-section-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: #1e1e1e;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.1rem;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.lc-section-nav-btn:hover {
+  text-decoration: underline;
+  background: none;
+  box-shadow: none;
+}
+
+.lc-section-nav-btn:focus-visible {
+  outline: 0.15rem solid rgba(30, 30, 30, 0.35);
+  outline-offset: 0.1rem;
+}
+
+.lc-section-nav-label {
+  white-space: nowrap;
 }
 
 /* ===============================================

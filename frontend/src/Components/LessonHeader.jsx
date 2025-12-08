@@ -49,7 +49,10 @@ export default function LessonHeader({
     : `Level ${level} · Lesson ${lessonOrder}`;
 
   return (
-    <section className={`lesson-banner${hasImage ? "" : " no-image"}`}>
+    <section
+      className={`lesson-banner${hasImage ? "" : " no-image"}`}
+      data-sticky-head-id="lesson-header"
+    >
       <div className="lesson-banner-inner">
         <Link to="/lessons" className="back-link">
           {backLinkText}

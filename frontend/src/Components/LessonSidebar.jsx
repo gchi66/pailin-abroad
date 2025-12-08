@@ -28,28 +28,6 @@ const MASTER_ORDER = [
   "practice",
 ];
 
-function getLessonHeader(lesson, uiLang) {
-  const lessonLabel = t("lessonSidebar.lessonLabel", uiLang) || "LESSON";
-  const checkpointLabel = t("lessonSidebar.checkpoint", uiLang) || "CHECKPOINT";
-
-  if (!lesson) return `${lessonLabel} –`;
-  const externalId = lesson.external_id || "";
-  // Check for checkpoint: external_id ends with .chp or lesson_order === 0
-  if (externalId.endsWith(".chp") || lesson.lesson_order === 0) {
-    return checkpointLabel;
-  }
-  // Try to extract the lesson number from external_id (e.g., 1.14 -> 14)
-  const match = externalId.match(/^(\d+)\.(\d+)$/);
-  if (match) {
-    return `${lessonLabel} ${parseInt(match[2], 10)}`;
-  }
-  // Fallback to lesson_order if available
-  if (lesson.lesson_order) {
-    return `${lessonLabel} ${lesson.lesson_order}`;
-  }
-  return `${lessonLabel} –`;
-}
-
 export default function LessonSidebar({
   sections = [],
   questions = [],
@@ -58,7 +36,6 @@ export default function LessonSidebar({
   lessonPhrases = [],
   activeId,
   onSelect,
-  lesson, // <-- new prop
   isLocked = false, // <-- add isLocked prop
 }) {
   const { ui: uiLang } = useUiLang();
@@ -109,26 +86,24 @@ export default function LessonSidebar({
     .filter(Boolean);
 
   return (
-    <aside className="ls-sidebar">
-      <header className="ls-header">
-        {getLessonHeader(lesson, uiLang)}
-      </header>
-      <ul className="ls-list">
-        {menuItems.map((item) => (
-          <li
-            key={item.id}
-            className={`ls-row ${item.id === activeId ? "ls-active" : ""}`}
-            onClick={() => onSelect(item.id)}
-          >
-            <span className="ls-row-label">
-              {getLabel(item.type)}
-            </span>
-            {item.id === activeId && (
-              <span className="ls-row-check">✔︎</span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </aside>
+    <nav className="ls-sidebar" aria-label="Lesson sections">
+      <div className="ls-list" role="tablist">
+        {menuItems.map((item) => {
+          const isActive = item.id === activeId;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              className={`ls-row ${isActive ? "ls-active" : ""}`}
+              onClick={() => onSelect(item.id)}
+              role="tab"
+              aria-selected={isActive}
+            >
+              <span className="ls-row-label">{getLabel(item.type)}</span>
+            </button>
+          );
+        })}
+      </div>
+    </nav>
   );
 }

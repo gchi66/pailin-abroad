@@ -220,9 +220,11 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
           </div>
           <div className="comment-top-actions">
             {isPinned && (
-              <span className="comment-pin-icon" aria-label="Pinned comment">
-                📌
-              </span>
+              <img
+                src="/images/pinned_comment_pin.png"
+                alt="Pinned comment"
+                className="comment-pin-icon"
+              />
             )}
             {typeof onPin === "function" && (
               <button
