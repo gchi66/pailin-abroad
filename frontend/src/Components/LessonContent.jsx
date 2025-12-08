@@ -424,7 +424,6 @@ export default function LessonContent({
             const phraseLabel = (() => {
               const enPhrase = item.phrase?.trim();
               const thPhrase = item.phrase_th?.trim();
-
               // Keep headers in English, falling back to other data when necessary
               return enPhrase || thPhrase || "Phrase";
             })();
