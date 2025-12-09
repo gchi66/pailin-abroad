@@ -108,3 +108,73 @@
     justify-content: center;
   }
 }
+
+@media (max-width: 480px) {
+  .characters-section {
+    padding: 2.25rem 1.25rem 2.75rem;
+    background: transparent;
+    border-top: 1px solid #1E1E1E;
+    border-bottom: 1px solid #1E1E1E;
+  }
+
+  .character-card {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "image title"
+      "description description"
+      "thumbnails thumbnails";
+    gap: 1.4rem .5rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .character-image {
+    grid-area: image;
+    width: 30vw;
+    justify-content: flex-start;
+  }
+
+  .character-content {
+    grid-area: title;
+    display: contents;
+  }
+
+  .characters-title {
+    grid-area: title;
+    font-size: clamp(1.9rem, 6vw, 2.1rem);
+    line-height: 1.2;
+    margin: 0;
+    text-shadow: none;
+    text-align: left;
+    max-width: 60vw;
+  }
+
+  .character-description {
+    grid-area: description;
+    font-size: clamp(.7rem, 4vw, 1.2rem);
+    line-height: 1.5;
+    text-align: left;
+    margin: 0;
+    justify-self: stretch;
+  }
+
+  .character-thumbnails {
+    grid-area: thumbnails;
+    justify-content: center;
+    gap: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .thumbnail {
+    flex: 0 0 clamp(2.8rem, 9vw, 3.6rem);
+  }
+}

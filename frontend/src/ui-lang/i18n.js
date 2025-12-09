@@ -341,13 +341,6 @@ export const copy = {
           },
         },
         {
-          name: { en: "Emily", th: "เอมิลี่" },
-          description: {
-            en: "Meet Emily! She’s Pailin’s 13-year-old host sister, just a freshman in high school. Emily is quirky and always getting herself into trouble. Pailin feels like a big sister to her, and she loves opening up to Pailin about her school and boy problems. She’s obsessed with K-Pop music, TikTok videos of Moo Deng, and doing cute nail designs.",
-            th: "ฉันคือเอมิลี่ น้องสาวโฮสต์ของไพลิน ฉันเป็นเด็กวัย 13 ที่ช่างสงสัยและพูดเก่งมาก บางครั้งก็สร้างเรื่องวุ่นวาย แต่โดยรวมแล้วฉันน่ารักนะ (ฉันว่าอย่างนั้น)",
-          },
-        },
-        {
           name: { en: "Mark", th: "มาร์ค" },
           description: {
             en: "Meet Mark! He’s Pailin’s host dad. He’s a lawyer and makes sure Pailin is settling into her new life in LA. He enjoys skiing and playing pickleball, and he’s a great source of knowledge for Pailin to learn about American culture! He’s also a big history buff and loves game nights with his family, especially trivia nights.",
@@ -355,10 +348,10 @@ export const copy = {
           },
         },
         {
-          name: { en: "Sylvie", th: "ซิลวี่" },
+          name: { en: "Emily", th: "เอมิลี่" },
           description: {
-            en: "Meet Sylvie! She’s Pailin’s host mom. She’s originally from France, and she owns a wine business. She’s easygoing and super welcoming of Pailin, and often gives Pailin heartfelt advice about finding her place in a new country. When she’s not having a glass of red wine, she loves gardening, baking, and hosting dinner parties for her clients.",
-            th: "ฉันคือซิลวี่ แม่โฮสต์ของไพลิน ฉันมาจากฝรั่งเศสและทำงานนำเข้าไวน์ ฉันชอบลองอาหารใหม่ ๆ ชอบอากาศอุ่น ๆ ที่ชายหาด และชอบใช้เวลากับครอบครัว",
+            en: "Meet Emily! She’s Pailin’s 13-year-old host sister, just a freshman in high school. Emily is quirky and always getting herself into trouble. Pailin feels like a big sister to her, and she loves opening up to Pailin about her school and boy problems. She’s obsessed with K-Pop music, TikTok videos of Moo Deng, and doing cute nail designs.",
+            th: "ฉันคือเอมิลี่ น้องสาวโฮสต์ของไพลิน ฉันเป็นเด็กวัย 13 ที่ช่างสงสัยและพูดเก่งมาก บางครั้งก็สร้างเรื่องวุ่นวาย แต่โดยรวมแล้วฉันน่ารักนะ (ฉันว่าอย่างนั้น)",
           },
         },
         {
@@ -366,6 +359,13 @@ export const copy = {
           description: {
             en: "Meet Tyler, Pailin’s coworker at Skylight Books. He’s a bit shy at first, but once you get to know him, he’s funny, thoughtful, and charming. He loves hiking and the outdoors, but he also studies computer programming when he’s not working, and hopes to be able to work from anywhere in the world. And, Pailin might have a little crush on him.",
             th: "ผมคือไทเลอร์ พี่ชายโฮสต์ของไพลิน ผมก็เรียนอยู่ที่ UCLA เช่นกัน ผมยังตัดสินใจไม่ได้ว่าจะเรียนสาขาอะไรดีเลยเปลี่ยนเอกอยู่เรื่อย ๆ ผมเป็นเพื่อนที่ไว้ใจได้และพร้อมลุยเสมอ",
+          },
+        },
+        {
+          name: { en: "Sylvie", th: "ซิลวี่" },
+          description: {
+            en: "Meet Sylvie! She’s Pailin’s host mom. She’s originally from France, and she owns a wine business. She’s easygoing and super welcoming of Pailin, and often gives Pailin heartfelt advice about finding her place in a new country. When she’s not having a glass of red wine, she loves gardening, baking, and hosting dinner parties for her clients.",
+            th: "ฉันคือซิลวี่ แม่โฮสต์ของไพลิน ฉันมาจากฝรั่งเศสและทำงานนำเข้าไวน์ ฉันชอบลองอาหารใหม่ ๆ ชอบอากาศอุ่น ๆ ที่ชายหาด และชอบใช้เวลากับครอบครัว",
           },
         },
       ],

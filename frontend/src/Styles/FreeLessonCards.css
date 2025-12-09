@@ -175,6 +175,7 @@ h3 {
     width: 100%;
     padding: 1.2rem 1.4rem;
     gap: 1rem;
+    min-height:58vh;
   }
 
   .fl-card-level {
@@ -183,7 +184,7 @@ h3 {
   }
 
   .fl-card-title {
-    font-size: clamp(1.2rem, 4.6vw, 1.5rem);
+    font-size: clamp(1rem, 4.6vw, 1.5rem);
     line-height: 1.25;
   }
 

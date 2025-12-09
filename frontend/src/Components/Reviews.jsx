@@ -20,8 +20,10 @@ const Reviews = () => {
         <h2 className="reviews-title">{pick(reviewsCopy.title, ui)}</h2>
         <div className="review-cards-container">
           {items.map((review, index) => (
-            <div key={index} className="review-card">
-              <p className="review-text">{pick(review.text, ui)}</p>
+            <div key={index} className="review-item">
+              <div className="review-card">
+                <p className="review-text">{pick(review.text, ui)}</p>
+              </div>
               <div className="photo-name-container">
                 <img
                   src={`images/${reviewerImages[index]}`}

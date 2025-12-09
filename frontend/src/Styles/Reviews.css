@@ -27,8 +27,15 @@
   background: none;
 }
 
-.review-card {
+.review-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   max-width: 18.75rem;
+}
+
+.review-card {
+  width: 100%;
   text-align: left;
   background-color: white;
   border-radius: 2.25rem 2.25rem 2.25rem 0;
@@ -39,6 +46,7 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 25vh;
+  box-sizing: border-box;
 }
 
 .review-text {
@@ -88,4 +96,60 @@
   font-size: .8rem;
   margin: 0;
   line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .reviews-section {
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  .reviews-container {
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .reviews-title {
+    font-size: clamp(1.8rem, 6vw, 2.2rem);
+    text-align: left;
+  }
+
+  .review-cards-container {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 1.25rem 0 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 1.25rem;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+  }
+
+
+  .review-cards-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .review-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .review-text {
+    font-size: .8rem;
+  }
+
+  .photo-name-container {
+    padding-left: 2vw;
+  }
+
+  .review-item {
+    flex: 0 0 75vw;
+    width: 75vw;
+    max-width: none;
+    scroll-snap-align: start;
+    box-sizing: border-box;
+  }
 }
