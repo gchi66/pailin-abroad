@@ -101,6 +101,7 @@
 
 @media (max-width: 480px) {
   .choose-us-card {
+    margin: 0 1.25rem;
     max-width: 90vw;
     padding: 4vh 4vh;
   }

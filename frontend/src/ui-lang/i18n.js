@@ -201,6 +201,10 @@ export const copy = {
       cta: { en: "SIGN UP FOR FREE", th: "สมัครสมาชิกฟรี" },
     },
     freeLessons: {
+      headerTitle: { en: "Try a free lesson now!", th: "ลองบทเรียนฟรีตอนนี้!" },
+      headerSubtitle: { en: "No sign up needed.", th: "ไม่ต้องสมัครสมาชิก" },
+      headerTitleFirst: { en: "Try a free", th: "ลองบทเรียนฟรี" },
+      headerTitleSecond: { en: "lesson now!", th: "ตอนนี้!" },
       header: { en: "Try a free lesson now! No sign up needed.", th: "ลองบทเรียนฟรีตอนนี้! ไม่ต้องสมัครสมาชิก" },
       cards: [
         {

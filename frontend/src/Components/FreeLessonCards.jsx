@@ -25,7 +25,15 @@ const FreeLessonCards = ({ showHeader = true }) => {
         <section className="free-lesson-header">
           <div className="flh-line" />
           <div className="flh-bubble">
-            <span className="flh-text">{renderText(freeCopy.header)}</span>
+            <span className="flh-text flh-text--title">
+              <span className="flh-title-line">{renderText(freeCopy.headerTitleFirst || freeCopy.headerTitle || freeCopy.header)}</span>
+              <span className="flh-title-line">{renderText(freeCopy.headerTitleSecond)}</span>
+            </span>
+            {freeCopy.headerSubtitle && (
+              <span className="flh-text flh-text--subtitle">
+                {renderText(freeCopy.headerSubtitle)}
+              </span>
+            )}
           </div>
         </section>
       )}

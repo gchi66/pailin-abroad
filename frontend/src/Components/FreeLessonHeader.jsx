@@ -5,7 +5,8 @@ const FreeLessonHeader = () => (
   <section className="free-lesson-header">
     <div className="flh-line" />
     <div className="flh-bubble">
-      <span className="flh-text">Try a free lesson now! No sign up needed.</span>
+      <span className="flh-text flh-text--title">Try a free lesson now!</span>
+      <span className="flh-text flh-text--subtitle">No sign-up needed.</span>
     </div>
   </section>
 );

@@ -26,6 +26,7 @@
   border-radius: 2vw;
   padding: 2vh 5vw;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -33,9 +34,63 @@
 }
 
 .flh-text {
+  display: block;
+  margin: 0;
   font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-size: 2.2vw;
   color: #1E1E1E;
   text-align: center;
+  line-height: 1.15;
+}
+
+.flh-text--title {
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+  font-size: 2.2vw;
+}
+
+.flh-text--subtitle {
+  font-weight: 500;
+  font-size: 1.2vw;
+  line-height: 1.3;
+}
+
+@media (max-width: 480px) {
+  .free-lesson-header {
+    margin: 1.75rem 0 1.75rem 0;
+  }
+
+  .flh-line {
+    display: none;
+  }
+
+  .flh-bubble {
+    width: 100%;
+    max-width: 100%;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0 1.25rem;
+    align-items: flex-start;
+  }
+
+  .flh-text {
+    text-align: left;
+    display: block;
+  }
+
+  .flh-text--title {
+    font-size: clamp(2.4rem, 8vw, 3rem);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .flh-title-line {
+    display: block;
+  }
+
+  .flh-text--subtitle {
+    font-size: clamp(1.05rem, 4.5vw, 1.25rem) ;
+    font-weight: 400;
+    opacity: 1;
+  }
 }
