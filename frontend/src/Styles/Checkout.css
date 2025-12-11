@@ -267,7 +267,14 @@
   }
 }
 
+/* MOBILE STYLES */
+
 @media (max-width: 480px) {
+  .page-header-text {
+    font-size: 2.2rem;
+    font-weight: 700;
+  }
+
   .checkout-card {
     padding: 1.5rem 1rem;
   }
