@@ -270,9 +270,23 @@
 /* MOBILE STYLES */
 
 @media (max-width: 480px) {
+  .checkout-page {
+    padding-top: 12vh;
+  }
+
   .page-header-text {
-    font-size: 2.2rem;
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
     font-weight: 700;
+    line-height: 1.2;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .checkout-page-header-subtitle {
+    font-size: 1rem;
+    line-height: 1.4;
+    white-space: normal;
+    text-align: center;
   }
 
   .checkout-card {

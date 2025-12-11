@@ -55,13 +55,18 @@ const PlanNotice = ({
 
     if (Array.isArray(subtext)) {
       return (
-        <div className="plan-notice-subtext">
-          {subtext.map((line, index) => (
-            <p className="plan-notice-subtext-line" key={index}>
-              {line}
-            </p>
-          ))}
-        </div>
+        <>
+          <div className="plan-notice-subtext plan-notice-subtext--desktop">
+            {subtext.map((line, index) => (
+              <p className="plan-notice-subtext-line" key={index}>
+                {line}
+              </p>
+            ))}
+          </div>
+          <p className="plan-notice-subtext plan-notice-subtext-line plan-notice-subtext--mobile">
+            {subtext.join(" ")}
+          </p>
+        </>
       );
     }
 

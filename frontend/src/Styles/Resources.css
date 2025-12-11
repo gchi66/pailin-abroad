@@ -172,3 +172,39 @@
     align-self: flex-end;
   }
 }
+
+@media (max-width: 480px) {
+  .resources-page-container {
+    padding-top: 12vh;
+    margin-top: 0;
+  }
+
+  .resources-page-header {
+    border-top: none;
+    padding: 2rem 3rem;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .resources-page-header-text {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: normal;
+    text-align: center;
+    width: 100%;
+  }
+
+  .resources-page-header-subtitle {
+    font-size: 1rem;
+    line-height: 1.4;
+    white-space: normal;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .resources-header-image {
+    width: clamp(5rem, 28vw, 8rem);
+    height: auto;
+  }
+}

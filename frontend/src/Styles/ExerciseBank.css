@@ -636,3 +636,37 @@
     padding: 1rem 1.25rem;
   }
 }
+
+@media (max-width: 480px) {
+  .exercise-bank-page-container,
+  .exercise-section-page-container {
+    padding-top: 12vh;
+    margin-top: 0;
+  }
+
+  .exercise-bank-page-header {
+    border-top: none;
+    padding: 2rem 3rem;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .exercise-bank-header-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .exercise-bank-page-header-text {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .exercise-bank-page-subtitle {
+    font-size: 1rem;
+    line-height: 1.4;
+    white-space: normal;
+    max-width: 100%;
+    text-align: center;
+  }
+}

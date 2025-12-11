@@ -25,6 +25,10 @@
   margin: 0;
 }
 
+.plan-notice-subtext--mobile {
+  display: none;
+}
+
 .plan-notice-subtext-line {
   font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
@@ -121,21 +125,56 @@
   .plan-notice {
     padding: 1.5rem;
     gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .plan-notice-heading {
-    font-size: 1.4rem;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    line-height: 1.2;
+    text-align: center;
   }
 
   .plan-notice-subtext-line {
-    font-size: 0.95rem;
+    font-size: clamp(0.95rem, 4vw, 1.05rem);
+    line-height: 1.4;
+    text-align: center;
   }
 
   .plan-notice-cta-divider {
-    font-size: 0.95rem;
+    font-size: clamp(0.95rem, 4vw, 1.05rem);
+    line-height: 1.3;
+    margin: 1rem 0 0 0;
   }
 
   .plan-notice-cta {
     width: 100%;
+    min-width: 0;
+    padding: 0.8rem 1rem;
+    font-size: clamp(0.95rem, 4vw, 1.05rem);
+  }
+
+  .plan-notice-subtext--desktop {
+    display: none;
+  }
+
+  .plan-notice-subtext--mobile {
+    display: block;
+    text-align: center;
+  }
+}
+
+
+/* MOBILE STYLES */
+
+@media (max-width: 480px) {
+  .plan-notice-heading{
+    font-size: 1.3rem;
+  }
+  .plan-notice-subtext-line{
+    font-size: 1rem;
+  }
+  .plan-notice-footer-note {
+    font-size: 1rem;
   }
 }
