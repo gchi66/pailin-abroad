@@ -212,8 +212,8 @@ export const copy = {
           title: { en: "Surfing at Venice Beach", th: "เล่นเซิร์ฟที่เวนิสบีช" },
           focusLabel: { en: "LESSON FOCUS", th: "จุดเน้นบทเรียน" },
           description: {
-            en: "Habits and routines with present simple tense",
-            th: "นิสัยและกิจวัตรประจำวันกับ Present Simple",
+            en: "How to use present simple tense",
+            th: "วิธีใช้ Present Simple Tense",
           },
         },
         {

@@ -58,7 +58,7 @@
 
 .reason-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   gap: 1.5vw;
   font-size: 2.7vh;
@@ -96,6 +96,7 @@
   .checkmark-icon {
     width: 3vh;
     height: 3vh;
+    margin-top: .1em;
   }
 }
 
@@ -113,5 +114,6 @@
   .reason-item {
     font-size: 2.8vh;
     gap: 4vw;
+    line-height: 1.3;
   }
 }

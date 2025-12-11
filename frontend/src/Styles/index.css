@@ -93,7 +93,9 @@ h2 {
   .level-btn,
   .stage-btn,
   .level-nav-button,
-  .account-avatar-option
+  .account-avatar-option,
+  .mobile-user-trigger,
+  .mobile-menu-close
 )) {
   box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
@@ -157,7 +159,9 @@ h2 {
   .level-btn,
   .stage-btn,
   .level-nav-button,
-  .account-avatar-option
+  .account-avatar-option,
+  .mobile-user-trigger,
+  .mobile-menu-close
 )):hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0.3rem 0.3rem 0 #1E1E1E;

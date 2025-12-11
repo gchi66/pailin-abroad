@@ -170,12 +170,13 @@ h3 {
     scroll-snap-align: start;
   }
 
-    .fl-card {
+  .fl-card {
     max-width: 100%;
     width: 100%;
     padding: 1.2rem 1.4rem;
     gap: 1rem;
-    min-height:58vh;
+    min-height: auto;
+    flex: 0 0 auto;
   }
 
   .fl-card-level {

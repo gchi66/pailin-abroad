@@ -32,7 +32,7 @@
 
 .hero-img {
   grid-area: image;
-  max-width: 48%;
+  /* max-width: 48%; */
   width: clamp(320px, 48%, 520px);
   height: auto;
   object-fit: contain;
@@ -48,7 +48,7 @@
   text-align: left;
   position: relative;
   margin-bottom: 0.5rem;
-  max-width: 70vw;
+  /* max-width: 70vw; */
 }
 
 .title-container h2 {
@@ -60,8 +60,8 @@
   position: relative;
   margin-top: 0;
   white-space: normal;
-  max-width: 100%;
-  overflow: hidden;
+  /* max-width: 100%; */
+  /* overflow: hidden; */
   text-shadow: 0.08vw 0.08vw 0.18vw rgba(30,30,30,0.13);
 }
 
@@ -113,7 +113,7 @@
 
 @media (max-width: 480px) {
   .hero {
-    padding: calc(var(--navbar-height, 80px) + 2.5rem) 1.25rem 3rem;
+    padding-top: 7vh;
   }
 
   .hero-card {
@@ -136,7 +136,7 @@
     max-width: 80%;
     width: 100%;
     justify-content: center;
-    margin: 0 auto;
+    margin: 0 auto 1em;
   }
 
   .title-container {

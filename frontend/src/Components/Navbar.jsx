@@ -11,6 +11,7 @@ import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
+import { API_BASE_URL } from "../config/api";
 
 const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const { user } = useAuth();
@@ -19,6 +20,8 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const navRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const mobilePanelRef = useRef(null);
   const {
     showStickyToggle,
     contentLang: stickyContentLang,
@@ -31,7 +34,10 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const handleStickyContentLang = stickySetContentLang || (() => {});
 
   const [isCompactNav, setIsCompactNav] = useState(false);
+  const [isMobileNav, setIsMobileNav] = useState(false);
   const [compactNavDropdowns, setCompactNavDropdowns] = useState({});
+  const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
+  const [userProfileInfo, setUserProfileInfo] = useState({ name: "", email: "", avatar: "" });
 
   const toggleCompactNavDropdown = useCallback((key) => {
     setCompactNavDropdowns((prev) => ({
@@ -49,12 +55,19 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 990px)");
+    const mobileQuery = window.matchMedia("(max-width: 480px)");
     const handleMediaChange = (event) => setIsCompactNav(event.matches);
+    const handleMobileChange = (event) => setIsMobileNav(event.matches);
 
     handleMediaChange(mediaQuery);
+    handleMobileChange(mobileQuery);
     mediaQuery.addEventListener("change", handleMediaChange);
+    mobileQuery.addEventListener("change", handleMobileChange);
 
-    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaChange);
+      mobileQuery.removeEventListener("change", handleMobileChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -62,6 +75,23 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
       setCompactNavDropdowns({});
     }
   }, [isCompactNav]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const menuNode = mobileMenuRef.current;
+      const panelNode = mobilePanelRef.current;
+      if (
+        menuNode &&
+        !menuNode.contains(event.target) &&
+        panelNode &&
+        !panelNode.contains(event.target)
+      ) {
+        setIsMobileUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Fetch user profile to check is_paid status
   useEffect(() => {
@@ -103,6 +133,56 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
     updateNavHeightVar();
   }, [updateNavHeightVar, user, profile]);
 
+  useEffect(() => {
+    const fetchProfileInfo = async () => {
+      if (!user) {
+        setUserProfileInfo({ name: "", email: "", avatar: "" });
+        return;
+      }
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const token = session?.access_token;
+
+        let name = user.user_metadata?.first_name || user.user_metadata?.name || "";
+        const email = user.email || "";
+        let avatar = user.user_metadata?.avatar || "";
+
+        if (token) {
+          const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+          if (response.ok) {
+            const data = await response.json();
+            if (data?.profile) {
+              name = data.profile.name || name;
+              avatar = data.profile.avatar || data.profile.avatar_url || avatar;
+            }
+          }
+        }
+
+        setUserProfileInfo({
+          name: name || "",
+          email,
+          avatar: avatar || "/images/characters/avatar_1.webp",
+        });
+      } catch (err) {
+        console.error("Error fetching profile info:", err);
+        setUserProfileInfo((prev) => ({
+          ...prev,
+          email: user.email || prev.email,
+          avatar: prev.avatar || "/images/characters/avatar_1.webp",
+        }));
+      }
+    };
+
+    fetchProfileInfo();
+  }, [user]);
+
   // Show dropdown if user is not logged in OR is a free user
   const shouldShowLessonsDropdown = !user || !profile?.is_paid;
 
@@ -129,15 +209,35 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
     { id: "membership", label: t("nav.membership", ui), href: withUi("/membership", ui), className: "pricing" },
   ];
 
+  const mobileMenuAvailable = isMobileNav;
+  const showMobilePanel = isMobileNav && isMobileUserMenuOpen;
+
   return (
-    <header className={`navbar${isCompactNav ? " navbar--compact" : ""}`} ref={navRef}>
+    <header className={`navbar${isCompactNav ? " navbar--compact" : ""}${isMobileNav ? " navbar--mobile" : ""}`} ref={navRef}>
+      {mobileMenuAvailable && (
+        <div className="mobile-menu-slot" ref={mobileMenuRef}>
+          <button
+            type="button"
+            className="mobile-user-trigger"
+            aria-label="Open menu"
+            onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}
+          >
+            <img
+              src="/images/menu_hamburger_icon_desktop.png"
+              alt="User menu icon"
+              className="guest-menu-icon"
+            />
+          </button>
+        </div>
+      )}
+
       <div className="logo">
         <NavLink to={withUi("/", ui)}>
           <img src="/images/full-logo.webp" alt="Pailin Abroad Logo" />
         </NavLink>
       </div>
 
-      {!isCompactNav && (
+      {!isCompactNav && !isMobileNav && (
         <nav className="menu">
           <ul>
             {staticNavLinks.map((link, index) => {
@@ -180,9 +280,11 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
           </div>
         )}
         {user ? (
-          <ProfileDropdown
-            extraLinks={isCompactNav ? staticNavLinks : null}
-          />
+          isMobileNav ? null : (
+            <ProfileDropdown
+              extraLinks={isCompactNav ? staticNavLinks : null}
+            />
+          )
         ) : (
           <div className="guest-menu">
             <div className="guest-menu-inner">
@@ -285,6 +387,154 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
           </div>
         )}
       </div>
+      {showMobilePanel && (
+        <>
+          <div className="mobile-menu-panel" ref={mobilePanelRef}>
+            <div className="mobile-menu-header">
+              <LanguageToggle language={ui} setLanguage={setUi} />
+              <button
+                type="button"
+                className="mobile-menu-close"
+                aria-label="Close menu"
+                onClick={() => setIsMobileUserMenuOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            {user ? (
+              <>
+                <div className="mobile-user-card">
+                  <img
+                    src={userProfileInfo.avatar || "/images/characters/avatar_1.webp"}
+                    alt={userProfileInfo.name || user?.email || "User avatar"}
+                    className="mobile-user-avatar"
+                  />
+                  <div className="mobile-user-meta">
+                    <span className="mobile-user-name">{userProfileInfo.name || "User"}</span>
+                    <span className="mobile-user-email">{userProfileInfo.email || user?.email}</span>
+                  </div>
+                </div>
+                <div className="dropdown-divider" />
+              </>
+            ) : (
+              <div className="mobile-auth-links">
+                <button
+                  type="button"
+                  className="dropdown-link"
+                  onClick={() => {
+                    setIsMobileUserMenuOpen(false);
+                    toggleSignupModal();
+                  }}
+                >
+                  {t("authButtons.signUp", ui)}
+                </button>
+                <button
+                  type="button"
+                  className="dropdown-link"
+                  onClick={() => {
+                    setIsMobileUserMenuOpen(false);
+                    toggleLoginModal();
+                  }}
+                >
+                  {t("authButtons.signIn", ui)}
+                </button>
+                <div className="dropdown-divider" />
+              </div>
+            )}
+
+            <div className="dropdown-navlinks mobile-navlinks">
+              {staticNavLinks.map((link, index) => {
+                if (link.dropdown) {
+                  return (
+                    <div key={`mobile-nav-${link.id ?? index}`} className="mobile-collapsible">
+                      <button
+                        type="button"
+                        className="dropdown-link dropdown-collapsible-trigger"
+                        onClick={() => toggleCompactNavDropdown(link.id ?? `dropdown-${index}`)}
+                        aria-expanded={Boolean(compactNavDropdowns[link.id ?? `dropdown-${index}`])}
+                      >
+                        <span>{link.label}</span>
+                        <span
+                          className={`dropdown-arrow${compactNavDropdowns[link.id ?? `dropdown-${index}`] ? " is-open" : ""}`}
+                          aria-hidden="true"
+                        >
+                          ▸
+                        </span>
+                      </button>
+                      {compactNavDropdowns[link.id ?? `dropdown-${index}`] && (
+                        <div className="dropdown-collapsible-content is-open">
+                          <ul>
+                            {link.dropdown.map((child, childIndex) => (
+                              <li key={`mobile-sub-${childIndex}`}>
+                                <button
+                                  type="button"
+                                  className="dropdown-link dropdown-sub-link"
+                                  onClick={() => {
+                                    setIsMobileUserMenuOpen(false);
+                                    navigate(child.href);
+                                  }}
+                                >
+                                  {child.label}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                return (
+                  <button
+                    key={`mobile-nav-${link.id ?? index}`}
+                    type="button"
+                    className={`dropdown-link ${link.className ?? ""}`}
+                    onClick={() => {
+                      setIsMobileUserMenuOpen(false);
+                      navigate(link.href);
+                    }}
+                  >
+                    {link.label}
+                  </button>
+                );
+              })}
+              {user && (
+                <>
+                  <div className="dropdown-divider" />
+                  <button
+                    type="button"
+                    className="dropdown-link dropdown-link--secondary"
+                    onClick={() => {
+                      setIsMobileUserMenuOpen(false);
+                      navigate("/profile");
+                    }}
+                  >
+                    {t("profileDropdown.accountSettings", ui)}
+                  </button>
+                  <button
+                    type="button"
+                    className="dropdown-link dropdown-link--secondary"
+                    onClick={() => {
+                      supabaseClient.auth.signOut();
+                      setIsMobileUserMenuOpen(false);
+                      navigate("/");
+                    }}
+                  >
+                    {t("profileDropdown.logout", ui)}
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+          <div
+            className="mobile-menu-scrim"
+            onClick={() => setIsMobileUserMenuOpen(false)}
+            aria-hidden="true"
+          />
+        </>
+      )}
     </header>
   );
 };
