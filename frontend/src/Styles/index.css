@@ -95,7 +95,10 @@ h2 {
   .level-nav-button,
   .account-avatar-option,
   .mobile-user-trigger,
-  .mobile-menu-close
+  .mobile-menu-close,
+  .mobile-stage-toggle,
+  .mobile-stage-item,
+  .mobile-level-btn
 )) {
   box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
@@ -161,7 +164,10 @@ h2 {
   .level-nav-button,
   .account-avatar-option,
   .mobile-user-trigger,
-  .mobile-menu-close
+  .mobile-menu-close,
+  .mobile-stage-toggle,
+  .mobile-stage-item,
+  .mobile-level-btn
 )):hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0.3rem 0.3rem 0 #1E1E1E;

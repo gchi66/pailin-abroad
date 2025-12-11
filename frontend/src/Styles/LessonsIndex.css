@@ -100,14 +100,14 @@
   background: white;
   border: 0.15rem solid #1E1E1E;
   border-radius: 0.5rem;
-  box-shadow: .2rem .2rem 0px #1E1E1E;
+  box-shadow: none;
   padding: 1rem 2rem;
   font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: #1e1e1e;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
   height: 3.5vw;
   min-width: 20vw;
   position: relative;
@@ -164,13 +164,13 @@
   border: 0.15rem solid #1E1E1E;
   border-radius: 1rem;
   border-radius: 0.5rem;
-  box-shadow: .2rem .2rem 0px #1E1E1E;
+  box-shadow: none;
   padding: 1rem 2rem;
   font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
   min-width: 13vw;
   height: 3.5vw;
   display: flex;
@@ -570,7 +570,7 @@
   .lessons-index-page-header-subtitle {
     width: 100%;
     max-width: 100%;
-    font-size: 0.95rem;
+    font-size: 1rem;
     text-align: center;
     white-space: normal;
   }
@@ -578,8 +578,196 @@
   .lesson-library {
     width: 100%;
     max-width: 100%;
-    padding: 1.5rem 1.25rem 0;
+    padding: 1.5rem .7rem 0;
     box-sizing: border-box;
     align-items: center;
   }
+
+  .lesson-stages {
+    display: none;
+  }
+
+  .stages-levels-subtitle {
+    gap: .5rem;
+    padding: 0 0 1.5rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .level-buttons {
+    display: none;
+  }
+
+  .mobile-stage-selector {
+    width: 100%;
+  }
+
+  .mobile-stage-toggle {
+    width: 100%;
+    background: #91CAFF;
+    border: 0.15rem solid #1E1E1E;
+    border-radius: 0.6rem;
+    padding: 0.9rem 1rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: none;
+  }
+
+  .mobile-stage-caret {
+    font-size: 1.1rem;
+  }
+
+  .mobile-stage-list {
+    margin-top: 0.5rem;
+    border: 0.15rem solid #1E1E1E;
+    border-radius: 0.6rem;
+    box-shadow: none;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-stage-item {
+    padding: 0.8rem 1rem;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    background: #fff;
+    border: none;
+    border-bottom: 0.08rem solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .mobile-stage-item:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-stage-item.is-active {
+    background: #91CAFF;
+  }
+
+  .stage-coming-soon-inline {
+    color: #FF4545;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .mobile-level-buttons {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .mobile-level-buttons::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-level-btn {
+    background: #fff;
+    border: 0.15rem solid #1E1E1E;
+    border-radius: 0.6rem;
+    padding: 0.6rem 1rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .mobile-level-btn.active {
+    background: #91CAFF;
+  }
+
+  .level-wrapper {
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .level-container {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0.6rem;
+    box-shadow: none;
+    border-width: 0.12rem;
+  }
+
+  .lesson-item {
+    padding: 1rem 1.5rem;
+  }
+
+  .lesson-item-left {
+    gap: 2rem;
+  }
+
+  .lesson-number {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+
+  .lesson-index-slot {
+    width: 1.5rem;
+  }
+
+  .lesson-lock-icon {
+    width: 2.5rem;
+    height: auto;
+  }
+
+  .lesson-name {
+    font-size: 1rem;
+  }
+
+  .lesson-focus {
+    font-size: .8rem;
+  }
+
+  .level-header {
+    padding: 1rem 1.25rem;
+    align-items: center;
+  }
+
+  .level-title-group {
+    gap: 0.6rem;
+  }
+
+  .level-header-text {
+    font-size: 1.2rem;
+  }
+
+  .level-header-image {
+    height: 2rem;
+  }
+
+  .backstory-arrow-group {
+    gap: 0.4rem;
+  }
+
+  .backstory-header-text  {
+    font-size: 1rem;
+  }
+
+  .level-complete-badge {
+    font-size: 1rem;
+  }
+
+
+
 }

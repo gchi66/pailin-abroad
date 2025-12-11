@@ -24,6 +24,8 @@ const LessonsIndex = () => {
   const [levelCompletionStatus, setLevelCompletionStatus] = useState(null);
   const [profile, setProfile] = useState(null);
   const [allLessons, setAllLessons] = useState([]); // Store all lessons for first lesson calculation
+  const [isMobileLayout, setIsMobileLayout] = useState(false);
+  const [isMobileStageOpen, setIsMobileStageOpen] = useState(false);
   const { user } = useAuth();
 
   // Track whether the stage has just changed
@@ -149,7 +151,6 @@ const LessonsIndex = () => {
         // Automatically select the first level ONLY when the stage changes
         if (uniqueLevels.length > 0 && isStageChanged.current) {
           setSelectedLevel(uniqueLevels[0]); // Set the first level of the new stage
-          scrollToTop();
           isStageChanged.current = false; // Reset the flag
         }
       } catch (error) {
@@ -198,6 +199,14 @@ const LessonsIndex = () => {
 
     fetchCompletedLessons();
   }, [user]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 480px)");
+    const handler = (e) => setIsMobileLayout(e.matches);
+    handler(mq);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   // Fetch level completion status for the current stage and level
   useEffect(() => {
@@ -267,12 +276,16 @@ const LessonsIndex = () => {
   const handleStageChange = (stage) => {
     setSelectedStage(stage);
     isStageChanged.current = true; // Set the flag to indicate a stage change
-    scrollToTop();
+    if (!isMobileLayout) {
+      scrollToTop();
+    }
   };
 
   const handleLevelSelect = (level) => {
     setSelectedLevel(level);
-    scrollToTop();
+    if (!isMobileLayout) {
+      scrollToTop();
+    }
   };
 
   // Helper function to check if a lesson is completed
@@ -392,50 +405,105 @@ const LessonsIndex = () => {
         )}
         {/* The level buttons and placement test header */}
         <div className="stages-levels-subtitle">
-          {/* <p className="lesson-subtitle">
-            Not sure where to start? Take our <button type="button" className="placement-test-link">Free Placement Test</button>.
-          </p> */}
-
-          <div className="lesson-stages">
-            {stages.map((stage) => (
-              <div className="stage-btn-wrapper" key={stage}>
+          {isMobileLayout ? (
+            <>
+              <div className="mobile-stage-selector">
                 <button
-                  className={`stage-btn ${selectedStage === stage ? "active" : ""}`}
-                  onClick={() => handleStageChange(stage)}
+                  type="button"
+                  className="mobile-stage-toggle"
+                  onClick={() => setIsMobileStageOpen((prev) => !prev)}
+                  aria-expanded={isMobileStageOpen}
                 >
-                  {stage.toUpperCase()}
-                  {stageCompletionMap[stage] && (
-                    <span className="completion-checkmark" aria-hidden="true">
-                      ✓
-                    </span>
-                  )}
+                  <span>{selectedStage.toUpperCase()}</span>
+                  <span className="mobile-stage-caret">▾</span>
                 </button>
-                {stage === "Expert" && (
-                  <span className="stage-coming-soon-badge">COMING SOON!</span>
+                {isMobileStageOpen && (
+                  <div className="mobile-stage-list">
+                    {stages.map((stage) => (
+                      <button
+                        key={`mobile-stage-${stage}`}
+                        type="button"
+                        className={`mobile-stage-item${selectedStage === stage ? " is-active" : ""}`}
+                        onClick={() => {
+                          handleStageChange(stage);
+                          setIsMobileStageOpen(false);
+                        }}
+                      >
+                        <span>{stage.toUpperCase()}</span>
+                        {stageCompletionMap[stage] && (
+                          <span className="completion-checkmark" aria-hidden="true">
+                            ✓
+                          </span>
+                        )}
+                        {stage === "Expert" && (
+                          <span className="stage-coming-soon-inline">Coming Soon!</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
-            ))}
-          </div>
 
-          {/* Level buttons */}
-          <div
-            className={`level-buttons ${stageClassMap[selectedStage] || stageClassMap.Beginner}`}
-          >
-            {levels.map((lvl) => (
-              <button
-                key={lvl}
-                className={`level-btn ${selectedLevel === lvl ? "active" : ""}`}
-                onClick={() => handleLevelSelect(lvl)}
+              <div className="mobile-level-buttons">
+                {levels.map((lvl) => (
+                  <button
+                    key={`mobile-level-${lvl}`}
+                    className={`mobile-level-btn ${selectedLevel === lvl ? "active" : ""}`}
+                    onClick={() => handleLevelSelect(lvl)}
+                  >
+                    LEVEL {lvl}
+                    {levelCompletionMap[`${selectedStage}-${lvl}`] && (
+                      <span className="completion-checkmark" aria-hidden="true">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="lesson-stages">
+                {stages.map((stage) => (
+                  <div className="stage-btn-wrapper" key={stage}>
+                    <button
+                      className={`stage-btn ${selectedStage === stage ? "active" : ""}`}
+                      onClick={() => handleStageChange(stage)}
+                    >
+                      {stage.toUpperCase()}
+                      {stageCompletionMap[stage] && (
+                        <span className="completion-checkmark" aria-hidden="true">
+                          ✓
+                        </span>
+                      )}
+                    </button>
+                    {stage === "Expert" && (
+                      <span className="stage-coming-soon-badge">COMING SOON!</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div
+                className={`level-buttons ${stageClassMap[selectedStage] || stageClassMap.Beginner}`}
               >
-                LEVEL {lvl}
-                {levelCompletionMap[`${selectedStage}-${lvl}`] && (
-                  <span className="completion-checkmark" aria-hidden="true">
-                    ✓
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
+                {levels.map((lvl) => (
+                  <button
+                    key={lvl}
+                    className={`level-btn ${selectedLevel === lvl ? "active" : ""}`}
+                    onClick={() => handleLevelSelect(lvl)}
+                  >
+                    LEVEL {lvl}
+                    {levelCompletionMap[`${selectedStage}-${lvl}`] && (
+                      <span className="completion-checkmark" aria-hidden="true">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Render lessons */}
