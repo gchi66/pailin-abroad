@@ -113,7 +113,7 @@
 
 @media (max-width: 480px) {
   .hero {
-    padding-top: 7vh;
+    padding-top: 12vh;
   }
 
   .hero-card {
@@ -164,6 +164,7 @@
 
   .hero-buttons .free-lessons {
     width: min(100%, 18rem);
+    color: white !important;
   }
 }
 
