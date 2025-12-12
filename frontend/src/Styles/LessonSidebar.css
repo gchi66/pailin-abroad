@@ -78,6 +78,7 @@
     border-radius: .65rem !important;
     padding: .5rem 1rem !important;
     font-size: .8rem !important;
+    border: .10rem solid #1e1e1e !important;
   }
   :where(button.ls-row):hover:not(:disabled),
   :where(button.ls-row):active:not(:disabled) {

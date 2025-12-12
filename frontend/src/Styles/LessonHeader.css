@@ -1,7 +1,7 @@
 /* Full-width lesson banner */
 .lesson-banner {
   width: 100%;
-  background: #E9F4FF;
+  background: #cde1f5;
   border-bottom: 0.15rem solid #1E1E1E;
   margin: 0;
   padding: clamp(3rem, 5vh, 6rem) clamp(1.8rem, 6.5vw, 4.5rem) clamp(2.4rem, 5vh, 4.6rem);
@@ -140,7 +140,7 @@
   }
 
   .lesson-focus-text {
-    max-width: 90%;
+    width: 100%;
   }
 
   .lesson-backstory {
@@ -153,6 +153,15 @@
     padding-top: 0 !important;
   }
 
+  .lesson-backstory {
+    border: .10rem solid #1e1e1e;
+
+  }
+
+  .lesson-backstory-text {
+    line-height: 1.5;
+  }
+
   /* Pull the banner up to meet the navbar, while keeping content clear of the fixed nav */
   .lesson-banner {
     margin-top: calc(-1 * var(--navbar-height, 80px));
@@ -160,9 +169,9 @@
   }
 
   .back-link {
-    top: calc(var(--navbar-height, 80px) + 1rem); /* tuck just under the navbar */
+    top: calc(var(--navbar-height) + 4rem); /* tuck just under the navbar */
     left: clamp(0.6rem, 5vw, .7rem);
-    font-size: .85rem;
+    font-size: .8rem;
   }
 
   .header-lesson-number {

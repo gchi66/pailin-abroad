@@ -644,6 +644,7 @@
     top: 0;
     left: 0;
     width: 100%;
+    border-bottom: .10rem solid #1e1e1e;
   }
 
   /* Hide the logo when the lesson toggle is shown on mobile */

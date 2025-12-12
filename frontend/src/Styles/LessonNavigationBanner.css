@@ -122,6 +122,10 @@
   .lesson-navigation-banner {
     gap: 0.75rem;
     padding: 1.5vh 3vw;
+    border-top: .10rem solid #1e1e1e;
+    border-bottom: .10rem solid #1e1e1e;
+    border-left: none;
+    border-right: none;
   }
 
   .lesson-mark-complete-text {
