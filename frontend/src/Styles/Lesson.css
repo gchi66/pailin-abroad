@@ -100,14 +100,15 @@
   .lc-card {
     border-left: none;
     border-right: none;
-    border-top: 0.15rem solid #1e1e1e;
-    border-bottom: 0.15rem solid #1e1e1e;
+    border-top: 0.10rem solid #1e1e1e;
+    border-bottom: 0.10rem solid #1e1e1e;
     border-radius: 0;
     box-shadow: none;
   }
 
   .lc-head {
     padding: .8rem 1rem;
+    border-bottom: 0.1rem solid #e5e7eb;
   }
 
   .lc-head-title {
