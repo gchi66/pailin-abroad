@@ -86,9 +86,30 @@
     font-size: 1rem;
     padding: .5rem 1.2rem;
     gap: .6rem;
-    width: 100%;
+    width: 97%;
     text-align: center;
     align-items: center;
     justify-content: center;
+  }
+
+  .lesson-content-container {
+    padding: 0 0 3rem;
+  }
+
+  .lc-card {
+    border-left: none;
+    border-right: none;
+    border-top: 0.15rem solid #1e1e1e;
+    border-bottom: 0.15rem solid #1e1e1e;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .lc-head {
+    padding: .8rem 1rem;
+  }
+
+  .lc-head-title {
+    font-size: 1.2rem;
   }
 }

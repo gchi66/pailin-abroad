@@ -29,7 +29,7 @@ export const copy = {
     lessonLabel: { en: "LESSON", th: "บทเรียน" },
     checkpoint: { en: "CHECKPOINT", th: "จุดตรวจ" },
     labels: {
-      comprehension: { en: "COMPREHENSION", th: "คำถามความเข้าใจ" },
+      comprehension: { en: "COMPREHENSION", th: "ความเข้าใจ" },
       transcript: { en: "TRANSCRIPT", th: "บทถอดเสียง" },
       apply: { en: "APPLY", th: "นำไปใช้" },
       understand: { en: "UNDERSTAND", th: "ทำความเข้าใจ" },
@@ -497,7 +497,7 @@ export const copy = {
   },
   lessonPage: {
     sectionFallbacks: {
-      comprehension: { en: "COMPREHENSION QUESTIONS", th: "คำถามความเข้าใจ" },
+      comprehension: { en: "COMPREHENSION", th: "ความเข้าใจ" },
       transcript: { en: "TRANSCRIPT", th: "บทถอดเสียง" },
       practice: { en: "PRACTICE", th: "แบบฝึกหัด" },
       phrasesVerbs: { en: "PHRASES & VERBS", th: "วลีและคำกริยา" },
