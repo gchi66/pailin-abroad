@@ -121,4 +121,8 @@
   .lc-head-title {
     font-size: 1.2rem;
   }
+
+  .lesson-nav-banner-wrapper {
+    margin-top: 0;
+  }
 }
