@@ -93,22 +93,21 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .lesson-navigation-banner {
-    flex-direction: column;
-    gap: 2rem;
-    /* padding: 4vh 4vw; */
+    flex-direction: row;
+    gap: 1rem;
+    padding: 2vh 4vw;
   }
 
   .lesson-nav-left,
   .lesson-nav-right,
   .lesson-nav-center {
-    flex: none;
-    width: 100%;
-    justify-content: center;
+    flex: 1;
+    width: auto;
   }
 
-  .lesson-nav-center {
-    order: -1; /* Move to top on mobile */
-  }
+  .lesson-nav-left { justify-content: flex-start; }
+  .lesson-nav-center { justify-content: center; }
+  .lesson-nav-right { justify-content: flex-end; }
 
   .lesson-mark-complete-text {
     font-size: 1rem;
@@ -120,17 +119,27 @@
 }
 
 @media (max-width: 480px) {
-  .lesson-mark-complete-button {
-    flex-direction: column;
-    gap: 0.5rem;
+  .lesson-navigation-banner {
+    gap: 0.75rem;
+    padding: 1.5vh 3vw;
   }
 
   .lesson-mark-complete-text {
-    font-size: 0.9rem;
-    text-align: center;
+    font-size: 0.8rem;
   }
 
   .lesson-navigation-text {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+  }
+
+  .lesson-mark-complete-button {
+    gap: .5rem;
+  }
+
+
+
+  .lesson-checkmark-icon {
+    width: 1.3rem;
+    height: auto;
   }
 }

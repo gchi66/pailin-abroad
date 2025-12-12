@@ -90,10 +90,11 @@
     text-align: center;
     align-items: center;
     justify-content: center;
+    color: white !important;
   }
 
   .lesson-content-container {
-    padding: 0 0 3rem;
+    padding: 0
   }
 
   .lc-card {

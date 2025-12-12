@@ -353,3 +353,29 @@ h2 {
   box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
   opacity: 0.8;
 }
+
+/* Force consistent button text color/appearance on mobile (iOS Safari tints by default) */
+@media (max-width: 480px) {
+  button,
+  [role="button"],
+  .dropdown-link,
+  .lesson-navigation-text,
+  .mobile-stage-toggle,
+  .mobile-stage-item,
+  .mobile-level-btn,
+  .level-btn,
+  .stage-btn,
+  .lesson-mark-complete-button,
+  .lesson-nav-button,
+  .lesson-navigation-text {
+    color: #1e1e1e !important;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  button:visited,
+  .dropdown-link:visited,
+  .lesson-navigation-text:visited {
+    color: #1e1e1e !important;
+  }
+}

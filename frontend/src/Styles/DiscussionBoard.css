@@ -49,6 +49,7 @@
   resize: vertical;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
+  box-sizing: border-box;
 }
 
 .discussion-textarea::placeholder {
@@ -139,6 +140,13 @@
   gap: 1.25rem;
 }
 
+@media (max-width: 768px) {
+  .discussion-wrapper {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
 .comment-card {
   position: relative;
   display: flex;
@@ -164,7 +172,7 @@
   width: 52px;
   height: 52px;
   border-radius: 999px;
-  border: 0.15rem solid #1E1E1E;
+  /* border: 0.15rem solid #1E1E1E; */
   background: #dbe8ff;
   display: flex;
   align-items: center;
@@ -374,7 +382,9 @@
   }
 
   .comment-card {
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.85rem;
     padding: 1.1rem 1.1rem;
     margin-left: min(calc(var(--comment-depth, 0) * 1.1rem), 2rem);
   }
@@ -385,9 +395,15 @@
   }
 
   .comment-top-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .comment-author-group {
+    gap: 0;
   }
 
   .comment-pin-toggle {

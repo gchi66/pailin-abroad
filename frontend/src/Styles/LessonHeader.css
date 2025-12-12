@@ -168,4 +168,8 @@
   .header-lesson-number {
     font-size: 1.1rem;
   }
+
+  .lc-section-nav-btn {
+    font-size: 1rem !important;
+  }
 }

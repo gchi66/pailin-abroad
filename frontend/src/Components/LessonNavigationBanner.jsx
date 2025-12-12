@@ -116,14 +116,7 @@ const LessonNavigationBanner = ({
     return nextNumber ? `LESSON ${nextNumber}` : "LESSON";
   };
 
-  const getMarkCompleteLabel = () => {
-    if (isCurrentCheckpoint) {
-      const level = currentLesson?.level;
-      const levelPrefix = level ? `LEVEL ${level} ` : "";
-      return `MARK ${levelPrefix}CHECKPOINT AS FINISHED`;
-    }
-    return `MARK LESSON ${getCurrentLessonNumber()} AS FINISHED`;
-  };
+  const getMarkCompleteLabel = () => "MARK LESSON COMPLETE";
 
   return (
     <section className="lesson-navigation-banner">
