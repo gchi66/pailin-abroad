@@ -107,4 +107,8 @@
   .prepare-item {
     padding-left: 0 !important;
   }
+
+  .prepare-text {
+    font-size: 1rem;
+  }
 }

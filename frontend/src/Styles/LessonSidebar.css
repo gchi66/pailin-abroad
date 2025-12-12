@@ -64,3 +64,24 @@
 .ls-row-label {
   pointer-events: none;
 }
+
+
+@media (max-width: 480px) {
+  .ls-list {
+    gap: .3rem;
+    justify-content: flex-start;
+    padding: .2rem 0;
+  }
+  :where(button.ls-row) {
+    box-shadow: none !important;
+    transform: none !important;
+    border-radius: .65rem !important;
+    padding: .5rem 1rem !important;
+  }
+  :where(button.ls-row):hover:not(:disabled),
+  :where(button.ls-row):active:not(:disabled) {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+}
