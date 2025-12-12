@@ -601,7 +601,7 @@
   .lesson-library {
     width: 100%;
     max-width: 100%;
-    padding: 1.5rem .7rem 0;
+    padding: 0 .7rem 0;
     box-sizing: border-box;
     align-items: center;
   }

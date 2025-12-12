@@ -177,4 +177,8 @@
   .plan-notice-footer-note {
     font-size: 1rem;
   }
+
+  .plan-notice  {
+    padding: 3rem 1.5rem;
+  }
 }
