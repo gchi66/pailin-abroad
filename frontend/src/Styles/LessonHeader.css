@@ -130,7 +130,7 @@
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-    margin-top: clamp(2rem, 8vh, 4rem);
+    margin-top: clamp(2rem, 10vh, 7rem);
   }
 
   .banner-content {

@@ -213,7 +213,10 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const showMobilePanel = isMobileNav && isMobileUserMenuOpen;
 
   return (
-    <header className={`navbar${isCompactNav ? " navbar--compact" : ""}${isMobileNav ? " navbar--mobile" : ""}`} ref={navRef}>
+    <header
+      className={`navbar${isCompactNav ? " navbar--compact" : ""}${isMobileNav ? " navbar--mobile" : ""}${stickyToggleVisible ? " navbar--toggle-visible" : ""}`}
+      ref={navRef}
+    >
       {mobileMenuAvailable && (
         <div className="mobile-menu-slot" ref={mobileMenuRef}>
           <button

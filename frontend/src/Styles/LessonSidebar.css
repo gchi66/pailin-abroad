@@ -77,6 +77,7 @@
     transform: none !important;
     border-radius: .65rem !important;
     padding: .5rem 1rem !important;
+    font-size: .8rem !important;
   }
   :where(button.ls-row):hover:not(:disabled),
   :where(button.ls-row):active:not(:disabled) {

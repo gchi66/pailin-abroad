@@ -101,9 +101,14 @@
 }
 
 .navbar-lesson-toggle .language-toggle-btn {
-  padding: 0.4rem 1.1rem;
-  font-size: 0.95rem;
-  /* box-shadow: 0.15rem 0.15rem 0 #1E1E1E; */
+  background: #fff;
+  border: 0.12rem solid #1E1E1E;
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.1;
 }
 
 .navbar-lesson-toggle .language-toggle-btn:hover {
@@ -639,6 +644,17 @@
     top: 0;
     left: 0;
     width: 100%;
+  }
+
+  /* Hide the logo when the lesson toggle is shown on mobile */
+  .navbar.navbar--mobile.navbar--toggle-visible .logo {
+    display: none;
+  }
+
+  .navbar-lesson-toggle .language-toggle-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
   }
 
   .navbar.navbar--mobile .logo {

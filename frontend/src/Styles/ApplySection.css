@@ -35,16 +35,18 @@
   background: white;
   border: 0.1rem solid #1E1E1E;
   border-radius: 3rem;
-  padding: 0.75rem 1.75rem;
+  padding: 1rem 5rem;
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s ease;
-  width: 15vw;
+  width: auto;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
   display: inline-flex;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  white-space: nowrap;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -58,4 +60,11 @@
 
 .apply-submit:hover {
   background: #91CAFF;
+}
+
+
+@media (max-width: 480px) {
+  .apply-submit {
+    padding: .75rem 3rem;
+  }
 }
