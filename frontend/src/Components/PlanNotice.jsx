@@ -53,24 +53,17 @@ const PlanNotice = ({
   const renderSubtext = () => {
     if (!subtext) return null;
 
-    if (Array.isArray(subtext)) {
-      return (
-        <>
-          <div className="plan-notice-subtext plan-notice-subtext--desktop">
-            {subtext.map((line, index) => (
-              <p className="plan-notice-subtext-line" key={index}>
-                {line}
-              </p>
-            ))}
-          </div>
-          <p className="plan-notice-subtext plan-notice-subtext-line plan-notice-subtext--mobile">
-            {subtext.join(" ")}
-          </p>
-        </>
-      );
-    }
+    const lines = Array.isArray(subtext) ? subtext : [subtext];
 
-    return <p className="plan-notice-subtext plan-notice-subtext-line">{subtext}</p>;
+    return (
+      <div className="plan-notice-subtext">
+        {lines.map((line, index) => (
+          <p className="plan-notice-subtext-line" key={index}>
+            {line}
+          </p>
+        ))}
+      </div>
+    );
   };
 
   const primaryCTA = renderCTA(cta);
