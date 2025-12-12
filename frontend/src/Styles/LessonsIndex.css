@@ -714,8 +714,8 @@
     justify-content: center;
     align-items: center;
     gap: 0.3rem;
-    white-space: normal;
-    flex: 1 1 auto;
+    white-space: nowrap;
+    flex: 0 0 auto; /* size to content + padding */
   }
 
   .mobile-level-btn.active {
@@ -733,11 +733,26 @@
     max-width: 100%;
     border-radius: 0.6rem;
     box-shadow: none;
-    border-width: 0.12rem;
+    border-width: 0.10rem;
+  }
+
+  .level-backstory {
+    border-bottom: .05rem solid #1e1e1e;
+  }
+
+  .backstory-container.open {
+    padding: 0 1.5rem;
+  }
+
+  .backstory-content  {
+    font-size: .8rem;
+    line-height: 1.1rem;
   }
 
   .lesson-item {
     padding: 1rem 1.5rem;
+    border-bottom: .05rem solid #1e1e1e;
+    border-top: .05rem solid #1e1e1e;
   }
 
   .lesson-item-left {
@@ -769,6 +784,8 @@
   .level-header {
     padding: 1rem 1.25rem;
     align-items: center;
+    border-bottom: none;
+    border-top: none;
   }
 
   .level-title-group {
