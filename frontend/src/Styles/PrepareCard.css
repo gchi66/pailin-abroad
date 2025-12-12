@@ -17,7 +17,6 @@
 .prepare-title {
   font-size: 1.5rem;
   font-weight: 800;
-  letter-spacing: 0.02em;
 }
 
 .prepare-subtitle {
@@ -76,5 +75,36 @@
 @media (max-width: 768px) {
   .prepare-grid {
     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  }
+}
+
+
+@media (max-width: 480px) {
+  .prepare-head {
+    gap: 0;
+    padding: .8rem 1.5rem;
+  }
+
+  .prepare-head-left {
+    gap: .3rem;
+  }
+
+  .prepare-title {
+    font-size: 1.3rem;
+    text-align: left;
+    letter-spacing: 0;
+  }
+
+  .prepare-subtitle {
+    font-size: .8rem;
+  }
+
+  .prepare-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* exactly two columns */
+    gap: 0.9rem 1.2rem; /* optional: tighter spacing on mobile */
+  }
+
+  .prepare-item {
+    padding-left: 0 !important;
   }
 }

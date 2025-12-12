@@ -639,8 +639,11 @@
   }
 
   .navbar.navbar--mobile .logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     order: 2;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     text-align: center;
     height: 1.5rem;
   }

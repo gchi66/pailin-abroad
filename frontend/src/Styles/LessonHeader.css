@@ -147,3 +147,25 @@
     width: 100%;
   }
 }
+
+@media (max-width: 480px) {
+  .lesson-page-container {
+    padding-top: 0 !important;
+  }
+
+  /* Pull the banner up to meet the navbar, while keeping content clear of the fixed nav */
+  .lesson-banner {
+    margin-top: calc(-1 * var(--navbar-height, 80px));
+    padding-top: calc(var(--navbar-height, 80px) + 1rem);
+  }
+
+  .back-link {
+    top: calc(var(--navbar-height, 80px) + 1rem); /* tuck just under the navbar */
+    left: clamp(0.6rem, 5vw, .7rem);
+    font-size: .85rem;
+  }
+
+  .header-lesson-number {
+    font-size: 1.1rem;
+  }
+}

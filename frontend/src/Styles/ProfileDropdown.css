@@ -108,7 +108,8 @@
 }
 
 .dropdown-navlinks > .dropdown-link,
-.dropdown-navlinks > .dropdown-collapsible > .dropdown-link {
+.dropdown-navlinks > .dropdown-collapsible > .dropdown-link,
+.mobile-navlinks > .mobile-collapsible > .dropdown-link {
   text-transform: none;
   font-size: 1rem;
   font-weight: 700;
