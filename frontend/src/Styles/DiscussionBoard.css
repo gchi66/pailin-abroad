@@ -410,3 +410,14 @@
     font-size: 0.7rem;
   }
 }
+
+
+@media (max-width: 480px) {
+  .discussion-textarea {
+    border: .10rem solid #1e1e1e;
+  }
+
+  .discussion-submit-btn {
+    border: .10rem solid #1e1e1e;
+  }
+}

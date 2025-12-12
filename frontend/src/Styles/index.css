@@ -400,4 +400,33 @@ h2 {
     box-shadow: none;
     outline: none;
   }
+
+  /* Keep red CTAs readable on mobile */
+  .discussion-submit-btn,
+  .listen-cta,
+  .cta-button,
+  .signup-cta-button,
+  .take-the-leap-cta-button,
+  .plan-notice-cta,
+  .lesson-locked-signup-btn,
+  .auth-buttons .join-button,
+  .contact-form button {
+    color: #ffffff !important;
+  }
+}
+
+/* Ensure red-background buttons always use white text */
+:where(
+  .btn-red,
+  .listen-cta,
+  .cta-button,
+  .signup-cta-button,
+  .take-the-leap-cta-button,
+  .plan-notice-cta,
+  .lesson-locked-signup-btn,
+  .auth-buttons .join-button,
+  .discussion-submit-btn,
+  .contact-form button
+) {
+  color: #ffffff !important;
 }
