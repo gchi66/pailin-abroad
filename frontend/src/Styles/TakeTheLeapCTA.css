@@ -1,7 +1,7 @@
 .take-the-leap-cta {
   background: white;
-  border-top: 0.15rem solid #1E1E1E;
-  border-bottom: 0.15rem solid #1E1E1E;
+  border-top: var(--border-thin) solid #1E1E1E;
+  border-bottom: var(--border-thin) solid #1E1E1E;
   text-align: center;
   padding: 7vh 2rem;
   display: flex;
@@ -21,7 +21,7 @@
 .take-the-leap-cta-button {
   background-color: #FF4545;
   color: #FFFFFF;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-size: 1.3rem;
   font-weight: 600;

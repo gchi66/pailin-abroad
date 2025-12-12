@@ -22,8 +22,8 @@
   width: 100%;
   max-width: 100vw;
   background: white;
-  border-top: 0.15rem solid #1E1E1E;
-  border-bottom: 0.15rem solid #1E1E1E;
+  border-top: var(--border-thin) solid #1E1E1E;
+  border-bottom: var(--border-thin) solid #1E1E1E;
   padding: 3rem;
   box-sizing: border-box;
   overflow-y: visible;

@@ -24,7 +24,6 @@
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #1e1e1e;
 }
@@ -39,7 +38,7 @@
   width: 100%;
   min-height: 160px;
   padding: 1rem 1.25rem;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 14px;
   background: #ffffff;
   font-size: var(--lesson-textarea-font-size);
@@ -152,7 +151,7 @@
   display: flex;
   gap: 1rem;
   padding: 1.25rem 1.5rem;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 16px;
   background: #ffffff;
   box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
@@ -163,7 +162,7 @@
 
 .comment-card--pinned {
   border-color: #91caff;
-  box-shadow: 0.2rem 0.2rem 0 rgba(109, 104, 242, 0.55);
+  box-shadow: 0.2rem 0.2rem 0 #91caff;
 }
 
 
@@ -172,7 +171,7 @@
   width: 52px;
   height: 52px;
   border-radius: 999px;
-  /* border: 0.15rem solid #1E1E1E; */
+  /* border: var(--border-thin) solid #1E1E1E; */
   background: #dbe8ff;
   display: flex;
   align-items: center;

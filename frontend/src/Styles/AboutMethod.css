@@ -12,7 +12,7 @@
 
 .about-method-card {
   background: white;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 3vh;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 2rem 2.5rem;

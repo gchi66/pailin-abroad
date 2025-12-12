@@ -71,7 +71,7 @@
   color: #fff;
   font-size: 1rem;
   padding: 0.5rem 2rem;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 2.6rem;
   cursor: pointer;
   width: 50%;

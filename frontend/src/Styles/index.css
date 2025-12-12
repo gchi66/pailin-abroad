@@ -7,6 +7,7 @@
   --rich-text-font-size: 1rem;
   --rich-text-line-height: 1.6;
   --app-bg: #F7FAFD;
+  --border-thin: 0.15rem;
 }
 
 html {
@@ -34,6 +35,12 @@ code {
 h2 {
   margin: 0;
 
+}
+
+@media (max-width: 480px) {
+  :root {
+    --border-thin: 0.10rem;
+  }
 }
 
 :where(button):not(:where(

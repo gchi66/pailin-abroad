@@ -67,7 +67,7 @@
   justify-content: center;
   background-color: #FF4545;
   color: #FFFFFF;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 9999px;
   font-family: "Poppins", sans-serif;
   font-size: 1rem;

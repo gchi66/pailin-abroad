@@ -87,6 +87,11 @@
     grid-template-columns: repeat(2, auto);
     gap: 0.75rem 1.25rem;
     justify-content: flex-start;
+
+  }
+  .footer-top {
+    border-top: .10rem solid #1e1e1e; /* Adds top border */
+    border-bottom: .10rem solid #1e1e1e; /* Adds bottom border */
   }
 }
 

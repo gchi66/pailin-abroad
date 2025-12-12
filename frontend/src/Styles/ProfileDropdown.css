@@ -36,7 +36,7 @@
   top: calc(100% + 0.5rem);
   right: 0;
   background: #ffffff;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 0.5rem;
   box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
   z-index: 1000;

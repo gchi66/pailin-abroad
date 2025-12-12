@@ -235,7 +235,7 @@
   top: calc(100% + 0.5rem);
   left: 0;
   background: white;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 0.5rem;
   list-style: none;
   padding: 0;
@@ -379,7 +379,7 @@
   top: calc(100% + 0.5rem);
   left: 1rem;
   background: #fff;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 0.5rem;
   box-shadow: 0.25rem 0.25rem 0 #1E1E1E;
   padding: 0.75rem;

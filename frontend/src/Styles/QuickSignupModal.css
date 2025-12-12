@@ -109,7 +109,7 @@
 .form-input {
   width: 100%;
   padding: 0.875rem 1rem;
-  border: 0.15rem solid #E0E0E0;
+  border: var(--border-thin) solid #E0E0E0;
   border-radius: 0.75rem;
   font-size: 1rem;
   font-family: "Poppins", sans-serif;
@@ -132,7 +132,7 @@
 /* Error Message */
 .error-message {
   background: rgba(255, 69, 69, 0.1);
-  border: 0.15rem solid rgba(255, 69, 69, 0.3);
+  border: var(--border-thin) solid rgba(255, 69, 69, 0.3);
   border-radius: 0.5rem;
   padding: 0.75rem 1rem;
   color: #ff4545;

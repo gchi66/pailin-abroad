@@ -63,7 +63,7 @@
   margin-bottom: 0.75rem;
   font-size: 0.95rem;
   font-weight: 500;
-  border: 0.15rem solid #ddd;
+  border: var(--border-thin) solid #ddd;
   border-radius: 999px;
   background: #fff;
   cursor: pointer;
@@ -112,7 +112,7 @@
 .modal-content .form-group input {
   width: 85%;
   padding: 0.9rem 1rem;
-  border: 0.15rem solid #ddd;
+  border: var(--border-thin) solid #ddd;
   border-radius: 0.75rem;
   font-size: 0.95rem;
   font-family: "Poppins", sans-serif;

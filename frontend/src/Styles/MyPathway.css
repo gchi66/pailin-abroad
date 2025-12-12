@@ -28,7 +28,7 @@
   background: #FFFFFF;
   border-radius: 3.6rem;
   padding: 4vh 4vw 6vh;
-  border: 0.15rem solid #1e1e1e;
+  border: var(--border-thin) solid #1e1e1e;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -142,8 +142,8 @@
   width: calc(100%);
   margin-left: -4vw;
   margin-right: -4vw;
-  border-top: 0.15rem solid #1E1E1E;
-  border-bottom: 0.15rem solid #1E1E1E;
+  border-top: var(--border-thin) solid #1E1E1E;
+  border-bottom: var(--border-thin) solid #1E1E1E;
   padding: 1.5rem 4vw;
 }
 
@@ -245,7 +245,7 @@
   flex: 1;
   height: 0.6rem;
   background-color: white;
-  border: 0.15rem solid #1E1E1E;
+  border: var(--border-thin) solid #1E1E1E;
   border-radius: 0.3rem;
   position: relative;
   overflow: hidden;
@@ -282,7 +282,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 2rem;
-  border: 0.15rem solid #1e1e1e;
+  border: var(--border-thin) solid #1e1e1e;
   border-radius: 1rem;
   text-decoration: none;
   transition: background 0.3s ease;
@@ -379,7 +379,7 @@
 
 .pathway-comment-item {
   padding: 1.5rem;
-  border: 0.15rem solid #1e1e1e;
+  border: var(--border-thin) solid #1e1e1e;
   border-radius: 1rem;
   background: white;
 }

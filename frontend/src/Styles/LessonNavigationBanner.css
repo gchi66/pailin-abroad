@@ -1,7 +1,7 @@
 .lesson-navigation-banner {
   background: white;
-  border-top: 0.15rem solid #1E1E1E;
-  border-bottom: 0.15rem solid #1E1E1E;
+  border-top: var(--border-thin) solid #1E1E1E;
+  border-bottom: var(--border-thin) solid #1E1E1E;
   padding: 3vh 4vw;
   display: flex;
   align-items: center;
