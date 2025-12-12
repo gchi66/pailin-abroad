@@ -10,16 +10,12 @@
   padding: 0.6rem 0.2rem;
   margin: 0;
   overflow-x: auto;
-  scrollbar-width: thin;
+  scrollbar-width: none; /* hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* hide scrollbar in IE/Edge */
 }
 
 .ls-list::-webkit-scrollbar {
-  height: 0.6rem;
-}
-
-.ls-list::-webkit-scrollbar-thumb {
-  background: rgba(30, 30, 30, 0.3);
-  border-radius: 999px;
+  display: none; /* hide scrollbar in WebKit */
 }
 
 .ls-row {
@@ -57,7 +53,7 @@
 }
 
 .ls-active {
-  background: #e9f4ff;
+  background: #cde1f5;
   font-weight: 600;
 }
 
@@ -70,12 +66,12 @@
   .ls-list {
     gap: .3rem;
     justify-content: flex-start;
-    padding: .2rem 0;
+    padding: 0 0 0 .5rem;
   }
   :where(button.ls-row) {
     box-shadow: none !important;
     transform: none !important;
-    border-radius: .65rem !important;
+    /* border-radius: .65rem !important; */
     padding: .5rem 1rem !important;
     font-size: .8rem !important;
     border: .10rem solid #1e1e1e !important;

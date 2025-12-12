@@ -378,4 +378,26 @@ h2 {
   .lesson-navigation-text:visited {
     color: #1e1e1e !important;
   }
+
+  /* Prevent language toggle buttons from turning blue or showing tap highlight */
+  .language-toggle-btn,
+  .language-toggle-btn--disabled {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #ffffff !important;
+    color: #1e1e1e !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .language-toggle-btn:hover,
+  .language-toggle-btn:active,
+  .language-toggle-btn:focus,
+  .language-toggle-btn--disabled:hover,
+  .language-toggle-btn--disabled:active,
+  .language-toggle-btn--disabled:focus {
+    background: #ffffff !important;
+    color: #1e1e1e !important;
+    box-shadow: none;
+    outline: none;
+  }
 }
