@@ -222,8 +222,8 @@ const AccountSettings = () => {
   };
 
   return (
-    <main className="pathway-main">
-      <div className="pathway-container">
+    <main className="account-main">
+      <div className="account-container">
         {/* Header */}
         <div className="account-header">
           <h1 className="account-title">ACCOUNT SETTINGS</h1>
