@@ -181,6 +181,11 @@
 }
 
 @media (max-width: 480px) {
+  .topic-detail-page-container {
+    padding-top: 10vh;
+    margin-top: 0;
+  }
+
   .topic-detail-header {
     padding: 2rem 1rem;
     min-height: 15vh;

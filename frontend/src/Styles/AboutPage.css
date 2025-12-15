@@ -113,12 +113,11 @@
 
 @media (max-width: 480px) {
   .about-page-container {
-    padding-top: 27vh;
+    padding-top: 10vh;
     margin-top: 0;
   }
 
   .about-page-header {
-    border-top: none;
     padding: 2rem 3rem;
     align-items: center;
     gap: 1rem;
