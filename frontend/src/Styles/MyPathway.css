@@ -35,6 +35,114 @@
   margin: 14vh auto 4vh auto;
 }
 
+.pathway-card-mobile {
+  width: 100%;
+  background: #fff;
+  border: 0.12rem solid #1E1E1E;
+  border-radius: 1.5rem;
+  padding: 1.5rem 1.25rem;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pathway-card-header-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pathway-card-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pathway-avatar-mobile {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pathway-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pathway-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.95rem;
+  color: #1e1e1e;
+}
+
+.pathway-card-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pathway-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pathway-stat-label {
+  font-size: 0.95rem;
+  color: #1e1e1e;
+}
+
+.pathway-stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.pathway-card-view {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pathway-card-view-label {
+  font-size: 0.95rem;
+  color: #1e1e1e;
+}
+
+.pathway-card-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.pathway-card-select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  padding-right: 2.25rem;
+  border-radius: 0.8rem;
+  border: 0.1rem solid #1E1E1E;
+  background: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 9l5 5 5-5' fill='none' stroke='%231e1e1e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 0.9rem) center;
+  background-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.pathway-card-select::-ms-expand {
+  display: none;
+}
+
 /* Header Section */
 .pathway-header {
   display: flex;
@@ -224,6 +332,113 @@
   margin: 0;
   flex-shrink: 0;
   font-family: "Poppins", sans-serif;
+}
+
+.pathway-featured-resources {
+  width: 98%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem .5rem;
+}
+
+.pathway-featured-header {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 0 .5rem;
+}
+
+.pathway-featured-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1e1e1e;
+}
+
+.pathway-featured-subtitle {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  color: #3a3a3a;
+  line-height: 1.4;
+}
+
+.pathway-featured-upgrade {
+  color: #FF4545;
+  font-weight: 700;
+}
+
+.pathway-featured-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 .5rem;
+}
+
+.resource-card-compact {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border: 0.12rem solid #1e1e1e;
+  border-radius: 1rem;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+}
+
+.resource-card-compact-disabled {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.resource-card-compact-media {
+  flex: 0 0 4.5rem;
+  height: 4.5rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.resource-card-compact-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resource-card-compact-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.resource-card-compact-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.resource-card-compact-desc {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #1e1e1e;
+  line-height: 1.35;
+}
+
+.pathway-featured-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.pathway-featured-link {
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: #1e1e1e;
+}
+
+.pathway-featured-link:hover {
+  text-decoration: underline;
 }
 
 .pathway-next-lesson-label {
@@ -543,6 +758,10 @@
     padding: 3vh 4vw;
   }
 
+  .pathway-card-mobile {
+    max-width: 100%;
+  }
+
   .pathway-header {
     flex-direction: column;
     gap: 2rem;
@@ -610,8 +829,15 @@
 
 @media (max-width: 480px) {
   .pathway-container {
-    width: 95%;
-    padding: 2vh 3vw;
+    width: 98%;
+    padding: 10vh 0 0;
+    border: none;
+    background: transparent;
+    margin: 0;
+  }
+
+  .pathway-content {
+    padding: 0 .5rem;
   }
 
   .pathway-avatar {
@@ -629,6 +855,10 @@
     gap: 0.5rem;
   }
 
+  .pathway-plan-notice-wrapper .plan-notice {
+    padding-top: 0;
+  }
+
   .pathway-counter-number {
     font-size: 1.5rem;
   }
@@ -640,4 +870,26 @@
   .pathway-section-title {
     font-size: 1.3rem;
   }
+
+  .pathway-footer {
+    padding-top: 0 !important;
+  }
+
+  .pathway-card-mobile {
+    width: 100%;
+    border: 0.1rem solid #1E1E1E;
+    box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .pathway-featured-resources {
+    padding: 1rem 0;
+  }
+
+  .resource-card-compact {
+    padding: 1rem 1.1rem;
+  }
+
+
 }

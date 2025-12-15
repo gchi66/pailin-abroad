@@ -20,6 +20,7 @@ const MyPathway = () => {
   const [showAllCompleted, setShowAllCompleted] = useState(false);
   const [isPaidMember, setIsPaidMember] = useState(null);
   const [allLessons, setAllLessons] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
   const isFreePlanUser = Boolean(user) && isPaidMember === false;
@@ -202,6 +203,24 @@ const MyPathway = () => {
 
     fetchUserProfile();
   }, [user]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 480px)");
+    const handleChange = (event) => setIsMobile(event.matches);
+    setIsMobile(mq.matches);
+    if (mq.addEventListener) {
+      mq.addEventListener("change", handleChange);
+    } else {
+      mq.addListener(handleChange);
+    }
+    return () => {
+      if (mq.removeEventListener) {
+        mq.removeEventListener("change", handleChange);
+      } else {
+        mq.removeListener(handleChange);
+      }
+    };
+  }, []);
 
   // Fetch paid status so we can surface free-plan UI
   useEffect(() => {
@@ -552,76 +571,128 @@ const MyPathway = () => {
         {/* Main Content - Show only when not loading and no error */}
         {!loading && !error && (
           <>
-            {/* Header Section */}
-            <div className="pathway-header">
-              <div className="pathway-header-left">
-                <img
-                  src="/images/characters/pailin-blue-left.png"
-                  alt={uiText.profileAvatar}
-                  className="pathway-avatar"
-                />
-                <div className="pathway-user-info">
-                  <h2 className="pathway-welcome">
-                    {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
-                  </h2>
-                  <div className="pathway-account-info">
-                    {/* <span className="pathway-level">Level: Upper Intermediate</span> */}
-                    <div className="pathway-plan">
-                      <span className="pathway-plan-text">
-                        {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
-                      </span>
-                      {isFreePlanUser && (
-                        <Link to="/membership" className="pathway-plan-upgrade-link">
-                          {uiText.upgrade}
-                        </Link>
-                      )}
+            {isMobile ? (
+              <div className="pathway-card-mobile">
+                <div className="pathway-card-header-mobile">
+                  <div className="pathway-card-profile">
+                    <img
+                      src={userProfile?.avatar_image || "/images/characters/pailin-blue-left.png"}
+                      alt={uiText.profileAvatar}
+                      className="pathway-avatar-mobile"
+                    />
+                    <div className="pathway-card-text">
+                      <h2 className="pathway-welcome">
+                        {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
+                      </h2>
+                      <div className="pathway-card-meta">
+                        <span className="pathway-level">Level: {userStats?.level_label || "—"}</span>
+                        <span className="pathway-plan-text">
+                          {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
+                        </span>
+                        <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
+                      </div>
                     </div>
-                    <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
+                  </div>
+                  <div className="pathway-card-stats">
+                    <div className="pathway-stat">
+                      <span className="pathway-stat-label">{uiText.lessonsComplete}</span>
+                      <span className="pathway-stat-value">{userStats?.lessons_completed || 0}</span>
+                    </div>
+                    <div className="pathway-stat">
+                      <span className="pathway-stat-label">{uiText.levelsComplete}</span>
+                      <span className="pathway-stat-value">{userStats?.levels_completed || 0}</span>
+                    </div>
+                  </div>
+                  <div className="pathway-card-view">
+                    <label className="pathway-card-view-label">View:</label>
+                    <div className="pathway-card-select-wrapper">
+                      <select
+                        className="pathway-card-select"
+                        value={activeTab}
+                        onChange={(e) => setActiveTab(e.target.value)}
+                      >
+                        <option value="pathway">{uiText.myPathway}</option>
+                        <option value="completed">{uiText.completed}</option>
+                        <option value="liked">{uiText.myLikedLessonsTab}</option>
+                        <option value="comments">{uiText.commentHistoryTab}</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
+            ) : (
+              <>
+                <div className="pathway-header">
+                  <div className="pathway-header-left">
+                    <img
+                      src={userProfile?.avatar_image || "/images/characters/pailin-blue-left.png"}
+                      alt={uiText.profileAvatar}
+                      className="pathway-avatar"
+                    />
+                    <div className="pathway-user-info">
+                      <h2 className="pathway-welcome">
+                        {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
+                      </h2>
+                      <div className="pathway-account-info">
+                        {/* <span className="pathway-level">Level: Upper Intermediate</span> */}
+                        <div className="pathway-plan">
+                          <span className="pathway-plan-text">
+                            {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
+                          </span>
+                          {isFreePlanUser && (
+                            <Link to="/membership" className="pathway-plan-upgrade-link">
+                              {uiText.upgrade}
+                            </Link>
+                          )}
+                        </div>
+                        <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
+                      </div>
+                    </div>
+                  </div>
 
-              <div className="pathway-header-right">
-                <div className="pathway-counter">
-                  <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.lessonsComplete)}</span>
-                  <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
+                  <div className="pathway-header-right">
+                    <div className="pathway-counter">
+                      <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.lessonsComplete)}</span>
+                      <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
+                    </div>
+                    <div className="pathway-counter">
+                      <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.levelsComplete)}</span>
+                      <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="pathway-counter">
-                  <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.levelsComplete)}</span>
-                  <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Navigation Tabs */}
-            <nav className="pathway-nav">
-              <div className="pathway-tabs">
-                <button
-                  className={`pathway-tab ${activeTab === "pathway" ? "active" : ""}`}
-                  onClick={() => setActiveTab("pathway")}
-                >
-                  {uiText.myPathway}
-                </button>
-                <button
-                  className={`pathway-tab ${activeTab === "completed" ? "active" : ""}`}
-                  onClick={() => setActiveTab("completed")}
-                >
-                  {uiText.completed}
-                </button>
-                <button
-                  className={`pathway-tab ${activeTab === "liked" ? "active" : ""}`}
-                  onClick={() => setActiveTab("liked")}
-                >
-                  {uiText.myLikedLessonsTab}
-                </button>
-                <button
-                  className={`pathway-tab ${activeTab === "comments" ? "active" : ""}`}
-                  onClick={() => setActiveTab("comments")}
-                >
-                  {uiText.commentHistoryTab}
-                </button>
-              </div>
-            </nav>
+                {/* Navigation Tabs */}
+                <nav className="pathway-nav">
+                  <div className="pathway-tabs">
+                    <button
+                      className={`pathway-tab ${activeTab === "pathway" ? "active" : ""}`}
+                      onClick={() => setActiveTab("pathway")}
+                    >
+                      {uiText.myPathway}
+                    </button>
+                    <button
+                      className={`pathway-tab ${activeTab === "completed" ? "active" : ""}`}
+                      onClick={() => setActiveTab("completed")}
+                    >
+                      {uiText.completed}
+                    </button>
+                    <button
+                      className={`pathway-tab ${activeTab === "liked" ? "active" : ""}`}
+                      onClick={() => setActiveTab("liked")}
+                    >
+                      {uiText.myLikedLessonsTab}
+                    </button>
+                    <button
+                      className={`pathway-tab ${activeTab === "comments" ? "active" : ""}`}
+                      onClick={() => setActiveTab("comments")}
+                    >
+                      {uiText.commentHistoryTab}
+                    </button>
+                  </div>
+                </nav>
+              </>
+            )}
 
             {/* Tab Content */}
             <div className="pathway-content">
@@ -633,6 +704,40 @@ const MyPathway = () => {
               <Link to="/free-lessons" className="pathway-library-link">
                 {uiText.goToFreeLessonLibrary}
               </Link>
+            </div>
+
+            {/* Featured Resources (mobile emphasis) */}
+            <div className="pathway-featured-resources">
+              <div className="pathway-featured-header">
+                <h3 className="pathway-featured-title">Featured Resources</h3>
+                <p className="pathway-featured-subtitle">
+                  Members get full access to all of our Resource pages! Here are some that we think you’d like.
+                  <Link to="/membership" className="pathway-featured-upgrade"> Upgrade</Link> your membership to get full access!
+                </p>
+              </div>
+              <div className="pathway-featured-cards">
+                <Link to="/exercise-bank" className="resource-card-compact">
+                  <div className="resource-card-compact-media">
+                    <img src="/images/resources_exercise_bank.webp" alt="Exercise Bank" />
+                  </div>
+                  <div className="resource-card-compact-copy">
+                    <h4 className="resource-card-compact-title">Exercise Bank</h4>
+                    <p className="resource-card-compact-desc">Additional practice exercises for those difficult grammar topics</p>
+                  </div>
+                </Link>
+                <div className="resource-card-compact resource-card-compact-disabled">
+                  <div className="resource-card-compact-media">
+                    <img src="/images/resources_common_mistakes.webp" alt="Common Mistakes" />
+                  </div>
+                  <div className="resource-card-compact-copy">
+                    <h4 className="resource-card-compact-title">Common Mistakes</h4>
+                    <p className="resource-card-compact-desc">Additional practice exercises for those difficult grammar topics</p>
+                  </div>
+                </div>
+              </div>
+              <div className="pathway-featured-cta">
+                <Link to="/resources" className="pathway-featured-link">SEE ALL RESOURCE PAGES &gt;</Link>
+              </div>
             </div>
           </>
         )}

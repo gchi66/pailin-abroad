@@ -783,7 +783,6 @@
   .onboarding-password-title {
     font-size: 1.75rem;
     margin-bottom: 2rem;
-    letter-spacing: .1rem;
   }
 
   .onboarding-password-form {
@@ -831,6 +830,7 @@
 
   .onboarding-benefit-text {
     font-size: 1rem;
+    text-align: left;
   }
 
 
@@ -985,7 +985,8 @@
   }
 
   .onboarding-benefits-list {
-    gap: 1.25rem;
+    gap: 1rem;
+    padding: 0 4rem;
   }
 
   .onboarding-benefit-item {
@@ -1046,5 +1047,9 @@
   .onboarding-back-btn {
     width: 100%;
     right: 0;
+  }
+
+  .onboarding-confirmation-button {
+    margin-top: 0 !important;
   }
 }
