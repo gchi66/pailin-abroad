@@ -240,13 +240,11 @@ const Onboarding = () => {
     // Benefits Step (Step 3)
     benefitsTitle: pickLang("What's included in my free account?", "บัญชีฟรีของฉันมีอะไรบ้าง?"),
     benefit1: pickLang("Access to the 1st lesson of each level – 12 lessons total!", "เข้าถึงบทเรียนแรกของแต่ละระดับ – รวม 12 บทเรียน!"),
-    benefit2: pickLang("Leave comments on free lessons and get feedback from us!", "แสดงความคิดเห็นในบทเรียนฟรีและได้รับคำตอบจากเรา!"),
-    benefit3: pickLang("Partial access to our Resource pages, which include:", "เข้าถึงหน้าแหล่งข้อมูลบางส่วน ซึ่งรวมถึง:"),
-    resource1: pickLang("Grammar exercise bank", "คลังแบบฝึกหัดไวยากรณ์"),
-    resource2: pickLang("Common mistakes made by Thai speakers", "ข้อผิดพลาดที่คนไทยมักทำ"),
-    resource3: pickLang("Useful phrases & phrasal verbs", "วลีที่มีประโยชน์และ phrasal verbs"),
-    resource4: pickLang("American culture notes", "บันทึกวัฒนธรรมอเมริกัน"),
-    resource5: pickLang("Reference pages to supplement your English learning", "หน้าอ้างอิงเพื่อเสริมการเรียนภาษาอังกฤษ"),
+    benefit2: pickLang("See common mistakes made by Thai speakers", "ดูข้อผิดพลาดที่พบบ่อยของผู้พูดภาษาไทย"),
+    benefit3: pickLang("Access to our Featured Exercises Bank", "เข้าถึงคลังแบบฝึกหัดเด่นของเรา"),
+    benefit4: pickLang("Access to our Featured Topics Library", "เข้าถึงคลังหัวข้อเด่นของเรา"),
+    benefit5: pickLang("Learn useful phrases & phrasal verbs", "เรียนรู้วลีและสำนวนที่มีประโยชน์"),
+    benefit6: pickLang("Leave comments on free lessons and get feedback from us!", "แสดงความคิดเห็นในบทเรียนฟรีและรับคำตอบจากเรา!"),
 
     // Confirmation Step (Step 4)
     confirmationTitle: pickLang("You're all set!", "เสร็จเรียบร้อยแล้ว!"),
@@ -509,9 +507,6 @@ const Onboarding = () => {
       case 0:
         return (
           <div className="onboarding-welcome">
-            <h1 className="onboarding-welcome-title">
-              {uiText.welcomeTitle}
-            </h1>
             <div className="onboarding-avatar">
               <img
                 src="/images/characters/pailin-blue-left.png"
@@ -519,12 +514,17 @@ const Onboarding = () => {
                 className="onboarding-avatar-image"
               />
             </div>
-            <p className="onboarding-welcome-subtitle">
-              {uiText.welcomeSubtitle}
-            </p>
-            <p className="onboarding-welcome-description">
-              {uiText.welcomeDescription}
-            </p>
+            <div className="onboarding-welcome-text">
+              <h1 className="onboarding-welcome-title">
+                {uiText.welcomeTitle}
+              </h1>
+              <p className="onboarding-welcome-subtitle">
+                {uiText.welcomeSubtitle}
+              </p>
+              <p className="onboarding-welcome-description">
+                {uiText.welcomeDescription}
+              </p>
+            </div>
           </div>
         );
       case 1:
@@ -697,19 +697,19 @@ const Onboarding = () => {
           </div>
         );
       case 3: {
-        const resourceBenefits = [
-          uiText.resource1,
-          uiText.resource2,
-          uiText.resource3,
-          uiText.resource4,
-          uiText.resource5
+        const benefits = [
+          uiText.benefit1,
+          uiText.benefit2,
+          uiText.benefit3,
+          uiText.benefit4,
+          uiText.benefit5,
+          uiText.benefit6
         ];
-        const coreBenefits = [uiText.benefit1, uiText.benefit2, uiText.benefit3];
         return (
           <div className="onboarding-benefits">
             <h2 className="onboarding-section-title">{uiText.benefitsTitle}</h2>
             <div className="onboarding-benefits-list">
-              {[...coreBenefits, ...resourceBenefits].map((benefit, index) => (
+              {benefits.map((benefit, index) => (
                 <div className="onboarding-benefit-item" key={`benefit-${index}`}>
                   <span className="onboarding-benefit-check">
                     <img
@@ -835,36 +835,36 @@ const Onboarding = () => {
 
         {/* Step Content */}
         <div className="onboarding-content">
-          <div className="onboarding-card-wrapper">
-            <div className="onboarding-card-header-mobile">
-              <div className="onboarding-card-header-spacer" aria-hidden="true" />
-              <div className="onboarding-card-lang-toggle">
-                <button
-                  className={`onboarding-lang-btn ${uiLang === 'en' ? 'active' : ''}`}
-                  onClick={() => setUiLang('en')}
-                  aria-label="Switch to English"
-                >
-                  EN
-                </button>
-                <span className="onboarding-lang-separator">|</span>
-                <button
-                  className={`onboarding-lang-btn ${uiLang === 'th' ? 'active' : ''}`}
-                  onClick={() => setUiLang('th')}
-                  aria-label="Switch to Thai"
-                >
-                  TH
-                </button>
+          {isMobile ? (
+            <div className="onboarding-card-wrapper">
+              <div className="onboarding-card-header-mobile">
+                <div className="onboarding-card-header-spacer" aria-hidden="true" />
+                <div className="onboarding-card-lang-toggle">
+                  <button
+                    className={`onboarding-lang-btn ${uiLang === 'en' ? 'active' : ''}`}
+                    onClick={() => setUiLang('en')}
+                    aria-label="Switch to English"
+                  >
+                    EN
+                  </button>
+                  <span className="onboarding-lang-separator">|</span>
+                  <button
+                    className={`onboarding-lang-btn ${uiLang === 'th' ? 'active' : ''}`}
+                    onClick={() => setUiLang('th')}
+                    aria-label="Switch to Thai"
+                  >
+                    TH
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="onboarding-card-body">
-              {renderStepContent()}
-            </div>
-            {isMobile && step < 4 && (
-              <div className="onboarding-mobile-progress">
-                {renderProgressDots()}
+              <div className="onboarding-card-body">
+                {renderStepContent()}
               </div>
-            )}
-            {isMobile && (
+              {step < 4 && (
+                <div className="onboarding-mobile-progress">
+                  {renderProgressDots()}
+                </div>
+              )}
               <div className="onboarding-mobile-footer">
                 <div className="onboarding-mobile-footer-left">
                   {step > 0 ? (
@@ -890,8 +890,10 @@ const Onboarding = () => {
                   )}
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            renderStepContent()
+          )}
         </div>
 
         {/* Bottom Navigation */}

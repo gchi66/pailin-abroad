@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { useUiLang } from "../ui-lang/UiLangContext";
 import supabaseClient from "../supabaseClient";
 import SubscriptionBilling from "../Components/SubscriptionBilling";
 import { API_BASE_URL } from "../config/api";
+import { FREE_PLAN_BENEFITS } from "../constants/planBenefits";
 import "../Styles/AccountSettings.css";
 
 const AccountSettings = () => {
@@ -24,6 +26,9 @@ const AccountSettings = () => {
   const [showManageAccount, setShowManageAccount] = useState(false);
   const [profileImage, setProfileImage] = useState(avatarOptions[0]);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isPaidMember, setIsPaidMember] = useState(null);
+  const { ui: uiLang } = useUiLang();
 
   const handleSaveFirstName = () => {
     // TODO: Save to backend
@@ -39,6 +44,52 @@ const AccountSettings = () => {
     setProfileImage(src);
     setShowAvatarPicker(false);
   };
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 480px)");
+    const handleChange = (event) => setIsMobile(event.matches);
+    setIsMobile(mq.matches);
+    if (mq.addEventListener) {
+      mq.addEventListener("change", handleChange);
+    } else {
+      mq.addListener(handleChange);
+    }
+    return () => {
+      if (mq.removeEventListener) {
+        mq.removeEventListener("change", handleChange);
+      } else {
+        mq.removeListener(handleChange);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchPlanStatus = async () => {
+      if (!user) {
+        setIsPaidMember(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("is_paid")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        setIsPaidMember(data?.is_paid ?? null);
+      } catch (planError) {
+        console.error("Error fetching plan status:", planError.message || planError);
+        setIsPaidMember(null);
+      }
+    };
+
+    fetchPlanStatus();
+  }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -212,7 +263,38 @@ const AccountSettings = () => {
         );
 
       case "billing":
-        return (
+        return isMobile && isPaidMember === false ? (
+          <div className="account-free-plan-card">
+            <div className="account-free-plan-header">
+              <span className="account-free-plan-label">Current plan:</span>
+              <span className="account-free-plan-value">FREE</span>
+            </div>
+            <div className="account-free-plan-body">
+              <p className="account-free-plan-included">Included in plan:</p>
+              <ul className="account-free-plan-list">
+                {(uiLang === "th" ? FREE_PLAN_BENEFITS.th : FREE_PLAN_BENEFITS.en).map((item) => (
+                  <li key={item} className="account-free-plan-item">
+                    <img
+                      src="/images/blue-checkmark.webp"
+                      alt=""
+                      aria-hidden="true"
+                      className="account-free-plan-check"
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="account-free-plan-footer">
+              <p className="account-free-plan-cta-text">
+                Want access to our <em>full</em> lesson library?
+              </p>
+              <Link to="/membership" className="account-free-plan-btn">
+                BECOME A MEMBER
+              </Link>
+            </div>
+          </div>
+        ) : (
           <SubscriptionBilling />
         );
 
