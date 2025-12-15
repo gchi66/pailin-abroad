@@ -25,6 +25,7 @@ const Onboarding = () => {
   const [skipPasswordStep, setSkipPasswordStep] = useState(false);
   const [hasSyncedUser, setHasSyncedUser] = useState(false);
   const [syncingUser, setSyncingUser] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const { ui: uiLang, setUi: setUiLang } = useUiLang();
   const withUi = useWithUi();
@@ -186,6 +187,24 @@ const Onboarding = () => {
 
     fetchUserProfile();
   }, [ensureUserRecord, isDevPreview, navigate]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 480px)");
+    const update = (event) => setIsMobile(event.matches);
+    setIsMobile(mq.matches);
+    if (mq.addEventListener) {
+      mq.addEventListener("change", update);
+    } else {
+      mq.addListener(update);
+    }
+    return () => {
+      if (mq.removeEventListener) {
+        mq.removeEventListener("change", update);
+      } else {
+        mq.removeListener(update);
+      }
+    };
+  }, []);
 
   // Helper function to pick the right language content
   const pickLang = (en, th) => {
@@ -490,28 +509,22 @@ const Onboarding = () => {
       case 0:
         return (
           <div className="onboarding-welcome">
-            <div className="onboarding-welcome-content">
-              <div className="onboarding-welcome-left">
-                <div className="onboarding-avatar">
-                  <img
-                    src="/images/characters/pailin-blue-left.png"
-                    alt="Pailin"
-                    className="onboarding-avatar-image"
-                  />
-                </div>
-              </div>
-              <div className="onboarding-welcome-right">
-                <h1 className="onboarding-welcome-title">
-                  {uiText.welcomeTitle}
-                </h1>
-                <p className="onboarding-welcome-subtitle">
-                  {uiText.welcomeSubtitle}
-                </p>
-                <p className="onboarding-welcome-description">
-                  {uiText.welcomeDescription}
-                </p>
-              </div>
+            <h1 className="onboarding-welcome-title">
+              {uiText.welcomeTitle}
+            </h1>
+            <div className="onboarding-avatar">
+              <img
+                src="/images/characters/pailin-blue-left.png"
+                alt="Pailin illustration"
+                className="onboarding-avatar-image"
+              />
             </div>
+            <p className="onboarding-welcome-subtitle">
+              {uiText.welcomeSubtitle}
+            </p>
+            <p className="onboarding-welcome-description">
+              {uiText.welcomeDescription}
+            </p>
           </div>
         );
       case 1:
@@ -786,6 +799,13 @@ const Onboarding = () => {
 
   return (
     <div className="onboarding-main">
+      <div className="onboarding-mobile-logo">
+        <img
+          src="/images/full-logo.webp"
+          alt="Pailin Abroad Logo"
+          className="onboarding-mobile-logo-image"
+        />
+      </div>
       <div className="onboarding-container">
         {/* Top Navigation - now just language toggle */}
         <nav className="onboarding-nav">
@@ -815,46 +835,104 @@ const Onboarding = () => {
 
         {/* Step Content */}
         <div className="onboarding-content">
-          {renderStepContent()}
+          <div className="onboarding-card-wrapper">
+            <div className="onboarding-card-header-mobile">
+              <div className="onboarding-card-header-spacer" aria-hidden="true" />
+              <div className="onboarding-card-lang-toggle">
+                <button
+                  className={`onboarding-lang-btn ${uiLang === 'en' ? 'active' : ''}`}
+                  onClick={() => setUiLang('en')}
+                  aria-label="Switch to English"
+                >
+                  EN
+                </button>
+                <span className="onboarding-lang-separator">|</span>
+                <button
+                  className={`onboarding-lang-btn ${uiLang === 'th' ? 'active' : ''}`}
+                  onClick={() => setUiLang('th')}
+                  aria-label="Switch to Thai"
+                >
+                  TH
+                </button>
+              </div>
+            </div>
+            <div className="onboarding-card-body">
+              {renderStepContent()}
+            </div>
+            {isMobile && step < 4 && (
+              <div className="onboarding-mobile-progress">
+                {renderProgressDots()}
+              </div>
+            )}
+            {isMobile && (
+              <div className="onboarding-mobile-footer">
+                <div className="onboarding-mobile-footer-left">
+                  {step > 0 ? (
+                    <button
+                      className="onboarding-back-btn"
+                      onClick={prevStep}
+                    >
+                      ← {uiText.back}
+                    </button>
+                  ) : (
+                    <span className="onboarding-footer-spacer" aria-hidden="true" />
+                  )}
+                </div>
+                <div className="onboarding-mobile-footer-right">
+                  {step < 4 && (
+                    <button
+                      className="onboarding-next-btn onboarding-mobile-next"
+                      onClick={nextStep}
+                      disabled={isNextDisabled}
+                    >
+                      {step === 1 && isLoading ? "..." : `${uiText.next} →`}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Bottom Navigation */}
-        <div className="onboarding-bottom">
-          {step < 4 && (
-            <div className="onboarding-progress">
-              {renderProgressDots()}
-            </div>
-          )}
-          {step < 4 && (
-            <div className="onboarding-navigation">
-              {step > 0 && (
+        {!isMobile && (
+          <div className="onboarding-bottom">
+            {step < 4 && (
+              <div className="onboarding-progress">
+                {renderProgressDots()}
+              </div>
+            )}
+            {step < 4 && (
+              <div className="onboarding-navigation">
+                {step > 0 && (
+                  <button
+                    className="onboarding-back-btn"
+                    onClick={prevStep}
+                  >
+                    ← {uiText.back}
+                  </button>
+                )}
+                <button
+                  className="onboarding-next-btn"
+                  onClick={nextStep}
+                  disabled={isNextDisabled}
+                >
+                  {step === 1 && isLoading ? "..." : `${uiText.next} →`}
+                </button>
+              </div>
+            )}
+            {step === 4 && (
+              <div className="onboarding-navigation">
                 <button
                   className="onboarding-back-btn"
                   onClick={prevStep}
                 >
                   ← {uiText.back}
                 </button>
-              )}
-              <button
-                className="onboarding-next-btn"
-                onClick={nextStep}
-                disabled={isNextDisabled}
-              >
-                {step === 1 && isLoading ? "..." : `${uiText.next} →`}
-              </button>
-            </div>
-          )}
-          {step === 4 && (
-            <div className="onboarding-navigation">
-              <button
-                className="onboarding-back-btn"
-                onClick={prevStep}
-              >
-                ← {uiText.back}
-              </button>
-            </div>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
