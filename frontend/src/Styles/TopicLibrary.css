@@ -76,6 +76,56 @@
   margin: 0 auto 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 0.8rem;
+}
+
+.topic-library-plan-notice {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.topic-library-plan-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.topic-library-plan-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #1e1e1e;
+}
+
+.topic-library-plan-desc {
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #2d2d2d;
+}
+
+.topic-library-plan-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  border: var(--border-thin) solid #1E1E1E;
+  background: #ff6f61;
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0.12rem 0.12rem 0 #1E1E1E;
+}
+
+.topic-library-plan-cta:hover {
+  background: #ff8579;
 }
 
 .topic-library-toolbar {
@@ -103,8 +153,8 @@
   gap: 1.5rem;
 }
 
-.topic-library-toolbar-right {
-  justify-content: flex-end;
+.topic-library-mobile-toolbar {
+  display: none;
 }
 
 .topic-library-breadcrumbs {
@@ -225,6 +275,8 @@
   background: white;
   color: #1E1E1E;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .topic-library-item:hover {
@@ -305,6 +357,50 @@
   margin-left: 1rem;
 }
 
+.topic-library-item-locked {
+  filter: grayscale(0.2);
+}
+
+.topic-library-lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.topic-library-lock-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.topic-library-lock-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+
+.topic-library-lock-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 700;
+  color: #1e1e1e;
+}
+
+.topic-library-lock-link {
+  color: #1e1e1e;
+  text-decoration: underline;
+  font-weight: 800;
+}
+
 /* Placeholder Content */
 .topic-library-placeholder {
   text-align: center;
@@ -340,6 +436,7 @@
   .topic-library-toolbar-wrapper {
     width: 85%;
     margin: 1.5rem auto;
+    gap: 0.9rem;
   }
 
   .topic-library-toolbar {
@@ -402,11 +499,13 @@
 
   .topic-library-content {
     width: 95%;
+    margin-top: 0;
   }
 
   .topic-library-toolbar-wrapper {
     width: 100%;
-    margin: 1.25rem auto;
+    margin: .5rem auto 1.25rem;
+    gap: 0.9rem;
   }
 
   .topic-library-toolbar {
@@ -470,5 +569,83 @@
     white-space: normal;
     text-align: center;
     max-width: 100%;
+  }
+
+  .topic-library-plan-notice {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.1rem 1.2rem;
+    gap: 0.75rem;
+  }
+
+  .topic-library-plan-cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .topic-library-toolbar {
+    display: none;
+  }
+
+  .topic-library-mobile-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .topic-library-mobile-view-toggle,
+  .topic-library-mobile-menu-item {
+    width: 100%;
+    background: #91CAFF;
+    border: var(--border-thin) solid #1E1E1E;
+    border-radius: 0.6rem;
+    padding: 0.9rem 1rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    box-shadow: none;
+  }
+
+  .topic-library-mobile-view-toggle {
+    justify-content: space-between;
+  }
+
+  .topic-library-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    border: var(--border-thin) solid #1E1E1E;
+    border-radius: 0.6rem;
+    overflow: hidden;
+  }
+
+  .topic-library-mobile-menu-item {
+    background: #fff;
+    border: none;
+    border-bottom: 0.08rem solid #e5e5e5;
+    font-size: 1.05rem;
+  }
+
+  .topic-library-mobile-menu-item:last-child {
+    border-bottom: none;
+  }
+
+  .topic-library-mobile-menu-item.is-active {
+    background: #91CAFF;
+  }
+
+  .topic-library-mobile-caret {
+    font-size: 1.1rem;
+  }
+
+  .topic-library-mobile-search {
+    width: 100%;
   }
 }

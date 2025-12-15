@@ -55,9 +55,12 @@
 }
 
 /* Section buttons container */
-.resources-grid {
+.resources-cards-shell {
   width: min(980px, 92vw);
   margin: 4rem auto 6rem;
+}
+
+.resources-grid {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -207,13 +210,22 @@
     height: auto;
   }
 
+  .resources-cards-shell {
+    width: 100%;
+    margin: 3rem 0 4rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
   .resources-grid {
     width: 100%;
-    padding: 0 1rem;
+    gap: 1rem;
   }
 
   .resources-card {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     flex-direction: row;
     align-items: center;
     gap: 1rem;

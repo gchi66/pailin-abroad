@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
+import { useAuth } from "../AuthContext";
+import supabaseClient from "../supabaseClient";
+import Breadcrumbs from "../Components/Breadcrumbs";
 import "../Styles/ExerciseBank.css";
 
 const CATEGORY_OPTIONS = [
@@ -30,8 +33,12 @@ const ExerciseBank = () => {
   const [activeView, setActiveView] = useState("featured");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileViewMenuOpen, setIsMobileViewMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [profile, setProfile] = useState(null);
   const categoryMenuRef = useRef(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     let isMounted = true;
@@ -133,6 +140,71 @@ const ExerciseBank = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isCategoryMenuOpen]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 480px)");
+    const handleMediaChange = (event) => {
+      setIsMobile(event.matches);
+      if (!event.matches) {
+        setIsMobileViewMenuOpen(false);
+      }
+    };
+
+    setIsMobile(mediaQuery.matches);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleMediaChange);
+    } else {
+      mediaQuery.addListener(handleMediaChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleMediaChange);
+      } else {
+        mediaQuery.removeListener(handleMediaChange);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) {
+        setProfile(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("is_paid")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching user profile:", error.message);
+          setProfile(null);
+        } else {
+          setProfile(data);
+        }
+      } catch (fetchError) {
+        console.error("Error fetching user profile:", fetchError);
+        setProfile(null);
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
+
+  const isPaid = profile?.is_paid === true;
+  const isNoAccount = !user;
+  const isFreePlan = user && profile?.is_paid === false;
+
+  const isCardLocked = (isFeaturedCard) => {
+    if (isPaid) return false;
+    if (isNoAccount) return true;
+    if (isFreePlan) return !isFeaturedCard;
+    return false;
+  };
 
   const featuredBySection = useMemo(() => {
     const map = new Map();
@@ -266,31 +338,153 @@ const ExerciseBank = () => {
       </header>
 
       <div className="exercise-bank-content">
+        <Breadcrumbs
+          className="exercise-bank-breadcrumbs"
+          items={[
+            { label: "Resources", to: "/resources" },
+            { label: "Exercise Bank" },
+          ]}
+        />
+        {(isFreePlan || isNoAccount) && (
+          <div className={`exercise-bank-plan-notice ${isFreePlan ? "is-free-plan" : "is-no-account"}`}>
+            <div className="exercise-bank-plan-copy">
+              <p className="exercise-bank-plan-title">
+                {isFreePlan ? "You're on our free plan." : "Looks like you don't have an account."}
+              </p>
+              <p className="exercise-bank-plan-desc">
+                {isFreePlan
+                  ? "Upgrade to enjoy full access to our Exercise Bank."
+                  : "Sign up for free to access our featured exercises!"}
+              </p>
+            </div>
+            <Link
+              className="exercise-bank-plan-cta"
+              to={isFreePlan ? "/membership" : "/signup"}
+            >
+              {isFreePlan ? "BECOME A MEMBER" : "SIGN UP FOR FREE"}
+            </Link>
+          </div>
+        )}
+
         <div className="exercise-bank-toolbar-wrapper">
-          <div className="exercise-bank-toolbar">
-            <div className="exercise-bank-toolbar-left">
-              <div className="exercise-bank-filters">
-                <button
-                  type="button"
-                  className={`exercise-bank-filter-button ${activeView === "featured" ? "active" : ""}`}
-                  onClick={() => {
-                    setActiveView("featured");
-                    setIsCategoryMenuOpen(false);
-                  }}
-                >
-                  Featured Exercises
-                </button>
-                <div className="exercise-bank-category-dropdown" ref={categoryMenuRef}>
+          {!isMobile && (
+            <div className="exercise-bank-toolbar">
+              <div className="exercise-bank-toolbar-left">
+                <div className="exercise-bank-filters">
                   <button
                     type="button"
-                    className={`exercise-bank-filter-button ${activeView === "categories" ? "active" : ""}`}
+                    className={`exercise-bank-filter-button ${activeView === "featured" ? "active" : ""}`}
                     onClick={() => {
-                      setActiveView("categories");
-                      setIsCategoryMenuOpen((prev) => !prev);
+                      setActiveView("featured");
+                      setIsCategoryMenuOpen(false);
                     }}
                   >
-                    View by Category
-                    <span className="exercise-bank-caret" aria-hidden="true">▾</span>
+                    Featured Exercises
+                  </button>
+                  <div className="exercise-bank-category-dropdown" ref={categoryMenuRef}>
+                    <button
+                      type="button"
+                      className={`exercise-bank-filter-button ${activeView === "categories" ? "active" : ""}`}
+                      onClick={() => {
+                        setActiveView("categories");
+                        setIsCategoryMenuOpen((prev) => !prev);
+                      }}
+                    >
+                      View by Category
+                      <span className="exercise-bank-caret" aria-hidden="true">▾</span>
+                    </button>
+                    {isCategoryMenuOpen && (
+                      <div className="exercise-bank-category-menu">
+                        {orderedCategoryOptions.map((option) => (
+                          <button
+                            key={option.slug}
+                            type="button"
+                            className={`exercise-bank-category-menu-item ${
+                              selectedCategory === option.slug ? "active" : ""
+                            }`}
+                            onClick={() => handleCategorySelect(option.slug)}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="exercise-bank-toolbar-right">
+                <div className="exercise-bank-search">
+                  <label htmlFor="exercise-bank-search-input" className="sr-only">
+                    Search exercises
+                  </label>
+                  <input
+                    id="exercise-bank-search-input"
+                    type="search"
+                    placeholder="Search exercises"
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                  />
+                  <span className="exercise-bank-search-icon" aria-hidden="true">
+                    <img src="/images/search_icon.webp" alt="" />
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isMobile && (
+            <div className="exercise-bank-mobile-toolbar">
+              <div className="exercise-bank-mobile-view">
+                <button
+                  type="button"
+                  className="exercise-bank-mobile-toggle"
+                  onClick={() => setIsMobileViewMenuOpen((prev) => !prev)}
+                  aria-expanded={isMobileViewMenuOpen}
+                >
+                  <span>{activeView === "featured" ? "Featured Exercises" : "View by Category"}</span>
+                  <span className="exercise-bank-mobile-caret" aria-hidden="true">▾</span>
+                </button>
+                {isMobileViewMenuOpen && (
+                  <div className="exercise-bank-mobile-menu">
+                    <button
+                      type="button"
+                      className={`exercise-bank-mobile-menu-item${activeView === "featured" ? " is-active" : ""}`}
+                      onClick={() => {
+                        setActiveView("featured");
+                        setIsMobileViewMenuOpen(false);
+                        setIsCategoryMenuOpen(false);
+                      }}
+                    >
+                      Featured Exercises
+                    </button>
+                    <button
+                      type="button"
+                      className={`exercise-bank-mobile-menu-item${activeView === "categories" ? " is-active" : ""}`}
+                      onClick={() => {
+                        setActiveView("categories");
+                        setIsMobileViewMenuOpen(false);
+                        setIsCategoryMenuOpen(false);
+                      }}
+                    >
+                      View by Category
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {activeView === "categories" && (
+                <div className="exercise-bank-mobile-category" ref={categoryMenuRef}>
+                  <button
+                    type="button"
+                    className="exercise-bank-mobile-category-toggle"
+                    onClick={() => setIsCategoryMenuOpen((prev) => !prev)}
+                    aria-expanded={isCategoryMenuOpen}
+                  >
+                    {selectedCategory
+                      ? orderedCategoryOptions.find((option) => option.slug === selectedCategory)?.label ||
+                        "Select a category"
+                      : "Select a category"}
+                    <span className="exercise-bank-mobile-caret" aria-hidden="true">▾</span>
                   </button>
                   {isCategoryMenuOpen && (
                     <div className="exercise-bank-category-menu">
@@ -301,7 +495,10 @@ const ExerciseBank = () => {
                           className={`exercise-bank-category-menu-item ${
                             selectedCategory === option.slug ? "active" : ""
                           }`}
-                          onClick={() => handleCategorySelect(option.slug)}
+                          onClick={() => {
+                            handleCategorySelect(option.slug);
+                            setIsCategoryMenuOpen(false);
+                          }}
                         >
                           {option.label}
                         </button>
@@ -309,26 +506,9 @@ const ExerciseBank = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              )}
             </div>
-            <div className="exercise-bank-toolbar-right">
-              <div className="exercise-bank-search">
-                <label htmlFor="exercise-bank-search-input" className="sr-only">
-                  Search exercises
-                </label>
-                <input
-                  id="exercise-bank-search-input"
-                  type="search"
-                  placeholder="Search exercises"
-                  value={searchTerm}
-                  onChange={(event) => setSearchTerm(event.target.value)}
-                />
-                <span className="exercise-bank-search-icon" aria-hidden="true">
-                  <img src="/images/search_icon.webp" alt="" />
-                </span>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="exercise-bank-main">
@@ -364,7 +544,29 @@ const ExerciseBank = () => {
               {!loadingFeatured && !featuredError && filteredFeaturedBySection.length > 0 && (
                 <div className="exercise-bank-card-grid">
                   {filteredFeaturedBySection.map((group) => (
-                    <div key={`${group.category_slug}-${group.section_slug}`} className="exercise-bank-card">
+                    <div
+                      key={`${group.category_slug}-${group.section_slug}`}
+                      className={`exercise-bank-card ${
+                        isCardLocked(true) ? "exercise-bank-card-locked" : ""
+                      }`}
+                    >
+                      {isCardLocked(true) && (
+                        <div className="exercise-bank-card-lock-overlay">
+                          <div className="exercise-bank-card-lock-content">
+                            <img
+                              src="/images/password-lock.webp"
+                              alt=""
+                              className="exercise-bank-card-lock-icon"
+                            />
+                            <div className="exercise-bank-card-lock-text">
+                              <span>Upgrade to view!</span>
+                              <Link to="/membership" className="exercise-bank-card-lock-link">
+                                Become a member
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       <div className="exercise-bank-card-header">
                         <div className="exercise-bank-card-section">
                           <h3>{group.section}</h3>
@@ -417,7 +619,29 @@ const ExerciseBank = () => {
               ) : (
                 <div className="exercise-bank-card-grid">
                   {sortedSections.map((section) => (
-                    <div key={`${section.category_slug}-${section.section_slug}`} className="exercise-bank-card">
+                    <div
+                      key={`${section.category_slug}-${section.section_slug}`}
+                      className={`exercise-bank-card ${
+                        isCardLocked(section?.is_featured === true) ? "exercise-bank-card-locked" : ""
+                      }`}
+                    >
+                      {isCardLocked(section?.is_featured === true) && (
+                        <div className="exercise-bank-card-lock-overlay">
+                          <div className="exercise-bank-card-lock-content">
+                            <img
+                              src="/images/password-lock.webp"
+                              alt=""
+                              className="exercise-bank-card-lock-icon"
+                            />
+                            <div className="exercise-bank-card-lock-text">
+                              <span>Upgrade to view!</span>
+                              <Link to="/membership" className="exercise-bank-card-lock-link">
+                                Become a member
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       <div className="exercise-bank-card-header">
                         <div className="exercise-bank-card-section">
                           <h3>{section.section}</h3>

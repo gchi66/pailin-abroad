@@ -53,26 +53,28 @@ const Resources = () => {
         <p className="resources-page-header-subtitle">{pick(resourcesCopy.subtitle, ui)}</p>
       </header>
 
-      <div className="resources-grid">
-        {resourceCards.map((card) => {
-          const CardWrapper = card.disabled ? "article" : Link;
-          const wrapperProps = card.disabled
-            ? { className: "resources-card resources-card-disabled", "aria-disabled": true }
-            : { className: "resources-card", to: card.to || "#" };
+      <div className="resources-cards-shell">
+        <div className="resources-grid">
+          {resourceCards.map((card) => {
+            const CardWrapper = card.disabled ? "article" : Link;
+            const wrapperProps = card.disabled
+              ? { className: "resources-card resources-card-disabled", "aria-disabled": true }
+              : { className: "resources-card", to: card.to || "#" };
 
-          return (
-            <CardWrapper key={card.title} {...wrapperProps}>
-              <div className="resources-card-media">
-                <img src={card.image} alt={`${card.title} illustration`} />
-              </div>
-              <div className="resources-card-copy">
-                <h3 className="resources-card-title">{card.title}</h3>
-                <p className="resources-card-desc">{card.description}</p>
-              </div>
-              {card.badge && <span className="resources-card-badge">{card.badge}</span>}
-            </CardWrapper>
-          );
-        })}
+            return (
+              <CardWrapper key={card.title} {...wrapperProps}>
+                <div className="resources-card-media">
+                  <img src={card.image} alt={`${card.title} illustration`} />
+                </div>
+                <div className="resources-card-copy">
+                  <h3 className="resources-card-title">{card.title}</h3>
+                  <p className="resources-card-desc">{card.description}</p>
+                </div>
+                {card.badge && <span className="resources-card-badge">{card.badge}</span>}
+              </CardWrapper>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

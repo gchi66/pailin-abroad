@@ -5,6 +5,8 @@ import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
 import Breadcrumbs from "../Components/Breadcrumbs";
+import { useAuth } from "../AuthContext";
+import supabaseClient from "../supabaseClient";
 import "../Styles/TopicLibrary.css";
 
 const MINOR_WORDS = new Set([
@@ -66,8 +68,12 @@ const TopicLibrary = () => {
   const [error, setError] = useState(null);
   const [filterMode, setFilterMode] = useState("featured");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileFilterMenuOpen, setIsMobileFilterMenuOpen] = useState(false);
+  const [profile, setProfile] = useState(null);
   const { ui: uiLang } = useUiLang();
   const withUi = useWithUi();
+  const { user } = useAuth();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -108,6 +114,71 @@ const TopicLibrary = () => {
       controller.abort();
     };
   }, [uiLang]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) {
+        setProfile(null);
+        return;
+      }
+
+      try {
+        const { data, error: profileError } = await supabaseClient
+          .from("users")
+          .select("is_paid")
+          .eq("id", user.id)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching user profile:", profileError.message);
+          setProfile(null);
+        } else {
+          setProfile(data);
+        }
+      } catch (profileErr) {
+        console.error("Error fetching user profile:", profileErr);
+        setProfile(null);
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 30rem)");
+    const handleMediaChange = (event) => {
+      setIsMobile(event.matches);
+      if (!event.matches) {
+        setIsMobileFilterMenuOpen(false);
+      }
+    };
+
+    setIsMobile(mediaQuery.matches);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleMediaChange);
+    } else {
+      mediaQuery.addListener(handleMediaChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleMediaChange);
+      } else {
+        mediaQuery.removeListener(handleMediaChange);
+      }
+    };
+  }, []);
+
+  const isPaid = profile?.is_paid === true;
+  const isNoAccount = !user;
+  const isFreePlan = user && profile?.is_paid === false;
+
+  const isTopicLocked = (isFeatured) => {
+    if (isPaid) return false;
+    if (isNoAccount) return true;
+    if (isFreePlan) return !isFeatured;
+    return false;
+  };
 
   const visibleTopics = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -191,43 +262,92 @@ const TopicLibrary = () => {
               { label: t("topicLibraryPage.title", uiLang) },
             ]}
           />
-          <div className="topic-library-toolbar">
-            <div className="topic-library-toolbar-left">
-              <div className="topic-library-filters">
-                <button
-                  type="button"
-                  className={`topic-filter-button ${filterMode === "featured" ? "active" : ""}`}
-                  onClick={() => setFilterMode("featured")}
-                >
-                  {t("topicLibraryPage.featuredButton", uiLang)}
-                </button>
-                <button
-                  type="button"
-                  className={`topic-filter-button ${filterMode === "all" ? "active" : ""}`}
-                  onClick={() => setFilterMode("all")}
-                >
-                  {t("topicLibraryPage.allButton", uiLang)}
-                </button>
+          {(isFreePlan || isNoAccount) && (
+            <div className={`topic-library-plan-notice ${isFreePlan ? "is-free-plan" : "is-no-account"}`}>
+              <div className="topic-library-plan-copy">
+                <p className="topic-library-plan-title">
+                  {isFreePlan ? "You're on our free plan." : "Looks like you don't have an account."}
+                </p>
+                <p className="topic-library-plan-desc">
+                  {isFreePlan
+                    ? "Upgrade to enjoy full access to our Topic Library."
+                    : "Sign up for free to access our featured topics!"}
+                </p>
+              </div>
+              <Link
+                className="topic-library-plan-cta"
+                to={isFreePlan ? "/membership" : "/signup"}
+              >
+                {isFreePlan ? "BECOME A MEMBER" : "SIGN UP FOR FREE"}
+              </Link>
+            </div>
+          )}
+          {!isMobile && (
+            <div className="topic-library-toolbar">
+              <div className="topic-library-toolbar-left">
+                <div className="topic-library-filters">
+                  <button
+                    type="button"
+                    className={`topic-filter-button ${filterMode === "featured" ? "active" : ""}`}
+                    onClick={() => setFilterMode("featured")}
+                  >
+                    {t("topicLibraryPage.featuredButton", uiLang)}
+                  </button>
+                  <button
+                    type="button"
+                    className={`topic-filter-button ${filterMode === "all" ? "active" : ""}`}
+                    onClick={() => setFilterMode("all")}
+                  >
+                    {t("topicLibraryPage.allButton", uiLang)}
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="topic-library-toolbar-right">
-              <div className="topic-library-search">
-                <label htmlFor="topic-library-search-input" className="sr-only">
-                  {t("topicLibraryPage.searchPlaceholder", uiLang)}
-                </label>
-                <input
-                  id="topic-library-search-input"
-                  type="search"
-                  placeholder={t("topicLibraryPage.searchPlaceholder", uiLang)}
-                  value={searchTerm}
-                  onChange={(event) => setSearchTerm(event.target.value)}
-                />
-                <span className="topic-library-search-icon" aria-hidden="true">
-                  <img src="/images/search_icon.webp" alt="" />
-                </span>
+          )}
+
+          {isMobile && (
+            <div className="topic-library-mobile-toolbar">
+              <div className="topic-library-mobile-toggle">
+                <button
+                  type="button"
+                  className="topic-library-mobile-view-toggle"
+                  onClick={() => setIsMobileFilterMenuOpen((prev) => !prev)}
+                  aria-expanded={isMobileFilterMenuOpen}
+                >
+                  <span>
+                    {filterMode === "featured"
+                      ? t("topicLibraryPage.featuredButton", uiLang)
+                      : t("topicLibraryPage.allButton", uiLang)}
+                  </span>
+                  <span className="topic-library-mobile-caret" aria-hidden="true">▾</span>
+                </button>
+                {isMobileFilterMenuOpen && (
+                  <div className="topic-library-mobile-menu">
+                    <button
+                      type="button"
+                      className={`topic-library-mobile-menu-item${filterMode === "featured" ? " is-active" : ""}`}
+                      onClick={() => {
+                        setFilterMode("featured");
+                        setIsMobileFilterMenuOpen(false);
+                      }}
+                    >
+                      {t("topicLibraryPage.featuredButton", uiLang)}
+                    </button>
+                    <button
+                      type="button"
+                      className={`topic-library-mobile-menu-item${filterMode === "all" ? " is-active" : ""}`}
+                      onClick={() => {
+                        setFilterMode("all");
+                        setIsMobileFilterMenuOpen(false);
+                      }}
+                    >
+                      {t("topicLibraryPage.allButton", uiLang)}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
+          )}
         </div>
         {/* Topics List */}
         <div className="topic-library-list">
@@ -237,37 +357,54 @@ const TopicLibrary = () => {
               <p>{t("topicLibraryPage.emptyBody", uiLang)}</p>
             </div>
           ) : (
-            visibleTopics.map((topic) => (
-              <Link
-                key={topic.id}
-                to={withUi(`/topic-library/${topic.slug}`)}
-                className="topic-library-item"
-              >
-                <div className="topic-library-content-wrapper">
-                  <div className="topic-library-header">
-                    {/* <div className="topic-library-number">
-                      {(index + 1).toString().padStart(2, '0')}
-                    </div> */}
-                    <div className="topic-library-text">
-                      <h3 className="topic-library-title">{formatTopicTitle(topic.name)}</h3>
-                      {topic.subtitle && (
-                        <p className="topic-library-subtitle">{topic.subtitle}</p>
-                      )}
-                      {topic.tags && topic.tags.length > 0 && (
-                        <div className="topic-library-tags">
-                          {topic.tags.map((tag, tagIndex) => (
-                            <span key={tagIndex} className="topic-library-tag">
-                              {tag}
-                            </span>
-                          ))}
+            visibleTopics.map((topic) => {
+              const locked = isTopicLocked(topic.is_featured);
+              return (
+                <Link
+                  key={topic.id}
+                  to={withUi(`/topic-library/${topic.slug}`)}
+                  className={`topic-library-item${locked ? " topic-library-item-locked" : ""}`}
+                >
+                  {locked && (
+                    <div className="topic-library-lock-overlay">
+                      <div className="topic-library-lock-content">
+                        <img
+                          src="/images/password-lock.webp"
+                          alt=""
+                          className="topic-library-lock-icon"
+                        />
+                        <div className="topic-library-lock-text">
+                          <span>Upgrade to view!</span>
+                          <Link to="/membership" className="topic-library-lock-link">
+                            Become a member
+                          </Link>
                         </div>
-                      )}
+                      </div>
+                    </div>
+                  )}
+                  <div className="topic-library-content-wrapper">
+                    <div className="topic-library-header">
+                      <div className="topic-library-text">
+                        <h3 className="topic-library-title">{formatTopicTitle(topic.name)}</h3>
+                        {topic.subtitle && (
+                          <p className="topic-library-subtitle">{topic.subtitle}</p>
+                        )}
+                        {topic.tags && topic.tags.length > 0 && (
+                          <div className="topic-library-tags">
+                            {topic.tags.map((tag, tagIndex) => (
+                              <span key={tagIndex} className="topic-library-tag">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="topic-library-arrow">▸</div>
-              </Link>
-            ))
+                  <div className="topic-library-arrow">▸</div>
+                </Link>
+              );
+            })
           )}
         </div>
       </div>
