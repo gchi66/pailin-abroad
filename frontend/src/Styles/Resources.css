@@ -206,4 +206,45 @@
     width: clamp(5rem, 28vw, 8rem);
     height: auto;
   }
+
+  .resources-grid {
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .resources-card {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .resources-card-media {
+    width: 85px;
+    height: 85px;
+  }
+
+  .resources-card-media img {
+    height: 10vh;
+    width: auto;
+  }
+
+  .resources-card-copy {
+    gap: 0.35rem;
+  }
+
+  .resources-card-title {
+    font-size: 1.2rem;
+  }
+
+  .resources-card-desc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .resources-card-badge {
+    position: static;
+    align-self: flex-start;
+  }
 }
