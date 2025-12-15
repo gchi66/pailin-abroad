@@ -361,10 +361,6 @@ const TopicDetail = () => {
               ))}
             </div>
           )}
-          <LessonLanguageToggle
-            contentLang={contentLang}
-            setContentLang={setContentLang}
-          />
           {isRefetching && (
             <span className="topic-detail-refetching">
               {t("topicDetailPage.loadingBody", uiLang)}
@@ -380,6 +376,12 @@ const TopicDetail = () => {
           <h2 className="topic-detail-content-title">
             {topic?.name}
           </h2>
+          <div className="topic-detail-language-toggle">
+            <LessonLanguageToggle
+              contentLang={contentLang}
+              setContentLang={setContentLang}
+            />
+          </div>
         </div>
 
         {topic.content_jsonb && topic.content_jsonb.length > 0 ? (
