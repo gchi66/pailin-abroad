@@ -30,7 +30,7 @@
 }
 
 .about-method-card.expanded {
-  width: 90vw;
+  width: 75vw;
   padding: 3rem 2.5rem;
 }
 
@@ -109,13 +109,19 @@
     max-width: 90vw;
     width: 90vw;
   }
+
+  .about-method-card.expanded {
+  width: 90vw;
+  padding: 3rem 2.5rem;
+}
+
   .about-method-card-header-container {
     align-items: flex-start;
     gap: 0.5rem;
   }
   .about-method-card-header {
     font-size: 1.5rem;
-    line-height: 1.6rem;
+    line-height: 1.9rem;
   }
 
   .about-method-card-text {
