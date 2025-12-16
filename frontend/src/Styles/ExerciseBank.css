@@ -824,12 +824,22 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: none;
+    box-shadow: none !important;
     gap: 0.4rem;
   }
 
   .exercise-bank-mobile-category-toggle {
     background: #fff;
+  }
+
+  .exercise-bank-mobile-toggle:hover,
+  .exercise-bank-mobile-category-toggle:hover,
+  .exercise-bank-mobile-toggle:active,
+  .exercise-bank-mobile-category-toggle:active,
+  .exercise-bank-mobile-toggle:focus,
+  .exercise-bank-mobile-category-toggle:focus {
+    box-shadow: none !important;
+    outline: none;
   }
 
   .exercise-bank-mobile-caret {
