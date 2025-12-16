@@ -168,6 +168,18 @@
     gap: 1rem;
   }
 
+  .contact-card {
+    display: none;
+  }
+
+  .contact-elements-container {
+    padding-top: 3rem;
+  }
+
+  .form-container {
+    max-width: 90%;
+  }
+
   .contact-page-header-text {
     font-size: clamp(1.4rem, 6vw, 1.8rem);
     font-weight: 700;
