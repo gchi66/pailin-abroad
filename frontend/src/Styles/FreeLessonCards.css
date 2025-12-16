@@ -177,6 +177,9 @@ h3 {
     gap: 1rem;
     min-height: auto;
     flex: 0 0 auto;
+    transform: none;
+    box-shadow: .2rem .2rem 0vw #1E1E1E;
+    transition: none;
   }
 
   .fl-card-level {
@@ -209,5 +212,16 @@ h3 {
     border-radius: 999px;
     padding: 0.9rem 0;
     width: 100%;
+    transition: none;
+  }
+
+  .fl-card-link:hover .fl-card {
+    transform: none;
+    box-shadow: .2rem .2rem 0vw #1E1E1E;
+  }
+
+  .fl-card-btn:hover {
+    background: #fff;
+    color: #1E1E1E;
   }
 }
