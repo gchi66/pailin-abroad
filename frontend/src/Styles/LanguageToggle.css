@@ -14,8 +14,9 @@
   cursor: pointer;
   user-select: none;
   transition: color 0.2s, background-color 0.2s;
+  font-weight: 400;
 }
 
 .language-toggle span.active {
-  font-weight: bold;
+  font-weight: 900;
 }
