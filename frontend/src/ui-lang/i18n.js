@@ -355,13 +355,6 @@ export const copy = {
           },
         },
         {
-          name: { en: "Tyler", th: "ไทเลอร์" },
-          description: {
-            en: "Meet Tyler, Pailin’s coworker at Skylight Books. He’s a bit shy at first, but once you get to know him, he’s funny, thoughtful, and charming. He loves hiking and the outdoors, but he also studies computer programming when he’s not working, and hopes to be able to work from anywhere in the world. And, Pailin might have a little crush on him.",
-            th: "ผมคือไทเลอร์ พี่ชายโฮสต์ของไพลิน ผมก็เรียนอยู่ที่ UCLA เช่นกัน ผมยังตัดสินใจไม่ได้ว่าจะเรียนสาขาอะไรดีเลยเปลี่ยนเอกอยู่เรื่อย ๆ ผมเป็นเพื่อนที่ไว้ใจได้และพร้อมลุยเสมอ",
-          },
-        },
-        {
           name: { en: "Sylvie", th: "ซิลวี่" },
           description: {
             en: "Meet Sylvie! She’s Pailin’s host mom. She’s originally from France, and she owns a wine business. She’s easygoing and super welcoming of Pailin, and often gives Pailin heartfelt advice about finding her place in a new country. When she’s not having a glass of red wine, she loves gardening, baking, and hosting dinner parties for her clients.",

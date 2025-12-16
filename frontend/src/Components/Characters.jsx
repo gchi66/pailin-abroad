@@ -9,7 +9,6 @@ const characterConfig = [
   { slug: "chloe" },
   { slug: "mark" },
   { slug: "emily" },
-  { slug: "tyler" },
   { slug: "sylvie" },
 ];
 

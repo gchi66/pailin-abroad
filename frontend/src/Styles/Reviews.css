@@ -104,13 +104,13 @@
   }
 
   .reviews-container {
-    align-items: flex-start;
+    align-items: center;
     gap: 2rem;
   }
 
   .reviews-title {
-    font-size: clamp(1.8rem, 6vw, 2.2rem);
-    text-align: left;
+    font-size: 8vw;
+    text-align: center;
   }
 
   .review-cards-container {
