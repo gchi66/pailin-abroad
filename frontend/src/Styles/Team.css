@@ -39,7 +39,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
 
+.team-member-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .member-name {
