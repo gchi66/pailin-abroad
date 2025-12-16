@@ -28,12 +28,12 @@ const Footer = () => {
       const { link } = item || {};
 
       if (!link) {
-        return <li key={index}>{text}</li>;
+        return <li key={index} className={item.text?.en === "FAQ" ? "footer-link faq-link" : ""}>{text}</li>;
       }
 
       if (isExternalLink(link)) {
         return (
-          <li key={index}>
+          <li key={index} className={item.text?.en === "FAQ" ? "footer-link faq-link" : ""}>
             <a href={link} target="_blank" rel="noopener noreferrer">
               {text}
             </a>
@@ -42,7 +42,7 @@ const Footer = () => {
       }
 
       return (
-        <li key={index}>
+        <li key={index} className={item.text?.en === "FAQ" ? "footer-link faq-link" : ""}>
           <Link to={buildInternalLink(link)}>{text}</Link>
         </li>
       );

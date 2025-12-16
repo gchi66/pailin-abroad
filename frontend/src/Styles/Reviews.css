@@ -1,9 +1,9 @@
 .reviews-section {
   padding: 4vh 2rem 8vh;
+  /* background: var(--app-bg); */
 }
 
 .reviews-container {
-  background: none;
   padding: 4vh 0vw;
   display: flex;
   flex-direction: column;

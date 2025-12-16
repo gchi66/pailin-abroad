@@ -54,6 +54,11 @@
   line-height: 1.3;
 }
 
+.flh-title-line {
+  display: inline;
+  margin-right: 0.3em;
+}
+
 @media (max-width: 480px) {
   .free-lesson-header {
     margin: 1.75rem 0 1.75rem 0;
@@ -86,6 +91,7 @@
 
   .flh-title-line {
     display: block;
+    margin-right: 0;
   }
 
   .flh-text--subtitle {

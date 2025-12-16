@@ -93,6 +93,10 @@
     border-top: .10rem solid #1e1e1e; /* Adds top border */
     border-bottom: .10rem solid #1e1e1e; /* Adds bottom border */
   }
+
+  .faq-link {
+    display: none;
+  }
 }
 
 /* Bottom bar (blue) */
