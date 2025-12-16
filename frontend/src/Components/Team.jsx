@@ -32,8 +32,10 @@ const Team = () => {
         <div className="team-member-card" key={index}>
           <img src={member.image} alt={member.name} className="team-member-image" />
           <div className="team-member-info">
-            <span className="member-name">{member.name}</span>
-            <span className="member-title">{member.location}</span>
+            <div className="team-member-heading">
+              <span className="member-name">{member.name}</span>
+              <span className="member-title">{member.location}</span>
+            </div>
             <hr className="team-underline" />
             <span className="description">{member.description}</span>
           </div>

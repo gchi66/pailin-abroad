@@ -103,3 +103,28 @@
   flex-shrink: 0;
   max-width: 200px;
 }
+
+@media (max-width: 480px) {
+  .about-method-card {
+    max-width: 90vw;
+    width: 90vw;
+  }
+  .about-method-card-header-container {
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .about-method-card-header {
+    font-size: 1.5rem;
+    line-height: 1.6rem;
+  }
+
+  .about-method-card-text {
+    font-size: .9rem;
+    line-height: 1.3rem;
+  }
+
+  .about-method-card-arrow {
+    position: static;
+    margin-left: auto;
+  }
+}
