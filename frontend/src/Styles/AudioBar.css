@@ -377,6 +377,8 @@
   padding: 1rem 1.5rem;
   box-shadow: 0 -0.2rem 0.6rem rgba(0,0,0,0.08);
   z-index: 50;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .audio-sticky-focus {
@@ -412,9 +414,7 @@
   justify-content: center;
   gap: 0.6rem;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: visible;
-  scrollbar-width: thin;
+  overflow: hidden;
 }
 
 .audio-sticky-controls {
@@ -479,20 +479,59 @@
 
 @media (max-width: 768px) {
   .audio-card-sticky {
-    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    padding: 1rem 0 calc(1.4rem + env(safe-area-inset-bottom, 0px));
   }
   .bar-row-sticky {
     flex-wrap: nowrap;
   }
   .audio-sticky-controls {
+    position: relative;
     width: 100%;
+    max-width: 100%;
     flex-wrap: nowrap;
-    justify-content: center;
-    gap: 0.6rem;
+    justify-content: space-between;
+    gap: 0.4rem;
+    padding-top: 0.35rem;
+    padding-bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   .audio-card-sticky .track {
-    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: env(safe-area-inset-bottom, 0px);
+    height: 0.3rem;
     max-width: none;
+    min-width: 0;
     order: 3;
+    z-index: 1;
+  }
+  .audio-card-sticky .audio-controls-primary .track {
+    min-width: 0;
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  .audio-card-sticky .track-fill {
+    height: 100%;
+  }
+  .audio-card-sticky .track-handle {
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-right: -0.45rem;
+  }
+  .audio-sticky-controls .time-label {
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+  .audio-card-sticky .play-pause-icon {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+  .audio-card-sticky .skip-icon {
+    width: 1.8rem;
+    height: 1.8rem;
   }
 }
