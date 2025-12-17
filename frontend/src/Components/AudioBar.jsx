@@ -32,11 +32,14 @@ export default function AudioBar({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isDraggingPanel, setIsDraggingPanel] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
+  const [isSnapping, setIsSnapping] = useState(false);
   const volumeTrackRef = useRef(null);
   const isScrubbingRef = useRef(false);
   const panelDragStartRef = useRef(null);
+  const dragOffsetRef = useRef(0);
   const controlsWrapperRef = useRef(null);
   const controlsHeightRef = useRef(0);
+  const cardRef = useRef(null);
   const [showRates, setShowRates] = useState(false);
   const rates = [0.5, 0.75, 1, 1.25, 1.5];
 
@@ -356,15 +359,12 @@ export default function AudioBar({
     if (!isSticky || !panelDragStartRef.current || isScrubbingRef.current) return;
     const deltaY = clientY - panelDragStartRef.current.y;
     const maxOffset = controlsHeightRef.current || 200;
-    let clampedOffset = isCollapsed ? Math.min(0, deltaY) : Math.max(0, deltaY);
+    const upperClamp = isCollapsed ? -maxOffset : 0;
+    const lowerClamp = isCollapsed ? 0 : maxOffset;
+    let clampedOffset = deltaY;
+    clampedOffset = Math.max(upperClamp, Math.min(lowerClamp, clampedOffset));
 
-    if (Math.abs(clampedOffset) > maxOffset) {
-      const excess = Math.abs(clampedOffset) - maxOffset;
-      clampedOffset = clampedOffset > 0
-        ? maxOffset + excess * 0.3
-        : -maxOffset - excess * 0.3;
-    }
-
+    dragOffsetRef.current = clampedOffset;
     setDragOffset(clampedOffset);
   };
 
@@ -372,10 +372,11 @@ export default function AudioBar({
     if (!isSticky || !panelDragStartRef.current) {
       setIsDraggingPanel(false);
       setDragOffset(0);
+      dragOffsetRef.current = 0;
       return;
     }
 
-    const deltaY = dragOffset;
+    const deltaY = dragOffsetRef.current;
     const elapsed = Math.max(1, Date.now() - panelDragStartRef.current.time);
     const velocity = Math.abs(deltaY) / elapsed;
     const distThreshold = (controlsHeightRef.current || 150) * 0.4;
@@ -393,8 +394,15 @@ export default function AudioBar({
     }
 
     setIsCollapsed(nextCollapsed);
+    setIsSnapping(true);
     setIsDraggingPanel(false);
-    setDragOffset(0);
+
+    // Reset offsets on next frame so snapping stays active
+    requestAnimationFrame(() => {
+      setDragOffset(0);
+      dragOffsetRef.current = 0;
+    });
+
     panelDragStartRef.current = null;
   };
 
@@ -444,13 +452,36 @@ export default function AudioBar({
     };
   }, [isDraggingPanel]);
 
+  useEffect(() => {
+    if (!isSnapping) return;
+    const card = cardRef.current;
+    if (!card) return;
+    const handleSnapEnd = (e) => {
+      if (e.propertyName === "transform") {
+        setIsSnapping(false);
+      }
+    };
+    card.addEventListener("transitionend", handleSnapEnd);
+    return () => {
+      card.removeEventListener("transitionend", handleSnapEnd);
+    };
+  }, [isSnapping]);
+
   const handleContainerClick = () => {
     if (isCollapsed && !isDraggingPanel) expand();
   };
 
   return (
     <section
-      className={`audio-card${isLocked ? ' audio-locked' : ''}${isSticky ? ' audio-card-sticky' : ''}${isCollapsed ? ' is-collapsed' : ''}`}
+      ref={cardRef}
+      className={`audio-card${isLocked ? ' audio-locked' : ''}${isSticky ? ' audio-card-sticky' : ''}${isCollapsed ? ' is-collapsed' : ''}${isDraggingPanel ? ' is-dragging' : ''}${isSnapping ? ' is-snapping' : ''}`}
+      style={
+        isSticky
+          ? {
+              "--drag-offset": `${isDraggingPanel ? dragOffset : 0}px`,
+            }
+          : undefined
+      }
       onClick={handleContainerClick}
     >
       {variant === "card" && (
@@ -507,10 +538,12 @@ export default function AudioBar({
           className={`audio-controls-wrapper${isCollapsed ? " is-collapsed" : ""}${isDraggingPanel ? " is-dragging" : ""}`}
           style={
             isDraggingPanel
-              ? {
-                  "--drag-offset": `${dragOffset}px`,
-                  "--drag-opacity": `${1 - Math.min(Math.abs(dragOffset) / Math.max(controlsHeightRef.current || 200, 1), 1)}`
-                }
+              ? (() => {
+                  const maxOffset = Math.max(controlsHeightRef.current || 200, 1);
+                  const progress = Math.min(Math.abs(dragOffset) / maxOffset, 1);
+                  const dragOpacity = isCollapsed ? progress : 1 - progress;
+                  return { "--drag-opacity": `${dragOpacity}` };
+                })()
               : undefined
           }
           onTouchStart={!isSticky ? undefined : handleTouchStartDrag}
