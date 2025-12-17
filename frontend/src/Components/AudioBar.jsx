@@ -29,7 +29,11 @@ export default function AudioBar({
   const [volume, setVolume] = useState(1);
   const [rate, setRate] = useState(1);
   const [isDraggingVolume, setIsDraggingVolume] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const volumeTrackRef = useRef(null);
+  const touchDataRef = useRef(null);
+  const touchHandledRef = useRef(false);
+  const isScrubbingRef = useRef(false);
   const [showRates, setShowRates] = useState(false);
   const rates = [0.5, 0.75, 1, 1.25, 1.5];
 
@@ -71,6 +75,7 @@ export default function AudioBar({
 
   const handleTrackClick = (e) => {
     if (isLocked) return;
+    isScrubbingRef.current = false;
     const rect = e.currentTarget.getBoundingClientRect();
     const pct = (e.clientX - rect.left) / rect.width;
     seek(pct);
@@ -79,9 +84,18 @@ export default function AudioBar({
   const handleTrackDrag = (e) => {
     if (isLocked) return;
     if (e.buttons !== 1) return; // Only drag with left mouse button
+    isScrubbingRef.current = true;
     const rect = e.currentTarget.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     seek(pct);
+  };
+
+  const handleTrackPointerDown = () => {
+    isScrubbingRef.current = true;
+  };
+
+  const handleTrackPointerUp = () => {
+    isScrubbingRef.current = false;
   };
 
   const skip = (sec) => {
@@ -305,9 +319,93 @@ export default function AudioBar({
     return () => pauseAll();
   }, []);
 
+  const expand = () => setIsCollapsed(false);
+  const collapse = () => setIsCollapsed(true);
+  const toggleCollapsed = () => setIsCollapsed((prev) => !prev);
+
+  const handleHandleClick = (event) => {
+    event.stopPropagation();
+    toggleCollapsed();
+  };
+
+  const handleHandleKeyDown = (event) => {
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      expand();
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      collapse();
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleCollapsed();
+    }
+  };
+
+  const SWIPE_DISTANCE_PX = 16;
+  const SWIPE_VELOCITY = 0.6;
+  const DOMINANCE_RATIO = 1.5;
+
+  const handleTouchStartBar = (event) => {
+    if (!isSticky || isScrubbingRef.current) return;
+    const t = event.touches?.[0];
+    if (!t) return;
+    touchHandledRef.current = false;
+    touchDataRef.current = { x: t.clientX, y: t.clientY, time: Date.now() };
+  };
+
+  const handleTouchMoveBar = (event) => {
+    if (!isSticky || !touchDataRef.current || isScrubbingRef.current) return;
+    const t = event.touches?.[0];
+    if (!t || touchHandledRef.current) return;
+
+    const deltaX = Math.abs(t.clientX - touchDataRef.current.x);
+    const deltaY = t.clientY - touchDataRef.current.y;
+    const absY = Math.abs(deltaY);
+    const dominantVertical = absY > deltaX * DOMINANCE_RATIO;
+    const elapsed = Math.max(1, Date.now() - touchDataRef.current.time);
+    const velocity = absY / elapsed;
+
+    if (!dominantVertical) return;
+
+    if (absY > SWIPE_DISTANCE_PX || velocity > SWIPE_VELOCITY) {
+      if (deltaY > 0 && !isCollapsed) {
+        collapse();
+        touchHandledRef.current = true;
+      } else if (deltaY < 0 && isCollapsed) {
+        expand();
+        touchHandledRef.current = true;
+      }
+    }
+  };
+
+  const handleTouchEndBar = () => {
+    if (!isSticky) return;
+    if (!touchHandledRef.current && isCollapsed) {
+      expand();
+    }
+    touchDataRef.current = null;
+    isScrubbingRef.current = false;
+    touchHandledRef.current = false;
+  };
+
+  const handleTouchCancelBar = () => {
+    touchDataRef.current = null;
+    touchHandledRef.current = false;
+    isScrubbingRef.current = false;
+  };
+
+  const handleContainerClick = () => {
+    if (isCollapsed) expand();
+  };
+
   return (
     <section
-      className={`audio-card${isLocked ? ' audio-locked' : ''}${isSticky ? ' audio-card-sticky' : ''}`}
+      className={`audio-card${isLocked ? ' audio-locked' : ''}${isSticky ? ' audio-card-sticky' : ''}${isCollapsed ? ' is-collapsed' : ''}`}
+      onClick={handleContainerClick}
+      onTouchStart={handleTouchStartBar}
+      onTouchMove={handleTouchMoveBar}
+      onTouchEnd={handleTouchEndBar}
+      onTouchCancel={handleTouchCancelBar}
     >
       {variant === "card" && (
         <>
@@ -342,115 +440,138 @@ export default function AudioBar({
 
       {/* controls */}
       <div className={`bar-row${isSticky ? " bar-row-sticky" : ""}`}>
-        <div className={isSticky ? "audio-controls audio-sticky-controls" : "audio-controls"}>
-          <div className="audio-controls-primary">
-            <button
-              className="icon-btn play-btn"
-              onClick={togglePlay}
-              aria-label="Play / Pause"
-              disabled={isLocked}
-            >
-              <img
-                src={playing ? "/images/pause-audio-lesson.webp" : "/images/play-audio-lesson.webp"}
-                alt={playing ? "Pause" : "Play"}
-                className="play-pause-icon"
-              />
-            </button>
-
-            <span className="time-label">{fmt(current)}</span>
-
-            <div
-              className="track"
-              role="slider"
-              aria-valuemin={0}
-              aria-valuemax={duration}
-              aria-valuenow={current}
-              onClick={handleTrackClick}
-              onMouseMove={handleTrackDrag}
-            >
-              <div
-                className="track-fill"
-                style={{ width: duration ? `${(current / duration) * 100}%` : 0 }}
-              >
-                <div className="track-handle" />
-              </div>
-            </div>
-
-            <span className="time-label">{fmt(duration)}</span>
-          </div>
-
-          <div className="audio-controls-secondary">
-            <button className="icon-btn skip-btn" onClick={() => skip(-10)} title="Replay 10 s">
-              <img
-                src="/images/rewind-audio-10-seconds.webp"
-                alt="Rewind 10 seconds"
-                className="skip-icon"
-              />
-            </button>
-            <button className="icon-btn skip-btn" onClick={() => skip(10)} title="Forward 10 s">
-              <img
-                src="/images/forward-audio-10-seconds.webp"
-                alt="Forward 10 seconds"
-                className="skip-icon"
-              />
-            </button>
-
-            <div className="volume-control">
+        {isSticky && (
+          <button
+            type="button"
+            className="audio-handle"
+            onClick={handleHandleClick}
+            onKeyDown={handleHandleKeyDown}
+            aria-expanded={!isCollapsed}
+            aria-label={isCollapsed ? "Expand audio controls" : "Collapse audio controls"}
+          />
+        )}
+        <div className={`audio-controls-wrapper${isCollapsed ? " is-collapsed" : ""}`}>
+          <div
+            className={isSticky ? "audio-controls audio-sticky-controls" : "audio-controls"}
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+          >
+            <div className="audio-controls-primary">
               <button
-                className={`icon-btn volume-btn${muted ? " is-muted" : ""}`}
-                onClick={toggleMute}
-                aria-label="Mute / Un-mute"
+                className="icon-btn play-btn"
+                onClick={togglePlay}
+                aria-label="Play / Pause"
+                disabled={isLocked}
               >
                 <img
-                  src="/images/adjust-volume-audio-lesson.webp"
-                  alt="Volume"
-                  className="volume-icon"
+                  src={playing ? "/images/pause-audio-lesson.webp" : "/images/play-audio-lesson.webp"}
+                  alt={playing ? "Pause" : "Play"}
+                  className="play-pause-icon"
                 />
               </button>
-              <div className="volume-slider-container">
+
+              <span className="time-label">{fmt(current)}</span>
+
+              <div
+                className="track"
+                role="slider"
+                aria-valuemin={0}
+                aria-valuemax={duration}
+                aria-valuenow={current}
+                onMouseDown={handleTrackPointerDown}
+                onTouchStart={handleTrackPointerDown}
+                onMouseUp={handleTrackPointerUp}
+                onTouchEnd={handleTrackPointerUp}
+                onClick={handleTrackClick}
+                onMouseMove={handleTrackDrag}
+              >
                 <div
-                  className="volume-slider-wrapper"
-                  ref={volumeTrackRef}
-                  onMouseDown={handleVolumeMouseDown}
-                  onTouchStart={handleVolumeMouseDown}
+                  className="track-fill"
+                  style={{ width: duration ? `${(current / duration) * 100}%` : 0 }}
                 >
-                  <div
-                    className="volume-slider-fill"
-                    style={{ height: `${(muted ? 0 : volume) * 100}%` }}
-                  />
-                  <div className="volume-handle" style={volumeHandleStyle} />
+                  <div className="track-handle" />
                 </div>
               </div>
+
+              <span className="time-label">{fmt(duration)}</span>
             </div>
 
-            <div className="rate-group">
-              <button
-                className="rate-btn current-rate"
-                onClick={() => setShowRates(!showRates)}
-                aria-label="Toggle playback rates"
-              >
-                {rate}x
+            <div className="audio-controls-secondary">
+              <button className="icon-btn skip-btn" onClick={() => skip(-10)} title="Replay 10 s">
+                <img
+                  src="/images/rewind-audio-10-seconds.webp"
+                  alt="Rewind 10 seconds"
+                  className="skip-icon"
+                />
               </button>
-              {showRates && (
-                <div className="rate-options">
-                  {rates.filter(r => r !== rate).map((r) => (
-                    <button
-                      key={r}
-                      className="rate-btn rate-option"
-                      onClick={() => {
-                        setRate(r);
-                        setShowRates(false);
-                      }}
-                      aria-label={`Set playback rate to ${r}x`}
-                    >
-                      {r}x
-                    </button>
-                  ))}
+              <button className="icon-btn skip-btn" onClick={() => skip(10)} title="Forward 10 s">
+                <img
+                  src="/images/forward-audio-10-seconds.webp"
+                  alt="Forward 10 seconds"
+                  className="skip-icon"
+                />
+              </button>
+
+              <div className="volume-control">
+                <button
+                  className={`icon-btn volume-btn${muted ? " is-muted" : ""}`}
+                  onClick={toggleMute}
+                  aria-label="Mute / Un-mute"
+                >
+                  <img
+                    src="/images/adjust-volume-audio-lesson.webp"
+                    alt="Volume"
+                    className="volume-icon"
+                  />
+                </button>
+                <div className="volume-slider-container">
+                  <div
+                    className="volume-slider-wrapper"
+                    ref={volumeTrackRef}
+                    onMouseDown={handleVolumeMouseDown}
+                    onTouchStart={handleVolumeMouseDown}
+                  >
+                    <div
+                      className="volume-slider-fill"
+                      style={{ height: `${(muted ? 0 : volume) * 100}%` }}
+                    />
+                    <div className="volume-handle" style={volumeHandleStyle} />
+                  </div>
                 </div>
-              )}
+              </div>
+
+              <div className="rate-group">
+                <button
+                  className="rate-btn current-rate"
+                  onClick={() => setShowRates(!showRates)}
+                  aria-label="Toggle playback rates"
+                >
+                  {rate}x
+                </button>
+                {showRates && (
+                  <div className="rate-options">
+                    {rates.filter(r => r !== rate).map((r) => (
+                      <button
+                        key={r}
+                        className="rate-btn rate-option"
+                        onClick={() => {
+                          setRate(r);
+                          setShowRates(false);
+                        }}
+                        aria-label={`Set playback rate to ${r}x`}
+                      >
+                        {r}x
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
+        <span className="sr-only" aria-live="polite">
+          {isCollapsed ? "Audio player collapsed" : "Audio player expanded"}
+        </span>
       </div>
     </section>
   );

@@ -64,6 +64,10 @@
 }
 
 @media (max-width: 480px) {
+  .take-the-leap-cta {
+    gap: 1rem;
+    padding: 5vh 2rem;
+  }
   .take-the-leap-cta-title {
     font-size: 1.2rem;
   }

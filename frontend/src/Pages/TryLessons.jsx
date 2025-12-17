@@ -1,12 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import PlanNotice from "../Components/PlanNotice";
 import { useAuth } from "../AuthContext";
 import "../Styles/TryLessons.css";
 import FreeLessonCards from "../Components/FreeLessonCards";
 import MembershipFeatures from "../Components/MembershipFeatures";
+import SignUpCTA from "../Components/SignUpCTA";
 
 const TryLessons = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const handleSignupClick = () => navigate("/signup");
 
   return (
     <div className="try-lessons-page-container">
@@ -30,6 +34,8 @@ const TryLessons = () => {
       <div className="try-lessons-cards-container">
         <FreeLessonCards showHeader={false} />
       </div>
+
+      <SignUpCTA onSignupClick={handleSignupClick} />
 
       <div className="try-lessons-plan-notice-wrapper">
         {!user ? (

@@ -66,6 +66,9 @@
 }
 
 @media (max-width: 480px) {
+  .signup-cta {
+    gap: 1rem;
+  }
   .signup-cta-title {
     font-size: 1.2rem;
   }
