@@ -283,6 +283,14 @@ export default function AudioBar({
     }
   };
 
+  const handleVolumeTouchMove = (event) => {
+    if (event.cancelable) event.preventDefault();
+    const clientY = extractClientY(event);
+    if (clientY !== null) {
+      updateVolumeFromPosition(clientY);
+    }
+  };
+
   useEffect(() => {
     if (!isDraggingVolume) return;
 
@@ -615,6 +623,7 @@ export default function AudioBar({
                         ref={volumeTrackRef}
                         onMouseDown={handleVolumeMouseDown}
                         onTouchStart={handleVolumeMouseDown}
+                        onTouchMove={handleVolumeTouchMove}
                       >
                         <div
                           className="volume-slider-fill"
