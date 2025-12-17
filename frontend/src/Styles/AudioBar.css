@@ -70,7 +70,7 @@
 }
 
 .play-btn {
-  font-size: 2.4rem;
+  font-size: 2.7rem;
   padding: 0;
   display: flex;
   align-items: center;
@@ -151,6 +151,19 @@
   transform: scale(1.1);
 }
 
+.volume-btn.is-muted::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.4rem;
+  height: 0.18rem;
+  background: #d10000;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
 .volume-slider-container {
   position: absolute;
   bottom: calc(100% - 0.5rem);
@@ -166,8 +179,7 @@
   box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.15);
 }
 
-.volume-control:hover .volume-slider-container,
-.volume-slider-container:hover {
+.volume-slider-container.is-open {
   opacity: 1;
   pointer-events: auto;
 }
@@ -261,11 +273,13 @@
 /* progress track */
 .track {
   flex: 1 1 auto;
-  height: 0.4rem;
+  height: 0.5rem;
   background: #dbe2ea;
-  border-radius: 0.2rem;
+  border-radius: 0.25rem;
   cursor: pointer;
   position: relative;
+  overflow: visible;
+  touch-action: none;
 }
 
 .track-fill {
@@ -280,13 +294,15 @@
 }
 
 .track-handle {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.4rem;
+  height: 1.4rem;
   background: #1e1e1e;
   border-radius: 50%;
   cursor: grab;
   transition: transform 0.2s ease;
-  margin-right: -0.6rem;
+  margin-right: -0.7rem;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
+  position: relative;
 }
 
 .track-handle:active {
@@ -296,6 +312,12 @@
 
 .track-handle:hover {
   transform: scale(1.15);
+}
+
+.track-handle::after {
+  content: "";
+  position: absolute;
+  inset: -0.35rem;
 }
 
 /* tips row */
@@ -519,7 +541,7 @@
   justify-content: center;
   gap: 0.6rem;
   flex-wrap: nowrap;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .audio-sticky-controls {
@@ -530,23 +552,49 @@
   min-width: 0;
   flex-wrap: nowrap;
   flex: 1 1 auto;
+  overflow: visible;
 }
 
 .audio-controls {
   display: flex;
   align-items: center;
-  gap: 3vw;
+  gap: 1rem;
   justify-content: center;
   min-width: 0;
   flex-wrap: nowrap;
   flex: 1 1 auto;
 }
 
-.audio-controls-primary {
+.audio-controls-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 1.2rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.audio-controls-left,
+.audio-controls-center,
+.audio-controls-right {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  min-width: 0;
+}
+
+.audio-controls-left {
+  justify-content: flex-start;
+  gap: 1.4rem;
+}
+
+.audio-controls-center {
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.audio-controls-right {
+  justify-content: flex-end;
+  gap: 1.4rem;
 }
 
 .audio-controls-secondary {
@@ -591,6 +639,7 @@
   }
   .bar-row-sticky {
     flex-wrap: nowrap;
+    overflow: visible;
   }
   .audio-sticky-controls {
     position: relative;
@@ -600,11 +649,11 @@
     justify-content: space-between;
     gap: 0.4rem;
     padding-top: 0.35rem;
-    padding-bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(0.8rem + env(safe-area-inset-bottom, 0px));
     padding-left: 0.9rem;
     padding-right: 0.9rem;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
   }
   .audio-card-sticky.is-collapsed .audio-sticky-controls {
     padding-top: 0;
@@ -614,12 +663,13 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: env(safe-area-inset-bottom, 0px);
-    height: 0.3rem;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 0.05rem);
+    height: 0.36rem;
     max-width: none;
     min-width: 0;
     order: 3;
-    z-index: 1;
+    z-index: 2;
+    overflow: visible;
   }
   .audio-card-sticky .audio-controls-primary .track {
     min-width: 0;
@@ -630,9 +680,17 @@
     height: 100%;
   }
   .audio-card-sticky .track-handle {
-    width: 0.9rem;
-    height: 0.9rem;
-    margin-right: -0.45rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: -0.6rem;
+    overflow: visible;
+    position: relative;
+    z-index: 2;
+  }
+
+  .track-handle::after {
+    position: relative;
+    overflow: visible;
   }
   .audio-sticky-controls .time-label {
     min-width: 0;
@@ -645,5 +703,9 @@
   .audio-card-sticky .skip-icon {
     width: 1.8rem;
     height: 1.8rem;
+  }
+
+  .icon-btn, .rate-btn {
+    padding: 0.4rem 0;
   }
 }
