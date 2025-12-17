@@ -51,7 +51,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  touch-action: pan-y;
+  touch-action: none;
   cursor: grab;
 }
 
@@ -408,6 +408,7 @@
 
 .audio-card-sticky.is-dragging {
   transition: none;
+  touch-action: none;
 }
 
 .audio-card-sticky.is-snapping {

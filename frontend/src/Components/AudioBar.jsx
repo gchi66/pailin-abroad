@@ -413,6 +413,9 @@ export default function AudioBar({
   };
 
   const handleTouchMoveDrag = (event) => {
+    if (isDraggingPanel && event.cancelable) {
+      event.preventDefault();
+    }
     const t = event.touches?.[0];
     if (!t) return;
     applyPanelDrag(t.clientY);
