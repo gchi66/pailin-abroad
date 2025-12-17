@@ -41,6 +41,20 @@
   justify-content: center;
 }
 
+.audio-handle-hit {
+  width: 100%;
+  padding: 0.75rem 0 0.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.audio-handle-hit:active {
+  cursor: grabbing;
+}
+
 .icon-btn,
 .rate-btn {
   font-size: 1.6rem;
@@ -394,7 +408,7 @@
   border-radius: 999px;
   background: linear-gradient(#dcdcdc, #c8c8c8);
   border: none;
-  margin: 0rem auto 0rem;
+  margin: 0.3rem auto 0.3rem;
   display: block;
   cursor: pointer;
   touch-action: pan-y;
@@ -427,6 +441,8 @@
   will-change: max-height, opacity;
   max-height: 320px;
   overflow: visible;
+  transform: translateY(var(--drag-offset, 0));
+  opacity: var(--drag-opacity, 1);
 }
 
 .audio-card-sticky.is-collapsed .audio-controls-wrapper {
@@ -434,6 +450,17 @@
   opacity: 0;
   pointer-events: none;
   transform: translateY(-4px);
+}
+
+.audio-card-sticky .audio-controls-wrapper.is-dragging {
+  transition: none;
+  max-height: 320px;
+  pointer-events: auto;
+}
+
+.audio-card-sticky.is-collapsed .audio-controls-wrapper.is-dragging {
+  opacity: var(--drag-opacity, 1);
+  transform: translateY(var(--drag-offset, 0));
 }
 
 .audio-sticky-focus {

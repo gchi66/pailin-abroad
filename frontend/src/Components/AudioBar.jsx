@@ -30,10 +30,13 @@ export default function AudioBar({
   const [rate, setRate] = useState(1);
   const [isDraggingVolume, setIsDraggingVolume] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDraggingPanel, setIsDraggingPanel] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
   const volumeTrackRef = useRef(null);
-  const touchDataRef = useRef(null);
-  const touchHandledRef = useRef(false);
   const isScrubbingRef = useRef(false);
+  const panelDragStartRef = useRef(null);
+  const controlsWrapperRef = useRef(null);
+  const controlsHeightRef = useRef(0);
   const [showRates, setShowRates] = useState(false);
   const rates = [0.5, 0.75, 1, 1.25, 1.5];
 
@@ -325,6 +328,7 @@ export default function AudioBar({
 
   const handleHandleClick = (event) => {
     event.stopPropagation();
+    if (isDraggingPanel) return;
     toggleCollapsed();
   };
 
@@ -341,71 +345,113 @@ export default function AudioBar({
     }
   };
 
-  const SWIPE_DISTANCE_PX = 16;
-  const SWIPE_VELOCITY = 0.6;
-  const DOMINANCE_RATIO = 1.5;
-
-  const handleTouchStartBar = (event) => {
+  const startPanelDrag = (clientY) => {
     if (!isSticky || isScrubbingRef.current) return;
-    const t = event.touches?.[0];
-    if (!t) return;
-    touchHandledRef.current = false;
-    touchDataRef.current = { x: t.clientX, y: t.clientY, time: Date.now() };
+    panelDragStartRef.current = { y: clientY, time: Date.now() };
+    controlsHeightRef.current = controlsWrapperRef.current?.scrollHeight || 0;
+    setIsDraggingPanel(true);
   };
 
-  const handleTouchMoveBar = (event) => {
-    if (!isSticky || !touchDataRef.current || isScrubbingRef.current) return;
-    const t = event.touches?.[0];
-    if (!t || touchHandledRef.current) return;
+  const applyPanelDrag = (clientY) => {
+    if (!isSticky || !panelDragStartRef.current || isScrubbingRef.current) return;
+    const deltaY = clientY - panelDragStartRef.current.y;
+    const maxOffset = controlsHeightRef.current || 200;
+    let clampedOffset = isCollapsed ? Math.min(0, deltaY) : Math.max(0, deltaY);
 
-    const deltaX = Math.abs(t.clientX - touchDataRef.current.x);
-    const deltaY = t.clientY - touchDataRef.current.y;
-    const absY = Math.abs(deltaY);
-    const dominantVertical = absY > deltaX * DOMINANCE_RATIO;
-    const elapsed = Math.max(1, Date.now() - touchDataRef.current.time);
-    const velocity = absY / elapsed;
+    if (Math.abs(clampedOffset) > maxOffset) {
+      const excess = Math.abs(clampedOffset) - maxOffset;
+      clampedOffset = clampedOffset > 0
+        ? maxOffset + excess * 0.3
+        : -maxOffset - excess * 0.3;
+    }
 
-    if (!dominantVertical) return;
+    setDragOffset(clampedOffset);
+  };
 
-    if (absY > SWIPE_DISTANCE_PX || velocity > SWIPE_VELOCITY) {
-      if (deltaY > 0 && !isCollapsed) {
-        collapse();
-        touchHandledRef.current = true;
-      } else if (deltaY < 0 && isCollapsed) {
-        expand();
-        touchHandledRef.current = true;
+  const finishPanelDrag = () => {
+    if (!isSticky || !panelDragStartRef.current) {
+      setIsDraggingPanel(false);
+      setDragOffset(0);
+      return;
+    }
+
+    const deltaY = dragOffset;
+    const elapsed = Math.max(1, Date.now() - panelDragStartRef.current.time);
+    const velocity = Math.abs(deltaY) / elapsed;
+    const distThreshold = (controlsHeightRef.current || 150) * 0.4;
+    const velThreshold = 0.3;
+
+    let nextCollapsed = isCollapsed;
+    if (!isCollapsed && deltaY > 0) {
+      if (deltaY > distThreshold || velocity > velThreshold) {
+        nextCollapsed = true;
+      }
+    } else if (isCollapsed && deltaY < 0) {
+      if (Math.abs(deltaY) > distThreshold || velocity > velThreshold) {
+        nextCollapsed = false;
       }
     }
+
+    setIsCollapsed(nextCollapsed);
+    setIsDraggingPanel(false);
+    setDragOffset(0);
+    panelDragStartRef.current = null;
   };
 
-  const handleTouchEndBar = () => {
-    if (!isSticky) return;
-    if (!touchHandledRef.current && isCollapsed) {
-      expand();
-    }
-    touchDataRef.current = null;
-    isScrubbingRef.current = false;
-    touchHandledRef.current = false;
+  const handleTouchStartDrag = (event) => {
+    const t = event.touches?.[0];
+    if (!t) return;
+    startPanelDrag(t.clientY);
   };
 
-  const handleTouchCancelBar = () => {
-    touchDataRef.current = null;
-    touchHandledRef.current = false;
-    isScrubbingRef.current = false;
+  const handleTouchMoveDrag = (event) => {
+    const t = event.touches?.[0];
+    if (!t) return;
+    applyPanelDrag(t.clientY);
   };
+
+  const handleTouchEndDrag = () => {
+    finishPanelDrag();
+  };
+
+  const handleHandleMouseDown = (event) => {
+    startPanelDrag(event.clientY);
+  };
+
+  const handleMouseMoveDrag = (event) => {
+    if (!isDraggingPanel) return;
+    applyPanelDrag(event.clientY);
+  };
+
+  const handleMouseUpDrag = () => {
+    if (isDraggingPanel) finishPanelDrag();
+  };
+
+  useEffect(() => {
+    if (!isDraggingPanel) return;
+    window.addEventListener("mousemove", handleMouseMoveDrag);
+    window.addEventListener("mouseup", handleMouseUpDrag);
+    window.addEventListener("touchmove", handleTouchMoveDrag, { passive: false });
+    window.addEventListener("touchend", handleTouchEndDrag);
+    window.addEventListener("touchcancel", handleTouchEndDrag);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMoveDrag);
+      window.removeEventListener("mouseup", handleMouseUpDrag);
+      window.removeEventListener("touchmove", handleTouchMoveDrag);
+      window.removeEventListener("touchend", handleTouchEndDrag);
+      window.removeEventListener("touchcancel", handleTouchEndDrag);
+    };
+  }, [isDraggingPanel]);
 
   const handleContainerClick = () => {
-    if (isCollapsed) expand();
+    if (isCollapsed && !isDraggingPanel) expand();
   };
 
   return (
     <section
       className={`audio-card${isLocked ? ' audio-locked' : ''}${isSticky ? ' audio-card-sticky' : ''}${isCollapsed ? ' is-collapsed' : ''}`}
       onClick={handleContainerClick}
-      onTouchStart={handleTouchStartBar}
-      onTouchMove={handleTouchMoveBar}
-      onTouchEnd={handleTouchEndBar}
-      onTouchCancel={handleTouchCancelBar}
     >
       {variant === "card" && (
         <>
@@ -441,16 +487,34 @@ export default function AudioBar({
       {/* controls */}
       <div className={`bar-row${isSticky ? " bar-row-sticky" : ""}`}>
         {isSticky && (
-          <button
-            type="button"
-            className="audio-handle"
-            onClick={handleHandleClick}
-            onKeyDown={handleHandleKeyDown}
-            aria-expanded={!isCollapsed}
-            aria-label={isCollapsed ? "Expand audio controls" : "Collapse audio controls"}
-          />
+          <div
+            className="audio-handle-hit"
+            onTouchStart={handleTouchStartDrag}
+            onMouseDown={handleHandleMouseDown}
+          >
+            <button
+              type="button"
+              className="audio-handle"
+              onClick={handleHandleClick}
+              onKeyDown={handleHandleKeyDown}
+              aria-expanded={!isCollapsed}
+              aria-label={isCollapsed ? "Expand audio controls" : "Collapse audio controls"}
+            />
+          </div>
         )}
-        <div className={`audio-controls-wrapper${isCollapsed ? " is-collapsed" : ""}`}>
+        <div
+          ref={controlsWrapperRef}
+          className={`audio-controls-wrapper${isCollapsed ? " is-collapsed" : ""}${isDraggingPanel ? " is-dragging" : ""}`}
+          style={
+            isDraggingPanel
+              ? {
+                  "--drag-offset": `${dragOffset}px`,
+                  "--drag-opacity": `${1 - Math.min(Math.abs(dragOffset) / Math.max(controlsHeightRef.current || 200, 1), 1)}`
+                }
+              : undefined
+          }
+          onTouchStart={!isSticky ? undefined : handleTouchStartDrag}
+        >
           <div
             className={isSticky ? "audio-controls audio-sticky-controls" : "audio-controls"}
             onClick={(e) => e.stopPropagation()}
