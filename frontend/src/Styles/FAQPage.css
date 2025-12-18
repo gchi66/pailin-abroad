@@ -93,7 +93,7 @@
   }
 
   .faq-page-header-text {
-    font-size: clamp(1.4rem, 6vw, 1.8rem);
+    font-size: 2rem;
     font-weight: 700;
     line-height: 1.2;
     white-space: normal;
