@@ -343,6 +343,7 @@ export default function Lesson() {
   const [snipIdx, setSnipIdx] = useState({});
   const [phrasesSnipIdx, setPhrasesSnipIdx] = useState({});
   const [showStickyPlayer, setShowStickyPlayer] = useState(false);
+  const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
 
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
@@ -871,16 +872,24 @@ export default function Lesson() {
             <div className="listen-cta-wrapper">
               <button
                 type="button"
-                className="listen-cta"
-                onClick={() => setShowStickyPlayer(true)}
+                className={`listen-cta${showStickyPlayer ? " is-active" : ""}`}
+                onClick={() => {
+                  if (showStickyPlayer) {
+                    setShowStickyPlayer(false);
+                    setShouldAutoPlay(false);
+                  } else {
+                    setShowStickyPlayer(true);
+                    setShouldAutoPlay(true);
+                  }
+                }}
                 disabled={isLocked}
               >
                 <img
-                  src="/images/play-audio-lesson.webp"
+                  src={showStickyPlayer ? "/images/pause-audio-lesson.webp" : "/images/play-audio-lesson.webp"}
                   alt="Play"
                   className="listen-cta-icon"
                 />
-                <span>LISTEN TO THE CONVERSATION</span>
+                <span>{showStickyPlayer ? t("listenCta.playing", uiLang) : t("listenCta.listen", uiLang)}</span>
               </button>
             </div>
           )}
@@ -949,6 +958,8 @@ export default function Lesson() {
           isLocked={isLocked}
           variant="sticky"
           focusText={headerFocus}
+          shouldAutoPlay={shouldAutoPlay}
+          onAutoPlayComplete={() => setShouldAutoPlay(false)}
         />
       )}
     </main>

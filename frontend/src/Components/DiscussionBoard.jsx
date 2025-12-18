@@ -249,52 +249,7 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
           )}
         </div>
 
-        {canReply && (
-          <div className="comment-footer">
-            <button
-              type="button"
-              className="comment-reply-toggle"
-              onClick={() => setShowReply((visible) => !visible)}
-            >
-              {showReply ? "Cancel" : "Reply"}
-            </button>
-          </div>
-        )}
-
-        {showReply && canReply && (
-          <form className="comment-reply-form" onSubmit={handleReplySubmit}>
-            <textarea
-              value={replyBody}
-              onChange={(event) => setReplyBody(event.target.value)}
-              placeholder="Write a reply…"
-              rows={3}
-              className="comment-reply-textarea"
-              required
-            />
-            <button
-              type="submit"
-              className="comment-reply-submit"
-              disabled={postingReply || !replyBody.trim()}
-            >
-              {postingReply ? "Posting..." : "Post Reply"}
-            </button>
-          </form>
-        )}
-
-        {Array.isArray(comment?.replies) && comment.replies.length > 0 && (
-          <div className="comment-children">
-            {comment.replies.map((reply) => (
-              <CommentItem
-                key={reply.id}
-                comment={reply}
-                onReply={onReply}
-                onPin={onPin}
-                canReply={canReply}
-                depth={(depth || 0) + 1}
-              />
-            ))}
-          </div>
-        )}
+        {/* Reply functionality removed per request */}
       </div>
     </div>
   );

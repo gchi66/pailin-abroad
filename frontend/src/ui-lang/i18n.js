@@ -25,6 +25,10 @@ export const copy = {
       th: "ทำความคุ้นเคยกับคำที่คุณจะได้ยินในการสนทนา",
     },
   },
+  listenCta: {
+    listen: { en: "LISTEN TO THE CONVERSATION", th: "ฟังบทสนทนา" },
+    playing: { en: "NOW PLAYING", th: "กำลังเล่น" },
+  },
   lessonSidebar: {
     lessonLabel: { en: "LESSON", th: "บทเรียน" },
     checkpoint: { en: "CHECKPOINT", th: "จุดตรวจ" },
@@ -494,6 +498,11 @@ export const copy = {
       transcript: { en: "TRANSCRIPT", th: "บทถอดเสียง" },
       practice: { en: "PRACTICE", th: "แบบฝึกหัด" },
       phrasesVerbs: { en: "PHRASES & VERBS", th: "วลีและคำกริยา" },
+      apply: { en: "APPLY", th: "นำไปใช้" },
+      extraTip: { en: "EXTRA TIPS", th: "เคล็ดลับเพิ่มเติม" },
+      commonMistake: { en: "COMMON MISTAKES", th: "ข้อผิดพลาดที่พบบ่อย" },
+      understand: { en: "UNDERSTAND", th: "ทำความเข้าใจ" },
+      cultureNote: { en: "CULTURE NOTES", th: "เกร็ดวัฒนธรรม" },
     },
     locked: {
       previewTitle: { en: "This lesson is locked", th: "บทเรียนนี้ถูกล็อก" },

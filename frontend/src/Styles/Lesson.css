@@ -55,6 +55,19 @@
   box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
 }
 
+.listen-cta.is-active {
+  background-color: #ffffff;
+  color: #1e1e1e;
+}
+
+.listen-cta.is-active span {
+  color: #1e1e1e;
+}
+
+.listen-cta.is-active:hover {
+  background-color: #f3f3f3;
+}
+
 .listen-cta:hover {
   background-color: #e63e3e;
   transform: translateY(-2px);
@@ -78,6 +91,10 @@
   height: 1.6rem;
   object-fit: contain;
   filter: drop-shadow(0 0 0 #1E1E1E);
+}
+
+.listen-cta.is-active .listen-cta-icon {
+  filter: none;
 }
 
 

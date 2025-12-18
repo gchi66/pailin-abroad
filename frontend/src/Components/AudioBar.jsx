@@ -18,6 +18,8 @@ export default function AudioBar({
   isLocked = false,
   variant = "card", // "card" (legacy) | "sticky"
   focusText = "",
+  shouldAutoPlay = false,
+  onAutoPlayComplete,
 }) {
   const voiceRef = useRef(null);
   const bgRef = useRef(null);
@@ -67,6 +69,20 @@ export default function AudioBar({
       playing ? voiceRef.current.pause() : voiceRef.current.play();
     }
     setPlaying(!playing);
+  };
+
+  const forcePlay = () => {
+    if (isLocked) return;
+    if (hasSplit) {
+      if (!voiceRef.current || !bgRef.current) return;
+      bgRef.current.currentTime = voiceRef.current.currentTime;
+      voiceRef.current.play().catch(() => {});
+      bgRef.current.play().catch(() => {});
+    } else {
+      if (!voiceRef.current) return;
+      voiceRef.current.play().catch(() => {});
+    }
+    setPlaying(true);
   };
 
   const seek = (pct) => {
@@ -497,19 +513,13 @@ export default function AudioBar({
   }, [isSnapping]);
 
   useEffect(() => {
-    if (!showVolume) return;
-    const handleClickOutside = (e) => {
-      if (volumeControlRef.current && !volumeControlRef.current.contains(e.target)) {
-        setShowVolume(false);
+    if (shouldAutoPlay && !playing) {
+      forcePlay();
+      if (onAutoPlayComplete) {
+        onAutoPlayComplete();
       }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [showVolume]);
+    }
+  }, [shouldAutoPlay, playing, onAutoPlayComplete]);
 
   const handleContainerClick = () => {
     if (isCollapsed && !isDraggingPanel) expand();
@@ -606,9 +616,11 @@ export default function AudioBar({
                       className={`icon-btn volume-btn${muted || volume === 0 ? " is-muted" : ""}`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setShowVolume((prev) => !prev);
+                        setMuted((prev) => !prev);
+                        if (voiceRef.current) voiceRef.current.muted = !muted;
+                        if (bgRef.current) bgRef.current.muted = !muted;
                       }}
-                      aria-expanded={showVolume}
+                      aria-expanded={false}
                       aria-label="Mute / Un-mute"
                     >
                       <img
@@ -617,21 +629,6 @@ export default function AudioBar({
                         className="volume-icon"
                       />
                     </button>
-                    <div className={`volume-slider-container${showVolume ? " is-open" : ""}`}>
-                      <div
-                        className="volume-slider-wrapper"
-                        ref={volumeTrackRef}
-                        onMouseDown={handleVolumeMouseDown}
-                        onTouchStart={handleVolumeMouseDown}
-                        onTouchMove={handleVolumeTouchMove}
-                      >
-                        <div
-                          className="volume-slider-fill"
-                        style={{ height: `${(muted ? 0 : volume) * 100}%` }}
-                      />
-                        <div className="volume-handle" style={volumeHandleStyle} />
-                      </div>
-                    </div>
                   </div>
                 </div>
 

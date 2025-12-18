@@ -165,23 +165,7 @@
 }
 
 .volume-slider-container {
-  position: absolute;
-  bottom: calc(100% - 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
-  background: #FFFFFF;
-  border: var(--border-thin) solid #1E1E1E;
-  border-radius: 1rem;
-  padding: 1rem 0.6rem 1.5rem 0.6rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.15);
-}
-
-.volume-slider-container.is-open {
-  opacity: 1;
-  pointer-events: auto;
+  display: none;
 }
 
 .volume-slider-wrapper {

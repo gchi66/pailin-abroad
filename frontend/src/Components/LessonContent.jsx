@@ -31,6 +31,16 @@ export default function LessonContent({
 }) {
   const fallbacks = copy.lessonPage.sectionFallbacks;
   const lockedCopy = copy.lessonPage.locked;
+  const getFallbackHeader = (sectionType, defaultText) => {
+    const fb =
+      fallbacks?.[sectionType] ||
+      (sectionType === "phrases_verbs" ? fallbacks?.phrasesVerbs : null) ||
+      (sectionType === "extra_tip" ? fallbacks?.extraTip : null) ||
+      (sectionType === "common_mistake" ? fallbacks?.commonMistake : null) ||
+      (sectionType === "understand" ? fallbacks?.understand : null) ||
+      (sectionType === "culture_note" ? fallbacks?.cultureNote : null);
+    return fb ? pick(fb, contentLang) : defaultText;
+  };
   /* ===============================================================
      HELPER: Section header by contentLang
   =============================================================== */
@@ -253,8 +263,8 @@ export default function LessonContent({
   if (activeId === "comprehension") {
     const comprehensionSection = sections.find((s) => s.type === "comprehension");
     const headerText = comprehensionSection
-      ? getSectionHeader(comprehensionSection, pick(fallbacks.comprehension, uiLang))
-      : pick(fallbacks.comprehension, uiLang);
+      ? getSectionHeader(comprehensionSection, pick(fallbacks.comprehension, contentLang))
+      : pick(fallbacks.comprehension, contentLang);
 
     return renderWithBackToTop(
       <article className="lc-card">
@@ -278,8 +288,8 @@ export default function LessonContent({
   if (activeId === "transcript") {
     const transcriptSection = sections.find((s) => s.type === "transcript");
     const headerText = transcriptSection
-      ? getSectionHeader(transcriptSection, pick(fallbacks.transcript, uiLang))
-      : pick(fallbacks.transcript, uiLang);
+      ? getSectionHeader(transcriptSection, pick(fallbacks.transcript, contentLang))
+      : pick(fallbacks.transcript, contentLang);
 
     return renderWithBackToTop(
       <article className="lc-card">
@@ -337,8 +347,8 @@ export default function LessonContent({
   if (activeId === "practice") {
     const practiceSection = sections.find((s) => s.type === "practice");
     const headerText = practiceSection
-      ? getSectionHeader(practiceSection, pick(fallbacks.practice, uiLang))
-      : pick(fallbacks.practice, uiLang);
+      ? getSectionHeader(practiceSection, pick(fallbacks.practice, contentLang))
+      : pick(fallbacks.practice, contentLang);
 
     return renderWithBackToTop(
       <article className="lc-card">
@@ -384,8 +394,8 @@ export default function LessonContent({
     if (items.length === 0) return null;
 
     const headerText = phrasesSection
-      ? getSectionHeader(phrasesSection, pick(fallbacks.phrasesVerbs, uiLang))
-      : pick(fallbacks.phrasesVerbs, uiLang);
+      ? getSectionHeader(phrasesSection, pick(fallbacks.phrasesVerbs, contentLang))
+      : pick(fallbacks.phrasesVerbs, contentLang);
 
     return renderWithBackToTop(
       <article className="lc-card">
@@ -488,7 +498,7 @@ export default function LessonContent({
 
   /* ------------------ APPLY SECTION ------------------ */
   if (section.type === "apply") {
-    const headerText = getSectionHeader(section, "APPLY");
+    const headerText = getSectionHeader(section, getFallbackHeader("apply", "APPLY"));
 
     return renderWithBackToTop(
       <article className="lc-card">
@@ -609,7 +619,10 @@ export default function LessonContent({
       allNodeKinds: processedContent.map((n, i) => ({ index: i, kind: n.kind, text: n.inlines?.[0]?.text?.substring(0, 30) }))
     });
 
-    const defaultHeaderText = section.type.replace("_", " ").toUpperCase();
+    const defaultHeaderText = getFallbackHeader(
+      section.type,
+      section.type.replace("_", " ").toUpperCase()
+    );
     const headerText = getSectionHeader(section, defaultHeaderText);
 
     return renderWithBackToTop(
@@ -643,7 +656,10 @@ export default function LessonContent({
   }
 
   /* ------------------ DEFAULT MARKDOWN SECTION -------- */
-  const defaultHeaderText = section.type.replace("_", " ").toUpperCase();
+  const defaultHeaderText = getFallbackHeader(
+    section.type,
+    section.type.replace("_", " ").toUpperCase()
+  );
   const headerText = getSectionHeader(section, defaultHeaderText);
 
   return renderWithBackToTop(
