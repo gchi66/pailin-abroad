@@ -610,22 +610,23 @@ const ExerciseBank = () => {
                         </div>
                         <div className="exercise-bank-card-meta">
                           <span className="exercise-bank-category-chip">{group.category_label}</span>
-                          <Link
-                            className="exercise-bank-card-link"
-                            to={`/exercise-bank/${group.category_slug}/${group.section_slug}`}
-                          >
-                            {translate(exerciseBankCopy.viewSection)}
-                          </Link>
+                          {group.exercises.length > 0 && (
+                            <span className="exercise-bank-featured-count">
+                              {formatFeaturedCount(group.exercises.length)}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="exercise-bank-card-body">
-                        <ul className="exercise-bank-featured-list">
-                          {group.exercises.map((exercise) => (
-                            <li key={exercise.id} className="exercise-bank-featured-item">
-                              <span className="exercise-bank-featured-title">{getExerciseTitle(exercise)}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        <p className="exercise-bank-card-copy">
+                          {formatExerciseCount(group.exercises.length)}
+                        </p>
+                        <Link
+                          className="exercise-bank-card-link"
+                          to={`/exercise-bank/${group.category_slug}/${group.section_slug}`}
+                        >
+                          {translate(exerciseBankCopy.exploreSection)}
+                        </Link>
                       </div>
                     </div>
                   ))}
