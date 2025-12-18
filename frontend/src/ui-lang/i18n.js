@@ -82,6 +82,73 @@ export const copy = {
     },
     errorTitle: { en: "Topic Library", th: "คลังหัวข้อ" },
   },
+  exerciseBankPage: {
+    title: { en: "Exercise Bank", th: "คลังแบบฝึกหัด" },
+    subtitle: {
+      en: "Additional practice exercises for those difficult grammar topics.",
+      th: "แบบฝึกหัดเพิ่มเติมสำหรับหัวข้อไวยากรณ์ที่ท้าทาย",
+    },
+    featuredButton: { en: "Featured Exercises", th: "แบบฝึกหัดแนะนำ" },
+    categoriesButton: { en: "View by Category", th: "ดูตามหมวดหมู่" },
+    searchPlaceholder: { en: "Search exercises", th: "ค้นหาแบบฝึกหัด" },
+    selectCategory: { en: "Select a category", th: "เลือกหมวดหมู่" },
+    viewSection: { en: "View section →", th: "ดูหัวข้อนี้ →" },
+    exploreSection: { en: "Explore section →", th: "ดูรายละเอียดหัวข้อนี้ →" },
+    featuredCountLabel: { en: "featured", th: "แบบฝึกหัดแนะนำ" },
+    exerciseCount: {
+      singular: { en: "exercise in this section.", th: "แบบฝึกหัดในหัวข้อนี้" },
+      plural: { en: "exercises in this section.", th: "แบบฝึกหัดในหัวข้อนี้" },
+    },
+    loading: { en: "Loading exercise bank...", th: "กำลังโหลดคลังแบบฝึกหัด..." },
+    loadingFeatured: { en: "Loading featured exercises...", th: "กำลังโหลดแบบฝึกหัดแนะนำ..." },
+    loadingCategories: {
+      en: "We’re loading categories for the exercise bank. Check back soon!",
+      th: "กำลังโหลดหมวดหมู่สำหรับคลังแบบฝึกหัด กรุณากลับมาตรวจสอบอีกครั้ง!",
+    },
+    noSearchResults: {
+      en: "No exercises match your search.",
+      th: "ไม่พบแบบฝึกหัดที่ตรงกับการค้นหา",
+    },
+    noFeatured: {
+      en: "No featured exercises yet. Check back soon!",
+      th: "ยังไม่มีแบบฝึกหัดแนะนำ กลับมาตรวจสอบอีกครั้งเร็วๆ นี้!",
+    },
+    noExercises: { en: "No exercises available yet.", th: "ยังไม่มีแบบฝึกหัด" },
+    noExercisesInCategory: {
+      en: "No exercises available in this category yet.",
+      th: "ยังไม่มีแบบฝึกหัดในหมวดหมู่นี้",
+    },
+    lockNotice: {
+      upgrade: { en: "Upgrade to view!", th: "อัปเกรดเพื่อดู!" },
+      cta: { en: "Become a member", th: "สมัครสมาชิก" },
+    },
+    planNotice: {
+      free: {
+        heading: { en: "You're on our free plan.", th: "คุณกำลังใช้แผนฟรี" },
+        upgradeLink: { en: "Upgrade", th: "อัปเกรด" },
+        upgradeRest: {
+          en: "to enjoy full access to our Exercise Bank.",
+          th: "เพื่อเข้าถึงคลังแบบฝึกหัดทั้งหมดของเรา",
+        },
+        browse: {
+          en: "You can still browse the featured exercises available on your plan.",
+          th: "ยังสามารถดูแบบฝึกหัดแนะนำที่ใช้ได้กับแผนของคุณ",
+        },
+      },
+      noAccount: {
+        heading: { en: "Unlock our Exercise Bank.", th: "ปลดล็อกคลังแบบฝึกหัดของเรา" },
+        signupLink: { en: "Sign up for free", th: "สมัครฟรี" },
+        signupRest: {
+          en: "to access our featured exercises.",
+          th: "เพื่อเข้าถึงแบบฝึกหัดแนะนำ",
+        },
+        memberRest: {
+          en: "Become a member to unlock the full Exercise Bank.",
+          th: "เป็นสมาชิกเพื่อปลดล็อกคลังแบบฝึกหัดทั้งหมด",
+        },
+      },
+    },
+  },
   topicDetailPage: {
     loadingTitle: { en: "Loading...", th: "กำลังโหลด..." },
     loadingBody: { en: "Loading topic content...", th: "กำลังโหลดเนื้อหาหัวข้อ..." },

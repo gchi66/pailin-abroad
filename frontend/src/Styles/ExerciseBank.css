@@ -393,8 +393,9 @@
 
 .exercise-bank-category-chip,
 .exercise-section-category-chip {
-  background: #1E1E1E;
-  color: white;
+  background: #91CAFF;
+  color: #1E1E1E;
+  border: 0.1rem solid #1E1E1E;
   padding: 0.4rem 0.85rem;
   border-radius: 999px;
   font-size: 0.8rem;
@@ -492,16 +493,6 @@
 
 .exercise-bank-featured-title {
   font-weight: 600;
-}
-
-.exercise-bank-featured-title-th {
-  color: #555;
-  font-size: 0.95rem;
-}
-
-.exercise-bank-featured-type {
-  font-size: 0.85rem;
-  color: #888;
 }
 
 .exercise-section-nav {
@@ -871,6 +862,10 @@
     gap: 0.5rem;
     font-size: 1.05rem;
     color: #1e1e1e;
+  }
+
+  .exercise-bank-card {
+    box-shadow: none;
   }
 
   .exercise-bank-mobile-menu-item:last-child {

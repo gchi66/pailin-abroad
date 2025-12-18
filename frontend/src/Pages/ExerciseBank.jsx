@@ -4,17 +4,20 @@ import { API_BASE_URL } from "../config/api";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
 import Breadcrumbs from "../Components/Breadcrumbs";
+import PlanNotice from "../Components/PlanNotice";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 import "../Styles/ExerciseBank.css";
 
 const CATEGORY_OPTIONS = [
-  { slug: "verbs-and-tenses", label: "Verbs & Tenses" },
-  { slug: "nouns-and-articles", label: "Nouns & Articles" },
-  { slug: "pronouns", label: "Pronouns" },
-  { slug: "adjectives", label: "Adjectives" },
-  { slug: "conjunctions", label: "Conjunctions" },
-  { slug: "prepositions", label: "Prepositions" },
-  { slug: "other-concepts", label: "Other Concepts" },
-  { slug: "all", label: "View All" },
+  { slug: "verbs-and-tenses", label: { en: "Verbs & Tenses", th: "กริยาและกาล" } },
+  { slug: "nouns-and-articles", label: { en: "Nouns & Articles", th: "คำนามและคำนำหน้านาม" } },
+  { slug: "pronouns", label: { en: "Pronouns", th: "คำสรรพนาม" } },
+  { slug: "adjectives", label: { en: "Adjectives", th: "คำคุณศัพท์" } },
+  { slug: "conjunctions", label: { en: "Conjunctions", th: "คำสันธาน" } },
+  { slug: "prepositions", label: { en: "Prepositions", th: "คำบุพบท" } },
+  { slug: "other-concepts", label: { en: "Other Concepts", th: "แนวคิดอื่น ๆ" } },
+  { slug: "all", label: { en: "View All", th: "ดูทั้งหมด" } },
 ];
 
 const CATEGORY_ORDER_INDEX = CATEGORY_OPTIONS.reduce((acc, option, index) => {
@@ -22,7 +25,10 @@ const CATEGORY_ORDER_INDEX = CATEGORY_OPTIONS.reduce((acc, option, index) => {
   return acc;
 }, {});
 
+const normalizeLabel = (label) => (typeof label === "string" ? { en: label, th: label } : label);
+
 const ExerciseBank = () => {
+  const { ui: uiLang } = useUiLang();
   const [sections, setSections] = useState([]);
   const [categories, setCategories] = useState([]);
   const [featured, setFeatured] = useState([]);
@@ -39,6 +45,8 @@ const ExerciseBank = () => {
   const [profile, setProfile] = useState(null);
   const categoryMenuRef = useRef(null);
   const { user } = useAuth();
+  const exerciseBankCopy = copy.exerciseBankPage;
+  const translate = (node) => pick(node, uiLang);
 
   useEffect(() => {
     let isMounted = true;
@@ -198,6 +206,18 @@ const ExerciseBank = () => {
   const isPaid = profile?.is_paid === true;
   const isNoAccount = !user;
   const isFreePlan = user && profile?.is_paid === false;
+  const getSectionTitle = (section) =>
+    uiLang === "th" ? section.section_th || section.section : section.section || "";
+
+  const getExerciseTitle = (exercise) =>
+    uiLang === "th" ? exercise.title_th || exercise.title : exercise.title || "";
+
+  const formatExerciseCount = (count) => {
+    const key = count === 1 ? "singular" : "plural";
+    return `${count} ${translate(exerciseBankCopy.exerciseCount[key])}`;
+  };
+
+  const formatFeaturedCount = (count) => `${count} ${translate(exerciseBankCopy.featuredCountLabel)}`;
 
   const isCardLocked = (isFeaturedCard) => {
     if (isPaid) return false;
@@ -231,16 +251,22 @@ const ExerciseBank = () => {
   const orderedCategoryOptions = useMemo(() => {
     const known = CATEGORY_OPTIONS.filter(
       (option) => option.slug === "all" || categories.some((cat) => cat.category_slug === option.slug)
-    );
+    ).map((option) => ({ ...option, label: normalizeLabel(option.label) }));
     const extras = categories
       .filter((cat) => !CATEGORY_OPTIONS.some((option) => option.slug === cat.category_slug))
       .map((cat) => ({
         slug: cat.category_slug,
-        label: cat.category_label || cat.category || cat.category_slug,
+        label: normalizeLabel(cat.category_label || cat.category || cat.category_slug),
       }));
 
     return [...known, ...extras];
   }, [categories]);
+
+  const selectedCategoryOption = useMemo(
+    () => orderedCategoryOptions.find((option) => option.slug === selectedCategory),
+    [orderedCategoryOptions, selectedCategory]
+  );
+  const localizedCategoryLabel = selectedCategoryOption ? translate(selectedCategoryOption.label) : "";
 
   const filteredSectionsForSelectedCategory = useMemo(() => {
     if (!selectedCategory) return [];
@@ -330,9 +356,9 @@ const ExerciseBank = () => {
     <div className="exercise-bank-page-container">
       <header className="exercise-bank-page-header">
         <div className="exercise-bank-header-content">
-          <h1 className="exercise-bank-page-header-text">Exercise Bank</h1>
+          <h1 className="exercise-bank-page-header-text">{translate(exerciseBankCopy.title)}</h1>
           <p className="exercise-bank-page-subtitle">
-            Additional practice exercises for those difficult grammar topics.
+            {translate(exerciseBankCopy.subtitle)}
           </p>
         </div>
       </header>
@@ -341,29 +367,35 @@ const ExerciseBank = () => {
         <Breadcrumbs
           className="exercise-bank-breadcrumbs"
           items={[
-            { label: "Resources", to: "/resources" },
-            { label: "Exercise Bank" },
+            { label: pick(copy.nav.resources, uiLang), to: "/resources" },
+            { label: translate(exerciseBankCopy.title) },
           ]}
         />
         {(isFreePlan || isNoAccount) && (
-          <div className={`exercise-bank-plan-notice ${isFreePlan ? "is-free-plan" : "is-no-account"}`}>
-            <div className="exercise-bank-plan-copy">
-              <p className="exercise-bank-plan-title">
-                {isFreePlan ? "You're on our free plan." : "Looks like you don't have an account."}
-              </p>
-              <p className="exercise-bank-plan-desc">
-                {isFreePlan
-                  ? "Upgrade to enjoy full access to our Exercise Bank."
-                  : "Sign up for free to access our featured exercises!"}
-              </p>
-            </div>
-            <Link
-              className="exercise-bank-plan-cta"
-              to={isFreePlan ? "/membership" : "/signup"}
-            >
-              {isFreePlan ? "BECOME A MEMBER" : "SIGN UP FOR FREE"}
-            </Link>
-          </div>
+          <PlanNotice
+            heading={
+              isFreePlan
+                ? translate(exerciseBankCopy.planNotice.free.heading)
+                : translate(exerciseBankCopy.planNotice.noAccount.heading)
+            }
+            subtext={
+              isFreePlan
+                ? [
+                    <>
+                      <Link to="/membership">{translate(exerciseBankCopy.planNotice.free.upgradeLink)}</Link>{" "}
+                      {translate(exerciseBankCopy.planNotice.free.upgradeRest)}
+                    </>,
+                    translate(exerciseBankCopy.planNotice.free.browse),
+                  ]
+                : [
+                    <>
+                      <Link to="/signup">{translate(exerciseBankCopy.planNotice.noAccount.signupLink)}</Link>{" "}
+                      {translate(exerciseBankCopy.planNotice.noAccount.signupRest)}
+                    </>,
+                    translate(exerciseBankCopy.planNotice.noAccount.memberRest),
+                  ]
+            }
+          />
         )}
 
         <div className="exercise-bank-toolbar-wrapper">
@@ -379,7 +411,7 @@ const ExerciseBank = () => {
                       setIsCategoryMenuOpen(false);
                     }}
                   >
-                    Featured Exercises
+                    {translate(exerciseBankCopy.featuredButton)}
                   </button>
                   <div className="exercise-bank-category-dropdown" ref={categoryMenuRef}>
                     <button
@@ -390,7 +422,7 @@ const ExerciseBank = () => {
                         setIsCategoryMenuOpen((prev) => !prev);
                       }}
                     >
-                      View by Category
+                      {translate(exerciseBankCopy.categoriesButton)}
                       <span className="exercise-bank-caret" aria-hidden="true">▾</span>
                     </button>
                     {isCategoryMenuOpen && (
@@ -404,7 +436,7 @@ const ExerciseBank = () => {
                             }`}
                             onClick={() => handleCategorySelect(option.slug)}
                           >
-                            {option.label}
+                            {translate(option.label)}
                           </button>
                         ))}
                       </div>
@@ -415,12 +447,12 @@ const ExerciseBank = () => {
               <div className="exercise-bank-toolbar-right">
                 <div className="exercise-bank-search">
                   <label htmlFor="exercise-bank-search-input" className="sr-only">
-                    Search exercises
+                    {translate(exerciseBankCopy.searchPlaceholder)}
                   </label>
                   <input
                     id="exercise-bank-search-input"
                     type="search"
-                    placeholder="Search exercises"
+                    placeholder={translate(exerciseBankCopy.searchPlaceholder)}
                     value={searchTerm}
                     onChange={(event) => setSearchTerm(event.target.value)}
                   />
@@ -441,7 +473,11 @@ const ExerciseBank = () => {
                   onClick={() => setIsMobileViewMenuOpen((prev) => !prev)}
                   aria-expanded={isMobileViewMenuOpen}
                 >
-                  <span>{activeView === "featured" ? "Featured Exercises" : "View by Category"}</span>
+                  <span>
+                    {activeView === "featured"
+                      ? translate(exerciseBankCopy.featuredButton)
+                      : translate(exerciseBankCopy.categoriesButton)}
+                  </span>
                   <span className="exercise-bank-mobile-caret" aria-hidden="true">▾</span>
                 </button>
                 {isMobileViewMenuOpen && (
@@ -455,7 +491,7 @@ const ExerciseBank = () => {
                         setIsCategoryMenuOpen(false);
                       }}
                     >
-                      Featured Exercises
+                      {translate(exerciseBankCopy.featuredButton)}
                     </button>
                     <button
                       type="button"
@@ -466,7 +502,7 @@ const ExerciseBank = () => {
                         setIsCategoryMenuOpen(false);
                       }}
                     >
-                      View by Category
+                      {translate(exerciseBankCopy.categoriesButton)}
                     </button>
                   </div>
                 )}
@@ -480,10 +516,7 @@ const ExerciseBank = () => {
                     onClick={() => setIsCategoryMenuOpen((prev) => !prev)}
                     aria-expanded={isCategoryMenuOpen}
                   >
-                    {selectedCategory
-                      ? orderedCategoryOptions.find((option) => option.slug === selectedCategory)?.label ||
-                        "Select a category"
-                      : "Select a category"}
+                    {selectedCategory ? localizedCategoryLabel || translate(exerciseBankCopy.selectCategory) : translate(exerciseBankCopy.selectCategory)}
                     <span className="exercise-bank-mobile-caret" aria-hidden="true">▾</span>
                   </button>
                   {isCategoryMenuOpen && (
@@ -500,7 +533,7 @@ const ExerciseBank = () => {
                             setIsCategoryMenuOpen(false);
                           }}
                         >
-                          {option.label}
+                          {translate(option.label)}
                         </button>
                       ))}
                     </div>
@@ -514,7 +547,7 @@ const ExerciseBank = () => {
         <div className="exercise-bank-main">
           {isLoading && (
             <div className="exercise-bank-placeholder">
-              <p>Loading exercise bank...</p>
+              <p>{translate(exerciseBankCopy.loading)}</p>
             </div>
           )}
 
@@ -528,7 +561,7 @@ const ExerciseBank = () => {
             <>
               {loadingFeatured && (
                 <div className="exercise-bank-placeholder">
-                  <p>Loading featured exercises...</p>
+                  <p>{translate(exerciseBankCopy.loadingFeatured)}</p>
                 </div>
               )}
               {!loadingFeatured && featuredError && (
@@ -538,7 +571,11 @@ const ExerciseBank = () => {
               )}
               {!loadingFeatured && !featuredError && filteredFeaturedBySection.length === 0 && (
                 <div className="exercise-bank-placeholder">
-                  <p>{normalizedSearch ? "No exercises match your search." : "No featured exercises yet. Check back soon!"}</p>
+                  <p>
+                    {normalizedSearch
+                      ? translate(exerciseBankCopy.noSearchResults)
+                      : translate(exerciseBankCopy.noFeatured)}
+                  </p>
                 </div>
               )}
               {!loadingFeatured && !featuredError && filteredFeaturedBySection.length > 0 && (
@@ -559,9 +596,9 @@ const ExerciseBank = () => {
                               className="exercise-bank-card-lock-icon"
                             />
                             <div className="exercise-bank-card-lock-text">
-                              <span>Upgrade to view!</span>
+                              <span>{translate(exerciseBankCopy.lockNotice.upgrade)}</span>
                               <Link to="/membership" className="exercise-bank-card-lock-link">
-                                Become a member
+                                {translate(exerciseBankCopy.lockNotice.cta)}
                               </Link>
                             </div>
                           </div>
@@ -569,8 +606,7 @@ const ExerciseBank = () => {
                       )}
                       <div className="exercise-bank-card-header">
                         <div className="exercise-bank-card-section">
-                          <h3>{group.section}</h3>
-                          {group.section_th && <p className="exercise-bank-card-section-th">{group.section_th}</p>}
+                          <h3>{getSectionTitle(group)}</h3>
                         </div>
                         <div className="exercise-bank-card-meta">
                           <span className="exercise-bank-category-chip">{group.category_label}</span>
@@ -578,7 +614,7 @@ const ExerciseBank = () => {
                             className="exercise-bank-card-link"
                             to={`/exercise-bank/${group.category_slug}/${group.section_slug}`}
                           >
-                            View section →
+                            {translate(exerciseBankCopy.viewSection)}
                           </Link>
                         </div>
                       </div>
@@ -586,11 +622,7 @@ const ExerciseBank = () => {
                         <ul className="exercise-bank-featured-list">
                           {group.exercises.map((exercise) => (
                             <li key={exercise.id} className="exercise-bank-featured-item">
-                              <span className="exercise-bank-featured-title">{exercise.title}</span>
-                              {exercise.title_th && (
-                                <span className="exercise-bank-featured-title-th">{exercise.title_th}</span>
-                              )}
-                              <span className="exercise-bank-featured-type">{exercise.exercise_type}</span>
+                              <span className="exercise-bank-featured-title">{getExerciseTitle(exercise)}</span>
                             </li>
                           ))}
                         </ul>
@@ -608,12 +640,12 @@ const ExerciseBank = () => {
                 <div className="exercise-bank-placeholder">
                   <p>
                     {normalizedSearch
-                      ? "No exercises match your search."
+                      ? translate(exerciseBankCopy.noSearchResults)
                       : categories.length === 0
-                        ? "We’re loading categories for the exercise bank. Check back soon!"
+                        ? translate(exerciseBankCopy.loadingCategories)
                         : selectedCategory === "all"
-                          ? "No exercises available yet."
-                          : "No exercises available in this category yet."}
+                          ? translate(exerciseBankCopy.noExercises)
+                          : translate(exerciseBankCopy.noExercisesInCategory)}
                   </p>
                 </div>
               ) : (
@@ -634,9 +666,9 @@ const ExerciseBank = () => {
                               className="exercise-bank-card-lock-icon"
                             />
                             <div className="exercise-bank-card-lock-text">
-                              <span>Upgrade to view!</span>
+                              <span>{translate(exerciseBankCopy.lockNotice.upgrade)}</span>
                               <Link to="/membership" className="exercise-bank-card-lock-link">
-                                Become a member
+                                {translate(exerciseBankCopy.lockNotice.cta)}
                               </Link>
                             </div>
                           </div>
@@ -644,29 +676,26 @@ const ExerciseBank = () => {
                       )}
                       <div className="exercise-bank-card-header">
                         <div className="exercise-bank-card-section">
-                          <h3>{section.section}</h3>
-                          {section.section_th && (
-                            <p className="exercise-bank-card-section-th">{section.section_th}</p>
-                          )}
+                          <h3>{getSectionTitle(section)}</h3>
                         </div>
                         <div className="exercise-bank-card-meta">
                           <span className="exercise-bank-category-chip">{section.category_label}</span>
                           {section.featured_count > 0 && (
                             <span className="exercise-bank-featured-count">
-                              {section.featured_count} featured
+                              {formatFeaturedCount(section.featured_count)}
                             </span>
                           )}
                         </div>
                       </div>
                       <div className="exercise-bank-card-body">
                         <p className="exercise-bank-card-copy">
-                          {section.exercise_count} exercise{section.exercise_count === 1 ? "" : "s"} in this section.
+                          {formatExerciseCount(section.exercise_count)}
                         </p>
                         <Link
                           className="exercise-bank-card-link"
                           to={`/exercise-bank/${section.category_slug}/${section.section_slug}`}
                         >
-                          Explore section →
+                          {translate(exerciseBankCopy.exploreSection)}
                         </Link>
                       </div>
                     </div>
