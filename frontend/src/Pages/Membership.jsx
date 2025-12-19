@@ -12,7 +12,7 @@ const Membership = () => {
   const [selectedPlanId, setSelectedPlanId] = useState("6-month");
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
-  const pointerStateRef = useRef({ x: 0, y: 0, dragging: false, suppressClick: false });
+  const touchStateRef = useRef({ x: 0, y: 0, dragging: false, suppressClick: false });
   const DRAG_THRESHOLD = 10;
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -82,35 +82,45 @@ const Membership = () => {
     setSelectedPlanId(planId);
   };
 
-  const handlePointerDown = (event) => {
-    const { clientX, clientY } = event;
-    pointerStateRef.current = { x: clientX, y: clientY, dragging: false, suppressClick: false };
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+    touchStateRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      dragging: false,
+      suppressClick: false
+    };
   };
 
-  const handlePointerMove = (event) => {
-    const { clientX, clientY } = event;
-    const dx = clientX - pointerStateRef.current.x;
-    const dy = clientY - pointerStateRef.current.y;
+  const handleTouchMove = (event) => {
+    const touch = event.touches[0];
+    const dx = touch.clientX - touchStateRef.current.x;
+    const dy = touch.clientY - touchStateRef.current.y;
     if (Math.hypot(dx, dy) > DRAG_THRESHOLD) {
-      pointerStateRef.current.dragging = true;
-      pointerStateRef.current.suppressClick = true;
+      touchStateRef.current.dragging = true;
     }
   };
 
-  const handlePointerUp = (planId) => {
-    if (pointerStateRef.current.dragging) return;
+  const handleTouchEnd = (planId) => {
+    if (touchStateRef.current.dragging) {
+      touchStateRef.current.suppressClick = true;
+      setTimeout(() => {
+        touchStateRef.current.suppressClick = false;
+      }, 100);
+      return;
+    }
     handleCardClick(planId);
   };
 
-  const handlePointerCancel = () => {
-    pointerStateRef.current.dragging = true;
-    pointerStateRef.current.suppressClick = true;
+  const handleTouchCancel = () => {
+    touchStateRef.current.dragging = true;
+    touchStateRef.current.suppressClick = true;
   };
 
   const handleClickFallback = (planId, event) => {
-    if (pointerStateRef.current.suppressClick) {
+    if (touchStateRef.current.suppressClick) {
       event.preventDefault();
-      pointerStateRef.current.suppressClick = false;
+      touchStateRef.current.suppressClick = false;
       return;
     }
     handleCardClick(planId);
@@ -154,10 +164,10 @@ const Membership = () => {
             className={`pricing-card ${selectedPlanId === plan.id ? 'selected' : ''} ${hoveredCard === plan.id ? 'hovered' : ''}`}
             onMouseEnter={() => setHoveredCard(plan.id)}
             onMouseLeave={() => setHoveredCard(null)}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={() => handlePointerUp(plan.id)}
-            onPointerCancel={handlePointerCancel}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={() => handleTouchEnd(plan.id)}
+            onTouchCancel={handleTouchCancel}
             onClick={(event) => handleClickFallback(plan.id, event)}
           >
             {plan.savings && (
