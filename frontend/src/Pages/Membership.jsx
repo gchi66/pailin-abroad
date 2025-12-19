@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import MembershipFeatures from "../Components/MembershipFeatures";
 import QuickSignupModal from "../Components/QuickSignupModal";
@@ -12,6 +12,8 @@ const Membership = () => {
   const [selectedPlanId, setSelectedPlanId] = useState("6-month");
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const pointerStateRef = useRef({ x: 0, y: 0, dragging: false, handled: false });
+  const DRAG_THRESHOLD = 10;
   const navigate = useNavigate();
   const { user } = useAuth();
   const { ui } = useUiLang();
@@ -80,6 +82,39 @@ const Membership = () => {
     setSelectedPlanId(planId);
   };
 
+  const handlePointerDown = (event) => {
+    const { clientX, clientY } = event;
+    pointerStateRef.current = { x: clientX, y: clientY, dragging: false, handled: false };
+  };
+
+  const handlePointerMove = (event) => {
+    const { clientX, clientY } = event;
+    const dx = clientX - pointerStateRef.current.x;
+    const dy = clientY - pointerStateRef.current.y;
+    if (Math.hypot(dx, dy) > DRAG_THRESHOLD) {
+      pointerStateRef.current.dragging = true;
+    }
+  };
+
+  const handlePointerUp = (planId) => {
+    if (!pointerStateRef.current.dragging) {
+      handleCardClick(planId);
+      pointerStateRef.current.handled = true;
+    }
+  };
+
+  const handlePointerCancel = () => {
+    pointerStateRef.current.dragging = true;
+  };
+
+  const handleClickFallback = (planId) => {
+    if (pointerStateRef.current.handled) {
+      pointerStateRef.current.handled = false;
+      return;
+    }
+    handleCardClick(planId);
+  };
+
   // Calculate pricing display based on selected plan
   const calculatePricingDisplay = (plan) => {
     if (!plan) return null;
@@ -118,7 +153,11 @@ const Membership = () => {
             className={`pricing-card ${selectedPlanId === plan.id ? 'selected' : ''} ${hoveredCard === plan.id ? 'hovered' : ''}`}
             onMouseEnter={() => setHoveredCard(plan.id)}
             onMouseLeave={() => setHoveredCard(null)}
-            onClick={() => handleCardClick(plan.id)}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={() => handlePointerUp(plan.id)}
+            onPointerCancel={handlePointerCancel}
+            onClick={() => handleClickFallback(plan.id)}
           >
             {plan.savings && (
               <div className={`savings-badge ${plan.isRecommended ? 'recommended-badge' : 'regular-badge'}`}>

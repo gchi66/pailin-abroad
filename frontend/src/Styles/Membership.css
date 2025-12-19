@@ -414,4 +414,8 @@
   .period {
     font-size: 0.95rem;
   }
+
+  .guarantee-text {
+    font-size: .6rem;
+  }
 }
