@@ -13,6 +13,7 @@ const Membership = () => {
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const touchStateRef = useRef({ x: 0, y: 0, dragging: false, suppressClick: false, touchStartTime: 0 });
+  const scrollStateRef = useRef({ startY: 0, scrolled: false });
   const DRAG_THRESHOLD = 10;
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -91,6 +92,10 @@ const Membership = () => {
       suppressClick: false,
       touchStartTime: Date.now()
     };
+    scrollStateRef.current = {
+      startY: window.scrollY,
+      scrolled: false
+    };
   };
 
   const handleTouchMove = (event) => {
@@ -136,6 +141,13 @@ const Membership = () => {
   };
 
   const handleClickFallback = (planId, event) => {
+    const scrollDelta = Math.abs(window.scrollY - scrollStateRef.current.startY);
+    if (scrollDelta > 5) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
     if (touchStateRef.current.suppressClick) {
       event.preventDefault();
       event.stopPropagation();
