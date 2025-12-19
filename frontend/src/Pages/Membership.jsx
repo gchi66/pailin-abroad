@@ -12,7 +12,7 @@ const Membership = () => {
   const [selectedPlanId, setSelectedPlanId] = useState("6-month");
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
-  const pointerStateRef = useRef({ x: 0, y: 0, dragging: false, handled: false });
+  const pointerStateRef = useRef({ x: 0, y: 0, dragging: false, suppressClick: false });
   const DRAG_THRESHOLD = 10;
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -84,7 +84,7 @@ const Membership = () => {
 
   const handlePointerDown = (event) => {
     const { clientX, clientY } = event;
-    pointerStateRef.current = { x: clientX, y: clientY, dragging: false, handled: false };
+    pointerStateRef.current = { x: clientX, y: clientY, dragging: false, suppressClick: false };
   };
 
   const handlePointerMove = (event) => {
@@ -93,23 +93,24 @@ const Membership = () => {
     const dy = clientY - pointerStateRef.current.y;
     if (Math.hypot(dx, dy) > DRAG_THRESHOLD) {
       pointerStateRef.current.dragging = true;
+      pointerStateRef.current.suppressClick = true;
     }
   };
 
   const handlePointerUp = (planId) => {
-    if (!pointerStateRef.current.dragging) {
-      handleCardClick(planId);
-      pointerStateRef.current.handled = true;
-    }
+    if (pointerStateRef.current.dragging) return;
+    handleCardClick(planId);
   };
 
   const handlePointerCancel = () => {
     pointerStateRef.current.dragging = true;
+    pointerStateRef.current.suppressClick = true;
   };
 
-  const handleClickFallback = (planId) => {
-    if (pointerStateRef.current.handled) {
-      pointerStateRef.current.handled = false;
+  const handleClickFallback = (planId, event) => {
+    if (pointerStateRef.current.suppressClick) {
+      event.preventDefault();
+      pointerStateRef.current.suppressClick = false;
       return;
     }
     handleCardClick(planId);
@@ -157,7 +158,7 @@ const Membership = () => {
             onPointerMove={handlePointerMove}
             onPointerUp={() => handlePointerUp(plan.id)}
             onPointerCancel={handlePointerCancel}
-            onClick={() => handleClickFallback(plan.id)}
+            onClick={(event) => handleClickFallback(plan.id, event)}
           >
             {plan.savings && (
               <div className={`savings-badge ${plan.isRecommended ? 'recommended-badge' : 'regular-badge'}`}>
