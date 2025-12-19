@@ -5,6 +5,7 @@
   padding: 0 1rem;
   height: auto;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .membership-features-card {
@@ -12,13 +13,15 @@
   align-items: center;
   justify-content: center;
   background: white;
-  padding: 4rem 8rem;
+  padding: 3.5rem 3rem;
   border-radius: 2vh;
   border: 0.1rem solid #1E1E1E;
   box-shadow: 0.2rem 0.2rem 0px #1E1E1E;
   max-width: 48rem;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .membership-features-box {
@@ -45,7 +48,7 @@
     line-height: 1.6;
     text-align: left;
     list-style: none;
-    padding: 1.5rem 0 0 6rem;
+    padding: 1.5rem 0 0 0;
     margin: 0;
 }
 
@@ -68,7 +71,8 @@
 
 @media (max-width: 768px) {
   .membership-features-card {
-    padding: 2.5rem 2rem;
+    padding: 2.25rem 1.5rem;
+    max-width: 100%;
   }
 
   .membership-features-title {
@@ -78,5 +82,36 @@
   .membership-features-text {
     font-size: 1.05rem;
     padding: 1.5rem 0 0 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-features-section {
+    padding: 0 0.85rem;
+  }
+
+  .membership-features-card {
+    padding: 1.75rem 1.1rem;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 1.25rem;
+  }
+
+  .membership-features-title {
+    font-size: 1.75rem;
+  }
+
+  .membership-features-text {
+    font-size: 1rem;
+    gap: 0.75rem;
+  }
+
+  .membership-feature-item {
+    gap: 0.75rem;
+  }
+
+  .membership-feature-icon {
+    width: 1.4rem;
+    height: 1.4rem;
   }
 }

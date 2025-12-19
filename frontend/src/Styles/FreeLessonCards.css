@@ -6,12 +6,12 @@
 
 .fl-card-comingsoon {
   position: absolute;
-  top: 1vh;
-  right: 1vw;
+  top: 1.5vh;
+  right: 2.2vw;
   background: none;
   color: #FF4545;
   font-family: "Poppins", sans-serif;
-  font-size: 1vw;
+  font-size: 3vw;
   font-weight: 700;
   z-index: 2;
   letter-spacing: 0.05em;
