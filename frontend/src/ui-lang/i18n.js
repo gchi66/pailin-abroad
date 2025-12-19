@@ -190,8 +190,8 @@ export const copy = {
       sixMonth: {
         duration: { en: "6 MONTHS", th: "6 เดือน" },
         bestFor: {
-          en: "Achieving long-term fluency and mastery",
-          th: "พัฒนาความคล่องแคล่วและความชำนาญในระยะยาว",
+          en: "Achieving long-term fluency",
+          th: "บรรลุความคล่องแคล่วในระยะยาว",
         },
         savings: { en: "Save 25%", th: "ประหยัด 25%" },
       },
@@ -206,8 +206,8 @@ export const copy = {
       oneMonth: {
         duration: { en: "1 MONTH", th: "1 เดือน" },
         bestFor: {
-          en: "Improving your English at your own pace",
-          th: "พัฒนาภาษาอังกฤษตามจังหวะของตัวเอง",
+          en: "Improving your English skills",
+          th: "พัฒนาทักษะภาษาอังกฤษของคุณ",
         },
       },
     },

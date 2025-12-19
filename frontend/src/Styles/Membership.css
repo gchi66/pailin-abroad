@@ -88,6 +88,7 @@
   align-items: flex-start;
   gap: 0.75rem;
   flex: 1;
+  min-width: 0;
 }
 
 .right-section {
@@ -159,6 +160,7 @@
   flex-direction: row;
   align-items: flex-start;
   gap: 0.25rem;
+  flex-wrap: wrap;
 }
 
 .best-for-label {
@@ -167,12 +169,19 @@
   color: #1e1e1e;
   letter-spacing: 0.0625rem;
   font-family: 'Poppins', sans-serif;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .best-for-text {
   font-size: 0.9rem;
   color: #1e1e1e;
   font-family: 'Poppins', sans-serif;
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.4;
 }
 
 /* Price Section */
@@ -297,15 +306,17 @@
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .membership-container {
-    padding: 1.25rem 0.9375rem;
+    padding: 0rem 0.9375rem;
+    gap: .5rem;
   }
 
   .membership-title {
     font-size: 2rem;
+    margin: 0 0 1rem;
   }
 
   .membership-subtitle {
-    font-size: 1rem;
+    font-size: .8rem;
   }
 
   .pricing-cards-container {
@@ -326,6 +337,12 @@
 
   .card-content {
     gap: 1.25rem;
+  }
+
+  .best-for-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
   }
 
   .savings-badge {
@@ -384,9 +401,6 @@
     font-size: 1.25rem;
   }
 
-  .best-for-label {
-    max-width: 2.5rem;
-  }
 
   .best-for-label,
   .best-for-text {
