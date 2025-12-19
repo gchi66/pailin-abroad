@@ -102,7 +102,20 @@ const Membership = () => {
     }
   };
 
-  const handleTouchEnd = (planId) => {
+  const handleTouchEnd = (planId, event) => {
+    const endTouch = event.changedTouches?.[0];
+    if (endTouch) {
+      const dx = endTouch.clientX - touchStateRef.current.x;
+      const dy = endTouch.clientY - touchStateRef.current.y;
+      if (Math.hypot(dx, dy) > DRAG_THRESHOLD) {
+        touchStateRef.current.suppressClick = true;
+        setTimeout(() => {
+          touchStateRef.current.suppressClick = false;
+        }, 300);
+        return;
+      }
+    }
+
     if (touchStateRef.current.dragging) {
       touchStateRef.current.suppressClick = true;
       setTimeout(() => {
@@ -110,6 +123,7 @@ const Membership = () => {
       }, 300);
       return;
     }
+
     const duration = Date.now() - touchStateRef.current.touchStartTime;
     if (duration < 500) {
       handleCardClick(planId);
@@ -171,7 +185,7 @@ const Membership = () => {
             onMouseLeave={() => setHoveredCard(null)}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            onTouchEnd={() => handleTouchEnd(plan.id)}
+            onTouchEnd={(event) => handleTouchEnd(plan.id, event)}
             onTouchCancel={handleTouchCancel}
             onClick={(event) => handleClickFallback(plan.id, event)}
           >
