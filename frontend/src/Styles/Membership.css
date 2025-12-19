@@ -61,11 +61,13 @@
   touch-action: pan-y;
 }
 
-.pricing-card:hover,
-.pricing-card.hovered {
-  border-color: #3CA0FE;
-  transform: translateY(-0.125rem);
-  box-shadow: 0.375rem 0.375rem 0rem #3CA0FE
+@media (hover: hover) and (pointer: fine) {
+  .pricing-card:hover,
+  .pricing-card.hovered {
+    border-color: #3CA0FE;
+    transform: translateY(-0.125rem);
+    box-shadow: 0.375rem 0.375rem 0rem #3CA0FE
+  }
 }
 
 /* Selected Card State */
