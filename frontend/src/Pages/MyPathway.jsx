@@ -20,7 +20,6 @@ const MyPathway = () => {
   const [showAllCompleted, setShowAllCompleted] = useState(false);
   const [isPaidMember, setIsPaidMember] = useState(null);
   const [allLessons, setAllLessons] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
   const isFreePlanUser = Boolean(user) && isPaidMember === false;
@@ -204,24 +203,6 @@ const MyPathway = () => {
     fetchUserProfile();
   }, [user]);
 
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 480px)");
-    const handleChange = (event) => setIsMobile(event.matches);
-    setIsMobile(mq.matches);
-    if (mq.addEventListener) {
-      mq.addEventListener("change", handleChange);
-    } else {
-      mq.addListener(handleChange);
-    }
-    return () => {
-      if (mq.removeEventListener) {
-        mq.removeEventListener("change", handleChange);
-      } else {
-        mq.removeListener(handleChange);
-      }
-    };
-  }, []);
-
   // Fetch paid status so we can surface free-plan UI
   useEffect(() => {
     const fetchPlanStatus = async () => {
@@ -330,30 +311,43 @@ const MyPathway = () => {
                 />
               </div>
             )}
-            {/* Progress Section */}
-            <div className="pathway-progress-section">
-              <h3 className="pathway-section-title">
-                <span className="pathway-next-lesson-label">{uiText.yourNextLesson}</span>
-                {nextLesson ? (
-                  (nextLesson.title || "").toLowerCase().includes("checkpoint")
-                    ? `Level ${nextLesson.level} ${uiText.checkpoint}`
-                    : nextLesson.formatted
-                ) : uiText.loading}
-              </h3>
-              {/* <div className="pathway-progress-bar-container">
-                <div className="pathway-progress-bar">
-                  <div
-                    className="pathway-progress-fill"
-                    style={{ width: `${currentProgress.progressPercentage}%` }}
-                  ></div>
-                </div>
-                <span className="pathway-progress-text">{currentProgress.progressPercentage}% Complete</span>
-              </div> */}
+
+            <div className="pathway-mobile-topbar">
+              <div className="pathway-progress-section">
+                <h3 className="pathway-section-title">
+                  <span className="pathway-next-lesson-label">{uiText.yourNextLesson}</span>
+                  <span className="pathway-next-lesson-detail">
+                    {nextLesson ? (
+                      (nextLesson.title || "").toLowerCase().includes("checkpoint")
+                        ? `Level ${nextLesson.level} ${uiText.checkpoint}`
+                        : nextLesson.formatted
+                    ) : uiText.loading}
+                  </span>
+                </h3>
+              </div>
+
+              <div className="pathway-mobile-nav">
+                <label className="pathway-mobile-nav-label" htmlFor="pathway-mobile-nav-select">
+                  View
+                </label>
+                <select
+                  id="pathway-mobile-nav-select"
+                  className="pathway-mobile-nav-select"
+                  value={activeTab}
+                  onChange={(e) => setActiveTab(e.target.value)}
+                  aria-label="Select pathway view"
+                >
+                  <option value="pathway">{uiText.myPathway}</option>
+                  <option value="completed">{uiText.completed}</option>
+                  <option value="liked">{uiText.myLikedLessonsTab}</option>
+                  <option value="comments">{uiText.commentHistoryTab}</option>
+                </select>
+              </div>
             </div>
 
             {/* Lessons List */}
             <div className="pathway-lessons-section">
-              <div className="pathway-lesson-list">
+              <div className="pathway-lesson-list pathway-lesson-list--pathway">
                 {pathwayLessons.map((lesson, index) => (
                   <Link
                     to={`/lesson/${lesson.id}`}
@@ -563,141 +557,89 @@ const MyPathway = () => {
 
         {/* Error State */}
         {error && (
-          <div className="pathway-error">
-            <p>{uiText.errorPrefix} {error}</p>
-          </div>
-        )}
+        <div className="pathway-error">
+          <p>{uiText.errorPrefix} {error}</p>
+        </div>
+      )}
 
-        {/* Main Content - Show only when not loading and no error */}
-        {!loading && !error && (
-          <>
-            {isMobile ? (
-              <div className="pathway-card-mobile">
-                <div className="pathway-card-header-mobile">
-                  <div className="pathway-card-profile">
-                    <img
-                      src={userProfile?.avatar_image || "/images/characters/pailin-blue-left.png"}
-                      alt={uiText.profileAvatar}
-                      className="pathway-avatar-mobile"
-                    />
-                    <div className="pathway-card-text">
-                      <h2 className="pathway-welcome">
-                        {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
-                      </h2>
-                      <div className="pathway-card-meta">
-                        <span className="pathway-level">Level: {userStats?.level_label || "—"}</span>
-                        <span className="pathway-plan-text">
-                          {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
-                        </span>
-                        <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
-                      </div>
-                    </div>
+      {/* Main Content - Show only when not loading and no error */}
+      {!loading && !error && (
+        <>
+          <div className="pathway-header">
+            <div className="pathway-header-left">
+              <Link to="/profile" className="pathway-avatar-link">
+                <img
+                  src={userProfile?.avatar_image || "/images/characters/pailin-blue-left.png"}
+                  alt={uiText.profileAvatar}
+                  className="pathway-avatar"
+                />
+              </Link>
+              <div className="pathway-user-info">
+                <h2 className="pathway-welcome">
+                  {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
+                </h2>
+                <div className="pathway-account-info">
+                  <div className="pathway-plan">
+                    <span className="pathway-plan-text">
+                      {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
+                    </span>
+                    {isFreePlanUser && (
+                      <Link to="/membership" className="pathway-plan-upgrade-link">
+                        {uiText.upgrade}
+                      </Link>
+                    )}
                   </div>
-                  <div className="pathway-card-stats">
-                    <div className="pathway-stat">
-                      <span className="pathway-stat-label">{uiText.lessonsComplete}</span>
-                      <span className="pathway-stat-value">{userStats?.lessons_completed || 0}</span>
-                    </div>
-                    <div className="pathway-stat">
-                      <span className="pathway-stat-label">{uiText.levelsComplete}</span>
-                      <span className="pathway-stat-value">{userStats?.levels_completed || 0}</span>
-                    </div>
-                  </div>
-                  <div className="pathway-card-view">
-                    <label className="pathway-card-view-label">View:</label>
-                    <div className="pathway-card-select-wrapper">
-                      <select
-                        className="pathway-card-select"
-                        value={activeTab}
-                        onChange={(e) => setActiveTab(e.target.value)}
-                      >
-                        <option value="pathway">{uiText.myPathway}</option>
-                        <option value="completed">{uiText.completed}</option>
-                        <option value="liked">{uiText.myLikedLessonsTab}</option>
-                        <option value="comments">{uiText.commentHistoryTab}</option>
-                      </select>
-                    </div>
-                  </div>
+                  <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
                 </div>
               </div>
-            ) : (
-              <>
-                <div className="pathway-header">
-                  <div className="pathway-header-left">
-                    <img
-                      src={userProfile?.avatar_image || "/images/characters/pailin-blue-left.png"}
-                      alt={uiText.profileAvatar}
-                      className="pathway-avatar"
-                    />
-                    <div className="pathway-user-info">
-                      <h2 className="pathway-welcome">
-                        {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
-                      </h2>
-                      <div className="pathway-account-info">
-                        {/* <span className="pathway-level">Level: Upper Intermediate</span> */}
-                        <div className="pathway-plan">
-                          <span className="pathway-plan-text">
-                            {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
-                          </span>
-                          {isFreePlanUser && (
-                            <Link to="/membership" className="pathway-plan-upgrade-link">
-                              {uiText.upgrade}
-                            </Link>
-                          )}
-                        </div>
-                        <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pathway-header-right">
-                    <div className="pathway-counter">
-                      <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.lessonsComplete)}</span>
-                      <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
-                    </div>
-                    <div className="pathway-counter">
-                      <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.levelsComplete)}</span>
-                      <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Navigation Tabs */}
-                <nav className="pathway-nav">
-                  <div className="pathway-tabs">
-                    <button
-                      className={`pathway-tab ${activeTab === "pathway" ? "active" : ""}`}
-                      onClick={() => setActiveTab("pathway")}
-                    >
-                      {uiText.myPathway}
-                    </button>
-                    <button
-                      className={`pathway-tab ${activeTab === "completed" ? "active" : ""}`}
-                      onClick={() => setActiveTab("completed")}
-                    >
-                      {uiText.completed}
-                    </button>
-                    <button
-                      className={`pathway-tab ${activeTab === "liked" ? "active" : ""}`}
-                      onClick={() => setActiveTab("liked")}
-                    >
-                      {uiText.myLikedLessonsTab}
-                    </button>
-                    <button
-                      className={`pathway-tab ${activeTab === "comments" ? "active" : ""}`}
-                      onClick={() => setActiveTab("comments")}
-                    >
-                      {uiText.commentHistoryTab}
-                    </button>
-                  </div>
-                </nav>
-              </>
-            )}
-
-            {/* Tab Content */}
-            <div className="pathway-content">
-              {renderTabContent()}
             </div>
+
+            <div className="pathway-header-right">
+              <div className="pathway-counter">
+                <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.lessonsComplete)}</span>
+                <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
+              </div>
+              <div className="pathway-counter">
+                <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.levelsComplete)}</span>
+                <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Tabs */}
+          <nav className="pathway-nav">
+            <div className="pathway-tabs">
+              <button
+                className={`pathway-tab ${activeTab === "pathway" ? "active" : ""}`}
+                onClick={() => setActiveTab("pathway")}
+              >
+                {uiText.myPathway}
+              </button>
+              <button
+                className={`pathway-tab ${activeTab === "completed" ? "active" : ""}`}
+                onClick={() => setActiveTab("completed")}
+              >
+                {uiText.completed}
+              </button>
+              <button
+                className={`pathway-tab ${activeTab === "liked" ? "active" : ""}`}
+                onClick={() => setActiveTab("liked")}
+              >
+                {uiText.myLikedLessonsTab}
+              </button>
+              <button
+                className={`pathway-tab ${activeTab === "comments" ? "active" : ""}`}
+                onClick={() => setActiveTab("comments")}
+              >
+                {uiText.commentHistoryTab}
+              </button>
+            </div>
+          </nav>
+
+          {/* Tab Content */}
+          <div className="pathway-content">
+            {renderTabContent()}
+          </div>
 
             {/* Footer Link */}
             <div className="pathway-footer">
