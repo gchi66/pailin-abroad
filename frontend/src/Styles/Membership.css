@@ -58,6 +58,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0.25rem 0.25rem 0rem #9D9D9D;
+  touch-action: pan-y;
 }
 
 .pricing-card:hover,

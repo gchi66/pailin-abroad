@@ -12,7 +12,7 @@ const Membership = () => {
   const [selectedPlanId, setSelectedPlanId] = useState("6-month");
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
-  const touchStateRef = useRef({ x: 0, y: 0, dragging: false, suppressClick: false });
+  const touchStateRef = useRef({ x: 0, y: 0, dragging: false, suppressClick: false, touchStartTime: 0 });
   const DRAG_THRESHOLD = 10;
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -88,7 +88,8 @@ const Membership = () => {
       x: touch.clientX,
       y: touch.clientY,
       dragging: false,
-      suppressClick: false
+      suppressClick: false,
+      touchStartTime: Date.now()
     };
   };
 
@@ -106,10 +107,13 @@ const Membership = () => {
       touchStateRef.current.suppressClick = true;
       setTimeout(() => {
         touchStateRef.current.suppressClick = false;
-      }, 100);
+      }, 300);
       return;
     }
-    handleCardClick(planId);
+    const duration = Date.now() - touchStateRef.current.touchStartTime;
+    if (duration < 500) {
+      handleCardClick(planId);
+    }
   };
 
   const handleTouchCancel = () => {
@@ -120,6 +124,7 @@ const Membership = () => {
   const handleClickFallback = (planId, event) => {
     if (touchStateRef.current.suppressClick) {
       event.preventDefault();
+      event.stopPropagation();
       touchStateRef.current.suppressClick = false;
       return;
     }
