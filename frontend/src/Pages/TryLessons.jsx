@@ -5,7 +5,6 @@ import { useAuth } from "../AuthContext";
 import "../Styles/TryLessons.css";
 import FreeLessonCards from "../Components/FreeLessonCards";
 import MembershipFeatures from "../Components/MembershipFeatures";
-import SignUpCTA from "../Components/SignUpCTA";
 
 const TryLessons = () => {
   const { user } = useAuth();
@@ -34,8 +33,6 @@ const TryLessons = () => {
       <div className="try-lessons-cards-container">
         <FreeLessonCards showHeader={false} />
       </div>
-
-      {!user && <SignUpCTA onSignupClick={handleSignupClick} />}
 
       <div className="try-lessons-plan-notice-wrapper">
         {!user ? (
