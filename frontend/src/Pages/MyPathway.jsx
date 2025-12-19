@@ -294,6 +294,10 @@ const MyPathway = () => {
     return !firstLessonIds.includes(lesson.id);
   };
 
+  const isLessonCompleted = (lessonId) => {
+    return completedLessons.some((completed) => completed.lesson_id === lessonId);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "pathway":
@@ -348,50 +352,53 @@ const MyPathway = () => {
             {/* Lessons List */}
             <div className="pathway-lessons-section">
               <div className="pathway-lesson-list pathway-lesson-list--pathway">
-                {pathwayLessons.map((lesson, index) => (
-                  <Link
-                    to={`/lesson/${lesson.id}`}
-                    key={lesson.id}
-                    className={`pathway-lesson-item ${index === 0 ? 'next-lesson' : ''}`}
-                  >
-                    <div className="pathway-lesson-content">
-                      <div className="pathway-lesson-header">
-                        {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
-                          <img src="/images/black-checkmark-level-checkpoint.webp" alt={uiText.lessonCheckpoint} className="pathway-lesson-checkpoint" />
-                        ) : (
-                          <span className="pathway-lesson-number">
-                            {lesson.level}.{lesson.lesson_order}
-                          </span>
-                        )}
-                        <div className="pathway-lesson-text">
-                          <span className="pathway-lesson-title">
-                            {pickLang(lesson.title, lesson.title_th)}
-                          </span>
-                          {(lesson.focus || lesson.focus_th) && (
-                            <div className="pathway-lesson-focus">
-                              {pickLang(lesson.focus, lesson.focus_th)}
-                            </div>
+                {pathwayLessons.map((lesson, index) => {
+                  const lessonCompleted = isLessonCompleted(lesson.id);
+                  return (
+                    <Link
+                      to={`/lesson/${lesson.id}`}
+                      key={lesson.id}
+                      className={`pathway-lesson-item ${index === 0 ? 'next-lesson' : ''}`}
+                    >
+                      <div className="pathway-lesson-content">
+                        <div className="pathway-lesson-header">
+                          {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
+                            <img src="/images/black-checkmark-level-checkpoint.webp" alt={uiText.lessonCheckpoint} className="pathway-lesson-checkpoint" />
+                          ) : (
+                            <span className="pathway-lesson-number">
+                              {lesson.level}.{lesson.lesson_order}
+                            </span>
                           )}
+                          <div className="pathway-lesson-text">
+                            <span className="pathway-lesson-title">
+                              {pickLang(lesson.title, lesson.title_th)}
+                            </span>
+                            {(lesson.focus || lesson.focus_th) && (
+                              <div className="pathway-lesson-focus">
+                                {pickLang(lesson.focus, lesson.focus_th)}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="pathway-lesson-right">
-                      {shouldShowLock(lesson) ? (
-                        <img
-                          src="/images/lock.webp"
-                          alt={uiText.locked}
-                          className="lesson-lock-icon pathway-lock-icon"
-                        />
-                      ) : (
-                        <img
-                          src="/images/CheckCircle.png"
-                          alt={uiText.notCompleted}
-                          className="pathway-checkmark"
-                        />
-                      )}
-                    </div>
-                  </Link>
-                ))}
+                      <div className="pathway-lesson-right">
+                        {shouldShowLock(lesson) ? (
+                          <img
+                            src="/images/lock.webp"
+                            alt={uiText.locked}
+                            className="lesson-lock-icon pathway-lock-icon"
+                          />
+                        ) : lessonCompleted ? (
+                          <img
+                            src="/images/filled-checkmark-lesson-complete.webp"
+                            alt={uiText.completedAlt}
+                            className="pathway-checkmark"
+                          />
+                        ) : null}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </>

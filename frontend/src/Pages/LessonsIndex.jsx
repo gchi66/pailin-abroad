@@ -541,49 +541,52 @@ const LessonsIndex = () => {
 
             <div className="level-content">
               <div className="lesson-list">
-                {sortedLessons.map((lesson) => (
-                  <Link
-                    to={`/lesson/${lesson.id}`}
-                    key={lesson.id}
-                    className="lesson-item"
-                    onClick={handleLessonClick}
-                  >
-                    <div className="lesson-item-left">
-                      <div className="lesson-index-slot">
-                        {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
-                          <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
-                        ) : (
-                          <span className="lesson-number">{lesson.level}.{lesson.lesson_order}</span>
-                        )}
-                      </div>
-                      <div className="name-desc-container">
-                        <span className="lesson-name">
-                          {lesson.title}
-                        </span>
-                        {lesson.focus && (
-                          <span className="lesson-focus">
-                            {lesson.focus}
+                {sortedLessons.map((lesson) => {
+                  const lessonCompleted = isLessonCompleted(lesson.id);
+                  return (
+                    <Link
+                      to={`/lesson/${lesson.id}`}
+                      key={lesson.id}
+                      className="lesson-item"
+                      onClick={handleLessonClick}
+                    >
+                      <div className="lesson-item-left">
+                        <div className="lesson-index-slot">
+                          {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
+                            <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
+                          ) : (
+                            <span className="lesson-number">{lesson.level}.{lesson.lesson_order}</span>
+                          )}
+                        </div>
+                        <div className="name-desc-container">
+                          <span className="lesson-name">
+                            {lesson.title}
                           </span>
-                        )}
+                          {lesson.focus && (
+                            <span className="lesson-focus">
+                              {lesson.focus}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <div className="lesson-item-right">
-                      {shouldShowLock(lesson) ? (
-                        <img
-                          src="/images/lock.webp"
-                          alt="Locked"
-                          className="lesson-lock-icon"
-                        />
-                      ) : (
-                        <img
-                          src={isLessonCompleted(lesson.id) ? "/images/filled-checkmark-lesson-complete.webp" : "/images/CheckCircle.png"}
-                          alt={isLessonCompleted(lesson.id) ? "Completed" : "Not completed"}
-                          className={`checkmark-img ${isLessonCompleted(lesson.id) ? "checkmark-completed" : ""}`}
-                        />
-                      )}
-                    </div>
-                  </Link>
-                ))}
+                      <div className="lesson-item-right">
+                        {shouldShowLock(lesson) ? (
+                          <img
+                            src="/images/lock.webp"
+                            alt="Locked"
+                            className="lesson-lock-icon"
+                          />
+                        ) : lessonCompleted ? (
+                          <img
+                            src="/images/filled-checkmark-lesson-complete.webp"
+                            alt="Completed"
+                            className="checkmark-img checkmark-completed"
+                          />
+                        ) : null}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
