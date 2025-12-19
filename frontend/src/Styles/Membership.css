@@ -141,8 +141,14 @@
 }
 
 /* Savings badge hover effect */
-.pricing-card:hover .savings-badge,
-.pricing-card.hovered .savings-badge,
+@media (hover: hover) and (pointer: fine) {
+  .pricing-card:hover .savings-badge,
+  .pricing-card.hovered .savings-badge {
+    color: #3CA0FE;
+    border-color: #3CA0FE;
+  }
+}
+
 .pricing-card.selected .savings-badge {
   color: #3CA0FE;
   border-color: #3CA0FE;
