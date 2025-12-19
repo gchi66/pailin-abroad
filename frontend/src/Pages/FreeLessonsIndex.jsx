@@ -14,6 +14,7 @@ const FreeLessonsIndex = () => {
     Advanced: [],
   });
   const [completedLessons, setCompletedLessons] = useState([]);
+  const [sessionUser, setSessionUser] = useState(null);
 
   // Fetch all lessons and group by stage, filtering to only first lesson of each level
   useEffect(() => {
@@ -78,11 +79,37 @@ const FreeLessonsIndex = () => {
     fetchAllLessons();
   }, []);
 
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const currentUser = user || sessionUser;
+
+  useEffect(() => {
+    const syncSessionUser = async () => {
+      const { data } = await supabaseClient.auth.getSession();
+      setSessionUser(data?.session?.user || null);
+    };
+
+    const { data: listener } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+      setSessionUser(session?.user || null);
+    });
+
+    syncSessionUser();
+
+    return () => listener?.subscription?.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserIfMissing = async () => {
+      if (currentUser) return;
+      const { data } = await supabaseClient.auth.getUser();
+      setSessionUser(data?.user || null);
+    };
+
+    fetchUserIfMissing();
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchCompletedLessons = async () => {
-      if (!user) {
+      if (!currentUser) {
         setCompletedLessons([]);
         return;
       }
@@ -118,7 +145,7 @@ const FreeLessonsIndex = () => {
     };
 
     fetchCompletedLessons();
-  }, [user]);
+  }, [currentUser]);
 
   const isLessonCompleted = (lessonId) =>
     completedLessons.some((completed) => completed.lesson_id === lessonId);
@@ -126,7 +153,7 @@ const FreeLessonsIndex = () => {
   // Component for a single lesson item
   const LessonItem = ({ lesson }) => {
     const isCheckpoint = (lesson.title || "").toLowerCase().includes("checkpoint");
-    const showLock = !user;
+    const showLock = !currentUser;
     const completed = isLessonCompleted(lesson.id);
 
     const content = (
@@ -218,7 +245,7 @@ const FreeLessonsIndex = () => {
         </p>
       </header>
 
-      {!user ? (
+      {!currentUser && !authLoading ? (
         <div className="free-plan-notice-wrapper">
           <PlanNotice
             heading="Looks like you don't have an account."
@@ -238,7 +265,7 @@ const FreeLessonsIndex = () => {
             }
           />
         </div>
-      ) : (
+      ) : currentUser ? (
         <div className="free-upgrade-message">
           <p>Your free plan gives you access to the first lesson of each level!</p>
           <p className="free-upgrade-actions">
@@ -252,7 +279,7 @@ const FreeLessonsIndex = () => {
             .
           </p>
         </div>
-      )}
+      ) : null}
 
       <div className="free-lessons-content">
         <section className="free-lessons-section">

@@ -35,7 +35,7 @@ const TryLessons = () => {
         <FreeLessonCards showHeader={false} />
       </div>
 
-      <SignUpCTA onSignupClick={handleSignupClick} />
+      {!user && <SignUpCTA onSignupClick={handleSignupClick} />}
 
       <div className="try-lessons-plan-notice-wrapper">
         {!user ? (

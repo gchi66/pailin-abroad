@@ -73,8 +73,7 @@
 /* Cards Container */
 .try-lessons-cards-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: block;
 }
 
 .try-lessons-plan-notice-wrapper {
@@ -115,6 +114,11 @@
 }
 
 @media (max-width: 480px) {
+  .try-lessons-cards-container {
+    width: 100%;
+    display: block;
+  }
+
   .try-lessons-plan-notice-wrapper {
     width: 100%;
     padding: 0 0.75rem;
@@ -126,13 +130,17 @@
   }
 
   .try-lessons-header-text {
-    font-size: 3.5vh;
+    font-size: 2rem;
     white-space: normal;
     text-align: center;
   }
 
   .try-lessons-header-subtitle {
-    font-size: 1.4vh;
+    font-size: 1rem;
+    max-width: 75%;
+    text-align: center;
+    margin: 0 auto;
+    white-space: normal;
   }
 
   .try-lessons-intro-section {
@@ -140,7 +148,11 @@
   }
 
   .try-lessons-intro {
-    font-size: 1rem;
+    font-size: .8rem;
     line-height: 1.6;
+  }
+
+  .try-lessons-plan-notice-wrapper .plan-notice {
+    margin-top: 0;
   }
 }
