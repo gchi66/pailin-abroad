@@ -129,10 +129,15 @@
     margin-top: -15vh;
   }
 
+  .try-lessons-page-header {
+    padding: 2rem 3rem;
+  }
+
   .try-lessons-header-text {
     font-size: 2rem;
     white-space: normal;
     text-align: center;
+    font-weight: 700;
   }
 
   .try-lessons-header-subtitle {
