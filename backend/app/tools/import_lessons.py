@@ -300,7 +300,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
         return
 
     (supabase.table("practice_exercises")
-        .upsert(rows, on_conflict="lesson_id,kind,sort_order")
+        .upsert(rows, on_conflict="lesson_id,kind,sort_order", returning="minimal")
         .execute())
 
     # After EN upsert, gather alt_text for lesson_images.alt_text_en
@@ -533,7 +533,7 @@ def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
                 continue
 
             (supabase.table("transcript_lines")
-             .upsert(record, on_conflict="lesson_id,sort_order")
+             .upsert(record, on_conflict="lesson_id,sort_order", returning="minimal")
              .execute())
             continue
 
@@ -573,7 +573,7 @@ def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
                 **th_update,
             }
             (supabase.table("transcript_lines")
-             .insert(ins_record)
+             .insert(ins_record, returning="minimal")
              .execute())
 
 
@@ -596,7 +596,7 @@ def upsert_comprehension(lesson_id, questions, lang=None, dry_run=False):
             print(f"[INFO] No comprehension rows (EN) for lesson {lesson_id}. Skipping.")
             return
         supabase.table("comprehension_questions") \
-            .upsert(rows, on_conflict="lesson_id,sort_order") \
+            .upsert(rows, on_conflict="lesson_id,sort_order", returning="minimal") \
             .execute()
         return
 
@@ -638,7 +638,11 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
                 print(f"[DRY RUN] Section EN UPSERT: {record}")
                 continue
             try:
-                supabase.table("lesson_sections").upsert(record, on_conflict="lesson_id,type").execute()
+                supabase.table("lesson_sections").upsert(
+                    record,
+                    on_conflict="lesson_id,type",
+                    returning="minimal",
+                ).execute()
             except Exception as e:
                 print(f"[ERROR] lesson_sections EN upsert {key}: {e}")
             continue
@@ -660,13 +664,16 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
             continue
         try:
             upd = (supabase.table("lesson_sections")
-                .update(th_update)
-                .eq("lesson_id", key["lesson_id"])
-                .eq("type", key["type"])
-                .execute())
+                   .update(th_update)
+                   .eq("lesson_id", key["lesson_id"])
+                   .eq("type", key["type"])
+                   .execute())
             if not (upd.data or []):
                 ins_record = {**key, **th_update}
-                supabase.table("lesson_sections").insert(ins_record).execute()
+                supabase.table("lesson_sections").insert(
+                    ins_record,
+                    returning="minimal",
+                ).execute()
         except Exception as e:
             print(f"[ERROR] lesson_sections TH update/insert {key}: {e}")
 
@@ -744,7 +751,7 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                         print("[DRY RUN] Insert phrases:", insert_payload)
                         phrase_id = None
                     else:
-                        ins = supabase.table("phrases").insert(insert_payload).execute()
+                        ins = supabase.table("phrases").insert(insert_payload, returning="representation").execute()
                         phrase_id = (ins.data or [{}])[0].get("id")
                         if not phrase_id:
                             refetched = _find_phrase_by_norm(variant, phrase_raw)
@@ -754,7 +761,7 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                 if dry_run:
                     print("[DRY RUN] Link lesson_phrases upsert:", link)
                 else:
-                    supabase.table("lesson_phrases").upsert(link, on_conflict="lesson_id,phrase_id").execute()
+                    supabase.table("lesson_phrases").upsert(link, on_conflict="lesson_id,phrase_id", returning="minimal").execute()
 
 
 def upsert_tags(lesson_id, tags, dry_run=False):
@@ -772,7 +779,7 @@ def upsert_tags(lesson_id, tags, dry_run=False):
             print(f"[DRY RUN] Upsert lesson_tags: {record}")
             continue
         try:
-            supabase.table("lesson_tags").upsert(record, on_conflict="lesson_id,tag_id").execute()
+            supabase.table("lesson_tags").upsert(record, on_conflict="lesson_id,tag_id", returning="minimal").execute()
         except Exception as e:
             print(f"[ERROR] lesson_tags for lesson {lesson_id}, tag {tag_name}: {e}")
 
@@ -811,7 +818,7 @@ def upsert_pinned_comment(lesson_id, pinned_comment, lang="en", dry_run=False):
             supabase.table("comments").update(update_data).eq("id", comment_id).execute()
             print(f"[INFO] Updated existing pinned comment for lesson {lesson_id} (lang={lang})")
         else:
-            supabase.table("comments").insert(comment_data).execute()
+            supabase.table("comments").insert(comment_data, returning="minimal").execute()
             print(f"[INFO] Inserted new pinned comment for lesson {lesson_id} (lang={lang})")
     except Exception as e:
         print(f"[ERROR] Failed to upsert pinned comment for lesson {lesson_id}: {e}")

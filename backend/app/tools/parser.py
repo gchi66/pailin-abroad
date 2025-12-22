@@ -1384,6 +1384,32 @@ class GoogleDocsParser:
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header
                             })
+
+                    # If the current node we just appended is a paragraph immediately after an audio list_item,
+                    # and it "looks attached" (same indent OR italic), merge its inlines into the previous node
+                    # so that only one list_item/audio button renders (mini-conversation style).
+                    if node_list:
+                        curr = node_list[-1]
+                        prev = node_list[-2] if len(node_list) >= 2 else None
+                        if (
+                            curr.get("kind") == "paragraph"
+                            and prev
+                            and prev.get("kind") == "list_item"
+                            and prev.get("audio_key")
+                        ):
+                            para_text = "".join((inl.get("text", "") or "") for inl in curr.get("inlines", [])).strip()
+                            looks_like_speaker = bool(re.match(r"^[^:\n]{1,50}:\s+", para_text))
+                            same_indent = curr.get("indent") == prev.get("indent")
+                            has_italic = any((inl.get("italic") for inl in curr.get("inlines", [])))
+                            has_text = any((inl.get("text", "").strip() for inl in curr.get("inlines", [])))
+                            if has_text and (same_indent or has_italic or looks_like_speaker):
+                                node_list.pop()  # remove the paragraph node
+                                prev_inlines = prev.get("inlines", [])
+                                if prev_inlines:
+                                    prev_inlines.append({"text": "\n", "bold": False, "italic": False, "underline": False})
+                                prev_inlines.extend(curr.get("inlines", []))
+                                prev["inlines"] = prev_inlines
+
                     line_idx += 1
 
                 # fallback plain-text (Markdown) version
