@@ -139,9 +139,42 @@ const hasLineBreak = (node) =>
   Array.isArray(node?.inlines) &&
   node.inlines.some((span) => cleanAudioTags(span.text).includes("\n"));
 
-const INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
-const MANUAL_INDENT_REM = 3;   // rem applied to flagged paragraphs
+const DEFAULT_INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
+const DEFAULT_MANUAL_INDENT_REM = 3;   // rem applied to flagged paragraphs
 const AUDIO_BUTTON_SIZE = 1.5; // rem
+
+function getIndentConfig() {
+  if (typeof window === "undefined") {
+    return {
+      indentPerLevel: DEFAULT_INDENT_PER_LEVEL,
+      manualIndentRem: DEFAULT_MANUAL_INDENT_REM,
+      listItemOffset: DEFAULT_INDENT_PER_LEVEL * 3, // matches legacy 4.5rem
+      listItemBaseOffset: (DEFAULT_INDENT_PER_LEVEL * 4) / 3, // matches legacy ~2rem
+    };
+  }
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  const indentPerLevel =
+    parseFloat(rootStyle.getPropertyValue("--audio-indent-step")) ||
+    DEFAULT_INDENT_PER_LEVEL;
+  const manualIndentRem =
+    parseFloat(rootStyle.getPropertyValue("--audio-manual-indent")) ||
+    DEFAULT_MANUAL_INDENT_REM;
+
+  return {
+    indentPerLevel,
+    manualIndentRem,
+    listItemOffset: indentPerLevel * 3, // scale with indent step
+    listItemBaseOffset: (indentPerLevel * 4) / 3, // keeps ~2rem baseline on desktop
+  };
+}
+
+const {
+  indentPerLevel: INDENT_PER_LEVEL,
+  manualIndentRem: MANUAL_INDENT_REM,
+  listItemOffset: LIST_ITEM_OFFSET,
+  listItemBaseOffset: LIST_ITEM_BASE_OFFSET,
+} = getIndentConfig();
 
 const computeIndent = (node) =>
   typeof node?.indent === "number" && Number.isFinite(node.indent)
@@ -251,7 +284,9 @@ const renderNode = (node, key) => {
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: baseIndentRem ? `${baseIndentRem + 4.5}rem` : "2rem", // Extra indent for list bullet
+              marginLeft: baseIndentRem
+                ? `${baseIndentRem + LIST_ITEM_OFFSET}rem`
+                : `${LIST_ITEM_BASE_OFFSET}rem`,
               display: "flex",
               alignItems: multiline ? "flex-start" : "flex-start",
               marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
