@@ -7,8 +7,8 @@ from typing import Dict, Tuple
 # ---- CONFIG: level → (EN_ID, TH_ID) ----
 
 LEVEL_DOC_IDS: Dict[int, Dict[str, str]] = {
-    1: {"en": "1USn1mSY52hCZ_f1r5fhwdvGLV8JdzVqqFmXxDAs5B0U", "th": "1LnnTGXQT3HKD3492yANQpbbuOGMktuAhqnTF5Xce6CE"},
-    2: {"en": "1pDg0-22-kbVevYc7CVn4KS0KVdBeRWeu5kGZyRbtWXg", "th": "1ep1P1MwrtRBlOgHOhsocRZ0_KLteBVZoa1-1rL4XGN4"},
+    1: {"en": "1VdXoHKRFd1PGgN317-JLZsusQwZLygaXns4DeA6jBns", "th": "1LnnTGXQT3HKD3492yANQpbbuOGMktuAhqnTF5Xce6CE"},
+    2: {"en": "1ca6cFOwVsyqrJaagNMz78-2THMFVqy7ZmmAMqdkfVBU", "th": "1ep1P1MwrtRBlOgHOhsocRZ0_KLteBVZoa1-1rL4XGN4"},
     3: {"en": "1smpD_CxTzVMaM6L_Pv808tKiQo04yVQSUVCFUj8xt10", "th": "1R77iQ63nGPUFaJRugK3_wkqpbew_otP9gKgwcCHe19E"},
     4: {"en": "1Wqa5L39_1Z2pFbBTJGng_pl3WO7lR9uUcK0jvys_lZs", "th": "1zwrm-oiQWpSOiyTDBFqIHMvWSdOitCWcxeoBZBRhKxc"},
     5: {"en": "13-30sdtvpJHinbwOtgJ4bM3bNfJPEYneUg2Do8QGE24", "th": "1o0rYbdgPdAXyHIddVcSjuFoabte0V2GSs_cITS1noJo"},

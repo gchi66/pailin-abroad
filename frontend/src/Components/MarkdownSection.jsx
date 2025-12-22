@@ -105,6 +105,22 @@ export default function MarkdownSection({
                         </div>
                       );
                     },
+                    // Add spacing to bold-only paragraphs (subheaders)
+                    p: ({ node, children, ...props }) => {
+                      const childArray = React.Children.toArray(children);
+                      const nonEmpty = childArray.filter((c) => {
+                        if (typeof c === "string") return c.trim() !== "";
+                        return true;
+                      });
+                      const allBold =
+                        nonEmpty.length > 0 && nonEmpty.every((c) => c?.type === "strong");
+                      const className = allBold ? "rich-subheader" : undefined;
+                      return (
+                        <p className={className} {...props}>
+                          {children}
+                        </p>
+                      );
+                    },
                   }}
                 >
                   {Array.isArray(body) ? body.join("\n").trim() : body}

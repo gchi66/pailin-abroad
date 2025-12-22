@@ -478,15 +478,19 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
         if "paragraph" in elem:
             para = elem["paragraph"]
             style = para.get("paragraphStyle", {}).get("namedStyleType", "")
-            text = "".join(
+            raw_text = "".join(
                 r.get("textRun", {}).get("content", "")
                 for r in para.get("elements", [])
-            ).replace("\u000b", "\n").strip()
+            ).replace("\u000b", "\n")
+            text = raw_text.strip()
 
+            # Preserve blank lines inside a section as explicit entries
             if not text:
+                if current_header is not None:
+                    current_lines.append(("", style))
                 continue
 
-            stripped = text.strip()
+            stripped = text
             header_candidate = stripped.upper().rstrip(":")
             is_checkpoint = header_candidate.startswith("CHECKPOINT")
 
@@ -1236,6 +1240,15 @@ class GoogleDocsParser:
                     text_line, style = lines[line_idx]
                     text_line = text_line.strip()
                     if not text_line:
+                        # Preserve blank lines as spacer nodes to control vertical gaps in the renderer
+                        node_list.append({
+                            "kind": "spacer",
+                            "level": None,
+                            "inlines": [],
+                            "indent": 0,
+                            "lesson_context": lesson_header_raw,
+                            "section_context": norm_header
+                        })
                         line_idx += 1
                         continue
 

@@ -59,6 +59,30 @@ details[open] > .markdown-summary::after {
   display: none;
 }
 
+.markdown-content p.rich-subheader {
+  margin-block-start: 3.5rem;
+  margin-block-end: 2rem;
+  font-size: 1.2rem;
+}
+
+.markdown-content p.rich-subheader + * {
+  margin-block-start: 0;
+}
+
+.lesson-table p.rich-subheader {
+  margin-top: 0;
+}
+
+/* Fallback for bold-only paragraphs we didn't tag */
+.markdown-content p:has(> span[style*="font-weight: bold"]:last-child) {
+  margin-block-start: 3.5rem;
+  margin-block-end: 2rem;
+}
+
+.markdown-content p:has(> span[style*="font-weight: bold"]:last-child) + * {
+  margin-block-start: 0;
+}
+
 /* main body */
 .markdown-content {
   padding: 0 2.25rem 1.4vh;          /* side + bottom padding */
@@ -75,7 +99,7 @@ details[open] > .markdown-summary::after {
 }
 
 .markdown-content p {
-  margin-block-end: 1em;
+  margin: 0; /* gaps controlled by explicit spacer nodes */
 }
 
 .markdown-content ul,
@@ -85,12 +109,16 @@ details[open] > .markdown-summary::after {
 }
 
 .markdown-content p:has(> span[style*="font-weight: bold"]:last-child) {
-  margin-block-start: 2rem;
+  margin-block-start: 3.5rem;
   margin-block-end: 2rem;
 }
 
 .markdown-content p:has(> span[style*="font-weight: bold"]:last-child) + * {
   margin-block-start: 0;
+}
+
+.para-spacer {
+  margin: 1rem 0;
 }
 
 

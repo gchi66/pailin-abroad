@@ -222,6 +222,11 @@ const renderNode = (node, key) => {
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
       const hasSpacing = hasYellowHighlight(node); // NEW: Check for yellow highlight
+      const textSpans = (node.inlines || []).filter(
+        (span) => typeof span?.text === "string" && span.text.trim() !== ""
+      );
+      const allTextBold = textSpans.length > 0 && textSpans.every((span) => !!span.bold);
+      const isSubheader = !hasAudio && allTextBold;
 
       if (hasAudio) {
         const multiline = hasLineBreak(node);
@@ -254,6 +259,7 @@ const renderNode = (node, key) => {
       return (
         <p
           key={key}
+          className={isSubheader ? "rich-subheader" : undefined}
           style={{
             marginLeft: paragraphIndentRem ? `${paragraphIndentRem}rem` : undefined,
             marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
@@ -371,16 +377,20 @@ const renderNode = (node, key) => {
       );
     }
 
-    if (node.kind === "numbered_item") {
-      // This should be handled by renderNodesWithNumberedLists
-      return null;
-    }
+  if (node.kind === "numbered_item") {
+    // This should be handled by renderNodesWithNumberedLists
+    return null;
+  }
 
-    if (node.kind === "table") {
-      return (
-        <LessonTable
-          key={key}
-          data={{
+  if (node.kind === "spacer") {
+    return <div key={key} className="para-spacer" aria-hidden="true" />;
+  }
+
+  if (node.kind === "table") {
+    return (
+      <LessonTable
+        key={key}
+        data={{
             cells: node.cells,
             indent: node.indent,
           }}
@@ -475,23 +485,50 @@ const renderNode = (node, key) => {
 
   const renderNodesWithNumberedLists = (nodeList) => {
     const elements = [];
-    let i = 0;
-    let groupIndex = 0;
+    const countsByIndent = new Map();
 
-    while (i < nodeList.length) {
-      const node = nodeList[i];
-      if (node.kind === "numbered_item") {
-        const group = [];
-        while (i < nodeList.length && nodeList[i].kind === "numbered_item") {
-          group.push(nodeList[i]);
-          i++;
-        }
-        elements.push(renderNumberedGroup(group, `numbered-group-${groupIndex++}`));
-      } else {
-        elements.push(renderNode(node, i));
-        i++;
+    const resetCounters = () => {
+      countsByIndent.clear();
+    };
+
+    const isSubheaderNode = (node) => {
+      if (node?.kind !== "paragraph") return false;
+      if (node?.audio_key || node?.audio_seq) return false;
+      const textSpans = (node.inlines || []).filter(
+        (span) => typeof span?.text === "string" && span.text.trim() !== ""
+      );
+      return textSpans.length > 0 && textSpans.every((span) => !!span.bold);
+    };
+
+    const renderNumberedItemWithCounter = (node, key) => {
+      const indent = computeIndent(node);
+      const current = countsByIndent.has(indent) ? countsByIndent.get(indent) : 1;
+      countsByIndent.set(indent, current + 1);
+      const listIndentRem = indent * INDENT_PER_LEVEL;
+      return (
+        <ol
+          key={key}
+          className="rich-numbered-list"
+          style={{ marginLeft: listIndentRem ? `${listIndentRem}rem` : undefined }}
+          start={current}
+        >
+          {renderNumberedListItem(node, `${key}-item`, indent)}
+        </ol>
+      );
+    };
+
+    nodeList.forEach((node, idx) => {
+      if (node.kind === "heading" || isSubheaderNode(node)) {
+        resetCounters();
+        elements.push(renderNode(node, idx));
+        return;
       }
-    }
+      if (node.kind === "numbered_item") {
+        elements.push(renderNumberedItemWithCounter(node, `numbered-${idx}`));
+        return;
+      }
+      elements.push(renderNode(node, idx));
+    });
 
     return elements;
   };
