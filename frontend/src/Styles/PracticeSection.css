@@ -136,3 +136,13 @@ details[open] > .markdown-summary {
 .fb-paragraph .fb-input{
    margin: .2rem 0;
 }
+
+
+@media (max-width: 480px) {
+  .markdown-summary {
+    padding: 1.5rem 1rem;
+  }
+  .markdown-content {
+    padding: 0 1rem .4vh;
+  }
+}
