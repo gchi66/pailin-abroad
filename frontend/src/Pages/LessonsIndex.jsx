@@ -367,10 +367,12 @@ const LessonsIndex = () => {
         {!user && (
           <PlanNotice
             heading="Unlock our full Lesson Library."
-            subtext={[
-              "All our lessons are locked. Create a free account to access our",
-              "free lessons, or become a member for full access to over 150 lessons!",
-            ]}
+            subtext={
+              <>
+                All our lessons are locked. Create a free account to access our{" "}
+                <Link to="/free-lessons">free lessons</Link>, or become a member for full access to over 150 lessons!
+              </>
+            }
             cta={{
               label: "SIGN UP FOR FREE",
               to: "/signup",

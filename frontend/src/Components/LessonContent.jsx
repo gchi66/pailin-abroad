@@ -189,7 +189,7 @@ export default function LessonContent({
 
     registerStickyHeaders(nodes);
     return () => {
-      registerStickyHeaders([]);
+      registerStickyHeaders([], { preserveState: true });
     };
   }, [
     registerStickyHeaders,

@@ -437,12 +437,15 @@ export default function Lesson() {
     return observerRef.current;
   }, [computeNavbarMargin, rebuildObserver]);
 
-  const registerStickyHeaders = useCallback((nodes) => {
+  const registerStickyHeaders = useCallback((nodes, options = {}) => {
+    const { preserveState = false } = options;
     if (!nodes || nodes.length === 0) {
       headNodesRef.current.clear();
       visibleHeadIdsRef.current.clear();
-      reachedHeadsRef.current = false;
-      setShowStickyToggle(false);
+      if (!preserveState) {
+        reachedHeadsRef.current = false;
+        setShowStickyToggle(false);
+      }
       return;
     }
 
