@@ -133,14 +133,14 @@ details[open] > .markdown-summary::after {
 .audio-bullet {
   display: flex;
   align-items: center;
-  padding-left: 0;
   list-style: none;
+  padding-left: calc(1.5rem + 0.5rem); /* reserve icon + gap */
 }
 
 .audio-bullet img {
   width: 1.5rem;
   height: 1.5rem;
-  margin-left: calc(-1.5rem - 0.5rem);
+  margin-left: 0;
   margin-right: 0.5rem;
   flex-shrink: 0;
 }

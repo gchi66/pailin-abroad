@@ -142,6 +142,8 @@ const hasLineBreak = (node) =>
 const DEFAULT_INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
 const DEFAULT_MANUAL_INDENT_REM = 3;   // rem applied to flagged paragraphs
 const AUDIO_BUTTON_SIZE = 1.5; // rem
+const NON_AUDIO_INDENT_BONUS_LEVELS = 2; // push non-audio indented items to align with audio bullets
+const OVERRIDE_INDENT_REM = 6; // force indent=1 to 6rem for alignment
 
 function getIndentConfig() {
   if (typeof window === "undefined") {
@@ -176,10 +178,33 @@ const {
   listItemBaseOffset: LIST_ITEM_BASE_OFFSET,
 } = getIndentConfig();
 
-const computeIndent = (node) =>
-  typeof node?.indent === "number" && Number.isFinite(node.indent)
-    ? node.indent
-    : 0;
+const computeIndentLevel = (node) => {
+  if (typeof node?.indent_level === "number" && Number.isFinite(node.indent_level)) {
+    return node.indent_level;
+  }
+  if (typeof node?.indent === "number" && Number.isFinite(node.indent)) {
+    return node.indent;
+  }
+  return 0;
+};
+
+const calcIndentRem = (indentLevel) => {
+  if (!indentLevel) return 0;
+  return indentLevel * INDENT_PER_LEVEL;
+};
+
+const listTextStartRem = (indentLevel) => {
+  const base = indentLevel ? calcIndentRem(indentLevel) : 0;
+  const offset = indentLevel ? LIST_ITEM_OFFSET : LIST_ITEM_BASE_OFFSET;
+  return base + offset;
+};
+
+const paragraphTextStartRem = (indentLevel) => {
+  const base = indentLevel ? calcIndentRem(indentLevel) : 0;
+  // mimic the space the audio button consumes + gap (use base offset for consistency)
+  const audioLikeOffset = LIST_ITEM_BASE_OFFSET;
+  return base + audioLikeOffset;
+};
 
 // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
 const renderNode = (node, key) => {
@@ -188,11 +213,9 @@ const renderNode = (node, key) => {
     return null;
   }
 
-  const indentValue = computeIndent(node);
-  const baseIndentRem = indentValue * INDENT_PER_LEVEL;
-  const manualIndentRem =
-    node.kind === "paragraph" && node.is_indented ? MANUAL_INDENT_REM : 0;
-  const paragraphIndentRem = baseIndentRem + manualIndentRem;
+  const indentLevel = computeIndentLevel(node);
+  const baseIndentRem = indentLevel * INDENT_PER_LEVEL;
+  const visualIndentRem = baseIndentRem;
 
   if (node.kind === "image") {
     const src =
@@ -227,7 +250,6 @@ const renderNode = (node, key) => {
       );
       const allTextBold = textSpans.length > 0 && textSpans.every((span) => !!span.bold);
       const isSubheader = !hasAudio && allTextBold;
-
       if (hasAudio) {
         const multiline = hasLineBreak(node);
         return (
@@ -235,7 +257,7 @@ const renderNode = (node, key) => {
             key={key}
             className="audio-bullet"
             style={{
-              marginLeft: paragraphIndentRem ? `${paragraphIndentRem}rem` : undefined,
+              marginLeft: visualIndentRem ? `${visualIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
               marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
@@ -261,7 +283,11 @@ const renderNode = (node, key) => {
           key={key}
           className={isSubheader ? "rich-subheader" : undefined}
           style={{
-            marginLeft: paragraphIndentRem ? `${paragraphIndentRem}rem` : undefined,
+            marginLeft: hasAudio
+              ? (visualIndentRem ? `${visualIndentRem}rem` : undefined)
+              : (indentLevel
+                  ? `${listTextStartRem(indentLevel)}rem`
+                  : `${LIST_ITEM_BASE_OFFSET}rem`),
             marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
           }}
         >
@@ -313,15 +339,17 @@ const renderNode = (node, key) => {
         );
       }
       return (
-        <li
-          key={key}
-          style={{
-            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
-            marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
-          }}
-        >
-          {renderInlines(node.inlines)}
-        </li>
+          <li
+            key={key}
+            style={{
+              marginLeft: indentLevel
+                ? `${listTextStartRem(indentLevel) + 3}rem`
+                : undefined,
+              marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
+            }}
+          >
+            {renderInlines(node.inlines)}
+          </li>
       );
     }
     if (node.kind === "misc_item") {
@@ -368,7 +396,9 @@ const renderNode = (node, key) => {
         <div
           key={key}
           style={{
-            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+            marginLeft: indentLevel
+              ? `${listTextStartRem(indentLevel) + 3}rem`
+              : undefined,
             marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
           }}
         >
@@ -419,7 +449,7 @@ const renderNode = (node, key) => {
     const hasBold = nodeHasBold(node);
     const hasSpacing = hasYellowHighlight(node);
     const multiline = hasLineBreak(node);
-    const baseIndent = computeIndent(node);
+    const baseIndent = computeIndentLevel(node);
     const extraIndent = baseIndent - groupIndent;
     const extraIndentRem = extraIndent * INDENT_PER_LEVEL;
 
@@ -465,7 +495,7 @@ const renderNode = (node, key) => {
 
   const renderNumberedGroup = (items, keyPrefix) => {
     if (!items.length) return null;
-    const groupIndent = computeIndent(items[0]);
+    const groupIndent = computeIndentLevel(items[0]);
     const listIndentRem = groupIndent * INDENT_PER_LEVEL;
 
     return (
@@ -501,7 +531,7 @@ const renderNode = (node, key) => {
     };
 
     const renderNumberedItemWithCounter = (node, key) => {
-      const indent = computeIndent(node);
+      const indent = computeIndentLevel(node);
       const current = countsByIndent.has(indent) ? countsByIndent.get(indent) : 1;
       countsByIndent.set(indent, current + 1);
       const listIndentRem = indent * INDENT_PER_LEVEL;

@@ -913,6 +913,11 @@ class GoogleDocsParser:
                 "level": None,
                 "inlines": [{"text": text, "bold": False, "italic": False, "underline": False}],
                 "indent": 0,
+                "detection_indent": 0,
+                "indent_level": 0,
+                "indent_start_pts": 0,
+                "indent_first_line_pts": 0,
+                "indent_first_line_level": 0,
                 "lesson_context": lesson_header_raw,
                 "section_context": "PHRASES & VERBS",
             }
@@ -1394,6 +1399,11 @@ class GoogleDocsParser:
                                 "level": None,
                                 "inlines": [{"text": text_line, "bold": False, "italic": False, "underline": False}],
                                 "indent": 0,
+                                "detection_indent": 0,
+                                "indent_level": 0,
+                                "indent_start_pts": 0,
+                                "indent_first_line_pts": 0,
+                                "indent_first_line_level": 0,
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header
                             })
