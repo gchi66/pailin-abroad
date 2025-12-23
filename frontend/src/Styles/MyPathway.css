@@ -853,6 +853,7 @@
     background: transparent;
     font-size: 0.9rem;
     font-weight: 600;
+    font-family: "Poppins", sans-serif;
     letter-spacing: 0.02em;
     color: #1E1E1E;
     appearance: none;
@@ -875,7 +876,7 @@
     justify-content: space-between;
     gap: 0.5rem;
     padding: 0 .5rem;
-    margin: 0 0 0.5rem;
+    margin: 0 0 -.8rem;
   }
 
   .pathway-featured-resources {

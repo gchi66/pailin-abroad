@@ -23,6 +23,7 @@ const MyPathway = () => {
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
   const isFreePlanUser = Boolean(user) && isPaidMember === false;
+  const isPaidUser = Boolean(user) && isPaidMember === true;
   const lessonsCompletedCount = userStats?.lessons_completed ?? userProfile?.lessons_complete ?? 0;
   const hasPreviousSignIn = Boolean(
     user?.last_sign_in_at &&
@@ -100,6 +101,7 @@ const MyPathway = () => {
 
     // Footer
     goToFreeLessonLibrary: uiLang === "th" ? "ไปที่ไลบรารีบทเรียนฟรี →" : "Go to Free Lesson Library →",
+    goToLessonLibrary: uiLang === "th" ? "ไปที่คลังบทเรียน →" : "Go to Lesson Library →",
     freePlanNoticeHeading: uiLang === "th" ? "คุณอยู่ในแผนฟรี" : "You're on our free plan.",
     freePlanNoticeCopy: uiLang === "th"
       ? "อัปเกรดเพื่อเข้าถึงคลังบทเรียนทั้งหมดของเรา!"
@@ -315,39 +317,6 @@ const MyPathway = () => {
                 />
               </div>
             )}
-
-            <div className="pathway-mobile-topbar">
-              <div className="pathway-progress-section">
-                <h3 className="pathway-section-title">
-                  <span className="pathway-next-lesson-label">{uiText.yourNextLesson}</span>
-                  <span className="pathway-next-lesson-detail">
-                    {nextLesson ? (
-                      (nextLesson.title || "").toLowerCase().includes("checkpoint")
-                        ? `Level ${nextLesson.level} ${uiText.checkpoint}`
-                        : nextLesson.formatted
-                    ) : uiText.loading}
-                  </span>
-                </h3>
-              </div>
-
-              <div className="pathway-mobile-nav">
-                <label className="pathway-mobile-nav-label" htmlFor="pathway-mobile-nav-select">
-                  View
-                </label>
-                <select
-                  id="pathway-mobile-nav-select"
-                  className="pathway-mobile-nav-select"
-                  value={activeTab}
-                  onChange={(e) => setActiveTab(e.target.value)}
-                  aria-label="Select pathway view"
-                >
-                  <option value="pathway">{uiText.myPathway}</option>
-                  <option value="completed">{uiText.completed}</option>
-                  <option value="liked">{uiText.myLikedLessonsTab}</option>
-                  <option value="comments">{uiText.commentHistoryTab}</option>
-                </select>
-              </div>
-            </div>
 
             {/* Lessons List */}
             <div className="pathway-lessons-section">
@@ -643,6 +612,40 @@ const MyPathway = () => {
             </div>
           </nav>
 
+          {/* Mobile topbar (progress + tab selector) */}
+          <div className="pathway-mobile-topbar">
+            <div className="pathway-progress-section">
+              <h3 className="pathway-section-title">
+                <span className="pathway-next-lesson-label">{uiText.yourNextLesson}</span>
+                <span className="pathway-next-lesson-detail">
+                  {nextLesson ? (
+                    (nextLesson.title || "").toLowerCase().includes("checkpoint")
+                      ? `Level ${nextLesson.level} ${uiText.checkpoint}`
+                      : nextLesson.formatted
+                  ) : uiText.loading}
+                </span>
+              </h3>
+            </div>
+
+            <div className="pathway-mobile-nav">
+              <label className="pathway-mobile-nav-label" htmlFor="pathway-mobile-nav-select">
+                View
+              </label>
+              <select
+                id="pathway-mobile-nav-select"
+                className="pathway-mobile-nav-select"
+                value={activeTab}
+                onChange={(e) => setActiveTab(e.target.value)}
+                aria-label="Select pathway view"
+              >
+                <option value="pathway">{uiText.myPathway}</option>
+                <option value="completed">{uiText.completed}</option>
+                <option value="liked">{uiText.myLikedLessonsTab}</option>
+                <option value="comments">{uiText.commentHistoryTab}</option>
+              </select>
+            </div>
+          </div>
+
           {/* Tab Content */}
           <div className="pathway-content">
             {renderTabContent()}
@@ -650,19 +653,24 @@ const MyPathway = () => {
 
             {/* Footer Link */}
             <div className="pathway-footer">
-              <Link to="/free-lessons" className="pathway-library-link">
-                {uiText.goToFreeLessonLibrary}
+              <Link
+                to={isPaidUser ? "/lessons" : "/free-lessons"}
+                className="pathway-library-link"
+              >
+                {isPaidUser ? uiText.goToLessonLibrary : uiText.goToFreeLessonLibrary}
               </Link>
             </div>
 
             {/* Featured Resources (mobile emphasis) */}
-            <div className="pathway-featured-resources">
+              <div className="pathway-featured-resources">
               <div className="pathway-featured-header">
                 <h3 className="pathway-featured-title">Featured Resources</h3>
-                <p className="pathway-featured-subtitle">
-                  Members get full access to all of our Resource pages! Here are some that we think you’d like.
-                  <Link to="/membership" className="pathway-featured-upgrade"> Upgrade</Link> your membership to get full access!
-                </p>
+                {isFreePlanUser && (
+                  <p className="pathway-featured-subtitle">
+                    Members get full access to all of our Resource pages! Here are some that we think you’d like.
+                    <Link to="/membership" className="pathway-featured-upgrade"> Upgrade</Link> your membership to get full access!
+                  </p>
+                )}
               </div>
               <div className="pathway-featured-cards">
                 <Link to="/exercise-bank" className="resource-card-compact">
@@ -674,15 +682,15 @@ const MyPathway = () => {
                     <p className="resource-card-compact-desc">Additional practice exercises for those difficult grammar topics</p>
                   </div>
                 </Link>
-                <div className="resource-card-compact resource-card-compact-disabled">
+                <Link to="/topic-library" className="resource-card-compact">
                   <div className="resource-card-compact-media">
-                    <img src="/images/resources_common_mistakes.webp" alt="Common Mistakes" />
+                    <img src="/images/resources_topic_library.webp" alt="Topic Library" />
                   </div>
                   <div className="resource-card-compact-copy">
-                    <h4 className="resource-card-compact-title">Common Mistakes</h4>
-                    <p className="resource-card-compact-desc">Additional practice exercises for those difficult grammar topics</p>
+                    <h4 className="resource-card-compact-title">Topic Library</h4>
+                    <p className="resource-card-compact-desc">Browse grammar and vocab explainers by topic</p>
                   </div>
-                </div>
+                </Link>
               </div>
               <div className="pathway-featured-cta">
                 <Link to="/resources" className="pathway-featured-link">SEE ALL RESOURCE PAGES &gt;</Link>
