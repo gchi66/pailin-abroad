@@ -35,8 +35,36 @@ export default function RichSectionRenderer({
   audio_seq: n.audio_seq
 })));
 
+  const isSubheaderNode = (node) => {
+    if (node?.kind !== "paragraph") return false;
+    if (node?.audio_key || node?.audio_seq) return false;
+    const textSpans = (node.inlines || []).filter(
+      (span) => typeof span?.text === "string" && span.text.trim() !== ""
+    );
+    return textSpans.length > 0 && textSpans.every((span) => !!span.bold);
+  };
+
+  const groupBySubheader = (nodeList) => {
+    const groups = [];
+    let current = [];
+    nodeList.forEach((node) => {
+      if (isSubheaderNode(node) && current.length) {
+        groups.push(current);
+        current = [];
+      }
+      current.push(node);
+    });
+    if (current.length) {
+      groups.push(current);
+    }
+    return groups;
+  };
+
+  const TH_RE = /[\u0E00-\u0E7F]/;
+
   // Helper for rendering inlines with proper spacing AND audio tag removal
-  const renderInlines = (inlines) => {
+  const renderInlines = (inlines, opts = {}) => {
+    const thaiColor = opts.thaiColor || null;
     const processedInlines = inlines.map((span, idx) => {
       const cleanText = cleanAudioTags(span.text);
       let displayText = cleanText;
@@ -90,32 +118,54 @@ export default function RichSectionRenderer({
         // DON'T render the highlight color - it's just a spacing flag
       };
 
-      let element;
-      if (span.link) {
-        // Rewrite sentinel → internal lesson path
-        let href = span.link;
-        if (href.startsWith("https://pa.invalid/lesson/")) {
-          href = href.replace("https://pa.invalid", "");
-        }
+      const parts = thaiColor && TH_RE.test(currentText)
+        ? currentText.split(/([\u0E00-\u0E7F]+)/)
+        : [currentText];
 
-        element = (
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={commonStyle}
-          >
-            {displayText}
-          </a>
-        );
-      } else {
-        element = <span style={commonStyle}>{displayText}</span>;
-      }
+      const fragmentNodes = parts
+        .filter((part) => part !== "")
+        .map((part, idx) => {
+          const isThai = TH_RE.test(part);
+          const style = {
+            ...commonStyle,
+            color: isThai && thaiColor ? thaiColor : undefined,
+            fontWeight:
+              isThai && thaiColor
+                ? (span.bold ? 500 : 400)
+                : commonStyle.fontWeight,
+          };
+
+          if (span.link) {
+            // Rewrite sentinel → internal lesson path
+            let href = span.link;
+            if (href.startsWith("https://pa.invalid/lesson/")) {
+              href = href.replace("https://pa.invalid", "");
+            }
+
+            return (
+              <a
+                key={`frag-${m}-${idx}`}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={style}
+              >
+                {part}
+              </a>
+            );
+          }
+
+          return (
+            <span key={`frag-${m}-${idx}`} style={style}>
+              {part}
+            </span>
+          );
+        });
 
       return (
         <React.Fragment key={m}>
           {needsSpaceBefore && " "}
-          {element}
+          {fragmentNodes}
         </React.Fragment>
       );
     });
@@ -130,10 +180,13 @@ export default function RichSectionRenderer({
   const nodeHasBold = (node) =>
     Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
 
-  // NEW: Check if any inline in the node has yellow highlight (#ffff00)
-  const hasYellowHighlight = (node) =>
+  const CYAN_HIGHLIGHT = "#00ffff";
+  const ACCENT_COLOR = "#7BE6C9";
+
+  // Detect cyan highlights in source text
+  const hasCyanHighlight = (node) =>
     Array.isArray(node?.inlines) &&
-    node.inlines.some((span) => span?.highlight?.toLowerCase() === '#ffff00');
+    node.inlines.some((span) => span?.highlight?.toLowerCase() === CYAN_HIGHLIGHT);
 
 const hasLineBreak = (node) =>
   Array.isArray(node?.inlines) &&
@@ -244,7 +297,7 @@ const renderNode = (node, key) => {
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
-      const hasSpacing = hasYellowHighlight(node); // NEW: Check for yellow highlight
+      const hasAccent = hasCyanHighlight(node);
       const textSpans = (node.inlines || []).filter(
         (span) => typeof span?.text === "string" && span.text.trim() !== ""
       );
@@ -255,12 +308,14 @@ const renderNode = (node, key) => {
         return (
           <p
             key={key}
-            className="audio-bullet"
+            className={`audio-bullet${hasAccent ? " rich-accent" : ""}`}
             style={{
               marginLeft: visualIndentRem ? `${visualIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
+              marginBottom: hasBold ? 0 : "0.5rem",
+              borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
+              paddingLeft: hasAccent ? "1rem" : undefined,
             }}
           >
             <AudioButton
@@ -273,7 +328,7 @@ const renderNode = (node, key) => {
               size={AUDIO_BUTTON_SIZE}
               className="select-none"
             />
-            <span>{renderInlines(node.inlines)}</span>
+            <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
           </p>
         );
       }
@@ -281,14 +336,16 @@ const renderNode = (node, key) => {
       return (
         <p
           key={key}
-          className={isSubheader ? "rich-subheader" : undefined}
+          className={`${isSubheader ? "rich-subheader" : ""}${hasAccent ? " rich-accent" : ""}`}
           style={{
             marginLeft: hasAudio
               ? (visualIndentRem ? `${visualIndentRem}rem` : undefined)
               : (indentLevel
                   ? `${listTextStartRem(indentLevel)}rem`
                   : `${LIST_ITEM_BASE_OFFSET}rem`),
-            marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined), // Use spacing if flagged
+            marginBottom: hasBold ? 0 : undefined,
+            borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
+            paddingLeft: hasAccent ? "1rem" : undefined,
           }}
         >
           {renderInlines(node.inlines)}
@@ -307,13 +364,11 @@ const renderNode = (node, key) => {
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
-      const hasSpacing = hasYellowHighlight(node); // NEW: Check for yellow highlight
-
-      if (hasAudio) {
-        const multiline = hasLineBreak(node);
-        return (
-          <li
-            key={key}
+    if (hasAudio) {
+      const multiline = hasLineBreak(node);
+      return (
+        <li
+          key={key}
             className="audio-bullet"
             style={{
               marginLeft: baseIndentRem
@@ -321,31 +376,31 @@ const renderNode = (node, key) => {
                 : `${LIST_ITEM_BASE_OFFSET}rem`,
               display: "flex",
               alignItems: multiline ? "flex-start" : "flex-start",
-              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
+              marginBottom: hasBold ? 0 : "0.5rem",
             }}
           >
-            <AudioButton
-              audioKey={node.audio_key}
-              node={node}
-              audioIndex={snipIdx}
-              phrasesSnipIdx={phrasesSnipIdx}
-              phraseId={phraseId}
-              phraseVariant={phraseVariant}
-              size={AUDIO_BUTTON_SIZE}
-              className="select-none"
-            />
-            <span>{renderInlines(node.inlines)}</span>
-          </li>
-        );
-      }
-      return (
+          <AudioButton
+            audioKey={node.audio_key}
+            node={node}
+            audioIndex={snipIdx}
+            phrasesSnipIdx={phrasesSnipIdx}
+            phraseId={phraseId}
+            phraseVariant={phraseVariant}
+            size={AUDIO_BUTTON_SIZE}
+            className="select-none"
+          />
+          <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
+        </li>
+      );
+    }
+    return (
           <li
             key={key}
             style={{
               marginLeft: indentLevel
                 ? `${listTextStartRem(indentLevel) + 3}rem`
                 : undefined,
-              marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
+              marginBottom: nodeHasBold(node) ? 0 : undefined,
             }}
           >
             {renderInlines(node.inlines)}
@@ -363,8 +418,6 @@ const renderNode = (node, key) => {
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
-      const hasSpacing = hasYellowHighlight(node); // NEW: Check for yellow highlight
-
       if (hasAudio) {
         const multiline = hasLineBreak(node);
         return (
@@ -375,23 +428,23 @@ const renderNode = (node, key) => {
               marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"), // Use spacing if flagged
+              marginBottom: hasBold ? 0 : "0.5rem",
             }}
           >
-            <AudioButton
-              audioKey={node.audio_key}
-              node={node}
-              audioIndex={snipIdx}
-              phrasesSnipIdx={phrasesSnipIdx}
-              phraseId={phraseId}
-              phraseVariant={phraseVariant}
-              size={AUDIO_BUTTON_SIZE}
-              className="select-none"
-            />
-            <span>{renderInlines(node.inlines)}</span>
-          </div>
-        );
-      }
+          <AudioButton
+            audioKey={node.audio_key}
+            node={node}
+            audioIndex={snipIdx}
+            phrasesSnipIdx={phrasesSnipIdx}
+            phraseId={phraseId}
+            phraseVariant={phraseVariant}
+            size={AUDIO_BUTTON_SIZE}
+            className="select-none"
+          />
+          <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
+        </div>
+      );
+    }
       return (
         <div
           key={key}
@@ -399,7 +452,7 @@ const renderNode = (node, key) => {
             marginLeft: indentLevel
               ? `${listTextStartRem(indentLevel) + 3}rem`
               : undefined,
-            marginBottom: hasSpacing ? "2rem" : (nodeHasBold(node) ? 0 : undefined), // Use spacing if flagged
+            marginBottom: nodeHasBold(node) ? 0 : undefined,
           }}
         >
           {renderInlines(node.inlines)}
@@ -447,7 +500,6 @@ const renderNode = (node, key) => {
   const renderNumberedListItem = (node, key, groupIndent) => {
     const hasAudio = node.audio_key || node.audio_seq;
     const hasBold = nodeHasBold(node);
-    const hasSpacing = hasYellowHighlight(node);
     const multiline = hasLineBreak(node);
     const baseIndent = computeIndentLevel(node);
     const extraIndent = baseIndent - groupIndent;
@@ -462,7 +514,7 @@ const renderNode = (node, key) => {
             marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
             display: "flex",
             alignItems: multiline ? "flex-start" : "flex-start",
-            marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : "0.5rem"),
+            marginBottom: hasBold ? 0 : "0.5rem",
           }}
         >
           <AudioButton
@@ -475,7 +527,7 @@ const renderNode = (node, key) => {
             size={AUDIO_BUTTON_SIZE}
             className="select-none"
           />
-          <span>{renderInlines(node.inlines)}</span>
+          <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
         </li>
       );
     }
@@ -485,7 +537,7 @@ const renderNode = (node, key) => {
         key={key}
         style={{
           marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
-          marginBottom: hasSpacing ? "2rem" : (hasBold ? 0 : undefined),
+          marginBottom: hasBold ? 0 : undefined,
         }}
       >
         {renderInlines(node.inlines)}
@@ -521,15 +573,6 @@ const renderNode = (node, key) => {
       countsByIndent.clear();
     };
 
-    const isSubheaderNode = (node) => {
-      if (node?.kind !== "paragraph") return false;
-      if (node?.audio_key || node?.audio_seq) return false;
-      const textSpans = (node.inlines || []).filter(
-        (span) => typeof span?.text === "string" && span.text.trim() !== ""
-      );
-      return textSpans.length > 0 && textSpans.every((span) => !!span.bold);
-    };
-
     const renderNumberedItemWithCounter = (node, key) => {
       const indent = computeIndentLevel(node);
       const current = countsByIndent.has(indent) ? countsByIndent.get(indent) : 1;
@@ -561,6 +604,18 @@ const renderNode = (node, key) => {
     });
 
     return elements;
+  };
+
+  const renderZebraGroups = (nodeList, startIndex = 0) => {
+    const groups = groupBySubheader(nodeList);
+    return groups.map((group, idx) => (
+      <div
+        key={`zebra-group-${startIndex + idx}`}
+        className={`rich-zebra rich-zebra-${(startIndex + idx) % 2}`}
+      >
+        {renderNodesWithNumberedLists(group)}
+      </div>
+    ));
   };
 
   // Group nodes by heading (for accordion/dropdown)
@@ -644,7 +699,7 @@ const renderNode = (node, key) => {
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">
-                {renderNodesWithNumberedLists(sec.body)}
+                {renderZebraGroups(sec.body, 0)}
               </div>
             </CollapsibleDetails>
           );
@@ -657,7 +712,7 @@ const renderNode = (node, key) => {
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {renderNodesWithNumberedLists(nodes)}
+        {renderZebraGroups(nodes, 0)}
       </div>
     </div>
   );

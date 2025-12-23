@@ -83,6 +83,19 @@ details[open] > .markdown-summary::after {
   margin-block-start: 0;
 }
 
+.markdown-content .rich-accent {
+  border-left: 0.25rem solid #7BE6C9;
+  padding-left: 1rem;
+}
+
+.markdown-content .rich-zebra {
+  margin: 0;
+}
+
+.markdown-content .rich-zebra .rich-subheader {
+  margin-top: 0;
+}
+
 /* main body */
 .markdown-content {
   padding: 0 2.25rem 1.4vh;          /* side + bottom padding */
@@ -191,4 +204,46 @@ details[open] > .markdown-summary::after {
 .lesson-table th,
 .lesson-table td {
   word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .markdown-content .rich-zebra {
+    padding: 1.5rem 0;
+    margin-left: -2.25rem;
+    margin-right: -2.25rem;
+    padding-left: 2.25rem;
+    padding-right: 2.25rem;
+  }
+
+  .markdown-content .rich-zebra-0 {
+    background: #ffffff;
+  }
+
+  .markdown-content .rich-zebra-1 {
+    background: #F7FAFD;
+  }
+
+  .markdown-content .rich-zebra > *:first-child {
+    margin-top: 0;
+  }
+
+  .markdown-content .rich-zebra > *:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Cancel bold-only subheader margins on mobile/tablet */
+  .markdown-content p:has(> span[style*="font-weight: bold"]:last-child) {
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .markdown-content .rich-zebra {
+    padding: 1rem 0;
+    margin-left: -2.25rem;
+    margin-right: -2.25rem;
+    padding-left: 2.25rem;
+    padding-right: 2.25rem;
+  }
 }
