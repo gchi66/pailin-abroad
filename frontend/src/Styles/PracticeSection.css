@@ -12,6 +12,8 @@
   border-radius: 0 0 1.6rem 1.6rem;
   box-shadow: none;
   overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .ps-container > .ps-accordion:first-of-type {
@@ -23,9 +25,9 @@
   list-style: none;
   cursor: pointer;
   font-weight: 700;
-  font-size: clamp(1.3rem, 1.2vw, 1.5rem);
+  font-size: clamp(1.2rem, 1.1vw, 1.4rem);
   color: var(--primary-color);
-  padding: 1.5rem 3rem;
+  padding: 1.25rem 2.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -68,10 +70,31 @@ details[open] > .markdown-summary {
 /* body animation / padding */
 .markdown-content,
 .ps-accordion > *:not(summary) {
-  padding: 0 3rem 1.4vh;
+  padding: 0 2rem 1.4dvh;
   line-height: var(--rich-text-line-height, 1.6);
   font-size: var(--rich-text-font-size, 1rem);
+  overflow-wrap: anywhere;
+  word-break: break-word;
   animation: fadeIn .25s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ps-accordion-body {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.ps-accordion-body,
+.ps-accordion-body .fb-wrap,
+.ps-accordion-body .st-wrap,
+.ps-accordion-body .oe-wrap,
+.ps-accordion-body .mc-wrap {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
 }
 
 @keyframes fadeIn {
@@ -88,7 +111,7 @@ details[open] > .markdown-summary {
 .fb-image {
   max-width: 100%;
   height: auto;
-  max-height: 300px;
+  max-height: 18.75rem;
   border-radius: 0.5rem;
   box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
   object-fit: contain;
@@ -116,17 +139,17 @@ details[open] > .markdown-summary {
 }
 
 .fb-input {
-  border: 1px solid var(--border-light, #e6e6e6);
+  border: 0.07rem solid var(--border-light, #e6e6e6);
   border-radius: 0.25rem;
   padding: 0.25rem 0.5rem;
   font-size: 1rem;
-  min-width: 100px;
+  min-width: 6.25rem;
 }
 
 .fb-input:focus {
   outline: none;
   border-color: var(--primary-color, #007bff);
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.125rem rgba(0, 123, 255, 0.25);
 }
 
 .fb-paragraph span{
@@ -138,11 +161,25 @@ details[open] > .markdown-summary {
 }
 
 
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
   .markdown-summary {
-    padding: 1.5rem 1rem;
+    padding: 1rem 1.25rem;
+    font-size: clamp(1.05rem, 4vw, 1.2rem);
   }
   .markdown-content {
-    padding: 0 1rem .4vh;
+    padding: 0 1.25rem .6dvh;
+    --rich-text-font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .ps-summary {
+    padding: 1rem 1.25rem;
+    font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+  }
+
+  .ps-accordion > *:not(summary) {
+    padding: 0 1.25rem 1dvh;
+    --rich-text-font-size: 0.95rem;
   }
 }
