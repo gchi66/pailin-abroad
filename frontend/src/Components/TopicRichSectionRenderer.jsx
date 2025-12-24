@@ -8,11 +8,11 @@ import CollapsibleDetails from "./CollapsibleDetails";
 // Helper function to clean audio tags from text - FIXED to handle [audio:...] format
 function cleanAudioTags(text) {
   if (!text || typeof text !== 'string') return text;
-  // Replace [audio:...] tags with a space, then clean up multiple spaces
+  // Replace [audio:...] tags with a space, then clean up spacing without collapsing newlines
   return text
     .replace(/\[audio:[^\]]+\]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/[^\S\r\n]+/g, ' ')   // collapse spaces/tabs but keep newlines
+    .replace(/\s*\n\s*/g, '\n');   // trim stray spaces around newlines
 }
 
 export default function TopicRichSectionRenderer({
@@ -23,27 +23,53 @@ export default function TopicRichSectionRenderer({
 
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines) => {
-    return inlines.map((span, m) => {
+    const processedInlines = inlines.map((span, idx) => {
       const cleanText = cleanAudioTags(span.text);
+      const nextSpan = inlines[idx + 1];
+
+      // Check if there's NO trailing space in the ORIGINAL text (before cleanAudioTags)
+      const originalHadTrailingSpace = typeof span.text === "string" && /[ \t]+$/.test(span.text);
+
+      const styleChangesNext =
+        nextSpan &&
+        (nextSpan?.underline !== span?.underline ||
+          nextSpan?.bold !== span?.bold ||
+          nextSpan?.italic !== span?.italic);
+
+      // If style changes AND original had no space, suppress auto-spacing on next span
+      const suppressSpaceBefore = styleChangesNext && !originalHadTrailingSpace;
+
+      return { span, cleanText, suppressSpaceBefore };
+    });
+
+    return processedInlines.map((entry, m) => {
+      const { span, cleanText } = entry;
+      const currentText = typeof cleanText === "string" ? cleanText : "";
 
       // Check if we need a space before this span
       let needsSpaceBefore = false;
       if (m > 0) {
-        const prevSpan = inlines[m - 1];
-        const prevText = cleanAudioTags(prevSpan.text);
+        const prevEntry = processedInlines[m - 1];
+        if (prevEntry.suppressSpaceBefore) {
+          needsSpaceBefore = false;
+        } else {
+          const prevText = typeof prevEntry.cleanText === "string" ? prevEntry.cleanText : "";
 
-        // Add space if previous span doesn't end with whitespace or punctuation
-        // and current span doesn't start with whitespace or punctuation
-        const prevEndsWithSpaceOrPunct = /[\s.,!?;:']$/.test(prevText);
-        const currentStartsWithSpaceOrPunct = /^[\s.,!?;:']/.test(cleanText);
+          // Add space if previous span doesn't end with whitespace or punctuation
+          // and current span doesn't start with whitespace or punctuation
+          const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]$/.test(prevText);
+          const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]/.test(currentText);
 
-        needsSpaceBefore = !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && cleanText.trim();
+          needsSpaceBefore =
+            !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && currentText.trim();
+        }
       }
 
       const commonStyle = {
         fontWeight: span.bold ? "bold" : undefined,
         fontStyle: span.italic ? "italic" : undefined,
         textDecoration: span.underline ? "underline" : undefined,
+        whiteSpace: "pre-line",
       };
 
       let element;
@@ -91,12 +117,21 @@ const computeIndent = (node) =>
 const nodeHasBold = (node) =>
   Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
 
+const isSubheaderNode = (node) => {
+  if (node?.is_subheader) return true;
+  if (node?.kind !== "paragraph") return false;
+  const textSpans = (node.inlines || []).filter(
+    (span) => typeof span?.text === "string" && span.text.trim() !== ""
+  );
+  return textSpans.length > 0 && textSpans.every((span) => !!span.bold);
+};
+
 const INDENT_PER_LEVEL = 1.5; // rem
 
 // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
 const renderNode = (node, key) => {
-  // Skip heading nodes - they should only be used for accordion structure
-  if (node.kind === "heading") {
+  // Skip non-subheader heading nodes - they should only be used for accordion structure
+  if (node.kind === "heading" && !node.is_subheader) {
     return null;
   }
 
@@ -120,13 +155,34 @@ const renderNode = (node, key) => {
   const baseIndentRem = indentValue * INDENT_PER_LEVEL;
   const hasBold = nodeHasBold(node);
 
+  if (node.kind === "heading" && node.is_subheader) {
+    return (
+      <p
+        key={key}
+        className="rich-subheader"
+        style={{
+          marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+          marginBottom: "1rem",
+        }}
+      >
+        {renderInlines(node.inlines)}
+      </p>
+    );
+  }
+
   if (node.kind === "paragraph") {
+      const textSpans = (node.inlines || []).filter(
+        (span) => typeof span?.text === "string" && span.text.trim() !== ""
+      );
+      const allTextBold = textSpans.length > 0 && textSpans.every((span) => !!span.bold);
+      const isSubheader = allTextBold;
       return (
         <p
           key={key}
+          className={isSubheader ? "rich-subheader" : undefined}
           style={{
             marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
-            marginBottom: hasBold ? 0 : undefined,
+            marginBottom: isSubheader ? "1rem" : (hasBold ? 0 : undefined),
           }}
         >
           {renderInlines(node.inlines)}
@@ -178,6 +234,10 @@ const renderNode = (node, key) => {
       );
     }
 
+    if (node.kind === "spacer") {
+      return <div key={key} className="para-spacer" aria-hidden="true" />;
+    }
+
     return null;
   };
 
@@ -227,6 +287,11 @@ const renderNode = (node, key) => {
 
     while (i < nodeList.length) {
       const node = nodeList[i];
+      if (node.kind === "heading" || isSubheaderNode(node)) {
+        elements.push(renderNode(node, i));
+        i++;
+        continue;
+      }
       if (node.kind === "numbered_item") {
         const group = [];
         while (i < nodeList.length && nodeList[i].kind === "numbered_item") {
@@ -243,12 +308,40 @@ const renderNode = (node, key) => {
     return elements;
   };
 
+  const groupBySubheader = (nodeList) => {
+    const groups = [];
+    let current = [];
+    nodeList.forEach((node) => {
+      if (isSubheaderNode(node) && current.length) {
+        groups.push(current);
+        current = [];
+      }
+      current.push(node);
+    });
+    if (current.length) {
+      groups.push(current);
+    }
+    return groups;
+  };
+
+  const renderZebraGroups = (nodeList, startIndex = 0) => {
+    const groups = groupBySubheader(nodeList);
+    return groups.map((group, idx) => (
+      <div
+        key={`zebra-group-${startIndex + idx}`}
+        className={`rich-zebra rich-zebra-${(startIndex + idx) % 2}`}
+      >
+        {renderNodesWithNumberedLists(group)}
+      </div>
+    ));
+  };
+
   // Group nodes by heading (for accordion/dropdown)
   const sections = [];
   let current = null;
 
   nodes.forEach((node, idx) => {
-    if (node.kind === "heading") {
+    if (node.kind === "heading" && !node.is_subheader) {
       // Clean the heading text by trimming whitespace and tabs
       const headingText = node.inlines
         .map((s) => s.text)
@@ -322,7 +415,7 @@ const renderNode = (node, key) => {
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">
-                {renderNodesWithNumberedLists(sec.body)}
+                {renderZebraGroups(sec.body, 0)}
               </div>
             </CollapsibleDetails>
           );
@@ -335,7 +428,7 @@ const renderNode = (node, key) => {
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {renderNodesWithNumberedLists(nodes)}
+        {renderZebraGroups(nodes, 0)}
       </div>
     </div>
   );

@@ -343,7 +343,7 @@ const renderNode = (node, key) => {
               : (indentLevel
                   ? `${listTextStartRem(indentLevel)}rem`
                   : `${LIST_ITEM_BASE_OFFSET}rem`),
-            marginBottom: hasBold ? 0 : undefined,
+            marginBottom: isSubheader ? "1rem" : (hasBold ? 0 : undefined),
             borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
             paddingLeft: hasAccent ? "1rem" : undefined,
           }}

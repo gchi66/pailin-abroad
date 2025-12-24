@@ -29,6 +29,7 @@ from typing import Dict, List, Union
 
 from .docs_fetch import fetch_doc
 from .docwalker import paragraph_nodes, Node
+from .textutils import is_subheader
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -278,6 +279,30 @@ class TopicParser:
                     if "inlines" in node_dict:
                         for inline in node_dict["inlines"]:
                             inline.pop("link", None)
+
+                    # Preserve blank paragraphs as spacer nodes to control vertical gaps.
+                    if node_dict.get("kind") == "paragraph":
+                        if not node_plain_text(node_dict).strip():
+                            all_nodes.append({
+                                "kind": "spacer",
+                                "level": None,
+                                "inlines": [],
+                                "indent": 0,
+                            })
+                            continue
+                        is_all_bold = False
+                        inlines = node_dict.get("inlines") or []
+                        if inlines:
+                            non_empty = [
+                                span for span in inlines
+                                if isinstance(span, dict) and (span.get("text") or "").strip()
+                            ]
+                            is_all_bold = bool(non_empty) and all(span.get("bold") for span in non_empty)
+
+                        if is_all_bold or is_subheader(node_plain_text(node_dict), node_dict.get("style", "")):
+                            node_dict["kind"] = "heading"
+                            node_dict["level"] = node_dict.get("level") or 4
+                            node_dict["is_subheader"] = True
 
                     # Detect TABLE-XX headings and treat them as labels for the next table
                     if node_dict.get("kind") in {"heading", "header"}:

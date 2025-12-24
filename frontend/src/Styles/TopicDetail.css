@@ -221,7 +221,7 @@
   .topic-detail-content {
     width: 100%;
     margin: 1.25rem auto;
-    padding: 1rem .5rem;
+    padding: 1rem 0rem;
     box-sizing: border-box;
     border-radius: 1.25rem;
     border: 0.1rem solid #1e1e1e;
