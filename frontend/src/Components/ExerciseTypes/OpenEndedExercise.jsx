@@ -91,8 +91,16 @@ export default function OpenEndedExercise({
   const { title, prompt, items = [] } = exercise || {};
   const displayTitle =
     pickFieldByLang(exercise, "title", contentLang) || title || "";
-  const displayPrompt =
-    pickFieldByLang(exercise, "prompt", contentLang) || prompt || "";
+  const promptEn =
+    pickFieldByLang(exercise, "prompt_en", "en") ||
+    pickFieldByLang(exercise, "prompt", "en") ||
+    prompt ||
+    "";
+  const promptTh =
+    pickFieldByLang(exercise, "prompt_th", "th") ||
+    exercise.prompt_th ||
+    "";
+  const displayPrompt = contentLang === "th" ? promptTh : promptEn;
   const { user } = useAuth();
   const userId = userIdProp || user?.id || null;
   const evaluationSourceType = ["bank", "practice"].includes(
@@ -309,11 +317,20 @@ export default function OpenEndedExercise({
     setError("");
   };
 
-  const firstQuestionRaw = resolveQuestionText(items[0], contentLang);
+  const firstQuestionEn = resolveQuestionText(items[0], "en");
+  const firstQuestionTh = resolveQuestionText(items[0], "th");
   const normalizedPrompt = normalizeText(displayPrompt);
-  const normalizedFirstQuestion = normalizeText(firstQuestionRaw);
+  const normalizedFirstQuestion =
+    contentLang === "th"
+      ? normalizeText(firstQuestionTh)
+      : normalizeText(firstQuestionEn);
+  const hasPromptTranslation =
+    contentLang !== "th" ||
+    normalizeText(pickFieldByLang(exercise, "prompt", "th"));
   const shouldRenderPrompt =
-    normalizedPrompt.length > 0 && normalizedPrompt !== normalizedFirstQuestion;
+    hasPromptTranslation &&
+    normalizedPrompt.length > 0 &&
+    normalizedPrompt !== normalizedFirstQuestion;
 
   const defaultPlaceholder =
     contentLang === "th" ? "พิมพ์คำตอบของคุณที่นี่" : "Type your answer here";
@@ -327,7 +344,10 @@ export default function OpenEndedExercise({
 
       {items.map((item, qIdx) => {
         const hasAudio = Boolean(item.audio_key);
-        const displayQuestion = resolveQuestionText(item, contentLang);
+        const questionEn = resolveQuestionText(item, "en");
+        const questionTh = resolveQuestionText(item, "th");
+        const displayQuestion =
+          contentLang === "th" ? questionEn || questionTh : questionEn || questionTh;
 
         if (isExampleItem(item)) {
           const imageUrl = item.image_key ? images[item.image_key] : null;
@@ -370,6 +390,9 @@ export default function OpenEndedExercise({
                     <p className="oe-question-text">
                       {displayQuestion}
                     </p>
+                    {contentLang === "th" && questionTh && questionEn && (
+                      <p className="oe-question-text">{questionTh}</p>
+                    )}
                     {exampleAnswer && (
                       <div className="fb-input-wrap oe-input-wrap">
                         <textarea
@@ -439,6 +462,9 @@ export default function OpenEndedExercise({
                 )}
 
                 <p className="oe-question-text">{displayQuestion}</p>
+                {contentLang === "th" && questionTh && questionEn && (
+                  <p className="oe-question-text">{questionTh}</p>
+                )}
 
                 {answerParts.map((value, partIdx) => (
                   <div

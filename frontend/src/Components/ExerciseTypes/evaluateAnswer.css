@@ -263,6 +263,7 @@
 .st-stem {
   margin: 0;
   font-size: var(--lesson-core-text-size);
+  line-height: 1.45;
 }
 
 .st-stem-th {
@@ -280,6 +281,7 @@
 
 .st-prompt {
   font-size: 1.2rem;
+  line-height: 1.45;
 }
 
 .st-mark-buttons {
@@ -412,6 +414,7 @@
 .oe-prompt {
   font-size: 1.2rem;
   margin-bottom: 1rem;
+  line-height: 1.45;
 }
 
 .oe-wrap .st-example .oe-input-wrap {
@@ -425,6 +428,7 @@
 .oe-question .oe-question-text {
   margin: 0;
   font-size: 1.2rem;
+  line-height: 1.45;
 }
 
 .fb-row-content {
@@ -441,9 +445,29 @@
   gap: 0.25rem;
   align-items: center;
   font-size: var(--lesson-core-text-size);
+  line-height: 1.45;
   min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.fb-row--fill-blank.fb-row--wrapped {
+  align-items: flex-start;
+}
+
+.fb-row--fill-blank.fb-row--wrapped .fb-row-number {
+  align-self: flex-start;
+}
+
+.fb-inline-pair {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.fb-inline-pair .fb-text-block {
+  white-space: nowrap;
 }
 
 .fb-line-break {
@@ -494,6 +518,7 @@
   font-size: 1.2rem;
   font-weight: 400;
   margin: 0 0 0.5rem;
+  line-height: 1.45;
 }
 
 .mc-question {
@@ -504,6 +529,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0 0 0.75rem;
+  line-height: 1.45;
 }
 
 .mc-options {
@@ -547,7 +573,7 @@
 
 .mc-option-text {
   font-size: 1.2rem;
-  line-height: 1.4;
+  line-height: 1.45;
   display: inline-flex;
   flex-direction: row;
   gap: 0.4rem;
@@ -608,6 +634,7 @@
 
 .fb-prompt {
   font-size: var(--lesson-core-text-size);
+  line-height: 1.45;
 }
 
 .fb-check-btn {
@@ -636,6 +663,21 @@
   display: inline-block;
   box-sizing: border-box;
   max-width: 100%;
+}
+
+.fb-wrap .fb-input.fb-input--short {
+  width: 9ch;
+  min-width: 8ch;
+  max-width: 9ch;
+}
+
+.fb-wrap .fb-input.fb-input--long {
+  width: min(100%, 32ch);
+  min-width: 0;
+}
+
+.fb-input-wrap--short {
+  white-space: nowrap;
 }
 
 .fb-wrap .fb-input:focus {
@@ -698,6 +740,7 @@
 @media (max-width: 48rem) {
   .fb-button-container {
     margin-left: 0;
+    margin-bottom: 1rem;
   }
 }
 
@@ -730,10 +773,13 @@
   }
 
   .mc-letter {
-    min-width: 2.75rem;
-    min-height: 2.75rem;
+    min-width: 1.7rem;
+    min-height: auto;
   }
 
+  .mc-letter.selected {
+    color: #fff !important;
+  }
   .mc-option-text {
     line-height: 1.35;
   }
@@ -745,7 +791,21 @@
   .fb-wrap .oe-textarea {
     width: 100%;
     min-width: 100%;
+    font-size: 16px;
+    border: .1rem solid #1e1e1e;
   }
+
+  .fb-wrap .oe-textarea::placeholder {
+    font-size: 16px;
+  }
+
+  .fb-input.st-input {
+    font-size: 16px;
+  }
+
+  .fb-row-th {
+    margin: -1rem 0 1.25rem 1rem;
+}
 }
 
 @media (max-width: 40rem) {
@@ -753,7 +813,7 @@
   .mc-prompt,
   .oe-prompt {
     font-size: 1.05rem;
-    line-height: 1.35;
+    line-height: 1.45;
   }
 
   .st-stem,
@@ -761,7 +821,7 @@
   .oe-question .oe-question-text,
   .fb-row-text {
     font-size: 1rem;
-    line-height: 1.35;
+    line-height: 1.45;
   }
 
   .st-stem-row {
@@ -780,6 +840,7 @@
   .fb-wrap .st-input {
     min-width: 100%;
     width: 100%;
+    border: .1rem solid #1e1e1e;
   }
 
   .fb-input-wrap,
@@ -790,14 +851,31 @@
 
   .fb-row-number {
     font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .fb-row-number--fill-blank {
+    line-height: 2.3;
   }
 
   .mc-option-text-lines {
     line-height: 1.4;
   }
-}
+
+  .mc-question-text {
+    font-weight: 400;
+  }
+ }
 
 @media (max-width: 30rem) {
+  .fb-row--fill-blank {
+    align-items: center;
+  }
+
+  .fb-row--fill-blank .fb-row-number {
+    align-self: center;
+  }
+
   .fb-wrap,
   .st-wrap {
     max-width: 100%;
@@ -818,7 +896,7 @@
   .mc-prompt,
   .oe-prompt {
     font-size: clamp(0.95rem, 1.2vw + 0.6rem, 1.05rem);
-    line-height: 1.35;
+    line-height: 1.45;
   }
 
   .fb-row-text,
@@ -827,13 +905,22 @@
   .oe-question .oe-question-text,
   .mc-option-text {
     font-size: clamp(0.95rem, 1.2vw + 0.6rem, 1.05rem);
-    line-height: 1.35;
+    line-height: 1.45;
+  }
+
+  .st-stem {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .fb-input,
   .st-input {
-    min-width: 0 !important;
+    min-width: 0;
     width: 100%;
+  }
+
+  .fb-wrap .fb-input {
+    border: .1rem solid #1e1e1e;
   }
 
   .fb-input-wrap,
@@ -849,16 +936,17 @@
 
   .st-stem-row {
     width: 100%;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     gap: 0.4rem;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .st-mark-buttons {
-    width: 100%;
+    width: auto;
+    flex: 0 0 auto;
     justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .st-mark-btn {

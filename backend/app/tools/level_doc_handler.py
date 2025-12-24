@@ -37,7 +37,7 @@ def run(cmd: list[str]) -> None:
     subprocess.run(cmd, check=True)
 
 
-def process_level(level: int, skip_import: bool, skip_th: bool) -> None:
+def process_level(level: int, skip_import: bool, skip_th: bool, skip_en: bool) -> None:
     stage = stage_for_level(level)
     en_id = LEVEL_DOC_IDS[level]["en"]
     th_id = LEVEL_DOC_IDS[level]["th"]
@@ -45,22 +45,25 @@ def process_level(level: int, skip_import: bool, skip_th: bool) -> None:
     en_out = f"data/level_{level}.json"
     th_out = f"data/level_{level}_th.json"
 
-    print("\n===============================")
-    print(f" Level {level} - {stage} (EN)")
-    print("===============================")
+    if not skip_en:
+        print("\n===============================")
+        print(f" Level {level} - {stage} (EN)")
+        print("===============================")
 
-    # Parse EN
-    run([
-        sys.executable, "-m", "app.tools.parser",
-        en_id, "--stage", stage, "--output", en_out
-    ])
-
-    # Import EN
-    if not skip_import:
+        # Parse EN
         run([
-            sys.executable, "-m", "app.tools.import_lessons",
-            en_out
+            sys.executable, "-m", "app.tools.parser",
+            en_id, "--stage", stage, "--output", en_out
         ])
+
+        # Import EN
+        if not skip_import:
+            run([
+                sys.executable, "-m", "app.tools.import_lessons",
+                en_out
+            ])
+    else:
+        print(f"⚠️  Skipping English for level {level}")
 
     # Optionally skip Thai
     if skip_th:
@@ -91,27 +94,30 @@ def parse_args(argv: list[str]):
     parser.add_argument("end", type=int, nargs="?")
     parser.add_argument("--skip-import", action="store_true", help="Skip importing into Supabase")
     parser.add_argument("--skip-th", action="store_true", help="Skip parsing/importing Thai docs")
+    parser.add_argument("--skip-en", action="store_true", help="Skip parsing/importing English docs")
     args = parser.parse_args(argv)
 
     start = args.start
     end = args.end if args.end else start
-    return start, end, args.skip_import, args.skip_th
+    return start, end, args.skip_import, args.skip_th, args.skip_en
 
 
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
 
-    start, end, skip_import, skip_th = parse_args(argv)
+    start, end, skip_import, skip_th, skip_en = parse_args(argv)
 
     print(f"Processing levels {start} → {end}")
     if skip_import:
         print("⚠️  Skipping imports")
     if skip_th:
         print("⚠️  Skipping Thai docs")
+    if skip_en:
+        print("⚠️  Skipping English docs")
 
     for level in range(start, end + 1):
-        process_level(level, skip_import, skip_th)
+        process_level(level, skip_import, skip_th, skip_en)
 
     print("\n✅ Done.")
 

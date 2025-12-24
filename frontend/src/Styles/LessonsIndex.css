@@ -390,6 +390,12 @@
   background: #e9f4ff;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .lesson-item:hover {
+    background: #fff;
+  }
+}
+
 .lesson-item-left {
   display: flex;
   flex-direction: row;

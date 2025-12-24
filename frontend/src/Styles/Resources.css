@@ -99,6 +99,14 @@
   outline-offset: 0.2rem;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .resources-card:hover {
+    transform: none;
+    box-shadow: .2rem .2rem 0vw #1E1E1E;
+    background-color: #fff;
+  }
+}
+
 .resources-card-disabled {
   opacity: 0.6;
   pointer-events: none;

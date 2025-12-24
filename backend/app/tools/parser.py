@@ -2022,9 +2022,13 @@ class GoogleDocsParser:
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
                 if content:
-                    # There's content on the same line (English text)
-                    cur_items[-1]["text"] = content
-                    cur_items[-1]["text_th"] = ""  # Initialize empty Thai
+                    # There's content on the same line
+                    if lang == "th" and _has_th(content) and not _has_en(content):
+                        cur_items[-1]["text_th"] = content
+                        cur_items[-1]["text"] = cur_items[-1].get("text", "")
+                    else:
+                        cur_items[-1]["text"] = content
+                        cur_items[-1]["text_th"] = ""  # Initialize empty Thai
                     collecting_text = True  # Keep collecting for Thai on next line
                 else:
                     # Empty TEXT: line, start collecting multi-line
@@ -2118,14 +2122,23 @@ class GoogleDocsParser:
                     # This is a continuation line
                     # If we already have English text but no Thai, this is the Thai line
                     if cur_items[-1].get("text") and not cur_items[-1].get("text_th"):
-                        cur_items[-1]["text_th"] = stripped
+                        if lang == "th" and _has_th(stripped) and not _has_en(stripped):
+                            cur_items[-1]["text_th"] = stripped
+                        else:
+                            cur_items[-1]["text_th"] = stripped
                         collecting_text = False  # Done collecting
                     else:
-                        # Otherwise append to English text
-                        if cur_items[-1].get("text"):
-                            cur_items[-1]["text"] = cur_items[-1]["text"] + " " + stripped
+                        # Otherwise append to English text (or Thai if TH doc)
+                        if lang == "th" and _has_th(stripped) and not _has_en(stripped):
+                            if cur_items[-1].get("text_th"):
+                                cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + " " + stripped
+                            else:
+                                cur_items[-1]["text_th"] = stripped
                         else:
-                            cur_items[-1]["text"] = stripped
+                            if cur_items[-1].get("text"):
+                                cur_items[-1]["text"] = cur_items[-1]["text"] + " " + stripped
+                            else:
+                                cur_items[-1]["text"] = stripped
                     continue
 
             # Multi-line paragraph collection

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import AudioButton from "../AudioButton";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
@@ -124,6 +124,8 @@ export default function FillBlankExercise({
   const [isChecking, setIsChecking] = useState(false);
   const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
+  const rowTextRefs = useRef([]);
+  const [wrappedRows, setWrappedRows] = useState([]);
 
   useEffect(() => {
     setQuestions(initialQuestions);
@@ -131,6 +133,32 @@ export default function FillBlankExercise({
     setHasChecked(false);
     setError("");
   }, [initialQuestions]);
+
+  useLayoutEffect(() => {
+    const elements = rowTextRefs.current;
+    if (!elements.length) return;
+
+    const computeWrappedRows = () => {
+      const next = elements.map((el) => {
+        if (!el) return false;
+        const style = window.getComputedStyle(el);
+        let lineHeight = Number.parseFloat(style.lineHeight);
+        if (!Number.isFinite(lineHeight)) {
+          const fontSize = Number.parseFloat(style.fontSize) || 16;
+          lineHeight = fontSize * 1.2;
+        }
+        return el.offsetHeight > lineHeight * 1.5;
+      });
+      setWrappedRows(next);
+    };
+
+    computeWrappedRows();
+    const observer = new ResizeObserver(computeWrappedRows);
+    elements.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [items, contentLang]);
 
   const pendingIndexes = useMemo(
     () =>
@@ -428,9 +456,9 @@ export default function FillBlankExercise({
       return (
         <React.Fragment key={`${item.number ?? idx}-${idx}`}>
         <div
-          className={`fb-row${hasMultiline ? " fb-row-multiline" : ""}`}
+          className={`fb-row fb-row--fill-blank${hasMultiline ? " fb-row-multiline" : ""}${wrappedRows[idx] ? " fb-row--wrapped" : ""}`}
         >
-          <div className="fb-row-number">
+          <div className="fb-row-number fb-row-number--fill-blank">
             <span>{displayNumber}</span>
           </div>
 
@@ -455,50 +483,107 @@ export default function FillBlankExercise({
                   />
                 </div>
               )}
-              <div className="fb-row-text">
-                {textSegments.map((segment, segmentIdx) => {
-                  if (segment.type === "text") {
-                    return (
-                      <React.Fragment key={`text-${idx}-${segmentIdx}`}>
-                        {renderMultiline(segment.content)}
-                      </React.Fragment>
+              <div
+                className="fb-row-text"
+                ref={(el) => {
+                  rowTextRefs.current[idx] = el;
+                }}
+              >
+                {(() => {
+                  const nodes = [];
+                  for (let segmentIdx = 0; segmentIdx < textSegments.length; segmentIdx += 1) {
+                    const segment = textSegments[segmentIdx];
+                    if (segment.type === "text") {
+                      const next = textSegments[segmentIdx + 1];
+                      const nextNext = textSegments[segmentIdx + 2];
+                      const canInline =
+                        next?.type === "blank" &&
+                        nextNext?.type === "text" &&
+                        !segment.content?.includes("\n") &&
+                        !nextNext.content?.includes("\n");
+                      const answerLength = (item?.answer || "").trim().length;
+                      const isShortAnswer = answerLength > 0 && answerLength <= 8;
+
+                      if (canInline && isShortAnswer) {
+                        const blankLength = next.length || 1;
+                        const minWidthCh = 3 + blankLength * 2;
+                        const inputMinWidthCh = 8;
+                        nodes.push(
+                          <React.Fragment key={`inline-${idx}-${segmentIdx}`}>
+                            <span className="fb-inline-pair">
+                              {renderMultiline(segment.content)}
+                              <span className="fb-input-wrap fb-input-wrap--short">
+                                <input
+                                  type="text"
+                                  className="fb-input fb-input--short"
+                                  value={questionState.answer}
+                                  onChange={(event) =>
+                                    handleAnswerChange(idx, event.target.value)
+                                  }
+                                  disabled={disabled}
+                                  placeholder=""
+                                  style={{
+                                    minWidth: `${inputMinWidthCh}ch`,
+                                  }}
+                                />
+                                <InlineStatus state={questionState} />
+                              </span>
+                            </span>
+                            {renderMultiline(nextNext.content)}
+                          </React.Fragment>
+                        );
+                        segmentIdx += 2;
+                        continue;
+                      }
+
+                      nodes.push(
+                        <React.Fragment key={`text-${idx}-${segmentIdx}`}>
+                          {renderMultiline(segment.content)}
+                        </React.Fragment>
+                      );
+                      continue;
+                    }
+
+                    if (segment.type === "line-break") {
+                      nodes.push(
+                        <span
+                          key={`break-${idx}-${segmentIdx}`}
+                          className="fb-line-break"
+                          aria-hidden="true"
+                        />
+                      );
+                      continue;
+                    }
+
+                    const blankLength = segment.length || 1;
+                    const minWidthCh = 3 + blankLength * 2;
+                    const answerLength = (item?.answer || "").trim().length;
+                    const isShortAnswer = answerLength > 0 && answerLength <= 8;
+                    const inputMinWidthCh = isShortAnswer ? 8 : minWidthCh;
+                    nodes.push(
+                      <div
+                        key={`blank-${idx}-${segmentIdx}`}
+                        className={`fb-input-wrap${isShortAnswer ? " fb-input-wrap--short" : " fb-input-wrap--long"}`}
+                      >
+                        <input
+                          type="text"
+                          className={`fb-input${isShortAnswer ? " fb-input--short" : " fb-input--long"}`}
+                          value={questionState.answer}
+                          onChange={(event) =>
+                            handleAnswerChange(idx, event.target.value)
+                          }
+                          disabled={disabled}
+                          placeholder=""
+                          style={{
+                            minWidth: `${inputMinWidthCh}ch`,
+                          }}
+                        />
+                        <InlineStatus state={questionState} />
+                      </div>
                     );
                   }
-
-                  if (segment.type === "line-break") {
-                    return (
-                      <span
-                        key={`break-${idx}-${segmentIdx}`}
-                        className="fb-line-break"
-                        aria-hidden="true"
-                      />
-                    );
-                  }
-
-                  const blankLength = segment.length || 1;
-                  const minWidthCh = 3 + blankLength * 2;
-                  return (
-                    <div
-                      key={`blank-${idx}-${segmentIdx}`}
-                      className="fb-input-wrap"
-                    >
-                      <input
-                        type="text"
-                        className="fb-input"
-                        value={questionState.answer}
-                        onChange={(event) =>
-                          handleAnswerChange(idx, event.target.value)
-                        }
-                        disabled={disabled}
-                        placeholder=""
-                        style={{
-                          minWidth: `${minWidthCh}ch`,
-                        }}
-                      />
-                      <InlineStatus state={questionState} />
-                    </div>
-                  );
-                })}
+                  return nodes;
+                })()}
               </div>
 
               <QuestionFeedback state={questionState} />

@@ -29,6 +29,11 @@ const isExampleItem = (item) => {
   return false;
 };
 
+const hasCorrectTag = (item) => {
+  const value = (item?.correct || "").trim().toLowerCase();
+  return value === "yes" || value === "no";
+};
+
 export default function SentenceTransformExercise({
   exercise = {},
   images = {},
@@ -74,6 +79,10 @@ export default function SentenceTransformExercise({
   const [error, setError] = useState("");
   const checkLabel = pick(copy.lessonContent.checkAnswers, contentLang);
   const checkingLabel = pick(copy.lessonContent.checking, contentLang);
+  const rewritePlaceholder =
+    contentLang === "th" ? "เขียนประโยคใหม่" : "Rewrite this sentence";
+  const alreadyCorrectPlaceholder =
+    contentLang === "th" ? "ประโยคนี้ถูกต้องแล้ว" : "Already correct";
 
   useEffect(() => {
     setQuestions(initialQuestions);
@@ -97,9 +106,9 @@ export default function SentenceTransformExercise({
     const answerText = (question.answer || "").trim();
     if (answerText) return true;
     // Allow marked as correct to count as answered
-    if (question.markedAsCorrect === true) return true;
+    if (hasCorrectTag(item) && question.markedAsCorrect === true) return true;
     // Allow already correct sentences to be left blank
-    return (item?.correct || "").toLowerCase() === "yes";
+    return hasCorrectTag(item) && (item?.correct || "").toLowerCase() === "yes";
   });
 
   const hasIncompleteAnswers =
@@ -127,6 +136,7 @@ export default function SentenceTransformExercise({
       prev.map((question, questionIdx) => {
         if (questionIdx !== idx || question.correct === true || question.loading)
           return question;
+        if (!hasCorrectTag(items[idx])) return question;
         return {
           ...question,
           markedAsCorrect: isCorrect,
@@ -262,6 +272,7 @@ export default function SentenceTransformExercise({
         const hasAudio = Boolean(item?.audio_key);
         const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
         const exampleItem = isExampleItem(item);
+        const showMarkButtons = hasCorrectTag(item);
         const thaiStem =
           contentLang === "th" && typeof item?.text_th === "string"
             ? item.text_th.trim()
@@ -304,33 +315,35 @@ export default function SentenceTransformExercise({
                     )}
                     <div className="st-stem-row">
                       <p className="st-stem">{item?.text}</p>
-                      <div className="st-mark-buttons">
-                        <button
-                          className={`st-mark-btn ${questionState.markedAsCorrect === false ? 'active' : ''}`}
-                          disabled={true}
-                          aria-label="Mark as incorrect"
-                          title="This sentence needs to be rewritten"
-                        >
-                          <img
-                            src={questionState.markedAsCorrect === false ? "/images/grey-x.webp" : "/images/white-x.webp"}
-                            alt="Incorrect"
-                            className="st-mark-icon"
-                          />
-                        </button>
-                        <button
-                          className={`st-mark-btn ${questionState.markedAsCorrect === true ? 'active' : ''}`}
-                          disabled={true}
-                          aria-label="Mark as correct"
-                          title="This sentence is already correct"
-                        >
-                          <img
-                            src={questionState.markedAsCorrect === true ? "/images/grey-check.webp" : "/images/white-check.webp"}
-                            alt="Correct"
-                            className="st-mark-icon"
-                          />
+                      {showMarkButtons && (
+                        <div className="st-mark-buttons">
+                          <button
+                            className={`st-mark-btn ${questionState.markedAsCorrect === true ? 'active' : ''}`}
+                            disabled={true}
+                            aria-label="Mark as correct"
+                            title="This sentence is already correct"
+                          >
+                            <img
+                              src={questionState.markedAsCorrect === true ? "/images/grey-check.webp" : "/images/white-check.webp"}
+                              alt="Correct"
+                              className="st-mark-icon"
+                            />
+                          </button>
+                          <button
+                            className={`st-mark-btn ${questionState.markedAsCorrect === false ? 'active' : ''}`}
+                            disabled={true}
+                            aria-label="Mark as incorrect"
+                            title="This sentence needs to be rewritten"
+                          >
+                            <img
+                              src={questionState.markedAsCorrect === false ? "/images/grey-x.webp" : "/images/white-x.webp"}
+                              alt="Incorrect"
+                              className="st-mark-icon"
+                            />
                           </button>
                         </div>
-                      </div>
+                      )}
+                    </div>
                     {thaiStem && <p className="st-stem-th">{thaiStem}</p>}
                     <div className="fb-input-wrap st-input-wrap">
                       <input
@@ -384,34 +397,36 @@ export default function SentenceTransformExercise({
                 )}
                 <div className="st-stem-row">
                   <p className="st-stem">{item.text}</p>
-                  <div className="st-mark-buttons">
-                    <button
-                      className={`st-mark-btn ${questionState.markedAsCorrect === false ? 'active' : ''}`}
-                      onClick={() => handleMarkCorrect(idx, false)}
-                      disabled={disabled}
-                      aria-label="Mark as incorrect"
-                      title="This sentence needs to be rewritten"
-                    >
-                      <img
-                        src={questionState.markedAsCorrect === false ? "/images/grey-x.webp" : "/images/white-x.webp"}
-                        alt="Incorrect"
-                        className="st-mark-icon"
-                      />
-                    </button>
-                    <button
-                      className={`st-mark-btn ${questionState.markedAsCorrect === true ? 'active' : ''}`}
-                      onClick={() => handleMarkCorrect(idx, true)}
-                      disabled={disabled}
-                      aria-label="Mark as correct"
-                      title="This sentence is already correct"
-                    >
-                      <img
-                        src={questionState.markedAsCorrect === true ? "/images/grey-check.webp" : "/images/white-check.webp"}
-                        alt="Correct"
-                        className="st-mark-icon"
-                      />
-                    </button>
-                  </div>
+                  {showMarkButtons && (
+                    <div className="st-mark-buttons">
+                      <button
+                        className={`st-mark-btn ${questionState.markedAsCorrect === true ? 'active' : ''}`}
+                        onClick={() => handleMarkCorrect(idx, true)}
+                        disabled={disabled}
+                        aria-label="Mark as correct"
+                        title="This sentence is already correct"
+                      >
+                        <img
+                          src={questionState.markedAsCorrect === true ? "/images/grey-check.webp" : "/images/white-check.webp"}
+                          alt="Correct"
+                          className="st-mark-icon"
+                        />
+                      </button>
+                      <button
+                        className={`st-mark-btn ${questionState.markedAsCorrect === false ? 'active' : ''}`}
+                        onClick={() => handleMarkCorrect(idx, false)}
+                        disabled={disabled}
+                        aria-label="Mark as incorrect"
+                        title="This sentence needs to be rewritten"
+                      >
+                        <img
+                          src={questionState.markedAsCorrect === false ? "/images/grey-x.webp" : "/images/white-x.webp"}
+                          alt="Incorrect"
+                          className="st-mark-icon"
+                        />
+                      </button>
+                    </div>
+                  )}
                 </div>
                 {thaiStem && <p className="st-stem-th">{thaiStem}</p>}
                 <div className="fb-input-wrap st-input-wrap">
@@ -420,7 +435,11 @@ export default function SentenceTransformExercise({
                     value={questionState.answer}
                     onChange={(event) => handleChange(idx, event.target.value)}
                     disabled={disabled || questionState.markedAsCorrect === true}
-                    placeholder={questionState.markedAsCorrect === true ? "Already correct" : "Rewrite this sentence"}
+                    placeholder={
+                      questionState.markedAsCorrect === true
+                        ? alreadyCorrectPlaceholder
+                        : rewritePlaceholder
+                    }
                     className="fb-input st-input"
                   />
                   <InlineStatus state={questionState} />

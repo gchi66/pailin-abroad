@@ -152,6 +152,8 @@ export default function MultipleChoiceExercise({
         const imageUrl = q.image_key ? images[q.image_key] : null;
         const hasAudio = Boolean(q.audio_key);
         const numberLabel = q.number ?? qIdx + 1;
+        const questionText =
+          contentLang === "th" ? q.text_th || q.text : q.text;
         const selected = normalizeArray(choices[qIdx]);
         const selectedSet = new Set(selected);
         const allowMultiple = q.answerLetters.length > 1;
@@ -185,7 +187,7 @@ export default function MultipleChoiceExercise({
                   </div>
                 )}
 
-                <p className="mc-question-text">{q.text}</p>
+                <p className="mc-question-text">{questionText}</p>
 
                 <div className="mc-options">
                   {q.options.map(({ label, text, image_key, alt_text }) => {

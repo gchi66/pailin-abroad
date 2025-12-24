@@ -209,7 +209,7 @@ function normalizeExercise(ex, contentLang) {
 
   if (!prompt && (exercise_type === "open" || exercise_type === "open_ended")) {
     const first = items && items[0] && (items[0].text || items[0].prompt || items[0].question);
-    if (first) prompt = String(first);
+    if (first && contentLang !== "th") prompt = String(first);
   }
 
   return {
@@ -221,6 +221,8 @@ function normalizeExercise(ex, contentLang) {
     title_th,
     title_en,
     prompt,
+    prompt_en,
+    prompt_th,
     paragraph,
     items,
     options,
