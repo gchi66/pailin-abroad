@@ -112,7 +112,7 @@ const SPEAKER_PREFIX_RE = /^((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0
 
 
       const commonStyle = {
-        fontWeight: span.bold ? "bold" : undefined,
+        fontWeight: span.speakerWeight || (span.bold ? "bold" : undefined),
         fontStyle: span.italic ? "italic" : undefined,
         textDecoration: span.underline ? "underline" : undefined,
         whiteSpace: "pre-line",
@@ -132,7 +132,7 @@ const SPEAKER_PREFIX_RE = /^((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0
             color: isThai && thaiColor ? thaiColor : undefined,
             fontWeight:
               isThai && thaiColor
-                ? (span.bold ? 500 : 400)
+                ? (span.speakerWeight || (span.bold ? 500 : 400))
                 : commonStyle.fontWeight,
           };
 
@@ -276,7 +276,7 @@ const paragraphTextStartRem = (indentLevel) => {
         const prefix = match[0];
         const rest = firstText.slice(prefix.length);
         const firstSpan = { ...node.inlines[0] };
-        const speakerSpan = { ...firstSpan, text: prefix, bold: true };
+        const speakerSpan = { ...firstSpan, text: prefix, bold: false, speakerWeight: 500 };
         if (rest) {
           const restSpan = { ...firstSpan, text: rest };
           node = {
