@@ -61,7 +61,22 @@ export default function RichSectionRenderer({
   };
 
 const TH_RE = /[\u0E00-\u0E7F]/;
-const SPEAKER_PREFIX_RE = /^((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0,40}):\s*)/;
+const SPEAKER_PREFIX_RE = /^\s*((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0,40}):\s*)/;
+
+const isSpeakerLineText = (text) => {
+  if (!text) return false;
+  const colonIdx = text.indexOf(":");
+  const bracketIdx = text.indexOf("[");
+  const hasBracketBeforeColon = bracketIdx >= 0 && (colonIdx < 0 || bracketIdx < colonIdx);
+  if (hasBracketBeforeColon) return false;
+  return SPEAKER_PREFIX_RE.test(text);
+};
+
+const isEnglishSpeakerLineText = (text) => {
+  if (!isSpeakerLineText(text)) return false;
+  const trimmed = text.trimStart();
+  return /^[A-Za-z]/.test(trimmed);
+};
 
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines, opts = {}) => {
@@ -129,7 +144,7 @@ const SPEAKER_PREFIX_RE = /^((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0
           const isThai = TH_RE.test(part);
           const style = {
             ...commonStyle,
-            color: isThai && thaiColor ? thaiColor : undefined,
+            color: span.speakerColor || (isThai && thaiColor ? thaiColor : undefined),
             fontWeight:
               isThai && thaiColor
                 ? (span.speakerWeight || (span.bold ? 500 : 400))
@@ -268,15 +283,18 @@ const paragraphTextStartRem = (indentLevel) => {
     }
     if (isPhrasesSection && Array.isArray(node.inlines) && node.inlines[0]?.text) {
       const firstText = node.inlines[0].text;
-      const colonIdx = firstText.indexOf(":");
-      const bracketIdx = firstText.indexOf("[");
-      const hasBracketBeforeColon = bracketIdx >= 0 && (colonIdx < 0 || bracketIdx < colonIdx);
-      const match = !hasBracketBeforeColon ? firstText.match(SPEAKER_PREFIX_RE) : null;
+      const match = isSpeakerLineText(firstText) ? firstText.match(SPEAKER_PREFIX_RE) : null;
       if (match) {
         const prefix = match[0];
         const rest = firstText.slice(prefix.length);
         const firstSpan = { ...node.inlines[0] };
-        const speakerSpan = { ...firstSpan, text: prefix, bold: false, speakerWeight: 500 };
+        const speakerSpan = {
+          ...firstSpan,
+          text: prefix,
+          bold: false,
+          speakerWeight: 500,
+          speakerColor: "#111",
+        };
         if (rest) {
           const restSpan = { ...firstSpan, text: rest };
           node = {
@@ -289,6 +307,7 @@ const paragraphTextStartRem = (indentLevel) => {
             inlines: [speakerSpan, ...node.inlines.slice(1).map((s) => ({ ...s }))],
           };
         }
+        node = { ...node, _isSpeakerLine: true };
       }
     }
     const phraseThaiOpts = isPhrasesSection ? { thaiColor: "#8C8D93" } : undefined;
@@ -383,6 +402,7 @@ const paragraphTextStartRem = (indentLevel) => {
               : (indentLevel
                   ? `${listTextStartRem(indentLevel)}rem`
                   : `${LIST_ITEM_BASE_OFFSET}rem`),
+            marginTop: isPhrasesSection && meta.speakerSpacing ? "0.3rem" : undefined,
             marginBottom: isSubheader ? "1rem" : (hasBold ? 0 : undefined),
             borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
             paddingLeft: hasAccent ? "1rem" : undefined,
@@ -447,6 +467,7 @@ const paragraphTextStartRem = (indentLevel) => {
               marginLeft: indentLevel
                 ? `${listTextStartRem(indentLevel) + 3}rem`
                 : undefined,
+              marginTop: isPhrasesSection && meta.speakerSpacing ? "0.3rem" : undefined,
               marginBottom: nodeHasBold(node) ? 0 : undefined,
             }}
           >
@@ -506,6 +527,7 @@ const paragraphTextStartRem = (indentLevel) => {
             marginLeft: indentLevel
               ? `${listTextStartRem(indentLevel) + 3}rem`
               : undefined,
+            marginTop: isPhrasesSection && meta.speakerSpacing ? "0.3rem" : undefined,
             marginBottom: nodeHasBold(node) ? 0 : undefined,
           }}
         >
@@ -624,9 +646,11 @@ const paragraphTextStartRem = (indentLevel) => {
     const elements = [];
     const countsByIndent = new Map();
     let phrasesAudioSeen = 0;
+    let speakerSeenAfterAudio = 0;
 
     const resetCounters = () => {
       countsByIndent.clear();
+      speakerSeenAfterAudio = 0;
     };
 
     const renderNumberedItemWithCounter = (node, key) => {
@@ -659,10 +683,24 @@ const paragraphTextStartRem = (indentLevel) => {
       let meta = {};
       if (isPhrasesSection && (node.audio_key || node.audio_seq)) {
         phrasesAudioSeen += 1;
+        speakerSeenAfterAudio = 0;
         meta = {
           boldPhrase: phrasesAudioSeen === 1,
           showDivider: phrasesAudioSeen === 2,
         };
+      }
+      const isEnglishSpeakerLine =
+        isPhrasesSection &&
+        Array.isArray(node.inlines) &&
+        isEnglishSpeakerLineText(node.inlines[0]?.text || "");
+      if (isEnglishSpeakerLine) {
+        speakerSeenAfterAudio += 1;
+        if (speakerSeenAfterAudio > 1) {
+          meta.speakerSpacing = true;
+        }
+      }
+      if (isPhrasesSection && phrasesAudioSeen === 1 && node.kind === "paragraph") {
+        meta.keepThaiBlack = true;
       }
       elements.push(renderNode(node, idx, meta));
     });
