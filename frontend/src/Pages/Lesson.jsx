@@ -852,6 +852,7 @@ export default function Lesson() {
         {/* Header */}
         <LessonHeader
           lessonId={lesson.id}
+          stage={lesson.stage}
           level={lesson.level}
           lessonOrder={lesson.lesson_order}
           title={headerTitle}

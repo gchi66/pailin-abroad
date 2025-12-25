@@ -55,8 +55,24 @@ export default function PrepareCard({
       if (aSeq !== bSeq) return aSeq - bSeq;
       return 0;
     });
-    return sorted;
-  }, [nodes]);
+    const filtered = sorted.filter((node) => {
+      const inlines = Array.isArray(node?.inlines) ? node.inlines : [];
+      const text = cleanAudioTags(
+        inlines
+          .map((span) => (span && typeof span.text === "string" ? span.text : ""))
+          .join("")
+      ).trim();
+      const hasSnippet =
+        !!(node?.audio_key && audioIndex?.by_key?.[node.audio_key]) ||
+        !!(
+          node?.audio_section &&
+          node?.audio_seq &&
+          audioIndex?.[node.audio_section]?.[node.audio_seq]
+        );
+      return text.length > 0 || hasSnippet;
+    });
+    return filtered;
+  }, [nodes, audioIndex]);
 
   if (!section || items.length === 0) return null;
 

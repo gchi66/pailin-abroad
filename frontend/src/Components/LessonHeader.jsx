@@ -7,6 +7,7 @@ import "../Styles/LessonHeader.css";
 
 export default function LessonHeader({
   lessonId,
+  stage,
   level,
   lessonOrder,
   title,
@@ -29,6 +30,9 @@ export default function LessonHeader({
   const fallbackBackstory = trimOrEmpty(backstory) || "";
   const backLinkText = t("lessonHeader.backLink", uiLang) || "< BACK TO LESSON LIBRARY";
   const backstoryLabel = t("lessonHeader.backstoryLabel", uiLang) || "Backstory";
+  const backLinkHref = stage
+    ? `/lessons?stage=${encodeURIComponent(stage)}&level=${encodeURIComponent(level ?? "")}`
+    : "/lessons";
 
   const isCheckpoint = (title || "").toLowerCase().includes("checkpoint");
   const imageSrc = useMemo(() => {
@@ -54,7 +58,7 @@ export default function LessonHeader({
       data-sticky-head-id="lesson-header"
     >
       <div className="lesson-banner-inner">
-        <Link to="/lessons" className="back-link">
+        <Link to={backLinkHref} className="back-link">
           {backLinkText}
         </Link>
         <div className="lesson-banner-main">

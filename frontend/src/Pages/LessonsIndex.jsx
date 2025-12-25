@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import supabaseClient from "../supabaseClient";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { API_BASE_URL } from "../config/api";
 import PlanNotice from "../Components/PlanNotice";
@@ -18,8 +18,18 @@ const LessonsIndex = () => {
   const [isBackstoryOpen, setIsBackstoryOpen] = useState(false);
   const [lessons, setLessons] = useState([]);
   const [levels, setLevels] = useState([]);
-  const [selectedStage, setSelectedStage] = useState("Beginner");
-  const [selectedLevel, setSelectedLevel] = useState(1);
+  const location = useLocation();
+
+  const [selectedStage, setSelectedStage] = useState(() => {
+    if (typeof window === "undefined") return "Beginner";
+    const stored = localStorage.getItem("lessonLibraryStage");
+    return stored && stageClassMap[stored] ? stored : "Beginner";
+  });
+  const [selectedLevel, setSelectedLevel] = useState(() => {
+    if (typeof window === "undefined") return 1;
+    const stored = Number(localStorage.getItem("lessonLibraryLevel"));
+    return Number.isFinite(stored) && stored > 0 ? stored : 1;
+  });
   const [completedLessons, setCompletedLessons] = useState([]);
   const [levelCompletionStatus, setLevelCompletionStatus] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -153,13 +163,40 @@ const LessonsIndex = () => {
           setSelectedLevel(uniqueLevels[0]); // Set the first level of the new stage
           isStageChanged.current = false; // Reset the flag
         }
+
+        if (uniqueLevels.length > 0 && !uniqueLevels.includes(selectedLevel)) {
+          setSelectedLevel(uniqueLevels[0]);
+        }
       } catch (error) {
         console.error("Error fetching levels:", error.message);
       }
     };
 
     fetchLevels();
-  }, [selectedStage, scrollToTop]); // Fetch levels whenever selectedStage changes
+  }, [selectedStage, selectedLevel, scrollToTop]); // Fetch levels whenever selectedStage changes
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const stageParam = params.get("stage");
+    const levelParam = params.get("level");
+    const normalizedStage =
+      stageParam && stageClassMap[stageParam] ? stageParam : null;
+    const normalizedLevel = levelParam ? Number(levelParam) : null;
+
+    if (normalizedStage) {
+      isStageChanged.current = false;
+      setSelectedStage(normalizedStage);
+    }
+    if (Number.isFinite(normalizedLevel) && normalizedLevel > 0) {
+      setSelectedLevel(normalizedLevel);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("lessonLibraryStage", selectedStage);
+    localStorage.setItem("lessonLibraryLevel", String(selectedLevel));
+  }, [selectedStage, selectedLevel]);
 
   // Fetch completed lessons for the authenticated user
   useEffect(() => {
