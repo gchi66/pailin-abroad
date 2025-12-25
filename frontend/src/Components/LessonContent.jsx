@@ -267,7 +267,7 @@ export default function LessonContent({
       : pick(fallbacks.comprehension, contentLang);
 
     return renderWithBackToTop(
-      <article className="lc-card">
+      <article className="lc-card phrases-verbs">
         <header className="lc-head">
           <div className="lc-head-left">
             <span className="lc-head-title">{headerText}</span>

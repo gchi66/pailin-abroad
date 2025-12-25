@@ -693,6 +693,7 @@ class GoogleDocsParser:
         current_variant: int = 0
         node_buffer: list[dict] = []
         text_buffer: list[str] = []
+        last_audio_node: dict | None = None
 
         # ---------------- regex helpers ----------------
         TH_RX = re.compile(r"[\u0E00-\u0E7F]")                 # Thai block
@@ -998,9 +999,8 @@ class GoogleDocsParser:
                     if _is_bullet_node(node):
                         node["kind"] = "list_item"
                     else:
-                        # Align mini-conversation / translation lines with preceding audio bullet.
-                        prev = node_buffer[-1] if node_buffer else None
-                        if prev and prev.get("kind") == "list_item" and (prev.get("audio_key") or prev.get("audio_seq")):
+                        # Align mini-conversation / translation lines with the most recent audio bullet.
+                        if last_audio_node:
                             for key in (
                                 "indent",
                                 "detection_indent",
@@ -1009,9 +1009,11 @@ class GoogleDocsParser:
                                 "indent_first_line_pts",
                                 "indent_first_line_level",
                             ):
-                                if key in prev and prev[key] is not None:
-                                    node[key] = prev[key]
+                                if key in last_audio_node and last_audio_node[key] is not None:
+                                    node[key] = last_audio_node[key]
                     node_buffer.append(node)
+                    if node.get("kind") == "list_item" and (node.get("audio_key") or node.get("audio_seq")):
+                        last_audio_node = node
                 else:
                     is_bullet = False
                     norm_text = _norm(text)
@@ -1036,6 +1038,8 @@ class GoogleDocsParser:
                                 break
 
                     indent_from = node_buffer[-1] if node_buffer else None
+                    if not indent_from and last_audio_node:
+                        indent_from = last_audio_node
                     node_buffer.append(_synth_node("paragraph", text, is_bullet, indent_from=indent_from))
 
         _flush()

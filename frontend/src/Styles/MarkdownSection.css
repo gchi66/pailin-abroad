@@ -104,6 +104,10 @@ details[open] > .markdown-summary::after {
   animation: fadeIn .25s ease;
 }
 
+.phrases-verbs .markdown-content {
+  padding: 0 2rem 3.2dvh;
+}
+
 .markdown-content p,
 .markdown-content div,
 .markdown-content span,
@@ -113,6 +117,16 @@ details[open] > .markdown-summary::after {
 
 .markdown-content p {
   margin: 0; /* gaps controlled by explicit spacer nodes */
+}
+
+.phrases-divider {
+  border-top: 1px dotted #c6c6c6;
+  margin: 0.9rem auto 0.6rem;
+  width: 90%;
+}
+
+.phrases-phrase-text {
+  font-weight: 600;
 }
 
 .markdown-content ul,

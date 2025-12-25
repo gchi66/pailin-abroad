@@ -260,11 +260,12 @@ const paragraphTextStartRem = (indentLevel) => {
 };
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
-  const renderNode = (node, key) => {
+  const renderNode = (node, key, meta = {}) => {
     // Skip heading nodes - they should only be used for accordion structure
     if (node.kind === "heading") {
       return null;
     }
+    const phraseThaiOpts = isPhrasesSection ? { thaiColor: "#8C8D93" } : undefined;
     if (isPhrasesSection) {
       const rawText = (node.inlines || []).map((s) => s.text || "").join("");
       if (rawText.toLowerCase().includes("link xx")) {
@@ -302,6 +303,8 @@ const paragraphTextStartRem = (indentLevel) => {
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
+      const showDivider = isPhrasesSection && meta.showDivider;
+      const boldPhrase = isPhrasesSection && meta.boldPhrase;
       const hasBold = nodeHasBold(node);
       const hasAccent = hasCyanHighlight(node);
       const textSpans = (node.inlines || []).filter(
@@ -312,31 +315,35 @@ const paragraphTextStartRem = (indentLevel) => {
       if (hasAudio) {
         const multiline = hasLineBreak(node);
         return (
-          <p
-            key={key}
-            className={`audio-bullet${hasAccent ? " rich-accent" : ""}`}
-            style={{
-              marginLeft: visualIndentRem ? `${visualIndentRem}rem` : undefined,
-              display: "flex",
-              alignItems: multiline ? "flex-start" : "center",
-              marginTop: isPhrasesSection ? "1rem" : undefined,
-              marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
-              borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
-              paddingLeft: hasAccent ? "1rem" : undefined,
-            }}
-          >
-            <AudioButton
-              audioKey={node.audio_key}
-              node={node}
-              audioIndex={snipIdx}
-              phrasesSnipIdx={phrasesSnipIdx}
-              phraseId={phraseId}
-              phraseVariant={phraseVariant}
-              size={AUDIO_BUTTON_SIZE}
-              className="select-none"
-            />
-            <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
-          </p>
+          <div key={key} className="phrases-audio-block">
+            {showDivider && <div className="phrases-divider" aria-hidden="true" />}
+            <p
+              className={`audio-bullet${hasAccent ? " rich-accent" : ""}`}
+              style={{
+                marginLeft: visualIndentRem ? `${visualIndentRem}rem` : undefined,
+                display: "flex",
+                alignItems: multiline ? "flex-start" : "center",
+                marginTop: isPhrasesSection ? "1rem" : undefined,
+                marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
+                borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
+                paddingLeft: hasAccent ? "1rem" : undefined,
+              }}
+            >
+              <AudioButton
+                audioKey={node.audio_key}
+                node={node}
+                audioIndex={snipIdx}
+                phrasesSnipIdx={phrasesSnipIdx}
+                phraseId={phraseId}
+                phraseVariant={phraseVariant}
+                size={AUDIO_BUTTON_SIZE}
+                className="select-none"
+              />
+              <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
+                {renderInlines(node.inlines, { thaiColor: "#8C8D93" })}
+              </span>
+            </p>
+          </div>
         );
       }
 
@@ -355,7 +362,7 @@ const paragraphTextStartRem = (indentLevel) => {
             paddingLeft: hasAccent ? "1rem" : undefined,
           }}
         >
-          {renderInlines(node.inlines)}
+          {renderInlines(node.inlines, phraseThaiOpts)}
         </p>
       );
     }
@@ -372,33 +379,39 @@ const paragraphTextStartRem = (indentLevel) => {
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
     if (hasAudio) {
+      const showDivider = isPhrasesSection && meta.showDivider;
+      const boldPhrase = isPhrasesSection && meta.boldPhrase;
       const multiline = hasLineBreak(node);
       return (
-        <li
-          key={key}
-            className="audio-bullet"
-            style={{
-              marginLeft: baseIndentRem
-                ? `${baseIndentRem + LIST_ITEM_OFFSET}rem`
-                : `${LIST_ITEM_BASE_OFFSET}rem`,
-              display: "flex",
-              alignItems: multiline ? "flex-start" : "flex-start",
-              marginTop: isPhrasesSection ? "1rem" : undefined,
-              marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
-            }}
-          >
-          <AudioButton
-            audioKey={node.audio_key}
-            node={node}
-            audioIndex={snipIdx}
-            phrasesSnipIdx={phrasesSnipIdx}
-            phraseId={phraseId}
-            phraseVariant={phraseVariant}
-            size={AUDIO_BUTTON_SIZE}
-            className="select-none"
-          />
-          <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
-        </li>
+        <div key={key} className="phrases-audio-block">
+          {showDivider && <div className="phrases-divider" aria-hidden="true" />}
+          <li
+              className="audio-bullet"
+              style={{
+                marginLeft: baseIndentRem
+                  ? `${baseIndentRem + LIST_ITEM_OFFSET}rem`
+                  : `${LIST_ITEM_BASE_OFFSET}rem`,
+                display: "flex",
+                alignItems: multiline ? "flex-start" : "flex-start",
+                marginTop: isPhrasesSection ? "1rem" : undefined,
+                marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
+              }}
+            >
+            <AudioButton
+              audioKey={node.audio_key}
+              node={node}
+              audioIndex={snipIdx}
+              phrasesSnipIdx={phrasesSnipIdx}
+              phraseId={phraseId}
+              phraseVariant={phraseVariant}
+              size={AUDIO_BUTTON_SIZE}
+              className="select-none"
+            />
+            <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
+              {renderInlines(node.inlines, { thaiColor: "#8C8D93" })}
+            </span>
+          </li>
+        </div>
       );
     }
     return (
@@ -411,7 +424,7 @@ const paragraphTextStartRem = (indentLevel) => {
               marginBottom: nodeHasBold(node) ? 0 : undefined,
             }}
           >
-            {renderInlines(node.inlines)}
+            {renderInlines(node.inlines, phraseThaiOpts)}
           </li>
       );
     }
@@ -427,31 +440,37 @@ const paragraphTextStartRem = (indentLevel) => {
       const hasAudio = node.audio_key || node.audio_seq;
       const hasBold = nodeHasBold(node);
       if (hasAudio) {
+        const showDivider = isPhrasesSection && meta.showDivider;
+        const boldPhrase = isPhrasesSection && meta.boldPhrase;
         const multiline = hasLineBreak(node);
         return (
-          <div
-            key={key}
-            className="audio-bullet"
-            style={{
-              marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
-              display: "flex",
-              alignItems: multiline ? "flex-start" : "center",
-              marginTop: isPhrasesSection ? "1rem" : undefined,
-              marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
-            }}
-          >
-          <AudioButton
-            audioKey={node.audio_key}
-            node={node}
-            audioIndex={snipIdx}
-            phrasesSnipIdx={phrasesSnipIdx}
-            phraseId={phraseId}
-            phraseVariant={phraseVariant}
-            size={AUDIO_BUTTON_SIZE}
-            className="select-none"
-          />
-          <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
-        </div>
+          <div key={key} className="phrases-audio-block">
+            {showDivider && <div className="phrases-divider" aria-hidden="true" />}
+            <div
+              className="audio-bullet"
+              style={{
+                marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+                display: "flex",
+                alignItems: multiline ? "flex-start" : "center",
+                marginTop: isPhrasesSection ? "1rem" : undefined,
+                marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
+              }}
+            >
+            <AudioButton
+              audioKey={node.audio_key}
+              node={node}
+              audioIndex={snipIdx}
+              phrasesSnipIdx={phrasesSnipIdx}
+              phraseId={phraseId}
+              phraseVariant={phraseVariant}
+              size={AUDIO_BUTTON_SIZE}
+              className="select-none"
+            />
+            <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
+              {renderInlines(node.inlines, { thaiColor: "#8C8D93" })}
+            </span>
+          </div>
+          </div>
       );
     }
       return (
@@ -464,7 +483,7 @@ const paragraphTextStartRem = (indentLevel) => {
             marginBottom: nodeHasBold(node) ? 0 : undefined,
           }}
         >
-          {renderInlines(node.inlines)}
+          {renderInlines(node.inlines, phraseThaiOpts)}
         </div>
       );
     }
@@ -513,6 +532,7 @@ const paragraphTextStartRem = (indentLevel) => {
     const baseIndent = computeIndentLevel(node);
     const extraIndent = baseIndent - groupIndent;
     const extraIndentRem = extraIndent * INDENT_PER_LEVEL;
+    const phraseThaiOpts = isPhrasesSection ? { thaiColor: "#8C8D93" } : undefined;
 
     if (hasAudio) {
       return (
@@ -549,7 +569,7 @@ const paragraphTextStartRem = (indentLevel) => {
           marginBottom: hasBold ? 0 : undefined,
         }}
       >
-        {renderInlines(node.inlines)}
+        {renderInlines(node.inlines, phraseThaiOpts)}
       </li>
     );
   };
@@ -577,6 +597,7 @@ const paragraphTextStartRem = (indentLevel) => {
   const renderNodesWithNumberedLists = (nodeList) => {
     const elements = [];
     const countsByIndent = new Map();
+    let phrasesAudioSeen = 0;
 
     const resetCounters = () => {
       countsByIndent.clear();
@@ -609,7 +630,15 @@ const paragraphTextStartRem = (indentLevel) => {
         elements.push(renderNumberedItemWithCounter(node, `numbered-${idx}`));
         return;
       }
-      elements.push(renderNode(node, idx));
+      let meta = {};
+      if (isPhrasesSection && (node.audio_key || node.audio_seq)) {
+        phrasesAudioSeen += 1;
+        meta = {
+          boldPhrase: phrasesAudioSeen === 1,
+          showDivider: phrasesAudioSeen === 2,
+        };
+      }
+      elements.push(renderNode(node, idx, meta));
     });
 
     return elements;
