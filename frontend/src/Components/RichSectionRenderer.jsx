@@ -60,7 +60,8 @@ export default function RichSectionRenderer({
     return groups;
   };
 
-  const TH_RE = /[\u0E00-\u0E7F]/;
+const TH_RE = /[\u0E00-\u0E7F]/;
+const SPEAKER_PREFIX_RE = /^((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0,40}):\s*)/;
 
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines, opts = {}) => {
@@ -264,6 +265,31 @@ const paragraphTextStartRem = (indentLevel) => {
     // Skip heading nodes - they should only be used for accordion structure
     if (node.kind === "heading") {
       return null;
+    }
+    if (isPhrasesSection && Array.isArray(node.inlines) && node.inlines[0]?.text) {
+      const firstText = node.inlines[0].text;
+      const colonIdx = firstText.indexOf(":");
+      const bracketIdx = firstText.indexOf("[");
+      const hasBracketBeforeColon = bracketIdx >= 0 && (colonIdx < 0 || bracketIdx < colonIdx);
+      const match = !hasBracketBeforeColon ? firstText.match(SPEAKER_PREFIX_RE) : null;
+      if (match) {
+        const prefix = match[0];
+        const rest = firstText.slice(prefix.length);
+        const firstSpan = { ...node.inlines[0] };
+        const speakerSpan = { ...firstSpan, text: prefix, bold: true };
+        if (rest) {
+          const restSpan = { ...firstSpan, text: rest };
+          node = {
+            ...node,
+            inlines: [speakerSpan, restSpan, ...node.inlines.slice(1).map((s) => ({ ...s }))],
+          };
+        } else {
+          node = {
+            ...node,
+            inlines: [speakerSpan, ...node.inlines.slice(1).map((s) => ({ ...s }))],
+          };
+        }
+      }
     }
     const phraseThaiOpts = isPhrasesSection ? { thaiColor: "#8C8D93" } : undefined;
     if (isPhrasesSection) {
