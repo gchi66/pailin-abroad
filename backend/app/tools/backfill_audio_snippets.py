@@ -54,7 +54,7 @@ STANDARD_FILE_RE = re.compile(
     r"""
     (?P<lesson>\d+\.\d+)
     _
-    (?P<section>understand|practice|extra_tips|common_mistakes|apply|culture_note)
+    (?P<section>understand|practice|extra_tips|common_mistakes|apply|culture_note|prepare)
     _
     (?P<seq>\d{1,3})
     (?:_(?P<character>[A-Za-z]+))?
@@ -84,6 +84,7 @@ SECTION_MAPPING = {
     "practice":        "practice",
     "apply":           "apply",
     "culture_note":    "culture_note",
+    "prepare":         "prepare",
 }
 
 # ─── 3. Helper functions ─────────────────────────
