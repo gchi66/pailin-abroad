@@ -259,12 +259,18 @@ const paragraphTextStartRem = (indentLevel) => {
   return base + audioLikeOffset;
 };
 
-// Helper for rendering individual nodes (NON-HEADING NODES ONLY)
-const renderNode = (node, key) => {
-  // Skip heading nodes - they should only be used for accordion structure
-  if (node.kind === "heading") {
-    return null;
-  }
+  // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
+  const renderNode = (node, key) => {
+    // Skip heading nodes - they should only be used for accordion structure
+    if (node.kind === "heading") {
+      return null;
+    }
+    if (isPhrasesSection) {
+      const rawText = (node.inlines || []).map((s) => s.text || "").join("");
+      if (rawText.toLowerCase().includes("link xx")) {
+        return null;
+      }
+    }
 
   const indentLevel = computeIndentLevel(node);
   const baseIndentRem = indentLevel * INDENT_PER_LEVEL;
@@ -313,7 +319,8 @@ const renderNode = (node, key) => {
               marginLeft: visualIndentRem ? `${visualIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasBold ? 0 : "0.5rem",
+              marginTop: isPhrasesSection ? "1rem" : undefined,
+              marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
               borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
               paddingLeft: hasAccent ? "1rem" : undefined,
             }}
@@ -376,7 +383,8 @@ const renderNode = (node, key) => {
                 : `${LIST_ITEM_BASE_OFFSET}rem`,
               display: "flex",
               alignItems: multiline ? "flex-start" : "flex-start",
-              marginBottom: hasBold ? 0 : "0.5rem",
+              marginTop: isPhrasesSection ? "1rem" : undefined,
+              marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
             }}
           >
           <AudioButton
@@ -428,7 +436,8 @@ const renderNode = (node, key) => {
               marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
               display: "flex",
               alignItems: multiline ? "flex-start" : "center",
-              marginBottom: hasBold ? 0 : "0.5rem",
+              marginTop: isPhrasesSection ? "1rem" : undefined,
+              marginBottom: isPhrasesSection ? 0 : (hasBold ? 0 : "0.5rem"),
             }}
           >
           <AudioButton

@@ -697,6 +697,7 @@ class GoogleDocsParser:
         # ---------------- regex helpers ----------------
         TH_RX = re.compile(r"[\u0E00-\u0E7F]")                 # Thai block
         HEADER_TRAILING_VARIANT_RX = re.compile(r"\[\s*\d+\s*\]\s*$")  # [1], [ 2 ], etc.
+        HEADER_ANY_VARIANT_RX = re.compile(r"\[\s*(\d+)\s*\]")         # variant anywhere
 
         # ---------------- small utils ------------------
         def _strip_bullets_tabs(s: str) -> str:
@@ -711,10 +712,10 @@ class GoogleDocsParser:
             'COOL! เยี่ยมเลย'     -> ('COOL!', 'เยี่ยมเลย', 0)
             """
             s = _strip_bullets_tabs(raw_header.lstrip("#"))
-            m = re.search(r"\[\s*(\d+)\s*\]\s*$", s)
+            m = HEADER_ANY_VARIANT_RX.search(s)
             if m:
                 variant = int(m.group(1))
-                s = s[: m.start()].strip()
+                s = HEADER_ANY_VARIANT_RX.sub("", s).strip()
             else:
                 variant = 0
             en, th = split_en_th(s)  # your existing helper
@@ -907,8 +908,8 @@ class GoogleDocsParser:
                             return hit
             return None
 
-        def _synth_node(kind: str, text: str, is_bullet: bool = False) -> dict:
-            return {
+        def _synth_node(kind: str, text: str, is_bullet: bool = False, indent_from: dict | None = None) -> dict:
+            node = {
                 "kind": "list_item" if is_bullet else kind,
                 "level": None,
                 "inlines": [{"text": text, "bold": False, "italic": False, "underline": False}],
@@ -921,6 +922,18 @@ class GoogleDocsParser:
                 "lesson_context": lesson_header_raw,
                 "section_context": "PHRASES & VERBS",
             }
+            if indent_from:
+                for key in (
+                    "indent",
+                    "detection_indent",
+                    "indent_level",
+                    "indent_start_pts",
+                    "indent_first_line_pts",
+                    "indent_first_line_level",
+                ):
+                    if key in indent_from and indent_from[key] is not None:
+                        node[key] = indent_from[key]
+            return node
 
         def looks_like_header(chunk: str, style: str, piece_index: int) -> bool:
             """
@@ -980,8 +993,24 @@ class GoogleDocsParser:
                 text_buffer.append(text)
                 node = _take_node(text)
                 if node is not None:
+                    if node.get("kind") == "heading":
+                        node["kind"] = "paragraph"
                     if _is_bullet_node(node):
                         node["kind"] = "list_item"
+                    else:
+                        # Align mini-conversation / translation lines with preceding audio bullet.
+                        prev = node_buffer[-1] if node_buffer else None
+                        if prev and prev.get("kind") == "list_item" and (prev.get("audio_key") or prev.get("audio_seq")):
+                            for key in (
+                                "indent",
+                                "detection_indent",
+                                "indent_level",
+                                "indent_start_pts",
+                                "indent_first_line_pts",
+                                "indent_first_line_level",
+                            ):
+                                if key in prev and prev[key] is not None:
+                                    node[key] = prev[key]
                     node_buffer.append(node)
                 else:
                     is_bullet = False
@@ -1006,7 +1035,8 @@ class GoogleDocsParser:
                             if is_bullet:
                                 break
 
-                    node_buffer.append(_synth_node("paragraph", text, is_bullet))
+                    indent_from = node_buffer[-1] if node_buffer else None
+                    node_buffer.append(_synth_node("paragraph", text, is_bullet, indent_from=indent_from))
 
         _flush()
         return items

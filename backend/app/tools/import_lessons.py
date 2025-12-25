@@ -757,6 +757,36 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                             refetched = _find_phrase_by_norm(variant, phrase_raw)
                             phrase_id = refetched["id"] if refetched else None
             if phrase_id:
+                # Ensure this lesson only links the variant specified in the doc.
+                norm_phrase = _normalize_phrase(phrase_raw)
+                if norm_phrase:
+                    try:
+                        variants = (
+                            supabase.table("phrases")
+                            .select("id")
+                            .eq("phrase", norm_phrase)
+                            .execute()
+                        )
+                        variant_ids = [
+                            r["id"] for r in (variants.data or [])
+                            if r.get("id") and r.get("id") != phrase_id
+                        ]
+                        if variant_ids:
+                            if dry_run:
+                                print(
+                                    "[DRY RUN] Delete lesson_phrases for other variants:",
+                                    {"lesson_id": lesson_id, "phrase_ids": variant_ids},
+                                )
+                            else:
+                                (
+                                    supabase.table("lesson_phrases")
+                                    .delete()
+                                    .eq("lesson_id", lesson_id)
+                                    .in_("phrase_id", variant_ids)
+                                    .execute()
+                                )
+                    except Exception as e:
+                        print(f"[WARN] Could not prune other variants for '{norm_phrase}': {e}")
                 link = {"lesson_id": lesson_id, "phrase_id": phrase_id, "sort_order": idx}
                 if dry_run:
                     print("[DRY RUN] Link lesson_phrases upsert:", link)

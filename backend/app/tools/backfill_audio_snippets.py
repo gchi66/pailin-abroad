@@ -26,6 +26,7 @@ Run:
 """
 
 from __future__ import annotations
+import json
 import os, re, sys
 from collections import defaultdict
 from supabase import create_client, Client
@@ -86,9 +87,17 @@ SECTION_MAPPING = {
 }
 
 # ─── 3. Helper functions ─────────────────────────
+AUDIO_TAG_RE = re.compile(r"\[audio:\s*([^\]]+?)\s*\]", re.IGNORECASE)
+
 def normalize_phrase_for_lookup(phrase_text: str) -> str:
-    """Remove punctuation and extra whitespace for phrase matching"""
-    return re.sub(r'[^\w\s]', '', phrase_text).strip()
+    """Normalize punctuation/spacing/case for phrase matching."""
+    if not phrase_text:
+        return ""
+    # Replace punctuation with spaces so tokens stay separated.
+    cleaned = re.sub(r"[^\w\s]", " ", phrase_text)
+    # Collapse whitespace and normalize case for stable matching.
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned.upper()
 
 def find_phrase_id(phrase_text: str, variant: int) -> str | None:
     """Find phrase_id by phrase text and variant"""
@@ -107,6 +116,102 @@ def find_phrase_id(phrase_text: str, variant: int) -> str | None:
     except Exception as e:
         print(f"Warning: Could not find phrase '{phrase_text}' variant {variant}: {e}")
         return None
+
+_AUDIO_TAG_INDEX = None
+
+def _build_audio_tag_index():
+    """
+    Build an audio_key -> {jsonb: [...], text: [...]} index from phrases content.
+    This is used as a fallback when phrase text matching fails.
+    """
+    global _AUDIO_TAG_INDEX
+    if _AUDIO_TAG_INDEX is not None:
+        return _AUDIO_TAG_INDEX
+
+    index = {}
+    page_size = 1000
+    offset = 0
+
+    while True:
+        res = (
+            sb.table("phrases")
+            .select("id, phrase, variant, content_jsonb, content_jsonb_th, content, content_th")
+            .range(offset, offset + page_size - 1)
+            .execute()
+        )
+        rows = res.data or []
+        if not rows:
+            break
+
+        for row in rows:
+            row_id = row.get("id")
+            phrase = row.get("phrase") or ""
+            variant = row.get("variant")
+
+            # Track which keys we've already added per source for this row.
+            seen_jsonb = set()
+            seen_text = set()
+
+            for field in ("content_jsonb", "content_jsonb_th"):
+                val = row.get(field)
+                if not val:
+                    continue
+                try:
+                    blob = json.dumps(val, ensure_ascii=True)
+                except Exception:
+                    continue
+                for match in AUDIO_TAG_RE.finditer(blob):
+                    key = (match.group(1) or "").strip()
+                    if not key or key in seen_jsonb:
+                        continue
+                    seen_jsonb.add(key)
+                    bucket = index.setdefault(key, {"jsonb": [], "text": []})
+                    bucket["jsonb"].append({"id": row_id, "phrase": phrase, "variant": variant})
+
+            for field in ("content", "content_th"):
+                val = row.get(field) or ""
+                if not val:
+                    continue
+                for match in AUDIO_TAG_RE.finditer(val):
+                    key = (match.group(1) or "").strip()
+                    if not key or key in seen_text:
+                        continue
+                    seen_text.add(key)
+                    bucket = index.setdefault(key, {"jsonb": [], "text": []})
+                    bucket["text"].append({"id": row_id, "phrase": phrase, "variant": variant})
+
+        offset += page_size
+        if len(rows) < page_size:
+            break
+
+    _AUDIO_TAG_INDEX = index
+    return _AUDIO_TAG_INDEX
+
+def find_phrase_id_by_audio_key(audio_key: str, variant: int | None) -> str | None:
+    if not audio_key:
+        return None
+    index = _build_audio_tag_index()
+    entry = index.get(audio_key)
+    if not entry:
+        return None
+
+    candidates = entry["jsonb"] if entry["jsonb"] else entry["text"]
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]["id"]
+
+    if variant is not None:
+        filtered = [c for c in candidates if c.get("variant") == variant]
+        if len(filtered) == 1:
+            return filtered[0]["id"]
+
+    norm_phrases = {normalize_phrase_for_lookup(c.get("phrase") or "") for c in candidates}
+    print(
+        f"Warning: multiple phrases matched audio key '{audio_key}' "
+        f"(variants={[c.get('variant') for c in candidates]}, phrases={sorted(norm_phrases)}); skipping"
+    )
+    return None
 
 
 # ─── 4. List objects with pagination (options-dict style) ──────────────────
@@ -254,9 +359,19 @@ def main() -> None:
             seq = int(phrases_match["seq"])
 
             phrase_text = phrase_key.replace("_", " ").upper()
+            # Match exact audio tag first if phrase text lookup fails.
+            audio_key_tag = f"phrases_verbs_{phrase_key}{variant if variant > 0 else ''}_{seq}"
+
             phrase_id = find_phrase_id(phrase_text, variant)
             if not phrase_id:
-                print(f"Skipping {filename}: phrase '{phrase_text}' variant {variant} not found in DB")
+                phrase_id = find_phrase_id_by_audio_key(audio_key_tag, variant)
+                if phrase_id:
+                    print(f"Fallback matched {filename} via audio tag {audio_key_tag}")
+            if not phrase_id:
+                print(
+                    f"Skipping {filename}: phrase '{phrase_text}' variant {variant} not found in DB "
+                    f"(audio tag {audio_key_tag} also not found)"
+                )
                 continue
 
             key = (phrase_id, variant, seq)

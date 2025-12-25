@@ -453,25 +453,23 @@ export default function LessonContent({
                   </>
                 }
               >
-                <div className="markdown-content">
-                  {hasRich ? (
-                    <RichSectionRenderer
-                      nodes={nodesToRender}
-                      snipIdx={snipIdx}
-                      phrasesSnipIdx={phrasesSnipIdx}
-                      phraseId={item.id}
-                      phraseVariant={item.variant || 0}
-                      isPhrasesSection={true}
-                      uiLang={uiLang}
-                    />
-                  ) : md ? (
-                    <MarkdownSection
-                      markdown={md}
-                      defaultOpenFirst={false}
-                      sectionType="phrases_verbs_item"
-                    />
-                  ) : null}
-                </div>
+                {hasRich ? (
+                  <RichSectionRenderer
+                    nodes={nodesToRender}
+                    snipIdx={snipIdx}
+                    phrasesSnipIdx={phrasesSnipIdx}
+                    phraseId={item.id}
+                    phraseVariant={item.variant || 0}
+                    isPhrasesSection={true}
+                    uiLang={uiLang}
+                  />
+                ) : md ? (
+                  <MarkdownSection
+                    markdown={md}
+                    defaultOpenFirst={false}
+                    sectionType="phrases_verbs_item"
+                  />
+                ) : null}
               </CollapsibleDetails>
             );
           })}
