@@ -159,6 +159,23 @@ def _norm2(s: str) -> str:
     # robust normalization for matching docwalker nodes to section lines
     return re.sub(r"\s+", " ", (s or "").replace("\u000b", " ").replace("\n", " ").strip())
 
+def _split_apply_prompt_response(content: str) -> tuple[str, str]:
+    if not content:
+        return "", ""
+    lines = content.splitlines()
+    for idx, line in enumerate(lines):
+        match = re.match(r"^\s*(?:##\s*)?RESPONSE\s*:\s*(.*)$", line, re.I)
+        if match:
+            prompt_text = "\n".join(lines[:idx]).strip()
+            response_lines = []
+            first = match.group(1).strip()
+            if first:
+                response_lines.append(first)
+            response_lines.extend(lines[idx + 1 :])
+            response_text = "\n".join(response_lines).strip()
+            return prompt_text, response_text
+    return content.strip(), ""
+
 def _lang_of_entry(e: dict) -> str:
     """
     Classify an entry as 'TH', 'EN', or 'MIXED' with robust heuristics:
@@ -1496,10 +1513,22 @@ class GoogleDocsParser:
                     f"## {t.strip()}" if is_subheader(t, style) else t
                     for t, style in lines
                 ]
-                other_sections.append({
-                    "type":       SECTION_TYPE_MAP.get(norm_header, norm_header.lower()),
+                content_text = "\n".join(body_parts).strip()
+                section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
+                prompt_text, response_text = _split_apply_prompt_response(content_text)
+                section_payload = {
+                    "type": section_key,
                     "sort_order": len(other_sections) + 1,
-                    "content":    "\n".join(body_parts).strip(),
+                    "content": content_text,
+                }
+                if section_key == "apply" and response_text:
+                    section_payload["content"] = prompt_text
+                    section_payload["content_jsonb"] = {
+                        "prompt": prompt_text,
+                        "response": response_text,
+                    }
+                other_sections.append({
+                    **section_payload,
                 })
         parsed_transcript = self.parse_conversation_from_lines(transcript_lines)
         if lang == 'th':

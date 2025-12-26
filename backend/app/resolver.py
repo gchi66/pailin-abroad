@@ -268,8 +268,27 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             continue
         # ----------------------------------------
 
-        en_nodes = s.get("content_jsonb") or []
-        th_nodes = s.get("content_jsonb_th") or []
+        raw_en_nodes = s.get("content_jsonb")
+        raw_th_nodes = s.get("content_jsonb_th")
+        if isinstance(raw_en_nodes, dict) or isinstance(raw_th_nodes, dict):
+            preferred = raw_th_nodes if lang == "th" and isinstance(raw_th_nodes, dict) else raw_en_nodes
+            resolved_sections.append(
+                {
+                    "id": s["id"],
+                    "lesson_id": s["lesson_id"],
+                    "sort_order": s.get("sort_order"),
+                    "type": s.get("type"),
+                    "render_mode": s.get("render_mode"),
+                    "audio_url": s.get("audio_url"),
+                    "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
+                    "content_jsonb": preferred if isinstance(preferred, dict) else None,
+                    "content_jsonb_th": raw_th_nodes if isinstance(raw_th_nodes, dict) else None,
+                }
+            )
+            continue
+
+        en_nodes = raw_en_nodes or []
+        th_nodes = raw_th_nodes or []
         merged_nodes = merge_content_nodes(en_nodes, th_nodes) if lang == "th" else en_nodes
         merged_nodes = _normalize_rich_nodes(merged_nodes, lang)
         _enrich_image_nodes(merged_nodes, images_lookup)

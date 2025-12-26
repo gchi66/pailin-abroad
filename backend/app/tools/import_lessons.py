@@ -99,7 +99,7 @@ def _resolve_sentinel_links(nodes, supabase_client):
     Walk through content_jsonb nodes and replace sentinel links
     (https://pa.invalid/lesson/X.Y) with real /lesson/<uuid>.
     """
-    if not nodes:
+    if not nodes or not isinstance(nodes, list):
         return nodes
     for node in nodes:
         inlines = node.get("inlines") or []
