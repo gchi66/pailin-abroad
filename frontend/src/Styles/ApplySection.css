@@ -26,6 +26,13 @@
   resize: vertical;               /* user can expand if they wish */
 }
 
+.apply-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  border: 0.11rem solid #2563eb;
+}
+
+
 .apply-input::placeholder {
   font-family: var(--lesson-textarea-font);
   font-size: var(--lesson-textarea-font-size);
@@ -57,6 +64,8 @@
   /* Optical centering for Poppins */
   transform: translateY(0.05em);
 }
+
+
 
 .apply-submit:hover {
   background: #91CAFF;
