@@ -396,6 +396,61 @@
 
 
 @media (max-width: 480px) {
+  .lesson-locked-container {
+    min-height: 50vh;
+    border-radius: 1.1rem;
+  }
+
+  .lesson-content-blurred {
+    padding: 2.2rem 1.2rem;
+    min-height: 50vh;
+  }
+
+  .lesson-locked-placeholder h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .lesson-locked-placeholder p {
+    font-size: 1.1rem;
+    line-height: 1.45;
+    margin-bottom: 1rem;
+  }
+
+  .lesson-locked-message {
+    padding: 1.8rem 1.4rem;
+    border-radius: 1.1rem;
+    max-width: 92%;
+  }
+
+  .lesson-locked-icon {
+    width: 3.6rem;
+    height: 3.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .lesson-locked-message h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .lesson-locked-message p {
+    font-size: 1.1rem;
+    line-height: 1.45;
+    margin-bottom: 1.6rem;
+  }
+
+  .lesson-locked-cta-buttons {
+    gap: 0.8rem;
+  }
+
+  .lesson-locked-signup-btn,
+  .lesson-locked-member-btn {
+    padding: 0.8rem 1.4rem;
+    font-size: 1rem;
+    border-radius: 0.6rem;
+  }
+
   .lesson-back-to-top-wrapper {
     display: none;
   }

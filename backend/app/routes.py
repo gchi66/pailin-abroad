@@ -6,6 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 import re
+import os
 from collections import defaultdict
 from app.config import Config
 
@@ -861,6 +862,7 @@ def get_lesson_resolved(lesson_id):
     # Check if user is authenticated and has paid access
     is_locked = True
     user_id = None
+    lesson_row = None
 
     auth_header = request.headers.get('Authorization')
     if auth_header and auth_header.startswith('Bearer '):
@@ -879,9 +881,14 @@ def get_lesson_resolved(lesson_id):
                     is_locked = False
                 else:
                     # For free users, check if this is a first lesson of any level
-                    lesson_result = supabase.table('lessons').select('stage, level, lesson_order').eq('id', lesson_id).single().execute()
-                    if lesson_result.data:
-                        lesson = lesson_result.data
+                    lesson_result = supabase.table('lessons').select(
+                        'id, stage, level, lesson_order, lesson_external_id, '
+                        'title, title_th, subtitle, subtitle_th, focus, focus_th, backstory, backstory_th, '
+                        'image_url, conversation_audio_url, header_img'
+                    ).eq('id', lesson_id).single().execute()
+                    lesson_row = lesson_result.data
+                    if lesson_row:
+                        lesson = lesson_row
                         print(f"Checking lesson {lesson_id}: stage={lesson['stage']}, level={lesson['level']}, lesson_order={lesson['lesson_order']}")
 
                         # Get all lessons for this stage-level combination, ordered by lesson_order
@@ -903,6 +910,81 @@ def get_lesson_resolved(lesson_id):
             print(f"Auth check error: {e}")
             # If auth fails, keep is_locked = True
 
+    if is_locked:
+        if not lesson_row:
+            lesson_result = supabase.table('lessons').select(
+                'id, stage, level, lesson_order, lesson_external_id, '
+                'title, title_th, subtitle, subtitle_th, focus, focus_th, backstory, backstory_th, '
+                'image_url, conversation_audio_url, header_img'
+            ).eq('id', lesson_id).single().execute()
+            lesson_row = lesson_result.data
+
+        if not lesson_row:
+            return jsonify({"error": "Lesson not found"}), 404
+
+        def pick_lang(en_value, th_value):
+            if lang == "th":
+                return th_value or en_value
+            return en_value or th_value
+
+        raw_header_img = (lesson_row.get("header_img") or "").strip()
+        header_image_path = None
+        header_image_url = None
+        if raw_header_img:
+            lowered = raw_header_img.lower()
+            if lowered.startswith("http://") or lowered.startswith("https://"):
+                header_image_url = raw_header_img
+            else:
+                relative = raw_header_img.lstrip("/")
+                if relative.lower().startswith("lesson-images/"):
+                    relative = relative.split("/", 1)[1]
+                relative = relative.split("?", 1)[0].split("#", 1)[0]
+                if not relative.lower().startswith("headers/") and "/" not in relative:
+                    relative = f"headers/{relative}"
+                if not os.path.splitext(relative)[1]:
+                    relative = f"{relative}.webp"
+                header_image_path = relative
+                base_url = (Config.SUPABASE_URL or "").rstrip("/")
+                if base_url:
+                    header_image_url = (
+                        f"{base_url}/storage/v1/object/public/lesson-images/{relative}"
+                    )
+
+        safe_payload = {
+            'locked': True,
+            'id': lesson_row.get('id'),
+            'title': pick_lang(lesson_row.get('title'), lesson_row.get('title_th')),
+            'title_th': lesson_row.get('title_th'),
+            'title_en': lesson_row.get('title'),
+            'subtitle': pick_lang(lesson_row.get('subtitle'), lesson_row.get('subtitle_th')),
+            'subtitle_th': lesson_row.get('subtitle_th'),
+            'subtitle_en': lesson_row.get('subtitle'),
+            'stage': lesson_row.get('stage'),
+            'level': lesson_row.get('level'),
+            'lesson_order': lesson_row.get('lesson_order'),
+            'lesson_external_id': lesson_row.get('lesson_external_id'),
+            'focus': pick_lang(lesson_row.get('focus'), lesson_row.get('focus_th')),
+            'focus_th': lesson_row.get('focus_th'),
+            'focus_en': lesson_row.get('focus'),
+            'image_url': lesson_row.get('image_url'),
+            'conversation_audio_url': lesson_row.get('conversation_audio_url'),
+            'backstory': pick_lang(lesson_row.get('backstory'), lesson_row.get('backstory_th')),
+            'backstory_th': lesson_row.get('backstory_th'),
+            'backstory_en': lesson_row.get('backstory'),
+            'header_img': raw_header_img or None,
+            'header_image_path': header_image_path,
+            'header_image_url': header_image_url,
+            'sections': [],
+            'questions': [],
+            'transcript': [],
+            'practice_exercises': [],
+            'phrases': [],
+        }
+        resp = jsonify(safe_payload)
+        resp.headers["Cache-Control"] = "public, max-age=60"
+        resp.headers["Vary"] = "Accept-Encoding, lang"
+        return resp, 200
+
     try:
         payload = resolve_lesson(lesson_id, lang)
     except KeyError:
@@ -912,40 +994,6 @@ def get_lesson_resolved(lesson_id):
 
     # Add locked status to payload
     payload['locked'] = is_locked
-
-    # If locked, remove sensitive content but keep metadata
-    if is_locked:
-        # Keep basic metadata and structure info but remove detailed content
-        safe_payload = {
-            'locked': True,
-            'id': payload.get('id'),
-            'title': payload.get('title'),
-            'title_th': payload.get('title_th'),
-            'title_en': payload.get('title_en'),
-            'subtitle': payload.get('subtitle'),
-            'subtitle_th': payload.get('subtitle_th'),
-            'subtitle_en': payload.get('subtitle_en'),
-            'stage': payload.get('stage'),
-            'level': payload.get('level'),
-            'lesson_order': payload.get('lesson_order'),
-            'lesson_external_id': payload.get('lesson_external_id'),
-            'focus': payload.get('focus'),
-            'focus_th': payload.get('focus_th'),
-            'image_url': payload.get('image_url'),
-            'conversation_audio_url': payload.get('conversation_audio_url'),
-            'backstory': payload.get('backstory'),
-            'backstory_th': payload.get('backstory_th'),
-            'header_img': payload.get('header_img'),
-            'header_image_path': payload.get('header_image_path'),
-            'header_image_url': payload.get('header_image_url'),
-            # Keep empty arrays so UI can show sidebar structure
-            'sections': payload.get('sections', []),
-            'questions': [],
-            'transcript': [],
-            'practice_exercises': [],
-            'phrases': [],
-        }
-        payload = safe_payload
 
     resp = jsonify(payload)
     resp.headers["Cache-Control"] = "public, max-age=60"

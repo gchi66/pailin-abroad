@@ -237,6 +237,18 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
     # sections
     resolved_sections: List[Dict[str, Any]] = []
     lesson_external_id = L.get("lesson_external_id")
+    audio_lookup: Dict[tuple, str] = {}
+    if lesson_external_id:
+        audio_snippets = _exec(
+            supabase.table("audio_snippets")
+            .select("audio_key, section, seq")
+            .eq("lesson_external_id", lesson_external_id)
+        )
+        audio_lookup = {
+            (a["section"], a["seq"]): a["audio_key"]
+            for a in audio_snippets
+            if a.get("audio_key")
+        }
 
     for s in raw["sections"]:
         section_type = (s.get("type") or "").lower()
@@ -295,16 +307,6 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
 
         # temporary audio enrichment
         if lesson_external_id:
-            audio_snippets = _exec(
-                supabase.table("audio_snippets")
-                .select("audio_key, section, seq")
-                .eq("lesson_external_id", lesson_external_id)
-            )
-            audio_lookup = {
-                (a["section"], a["seq"]): a["audio_key"]
-                for a in audio_snippets
-                if a.get("audio_key")
-            }
             for node in merged_nodes:
                 if (
                     node.get("audio_section")

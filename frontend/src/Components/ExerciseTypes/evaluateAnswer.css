@@ -854,6 +854,10 @@
     line-height: 1.45;
   }
 
+  .cq-row-number {
+    line-height: 1.95;
+  }
+
   .fb-row-number--fill-blank {
     line-height: 2.3;
   }

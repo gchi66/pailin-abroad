@@ -109,7 +109,7 @@ const parseOptions = (q) => {
 
           return (
             <div key={q.id} className="fb-row cq-question">
-              <div className="fb-row-number">
+              <div className="fb-row-number cq-row-number">
                 <span>{questionNumber}</span>
               </div>
 

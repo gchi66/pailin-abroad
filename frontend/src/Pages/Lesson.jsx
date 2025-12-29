@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
-import { fetchResolvedLesson } from "../lib/fetchResolvedLesson";
+import { fetchResolvedLesson, prefetchResolvedLesson } from "../lib/fetchResolvedLesson";
 import { fetchSnippets, fetchPhrasesSnippets } from "../lib/fetchSnippets";
 
 import LessonHeader from "../Components/LessonHeader";
@@ -663,6 +663,9 @@ export default function Lesson() {
         setLessonPhrases(payload.phrases || []);
         setImages(payload.images || {});
 
+        const otherLang = contentLang === "th" ? "en" : "th";
+        prefetchResolvedLesson(id, otherLang);
+
   // console.log("Practice exercises:", normalizedExercises);
         // 2) initial active section: only set if not already chosen
         setActiveId(prev => {
@@ -699,50 +702,47 @@ export default function Lesson() {
           }
         }
 
-        // 3) sign conversation audio (all three versions)
+        // 3) sign conversation audio (all three versions, parallelized)
         if (lsn.conversation_audio_url) {
+          const signAudio = async (path) => {
+            const { data, error } = await supabaseClient.storage
+              .from("lesson-audio")
+              .createSignedUrl(path, 2 * 60 * 60);
+            if (error) throw error;
+            return data?.signedUrl ?? null;
+          };
+
           try {
-            // Sign the main conversation file
-            const { data: mainData, error: mainError } = await supabaseClient.storage
-              .from("lesson-audio")
-              .createSignedUrl(lsn.conversation_audio_url, 2 * 60 * 60);
-
-            if (mainError) {
-              console.warn("Main audio signed URL error:", mainError);
-              setAudioUrl(null);
-            } else {
-              setAudioUrl(mainData.signedUrl);
-            }
-
-            // Generate paths for split versions
             const basePath = lsn.conversation_audio_url;
-            const noBgPath = basePath.replace('.mp3', '_no_bg.mp3');
-            const bgPath = basePath.replace('.mp3', '_bg.mp3');
+            const noBgPath = basePath.replace(".mp3", "_no_bg.mp3");
+            const bgPath = basePath.replace(".mp3", "_bg.mp3");
 
-            // Sign the no-background version
-            const { data: noBgData, error: noBgError } = await supabaseClient.storage
-              .from("lesson-audio")
-              .createSignedUrl(noBgPath, 2 * 60 * 60);
+            const [mainResult, noBgResult, bgResult] = await Promise.allSettled([
+              signAudio(basePath),
+              signAudio(noBgPath),
+              signAudio(bgPath),
+            ]);
 
-            if (noBgError) {
-              console.warn("No-bg audio signed URL error:", noBgError);
+            if (mainResult.status === "fulfilled") {
+              setAudioUrl(mainResult.value);
+            } else {
+              console.warn("Main audio signed URL error:", mainResult.reason);
+              setAudioUrl(null);
+            }
+
+            if (noBgResult.status === "fulfilled") {
+              setAudioUrlNoBg(noBgResult.value);
+            } else {
+              console.warn("No-bg audio signed URL error:", noBgResult.reason);
               setAudioUrlNoBg(null);
-            } else {
-              setAudioUrlNoBg(noBgData.signedUrl);
             }
 
-            // Sign the background-only version
-            const { data: bgData, error: bgError } = await supabaseClient.storage
-              .from("lesson-audio")
-              .createSignedUrl(bgPath, 2 * 60 * 60);
-
-            if (bgError) {
-              console.warn("Background audio signed URL error:", bgError);
+            if (bgResult.status === "fulfilled") {
+              setAudioUrlBg(bgResult.value);
+            } else {
+              console.warn("Background audio signed URL error:", bgResult.reason);
               setAudioUrlBg(null);
-            } else {
-              setAudioUrlBg(bgData.signedUrl);
             }
-
           } catch (e) {
             console.warn("Audio signed URL exception:", e);
             setAudioUrl(null);
@@ -755,29 +755,32 @@ export default function Lesson() {
           setAudioUrlBg(null);
         }
 
-        // 4) fetch audio snippet index (including phrases audio snippets)
+        // 4) fetch audio snippet index + phrases audio snippets (in parallel)
         if (lsn.lesson_external_id) {
           try {
-            const idx = await fetchSnippets(lsn.lesson_external_id, lsn.id);
-            setSnipIdx(idx || {});
+            if (lsn.id) {
+              const [idx, phrasesAudio] = await Promise.all([
+                fetchSnippets(lsn.lesson_external_id, lsn.id),
+                fetchPhrasesSnippets(lsn.id),
+              ]);
+              const mergedByKey = {
+                ...(idx?.by_key || {}),
+                ...(phrasesAudio?.by_key || {}),
+              };
+              setSnipIdx({ ...(idx || {}), by_key: mergedByKey });
+              setPhrasesSnipIdx(phrasesAudio || {});
+            } else {
+              const idx = await fetchSnippets(lsn.lesson_external_id, lsn.id);
+              setSnipIdx(idx || {});
+              setPhrasesSnipIdx({});
+            }
           } catch (err) {
             console.error("Error fetching audio snippets:", err);
             setSnipIdx({});
-          }
-        } else {
-          setSnipIdx({});
-        }
-
-        // 5) fetch phrases audio snippets
-        if (lsn.id) {
-          try {
-            const phrasesAudio = await fetchPhrasesSnippets(lsn.id);
-            setPhrasesSnipIdx(phrasesAudio || {});
-          } catch (err) {
-            console.error("Error fetching phrases audio snippets:", err);
             setPhrasesSnipIdx({});
           }
         } else {
+          setSnipIdx({});
           setPhrasesSnipIdx({});
         }
 

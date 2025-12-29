@@ -24,19 +24,7 @@ export async function fetchSnippets(lessonExternalId, lessonId = null) {
     }
   });
 
-  // If lessonId is provided, also fetch phrases audio snippets and add to by_key
-  if (lessonId) {
-    try {
-      const phrasesData = await fetchPhrasesSnippets(lessonId);
-      if (phrasesData.by_key) {
-        // Merge phrases audio snippets into by_key lookup
-        Object.assign(by_key, phrasesData.by_key);
-      }
-    } catch (phrasesError) {
-      console.warn("Failed to fetch phrases audio snippets:", phrasesError);
-      // Don't fail the whole function if phrases audio fails
-    }
-  }
+  // Note: phrases audio snippets are fetched separately to avoid duplicate requests.
 
   return { ...idx, by_key };
 }
