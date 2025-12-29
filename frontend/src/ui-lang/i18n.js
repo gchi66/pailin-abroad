@@ -51,6 +51,7 @@ export const copy = {
       en: "Answer all the questions before checking your answers.",
       th: "กรุณาตอบคำถามทุกข้อก่อนตรวจคำตอบ",
     },
+    applySubmit: { en: "Give it a try", th: "ลองทำดู" },
   },
   profileDropdown: {
     accountSettings: { en: "Account Settings", th: "การตั้งค่าบัญชี" },

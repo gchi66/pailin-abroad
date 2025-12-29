@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import "../Styles/ApplySection.css";
+import { copy, pick } from "../ui-lang/i18n";
 
 /**
  * Renders the “Apply” section of a lesson.
  * Props
  *   content   – markdown string for the exercise prompt
+ *   response  – markdown string for the optional response
  *   uiLang    – "en" | "th" (for later localisation, optional)
  */
-export default function ApplySection({ content = "", uiLang = "en" }) {
+export default function ApplySection({ content = "", response = "", uiLang = "en" }) {
   const [text, setText] = useState("");
+  const [showResponse, setShowResponse] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Apply input →", text);   // placeholder for future logic
-    setText("");                          // clear box for now
+    setShowResponse(true);
   };
 
   return (
@@ -37,9 +40,15 @@ export default function ApplySection({ content = "", uiLang = "en" }) {
         />
 
         <button type="submit" className="apply-submit">
-          {uiLang === "th" ? "ส่งคำตอบ" : "Submit"}
+          {pick(copy.lessonContent.applySubmit, uiLang)}
         </button>
       </form>
+
+      {showResponse && response ? (
+        <div className="apply-response">
+          <ReactMarkdown>{response}</ReactMarkdown>
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -497,6 +497,18 @@ export default function LessonContent({
   /* ------------------ APPLY SECTION ------------------ */
   if (section.type === "apply") {
     const headerText = getSectionHeader(section, getFallbackHeader("apply", "APPLY"));
+    const contentJsonb =
+      uiLang === "th" && section.content_jsonb_th
+        ? section.content_jsonb_th
+        : section.content_jsonb;
+    const promptText =
+      contentJsonb && typeof contentJsonb.prompt === "string"
+        ? contentJsonb.prompt
+        : contentText;
+    const responseText =
+      contentJsonb && typeof contentJsonb.response === "string"
+        ? contentJsonb.response
+        : "";
 
     return renderWithBackToTop(
       <article className="lc-card">
@@ -509,7 +521,7 @@ export default function LessonContent({
           </div>
         </header>
 
-        <ApplySection content={contentText} uiLang={uiLang} />
+        <ApplySection content={promptText} response={responseText} uiLang={uiLang} />
       </article>
     );
   }

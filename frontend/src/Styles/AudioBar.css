@@ -263,9 +263,7 @@
   cursor: pointer;
   position: relative;
   overflow: visible;
-  touch-action: none;
-  width: 100%;
-}
+  touch-action: none;}
 
 .track-fill {
   position: absolute;
@@ -542,7 +540,6 @@
 
 .audio-controls {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 1rem;
   justify-content: center;
@@ -693,5 +690,15 @@
 
   .icon-btn, .rate-btn {
     padding: 0.4rem 0;
+  }
+}
+
+@media (min-width: 769px) {
+  .audio-controls {
+    flex-direction: column;
+  }
+
+  .track {
+    width: 100%;
   }
 }
