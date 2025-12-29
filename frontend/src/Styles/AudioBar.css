@@ -393,7 +393,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: var(--vv-offset, 0px);
   width: 100%;
   max-width: 100%;
   border-radius: 12px 12px 0 0;

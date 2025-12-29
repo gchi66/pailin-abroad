@@ -27,6 +27,11 @@ body {
   background-color: var(--app-bg);
   width: 100%;
   overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+#root {
+  min-height: 100dvh;
 }
 
 code {

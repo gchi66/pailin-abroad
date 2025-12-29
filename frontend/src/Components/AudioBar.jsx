@@ -521,6 +521,29 @@ export default function AudioBar({
     }
   }, [shouldAutoPlay, playing, onAutoPlayComplete]);
 
+  useEffect(() => {
+    if (!isSticky || typeof window === "undefined") return;
+    if (!window.visualViewport) return;
+    if (!/CriOS/i.test(navigator.userAgent)) return;
+
+    const updateOffset = () => {
+      const offset = Math.max(
+        0,
+        window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop
+      );
+      document.documentElement.style.setProperty("--vv-offset", `${offset}px`);
+    };
+
+    updateOffset();
+    window.visualViewport.addEventListener("resize", updateOffset);
+    window.visualViewport.addEventListener("scroll", updateOffset);
+
+    return () => {
+      window.visualViewport.removeEventListener("resize", updateOffset);
+      window.visualViewport.removeEventListener("scroll", updateOffset);
+    };
+  }, [isSticky]);
+
   const handleContainerClick = () => {
     if (isCollapsed && !isDraggingPanel) expand();
   };
