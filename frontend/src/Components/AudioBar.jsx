@@ -527,11 +527,11 @@ export default function AudioBar({
     if (!/CriOS/i.test(navigator.userAgent)) return;
 
     const updateOffset = () => {
-      const offset = Math.max(
-        0,
-        window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop
-      );
-      document.documentElement.style.setProperty("--vv-offset", `${offset}px`);
+      const layoutHeight = document.documentElement.clientHeight || window.innerHeight;
+      const visualBottom =
+        window.visualViewport.height + window.visualViewport.offsetTop;
+      const diff = Math.max(0, visualBottom - layoutHeight);
+      document.documentElement.style.setProperty("--vv-offset", `${-diff}px`);
     };
 
     updateOffset();
