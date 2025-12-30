@@ -3,6 +3,8 @@ import "../Styles/Contact.css";
 import { API_BASE_URL } from "../config/api";
 
 const Contact = () => {
+  const [status, setStatus] = useState("idle");
+  const [feedback, setFeedback] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,11 +13,17 @@ const Contact = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (status !== "idle") {
+      setStatus("idle");
+      setFeedback("");
+    }
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus("sending");
+    setFeedback("");
     try {
       const response = await fetch(`${API_BASE_URL}/contact`, {
         method: "POST",
@@ -23,14 +31,26 @@ const Contact = () => {
         body: JSON.stringify(formData)
       });
       if (response.ok) {
-        alert("Message sent successfully!");
+        setStatus("success");
+        setFeedback("Message sent successfully! We'll get back to you soon.");
         setFormData({ name: "", email: "", message: "" });
       } else {
-        alert("Error sending message.");
+        let errorMessage = "Error sending message. Please try again.";
+        try {
+          const data = await response.json();
+          if (data?.message) {
+            errorMessage = data.message;
+          }
+        } catch (error) {
+          console.error("Error parsing response:", error);
+        }
+        setStatus("error");
+        setFeedback(errorMessage);
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong.");
+      setStatus("error");
+      setFeedback("Something went wrong. Please try again.");
     }
   };
 
@@ -52,6 +72,15 @@ const Contact = () => {
         {/* form */}
         <div className="form-container">
           <form className="contact-form" onSubmit={handleSubmit}>
+            {status !== "idle" && (
+              <div
+                className={`contact-form-status ${status === "success" ? "is-success" : ""} ${status === "error" ? "is-error" : ""}`}
+                role="status"
+                aria-live="polite"
+              >
+                {feedback || (status === "sending" ? "Sending your message..." : "")}
+              </div>
+            )}
             <label htmlFor="name">Name</label>
             <input
               type="text"
@@ -88,7 +117,9 @@ const Contact = () => {
               required
             ></textarea>
 
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={status === "sending"}>
+              {status === "sending" ? "Sending..." : "Submit"}
+            </button>
           </form>
         </div>
 

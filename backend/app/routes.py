@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 import smtplib
 import re
 import os
+import requests
 from collections import defaultdict
 from app.config import Config
 
@@ -825,28 +826,42 @@ def contact():
     if not (name and email and message):
         return jsonify({"message": "Missing required fields"}), 400
 
-    # Build the message
-    msg = MIMEMultipart()
-    msg["From"] = Config.EMAIL_ADDRESS
-    msg["To"] = Config.RECIPIENT_EMAIL
-    msg["Subject"] = "New Contact Form Submission"
+    if not Config.POSTMARK_SERVER_TOKEN or not Config.POSTMARK_FROM or not Config.POSTMARK_TO:
+        print("[contact] Missing Postmark config values.")
+        return jsonify({"message": "Email service not configured."}), 500
 
-    body = f"""
-    You have a new message from your contact form:
+    body = (
+        "You have a new message from your contact form:\n\n"
+        f"Name: {name}\n"
+        f"Email: {email}\n\n"
+        "Message:\n"
+        f"{message}\n"
+    )
 
-    Name: {name}
-    Email: {email}
+    payload = {
+        "From": Config.POSTMARK_FROM,
+        "To": Config.POSTMARK_TO,
+        "Subject": "New Contact Form Submission",
+        "TextBody": body,
+        "ReplyTo": email
+    }
 
-    Message:
-    {message}
-    """
-    msg.attach(MIMEText(body, "plain"))
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "X-Postmark-Server-Token": Config.POSTMARK_SERVER_TOKEN
+    }
+
+    print(f"[contact] Sending Postmark email from {Config.POSTMARK_FROM} to {Config.POSTMARK_TO}.")
+    print(f"[contact] Reply-To set to {email}.")
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(Config.EMAIL_ADDRESS, Config.EMAIL_PASSWORD)
-            server.send_message(msg)
-        return jsonify({"message": "Email sent successfully!"}), 200
+        response = requests.post("https://api.postmarkapp.com/email", json=payload, headers=headers, timeout=10)
+        print(f"[contact] Postmark response status: {response.status_code}")
+        if response.ok:
+            return jsonify({"message": "Email sent successfully!"}), 200
+        print(f"[contact] Postmark response body: {response.text}")
+        return jsonify({"message": "Failed to send email."}), 500
     except Exception as e:
         print("Error sending email:", e)
         return jsonify({"message": "Failed to send email."}), 500
