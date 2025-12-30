@@ -535,10 +535,14 @@ export default function AudioBar({
     };
 
     updateOffset();
+    const rafId = requestAnimationFrame(updateOffset);
+    const timeoutId = window.setTimeout(updateOffset, 200);
     window.visualViewport.addEventListener("resize", updateOffset);
     window.visualViewport.addEventListener("scroll", updateOffset);
 
     return () => {
+      cancelAnimationFrame(rafId);
+      window.clearTimeout(timeoutId);
       window.visualViewport.removeEventListener("resize", updateOffset);
       window.visualViewport.removeEventListener("scroll", updateOffset);
     };
