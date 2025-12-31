@@ -8,6 +8,7 @@ import smtplib
 import re
 import os
 import requests
+from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 from app.config import Config
 
@@ -819,9 +820,9 @@ def delete_account():
 @handle_options
 def contact():
     data = request.get_json()
-    name = data.get("name")
-    email = data.get("email")
-    message = data.get("message")
+    name = (data.get("name") or "").strip()
+    email = (data.get("email") or "").strip()
+    message = (data.get("message") or "").strip()
 
     if not (name and email and message):
         return jsonify({"message": "Missing required fields"}), 400
@@ -829,6 +830,22 @@ def contact():
     if not Config.POSTMARK_SERVER_TOKEN or not Config.POSTMARK_FROM or not Config.POSTMARK_TO:
         print("[contact] Missing Postmark config values.")
         return jsonify({"message": "Email service not configured."}), 500
+
+    # Simple per-email rate limit: 5 messages per 24 hours.
+    try:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=1)
+        rate_limit_result = (
+            supabase.table("contact_messages")
+            .select("id", count="exact")
+            .eq("email", email)
+            .gte("created_at", cutoff.isoformat())
+            .execute()
+        )
+        recent_count = rate_limit_result.count or 0
+        if recent_count >= 5:
+            return jsonify({"message": "Too many messages sent from this email. Please try again later."}), 429
+    except Exception as e:
+        print("[contact] Rate limit check failed:", e)
 
     body = (
         "You have a new message from your contact form:\n\n"
@@ -859,6 +876,18 @@ def contact():
         response = requests.post("https://api.postmarkapp.com/email", json=payload, headers=headers, timeout=10)
         print(f"[contact] Postmark response status: {response.status_code}")
         if response.ok:
+            try:
+                forwarded_for = request.headers.get("X-Forwarded-For", "")
+                ip_address = (forwarded_for.split(",")[0].strip() if forwarded_for else request.remote_addr)
+                user_agent = request.headers.get("User-Agent")
+                supabase.table("contact_messages").insert({
+                    "email": email,
+                    "ip_address": ip_address,
+                    "user_agent": user_agent,
+                    "message": message
+                }).execute()
+            except Exception as e:
+                print("[contact] Failed to log contact message:", e)
             return jsonify({"message": "Email sent successfully!"}), 200
         print(f"[contact] Postmark response body: {response.text}")
         return jsonify({"message": "Failed to send email."}), 500

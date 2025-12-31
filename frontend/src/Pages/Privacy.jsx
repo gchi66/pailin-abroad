@@ -1,11 +1,12 @@
 import React from "react";
-import "../Styles/PlaceholderPage.css";
+import LegalPage from "../Components/LegalPage";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 
-const Privacy = () => (
-  <main className="placeholder-page">
-    <h1>Privacy Policy</h1>
-    <p>Privacy details coming soon.</p>
-  </main>
-);
+const Privacy = () => {
+  const { ui } = useUiLang();
+  const title = pick(copy.legal.privacyTitle, ui);
+  return <LegalPage title={title} slug="privacy" />;
+};
 
 export default Privacy;

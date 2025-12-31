@@ -551,6 +551,8 @@ export const copy = {
         items: [
           { text: { en: "Contact Us", th: "ติดต่อเรา" }, link: "/contact" },
           { text: { en: "FAQ", th: "คำถามที่พบบ่อย" }, link: "/faq" },
+          { text: { en: "Privacy Policy", th: "นโยบายความเป็นส่วนตัว" }, link: "/privacy" },
+          { text: { en: "Terms & Conditions", th: "ข้อกำหนดและเงื่อนไข" }, link: "/terms" },
         ],
       },
     },
@@ -558,6 +560,15 @@ export const copy = {
     copyright: {
       en: "Copyright © {year}, Pailin Abroad",
       th: "ลิขสิทธิ์ © {year} Pailin Abroad",
+    },
+  },
+  legal: {
+    privacyTitle: { en: "Privacy Policy", th: "นโยบายความเป็นส่วนตัว" },
+    termsTitle: { en: "Terms & Conditions", th: "ข้อกำหนดและเงื่อนไข" },
+    loading: { en: "Loading document...", th: "กำลังโหลดเอกสาร..." },
+    missing: {
+      en: "We could not load this document yet. Please check back soon.",
+      th: "ยังไม่สามารถโหลดเอกสารนี้ได้ในตอนนี้ กรุณาลองใหม่ภายหลัง",
     },
   },
   lessonPage: {

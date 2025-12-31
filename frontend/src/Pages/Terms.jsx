@@ -1,11 +1,12 @@
 import React from "react";
-import "../Styles/PlaceholderPage.css";
+import LegalPage from "../Components/LegalPage";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { copy, pick } from "../ui-lang/i18n";
 
-const Terms = () => (
-  <main className="placeholder-page">
-    <h1>Terms &amp; Conditions</h1>
-    <p>Full terms content coming soon.</p>
-  </main>
-);
+const Terms = () => {
+  const { ui } = useUiLang();
+  const title = pick(copy.legal.termsTitle, ui);
+  return <LegalPage title={title} slug="terms" />;
+};
 
 export default Terms;
