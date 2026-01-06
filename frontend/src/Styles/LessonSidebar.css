@@ -62,10 +62,40 @@
   pointer-events: none;
 }
 
+@media (max-width: 768px) {
+  .ls-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    align-self: flex-start;
+    top: var(--navbar-height, 80px);
+    z-index: 20;
+    padding: 0.5rem 0;
+  }
+
+  .ls-sidebar.ls-stuck {
+    background: #ffffff;
+    box-shadow: 0 0.001rem 0 #e5e7eb;
+  }
+  .ls-row:hover {
+    background: none;
+  }
+}
 
 @media (max-width: 480px) {
+  .ls-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    align-self: flex-start;
+    top: var(--navbar-height, 80px);
+    z-index: 20;
+    padding: 0.5rem 0;
+  }
   .ls-list {
     gap: .3rem;
+    position: -webkit-sticky;
+    position: sticky;
+    align-self: flex-start;
+    top: var(--navbar-height, 80px);
     justify-content: flex-start;
     padding: 0 0 0 .5rem;
   }

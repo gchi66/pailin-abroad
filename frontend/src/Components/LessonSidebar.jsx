@@ -37,6 +37,7 @@ export default function LessonSidebar({
   activeId,
   onSelect,
   isLocked = false, // <-- add isLocked prop
+  isStuck = false,
 }) {
   const { ui: uiLang } = useUiLang();
 
@@ -86,7 +87,7 @@ export default function LessonSidebar({
     .filter(Boolean);
 
   return (
-    <nav className="ls-sidebar" aria-label="Lesson sections">
+    <nav className={`ls-sidebar${isStuck ? " ls-stuck" : ""}`} aria-label="Lesson sections">
       <div className="ls-list" role="tablist">
         {menuItems.map((item) => {
           const isActive = item.id === activeId;

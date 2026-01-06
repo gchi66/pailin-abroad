@@ -346,6 +346,7 @@ export default function Lesson() {
   const [phrasesSnipIdx, setPhrasesSnipIdx] = useState({});
   const [showStickyPlayer, setShowStickyPlayer] = useState(false);
   const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
+  const [isSidebarStuck, setIsSidebarStuck] = useState(false);
 
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
@@ -374,6 +375,7 @@ export default function Lesson() {
   const topSentinelRef = useRef(null);
   const topSentinelVisibleRef = useRef(false);
   const topObserverRef = useRef(null);
+  const sidebarSentinelRef = useRef(null);
 
   const computeNavbarMargin = useCallback(() => {
     if (typeof window === "undefined") return "0px 0px 0px 0px";
@@ -552,6 +554,46 @@ export default function Lesson() {
   useEffect(() => {
     updateStickyContentLang(contentLang);
   }, [contentLang, updateStickyContentLang]);
+
+  useEffect(() => {
+    let frame = null;
+    const updateStuck = () => {
+      const node = sidebarSentinelRef.current;
+      if (!node || typeof window === "undefined") return;
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--navbar-height");
+      const parsed = parseFloat(raw);
+      const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
+      const rect = node.getBoundingClientRect();
+      const stickAt = navbarHeight + 4;
+      const unstickAt = navbarHeight + 12;
+      setIsSidebarStuck((prev) => {
+        if (prev) {
+          return rect.top <= unstickAt;
+        }
+        return rect.top <= stickAt;
+      });
+    };
+
+    const handleScroll = () => {
+      if (frame !== null) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = null;
+        updateStuck();
+      });
+    };
+
+    updateStuck();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      if (frame !== null) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -907,6 +949,7 @@ export default function Lesson() {
 
           {/* Body */}
           <div className="lesson-body">
+            <div ref={sidebarSentinelRef} className="lesson-sidebar-sentinel" aria-hidden="true" />
             <LessonSidebar
               sections={sections}
               questions={questions}
@@ -917,6 +960,7 @@ export default function Lesson() {
               onSelect={setActiveId}
               lesson={lesson}
               isLocked={isLocked}
+              isStuck={isSidebarStuck}
             />
             <LessonContent
               sections={sections}

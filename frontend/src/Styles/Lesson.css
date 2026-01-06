@@ -28,6 +28,12 @@
   width: 100%;
 }
 
+.lesson-sidebar-sentinel {
+  height: 1px;
+  margin-bottom: -1px;
+  pointer-events: none;
+}
+
 .lesson-nav-banner-wrapper {
   margin-top: 1.6rem;
   width: 100%;

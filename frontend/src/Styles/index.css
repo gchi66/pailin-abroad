@@ -26,7 +26,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--app-bg);
   width: 100%;
-  overflow-x: hidden;
   min-height: 100dvh;
 }
 
