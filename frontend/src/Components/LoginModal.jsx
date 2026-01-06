@@ -153,14 +153,6 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
         >
           {socialLoading === "google" ? "Connecting to Google..." : "Sign In with Google"}
         </button>
-        <button
-          className="login-social-button facebook"
-          onClick={() => handleSocialSignIn("facebook")}
-          disabled={socialLoading === "facebook"}
-          style={{ opacity: socialLoading === "facebook" ? 0.6 : 1 }}
-        >
-          {socialLoading === "facebook" ? "Connecting to Facebook..." : "Sign In with Facebook"}
-        </button>
 
         {toggleSignupModal && (
           <p className="login-switch-text">

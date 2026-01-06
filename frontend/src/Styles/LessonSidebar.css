@@ -39,10 +39,6 @@
   white-space: nowrap;
 }
 
-.ls-row:hover {
-  background: #cde1f5;
-}
-
 .ls-row:active {
   transform: translate(0.08rem, 0.08rem);
   box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
@@ -69,27 +65,16 @@
     align-self: flex-start;
     top: var(--navbar-height, 80px);
     z-index: 20;
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 1rem 0;
   }
 
   .ls-sidebar.ls-stuck {
     background: #ffffff;
     box-shadow: 0 0.001rem 0 #e5e7eb;
   }
-  .ls-row:hover {
-    background: none;
-  }
 }
 
 @media (max-width: 480px) {
-  .ls-sidebar {
-    position: -webkit-sticky;
-    position: sticky;
-    align-self: flex-start;
-    top: var(--navbar-height, 80px);
-    z-index: 20;
-    padding: 0.5rem 0;
-  }
   .ls-list {
     gap: .3rem;
     position: -webkit-sticky;
@@ -113,4 +98,10 @@
     transform: none !important;
   }
 
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ls-row:hover {
+    background: #cde1f5;
+  }
 }

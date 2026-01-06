@@ -115,16 +115,17 @@
     justify-content: center;
     color: white !important;
     border: .10rem solid #1e1e1e;
-    margin: .75rem 0;
+    margin: 1.5rem 0;
   }
 
 
   .lesson-body {
-    gap: 1rem;
+    gap: 0rem;
   }
 
   .lesson-content-container {
-    padding: 0
+    padding: 0;
+    gap: 0;
   }
 
   .lc-card {

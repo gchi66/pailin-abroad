@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
+import supabaseClient from "../supabaseClient";
 import "../Styles/EmailConfirmation.css";
 
 const EmailConfirmationPage = ({ userEmail = "your email" }) => {
@@ -10,10 +11,38 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
   const emailFromState = location.state?.email;
   const effectiveEmail = emailFromParams || emailFromState || userEmail;
 
-  const handleResendEmail = () => {
-    // TODO: Implement resend email logic
-    console.log("Resend email clicked for:", effectiveEmail);
-    alert("Resend email functionality will be implemented.");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendMessage, setResendMessage] = useState("");
+
+  const handleResendEmail = async () => {
+    if (!effectiveEmail || effectiveEmail === "your email") {
+      setResendMessage("Error: No email found");
+      return;
+    }
+
+    setResendLoading(true);
+    setResendMessage("");
+
+    try {
+      const { error } = await supabaseClient.auth.resend({
+        type: "signup",
+        email: effectiveEmail,
+        options: {
+          emailRedirectTo: `${window.location.origin}/onboarding`
+        }
+      });
+
+      if (error) {
+        setResendMessage(`Error: ${error.message}`);
+      } else {
+        setResendMessage("Verification email sent! Check your inbox.");
+      }
+    } catch (err) {
+      setResendMessage("Failed to send email. Please try again.");
+      console.error("Resend email error:", err);
+    } finally {
+      setResendLoading(false);
+    }
   };
 
   return (
@@ -32,9 +61,16 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
         <button
           className="submit-btn"
           onClick={handleResendEmail}
+          disabled={resendLoading}
         >
-          RESEND EMAIL
+          {resendLoading ? "Sending..." : "RESEND EMAIL"}
         </button>
+
+        {resendMessage && (
+          <p className={`resend-message ${resendMessage.startsWith('Error') ? 'error' : 'success'}`}>
+            {resendMessage}
+          </p>
+        )}
       </div>
     </main>
   );

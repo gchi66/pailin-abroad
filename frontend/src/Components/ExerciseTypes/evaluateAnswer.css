@@ -855,7 +855,8 @@
   }
 
   .cq-row-number {
-    line-height: 1.95;
+    line-height: 1.8;
+    font-size: 1.1rem;
   }
 
   .fb-row-number--fill-blank {

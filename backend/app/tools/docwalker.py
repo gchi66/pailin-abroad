@@ -223,9 +223,29 @@ def paragraph_nodes(doc_json: dict):
         bullet_info = p.get("bullet")
         para_style = p.get("paragraphStyle", {})
 
-        # Get raw indent values
-        base_indent_pts = para_style.get("indentStart", {}).get("magnitude", 0)
-        first_line_indent_pts = para_style.get("indentFirstLine", {}).get("magnitude", 0)
+        # Get raw indent values. For list items, fall back to list-level indents
+        # if the paragraph style omits them (Docs sometimes stores these only on the list).
+        base_indent_dict = para_style.get("indentStart")
+        first_line_indent_dict = para_style.get("indentFirstLine")
+
+        base_indent_pts = base_indent_dict.get("magnitude", 0) if isinstance(base_indent_dict, dict) else 0
+        first_line_indent_pts = (
+            first_line_indent_dict.get("magnitude", 0) if isinstance(first_line_indent_dict, dict) else 0
+        )
+
+        if bullet_info:
+            list_id = bullet_info.get("listId")
+            nesting_level = bullet_info.get("nestingLevel", 0)
+            list_def = doc_json.get("lists", {}).get(list_id, {})
+            nesting_levels = list_def.get("listProperties", {}).get("nestingLevels", [])
+            list_level_def = nesting_levels[nesting_level] if nesting_level < len(nesting_levels) else {}
+
+            if (not isinstance(base_indent_dict, dict)) or ("magnitude" not in base_indent_dict):
+                base_indent_pts = list_level_def.get("indentStart", {}).get("magnitude", base_indent_pts)
+            if (not isinstance(first_line_indent_dict, dict)) or ("magnitude" not in first_line_indent_dict):
+                first_line_indent_pts = list_level_def.get("indentFirstLine", {}).get(
+                    "magnitude", first_line_indent_pts
+                )
 
         # Normalize: subtract the accidental 36 PT base from levels 3-12
         if base_indent_pts >= 36:

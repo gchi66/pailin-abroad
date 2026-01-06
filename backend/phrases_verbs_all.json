@@ -1,9 +1,9 @@
 [
   {
-    "section_index": 1213,
+    "section_index": 248,
     "paragraphs": [
       {
-        "index": 1214,
+        "index": 249,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -14,8 +14,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1215,
-        "text": "OH",
+        "index": 250,
+        "text": "GUYS",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -25,17 +25,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1216,
-        "text": "Oh [audio:phrases_verbs_oh_1]",
+        "index": 251,
+        "text": "Guys [audio:phrases_verbs_guys_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.iwnqqz6d7cxn",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.rm33u9k7uzw1",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -44,8 +39,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1217,
-        "text": "Said when you are pleasantly surprised about something",
+        "index": 252,
+        "text": "An informal, friendly term to address a group of people, regardless of gender",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -55,7 +50,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1218,
+        "index": 253,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -66,17 +61,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1219,
-        "text": "Pailin: I baked this cake for you. [audio:phrases_verbs_oh_2]",
+        "index": 254,
+        "text": "Hey guys, how’s it going? [audio:phrases_verbs_guys_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.iwnqqz6d7cxn",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.nf9wdin27qci",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -85,18 +75,21 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1220,
-        "text": "Luke: Oh, it looks so good! Thank you!",
+        "index": 255,
+        "text": "Guys, we’re going to be late if we don’t leave now. [audio:phrases_verbs_guys_3]",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
+        "bullet": {
+          "listId": "kix.nf9wdin27qci",
+          "textStyle": {}
+        },
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": null
+          "glyphSymbol": "●"
         },
-        "docwalker_kind_guess": "paragraph"
+        "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1221,
+        "index": 256,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -107,8 +100,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1222,
-        "text": "(link xx) See more uses of ‘Oh’ ",
+        "index": 257,
+        "text": "(link xx) See more uses of ‘Guys’",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -118,7 +111,123 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1223,
+        "index": 258,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 259,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 260,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 261,
+        "text": "OH NO",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 262,
+        "text": "Oh no [audio:phrases_verbs_oh_no_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.nf9wdin27qci",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 263,
+        "text": "An expression to show alarm or concern, especially when something goes wrong",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 264,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 265,
+        "text": "Oh no. I locked my keys in my car! [audio:phrases_verbs_oh_no_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.nf9wdin27qci",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 266,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 267,
+        "text": "(link xx) See more uses of 'Oh no'",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 268,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -131,10 +240,10 @@
     ]
   },
   {
-    "section_index": 1425,
+    "section_index": 1240,
     "paragraphs": [
       {
-        "index": 1426,
+        "index": 1241,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -145,8 +254,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1427,
-        "text": "HERE",
+        "index": 1242,
+        "text": "OH NO",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -156,97 +265,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1428,
-        "text": "Here [audio:phrases_verbs_here_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.n8kzdt1u63lb",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1429,
-        "text": "Used to offer something to someone, like ‘Take this’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1430,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1431,
-        "text": "Luke: My breath stinks. [audio:phrases_verbs_here_2]\u000bPailin: Here, I have some gum.\u000b",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.l7qegrce5fxj",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1432,
-        "text": "Pailin: I can’t find my blue pen. [audio:phrases_verbs_here_3]\u000bLuke: Here, you can use mine.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.l7qegrce5fxj",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1433,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1434,
+        "index": 1243,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -259,10 +278,10 @@
     ]
   },
   {
-    "section_index": 1974,
+    "section_index": 1615,
     "paragraphs": [
       {
-        "index": 1975,
+        "index": 1616,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -273,8 +292,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1976,
-        "text": "NICE! ",
+        "index": 1617,
+        "text": "OH [1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -284,17 +303,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1977,
-        "text": "Nice! [audio:phrases_verbs_nice_1]",
+        "index": 1618,
+        "text": "Oh [audio:phrases_verbs_oh1_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.r2nwj89h6yh3",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.mby7ju15x89v",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -303,8 +317,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1978,
-        "text": "A positive expression to show enthusiasm or approval",
+        "index": 1619,
+        "text": "Said when you realize something that you didn’t notice or forgot about",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -314,7 +328,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1979,
+        "index": 1620,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -325,17 +339,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1980,
-        "text": "Luke: I applied for a few jobs today. [audio:phrases_verbs_nice_2]",
+        "index": 1621,
+        "text": "I need to get milk from the store. Oh, and I need to get eggs, too. [audio:phrases_verbs_oh1_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.i7utfy26vrmu",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.hvx2nudfqbd2",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -344,18 +353,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1981,
-        "text": "Pailin: Nice! I’m sure you’ll get one.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1982,
+        "index": 1622,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -366,27 +364,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1983,
-        "text": "Luke: I found some nice AirBnBs for our trip to Mexico City. [audio:phrases_verbs_nice_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.e0ri3nypzrpb",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1984,
-        "text": "Pailin: Nice! Send them to me and I’ll take a look at them.",
+        "index": 1623,
+        "text": "\t(link xx) See more uses of ‘Oh’",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -396,7 +375,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1985,
+        "index": 1624,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -407,29 +386,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1986,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1987,
-        "text": "OH",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1988,
+        "index": 1625,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -442,10 +399,10 @@
     ]
   },
   {
-    "section_index": 2283,
+    "section_index": 1905,
     "paragraphs": [
       {
-        "index": 2284,
+        "index": 1906,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -456,7 +413,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2285,
+        "index": 1907,
         "text": "WOW",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -467,37 +424,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2286,
-        "text": "Wow [audio:phrases_verbs_wow_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.c09em57tpln6",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2287,
-        "text": "Used to show surprise or admiration",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2288,
+        "index": 1908,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -508,70 +435,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2289,
-        "text": "Wow! This cake is beautiful. Did you make it all by yourself? [audio:phrases_verbs_wow_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.c09em57tpln6",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2290,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2291,
-        "text": "\t(link xx) See more uses of ‘Wow’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2292,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2293,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2294,
+        "index": 1909,
         "text": "COOL!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -582,37 +446,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2295,
-        "text": "Cool! [audio:phrases_verbs_cool_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ov39ef22pyu",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2296,
-        "text": "An informal way of saying ‘That’s great’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2297,
+        "index": 1910,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -623,17 +457,23 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2298,
-        "text": "Luke: I just got tickets to the concert! [audio:phrases_verbs_cool_2]\u000bPailin: Cool! I’m so excited.\u000b",
+        "index": 1911,
+        "text": "GREAT IDEA",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1912,
+        "text": "Great idea [audio:phrases_verbs_great_idea_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.bqfii5o8g0p0",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.rtevnrlkis3e",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -642,17 +482,34 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2299,
-        "text": "Pailin: We’re bringing a pie to the potluck. [audio:phrases_verbs_cool_3]\u000bLuke: Cool, what kind of pie are you bringing?",
+        "index": 1913,
+        "text": "Said to show enthusiastic approval of a suggestion or plan",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1914,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1915,
+        "text": "Luke: Oh, it’s happy hour at Jay’s Bar. Should we go there? [audio:phrases_verbs_great_idea_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.bqfii5o8g0p0",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.rtevnrlkis3e",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -661,7 +518,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2300,
+        "index": 1916,
+        "text": "Pailin: Yeah, great idea!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1917,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -674,10 +542,10 @@
     ]
   },
   {
-    "section_index": 2916,
+    "section_index": 2177,
     "paragraphs": [
       {
-        "index": 2917,
+        "index": 2178,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -688,8 +556,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2918,
-        "text": "HERE ",
+        "index": 2179,
+        "text": "MEET UP",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -699,7 +567,32 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2919,
+        "index": 2180,
+        "text": "Meet up [audio:phrases_verbs_meet_up_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.6jpa1v9isrjz",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2181,
+        "text": "To plan an informal and casual meeting",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2182,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -710,28 +603,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2920,
-        "text": "LOOK FOR",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2921,
-        "text": "Look for [audio:phrases_verbs_look_for_1]",
+        "index": 2183,
+        "text": "Let’s meet up for coffee this week. [audio:phrases_verbs_meet_up_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.6rjepfhqqzqk",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.ole20xbqqx8y",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -740,18 +617,21 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2922,
-        "text": "To try to find or search for something",
+        "index": 2184,
+        "text": "We’re going to meet up with friends tonight. [audio:phrases_verbs_meet_up_3]",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
+        "bullet": {
+          "listId": "kix.ole20xbqqx8y",
+          "textStyle": {}
+        },
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": null
+          "glyphSymbol": "●"
         },
-        "docwalker_kind_guess": "paragraph"
+        "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2923,
+        "index": 2185,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -762,17 +642,45 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2924,
-        "text": "I’ve been looking for a new job, but not many places are hiring. [audio:phrases_verbs_look_for_2]",
+        "index": 2186,
+        "text": "\tTHAT SOUNDS FUN",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2187,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2188,
+        "text": "OF COURSE",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2189,
+        "text": "Of course [audio:phrases_verbs_of_course_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.6rjepfhqqzqk",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.o2bgpipksxu6",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -781,17 +689,34 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2925,
-        "text": "I’m looking for my keys. Have you seen them? [audio:phrases_verbs_look_for_3]",
+        "index": 2190,
+        "text": "แน่นอน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2191,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2192,
+        "text": "Of course you can stay at my place! You don’t even have to ask. [audio:phrases_verbs_of_course_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.6rjepfhqqzqk",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.o2bgpipksxu6",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -800,7 +725,118 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2926,
+        "index": 2193,
+        "text": "Pailin: Can I make myself another cup of coffee? [audio:phrases_verbs_of_course_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.n5bkq06sck0j",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2194,
+        "text": "Luke: Of course! Go ahead.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2195,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2196,
+        "text": "IN TOWN",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2197,
+        "text": "In town [audio:phrases_verbs_in_town_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.465r0p7vpct2",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2198,
+        "text": "Said when a person is in your specific city or location for a short stay",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2199,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2200,
+        "text": "My parents are in town this weekend, so I won’t be free. [audio:phrases_verbs_in_town_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.r0l2bj5oa7is",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2201,
+        "text": "Since you’re in town, we should catch up. [audio:phrases_verbs_in_town_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.r0l2bj5oa7is",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2202,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -813,10 +849,10 @@
     ]
   },
   {
-    "section_index": 3275,
+    "section_index": 2478,
     "paragraphs": [
       {
-        "index": 3276,
+        "index": 2479,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -827,8 +863,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3277,
-        "text": "LET’S SEE ",
+        "index": 2480,
+        "text": "LET’S SEE",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -838,37 +874,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3278,
-        "text": "Let’s see [audio:phrases_verbs_lets_see_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.1r0z1d5km1as",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3279,
-        "text": "Said when you’re trying to remember something or are thinking carefully",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3280,
+        "index": 2481,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -879,17 +885,23 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3281,
-        "text": "Next Sunday, let’s see, I’ve got to pick up my sister from the airport. [audio:phrases_verbs_lets_see_2]",
+        "index": 2482,
+        "text": "IT’S MY TREAT",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2483,
+        "text": "It’s my treat [audio:phrases_verbs_its_my_treat_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.r8u4iyrnoa3h",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.mmpyr0otzk4e",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -898,26 +910,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3282,
-        "text": "Let’s see, how long did it take to get to Vegas last time? [audio:phrases_verbs_lets_see_3]",
+        "index": 2484,
+        "text": "ฉันเลี้ยงเอง",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.r8u4iyrnoa3h",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
+        "bullet": null,
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": "●"
+          "glyphSymbol": null
         },
-        "docwalker_kind_guess": "list_item"
+        "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3283,
+        "index": 2485,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -928,28 +932,12 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3284,
-        "text": "COME BACK ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3285,
-        "text": "Come back [audio:phrases_verbs_come_back_1]",
+        "index": 2486,
+        "text": "Let’s get coffee. Don’t worry, it’s my treat. [audio:phrases_verbs_its_my_treat_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.pjtxypgmcr3z",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.mmpyr0otzk4e",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -958,18 +946,21 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3286,
-        "text": "To return to a place",
+        "index": 2487,
+        "text": "Since you’re visiting, the tickets are my treat. [audio:phrases_verbs_its_my_treat_3]",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
+        "bullet": {
+          "listId": "kix.mmpyr0otzk4e",
+          "textStyle": {}
+        },
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": null
+          "glyphSymbol": "●"
         },
-        "docwalker_kind_guess": "paragraph"
+        "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3287,
+        "index": 2488,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -980,45 +971,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3288,
-        "text": "I want to come back to Thailand next year. [audio:phrases_verbs_come_back_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.pjtxypgmcr3z",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3289,
-        "text": "What time did you come back last night? [audio:phrases_verbs_come_back_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.pjtxypgmcr3z",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3290,
+        "index": 2489,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1029,8 +982,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3291,
-        "text": "SURE! ",
+        "index": 2490,
+        "text": "WOW",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1040,111 +993,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3292,
-        "text": "Sure! [audio:phrases_verbs_sure_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ox1drq2or1m7",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3293,
-        "text": "An enthusiastic way of saying ‘Yes’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3294,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3295,
-        "text": "Luke: Could you help me translate these sentences into Thai? [audio:phrases_verbs_sure_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.8chclyame0re",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3296,
-        "text": "Pailin: Sure!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3297,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3298,
-        "text": "(link xx) See more uses of ‘Sure’",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3299,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3300,
+        "index": 2491,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1157,10 +1006,10 @@
     ]
   },
   {
-    "section_index": 3582,
+    "section_index": 2835,
     "paragraphs": [
       {
-        "index": 3583,
+        "index": 2836,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1171,8 +1020,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3584,
-        "text": "CHECK OUT",
+        "index": 2837,
+        "text": "OH",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1182,37 +1031,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3585,
-        "text": "Check out [something] / check [something] out [audio:phrases_verbs_check_out_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.b554farcbmh4",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3586,
-        "text": "To look at or examine a person or thing that seems interesting or attractive",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3587,
+        "index": 2838,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1223,17 +1042,23 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3588,
-        "text": "Do you wanna check out this new cafe that just opened down the street? [audio:phrases_verbs_check_out_2]",
+        "index": 2839,
+        "text": "I THINK SO",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2840,
+        "text": "I think so [audio:phrases_verbs_i_think_so_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.nkf4c6kyp0y9",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
+          "listId": "kix.99m1wh8pvody",
+          "textStyle": {}
         },
         "resolvedListGlyph": {
           "glyphType": null,
@@ -1242,26 +1067,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3589,
-        "text": "Emily, check it out. This camera can take photos underwater! [audio:phrases_verbs_check_out_3]",
+        "index": 2841,
+        "text": "ฉันก็คิดอย่างนั้น",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.nkf4c6kyp0y9",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
+        "bullet": null,
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": "●"
+          "glyphSymbol": null
         },
-        "docwalker_kind_guess": "list_item"
+        "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3590,
+        "index": 2842,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1272,8 +1089,22 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3591,
-        "text": "\t(link xx) See more uses of ‘Check out’",
+        "index": 2843,
+        "text": "Pailin: Is Sebastian majoring in Psychology? [audio:phrases_verbs_i_think_so_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.99m1wh8pvody",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2844,
+        "text": "Luke: I think so.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1283,7 +1114,270 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3592,
+        "index": 2845,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2846,
+        "text": "Luke: Do you have a band-aid by any chance? [audio:phrases_verbs_i_think_so_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.99m1wh8pvody",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2847,
+        "text": "Pailin: I think so, let me check my bag.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2848,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2849,
+        "text": "NICE!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2850,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2851,
+        "text": "THAT’S OKAY",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2852,
+        "text": "That’s okay / It’s okay [audio:phrases_verbs_thats_okay_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.204999vplpbb",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2853,
+        "text": "These can be said when you’re not bothered by something, or they can be a gentle way to say ‘no’ or to decline something",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2854,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2855,
+        "text": "Luke: Sorry, I forgot to bring you that book you wanted to borrow! [audio:phrases_verbs_thats_okay_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.204999vplpbb",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2856,
+        "text": "Pailin: That’s okay, I’m not in a rush to read it.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2857,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2858,
+        "text": "Luke: Do you need help carrying that? [audio:phrases_verbs_thats_okay_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.204999vplpbb",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2859,
+        "text": "Pailin: It’s okay. It’s not heavy.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2860,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2861,
+        "text": "FOLLOW",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2862,
+        "text": "Follow (social media context) [audio:phrases_verbs_follow_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.zeot37hdm3h2",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2863,
+        "text": "ติดตาม กดติดตาม",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2864,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2865,
+        "text": "I’m not following him on Instagram. [audio:phrases_verbs_follow_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.zeot37hdm3h2",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2866,
+        "text": "Do you follow Jeff on TikTok? [audio:phrases_verbs_follow_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.zeot37hdm3h2",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2867,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1296,10 +1390,10 @@
     ]
   },
   {
-    "section_index": 3855,
+    "section_index": 3160,
     "paragraphs": [
       {
-        "index": 3856,
+        "index": 3161,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1310,8 +1404,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3857,
-        "text": "I SEE",
+        "index": 3162,
+        "text": "MAN",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1321,16 +1415,13 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3858,
-        "text": "I see [audio:phrases_verbs_i_see_1]",
+        "index": 3163,
+        "text": "Man [audio:phrases_verbs_man_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.vjolt7qu5nih",
+          "listId": "kix.xzpo26y3qawm",
           "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
+            "underline": false
           }
         },
         "resolvedListGlyph": {
@@ -1340,8 +1431,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3859,
-        "text": "I understand",
+        "index": 3164,
+        "text": "Very informal expression used for disappointment",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1351,7 +1442,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3860,
+        "index": 3165,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1362,16 +1453,13 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3861,
-        "text": "Pailin: How did you know I work here? [audio:phrases_verbs_i_see_2]",
+        "index": 3166,
+        "text": "Aw, some birds pooped all over my car! Man, and I just got a car wash, too. [audio:phrases_verbs_man_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.ljufcji2sk3a",
+          "listId": "kix.zcwtx06jgjnb",
           "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
+            "underline": false
           }
         },
         "resolvedListGlyph": {
@@ -1381,29 +1469,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3862,
-        "text": "Luke: You told me the last time I saw you.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3863,
-        "text": "Pailin: Oh, I see.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3864,
+        "index": 3167,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1414,16 +1480,582 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3865,
-        "text": "Luke: The reason your electricity isn't working is because someone turned off your circuit breaker. [audio:phrases_verbs_i_see_3]",
+        "index": 3168,
+        "text": "(link xx) See more uses of ‘Man’",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3169,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3170,
+        "text": "COOL!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3171,
+        "text": "\u000bCHECK OUT",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3172,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 3500,
+    "paragraphs": [
+      {
+        "index": 3501,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3502,
+        "text": "WHAT DO YOU DO?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3503,
+        "text": "What do you do? [audio:phrases_verbs_what_do_you_do_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.qwwfgyr1foby",
+          "listId": "kix.wsxns8gm47py",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3504,
+        "text": "The common way to ask what someone’s job is",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3505,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3506,
+        "text": "So, what do you do in Thailand? [audio:phrases_verbs_what_do_you_do_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.wsxns8gm47py",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3507,
+        "text": "What does your sister do? [audio:phrases_verbs_what_do_you_do_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.wsxns8gm47py",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3508,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3509,
+        "text": "DRINK",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3510,
+        "text": "Drink [audio:phrases_verbs_drink_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.psit7jr35tii",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3511,
+        "text": "When used by itself as a verb, with no beverage mentioned, it’s often understood that it’s referring to alcohol",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3512,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3513,
+        "text": "My dad drinks too much. [audio:phrases_verbs_drink_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.psit7jr35tii",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3514,
+        "text": "Do you drink? [audio:phrases_verbs_drink_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.psit7jr35tii",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3515,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3516,
+        "text": "WORK OUT",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3517,
+        "text": "Work out [audio:phrases_verbs_work_out_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.43u4anldvkmb",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3518,
+        "text": "To exercise",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3519,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3520,
+        "text": "I like to work out in the morning. [audio:phrases_verbs_work_out_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.43u4anldvkmb",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3521,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3522,
+        "text": "\t(link xx) See more uses of ‘Work out’",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3523,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 3979,
+    "paragraphs": [
+      {
+        "index": 3980,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3981,
+        "text": "RUN ERRANDS",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3982,
+        "text": "Run errands [audio:phrases_verbs_run_errands_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.bu37hc7cl4ed",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3983,
+        "text": "To go out and do small tasks on your to-do list",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3984,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3985,
+        "text": "I’m exhausted. I’ve been running errands all morning. [audio:phrases_verbs_run_errands_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.cqzg2olw6li4",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3986,
+        "text": "I’ll be back in about 2 hours. I’ve gotta run some errands. [audio:phrases_verbs_run_errands_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.cqzg2olw6li4",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3987,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3988,
+        "text": "\t",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3989,
+        "text": "\tDROP OFF",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3990,
+        "text": "Drop off [audio:phrases_verbs_drop_off_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.mmqm87fml0ko",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3991,
+        "text": "Drop off [someone or something] / drop [someone or something] off",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3992,
+        "text": "To take someone or something to a particular place and leave them there",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3993,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3994,
+        "text": "I’ll drop off the kids at soccer practice on my way to work. [audio:phrases_verbs_drop_off_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3f4f69ostrs1",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3995,
+        "text": "Could you drop these letters off at the post office for me? [audio:phrases_verbs_drop_off_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3f4f69ostrs1",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3996,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3997,
+        "text": "\t",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3998,
+        "text": "\tPICK UP",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3999,
+        "text": "Pick up [audio:phrases_verbs_pick_up_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.tcna9evqk8yz",
           "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
+            "underline": false
           }
         },
         "resolvedListGlyph": {
@@ -1433,8 +2065,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3866,
-        "text": "Pailin: Oh, okay I see.",
+        "index": 4000,
+        "text": "Pick up [someone or something] / pick [someone or something] up",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1444,7 +2076,18 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3867,
+        "index": 4001,
+        "text": "To go somewhere to collect a person or a thing",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4002,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1455,7 +2098,35 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3868,
+        "index": 4003,
+        "text": "I have to pick my daughter up from daycare by 6PM. [audio:phrases_verbs_pick_up_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.mjj6a7hgppkn",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4004,
+        "text": "I’ll be leaving the airport soon. I’m just waiting to pick up my suitcase.  [audio:phrases_verbs_pick_up_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.mjj6a7hgppkn",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4005,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1466,7 +2137,581 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3869,
+        "index": 4006,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4007,
+        "text": "\tPERFECT",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4008,
+        "text": "Perfect [audio:phrases_verbs_perfect_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.mehqe4sw21dt",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4009,
+        "text": "Said when everything works out well",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4010,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4011,
+        "text": "Pailin: I’m off work at 5. How about you? [audio:phrases_verbs_perfect_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.91cuuibe039w",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4012,
+        "text": "Luke: Perfect, I’m off at 5, too. Let’s meet at the subway station at 5:30.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4013,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4014,
+        "text": "Luke: How about I bring the pasta, and you bring the wine. [audio:phrases_verbs_perfect_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.91cuuibe039w",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4015,
+        "text": "Pailin: That’s perfect. I’ll be at your place at 6 then.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4016,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4017,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4018,
+        "text": "GOOD IDEA",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4019,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4020,
+        "text": "COOL!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4021,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4022,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 4365,
+    "paragraphs": [
+      {
+        "index": 4366,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4367,
+        "text": "WOW",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4368,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4369,
+        "text": "I KNOW",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4370,
+        "text": "I know [audio:phrases_verbs_i_know_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.bfgc7029u6x3",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4371,
+        "text": "Can be said to agree with what someone says",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4372,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4373,
+        "text": "Pailin: That movie was so good! [audio:phrases_verbs_i_know_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.59ku61osys5u",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4374,
+        "text": "Luke: I know! The acting was incredible.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4375,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4376,
+        "text": "Pailin: I hate this gloomy weather. [audio:phrases_verbs_i_know_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.xg2q9olsu72k",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4377,
+        "text": "Luke: I know, it makes me depressed.",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4378,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4379,
+        "text": "\t(link xx) See more uses of ‘I know’",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4380,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4381,
+        "text": "\tWAKE UP",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4382,
+        "text": "Wake up / wake [someone] up [audio:phrases_verbs_wake_up_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.w6d7f5sbut0b",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4383,
+        "text": "ตื่น / ปลุก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4384,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4385,
+        "text": "I keep waking up in the middle of the night. [audio:phrases_verbs_wake_up_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.w6d7f5sbut0b",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4386,
+        "text": "My kids woke me up this morning. [audio:phrases_verbs_wake_up_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.w6d7f5sbut0b",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4387,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 4527,
+    "paragraphs": [
+      {
+        "index": 4528,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4529,
+        "text": "\tJOIN IN",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4530,
+        "text": "Join in [audio:phrases_verbs_join_in_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.x2fl36qj33g7",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4531,
+        "text": "To participate in an activity",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4532,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4533,
+        "text": "Everyone was dancing, so I decided to join in. [audio:phrases_verbs_join_in_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.x2fl36qj33g7",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4534,
+        "text": "We’re playing volleyball, do you want to join in? [audio:phrases_verbs_join_in_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.x2fl36qj33g7",
+          "textStyle": {}
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4535,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4536,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4537,
         "text": "PINNED COMMENT",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1477,7 +2722,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3870,
+        "index": 4538,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1488,8 +2733,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3871,
-        "text": "What’s your best friend’s name? How old is he or she?",
+        "index": 4539,
+        "text": "What were your favorite subjects to study in school?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1499,7 +2744,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3872,
+        "index": 4540,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1510,7 +2755,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3873,
+        "index": 4541,
         "text": "TAGS",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1521,7 +2766,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3874,
+        "index": 4542,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1532,52 +2777,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3875,
-        "text": "time, weather, phone call, family, friends, parents",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3876,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3877,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3878,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3879,
-        "text": "",
+        "index": 4543,
+        "text": "university, school, first day of school, professor, lecture, homework, art, art history, assignments, office hours",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
