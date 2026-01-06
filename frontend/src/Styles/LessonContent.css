@@ -467,8 +467,8 @@
   }
 
   .lc-section-nav {
-    padding: 1rem .5rem;
-    display: none;
+    padding: 1rem 0.5rem;
+    display: flex;
   }
 
   .lc-section-nav-label {
