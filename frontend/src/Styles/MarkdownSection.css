@@ -260,4 +260,8 @@ details[open] > .markdown-summary::after {
     padding-left: 2.25rem;
     padding-right: 2.25rem;
   }
+
+  .markdown-content .rich-zebra:first-of-type {
+    padding-top: 0;
+  }
 }

@@ -53,7 +53,7 @@
 
 .cq-letter.selected {
   background: #6b7280;
-  color: #fff;
+  color: #fff !important;
 }
 
 .cq-letter:disabled {
@@ -120,18 +120,32 @@
 }
 
 @media (max-width: 768px) {
+  .cq-questions {
+    padding: 1rem 2rem 0;
+  }
   .cq-check-btn {
     margin-left: 0;
   }
-}
+  .cq-result {
+    font-size: 1rem;
+    margin-left: 0.6rem;
+  }
+  .cq-result.correct {
+    color: #16a34a;
+  }
+  .cq-result.incorrect {
+    color: #dc2626;
+  }
 
-.cq-result {
-  font-size: 1.25rem;
-  margin-left: 0.6rem;
-}
-.cq-result.correct {
-  color: #16a34a;
-}
-.cq-result.incorrect {
-  color: #dc2626;
+  .cq-prompt p {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .cq-option-text-en {
+    font-size: 1rem;
+  }
+
+  .cq-option-text-th {
+    font-size: 1rem;
+  }
 }

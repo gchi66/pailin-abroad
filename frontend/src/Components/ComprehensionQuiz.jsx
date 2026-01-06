@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import "../Styles/ComprehensionQuiz.css";
 import { copy, pick } from "../ui-lang/i18n";
 
-export default function ComprehensionQuiz({ questions = [], uiLang = "en", images = {} }) {
+export default function ComprehensionQuiz({ questions = [], contentLang = "en", images = {} }) {
   const [selected, setSelected] = useState({}); // { [qId]: ["A","C"] }
   const [checked, setChecked] = useState(false);
   const quizCopy = copy.lessonPage.quiz;
@@ -100,7 +100,7 @@ const parseOptions = (q) => {
     <>
       <div className="cq-questions">
         {questions.map((q, idx) => {
-          const prompt = uiLang === "th" && q.prompt_th ? q.prompt_th : q.prompt;
+          const prompt = contentLang === "th" && q.prompt_th ? q.prompt_th : q.prompt;
           const opts = parseOptions(q);
           const isMulti = (q.answer_key || []).length > 1;
           const questionNumber = q.sort_order ?? idx + 1;
@@ -181,7 +181,7 @@ const parseOptions = (q) => {
           className="apply-submit cq-check-btn"
           onClick={checkAnswers}
         >
-          {pick(quizCopy.checkAnswers, uiLang)}
+          {pick(quizCopy.checkAnswers, contentLang)}
         </button>
       </div>
     </>

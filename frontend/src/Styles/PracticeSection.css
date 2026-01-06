@@ -166,6 +166,10 @@ details[open] > .markdown-summary {
     padding: 1rem 1.25rem;
     font-size: clamp(1.05rem, 4vw, 1.2rem);
   }
+
+  details[open] > .markdown-summary {
+    padding-bottom: 0;
+  }
   .markdown-content {
     padding: 0 1.25rem .6dvh;
     --rich-text-font-size: 0.95rem;
@@ -176,6 +180,10 @@ details[open] > .markdown-summary {
   .ps-summary {
     padding: 1rem 1.25rem;
     font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+  }
+
+  details[open] > .ps-summary {
+    padding-bottom: 0;
   }
 
   .ps-accordion > *:not(summary) {

@@ -73,7 +73,22 @@
 
 
 @media (max-width: 480px) {
+  .apply-section {
+    padding: 1rem 2rem;
+  }
+  .apply-prompt {
+    font-size: 1rem;
+  }
+
+  .apply-input {
+    font-size: 1rem;
+  }
+
+  .apply-input::placeholder {
+    font-size: 1rem;
+  }
   .apply-submit {
     padding: .75rem 3rem;
+    margin-top: 0;
   }
 }

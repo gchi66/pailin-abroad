@@ -766,31 +766,51 @@ const paragraphTextStartRem = (indentLevel) => {
   const hasHeadings = sections.some(sec => sec.heading);
 
   if (hasHeadings) {
+    const getCleanHeadingText = (headingNode) => {
+      if (!headingNode) return "";
+      return headingNode.inlines
+        .map((s) => s.text)
+        .join("")
+        .trim()
+        .replace(/^\t+/, "");
+    };
+
+    const isLessonFocusHeading = (headingNode) => {
+      const cleanHeadingText = getCleanHeadingText(headingNode);
+      const normalizedHeading = cleanHeadingText.trim().toLowerCase();
+      return (
+        normalizedHeading.includes("lesson focus") ||
+        normalizedHeading.includes("จุดเน้นบทเรียน")
+      );
+    };
+
     return (
       <div className="markdown-section">
         {sections.map((sec, i) => {
           // If section has no heading, render content directly
           if (!sec.heading) {
             console.log("Rendering no-heading section:", sec.key, "with", sec.body.length, "items");
+            const nextSection = sections[i + 1];
+            const shouldHideSpacer = isLessonFocusHeading(nextSection?.heading);
+            const filteredBody = shouldHideSpacer
+              ? sec.body.filter((node) => node.kind !== "spacer")
+              : sec.body;
+
+            if (!filteredBody.length) {
+              return null;
+            }
             return (
               <div key={sec.key} className="markdown-content no-heading">
-                {renderNodesWithNumberedLists(sec.body)}
+                {renderNodesWithNumberedLists(filteredBody)}
               </div>
             );
           }
 
           // Clean the heading text for display
-          const cleanHeadingText = sec.heading.inlines
-            .map((s) => s.text)
-            .join("")
-            .trim()
-            .replace(/^\t+/, ""); // Remove leading tabs
+          const cleanHeadingText = getCleanHeadingText(sec.heading);
 
           console.log("Rendering accordion section:", cleanHeadingText);
-          const normalizedHeading = cleanHeadingText.trim().toLowerCase();
-          const isLessonFocus =
-            normalizedHeading.includes("lesson focus") ||
-            normalizedHeading.includes("จุดเน้นบทเรียน");
+          const isLessonFocus = isLessonFocusHeading(sec.heading);
 
           // Render as accordion section
           return (

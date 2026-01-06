@@ -8,9 +8,9 @@ import { copy, pick } from "../ui-lang/i18n";
  * Props
  *   content   – markdown string for the exercise prompt
  *   response  – markdown string for the optional response
- *   uiLang    – "en" | "th" (for later localisation, optional)
+ *   contentLang – "en" | "th"
  */
-export default function ApplySection({ content = "", response = "", uiLang = "en" }) {
+export default function ApplySection({ content = "", response = "", contentLang = "en" }) {
   const [text, setText] = useState("");
   const [showResponse, setShowResponse] = useState(false);
 
@@ -31,7 +31,7 @@ export default function ApplySection({ content = "", response = "", uiLang = "en
           className="apply-input"
           rows={2}
           placeholder={
-            uiLang === "th"
+            contentLang === "th"
               ? "พิมพ์คำตอบของคุณที่นี่…"
               : "Type your response here…"
           }
@@ -40,7 +40,7 @@ export default function ApplySection({ content = "", response = "", uiLang = "en
         />
 
         <button type="submit" className="apply-submit">
-          {pick(copy.lessonContent.applySubmit, uiLang)}
+          {pick(copy.lessonContent.applySubmit, contentLang)}
         </button>
       </form>
 

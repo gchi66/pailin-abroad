@@ -277,7 +277,7 @@ export default function LessonContent({
           </div>
         </header>
 
-        <ComprehensionQuiz questions={questions} uiLang={uiLang} images={images} />
+        <ComprehensionQuiz questions={questions} contentLang={contentLang} images={images} />
       </article>
     );
   }
@@ -521,7 +521,7 @@ export default function LessonContent({
           </div>
         </header>
 
-        <ApplySection content={promptText} response={responseText} uiLang={uiLang} />
+        <ApplySection content={promptText} response={responseText} contentLang={contentLang} />
       </article>
     );
   }
