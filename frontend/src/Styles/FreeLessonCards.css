@@ -106,6 +106,8 @@
   text-align: left;
   width: 100%;
   align-self: stretch;
+  line-height: 1.2;
+  min-height: 2.4em;
   /* margin-bottom: 1vh; */
 }
 
@@ -192,6 +194,7 @@ h3 {
   .fl-card-title {
     font-size: clamp(1rem, 4.6vw, 1.5rem);
     line-height: 1.25;
+    min-height: 2.5em;
   }
 
   .fl-card-img {
