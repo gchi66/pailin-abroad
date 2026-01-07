@@ -87,7 +87,10 @@ function App() {
                   <Route path="/lessons" element={<LessonsIndex />} />
                   <Route path="/free-lessons" element={<FreeLessonsIndex />} />
                   <Route path="/try-lessons" element={<TryLessons />} />
-                  <Route path="/lesson/:id" element={<Lesson />} />
+                  <Route
+                    path="/lesson/:id"
+                    element={<Lesson toggleLoginModal={toggleLoginModal} toggleSignupModal={toggleSignupModal} />}
+                  />
                   <Route path="/pathway" element={<MyPathway />} />
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/topic-library" element={<TopicLibrary />} />

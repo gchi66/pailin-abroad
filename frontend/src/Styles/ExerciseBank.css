@@ -367,6 +367,15 @@
   overflow: hidden;
 }
 
+.exercise-bank-card-clickable {
+  cursor: pointer;
+}
+
+.exercise-bank-card-clickable:focus-visible {
+  outline: 0.2rem solid #1E1E1E;
+  outline-offset: 0.2rem;
+}
+
 .exercise-bank-card-header {
   display: flex;
   flex-direction: column;

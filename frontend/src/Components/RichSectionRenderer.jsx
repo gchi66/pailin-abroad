@@ -61,6 +61,7 @@ export default function RichSectionRenderer({
   };
 
 const TH_RE = /[\u0E00-\u0E7F]/;
+const TH_PUNCT_ONLY_RE = /^[.,!?;:'"(){}\[\]<>\/\\\-–—…]+$/;
 const SPEAKER_PREFIX_RE = /^\s*((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0,40}):\s*)/;
 
 const isSpeakerLineText = (text) => {
@@ -135,13 +136,13 @@ const isEnglishSpeakerLineText = (text) => {
       };
 
       const parts = thaiColor && TH_RE.test(currentText)
-        ? currentText.split(/([\u0E00-\u0E7F]+)/)
+        ? currentText.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}\[\]<>\/\\\-–—…]+)/)
         : [currentText];
 
       const fragmentNodes = parts
         .filter((part) => part !== "")
         .map((part, idx) => {
-          const isThai = TH_RE.test(part);
+          const isThai = TH_RE.test(part) || (thaiColor && TH_PUNCT_ONLY_RE.test(part));
           const style = {
             ...commonStyle,
             color: span.speakerColor || (isThai && thaiColor ? thaiColor : undefined),
@@ -778,9 +779,15 @@ const paragraphTextStartRem = (indentLevel) => {
     const isLessonFocusHeading = (headingNode) => {
       const cleanHeadingText = getCleanHeadingText(headingNode);
       const normalizedHeading = cleanHeadingText.trim().toLowerCase();
-      return (
-        normalizedHeading.includes("lesson focus") ||
-        normalizedHeading.includes("จุดเน้นบทเรียน")
+      const lessonFocusMarkers = [
+        "lesson focus",
+        "จุดเน้นบทเรียน",
+        "หัวข้อสำคัญของบทเรียน",
+        "โฟกัสบทเรียน",
+        "ประเด็นหลักของบทเรียน",
+      ];
+      return lessonFocusMarkers.some((marker) =>
+        normalizedHeading.includes(marker)
       );
     };
 

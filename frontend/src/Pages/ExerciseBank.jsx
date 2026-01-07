@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
@@ -45,8 +45,22 @@ const ExerciseBank = () => {
   const [profile, setProfile] = useState(null);
   const categoryMenuRef = useRef(null);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const exerciseBankCopy = copy.exerciseBankPage;
   const translate = (node) => pick(node, uiLang);
+  const handleCardNavigate = (event, destination, isLocked) => {
+    if (isLocked) return;
+    if (event?.target?.closest?.("a")) return;
+    navigate(destination);
+  };
+
+  const handleCardKeyDown = (event, destination, isLocked) => {
+    if (isLocked) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      navigate(destination);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -580,14 +594,22 @@ const ExerciseBank = () => {
               )}
               {!loadingFeatured && !featuredError && filteredFeaturedBySection.length > 0 && (
                 <div className="exercise-bank-card-grid">
-                  {filteredFeaturedBySection.map((group) => (
+                  {filteredFeaturedBySection.map((group) => {
+                    const isLocked = isCardLocked(true);
+                    const destination = `/exercise-bank/${group.category_slug}/${group.section_slug}`;
+                    return (
                     <div
                       key={`${group.category_slug}-${group.section_slug}`}
-                      className={`exercise-bank-card ${
-                        isCardLocked(true) ? "exercise-bank-card-locked" : ""
+                      className={`exercise-bank-card exercise-bank-card-clickable ${
+                        isLocked ? "exercise-bank-card-locked" : ""
                       }`}
+                      role="link"
+                      tabIndex={isLocked ? -1 : 0}
+                      aria-disabled={isLocked}
+                      onClick={(event) => handleCardNavigate(event, destination, isLocked)}
+                      onKeyDown={(event) => handleCardKeyDown(event, destination, isLocked)}
                     >
-                      {isCardLocked(true) && (
+                      {isLocked && (
                         <div className="exercise-bank-card-lock-overlay">
                           <div className="exercise-bank-card-lock-content">
                             <img
@@ -621,15 +643,13 @@ const ExerciseBank = () => {
                         <p className="exercise-bank-card-copy">
                           {formatExerciseCount(group.exercises.length)}
                         </p>
-                        <Link
-                          className="exercise-bank-card-link"
-                          to={`/exercise-bank/${group.category_slug}/${group.section_slug}`}
-                        >
+                        <span className="exercise-bank-card-link" aria-hidden="true">
                           {translate(exerciseBankCopy.exploreSection)}
-                        </Link>
+                        </span>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </>
@@ -651,14 +671,22 @@ const ExerciseBank = () => {
                 </div>
               ) : (
                 <div className="exercise-bank-card-grid">
-                  {sortedSections.map((section) => (
+                  {sortedSections.map((section) => {
+                    const isLocked = isCardLocked(section?.is_featured === true);
+                    const destination = `/exercise-bank/${section.category_slug}/${section.section_slug}`;
+                    return (
                     <div
                       key={`${section.category_slug}-${section.section_slug}`}
-                      className={`exercise-bank-card ${
-                        isCardLocked(section?.is_featured === true) ? "exercise-bank-card-locked" : ""
+                      className={`exercise-bank-card exercise-bank-card-clickable ${
+                        isLocked ? "exercise-bank-card-locked" : ""
                       }`}
+                      role="link"
+                      tabIndex={isLocked ? -1 : 0}
+                      aria-disabled={isLocked}
+                      onClick={(event) => handleCardNavigate(event, destination, isLocked)}
+                      onKeyDown={(event) => handleCardKeyDown(event, destination, isLocked)}
                     >
-                      {isCardLocked(section?.is_featured === true) && (
+                      {isLocked && (
                         <div className="exercise-bank-card-lock-overlay">
                           <div className="exercise-bank-card-lock-content">
                             <img
@@ -692,15 +720,13 @@ const ExerciseBank = () => {
                         <p className="exercise-bank-card-copy">
                           {formatExerciseCount(section.exercise_count)}
                         </p>
-                        <Link
-                          className="exercise-bank-card-link"
-                          to={`/exercise-bank/${section.category_slug}/${section.section_slug}`}
-                        >
+                        <span className="exercise-bank-card-link" aria-hidden="true">
                           {translate(exerciseBankCopy.exploreSection)}
-                        </Link>
+                        </span>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </>

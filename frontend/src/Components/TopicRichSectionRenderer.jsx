@@ -402,9 +402,16 @@ const renderNode = (node, key) => {
             .replace(/^\t+/, ""); // Remove leading tabs
 
           const normalizedHeading = cleanHeadingText.trim().toLowerCase();
-          const isLessonFocus =
-            normalizedHeading.includes("lesson focus") ||
-            normalizedHeading.includes("จุดเน้นบทเรียน");
+          const lessonFocusMarkers = [
+            "lesson focus",
+            "จุดเน้นบทเรียน",
+            "หัวข้อสำคัญของบทเรียน",
+            "โฟกัสบทเรียน",
+            "ประเด็นหลักของบทเรียน",
+          ];
+          const isLessonFocus = lessonFocusMarkers.some((marker) =>
+            normalizedHeading.includes(marker)
+          );
 
           // Render as accordion section
           return (

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LessonLanguageToggle from "./LessonLanguageToggle";
 import ComprehensionQuiz from "./ComprehensionQuiz";
 import ApplySection from "./ApplySection";
@@ -27,8 +27,11 @@ export default function LessonContent({
   images = {},
   isLocked = false,
   registerStickyHeaders,
+  toggleLoginModal,
+  toggleSignupModal,
   onSelectSection,
 }) {
+  const navigate = useNavigate();
   const fallbacks = copy.lessonPage.sectionFallbacks;
   const lockedCopy = copy.lessonPage.locked;
   const getFallbackHeader = (sectionType, defaultText) => {
@@ -226,6 +229,16 @@ export default function LessonContent({
      LOCKED LESSON CHECK
   =============================================================== */
   if (isLocked) {
+    const handleSignupClick = () => {
+      if (typeof toggleSignupModal === "function") {
+        toggleSignupModal();
+      }
+    };
+
+    const handleMemberClick = () => {
+      navigate("/membership");
+    };
+
     return (
       <div className="lesson-locked-container" ref={shellRef}>
         <div className="lesson-content-blurred">
@@ -244,12 +257,20 @@ export default function LessonContent({
             <h2>{pick(lockedCopy.overlayTitle, uiLang)}</h2>
             <p>{pick(lockedCopy.overlayBody, uiLang)}</p>
             <div className="lesson-locked-cta-buttons">
-              <Link to="/signup" className="lesson-locked-signup-btn">
+              <button
+                type="button"
+                className="lesson-locked-signup-btn"
+                onClick={handleSignupClick}
+              >
                 {pick(lockedCopy.ctaSignUp, uiLang)}
-              </Link>
-              <Link to="/membership" className="lesson-locked-member-btn">
+              </button>
+              <button
+                type="button"
+                className="lesson-locked-member-btn"
+                onClick={handleMemberClick}
+              >
                 {pick(lockedCopy.ctaBecomeMember, uiLang)}
-              </Link>
+              </button>
             </div>
           </div>
         </div>

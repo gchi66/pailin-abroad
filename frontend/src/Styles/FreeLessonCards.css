@@ -104,6 +104,8 @@
   font-family: "Poppins", sans-serif;
   font-weight: 620;
   text-align: left;
+  width: 100%;
+  align-self: stretch;
   /* margin-bottom: 1vh; */
 }
 

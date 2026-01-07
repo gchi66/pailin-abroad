@@ -36,15 +36,17 @@ const LessonSidebar = forwardRef(function LessonSidebar({
   lessonPhrases = [],
   activeId,
   onSelect,
+  contentLang = "en",
   isLocked = false, // <-- add isLocked prop
   isStuck = false,
 }, ref) {
   const { ui: uiLang } = useUiLang();
+  const langForLabels = contentLang === "th" ? "th" : uiLang;
 
   const getLabel = (type) => {
     const key = LABEL_KEY_MAP[type];
     if (!key) return (type || "").toUpperCase();
-    const translated = t(key, uiLang);
+    const translated = t(key, langForLabels);
     if (translated) return translated;
     return (type || "").toUpperCase();
   };

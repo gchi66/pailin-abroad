@@ -119,12 +119,12 @@
 
   .character-card {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 1fr;
     grid-template-areas:
       "image title"
       "description description"
       "thumbnails thumbnails";
-    gap: 1.4rem .5rem;
+    gap: 1.2rem 0.2rem;
     background: transparent;
     border: none;
     box-shadow: none;
@@ -132,7 +132,7 @@
     width: 100%;
     max-width: 100%;
     justify-content: center;
-    justify-items: center;
+    justify-items: start;
     align-items: center;
     margin: 0 auto;
   }
@@ -141,6 +141,7 @@
     grid-area: image;
     width: 30vw;
     justify-content: flex-start;
+    justify-self: start;
   }
 
   .character-content {
@@ -156,6 +157,7 @@
     text-shadow: none;
     text-align: left;
     max-width: 60vw;
+    justify-self: start;
   }
 
   .character-description {

@@ -298,7 +298,7 @@ function normalizeHeaderImagePath(raw) {
 
 // ---------------- component ----------------
 
-export default function Lesson() {
+export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   // Remember/restore the current tab across language toggles
   // UI state
   const [activeId, setActiveId] = useState(null);
@@ -1017,6 +1017,7 @@ export default function Lesson() {
               lessonPhrases={lessonPhrases}
               activeId={activeId}
               onSelect={setActiveId}
+              contentLang={contentLang}
               lesson={lesson}
               isLocked={isLocked}
               isStuck={isSidebarStuck}
@@ -1038,6 +1039,8 @@ export default function Lesson() {
               isLocked={isLocked}
               registerStickyHeaders={registerStickyHeaders}
               topSentinelRef={topSentinelRef}
+              toggleLoginModal={toggleLoginModal}
+              toggleSignupModal={toggleSignupModal}
               onSelectSection={setActiveId}
             />
           </div>
