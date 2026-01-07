@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
 import "../Styles/LessonSidebar.css";
@@ -28,7 +28,7 @@ const MASTER_ORDER = [
   "practice",
 ];
 
-export default function LessonSidebar({
+const LessonSidebar = forwardRef(function LessonSidebar({
   sections = [],
   questions = [],
   transcript = [],
@@ -38,7 +38,7 @@ export default function LessonSidebar({
   onSelect,
   isLocked = false, // <-- add isLocked prop
   isStuck = false,
-}) {
+}, ref) {
   const { ui: uiLang } = useUiLang();
 
   const getLabel = (type) => {
@@ -87,7 +87,11 @@ export default function LessonSidebar({
     .filter(Boolean);
 
   return (
-    <nav className={`ls-sidebar${isStuck ? " ls-stuck" : ""}`} aria-label="Lesson sections">
+    <nav
+      ref={ref}
+      className={`ls-sidebar${isStuck ? " ls-stuck" : ""}`}
+      aria-label="Lesson sections"
+    >
       <div className="ls-list" role="tablist">
         {menuItems.map((item) => {
           const isActive = item.id === activeId;
@@ -107,4 +111,6 @@ export default function LessonSidebar({
       </div>
     </nav>
   );
-}
+});
+
+export default LessonSidebar;

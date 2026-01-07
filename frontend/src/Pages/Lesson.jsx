@@ -347,6 +347,8 @@ export default function Lesson() {
   const [showStickyPlayer, setShowStickyPlayer] = useState(false);
   const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
   const [isSidebarStuck, setIsSidebarStuck] = useState(false);
+  const [sidebarHeight, setSidebarHeight] = useState(0);
+  const [isMobileView, setIsMobileView] = useState(false);
 
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
@@ -376,14 +378,16 @@ export default function Lesson() {
   const topSentinelVisibleRef = useRef(false);
   const topObserverRef = useRef(null);
   const sidebarSentinelRef = useRef(null);
+  const sidebarRef = useRef(null);
 
   const computeNavbarMargin = useCallback(() => {
     if (typeof window === "undefined") return "0px 0px 0px 0px";
     const raw = getComputedStyle(document.documentElement).getPropertyValue("--navbar-height");
     const parsed = parseFloat(raw);
     const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
-    return `-${navbarHeight}px 0px 0px 0px`;
-  }, []);
+    const sidebarOffset = isMobileView && isSidebarStuck ? sidebarHeight : 0;
+    return `-${navbarHeight + sidebarOffset}px 0px 0px 0px`;
+  }, [isMobileView, isSidebarStuck, sidebarHeight]);
 
   const recomputeStickyVisibility = useCallback(() => {
     const noHeadsVisible = visibleHeadIdsRef.current.size === 0;
@@ -541,7 +545,57 @@ export default function Lesson() {
       observer.disconnect();
       topObserverRef.current = null;
     };
-  }, [recomputeStickyVisibility]);
+  }, [computeNavbarMargin, recomputeStickyVisibility]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const handleChange = (event) => setIsMobileView(event.matches);
+    handleChange(mediaQuery);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const node = sidebarRef.current;
+    if (!node || typeof window === "undefined") return undefined;
+
+    let frame = null;
+    const updateHeight = () => {
+      const rect = node.getBoundingClientRect();
+      setSidebarHeight(rect.height);
+    };
+
+    updateHeight();
+
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(() => {
+        if (frame !== null) return;
+        frame = window.requestAnimationFrame(() => {
+          frame = null;
+          updateHeight();
+        });
+      });
+      observer.observe(node);
+      return () => {
+        observer.disconnect();
+        if (frame !== null) {
+          window.cancelAnimationFrame(frame);
+        }
+      };
+    }
+
+    const handleResize = () => updateHeight();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (frame !== null) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
+  }, [isSidebarStuck, isMobileView]);
 
   useEffect(() => {
     registerLessonToggle({ contentLang, setContentLang });
@@ -608,6 +662,10 @@ export default function Lesson() {
       }
     };
   }, [rebuildObserver]);
+
+  useEffect(() => {
+    rebuildObserver();
+  }, [rebuildObserver, sidebarHeight, isSidebarStuck, isMobileView]);
 
   useEffect(() => {
     return () => {
@@ -951,6 +1009,7 @@ export default function Lesson() {
           <div className="lesson-body">
             <div ref={sidebarSentinelRef} className="lesson-sidebar-sentinel" aria-hidden="true" />
             <LessonSidebar
+              ref={sidebarRef}
               sections={sections}
               questions={questions}
               transcript={transcript}
