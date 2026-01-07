@@ -308,7 +308,7 @@ export const copy = {
         },
         {
           level: { en: "EXPERT", th: "EXPERT" },
-          title: { en: "Spaghetti sauce everywhere!", th: "ซอสสปาเก็ตตี้เลอะไปหมด!" },
+          title: { en: "Spaghetti sauce everywhere!", th: "สปาเก็ตตี้เลอะไปหมด!" },
           focusLabel: { en: "LESSON FOCUS", th: "จุดเน้นบทเรียน" },
           description: {
             en: "Discourse markers and filler words",
