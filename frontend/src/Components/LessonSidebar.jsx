@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
 import "../Styles/LessonSidebar.css";
@@ -42,6 +42,7 @@ const LessonSidebar = forwardRef(function LessonSidebar({
 }, ref) {
   const { ui: uiLang } = useUiLang();
   const langForLabels = contentLang === "th" ? "th" : uiLang;
+  const listRef = useRef(null);
 
   const getLabel = (type) => {
     const key = LABEL_KEY_MAP[type];
@@ -88,13 +89,25 @@ const LessonSidebar = forwardRef(function LessonSidebar({
     })
     .filter(Boolean);
 
+  useEffect(() => {
+    const listNode = listRef.current;
+    if (!listNode) return;
+    const activeNode = listNode.querySelector(".ls-row.ls-active");
+    if (!activeNode) return;
+    const frame = window.requestAnimationFrame(() => {
+      const targetLeft = Math.max(0, activeNode.offsetLeft - 4);
+      listNode.scrollTo({ left: targetLeft, behavior: "smooth" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [activeId, menuItems.length]);
+
   return (
     <nav
       ref={ref}
       className={`ls-sidebar${isStuck ? " ls-stuck" : ""}`}
       aria-label="Lesson sections"
     >
-      <div className="ls-list" role="tablist">
+      <div className="ls-list" role="tablist" ref={listRef}>
         {menuItems.map((item) => {
           const isActive = item.id === activeId;
           return (

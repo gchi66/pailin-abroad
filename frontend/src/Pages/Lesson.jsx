@@ -349,6 +349,9 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const [isSidebarStuck, setIsSidebarStuck] = useState(false);
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [isMobileView, setIsMobileView] = useState(false);
+  const handleSelectSection = useCallback((id) => {
+    setActiveId(id);
+  }, []);
 
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
@@ -379,6 +382,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const topObserverRef = useRef(null);
   const sidebarSentinelRef = useRef(null);
   const sidebarRef = useRef(null);
+  const hasSectionScrollRef = useRef(false);
 
   const computeNavbarMargin = useCallback(() => {
     if (typeof window === "undefined") return "0px 0px 0px 0px";
@@ -662,6 +666,31 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
       }
     };
   }, [rebuildObserver]);
+
+  useEffect(() => {
+    if (!activeId || typeof window === "undefined") return;
+    if (!hasSectionScrollRef.current) {
+      hasSectionScrollRef.current = true;
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      const header = document.querySelector(".lesson-content-shell .lc-head");
+      if (!header) return;
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--navbar-height");
+      const parsed = parseFloat(raw);
+      const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
+      const sidebarOffset = isMobileView ? sidebarHeight : 0;
+      const gap = 1.6;
+      const top =
+        header.getBoundingClientRect().top +
+        window.scrollY -
+        navbarHeight -
+        sidebarOffset -
+        gap;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    });
+  }, [activeId, isMobileView, sidebarHeight]);
 
   useEffect(() => {
     rebuildObserver();
@@ -1016,7 +1045,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
               practiceExercises={practiceExercises}
               lessonPhrases={lessonPhrases}
               activeId={activeId}
-              onSelect={setActiveId}
+              onSelect={handleSelectSection}
               contentLang={contentLang}
               lesson={lesson}
               isLocked={isLocked}
@@ -1041,7 +1070,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
               topSentinelRef={topSentinelRef}
               toggleLoginModal={toggleLoginModal}
               toggleSignupModal={toggleSignupModal}
-              onSelectSection={setActiveId}
+              onSelectSection={handleSelectSection}
             />
           </div>
         </div>

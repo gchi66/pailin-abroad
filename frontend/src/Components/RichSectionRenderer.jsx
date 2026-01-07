@@ -799,9 +799,19 @@ const paragraphTextStartRem = (indentLevel) => {
             console.log("Rendering no-heading section:", sec.key, "with", sec.body.length, "items");
             const nextSection = sections[i + 1];
             const shouldHideSpacer = isLessonFocusHeading(nextSection?.heading);
-            const filteredBody = shouldHideSpacer
-              ? sec.body.filter((node) => node.kind !== "spacer")
-              : sec.body;
+            const trimTrailingSpacers = (nodes) => {
+              const trimmed = [...nodes];
+              while (trimmed.length && trimmed[trimmed.length - 1]?.kind === "spacer") {
+                trimmed.pop();
+              }
+              return trimmed;
+            };
+            let filteredBody = sec.body;
+            if (shouldHideSpacer) {
+              filteredBody = filteredBody.filter((node) => node.kind !== "spacer");
+            } else if (nextSection?.heading) {
+              filteredBody = trimTrailingSpacers(filteredBody);
+            }
 
             if (!filteredBody.length) {
               return null;
@@ -818,6 +828,7 @@ const paragraphTextStartRem = (indentLevel) => {
 
           console.log("Rendering accordion section:", cleanHeadingText);
           const isLessonFocus = isLessonFocusHeading(sec.heading);
+          const sectionBody = sec.body?.[0]?.kind === "spacer" ? sec.body.slice(1) : sec.body;
 
           // Render as accordion section
           return (
@@ -828,7 +839,7 @@ const paragraphTextStartRem = (indentLevel) => {
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">
-                {renderZebraGroups(sec.body, 0)}
+                {renderZebraGroups(sectionBody, 0)}
               </div>
             </CollapsibleDetails>
           );

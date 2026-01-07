@@ -71,6 +71,8 @@
   .ls-sidebar.ls-stuck {
     background: #ffffff;
     box-shadow: 0 0.001rem 0 #e5e7eb;
+    padding-top: .6rem;
+    padding-bottom: .5rem;
   }
 }
 

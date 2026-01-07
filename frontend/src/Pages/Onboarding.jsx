@@ -4,6 +4,7 @@ import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
+import useSwipe from "../hooks/useSwipe";
 import "../Styles/Onboarding.css";
 
 const Onboarding = () => {
@@ -296,6 +297,18 @@ const Onboarding = () => {
       console.log(`Moving back to step ${step - 1}`);
     }
   };
+
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
+    onSwipeLeft: () => {
+      if (step >= 4 || isNextDisabled) return;
+      nextStep();
+    },
+    onSwipeRight: () => {
+      if (step <= 0) return;
+      prevStep();
+    },
+    threshold: 70,
+  });
 
   // Finish onboarding - set is_active = true for all users
   const handleFinishOnboarding = async () => {
@@ -834,7 +847,12 @@ const Onboarding = () => {
         </nav>
 
         {/* Step Content */}
-        <div className="onboarding-content">
+        <div
+          className="onboarding-content"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           {isMobile ? (
             <div className="onboarding-card-wrapper">
               <div className="onboarding-card-header-mobile">
