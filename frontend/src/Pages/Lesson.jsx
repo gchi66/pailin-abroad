@@ -350,6 +350,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [isMobileView, setIsMobileView] = useState(false);
   const handleSelectSection = useCallback((id) => {
+    shouldAutoScrollRef.current = true;
     setActiveId(id);
   }, []);
 
@@ -383,6 +384,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const sidebarSentinelRef = useRef(null);
   const sidebarRef = useRef(null);
   const hasSectionScrollRef = useRef(false);
+  const shouldAutoScrollRef = useRef(false);
 
   const computeNavbarMargin = useCallback(() => {
     if (typeof window === "undefined") return "0px 0px 0px 0px";
@@ -673,6 +675,8 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
       hasSectionScrollRef.current = true;
       return;
     }
+    if (!shouldAutoScrollRef.current) return;
+    shouldAutoScrollRef.current = false;
 
     window.requestAnimationFrame(() => {
       const header = document.querySelector(".lesson-content-shell .lc-head");
