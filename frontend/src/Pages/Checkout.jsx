@@ -4,10 +4,6 @@ import "../Styles/Checkout.css";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 
-// ✅ Load Stripe publishable key from .env
-const STRIPE_KEY =
-  process.env.REACT_APP_STRIPE_PUBLIC_KEY ||
-  "pk_test_51SFbiU2FEde6izNxgllAtD0Mjc7FWGfMjTmeeuO6OeiGEmSzgAnQdGPnn5lRkx6Pe3NqeEfrOy0FEecwGCMQwe4r00oG3xBfRM";
 
 const Checkout = () => {
   const location = useLocation();
@@ -44,16 +40,16 @@ const Checkout = () => {
 
     try {
       // ✅ Match keys exactly to your Membership plans
-      const priceIdMap = {
-        "1 MONTH": "price_1SH6OH2FEde6izNxD1YRbtqx",
-        "3 MONTHS": "price_1SH6OH2FEde6izNxWvgdYvLW",
-        "6 MONTHS": "price_1SH6OH2FEde6izNxcyqYFrou",
+      const planKeyMap = {
+        "1 MONTH": "ONE_MONTH",
+        "3 MONTHS": "THREE_MONTHS",
+        "6 MONTHS": "SIX_MONTHS",
       };
 
-      const priceId = priceIdMap[selectedPlan.duration];
+      const planKey = planKeyMap[selectedPlan.duration];
       console.log("Selected plan duration:", selectedPlan.duration);
 
-      if (!priceId) {
+      if (!planKey) {
         setError("Invalid plan selected");
         setLoading(false);
         return;
@@ -64,10 +60,8 @@ const Checkout = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          price_id: priceId,
+          plan_key: planKey,
           email: userEmail,
-          success_url: "http://localhost:3000/payment-success",
-          cancel_url: "http://localhost:3000/checkout",
         }),
       });
 

@@ -141,6 +141,10 @@ const Membership = () => {
   };
 
   const handleClickFallback = (planId, event) => {
+    if (!touchStateRef.current.touchStartTime) {
+      handleCardClick(planId);
+      return;
+    }
     const scrollDelta = Math.abs(window.scrollY - scrollStateRef.current.startY);
     if (scrollDelta > 5) {
       event.preventDefault();

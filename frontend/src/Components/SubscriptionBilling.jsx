@@ -211,7 +211,7 @@ const SubscriptionBilling = () => {
         // Update local state - keep is_paid true until period ends
         setUserProfile({
           ...userProfile,
-          subscription_status: 'canceled',
+          subscription_status: 'cancelled',
           cancel_at_period_end: true,
           cancel_at: data.cancel_at
           // is_paid stays true - user retains access until current_period_end

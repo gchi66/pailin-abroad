@@ -9,6 +9,12 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 stripe_routes = Blueprint('stripe_routes', __name__)
 
+PRICE_ID_BY_PLAN_KEY = {
+    "ONE_MONTH": os.getenv("STRIPE_PRICE_1_MONTH"),
+    "THREE_MONTHS": os.getenv("STRIPE_PRICE_3_MONTH"),
+    "SIX_MONTHS": os.getenv("STRIPE_PRICE_6_MONTH"),
+}
+
 
 def get_current_period_end(subscription):
     """
@@ -44,13 +50,17 @@ def create_checkout_session():
     """
     try:
         data = request.get_json()
-        price_id = data.get('price_id')  # Pass the Stripe Price ID from frontend
+        plan_key = data.get('plan_key')
         customer_email = data.get('email')
-        success_url = data.get('success_url', f'{Config.FRONTEND_URL}/payment-success')
-        cancel_url = data.get('cancel_url', f'{Config.FRONTEND_URL}/checkout')
+        success_url = f'{Config.FRONTEND_URL}/payment-success'
+        cancel_url = f'{Config.FRONTEND_URL}/checkout'
 
+        if not plan_key:
+            return jsonify({'error': 'plan_key is required'}), 400
+
+        price_id = PRICE_ID_BY_PLAN_KEY.get(plan_key)
         if not price_id:
-            return jsonify({'error': 'price_id is required'}), 400
+            return jsonify({'error': 'Invalid plan_key'}), 400
 
         # Create Checkout Session
         session = stripe.checkout.Session.create(
@@ -350,7 +360,7 @@ def cancel_subscription():
 
         # Update database with cancellation info
         supabase.table('users').update({
-            'subscription_status': 'canceled',
+            'subscription_status': 'cancelled',
             'cancel_at_period_end': True,
             'cancel_at': cancel_at
         }).eq('id', user_id).execute()
