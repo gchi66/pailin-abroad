@@ -63,12 +63,6 @@ def to_iso_date(unix_ts):
 # Get Stripe webhook secret from environment
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
-# Debug: Print webhook secret status on startup
-if STRIPE_WEBHOOK_SECRET:
-    print(f"✅ Stripe webhook secret loaded: {STRIPE_WEBHOOK_SECRET[:10]}...{STRIPE_WEBHOOK_SECRET[-10:]}")
-else:
-    print("❌ WARNING: STRIPE_WEBHOOK_SECRET not found in environment!")
-
 @stripe_webhook.route('/api/stripe/webhook', methods=['POST'])
 def stripe_webhook_handler():
     payload = request.data
