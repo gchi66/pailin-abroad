@@ -11,12 +11,18 @@
   margin: 0;
   overflow-x: auto;
   scroll-padding-left: var(--nav-side-padding, 2rem);
+  scroll-padding-right: var(--nav-side-padding, 2rem);
   scrollbar-width: none; /* hide scrollbar in Firefox */
   -ms-overflow-style: none; /* hide scrollbar in IE/Edge */
 }
 
 .ls-list::-webkit-scrollbar {
   display: none; /* hide scrollbar in WebKit */
+}
+
+.ls-list::after {
+  content: "";
+  flex: 0 0 0;
 }
 
 .ls-row {

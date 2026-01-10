@@ -16,6 +16,11 @@ const FreeLessonCards = ({ showHeader = true }) => {
   const { ui } = useUiLang();
   const freeCopy = copy.home.freeLessons;
   const cards = freeCopy.cards || [];
+  const lessonLinks = {
+    0: "/lesson/a34f5a4b-0729-430e-9b92-900dcad2f977",
+    1: "/lesson/5f9d09b4-ed35-40ac-b89f-50dbd7e96c0c",
+    2: "/lesson/27e50504-7021-4a7b-b30d-0cae34a094bf",
+  };
 
   const renderText = (node) => pick(node, ui);
 
@@ -39,33 +44,38 @@ const FreeLessonCards = ({ showHeader = true }) => {
       )}
 
       <section className="free-lesson-cards">
-        {cards.map((card, idx) => (
-          <Link
-            key={idx}
-            to="/try-lessons"
-            className={`fl-card-link${idx === 3 ? " fl-card-link-disabled" : ""}`}
-            onClick={(event) => {
-              if (idx === 3) {
-                event.preventDefault();
-              }
-            }}
-          >
-            <div className={`fl-card${idx === 3 ? " fl-card-disabled" : ""}`}>
-              {idx === 3 && (
-                <span className="fl-card-comingsoon">{renderText(freeCopy.comingSoon)}</span>
-              )}
-              <span className="fl-card-level">{renderText(card.level)}</span>
-              <h3 className="fl-card-title">{renderText(card.title)}</h3>
-              <img
-                src={cardImages[idx]}
-                alt={`Illustration for ${renderText(card.title)}`}
-                className="fl-card-img"
-              />
-              <span className="fl-card-focus">{renderText(card.focusLabel)}</span>
-              <p className="fl-card-desc">{renderText(card.description)}</p>
-            </div>
-          </Link>
-        ))}
+        {cards.map((card, idx) => {
+          const isDisabled = idx === 3;
+          const linkTarget = lessonLinks[idx] || "/try-lessons";
+
+          return (
+            <Link
+              key={idx}
+              to={linkTarget}
+              className={`fl-card-link${isDisabled ? " fl-card-link-disabled" : ""}`}
+              onClick={(event) => {
+                if (isDisabled || !lessonLinks[idx]) {
+                  event.preventDefault();
+                }
+              }}
+            >
+              <div className={`fl-card${isDisabled ? " fl-card-disabled" : ""}`}>
+                {idx === 3 && (
+                  <span className="fl-card-comingsoon">{renderText(freeCopy.comingSoon)}</span>
+                )}
+                <span className="fl-card-level">{renderText(card.level)}</span>
+                <h3 className="fl-card-title">{renderText(card.title)}</h3>
+                <img
+                  src={cardImages[idx]}
+                  alt={`Illustration for ${renderText(card.title)}`}
+                  className="fl-card-img"
+                />
+                <span className="fl-card-focus">{renderText(card.focusLabel)}</span>
+                <p className="fl-card-desc">{renderText(card.description)}</p>
+              </div>
+            </Link>
+          );
+        })}
       </section>
     </div>
   );

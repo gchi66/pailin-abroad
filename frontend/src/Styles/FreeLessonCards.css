@@ -11,7 +11,7 @@
   background: none;
   color: #FF4545;
   font-family: "Poppins", sans-serif;
-  font-size: 3vw;
+  font-size: clamp(0.75rem, 1.2vw, 1.1rem);
   font-weight: 700;
   z-index: 2;
   letter-spacing: 0.05em;
@@ -63,15 +63,17 @@
   justify-content: flex-start;
   box-sizing: border-box;
   overflow: hidden;
+  height: 100%;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .fl-card-img {
-  height: 11vh;
+  height: clamp(90px, 9vh, 140px);
   width: auto;
+  max-width: 100%;
   object-fit: contain;
   border-radius: 1vw;
   display: block;
-  margin: 2.5vh 0rem;
+  margin: 2vh 0;
 }
  .fl-card-title {
   text-align: left;
@@ -117,6 +119,7 @@
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   margin: 0;
+  flex-grow: 1;
 }
 
 .fl-card-btn {

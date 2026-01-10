@@ -43,6 +43,7 @@ const LessonSidebar = forwardRef(function LessonSidebar({
   const { ui: uiLang } = useUiLang();
   const langForLabels = contentLang === "th" ? "th" : uiLang;
   const listRef = useRef(null);
+  const prevMenuKeyRef = useRef("");
 
   const getLabel = (type) => {
     const key = LABEL_KEY_MAP[type];
@@ -88,18 +89,29 @@ const LessonSidebar = forwardRef(function LessonSidebar({
       return sec ? { id: sec.id, type } : null;
     })
     .filter(Boolean);
+  const menuKey = menuItems.map((item) => item.id).join("|");
 
   useEffect(() => {
     const listNode = listRef.current;
     if (!listNode) return;
+    if (prevMenuKeyRef.current !== menuKey) {
+      prevMenuKeyRef.current = menuKey;
+      listNode.scrollLeft = 0;
+      return;
+    }
     const activeNode = listNode.querySelector(".ls-row.ls-active");
     if (!activeNode) return;
+    const viewLeft = listNode.scrollLeft;
+    const viewRight = viewLeft + listNode.clientWidth;
+    const tabLeft = activeNode.offsetLeft;
+    const tabRight = tabLeft + activeNode.offsetWidth;
+    if (tabLeft >= viewLeft && tabRight <= viewRight) return;
     const frame = window.requestAnimationFrame(() => {
       const targetLeft = Math.max(0, activeNode.offsetLeft - 4);
       listNode.scrollTo({ left: targetLeft, behavior: "smooth" });
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [activeId, menuItems.length]);
+  }, [activeId, menuKey]);
 
   return (
     <nav
