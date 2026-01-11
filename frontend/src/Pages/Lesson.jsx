@@ -671,6 +671,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
 
   useEffect(() => {
     if (!activeId || typeof window === "undefined") return;
+    if (!isMobileView) return;
     if (!hasSectionScrollRef.current) {
       hasSectionScrollRef.current = true;
       return;
@@ -1054,6 +1055,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
               lesson={lesson}
               isLocked={isLocked}
               isStuck={isSidebarStuck}
+              isMobileView={isMobileView}
             />
             <LessonContent
               sections={sections}

@@ -39,6 +39,7 @@ const LessonSidebar = forwardRef(function LessonSidebar({
   contentLang = "en",
   isLocked = false, // <-- add isLocked prop
   isStuck = false,
+  isMobileView = false,
 }, ref) {
   const { ui: uiLang } = useUiLang();
   const langForLabels = contentLang === "th" ? "th" : uiLang;
