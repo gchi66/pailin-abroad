@@ -13,12 +13,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-areas:
-    "image title"
-    "image subtitle"
-    "image buttons";
+    "image content";
   align-items: center;
   background: white;
-  padding: 9vh 10vh 9vh 7vh;
+  padding: 4vh 10vh 4vh 5.5vh;
   border-radius: 2vh;
   border: .15rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0vw #1E1E1E;
@@ -27,13 +25,14 @@
   width: 100%;
   min-height: 44vh;
   height: auto;
-  gap: 0rem 2vw;
+  column-gap: 2vw;
 }
 
 .hero-img {
   grid-area: image;
   /* max-width: 48%; */
-  width: clamp(20rem, 25rem, 42rem);
+  width: clamp(22rem, 30rem, 46rem);
+  max-width: 100%;
   height: auto;
   object-fit: contain;
   margin-left: 0;
@@ -41,6 +40,14 @@
   align-items: center;
   justify-content: flex-end;
   justify-self: center;
+}
+
+.hero-content {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
 }
 
 .title-container {
@@ -75,7 +82,7 @@
 
 .hero-subheader {
   grid-area: subtitle;
-  font-size: 2.9vh;
+  font-size: clamp(1rem, 2.4vw, 1.7rem);
   font-family: "Poppins", sans-serif;
   color: #1E1E1E;
   font-weight: 500;
@@ -99,8 +106,8 @@
   border: .3dvh solid #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
-  width: clamp(12rem, 28vw, 20rem);
-  min-width: 0;
+  width: max-content;
+  min-width: 14rem;
   padding: clamp(0.75rem, 1.5vh, 1.4rem) clamp(1.8rem, 5vw, 3.5rem);
   background-color: #F65555;
   color: white;
@@ -131,6 +138,10 @@
     max-width: 100%;
     padding: 0;
     gap: 0;
+  }
+
+  .hero-content {
+    display: contents;
   }
 
   .hero-img {
