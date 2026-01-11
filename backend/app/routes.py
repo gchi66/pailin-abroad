@@ -22,6 +22,12 @@ CATEGORY_LABELS = {
     "other_concepts": "Other Concepts",
 }
 
+PUBLIC_TRY_LESSON_IDS = [
+    "a34f5a4b-0729-430e-9b92-900dcad2f977",
+    "5f9d09b4-ed35-40ac-b89f-50dbd7e96c0c",
+    "27e50504-7021-4a7b-b30d-0cae34a094bf",
+]
+
 
 def _slugify(value: str) -> str:
     value = (value or "").lower()
@@ -904,7 +910,8 @@ def get_lesson_resolved(lesson_id):
         return jsonify({"error": "lang must be 'en' or 'th'"}), 400
 
     # Check if user is authenticated and has paid access
-    is_locked = True
+    is_public_try_lesson = lesson_id in PUBLIC_TRY_LESSON_IDS
+    is_locked = not is_public_try_lesson
     user_id = None
     lesson_row = None
 
@@ -923,7 +930,7 @@ def get_lesson_resolved(lesson_id):
 
                 if is_paid:
                     is_locked = False
-                else:
+                elif is_locked:
                     # For free users, check if this is a first lesson of any level
                     lesson_result = supabase.table('lessons').select(
                         'id, stage, level, lesson_order, lesson_external_id, '
