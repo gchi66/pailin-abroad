@@ -530,6 +530,12 @@ export default function LessonContent({
       contentJsonb && typeof contentJsonb.response === "string"
         ? contentJsonb.response
         : "";
+    const promptNodes = Array.isArray(contentJsonb?.prompt_nodes)
+      ? contentJsonb.prompt_nodes
+      : [];
+    const responseNodes = Array.isArray(contentJsonb?.response_nodes)
+      ? contentJsonb.response_nodes
+      : [];
 
     return renderWithBackToTop(
       <article className="lc-card">
@@ -542,7 +548,13 @@ export default function LessonContent({
           </div>
         </header>
 
-        <ApplySection content={promptText} response={responseText} contentLang={contentLang} />
+        <ApplySection
+          content={promptText}
+          response={responseText}
+          contentLang={contentLang}
+          contentNodes={promptNodes}
+          responseNodes={responseNodes}
+        />
       </article>
     );
   }

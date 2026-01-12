@@ -1507,6 +1507,164 @@ class GoogleDocsParser:
                     "content_jsonb": node_list,
                     "content":       "\n".join(body_parts).strip(),
                 })
+            elif norm_header == "APPLY":
+                section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
+                response_re = re.compile(r"^\s*(?:##\s*)?RESPONSE\s*:\s*(.*)$", re.I)
+
+                prompt_lines: list[tuple[str, str]] = []
+                response_lines: list[tuple[str, str]] = []
+                in_response = False
+                for text_line, style in lines:
+                    if not in_response:
+                        match = response_re.match(text_line or "")
+                        if match:
+                            in_response = True
+                            first = match.group(1).strip()
+                            if first:
+                                response_lines.append((first, style))
+                            continue
+                        prompt_lines.append((text_line, style))
+                    else:
+                        response_lines.append((text_line, style))
+
+                text_to_nodes = {}
+                orig_kind_by_text = {}
+                for n in tagged_nodes:
+                    if not _same_lesson(n):
+                        continue
+                    if "inlines" in n:
+                        plain = "".join(s["text"] for s in n["inlines"])
+                        k = _norm2(plain)
+                        if not k:
+                            continue
+                        text_to_nodes.setdefault(k, []).append(n)
+                        if n.get("kind") in {"list_item", "numbered_item"}:
+                            orig_kind_by_text[k] = n["kind"]
+
+                def _build_nodes_from_lines(lines_list: list[tuple[str, str]]) -> list[dict]:
+                    node_list: list[dict] = []
+                    table_ids_added = set()
+                    skip_alt_indexes: set[int] = set()
+                    line_idx = 0
+                    while line_idx < len(lines_list):
+                        if line_idx in skip_alt_indexes:
+                            line_idx += 1
+                            continue
+
+                        text_line, _style = lines_list[line_idx]
+                        line_stripped = (text_line or "").strip()
+                        if not line_stripped:
+                            node_list.append({
+                                "kind": "spacer",
+                                "level": None,
+                                "inlines": [],
+                                "indent": 0,
+                                "lesson_context": lesson_header_raw,
+                                "section_context": norm_header
+                            })
+                            line_idx += 1
+                            continue
+
+                        img_match = IMG_TAG_RE.search(line_stripped)
+                        if img_match:
+                            image_key = (img_match.group(1) or "").strip()
+                            if image_key:
+                                alt_text = None
+                                lookahead = line_idx + 1
+                                while lookahead < len(lines_list):
+                                    next_text = (lines_list[lookahead][0] or "").strip()
+                                    if not next_text:
+                                        lookahead += 1
+                                        continue
+                                    alt_match = ALT_TEXT_RE.match(next_text)
+                                    if alt_match:
+                                        alt_text = (alt_match.group(1) or "").strip()
+                                        skip_alt_indexes.add(lookahead)
+                                    break
+
+                                node_list.append({
+                                    "kind": "image",
+                                    "image_key": image_key,
+                                    "alt_text": alt_text,
+                                    "lesson_context": lesson_header_raw,
+                                    "section_context": norm_header
+                                })
+                            line_idx += 1
+                            continue
+
+                        if line_stripped.upper().startswith("TABLE-") and line_stripped.endswith(":"):
+                            table_id = line_stripped.lower().rstrip(":")
+                            tbl = table_nodes.get(table_id)
+                            if tbl and table_id not in table_ids_added:
+                                node_list.append(tbl.copy())
+                                table_ids_added.add(table_id)
+                            line_idx += 1
+                            continue
+
+                        norm_key = _norm2(line_stripped)
+                        matching_nodes = text_to_nodes.get(norm_key, [])
+
+                        if matching_nodes:
+                            audio_nodes = [n for n in matching_nodes if n.get("audio_section") == section_key]
+                            section_nodes = [n for n in matching_nodes if n.get("section_context") == norm_header]
+                            chosen_node = audio_nodes[0] if audio_nodes else (
+                                section_nodes[0] if section_nodes else matching_nodes[0]
+                            )
+                            node_copy = chosen_node.copy()
+                            if "inlines" in node_copy:
+                                node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
+                            node_list.append(node_copy)
+                            matching_nodes.remove(chosen_node)
+                        else:
+                            synthetic_kind = "paragraph"
+                            orig = orig_kind_by_text.get(norm_key)
+                            if orig in {"list_item", "numbered_item"}:
+                                synthetic_kind = orig
+                            elif bool(re.match(r"^[•●◦○∙·]\s", line_stripped)):
+                                synthetic_kind = "list_item"
+
+                            node_list.append({
+                                "kind": synthetic_kind,
+                                "level": None,
+                                "inlines": [{"text": line_stripped, "bold": False, "italic": False, "underline": False}],
+                                "indent": 0,
+                                "detection_indent": 0,
+                                "indent_level": 0,
+                                "indent_start_pts": 0,
+                                "indent_first_line_pts": 0,
+                                "indent_first_line_level": 0,
+                                "lesson_context": lesson_header_raw,
+                                "section_context": norm_header
+                            })
+
+                        line_idx += 1
+
+                    return node_list
+
+                prompt_nodes = _build_nodes_from_lines(prompt_lines)
+                response_nodes = _build_nodes_from_lines(response_lines)
+
+                body_parts = [
+                    f"## {t.strip()}" if is_subheader(t, style) else t
+                    for t, style in lines
+                ]
+                content_text = "\n".join(body_parts).strip()
+                prompt_text, response_text = _split_apply_prompt_response(content_text)
+
+                section_payload = {
+                    "type": section_key,
+                    "sort_order": len(other_sections) + 1,
+                    "content": prompt_text,
+                }
+                section_payload["content_jsonb"] = {
+                    "prompt": prompt_text,
+                    "response": response_text,
+                    "prompt_nodes": prompt_nodes,
+                    "response_nodes": response_nodes,
+                }
+                other_sections.append({
+                    **section_payload,
+                })
             else:
                 # ---- legacy / plain-text section (e.g. APPLY) -------------
                 body_parts = [

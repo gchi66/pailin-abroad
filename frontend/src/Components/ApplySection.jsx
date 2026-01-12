@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import RichSectionRenderer from "./RichSectionRenderer";
 import "../Styles/ApplySection.css";
 import { copy, pick } from "../ui-lang/i18n";
 
@@ -10,9 +11,18 @@ import { copy, pick } from "../ui-lang/i18n";
  *   response  – markdown string for the optional response
  *   contentLang – "en" | "th"
  */
-export default function ApplySection({ content = "", response = "", contentLang = "en" }) {
+export default function ApplySection({
+  content = "",
+  response = "",
+  contentLang = "en",
+  contentNodes = [],
+  responseNodes = [],
+}) {
   const [text, setText] = useState("");
   const [showResponse, setShowResponse] = useState(false);
+  const hasPromptNodes = Array.isArray(contentNodes) && contentNodes.length > 0;
+  const hasResponseNodes = Array.isArray(responseNodes) && responseNodes.length > 0;
+  const hasResponse = Boolean((response && response.trim()) || hasResponseNodes);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,8 +32,17 @@ export default function ApplySection({ content = "", response = "", contentLang 
 
   return (
     <section className="apply-section">
-      <div className="apply-prompt">
-        <ReactMarkdown>{content}</ReactMarkdown>
+      <div className="apply-prompt apply-rich">
+        {hasPromptNodes ? (
+          <RichSectionRenderer
+            nodes={contentNodes}
+            uiLang={contentLang}
+            noAccordion
+            suppressBaseOffset
+          />
+        ) : (
+          <ReactMarkdown>{content}</ReactMarkdown>
+        )}
       </div>
 
       <form className="apply-form" onSubmit={handleSubmit}>
@@ -44,9 +63,18 @@ export default function ApplySection({ content = "", response = "", contentLang 
         </button>
       </form>
 
-      {showResponse && response ? (
-        <div className="apply-response">
-          <ReactMarkdown>{response}</ReactMarkdown>
+      {showResponse && hasResponse ? (
+        <div className="apply-response apply-rich">
+          {hasResponseNodes ? (
+            <RichSectionRenderer
+              nodes={responseNodes}
+              uiLang={contentLang}
+              noAccordion
+              suppressBaseOffset
+            />
+          ) : (
+            <ReactMarkdown>{response}</ReactMarkdown>
+          )}
         </div>
       ) : null}
     </section>

@@ -10,6 +10,16 @@
   margin-bottom: 1.4rem;
 }
 
+.apply-rich .markdown-content {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.apply-rich .rich-accent {
+  padding-left: 1.5rem;
+  margin-left: 1rem;
+}
+
 .apply-form {
   display: flex;
   flex-direction: column;

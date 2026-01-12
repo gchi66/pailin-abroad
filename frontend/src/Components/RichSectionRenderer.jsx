@@ -24,7 +24,9 @@ export default function RichSectionRenderer({
   phraseVariant = 0,
   isPhrasesSection = false,
   uiLang = "en",
-  renderQuickPractice
+  renderQuickPractice,
+  noAccordion = false,
+  suppressBaseOffset = false
 }) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
@@ -278,8 +280,14 @@ const paragraphTextStartRem = (indentLevel) => {
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
   const renderNode = (node, key, meta = {}) => {
-    // Skip heading nodes - they should only be used for accordion structure
     if (node.kind === "heading") {
+      if (meta.allowHeading) {
+        return (
+          <p key={key} className="rich-subheader">
+            {renderInlines(node.inlines)}
+          </p>
+        );
+      }
       return null;
     }
     if (isPhrasesSection && Array.isArray(node.inlines) && node.inlines[0]?.text) {
@@ -393,6 +401,13 @@ const paragraphTextStartRem = (indentLevel) => {
         );
       }
 
+      const shouldSuppressBaseOffset = suppressBaseOffset && !indentLevel && !hasAudio;
+      const baseOffsetRem = suppressBaseOffset && !indentLevel ? 0 : LIST_ITEM_BASE_OFFSET;
+      const paragraphMarginLeft = shouldSuppressBaseOffset
+        ? undefined
+        : (indentLevel
+            ? `${listTextStartRem(indentLevel)}rem`
+            : `${baseOffsetRem}rem`);
       return (
         <p
           key={key}
@@ -400,9 +415,7 @@ const paragraphTextStartRem = (indentLevel) => {
           style={{
             marginLeft: hasAudio
               ? (visualIndentRem ? `${visualIndentRem}rem` : undefined)
-              : (indentLevel
-                  ? `${listTextStartRem(indentLevel)}rem`
-                  : `${LIST_ITEM_BASE_OFFSET}rem`),
+              : paragraphMarginLeft,
             marginTop: isPhrasesSection && meta.speakerSpacing ? "0.3rem" : undefined,
             marginBottom: isSubheader ? "1rem" : (hasBold ? 0 : undefined),
             borderLeft: hasAccent ? `0.25rem solid ${ACCENT_COLOR}` : undefined,
@@ -643,11 +656,12 @@ const paragraphTextStartRem = (indentLevel) => {
     );
   };
 
-  const renderNodesWithNumberedLists = (nodeList) => {
+  const renderNodesWithNumberedLists = (nodeList, options = {}) => {
     const elements = [];
     const countsByIndent = new Map();
     let phrasesAudioSeen = 0;
     let speakerSeenAfterAudio = 0;
+    const allowHeadings = options.allowHeadings === true;
 
     const resetCounters = () => {
       countsByIndent.clear();
@@ -674,7 +688,7 @@ const paragraphTextStartRem = (indentLevel) => {
     nodeList.forEach((node, idx) => {
       if (node.kind === "heading" || isSubheaderNode(node)) {
         resetCounters();
-        elements.push(renderNode(node, idx));
+        elements.push(renderNode(node, idx, { allowHeading: allowHeadings }));
         return;
       }
       if (node.kind === "numbered_item") {
@@ -703,23 +717,33 @@ const paragraphTextStartRem = (indentLevel) => {
       if (isPhrasesSection && phrasesAudioSeen === 1 && node.kind === "paragraph") {
         meta.keepThaiBlack = true;
       }
-      elements.push(renderNode(node, idx, meta));
+      elements.push(renderNode(node, idx, allowHeadings ? { ...meta, allowHeading: true } : meta));
     });
 
     return elements;
   };
 
-  const renderZebraGroups = (nodeList, startIndex = 0) => {
+  const renderZebraGroups = (nodeList, startIndex = 0, options = {}) => {
     const groups = groupBySubheader(nodeList);
     return groups.map((group, idx) => (
       <div
         key={`zebra-group-${startIndex + idx}`}
         className={`rich-zebra rich-zebra-${(startIndex + idx) % 2}`}
       >
-        {renderNodesWithNumberedLists(group)}
+        {renderNodesWithNumberedLists(group, options)}
       </div>
     ));
   };
+
+  if (noAccordion) {
+    return (
+      <div className="markdown-section">
+        <div className="markdown-content">
+          {renderZebraGroups(nodes, 0, { allowHeadings: true })}
+        </div>
+      </div>
+    );
+  }
 
   // Group nodes by heading (for accordion/dropdown)
   const sections = [];
