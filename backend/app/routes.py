@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from functools import wraps
-from app.supabase_client import supabase
+from app.supabase_client import supabase, supabase_admin
 from app.resolver import resolve_lesson
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -9,6 +9,8 @@ import re
 import os
 import requests
 from datetime import datetime, timedelta, timezone
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 from app.config import Config
 
@@ -27,6 +29,59 @@ PUBLIC_TRY_LESSON_IDS = [
     "5f9d09b4-ed35-40ac-b89f-50dbd7e96c0c",
     "27e50504-7021-4a7b-b30d-0cae34a094bf",
 ]
+
+LESSON_AUDIO_BUCKET = "lesson-audio"
+TRY_AUDIO_TTL_SECONDS = 2 * 60 * 60
+TRY_AUDIO_CACHE_TTL_SECONDS = 50 * 60
+TRY_AUDIO_MAX_WORKERS = 8
+_try_audio_cache = {}
+
+
+def _sign_audio_path(path):
+    if not path:
+        return None
+    try:
+        result = supabase_admin.storage.from_(LESSON_AUDIO_BUCKET).create_signed_url(
+            path, TRY_AUDIO_TTL_SECONDS
+        )
+        return result.get("signedURL") or result.get("signedUrl")
+    except Exception as e:
+        print(f"Warning: could not sign audio path {path}: {e}")
+        return None
+
+
+def _get_try_audio_cache(lesson_id):
+    cached = _try_audio_cache.get(lesson_id)
+    if not cached:
+        return None
+    if time.time() - cached["ts"] > TRY_AUDIO_CACHE_TTL_SECONDS:
+        _try_audio_cache.pop(lesson_id, None)
+        return None
+    return cached["payload"]
+
+
+def _set_try_audio_cache(lesson_id, payload):
+    _try_audio_cache[lesson_id] = {"ts": time.time(), "payload": payload}
+
+
+def _sign_audio_batch(items):
+    results = []
+    with ThreadPoolExecutor(max_workers=TRY_AUDIO_MAX_WORKERS) as executor:
+        future_map = {
+            executor.submit(_sign_audio_path, item["path"]): item
+            for item in items
+            if item.get("path")
+        }
+        for future in as_completed(future_map):
+            item = future_map[future]
+            signed_url = None
+            try:
+                signed_url = future.result()
+            except Exception as e:
+                print(f"Warning: signing failed for {item.get('path')}: {e}")
+            if signed_url:
+                results.append({**item, "signed_url": signed_url})
+    return results
 
 
 def _slugify(value: str) -> str:
@@ -62,6 +117,114 @@ def handle_options(f):
 @handle_options
 def home():
     return jsonify({}), 204
+
+@routes.route('/api/try-lessons/<lesson_id>/audio-url', methods=['GET'])
+@handle_options
+def get_try_lesson_audio(lesson_id):
+    if lesson_id not in PUBLIC_TRY_LESSON_IDS:
+        return jsonify({"error": "Not allowed"}), 403
+
+    try:
+        cached = _get_try_audio_cache(lesson_id)
+        if cached:
+            return jsonify(cached), 200
+
+        lesson_result = (
+            supabase_admin
+            .table("lessons")
+            .select("id, lesson_external_id, conversation_audio_url")
+            .eq("id", lesson_id)
+            .limit(1)
+            .execute()
+        )
+        lesson_rows = lesson_result.data or []
+        if not lesson_rows:
+            return jsonify({"error": "Lesson not found"}), 404
+
+        lesson_row = lesson_rows[0]
+        lesson_external_id = lesson_row.get("lesson_external_id")
+        conversation_path = lesson_row.get("conversation_audio_url")
+
+        conversation = {"path": conversation_path}
+
+        snippets_out = []
+        if lesson_external_id:
+            snippets_result = (
+                supabase_admin
+                .table("audio_snippets")
+                .select("section, seq, storage_path, audio_key")
+                .eq("lesson_external_id", lesson_external_id)
+                .execute()
+            )
+            for row in snippets_result.data or []:
+                audio_key = row.get("audio_key")
+                storage_path = row.get("storage_path")
+                if not audio_key or not storage_path:
+                    continue
+                snippets_out.append({
+                    "audio_key": audio_key,
+                    "section": row.get("section"),
+                    "seq": row.get("seq"),
+                    "storage_path": storage_path,
+                })
+
+        phrase_ids = []
+        phrases_links = (
+            supabase_admin
+            .table("lesson_phrases")
+            .select("phrase_id")
+            .eq("lesson_id", lesson_id)
+            .execute()
+        )
+        for row in phrases_links.data or []:
+            phrase_id = row.get("phrase_id")
+            if phrase_id:
+                phrase_ids.append(phrase_id)
+
+        phrases_out = []
+        if phrase_ids:
+            phrases_result = (
+                supabase_admin
+                .table("phrases_audio_snippets")
+                .select("phrase_id, variant, seq, storage_path, audio_key")
+                .in_("phrase_id", phrase_ids)
+                .execute()
+            )
+            items = []
+            for row in phrases_result.data or []:
+                audio_key = row.get("audio_key")
+                storage_path = row.get("storage_path")
+                if not audio_key or not storage_path:
+                    continue
+                items.append({
+                    "audio_key": audio_key,
+                    "phrase_id": row.get("phrase_id"),
+                    "variant": row.get("variant") or 0,
+                    "seq": row.get("seq"),
+                    "path": storage_path,
+                })
+            signed_phrases = _sign_audio_batch(items)
+            for row in signed_phrases:
+                phrases_out.append({
+                    "audio_key": row.get("audio_key"),
+                    "phrase_id": row.get("phrase_id"),
+                    "variant": row.get("variant") or 0,
+                    "seq": row.get("seq"),
+                    "signed_url": row.get("signed_url"),
+                })
+
+        payload = {
+            "conversation": conversation,
+            "snippets": snippets_out,
+            "phrases": phrases_out,
+            "expires_in": TRY_AUDIO_TTL_SECONDS,
+        }
+        _set_try_audio_cache(lesson_id, payload)
+        return jsonify(payload), 200
+
+    except Exception as e:
+        print(f"Error generating try lesson audio URLs: {e}")
+        return jsonify({"error": "Internal server error"}), 500
 
 @routes.route('/api/login', methods=['GET', 'POST'])
 @handle_options

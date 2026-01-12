@@ -69,6 +69,10 @@ export default function AudioButton({
   async function fetchSignedUrl() {
     if (signedUrl) return signedUrl;
     if (fetchPromiseRef.current) return fetchPromiseRef.current;
+    if (snip?.signed_url) {
+      setSignedUrl(snip.signed_url);
+      return snip.signed_url;
+    }
 
     const fetchPromise = (async () => {
       try {
@@ -198,7 +202,7 @@ export default function AudioButton({
     };
 
     return cleanup;
-  }, [snip?.storage_path]);
+  }, [snip?.storage_path, snip?.signed_url]);
 
   // Don't render anything if no snippet found
   if (!snip) return null;

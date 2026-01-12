@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchResolvedLesson, prefetchResolvedLesson } from "../lib/fetchResolvedLesson";
 import { fetchSnippets, fetchPhrasesSnippets } from "../lib/fetchSnippets";
+import { API_BASE_URL } from "../config/api";
 
 import LessonHeader from "../Components/LessonHeader";
 import AudioBar from "../Components/AudioBar";
@@ -44,6 +45,24 @@ const LABEL_KEY_MAP = {
   culture_note: "lessonSidebar.labels.culture_note",
   practice: "lessonSidebar.labels.practice",
 };
+
+const TRY_LESSON_IDS = new Set([
+  "a34f5a4b-0729-430e-9b92-900dcad2f977",
+  "5f9d09b4-ed35-40ac-b89f-50dbd7e96c0c",
+  "27e50504-7021-4a7b-b30d-0cae34a094bf",
+]);
+
+const TRY_LESSON_PREFIX = "Try_Lessons/";
+const TRY_LESSON_BUCKET = "try-lessons";
+
+function getTryPublicUrl(storagePath) {
+  if (!storagePath) return null;
+  const normalized = storagePath.startsWith(TRY_LESSON_PREFIX)
+    ? storagePath
+    : `${TRY_LESSON_PREFIX}${storagePath}`;
+  const { data } = supabaseClient.storage.from(TRY_LESSON_BUCKET).getPublicUrl(normalized);
+  return data?.publicUrl ?? null;
+}
 
 function tabExists({ id, sections, questions, transcript, practiceExercises, lessonPhrases }) {
   if (id === "comprehension") return (questions?.length ?? 0) > 0;
@@ -121,6 +140,47 @@ function buildSectionMenu({ sections = [], questions = [], transcript = [], prac
     ...item,
     label: getSectionLabel(item.type, uiLang),
   }));
+}
+
+async function fetchTryLessonAudio(lessonId) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/try-lessons/${lessonId}/audio-url`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    console.warn("Try lesson audio fetch failed:", err);
+    return null;
+  }
+}
+
+function buildTryAudioIndexes(payload) {
+  const snipIdx = { by_key: {} };
+  const phrasesSnipIdx = { idx: {}, by_key: {} };
+
+  (payload?.snippets || []).forEach((snip) => {
+    if (!snip?.audio_key) return;
+    const publicUrl = getTryPublicUrl(snip.storage_path);
+    if (!publicUrl) return;
+    const enriched = { ...snip, signed_url: publicUrl };
+    snipIdx.by_key[snip.audio_key] = enriched;
+    if (snip.section && typeof snip.seq !== "undefined") {
+      if (!snipIdx[snip.section]) snipIdx[snip.section] = {};
+      snipIdx[snip.section][snip.seq] = enriched;
+    }
+  });
+
+  (payload?.phrases || []).forEach((snip) => {
+    if (!snip?.audio_key || !snip?.signed_url) return;
+    snipIdx.by_key[snip.audio_key] = snip;
+    if (!snip?.phrase_id) return;
+    const variant = snip.variant || 0;
+    if (!phrasesSnipIdx.idx[snip.phrase_id]) phrasesSnipIdx.idx[snip.phrase_id] = {};
+    if (!phrasesSnipIdx.idx[snip.phrase_id][variant]) phrasesSnipIdx.idx[snip.phrase_id][variant] = {};
+    phrasesSnipIdx.idx[snip.phrase_id][variant][snip.seq] = snip;
+    phrasesSnipIdx.by_key[snip.audio_key] = snip;
+  });
+
+  return { snipIdx, phrasesSnipIdx };
 }
 
 function safeJSON(v, fallback) {
@@ -836,86 +896,118 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
           }
         }
 
-        // 3) sign conversation audio (all three versions, parallelized)
-        if (lsn.conversation_audio_url) {
-          const signAudio = async (path) => {
-            const { data, error } = await supabaseClient.storage
-              .from("lesson-audio")
-              .createSignedUrl(path, 2 * 60 * 60);
-            if (error) throw error;
-            return data?.signedUrl ?? null;
-          };
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const isTryLesson = TRY_LESSON_IDS.has(id);
+        const tryAudioPayload = !session?.access_token && isTryLesson
+          ? await fetchTryLessonAudio(id)
+          : null;
+        const hasTryAudio = !!tryAudioPayload;
 
-          try {
-            const basePath = lsn.conversation_audio_url;
+        if (!session?.access_token && isTryLesson) {
+          const basePath = tryAudioPayload?.conversation?.path || lsn.conversation_audio_url;
+          if (basePath) {
+            setAudioUrl(getTryPublicUrl(basePath));
             const noBgPath = basePath.replace(".mp3", "_no_bg.mp3");
             const bgPath = basePath.replace(".mp3", "_bg.mp3");
-
-            const [mainResult, noBgResult, bgResult] = await Promise.allSettled([
-              signAudio(basePath),
-              signAudio(noBgPath),
-              signAudio(bgPath),
-            ]);
-
-            if (mainResult.status === "fulfilled") {
-              setAudioUrl(mainResult.value);
-            } else {
-              console.warn("Main audio signed URL error:", mainResult.reason);
-              setAudioUrl(null);
-            }
-
-            if (noBgResult.status === "fulfilled") {
-              setAudioUrlNoBg(noBgResult.value);
-            } else {
-              console.warn("No-bg audio signed URL error:", noBgResult.reason);
-              setAudioUrlNoBg(null);
-            }
-
-            if (bgResult.status === "fulfilled") {
-              setAudioUrlBg(bgResult.value);
-            } else {
-              console.warn("Background audio signed URL error:", bgResult.reason);
-              setAudioUrlBg(null);
-            }
-          } catch (e) {
-            console.warn("Audio signed URL exception:", e);
+            setAudioUrlNoBg(getTryPublicUrl(noBgPath));
+            setAudioUrlBg(getTryPublicUrl(bgPath));
+          } else {
             setAudioUrl(null);
             setAudioUrlNoBg(null);
             setAudioUrlBg(null);
           }
-        } else {
-          setAudioUrl(null);
-          setAudioUrlNoBg(null);
-          setAudioUrlBg(null);
-        }
 
-        // 4) fetch audio snippet index + phrases audio snippets (in parallel)
-        if (lsn.lesson_external_id) {
-          try {
-            if (lsn.id) {
-              const [idx, phrasesAudio] = await Promise.all([
-                fetchSnippets(lsn.lesson_external_id, lsn.id),
-                fetchPhrasesSnippets(lsn.id),
-              ]);
-              const mergedByKey = {
-                ...(idx?.by_key || {}),
-                ...(phrasesAudio?.by_key || {}),
-              };
-              setSnipIdx({ ...(idx || {}), by_key: mergedByKey });
-              setPhrasesSnipIdx(phrasesAudio || {});
-            } else {
-              const idx = await fetchSnippets(lsn.lesson_external_id, lsn.id);
-              setSnipIdx(idx || {});
-              setPhrasesSnipIdx({});
-            }
-          } catch (err) {
-            console.error("Error fetching audio snippets:", err);
+          if (hasTryAudio) {
+            const { snipIdx: trySnipIdx, phrasesSnipIdx: tryPhrasesSnipIdx } =
+              buildTryAudioIndexes(tryAudioPayload);
+            setSnipIdx(trySnipIdx);
+            setPhrasesSnipIdx(tryPhrasesSnipIdx);
+          } else {
             setSnipIdx({});
             setPhrasesSnipIdx({});
           }
         } else {
-          setSnipIdx({});
-          setPhrasesSnipIdx({});
+          // 3) sign conversation audio (all three versions, parallelized)
+          if (lsn.conversation_audio_url) {
+            const signAudio = async (path) => {
+              const { data, error } = await supabaseClient.storage
+                .from("lesson-audio")
+                .createSignedUrl(path, 2 * 60 * 60);
+              if (error) throw error;
+              return data?.signedUrl ?? null;
+            };
+
+            try {
+              const basePath = lsn.conversation_audio_url;
+              const noBgPath = basePath.replace(".mp3", "_no_bg.mp3");
+              const bgPath = basePath.replace(".mp3", "_bg.mp3");
+
+              const [mainResult, noBgResult, bgResult] = await Promise.allSettled([
+                signAudio(basePath),
+                signAudio(noBgPath),
+                signAudio(bgPath),
+              ]);
+
+              if (mainResult.status === "fulfilled") {
+                setAudioUrl(mainResult.value);
+              } else {
+                console.warn("Main audio signed URL error:", mainResult.reason);
+                setAudioUrl(null);
+              }
+
+              if (noBgResult.status === "fulfilled") {
+                setAudioUrlNoBg(noBgResult.value);
+              } else {
+                console.warn("No-bg audio signed URL error:", mainResult.reason);
+                setAudioUrlNoBg(null);
+              }
+
+              if (bgResult.status === "fulfilled") {
+                setAudioUrlBg(bgResult.value);
+              } else {
+                console.warn("Background audio signed URL error:", mainResult.reason);
+                setAudioUrlBg(null);
+              }
+            } catch (e) {
+              console.warn("Audio signed URL exception:", e);
+              setAudioUrl(null);
+              setAudioUrlNoBg(null);
+              setAudioUrlBg(null);
+            }
+          } else {
+            setAudioUrl(null);
+            setAudioUrlNoBg(null);
+            setAudioUrlBg(null);
+          }
+
+          // 4) fetch audio snippet index + phrases audio snippets (in parallel)
+          if (lsn.lesson_external_id) {
+            try {
+              if (lsn.id) {
+                const [idx, phrasesAudio] = await Promise.all([
+                  fetchSnippets(lsn.lesson_external_id, lsn.id),
+                  fetchPhrasesSnippets(lsn.id),
+                ]);
+                const mergedByKey = {
+                  ...(idx?.by_key || {}),
+                  ...(phrasesAudio?.by_key || {}),
+                };
+                setSnipIdx({ ...(idx || {}), by_key: mergedByKey });
+                setPhrasesSnipIdx(phrasesAudio || {});
+              } else {
+                const idx = await fetchSnippets(lsn.lesson_external_id, lsn.id);
+                setSnipIdx(idx || {});
+                setPhrasesSnipIdx({});
+              }
+            } catch (err) {
+              console.error("Error fetching audio snippets:", err);
+              setSnipIdx({});
+              setPhrasesSnipIdx({});
+            }
+          } else {
+            setSnipIdx({});
+            setPhrasesSnipIdx({});
+          }
         }
 
         // 6) prev/next list

@@ -35,6 +35,13 @@ export default function PhrasesAudioBullet({
       console.log("🔄 No cached URL, fetching signed URL...");
 
       try {
+        if (snip?.signed_url) {
+          setUrl(snip.signed_url);
+          const audio = new Audio(snip.signed_url);
+          await audio.play();
+          return;
+        }
+
         const { data, error } = await supabaseClient.storage
           .from("lesson-audio")
           .createSignedUrl(snip.storage_path, 60);
