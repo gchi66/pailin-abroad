@@ -180,7 +180,7 @@ const AccountSettings = () => {
               {/* First Name Field */}
               <div className="account-field">
                 <label className="account-field-label">First Name</label>
-                <div className="account-field-row">
+                <div className="account-field-row account-field-row--center">
                   <input
                     type="text"
                     value={firstName}
@@ -203,7 +203,7 @@ const AccountSettings = () => {
               {/* Email Field */}
               <div className="account-field">
                 <label className="account-field-label">Email Address</label>
-                <div className="account-field-row">
+                <div className="account-field-row account-field-row--center">
                   <input
                     type="email"
                     value={user?.email || "user@example.com"}
@@ -216,7 +216,7 @@ const AccountSettings = () => {
               {/* Password Field */}
               <div className="account-field">
                 <label className="account-field-label">Password</label>
-                <div className="account-field-row">
+                <div className="account-field-row account-field-row--center">
                   <input
                     type="password"
                     value="••••••••"

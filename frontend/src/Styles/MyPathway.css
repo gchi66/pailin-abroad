@@ -222,7 +222,6 @@
 
 /* Progress Section */
 .pathway-progress-section {
-  margin-bottom: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -335,10 +334,12 @@
 }
 
 .pathway-featured-link {
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: 500;
+  font-size: 1.1rem;
   text-decoration: none;
   color: #1e1e1e;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 .pathway-featured-link:hover {
@@ -413,8 +414,12 @@
 }
 
 .pathway-lesson-item.next-lesson {
-  background-color: #DEEFFF;
-  border-color: #1e1e1e;
+  background-color: white;
+  border-color: #3CA0FE;
+}
+
+.pathway-lesson-item.next-lesson:hover {
+  background: white;
 }
 
 .pathway-lesson-item.completed {
@@ -638,7 +643,6 @@
 /* Footer Link */
 .pathway-footer {
   text-align: center;
-  padding-top: 2rem;
 }
 
 .pathway-library-link {

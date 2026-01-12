@@ -100,7 +100,7 @@
   background: white;
   border: var(--border-thin) solid #1E1E1E;
   border-radius: 0.5rem;
-  box-shadow: none;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
   padding: 1rem 2rem;
   font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
@@ -164,7 +164,7 @@
   border: var(--border-thin) solid #1E1E1E;
   border-radius: 1rem;
   border-radius: 0.5rem;
-  box-shadow: none;
+  box-shadow: 0.2rem 0.2rem 0 #1E1E1E;
   padding: 1rem 2rem;
   font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
@@ -336,7 +336,7 @@
   text-align: left;
   padding: 2rem 0rem;
   font-size: 1.2rem;
-  line-height: 2.5vh;
+  line-height: 3vh;
   font-family: "Poppins", sans-serif;
   color: #1e1e1e;
   font-weight: 500;
@@ -645,7 +645,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: none;
+    box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
   }
 
   .mobile-stage-caret {
@@ -687,6 +687,11 @@
     background: #91CAFF;
   }
 
+  .stage-btn,
+  .level-btn {
+    box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
+  }
+
   .stage-coming-soon-inline {
     color: #FF4545;
     font-size: 0.9rem;
@@ -715,7 +720,7 @@
     font-family: "Poppins", sans-serif;
     font-weight: 600;
     font-size: 0.85rem;
-    box-shadow: none;
+    box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
     color: #1e1e1e;
     display: inline-flex;
     justify-content: center;
@@ -739,7 +744,7 @@
     width: 100%;
     max-width: 100%;
     border-radius: 0.6rem;
-    box-shadow: none;
+    box-shadow: .1rem .1rem 0 #1e1e1e;
     border-width: 0.10rem;
   }
 

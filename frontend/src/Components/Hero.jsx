@@ -10,7 +10,7 @@ const Hero = ({ onSignupClick }) => {
   return (
     <section className="hero">
       <div className="hero-card">
-        <img src="/images/characters/hero_audio_bar.webp" alt="Pailin hero audio bar" className="hero-img" />
+        <img src="/images/characters/hero_image_pailin_luke.webp" alt="Pailin hero audio bar" className="hero-img" />
         <div className="hero-content">
           <div className="title-container">
             <h2>

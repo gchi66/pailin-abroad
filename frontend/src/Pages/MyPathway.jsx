@@ -617,13 +617,6 @@ const MyPathway = () => {
             <div className="pathway-progress-section">
               <h3 className="pathway-section-title">
                 <span className="pathway-next-lesson-label">{uiText.yourNextLesson}</span>
-                <span className="pathway-next-lesson-detail">
-                  {nextLesson ? (
-                    (nextLesson.title || "").toLowerCase().includes("checkpoint")
-                      ? `Level ${nextLesson.level} ${uiText.checkpoint}`
-                      : nextLesson.formatted
-                  ) : uiText.loading}
-                </span>
               </h3>
             </div>
 
@@ -693,7 +686,7 @@ const MyPathway = () => {
                 </Link>
               </div>
               <div className="pathway-featured-cta">
-                <Link to="/resources" className="pathway-featured-link">SEE ALL RESOURCE PAGES &gt;</Link>
+                <Link to="/resources" className="pathway-featured-link">SEE ALL RESOURCE PAGES →</Link>
               </div>
             </div>
           </>

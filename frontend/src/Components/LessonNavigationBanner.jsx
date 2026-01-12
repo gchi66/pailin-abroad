@@ -146,7 +146,7 @@ const LessonNavigationBanner = ({
           <img
             src={
               isCompleted
-                ? "/images/filled-checkmark-lesson-complete.webp"
+                ? "/images/check_circle_blue.webp"
                 : "/images/CheckCircle.png"
             }
             alt={isCompleted ? "Completed" : "Mark as complete"}

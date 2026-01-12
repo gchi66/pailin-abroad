@@ -81,7 +81,7 @@
 
 .cq-option-text {
   font-size: var(--lesson-core-text-size);
-  line-height: 1.4;
+  line-height: 1.6;
   display: inline-flex;
   flex-direction: row;
   gap: 0.4rem;

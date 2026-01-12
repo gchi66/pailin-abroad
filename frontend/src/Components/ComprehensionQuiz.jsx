@@ -8,6 +8,26 @@ export default function ComprehensionQuiz({ questions = [], contentLang = "en", 
   const [checked, setChecked] = useState(false);
   const quizCopy = copy.lessonPage.quiz;
 
+  const allCorrect =
+    questions.length > 0 &&
+    questions.every((q) => {
+      const answerKey = q.answer_key || [];
+      const selections = selected[q.id] || [];
+
+      if (!selections.length || selections.length !== answerKey.length) {
+        return false;
+      }
+
+      const answerSet = new Set(answerKey);
+      return selections.every((choice) => answerSet.has(choice));
+    });
+
+  const checkLabel = checked
+    ? allCorrect
+      ? "GREAT JOB!"
+      : "TRY AGAIN"
+    : pick(quizCopy.checkAnswers, contentLang);
+
   const toggle = (qId, letter, isMulti) =>
     setSelected((prev) => {
       const prevList = prev[qId] || [];
@@ -181,7 +201,7 @@ const parseOptions = (q) => {
           className="apply-submit cq-check-btn"
           onClick={checkAnswers}
         >
-          {pick(quizCopy.checkAnswers, contentLang)}
+          {checkLabel}
         </button>
       </div>
     </>

@@ -34,7 +34,7 @@
   font-size: 1.2rem;
   color: #1E1E1E;
   margin: 0;
-  line-height: 1.2rem;
+  line-height: 1.6rem;
 }
 
 .plan-notice-subtext-line a {
@@ -112,7 +112,6 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
 }
 
 .plan-notice-footer-note a {
