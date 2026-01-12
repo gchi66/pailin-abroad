@@ -74,9 +74,12 @@ export default function TopicRichSectionRenderer({
 
       let element;
       if (span.link) {
-        // Rewrite sentinel → internal lesson path
+        // Rewrite sentinel → internal lesson/topic path
         let href = span.link;
         if (href.startsWith("https://pa.invalid/lesson/")) {
+          href = href.replace("https://pa.invalid", "");
+        }
+        if (href.startsWith("https://pa.invalid/topic-library/")) {
           href = href.replace("https://pa.invalid", "");
         }
 

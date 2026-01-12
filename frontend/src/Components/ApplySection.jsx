@@ -46,6 +46,9 @@ export default function ApplySection({
       </div>
 
       <form className="apply-form" onSubmit={handleSubmit}>
+        <div className="apply-note">
+          {pick(copy.lessonContent.applyNote, contentLang)}
+        </div>
         <textarea
           className="apply-input"
           rows={2}
@@ -56,11 +59,14 @@ export default function ApplySection({
           }
           value={text}
           onChange={(e) => setText(e.target.value)}
+          disabled={showResponse}
         />
 
-        <button type="submit" className="apply-submit">
-          {pick(copy.lessonContent.applySubmit, contentLang)}
-        </button>
+        {!showResponse ? (
+          <button type="submit" className="apply-submit apply-submit--apply">
+            {pick(copy.lessonContent.applySubmit, contentLang)}
+          </button>
+        ) : null}
       </form>
 
       {showResponse && hasResponse ? (
@@ -75,6 +81,9 @@ export default function ApplySection({
           ) : (
             <ReactMarkdown>{response}</ReactMarkdown>
           )}
+          <div className="apply-response-note">
+            {pick(copy.lessonContent.applyResponseNote, contentLang)}
+          </div>
         </div>
       ) : null}
     </section>

@@ -106,7 +106,7 @@ def _resolve_sentinel_links(nodes, supabase_client):
         for span in inlines:
             link = span.get("link")
             if link and link.startswith("https://pa.invalid/lesson/"):
-                ext_id = link.rsplit("/", 1)[-1]
+                ext_id = link.rsplit("/", 1)[-1].strip()
                 try:
                     result = (
                         supabase_client

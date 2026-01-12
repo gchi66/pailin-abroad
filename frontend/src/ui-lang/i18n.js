@@ -51,7 +51,12 @@ export const copy = {
       en: "Answer all the questions before checking your answers.",
       th: "กรุณาตอบคำถามทุกข้อก่อนตรวจคำตอบ",
     },
-    applySubmit: { en: "Give it a try", th: "ลองทำดู" },
+    applySubmit: { en: "SEE AN EXAMPLE ANSWER", th: "ดูตัวอย่างคำตอบ" },
+    applyNote: { en: "Don’t worry about making mistakes!", th: "ไม่ต้องกังวลว่าจะทำผิด!" },
+    applyResponseNote: {
+      en: "This is just one example. Go to the Understand section to learn more!",
+      th: "นี่เป็นเพียงหนึ่งตัวอย่าง ไปที่หัวข้อทำความเข้าใจเพื่อเรียนรู้เพิ่มเติม!",
+    },
   },
   profileDropdown: {
     accountSettings: { en: "Account Settings", th: "การตั้งค่าบัญชี" },

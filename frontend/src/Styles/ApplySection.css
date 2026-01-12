@@ -13,6 +13,7 @@
 .apply-rich .markdown-content {
   padding-left: 0;
   padding-right: 0;
+  padding-bottom: 0;
 }
 
 .apply-rich .rich-accent {
@@ -20,10 +21,22 @@
   margin-left: 1rem;
 }
 
+.apply-response-note {
+  margin-top: 0.75rem;
+  color: #676769;
+  font-style: italic;
+}
+
 .apply-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.apply-note {
+  color: #676769;
+  font-style: italic;
+  font-size: 0.95rem;
 }
 
 .apply-input {
@@ -46,6 +59,10 @@
 .apply-input::placeholder {
   font-family: var(--lesson-textarea-font);
   font-size: var(--lesson-textarea-font-size);
+}
+
+.apply-response.apply-rich {
+  margin-top: 2rem;
 }
 
 .apply-submit {
@@ -73,6 +90,11 @@
 
   /* Optical centering for Poppins */
   transform: translateY(0.05em);
+}
+
+.apply-submit.apply-submit--apply {
+  background: #91CAFF;
+  padding: 1rem 3rem;
 }
 
 
