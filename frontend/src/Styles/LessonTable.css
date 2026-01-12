@@ -24,3 +24,15 @@
 .lesson-table-wrapper .table-line-with-audio .audio-button {
   margin-right: 0.35rem;     /* small gap between button and text */
 }
+
+@media (max-width: 768px) {
+  .lesson-table-wrapper.table-visibility-all {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .lesson-table-wrapper.table-visibility-mobile {
+    display: none;
+  }
+}

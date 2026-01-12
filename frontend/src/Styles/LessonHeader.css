@@ -169,6 +169,13 @@
     border-bottom: .10rem solid #1e1e1e;
   }
 
+  .lesson-banner-main {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    margin-top: clamp(2rem, 12vh, 9rem);
+  }
+
   .back-link {
     top: calc(var(--navbar-height) + 4rem); /* tuck just under the navbar */
     left: clamp(0.6rem, 5vw, .7rem);

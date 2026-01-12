@@ -129,7 +129,7 @@ export default function PracticeSection({
           audioIndex,
           sourceType: "practice",
           exerciseId: ex.id,
-          showTitle: !wrapInDetails,
+          showTitle: !wrapInDetails && !ex.isQuickPractice,
           contentLang,
         };
 

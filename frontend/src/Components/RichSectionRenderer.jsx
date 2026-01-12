@@ -563,6 +563,14 @@ const paragraphTextStartRem = (indentLevel) => {
   }
 
   if (node.kind === "table") {
+    const tableVisibility = typeof node.table_visibility === "string"
+      ? node.table_visibility
+      : (
+        typeof node.table_label === "string" && /-M:?\s*$/i.test(node.table_label)
+          ? "mobile"
+          : "all"
+      );
+
     return (
       <LessonTable
         key={key}
@@ -574,6 +582,7 @@ const paragraphTextStartRem = (indentLevel) => {
           phrasesSnipIdx={phrasesSnipIdx}
           phraseId={phraseId}
           phraseVariant={phraseVariant}
+          tableVisibility={tableVisibility}
         />
       );
     }

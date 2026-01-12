@@ -7,7 +7,8 @@ export default function LessonTable({
   snipIdx,
   phrasesSnipIdx,
   phraseId,
-  phraseVariant = 0
+  phraseVariant = 0,
+  tableVisibility = null
 }) {
   // Helper function to extract audio tags and return cleaned text + audio keys
   const parseAudioInText = (text) => {
@@ -58,17 +59,42 @@ export default function LessonTable({
     });
   };
 
+  const normalizeCell = (cell) => {
+    if (cell && typeof cell === "object") {
+      return {
+        text: cell.text || "",
+        colspan: cell.colspan,
+        rowspan: cell.rowspan
+      };
+    }
+
+    return { text: cell || "" };
+  };
+
   return (
-    <div className="lesson-table-wrapper">
+    <div
+      className={
+        `lesson-table-wrapper${
+          tableVisibility ? ` table-visibility-${tableVisibility}` : ""
+        }`
+      }
+    >
       <table>
         <tbody>
           {data.cells.map((row, rIdx) => (
             <tr key={rIdx}>
-              {row.map((cell, cIdx) => (
-                <td key={cIdx}>
-                  {renderCellContent(cell, rIdx, cIdx)}
-                </td>
-              ))}
+              {row.map((cell, cIdx) => {
+                if (cell == null) return null;
+                const { text, colspan, rowspan } = normalizeCell(cell);
+                const colSpan = typeof colspan === "number" && colspan > 1 ? colspan : undefined;
+                const rowSpan = typeof rowspan === "number" && rowspan > 1 ? rowspan : undefined;
+
+                return (
+                  <td key={cIdx} colSpan={colSpan} rowSpan={rowSpan}>
+                    {renderCellContent(text, rIdx, cIdx)}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

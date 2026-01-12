@@ -108,22 +108,38 @@ def _plain_text(elems: list[dict]) -> str:
 def _table_block(elem: dict, tbl_id: int) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
     rows = []
+    max_cols = 0
     for row in elem["table"]["tableRows"]:
         row_cells = []
+        row_col_count = 0
         for cell in row["tableCells"]:
             cell_lines = []
             for para in cell.get("content", []):
                 if "paragraph" in para:
                     cell_lines.append(_plain_text(para["paragraph"]["elements"]))
-            row_cells.append("\n".join(cell_lines))
+            cell_text = "\n".join(cell_lines)
+            cell_style = cell.get("tableCellStyle", {})
+            colspan = cell_style.get("columnSpan", 1)
+            rowspan = cell_style.get("rowSpan", 1)
+            row_col_count += colspan or 1
+            if (colspan and colspan > 1) or (rowspan and rowspan > 1):
+                cell_payload = {"text": cell_text}
+                if colspan and colspan > 1:
+                    cell_payload["colspan"] = colspan
+                if rowspan and rowspan > 1:
+                    cell_payload["rowspan"] = rowspan
+                row_cells.append(cell_payload)
+            else:
+                row_cells.append(cell_text)
         rows.append(row_cells)
+        max_cols = max(max_cols, row_col_count)
 
     return {
         "kind":  "table",
         "type":  "table",
         "id":    f"table-{tbl_id}",
         "rows":  len(rows),
-        "cols":  len(rows[0]) if rows else 0,
+        "cols":  max_cols if rows else 0,
         "cells": rows,
     }
 
@@ -462,7 +478,16 @@ def paragraphs_with_style(doc_json) -> List[Tuple[str, str]]:
             paragraphs_list.append((text, style))
     return paragraphs_list
 
-def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
+def _line_parts(line: Tuple[str, str] | Tuple[str, str, dict] | str) -> Tuple[str, str, dict | None]:
+    if isinstance(line, tuple):
+        if len(line) == 3:
+            return line[0], line[1], line[2]
+        if len(line) == 2:
+            return line[0], line[1], None
+    return line, "", None
+
+
+def extract_sections(doc_json) -> List[Tuple[str, List[Tuple[str, str, dict | None]]]]:
     """
     Returns a list of (header, [lines]) tuples for each section.
     A section header is detected either by a paragraph whose style starts with "HEADING"
@@ -494,7 +519,13 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
         # Handle paragraphs (including headers)
         if "paragraph" in elem:
             para = elem["paragraph"]
-            style = para.get("paragraphStyle", {}).get("namedStyleType", "")
+            para_style = para.get("paragraphStyle", {}) or {}
+            style = para_style.get("namedStyleType", "")
+            space_above = (para_style.get("spaceAbove") or {}).get("magnitude", 0) or 0
+            space_below = (para_style.get("spaceBelow") or {}).get("magnitude", 0) or 0
+            spacing = None
+            if space_above > 0 or space_below > 0:
+                spacing = {"above": space_above, "below": space_below}
             raw_text = "".join(
                 r.get("textRun", {}).get("content", "")
                 for r in para.get("elements", [])
@@ -504,7 +535,7 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
             # Preserve blank lines inside a section as explicit entries
             if not text:
                 if current_header is not None:
-                    current_lines.append(("", style))
+                    current_lines.append(("", style, spacing))
                 continue
 
             stripped = text
@@ -521,14 +552,14 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
             else:
                 # Regular paragraph content
                 if current_header is not None:
-                    current_lines.append((text, style))
+                    current_lines.append((text, style, spacing))
 
         # Handle tables - add them as placeholder text to preserve document order
         elif "table" in elem:
             table_counter += 1
             table_placeholder = f"TABLE-{table_counter}:"
             if current_header is not None:
-                current_lines.append((table_placeholder, ""))
+                current_lines.append((table_placeholder, "", None))
 
     # Don't forget the last section
     if current_header is not None:
@@ -536,8 +567,8 @@ def extract_sections(doc_json) -> List[Tuple[str, List[str]]]:
 
     return sections
 
-def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str]]]]
-                            ) -> list[list[tuple[str, list[tuple[str, str]]]]]:
+def split_lessons_by_header(sections: list[tuple[str, list[tuple[str, str, dict | None]]]]
+                            ) -> list[list[tuple[str, list[tuple[str, str, dict | None]]]]]:
     """Break the full-doc section list into one sub-list per lesson."""
     lessons, current = [], []
     for header, lines in sections:
@@ -990,7 +1021,8 @@ class GoogleDocsParser:
             return True
 
         # -------------------------- main loop --------------------------
-        for raw_text, style in lines:
+        for line in lines:
+            raw_text, style, _spacing = _line_parts(line)
             if not raw_text:
                 continue
 
@@ -1068,7 +1100,7 @@ class GoogleDocsParser:
     ################################################################################
     def build_lesson_from_sections(
         self,
-        lesson_sections: list[tuple[str, list[tuple[str, str]]]],
+        lesson_sections: list[tuple[str, list[tuple[str, str, dict | None]]]],
         stage: str,
         doc_json,
         lang: str = 'en'
@@ -1090,7 +1122,8 @@ class GoogleDocsParser:
 
 
         header_img = None
-        for raw_text, _style in (header_lines or []):
+        for line in (header_lines or []):
+            raw_text, _style, _spacing = _line_parts(line)
             text = (raw_text or "").strip()
             if not text:
                 continue
@@ -1132,7 +1165,7 @@ class GoogleDocsParser:
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
             norm_header = header.strip().upper().rstrip(":")
-            texts_only  = [t for t, _ in lines]
+            texts_only  = [_line_parts(line)[0] for line in lines]
 
             # ---- simple text buckets ---------------------------------------
             if   norm_header == "FOCUS":
@@ -1142,7 +1175,8 @@ class GoogleDocsParser:
                 lesson["backstory"] = "\n".join(texts_only).strip()
                 continue
             elif norm_header == "CONVERSATION":
-                for raw_text, _style in lines:
+                for line in lines:
+                    raw_text, _style, _spacing = _line_parts(line)
                     text = (raw_text or "").replace("\u000b", "\n")
                     for piece in text.splitlines():
                         piece = piece.strip()
@@ -1194,13 +1228,33 @@ class GoogleDocsParser:
                 table_ids_added = set()
                 last_qp_directive: str | None = None
 
-                for text_line, style in lines:
+                def _append_spacer():
+                    if node_list and node_list[-1].get("kind") == "spacer":
+                        return
+                    node_list.append({
+                        "kind": "spacer",
+                        "level": None,
+                        "inlines": [],
+                        "indent": 0,
+                        "lesson_context": lesson_header_raw,
+                        "section_context": norm_header
+                    })
+
+                def _append_node_with_spacing(node, spacing):
+                    if spacing and spacing.get("above") and node_list:
+                        _append_spacer()
+                    node_list.append(node)
+                    if spacing and spacing.get("below"):
+                        _append_spacer()
+
+                for line in lines:
+                    text_line, style, spacing = _line_parts(line)
                     line_stripped = (text_line or "").strip()
                     upper = line_stripped.upper()
 
                     # keep the visible header
                     if upper.startswith("QUICK PRACTICE"):
-                        keep_lines.append((text_line, style))
+                        keep_lines.append((text_line, style, spacing))
                         continue
 
                     # ---- start of a new directive block ----
@@ -1212,6 +1266,13 @@ class GoogleDocsParser:
                                 embedded_practice_lines.extend(qp_chunk)
                                 qp_chunk = []
                                 last_qp_directive = None
+                        if directive_name == "TITLE":
+                            title_text = line_stripped.split(":", 1)[1].strip() if ":" in line_stripped else ""
+                            if title_text:
+                                title_upper = title_text.upper()
+                                if "QUICK PRACTICE" in title_upper or "แบบฝึกหัด" in title_text:
+                                    # Preserve the Quick Practice heading at its original position.
+                                    keep_lines.append((title_text, "HEADING_3", spacing))
                         qp_chunk.append(line_stripped)
                         last_qp_directive = directive_name
                         continue
@@ -1232,7 +1293,7 @@ class GoogleDocsParser:
                                 embedded_practice_lines.extend(qp_chunk)
                                 qp_chunk = []
                                 last_qp_directive = None
-                                keep_lines.append((text_line, style))
+                                keep_lines.append((text_line, style, spacing))
                                 continue
 
                         if TH.search(line_stripped):
@@ -1249,7 +1310,7 @@ class GoogleDocsParser:
                         embedded_practice_lines.extend(qp_chunk)
                         qp_chunk = []
                         last_qp_directive = None
-                    keep_lines.append((text_line, style))
+                    keep_lines.append((text_line, style, spacing))
 
                 # flush any trailing block
                 if qp_chunk:
@@ -1288,23 +1349,17 @@ class GoogleDocsParser:
 
                 skip_alt_indexes: set[int] = set()
                 line_idx = 0
+                pending_table_label = None
                 while line_idx < len(lines):
                     if line_idx in skip_alt_indexes:
                         line_idx += 1
                         continue
 
-                    text_line, style = lines[line_idx]
+                    text_line, style, spacing = _line_parts(lines[line_idx])
                     text_line = text_line.strip()
                     if not text_line:
                         # Preserve blank lines as spacer nodes to control vertical gaps in the renderer
-                        node_list.append({
-                            "kind": "spacer",
-                            "level": None,
-                            "inlines": [],
-                            "indent": 0,
-                            "lesson_context": lesson_header_raw,
-                            "section_context": norm_header
-                        })
+                        _append_spacer()
                         line_idx += 1
                         continue
 
@@ -1316,7 +1371,7 @@ class GoogleDocsParser:
                             alt_text = None
                             lookahead = line_idx + 1
                             while lookahead < len(lines):
-                                next_text = (lines[lookahead][0] or "").strip()
+                                next_text = (_line_parts(lines[lookahead])[0] or "").strip()
                                 if not next_text:
                                     lookahead += 1
                                     continue
@@ -1326,25 +1381,37 @@ class GoogleDocsParser:
                                     skip_alt_indexes.add(lookahead)
                                 break
 
-                            node_list.append({
+                            _append_node_with_spacing({
                                 "kind": "image",
                                 "image_key": image_key,
                                 "alt_text": alt_text,
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header
-                            })
+                            }, spacing)
                         line_idx += 1
                         continue
 
                     # ── Handle table placeholders in their correct position ──
                     if text_line.upper().startswith("TABLE-") and text_line.endswith(":"):
-                        table_id = text_line.lower().rstrip(":")
-                        tbl = table_nodes.get(table_id)
-                        if tbl and table_id not in table_ids_added:
+                        table_label = text_line.strip()
+                        table_id = table_label.lower().rstrip(":")
+                        table_id_lookup = table_id[:-2] if table_id.endswith("-m") else table_id
+                        if style:
+                            pending_table_label = table_label
+                            line_idx += 1
+                            continue
+                        tbl = table_nodes.get(table_id_lookup)
+                        if tbl and table_id_lookup not in table_ids_added:
                             # Create a copy to avoid modifying the original
+                            resolved_label = pending_table_label or table_label
+                            pending_table_label = None
                             table_copy = tbl.copy()
-                            node_list.append(table_copy)
-                            table_ids_added.add(table_id)
+                            table_copy["table_label"] = resolved_label
+                            table_copy["table_visibility"] = (
+                                "mobile" if resolved_label.upper().endswith("-M:") else "all"
+                            )
+                            _append_node_with_spacing(table_copy, spacing)
+                            table_ids_added.add(table_id_lookup)
                         line_idx += 1
                         continue
 
@@ -1365,7 +1432,7 @@ class GoogleDocsParser:
                             node = matching_nodes[0].copy()  # Create a copy
                             for inline in node["inlines"]:
                                 inline["text"] = full_title
-                            node_list.append(node)
+                            _append_node_with_spacing(node, spacing)
                             matching_nodes.remove(matching_nodes[0])  # Remove from original list
                         else:
                             # Synthetic heading node
@@ -1377,7 +1444,7 @@ class GoogleDocsParser:
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header
                             }
-                            node_list.append(synthetic_node)
+                            _append_node_with_spacing(synthetic_node, spacing)
                         line_idx += 1
                         continue
 
@@ -1391,7 +1458,7 @@ class GoogleDocsParser:
                         node_copy = chosen_node.copy()
                         if "inlines" in node_copy:
                             node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
-                        node_list.append(node_copy)
+                        _append_node_with_spacing(node_copy, spacing)
 
                         # consume it so the same node isn't reused
                         matching_nodes.remove(chosen_node)
@@ -1418,7 +1485,7 @@ class GoogleDocsParser:
                             node_copy = best.copy()
                             if "inlines" in node_copy:
                                 node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
-                            node_list.append(node_copy)
+                            _append_node_with_spacing(node_copy, spacing)
                             # consume it
                             text_to_nodes[best_key].remove(best)
                         else:
@@ -1445,7 +1512,7 @@ class GoogleDocsParser:
                                     if looks_bullety:
                                         synthetic_kind = "list_item"
 
-                            node_list.append({
+                            _append_node_with_spacing({
                                 "kind": synthetic_kind,
                                 "level": None,
                                 "inlines": [{"text": text_line, "bold": False, "italic": False, "underline": False}],
@@ -1457,7 +1524,7 @@ class GoogleDocsParser:
                                 "indent_first_line_level": 0,
                                 "lesson_context": lesson_header_raw,
                                 "section_context": norm_header
-                            })
+                            }, spacing)
 
                     # If the current node we just appended is a paragraph immediately after an audio list_item,
                     # and it "looks attached" (same indent OR italic), merge its inlines into the previous node
@@ -1488,7 +1555,8 @@ class GoogleDocsParser:
 
                 # fallback plain-text (Markdown) version
                 body_parts = []
-                for t, style in lines:
+                for line in lines:
+                    t, style, _spacing = _line_parts(line)
                     stripped = (t or "").strip()
                     if not stripped:
                         body_parts.append(t)
@@ -1514,7 +1582,8 @@ class GoogleDocsParser:
                 prompt_lines: list[tuple[str, str]] = []
                 response_lines: list[tuple[str, str]] = []
                 in_response = False
-                for text_line, style in lines:
+                for line in lines:
+                    text_line, style, _spacing = _line_parts(line)
                     if not in_response:
                         match = response_re.match(text_line or "")
                         if match:
@@ -1545,13 +1614,14 @@ class GoogleDocsParser:
                     node_list: list[dict] = []
                     table_ids_added = set()
                     skip_alt_indexes: set[int] = set()
+                    pending_table_label = None
                     line_idx = 0
                     while line_idx < len(lines_list):
                         if line_idx in skip_alt_indexes:
                             line_idx += 1
                             continue
 
-                        text_line, _style = lines_list[line_idx]
+                        text_line, style = lines_list[line_idx]
                         line_stripped = (text_line or "").strip()
                         if not line_stripped:
                             node_list.append({
@@ -1593,11 +1663,24 @@ class GoogleDocsParser:
                             continue
 
                         if line_stripped.upper().startswith("TABLE-") and line_stripped.endswith(":"):
-                            table_id = line_stripped.lower().rstrip(":")
-                            tbl = table_nodes.get(table_id)
-                            if tbl and table_id not in table_ids_added:
-                                node_list.append(tbl.copy())
-                                table_ids_added.add(table_id)
+                            table_label = line_stripped.strip()
+                            table_id = table_label.lower().rstrip(":")
+                            table_id_lookup = table_id[:-2] if table_id.endswith("-m") else table_id
+                            if style:
+                                pending_table_label = table_label
+                                line_idx += 1
+                                continue
+                            tbl = table_nodes.get(table_id_lookup)
+                            if tbl and table_id_lookup not in table_ids_added:
+                                resolved_label = pending_table_label or table_label
+                                pending_table_label = None
+                                table_copy = tbl.copy()
+                                table_copy["table_label"] = resolved_label
+                                table_copy["table_visibility"] = (
+                                    "mobile" if resolved_label.upper().endswith("-M:") else "all"
+                                )
+                                node_list.append(table_copy)
+                                table_ids_added.add(table_id_lookup)
                             line_idx += 1
                             continue
 
@@ -1653,7 +1736,7 @@ class GoogleDocsParser:
 
                 body_parts = [
                     f"## {t.strip()}" if is_subheader(t, style) else t
-                    for t, style in lines
+                    for t, style, _spacing in lines
                 ]
                 content_text = "\n".join(body_parts).strip()
                 prompt_text, response_text = _split_apply_prompt_response(content_text)
@@ -1676,7 +1759,7 @@ class GoogleDocsParser:
                 # ---- legacy / plain-text section (e.g. APPLY) -------------
                 body_parts = [
                     f"## {t.strip()}" if is_subheader(t, style) else t
-                    for t, style in lines
+                    for t, style, _spacing in lines
                 ]
                 content_text = "\n".join(body_parts).strip()
                 section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
@@ -1742,6 +1825,7 @@ class GoogleDocsParser:
                     context_source = content_nodes[0] if content_nodes else {}
 
                     existing_labels = set()
+                    has_quick_practice_heading = False
                     for node in content_nodes:
                         node_text = node.get("text", {})
                         if isinstance(node_text, dict):
@@ -1752,6 +1836,12 @@ class GoogleDocsParser:
                         inline_text = "".join(run.get("text", "") or "" for run in node.get("inlines", [])).strip()
                         if inline_text:
                             existing_labels.add(inline_text)
+                        if inline_text.upper().startswith("QUICK PRACTICE"):
+                            has_quick_practice_heading = True
+
+                    # Headings already exist at their correct positions; skip injection.
+                    if has_quick_practice_heading and jsonb_key != "content_jsonb_th":
+                        return
 
                     anchor_idx = None
                     for idx, node in enumerate(content_nodes):
@@ -1822,7 +1912,21 @@ class GoogleDocsParser:
                     for title, title_th, p_idx in numeric_entries:
                         practice = lesson_obj["practice_exercises"][p_idx]
                         effective_th = title_th or practice.get("title_th")
-                        _add_heading(title, effective_th)
+                        if jsonb_key == "content_jsonb_th" and has_quick_practice_heading:
+                            # Update existing EN heading to TH for Thai content, preserving order.
+                            for node in content_nodes:
+                                inline_text = "".join(run.get("text", "") or "" for run in node.get("inlines", [])).strip()
+                                if inline_text.upper() == (title or "").strip().upper():
+                                    label_th = (effective_th or "").strip()
+                                    display_label = label_th or inline_text
+                                    for inline in node.get("inlines", []):
+                                        inline["text"] = display_label
+                                    if isinstance(node.get("text"), dict):
+                                        node["text"]["th"] = label_th or None
+                                    existing_labels.add(display_label)
+                                    break
+                        else:
+                            _add_heading(title, effective_th)
 
                     for title, title_th, p_idx in trailing_entries:
                         practice = lesson_obj["practice_exercises"][p_idx]
@@ -2513,7 +2617,7 @@ class GoogleDocsParser:
         return results if len(results) > 1 else (results[0] if results else [])
 
 
-def parse_google_doc(doc_json) -> List[List[Tuple[str, List[str]]]]:
+def parse_google_doc(doc_json) -> List[List[Tuple[str, List[Tuple[str, str, dict | None]]]]]:
     sections = extract_sections(doc_json)
     lessons = split_lessons_by_header(sections)
     return lessons

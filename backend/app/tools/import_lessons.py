@@ -16,6 +16,8 @@ import glob
 import json
 import argparse
 import unicodedata
+import time
+from postgrest.exceptions import APIError
 from app.supabase_client import supabase
 
 
@@ -135,6 +137,31 @@ def _extract_th(val):
     if isinstance(val, str):
         return val.strip()
     return ""
+
+#______________________ RETRY HELPERS
+def _execute_with_retry(builder, label, retries=3, backoff_seconds=0.5):
+    """
+    Retry transient PostgREST gateway/network errors.
+    """
+    attempt = 0
+    while True:
+        try:
+            return builder.execute()
+        except APIError as e:
+            msg = str(e)
+            is_transient = (
+                "gateway error" in msg
+                or "Network connection lost" in msg
+                or "502" in msg
+            )
+            if not is_transient:
+                raise
+            attempt += 1
+            if attempt > retries:
+                raise
+            sleep_for = backoff_seconds * (2 ** (attempt - 1))
+            print(f"[WARN] {label} failed with transient error; retrying in {sleep_for:.1f}s ({attempt}/{retries})")
+            time.sleep(sleep_for)
 
 #______________________ REGULAR METHODS
 
@@ -532,9 +559,11 @@ def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
                 print(f"[DRY RUN] Transcript EN UPSERT: {record}")
                 continue
 
-            (supabase.table("transcript_lines")
-             .upsert(record, on_conflict="lesson_id,sort_order", returning="minimal")
-             .execute())
+            _execute_with_retry(
+                supabase.table("transcript_lines")
+                .upsert(record, on_conflict="lesson_id,sort_order", returning="minimal"),
+                "transcript EN upsert",
+            )
             continue
 
         # ---------- TH path ----------
@@ -556,11 +585,13 @@ def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
             continue
 
         # Try to UPDATE existing row and ask PostgREST to return matched rows.
-        upd = (supabase.table("transcript_lines")
-               .update(th_update, returning="representation")  # ensures .data contains updated rows
-               .eq("lesson_id", lesson_id)
-               .eq("sort_order", line["sort_order"])
-               .execute())
+        upd = _execute_with_retry(
+            supabase.table("transcript_lines")
+            .update(th_update, returning="representation")  # ensures .data contains updated rows
+            .eq("lesson_id", lesson_id)
+            .eq("sort_order", line["sort_order"]),
+            "transcript TH update",
+        )
 
         rows = upd.data or []
 
@@ -572,9 +603,11 @@ def upsert_transcript(lesson_id, transcript, lang="en", dry_run=False):
                 "line_text": (line.get("line_text") or "").strip(), # placeholders OK
                 **th_update,
             }
-            (supabase.table("transcript_lines")
-             .insert(ins_record, returning="minimal")
-             .execute())
+            _execute_with_retry(
+                supabase.table("transcript_lines")
+                .insert(ins_record, returning="minimal"),
+                "transcript TH insert",
+            )
 
 
 def upsert_comprehension(lesson_id, questions, lang=None, dry_run=False):
