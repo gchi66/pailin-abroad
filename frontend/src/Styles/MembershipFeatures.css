@@ -34,7 +34,7 @@
 
 .membership-features-title {
   font-size: 2.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 600;
   text-align: center; /* Changed from right */
   color: #0f172a;
@@ -43,7 +43,7 @@
 .membership-features-text {
     font-size: 1.2rem;
     font-weight: 600;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", "Anuphan", sans-serif;
     color: #1e1e1e;
     line-height: 1.6;
     text-align: left;

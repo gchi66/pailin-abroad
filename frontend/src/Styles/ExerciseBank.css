@@ -6,7 +6,7 @@
   padding: 33vh 0 0 0;
   display: flex;
   flex-direction: column;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   z-index: 1;
   margin-top: -18vh;
@@ -40,7 +40,7 @@
   font-size: 2.5rem;
   color: #1E1E1E;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   line-height: 2.5rem;
   margin: 0;
 }
@@ -49,7 +49,7 @@
   font-size: 1.1rem;
   color: #434343;
   font-weight: 300;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   margin: 0;
   max-width: 640px;
   white-space: nowrap;
@@ -81,7 +81,7 @@
   padding: 0;
   box-sizing: border-box;
   flex-wrap: wrap;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   border-radius: 1rem;
   margin-bottom: 0.5rem;
 }
@@ -194,7 +194,7 @@
   padding: 0.75rem 1rem;
   color: #1E1E1E;
   text-decoration: none;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
   transition: background-color 0.2s, color 0.2s;
@@ -225,7 +225,7 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   white-space: nowrap;
   text-align: center;
   min-width: 23vw;
@@ -256,7 +256,7 @@
   border-radius: 999px;
   border: 0.12rem solid #132042;
   font-size: 0.95rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   background: #ffffff;
   box-shadow: inset 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08);
   -webkit-appearance: none;
@@ -330,7 +330,7 @@
   border: 0.12rem solid #1E1E1E;
   border-radius: 999px;
   padding: 0.6rem 1.25rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 500;
   cursor: pointer;
   color: #1E1E1E;
@@ -537,7 +537,7 @@
   border: 0.10rem solid #1E1E1E;
   border-radius: 999px;
   padding: 0.5rem 1.25rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -610,7 +610,7 @@
   align-items: center;
   cursor: pointer;
   text-align: left;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .exercise-section-item-heading {
@@ -838,7 +838,7 @@
     border: var(--border-thin) solid #1E1E1E;
     border-radius: 0.6rem;
     padding: 0.9rem 1rem;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", "Anuphan", sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     display: flex;
@@ -881,7 +881,7 @@
   .exercise-bank-mobile-menu-item {
     padding: 0.85rem 1rem;
     text-align: center;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", "Anuphan", sans-serif;
     font-weight: 600;
     background: #fff;
     border: none;

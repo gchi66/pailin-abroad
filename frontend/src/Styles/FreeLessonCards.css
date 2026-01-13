@@ -10,7 +10,7 @@
   right: 2.2vw;
   background: none;
   color: #FF4545;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: clamp(0.75rem, 1.2vw, 1.1rem);
   font-weight: 700;
   z-index: 2;
@@ -87,7 +87,7 @@
 
  .fl-card-focus {
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 600;
   margin-bottom: -.8vh;
  }
@@ -103,7 +103,7 @@
 .fl-card-title {
   font-size: 1.7vw;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 620;
   text-align: left;
   width: 100%;
@@ -116,7 +116,7 @@
 .fl-card-desc {
   font-size: .75rem;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 400;
   margin: 0;
   flex-grow: 1;
@@ -129,7 +129,7 @@
   border: 0.13rem solid #1E1E1E;
   border-radius: 2vh;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 600;
   font-size: 1.3vw;
   /* margin-top: 2vh; */

@@ -38,7 +38,7 @@
   max-width: 420px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-align: left;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 /* Close button (X in top-right) */
@@ -100,7 +100,7 @@
   border: 2px solid #ddd;
   border-radius: 8px;
   font-size: 0.95rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
 }
@@ -162,7 +162,7 @@
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 700;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
@@ -223,7 +223,7 @@
   margin-bottom: 0.75rem;
   font-size: 0.95rem;
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   border: 2px solid #ddd;
   border-radius: 50px;
   background: #fff;

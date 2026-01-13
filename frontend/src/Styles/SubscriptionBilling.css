@@ -47,7 +47,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-weight: 600;
 }
 
@@ -58,7 +58,7 @@
 .no-subscription h3 {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 .no-subscription p {
@@ -79,7 +79,7 @@
   margin-top: 1.5rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
 }
 
@@ -104,7 +104,7 @@
 }
 
 .section-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -135,13 +135,13 @@
 }
 
 .detail-label {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   color: #666;
 }
 
 .detail-value {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: #333;
@@ -196,14 +196,14 @@
 }
 
 .card-brand {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: #333;
 }
 
 .card-expiry {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.75rem;
   color: #666;
 }
@@ -232,13 +232,13 @@
 }
 
 .invoice-date {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.75rem;
   color: #666;
 }
 
 .invoice-description {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: #333;
@@ -251,7 +251,7 @@
 }
 
 .invoice-amount {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
   color: #333;
@@ -264,7 +264,7 @@
   padding: 0.75rem 2rem;
   border: none;
   border-radius: 6px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -314,7 +314,7 @@
   color: #4a90e2;
   border: 1px solid #4a90e2;
   border-radius: 4px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -344,7 +344,7 @@
 }
 
 .cancel-warning p {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   color: #666;
   line-height: 1.6;
@@ -358,7 +358,7 @@
 }
 
 .confirm-text {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: #856404;
@@ -372,7 +372,7 @@
 }
 
 .no-data {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-size: 0.875rem;
   color: #999;
   font-style: italic;

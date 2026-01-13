@@ -4,7 +4,7 @@
   align-items: center;
   gap: 5vh;
   padding: 6vh 0vw;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
 }
 
@@ -15,7 +15,7 @@
   border-radius: 2.25rem;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 3rem 2.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: #1e1e1e;

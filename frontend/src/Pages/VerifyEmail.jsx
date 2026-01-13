@@ -65,7 +65,7 @@ const VerifyEmail = () => {
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
-      fontFamily: 'Poppins, sans-serif'
+      fontFamily: 'Poppins, Anuphan, sans-serif'
     }}>
       <div style={{ textAlign: 'center' }}>
         <h2>Verifying your email...</h2>

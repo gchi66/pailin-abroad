@@ -22,7 +22,7 @@
   max-width: 420px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-align: left;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 /* Close button (X in top-right) */
@@ -111,7 +111,7 @@
   border: var(--border-thin) solid #ddd;
   border-radius: 0.75rem;
   font-size: 0.95rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .modal-content .form-group input:focus {

@@ -13,14 +13,14 @@
   font-size: 2rem;
   font-weight: 600;
   margin: 0;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .placement-button {
   background-color: #F65555;
   color: white;
   border: .3dvh solid #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 1.3rem;
   font-weight: 600;
   padding: 1rem 1.7rem;

@@ -5,7 +5,7 @@
   justify-content: center;
   gap: 3vh;
   padding: 6vh 0vw;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   width: 100%;
 }
@@ -16,7 +16,7 @@
   border-radius: 3vh;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 2rem 2.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1e1e1e;
   width: 75vw;
   max-width: 75vw;

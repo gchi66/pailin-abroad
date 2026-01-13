@@ -20,7 +20,7 @@
 
 .pathway-main,
 .pathway-container {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .pathway-container {
@@ -159,7 +159,7 @@
 }
 
 .pathway-tab {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
   color: #666;
@@ -234,7 +234,7 @@
   font-weight: 700;
   margin: 0;
   flex-shrink: 0;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .pathway-featured-resources {
@@ -469,7 +469,7 @@
   font-weight: 600;
   color: #1E1E1E;
   line-height: 1.2;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .pathway-lesson-focus {
@@ -477,7 +477,7 @@
   color: #666;
   font-weight: 600;
   line-height: 1.3;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .pathway-lesson-right {
@@ -858,7 +858,7 @@
     background: transparent;
     font-size: 0.9rem;
     font-weight: 600;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", "Anuphan", sans-serif;
     letter-spacing: 0.02em;
     color: #1E1E1E;
     appearance: none;

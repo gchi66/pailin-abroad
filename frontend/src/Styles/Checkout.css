@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   z-index: 1;
   margin-top: -18vh;
@@ -35,7 +35,7 @@
   font-size: 2.5rem;
   color: #1E1E1E;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   line-height: 2.5rem;
   margin: 0;
   white-space: nowrap;
@@ -45,7 +45,7 @@
   font-size: 1.1rem;
   color: #434343;
   font-weight: 300;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   margin: 0;
   white-space: nowrap;
 }
@@ -173,7 +173,7 @@
   font-size: 0.95rem;
   font-weight: 500;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .form-input {
@@ -181,7 +181,7 @@
   border: var(--border-thin) solid #1E1E1E;
   border-radius: 0.5rem;
   font-size: 1rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   background: white;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -210,7 +210,7 @@
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -231,7 +231,7 @@
   font-size: 0.875rem;
   color: #666;
   margin-top: 0.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 /* Responsive Design */

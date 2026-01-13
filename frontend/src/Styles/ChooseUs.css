@@ -36,7 +36,7 @@
 .choose-us-content h2 {
   font-size: 3.2vw;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 600;
   line-height: 1.15;
   margin: 0;
@@ -62,7 +62,7 @@
   justify-content: flex-start;
   gap: 1.5vw;
   font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   font-weight: 500;
   width: 100%;

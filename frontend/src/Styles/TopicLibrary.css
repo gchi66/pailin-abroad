@@ -6,7 +6,7 @@
   padding: 33vh 0 0 0;
   display: flex;
   flex-direction: column;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   z-index: 1;
   margin-top: -18vh; /* Counteract the padding to keep layout consistent */
@@ -42,7 +42,7 @@
   font-size: 2.5rem;
   color: #1E1E1E;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   width: auto;
   white-space: nowrap; /* Prevents text from wrapping */
   margin: 0;
@@ -53,7 +53,7 @@
   font-size: 1.1rem;
   color: #434343;
   font-weight: 300;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   margin: 0;
   max-width: 600px;
   line-height: 1.4;
@@ -67,7 +67,7 @@
   width: 85%;
   margin: 2rem auto;
   align-items: center;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
 }
 
@@ -137,7 +137,7 @@
   padding: 1.5rem 0rem;
   box-sizing: border-box;
   flex-wrap: wrap;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   border-radius: 1rem;
   margin-bottom: 1rem;
 }
@@ -183,7 +183,7 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   white-space: nowrap;
   text-align: center;
   min-width: 23vw;
@@ -214,7 +214,7 @@
   border-radius: 999px;
   border: 0.12rem solid #132042;
   font-size: 0.95rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   background: #ffffff;
   box-shadow: inset 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08);
 }
@@ -321,7 +321,7 @@
   font-weight: 600;
   color: #1E1E1E;
   line-height: 1.2;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   margin: 0;
 }
 
@@ -609,7 +609,7 @@
     border: var(--border-thin) solid #1E1E1E;
     border-radius: 0.6rem;
     padding: 0.9rem 1rem;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", "Anuphan", sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     display: flex;

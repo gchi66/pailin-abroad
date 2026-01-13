@@ -3,7 +3,7 @@
   min-height: 100vh;
   background-color: none;
   padding: 33vh 0 0 0;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   display: flex;
   flex-direction: column;
@@ -33,7 +33,7 @@
   font-size: 2.5rem;
   color: #1E1E1E;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   line-height: 2.5rem;
   width: auto;
   white-space: nowrap; /* Prevents text from wrapping */
@@ -44,7 +44,7 @@
   font-size: 1.1rem;
   color: #434343;
   font-weight: 300;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   margin: 0;
   white-space: nowrap;
 }
@@ -67,7 +67,7 @@
   border-radius: 0.5rem;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 1rem 1.25rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 1.05rem;
   font-weight: 600;
   color: #1e1e1e;

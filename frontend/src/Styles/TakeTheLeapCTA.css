@@ -15,14 +15,14 @@
   font-size: 2.2rem;
   font-weight: 600;
   margin: 0;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
 }
 
 .take-the-leap-cta-button {
   background-color: #FF4545;
   color: #FFFFFF;
   border: var(--border-thin) solid #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 1.3rem;
   font-weight: 600;
   padding: 1rem 2.5rem;

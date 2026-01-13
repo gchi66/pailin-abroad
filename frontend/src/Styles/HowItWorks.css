@@ -11,7 +11,7 @@
 .how-it-works-title {
   font-size: 2.3rem;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 600;
   text-align: center;
   line-height: 1.15;
@@ -61,7 +61,7 @@
 .hiw-header {
   font-size: 1.7vw;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 620;
   margin: 0;
   text-align: center;
@@ -72,7 +72,7 @@
 .hiw-text {
   font-size: 1.2vw;
   color: #1E1E1E;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 500;
   margin: 0;
   text-align: center;

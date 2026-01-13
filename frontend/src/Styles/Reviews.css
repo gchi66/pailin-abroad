@@ -13,7 +13,7 @@
 }
 
 .reviews-title {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 2.2rem;
   font-weight: 600;
   color: #1e1e1e;
@@ -50,7 +50,7 @@
 }
 
 .review-text {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 500;
   font-size: clamp(0.95rem, 1.05vw, 1.1rem);
   color: #1E1E1E;
@@ -82,7 +82,7 @@
 
 
 .review-name {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: clamp(1rem, 1vw, 1.1rem);
   font-weight: bold;
   color: #1E1E1E;
@@ -91,7 +91,7 @@
 }
 
 .review-location {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1e1e1ea1;
   font-size: clamp(0.75rem, 0.8vw, 0.9rem);
   margin: 0;

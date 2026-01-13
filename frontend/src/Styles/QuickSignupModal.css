@@ -33,7 +33,7 @@
   width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   animation: slideUp 0.3s ease;
 }
@@ -112,7 +112,7 @@
   border: var(--border-thin) solid #E0E0E0;
   border-radius: 0.75rem;
   font-size: 1rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   background: white;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -161,7 +161,7 @@
   background: none;
   border: none;
   color: #91CAFF;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 0.9rem;
   cursor: pointer;
   text-decoration: none;

@@ -5,7 +5,7 @@
   padding: 33vh 0 0 0;
   display: flex;
   flex-direction: column;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
   z-index: 1;
   margin-top: -18vh; /* Counteract the padding to prevent double spacing */
@@ -33,7 +33,7 @@
   font-size: 2.5rem;
   color: #1E1E1E;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   line-height: 2.5rem;
   width: auto;
   white-space: nowrap;
@@ -44,7 +44,7 @@
   font-size: 1.1rem;
   color: #434343;
   font-weight: 300;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   margin: 0;
   white-space: nowrap;
 }
@@ -62,7 +62,7 @@
   align-items: center;
   gap: 5vh;
   padding: 10vh 0vw;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1E1E1E;
 }
 
@@ -73,7 +73,7 @@
   border-radius: 2.25rem;
   box-shadow: .2rem .2rem 0px #1E1E1E;
   padding: 3rem 2.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: #1e1e1e;
@@ -139,7 +139,7 @@
   border-radius: 0.8rem;
   width: 100%;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 /* Submit button styling */
@@ -155,7 +155,7 @@
   margin-top: 1.5rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   box-shadow: 0.15rem 0.15rem 0 #1E1E1E;
 }
 

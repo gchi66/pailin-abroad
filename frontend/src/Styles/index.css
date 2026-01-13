@@ -2,7 +2,7 @@
   --navbar-height: 80px;
   --nav-side-padding: 2rem;
   --lesson-core-text-size: 1.2rem;
-  --lesson-textarea-font: "Poppins", sans-serif;
+  --lesson-textarea-font: "Poppins", "Anuphan", sans-serif;
   --lesson-textarea-font-size: var(--lesson-core-text-size);
   --audio-indent-step: 1.5rem;
   --audio-manual-indent: 3rem;

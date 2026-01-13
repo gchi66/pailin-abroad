@@ -49,7 +49,7 @@
   text-decoration: none;
   font-size: 1rem;
   font-weight: 700; /* Poppins Bold */
-  font-family: 'Poppins', sans-serif; /* Use Poppins */
+  font-family: 'Poppins', 'Anuphan', sans-serif; /* Use Poppins */
 }
 
 .menu ul li a:hover {
@@ -105,7 +105,7 @@
   border: 0.10rem solid #1E1E1E;
   border-radius: 999px;
   padding: 0.5rem 1.25rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.1;
@@ -133,7 +133,7 @@
   font-size: 1rem;
   font-weight: 600; /* Poppins Semi-Bold */
   cursor: pointer;
-  font-family: 'Poppins', sans-serif; /* Use Poppins */
+  font-family: 'Poppins', 'Anuphan', sans-serif; /* Use Poppins */
 }
 
 .auth-buttons .join-button {
@@ -220,7 +220,7 @@
   color: #1E1E1E;
   font-size: 1rem;
   font-weight: 700;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   cursor: default;
   transition: color 0.2s;
 }
@@ -278,7 +278,7 @@
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   transition: background-color 0.2s, color 0.2s;
   border: none;
   white-space: nowrap;

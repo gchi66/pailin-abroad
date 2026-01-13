@@ -5,7 +5,7 @@
 .lesson-table-wrapper table {
   width: 100%;
   border-collapse: collapse;
-  font-family: "Poppins", "Mitr", "Noto Sans Thai", sans-serif;
+  font-family: "Poppins", "Anuphan", "Noto Sans Thai", sans-serif;
 }
 
 .lesson-table-wrapper td,
@@ -28,7 +28,7 @@
 }
 
 .lesson-table-thai {
-  font-family: "Mitr", "Noto Sans Thai", sans-serif;
+  font-family: "Anuphan", "Noto Sans Thai", sans-serif;
 }
 
 @media (max-width: 768px) {

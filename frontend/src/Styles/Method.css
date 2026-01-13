@@ -31,7 +31,7 @@
 
 .method-title {
   font-size: 2.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   font-weight: 600;
   text-align: right;
   color: #0f172a;
@@ -39,7 +39,7 @@
 
 .method-text {
   font-size: 1.2rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Anuphan", sans-serif;
   color: #1e1e1e;
   line-height: 1.6;
   text-align: right;

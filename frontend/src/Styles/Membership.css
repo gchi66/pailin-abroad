@@ -3,7 +3,7 @@
 .membership-container {
   /* background-color: #FAF5F1; */
   min-height: 100vh;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   padding: 2.5rem 1.25rem;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@
 }
 
 .membership-container * {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 /* Header section */
@@ -23,7 +23,7 @@
 }
 
 .membership-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-weight: 600;
   font-size: 2.5rem;
   color: #333;
@@ -159,7 +159,7 @@
   font-size: 1.6rem;
   font-weight: 500;
   color: #1E1E1E;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   margin: 0;
 }
 
@@ -177,7 +177,7 @@
   font-weight: 600;
   color: #1e1e1e;
   letter-spacing: 0.0625rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   flex-shrink: 0;
   white-space: nowrap;
   line-height: 1.4;
@@ -186,7 +186,7 @@
 .best-for-text {
   font-size: 0.9rem;
   color: #1e1e1e;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   flex: 1;
   min-width: 0;
   white-space: normal;
@@ -205,13 +205,13 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: #1E1E1E;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 .period {
   font-size: 1rem;
   color: #666;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 /* Pricing summary */
@@ -232,20 +232,20 @@
   font-weight: 600;
   color: #999;
   text-decoration: line-through;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 .final-price {
   font-size: 2.25rem;
   font-weight: 700;
   color: #1E1E1E;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 .pricing-description {
   font-size: 1rem;
   color: #666;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 /* Join button */
@@ -255,7 +255,7 @@
   border: 0.125rem solid black;
   padding: 1.125rem 3rem;
   border-radius: 3.125rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
   font-weight: 600;
   font-size: 1.2rem;
   cursor: pointer;
