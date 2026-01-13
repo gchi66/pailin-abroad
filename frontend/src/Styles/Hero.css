@@ -16,14 +16,14 @@
     "image content";
   align-items: center;
   background: white;
-  padding: 1rem 8rem 1rem 4.4rem;
+  padding: 4rem 8rem 4rem 4.4rem;
   border-radius: 2vh;
   border: .15rem solid #1E1E1E;
   box-shadow: .2rem .2rem 0vw #1E1E1E;
   position: relative;
   max-width: 70vw;
   width: 100%;
-  min-height: 44vh;
+  min-height: 20rem;
   height: auto;
   column-gap: 2vw;
 }
