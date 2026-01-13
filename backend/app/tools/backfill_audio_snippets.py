@@ -52,7 +52,7 @@ sb: Client = create_client(SUPABASE_URL, SERVICE_ROLE)
 # Standard sections (no variant)
 STANDARD_FILE_RE = re.compile(
     r"""
-    (?P<lesson>\d+\.\d+)
+    (?P<lesson>\d+\.(?:\d+|chp|checkpoint))
     _
     (?P<section>understand|practice|extra_tips|common_mistakes|apply|culture_note|prepare)
     _

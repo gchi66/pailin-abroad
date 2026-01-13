@@ -137,19 +137,27 @@ const isEnglishSpeakerLineText = (text) => {
         // DON'T render the highlight color - it's just a spacing flag
       };
 
-      const parts = thaiColor && TH_RE.test(currentText)
+      const hasThai = !!(thaiColor && TH_RE.test(currentText));
+      const thaiStartIndex = hasThai ? currentText.search(TH_RE) : -1;
+      const parts = hasThai
         ? currentText.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}\[\]<>\/\\\-–—…]+)/)
         : [currentText];
+      let partOffset = 0;
+      const partEntries = parts.map((part) => {
+        const entry = { part, start: partOffset };
+        partOffset += part.length;
+        return entry;
+      });
 
-      const fragmentNodes = parts
-        .filter((part) => part !== "")
-        .map((part, idx) => {
-          const isThai = TH_RE.test(part) || (thaiColor && TH_PUNCT_ONLY_RE.test(part));
+      const fragmentNodes = partEntries
+        .filter(({ part }) => part !== "")
+        .map(({ part, start }, idx) => {
+          const isThaiLinePart = hasThai && start >= thaiStartIndex;
           const style = {
             ...commonStyle,
-            color: span.speakerColor || (isThai && thaiColor ? thaiColor : undefined),
+            color: span.speakerColor || (isThaiLinePart && thaiColor ? thaiColor : undefined),
             fontWeight:
-              isThai && thaiColor
+              isThaiLinePart && thaiColor
                 ? (span.speakerWeight || (span.bold ? 500 : 400))
                 : commonStyle.fontWeight,
           };

@@ -45,12 +45,20 @@ const pickFieldByLang = (entity, field, lang) => {
   return base ?? en ?? th ?? null;
 };
 
+const stripAltTextLines = (value) => {
+  if (typeof value !== "string") return "";
+  const lines = value.split("\n");
+  const filtered = lines.filter((line) => !/^\s*ALT-TEXT\s*:/i.test(line));
+  return filtered.join("\n").trim();
+};
+
 const resolveQuestionText = (item, lang) => {
   if (!item) return "";
   const keys = ["question", "text", "prompt"];
   for (const key of keys) {
     const value = pickFieldByLang(item, key, lang);
-    if (value) return value;
+    const cleaned = stripAltTextLines(value);
+    if (cleaned) return cleaned;
   }
   return "";
 };
@@ -94,11 +102,14 @@ export default function OpenEndedExercise({
   const promptEn =
     pickFieldByLang(exercise, "prompt_en", "en") ||
     pickFieldByLang(exercise, "prompt", "en") ||
+    exercise?.prompt_md ||
     prompt ||
     "";
   const promptTh =
     pickFieldByLang(exercise, "prompt_th", "th") ||
+    pickFieldByLang(exercise, "prompt", "th") ||
     exercise.prompt_th ||
+    exercise.prompt ||
     "";
   const displayPrompt = contentLang === "th" ? promptTh : promptEn;
   const { user } = useAuth();
@@ -325,8 +336,7 @@ export default function OpenEndedExercise({
       ? normalizeText(firstQuestionTh)
       : normalizeText(firstQuestionEn);
   const hasPromptTranslation =
-    contentLang !== "th" ||
-    normalizeText(pickFieldByLang(exercise, "prompt", "th"));
+    contentLang !== "th" || normalizeText(promptTh);
   const shouldRenderPrompt =
     hasPromptTranslation &&
     normalizedPrompt.length > 0 &&

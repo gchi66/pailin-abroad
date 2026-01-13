@@ -446,6 +446,7 @@ export default function FillBlankExercise({
         questionState.correct === true || questionState.loading === true;
       const imageUrl = item.image_key ? images[item.image_key] : null;
       const textSegments = segmentTextWithBlanks(item.text || "");
+      const hasBlank = textSegments.some((segment) => segment.type === "blank");
       const hasMultiline = textSegments.some(
         (segment) =>
           segment.type === "line-break" ||
@@ -563,6 +564,33 @@ export default function FillBlankExercise({
                     nodes.push(
                       <div
                         key={`blank-${idx}-${segmentIdx}`}
+                        className={`fb-input-wrap${isShortAnswer ? " fb-input-wrap--short" : " fb-input-wrap--long"}`}
+                      >
+                        <input
+                          type="text"
+                          className={`fb-input${isShortAnswer ? " fb-input--short" : " fb-input--long"}`}
+                          value={questionState.answer}
+                          onChange={(event) =>
+                            handleAnswerChange(idx, event.target.value)
+                          }
+                          disabled={disabled}
+                          placeholder=""
+                          style={{
+                            minWidth: `${inputMinWidthCh}ch`,
+                          }}
+                        />
+                        <InlineStatus state={questionState} />
+                      </div>
+                    );
+                  }
+
+                  if (!hasBlank) {
+                    const answerLength = (item?.answer || "").trim().length;
+                    const isShortAnswer = answerLength > 0 && answerLength <= 8;
+                    const inputMinWidthCh = isShortAnswer ? 8 : 12;
+                    nodes.push(
+                      <div
+                        key={`blank-${idx}-fallback`}
                         className={`fb-input-wrap${isShortAnswer ? " fb-input-wrap--short" : " fb-input-wrap--long"}`}
                       >
                         <input

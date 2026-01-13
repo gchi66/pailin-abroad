@@ -565,6 +565,10 @@ def extract_sections(doc_json) -> List[Tuple[str, List[Tuple[str, str, dict | No
                 upper_text = text.upper()
                 for hdr in special_headers:
                     if upper_text.startswith(hdr) and len(text) > len(hdr):
+                        # Only treat this as an inline header when the line is all-caps.
+                        # This avoids false positives like "Focus on common irregular verbs".
+                        if text != text.upper():
+                            continue
                         next_char = text[len(hdr):len(hdr) + 1]
                         if next_char in (" ", "\n", "\t", ":"):
                             split_header = hdr
@@ -1557,9 +1561,8 @@ class GoogleDocsParser:
                                 "section_context": norm_header
                             }, spacing)
 
-                    # If the current node we just appended is a paragraph immediately after an audio list_item,
-                    # and it "looks attached" (same indent OR italic), merge its inlines into the previous node
-                    # so that only one list_item/audio button renders (mini-conversation style).
+                    # If the current node is a Thai-only or speaker-prefixed paragraph immediately after
+                    # an audio list_item, merge it so the full exchange renders as one audio bullet.
                     if node_list:
                         curr = node_list[-1]
                         prev = node_list[-2] if len(node_list) >= 2 else None
@@ -1567,14 +1570,20 @@ class GoogleDocsParser:
                             curr.get("kind") == "paragraph"
                             and prev
                             and prev.get("kind") == "list_item"
-                            and prev.get("audio_key")
+                            and (prev.get("audio_key") or prev.get("audio_seq"))
                         ):
                             para_text = "".join((inl.get("text", "") or "") for inl in curr.get("inlines", [])).strip()
+                            has_audio_tag = bool(AUDIO_TAG_RE.search(para_text))
+                            is_thai_only = _has_th(para_text) and not _has_en(para_text)
                             looks_like_speaker = bool(re.match(r"^[^:\n]{1,50}:\s+", para_text))
-                            same_indent = curr.get("indent") == prev.get("indent")
-                            has_italic = any((inl.get("italic") for inl in curr.get("inlines", [])))
+                            prev_indent_level = prev.get("indent_level")
+                            curr_indent_level = curr.get("indent_level")
+                            if prev_indent_level is None or curr_indent_level is None:
+                                prev_indent_level = prev.get("indent")
+                                curr_indent_level = curr.get("indent")
+                            same_indent_level = prev_indent_level == curr_indent_level
                             has_text = any((inl.get("text", "").strip() for inl in curr.get("inlines", [])))
-                            if has_text and (same_indent or has_italic or looks_like_speaker):
+                            if has_text and (is_thai_only or looks_like_speaker) and not has_audio_tag and same_indent_level:
                                 node_list.pop()  # remove the paragraph node
                                 prev_inlines = prev.get("inlines", [])
                                 if prev_inlines:
