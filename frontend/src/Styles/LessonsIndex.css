@@ -399,14 +399,13 @@
 
 .lesson-item {
   background: #fff;
-  padding: 1.5rem;
   text-align: left;
   transition: background 0.3s ease-in-out;
   max-width: 100vw; /* Prevents overflow */
   background: white;
   border-top: 0.075rem solid #1E1E1E;
   border-bottom: 0.075rem solid #1E1E1E;
-  padding: 1.5rem 4rem;
+  padding: 1.5rem 4rem 1.5rem 2rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
