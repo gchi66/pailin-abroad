@@ -164,13 +164,18 @@ const isEnglishSpeakerLineText = (text) => {
               href = href.replace("https://pa.invalid", "");
             }
 
+            const linkStyle = {
+              ...style,
+              color: span.underline ? "#676769" : style.color,
+            };
+
             return (
               <a
                 key={`frag-${m}-${idx}`}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={style}
+                style={linkStyle}
               >
                 {part}
               </a>

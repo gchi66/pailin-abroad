@@ -103,7 +103,9 @@ def _has_th(s: str | None) -> bool:
 def _plain_text(elems: list[dict]) -> str:
     """Concatenate all textRun content inside a list of Google-Docs elements."""
     parts = [el.get("textRun", {}).get("content", "") for el in elems]
-    return "".join(parts).strip()
+    text = "".join(parts)
+    # Google Docs uses vertical tab (\u000b) for soft line breaks inside table cells.
+    return text.replace("\u000b", "\n").strip()
 
 def _table_block(elem: dict, tbl_id: int) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
@@ -112,7 +114,11 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
     for row in elem["table"]["tableRows"]:
         row_cells = []
         row_col_count = 0
+        skip_cells = 0
         for cell in row["tableCells"]:
+            if skip_cells > 0:
+                skip_cells -= 1
+                continue
             cell_lines = []
             for para in cell.get("content", []):
                 if "paragraph" in para:
@@ -122,6 +128,8 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
             colspan = cell_style.get("columnSpan", 1)
             rowspan = cell_style.get("rowSpan", 1)
             row_col_count += colspan or 1
+            if colspan and colspan > 1:
+                skip_cells = max(skip_cells, (colspan - 1))
             if (colspan and colspan > 1) or (rowspan and rowspan > 1):
                 cell_payload = {"text": cell_text}
                 if colspan and colspan > 1:

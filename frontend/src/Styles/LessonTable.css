@@ -5,12 +5,14 @@
 .lesson-table-wrapper table {
   width: 100%;
   border-collapse: collapse;
+  font-family: "Poppins", "Mitr", "Noto Sans Thai", sans-serif;
 }
 
 .lesson-table-wrapper td,
 .lesson-table-wrapper th {
   padding: 0.5rem;
   border: 1px solid #ddd;
+  font-family: inherit;
 }
 
 .lesson-table-wrapper tbody > tr:first-child td {
@@ -23,6 +25,10 @@
 
 .lesson-table-wrapper .table-line-with-audio .audio-button {
   margin-right: 0.35rem;     /* small gap between button and text */
+}
+
+.lesson-table-thai {
+  font-family: "Mitr", "Noto Sans Thai", sans-serif;
 }
 
 @media (max-width: 768px) {

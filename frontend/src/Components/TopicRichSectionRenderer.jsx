@@ -83,12 +83,17 @@ export default function TopicRichSectionRenderer({
           href = href.replace("https://pa.invalid", "");
         }
 
+        const linkStyle = {
+          ...commonStyle,
+          color: span.underline ? "#676769" : commonStyle.color,
+        };
+
         element = (
           <a
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            style={commonStyle}
+            style={linkStyle}
           >
             {cleanText}
           </a>
