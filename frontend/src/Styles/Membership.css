@@ -180,6 +180,7 @@
   font-family: 'Poppins', sans-serif;
   flex-shrink: 0;
   white-space: nowrap;
+  line-height: 1.4;
 }
 
 .best-for-text {
@@ -396,6 +397,12 @@
     font-size: 1.1rem;
     width: 100%;
     max-width: 18.75rem;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .best-for-section {
+    align-items: baseline;
   }
 }
 

@@ -54,7 +54,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   }, []);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 990px)");
+    const mediaQuery = window.matchMedia("(max-width: 1100px)");
     const mobileQuery = window.matchMedia("(max-width: 480px)");
     const handleMediaChange = (event) => setIsCompactNav(event.matches);
     const handleMobileChange = (event) => setIsMobileNav(event.matches);

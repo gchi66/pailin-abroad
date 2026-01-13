@@ -394,6 +394,12 @@
   text-decoration: none;
 }
 
+@media (max-width: 1100px) {
+  .lesson-back-to-top-wrapper {
+    display: none;
+  }
+}
+
 
 @media (max-width: 480px) {
   .transcript-list {

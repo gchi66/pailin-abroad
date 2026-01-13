@@ -1,5 +1,10 @@
 .ls-sidebar {
   width: 100%;
+  position: -webkit-sticky;
+  position: sticky;
+  align-self: flex-start;
+  top: var(--navbar-height, 80px);
+  z-index: 20;
 }
 
 .ls-list {
@@ -66,20 +71,15 @@
 
 @media (max-width: 768px) {
   .ls-sidebar {
-    position: -webkit-sticky;
-    position: sticky;
-    align-self: flex-start;
-    top: var(--navbar-height, 80px);
-    z-index: 20;
     padding: 0.5rem 0 1rem 0;
   }
+}
 
-  .ls-sidebar.ls-stuck {
-    background: #ffffff;
-    box-shadow: 0 0.001rem 0 #e5e7eb;
-    padding-top: .6rem;
-    padding-bottom: .5rem;
-  }
+.ls-sidebar.ls-stuck {
+  background: #ffffff;
+  box-shadow: 0 0.001rem 0 #e5e7eb;
+  padding-top: .6rem;
+  padding-bottom: .5rem;
 }
 
 @media (max-width: 480px) {

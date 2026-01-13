@@ -106,6 +106,9 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #1e1e1e;
+  -webkit-text-fill-color: #1e1e1e;
+  -webkit-appearance: none;
+  appearance: none;
   cursor: pointer;
   transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
   height: 3.5vw;
@@ -158,6 +161,16 @@
   transform: translateX(0);
 }
 
+@media (max-width: 1100px) and (min-width: 481px) {
+  .level-buttons-Intermediate {
+    transform: translateX(.00000000000000001%);
+  }
+
+  .level-buttons-Advanced {
+    transform: translateX(6%);
+  }
+}
+
 
 .level-btn {
   background: white;
@@ -173,6 +186,10 @@
   transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
   min-width: 13vw;
   height: 3.5vw;
+  color: #1e1e1e;
+  -webkit-text-fill-color: #1e1e1e;
+  -webkit-appearance: none;
+  appearance: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,6 +228,18 @@
 
 .level-btn .completion-checkmark {
   font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+  .stage-btn {
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .level-btn {
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
 }
 
 
@@ -336,7 +365,7 @@
   text-align: left;
   padding: 2rem 0rem;
   font-size: 1.2rem;
-  line-height: 3vh;
+  line-height: 1.8rem;
   font-family: "Poppins", sans-serif;
   color: #1e1e1e;
   font-weight: 500;

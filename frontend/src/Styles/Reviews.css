@@ -14,7 +14,7 @@
 
 .reviews-title {
   font-family: "Poppins", sans-serif;
-  font-size: 3.5rem;
+  font-size: 2.2rem;
   font-weight: 600;
   color: #1e1e1e;
 }
@@ -52,7 +52,7 @@
 .review-text {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 1.05vw, 1.1rem);
   color: #1E1E1E;
   line-height: 1.5;
   flex-grow: 1;
@@ -67,8 +67,8 @@
 }
 
 .review-image {
-  width: 4rem;
-  height: 4rem;
+  width: clamp(3.25rem, 4vw, 4rem);
+  height: clamp(3.25rem, 4vw, 4rem);
   border-radius: 50%;
   object-fit: cover;
 }
@@ -83,7 +83,7 @@
 
 .review-name {
   font-family: "Poppins", sans-serif;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 1vw, 1.1rem);
   font-weight: bold;
   color: #1E1E1E;
   margin: 0;
@@ -93,9 +93,20 @@
 .review-location {
   font-family: "Poppins", sans-serif;
   color: #1e1e1ea1;
-  font-size: .8rem;
+  font-size: clamp(0.75rem, 0.8vw, 0.9rem);
   margin: 0;
   line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .review-item {
+    max-width: 16.5rem;
+  }
+
+  .review-card {
+    padding: 1.25rem 1.25rem 1.25rem 1.7rem;
+    min-height: 22vh;
+  }
 }
 
 @media (max-width: 480px) {

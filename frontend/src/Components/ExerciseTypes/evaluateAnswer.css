@@ -457,6 +457,7 @@
 
 .fb-row--fill-blank.fb-row--wrapped .fb-row-number {
   align-self: flex-start;
+  line-height: 2.2rem;
 }
 
 .fb-inline-pair {
@@ -855,7 +856,7 @@
   }
 
   .cq-row-number {
-    line-height: 1.5;
+    line-height: 1.6;
     font-size: 1rem;
   }
 

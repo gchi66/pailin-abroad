@@ -283,7 +283,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1.1rem 1.25rem;
-  border: 0.12rem solid #1e1e1e;
+  border: var(--border-thin) solid #1e1e1e;
   border-radius: 1rem;
   background: #fff;
   text-decoration: none;

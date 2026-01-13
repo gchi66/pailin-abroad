@@ -451,9 +451,9 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     const raw = getComputedStyle(document.documentElement).getPropertyValue("--navbar-height");
     const parsed = parseFloat(raw);
     const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
-    const sidebarOffset = isMobileView && isSidebarStuck ? sidebarHeight : 0;
+    const sidebarOffset = isSidebarStuck ? sidebarHeight : 0;
     return `-${navbarHeight + sidebarOffset}px 0px 0px 0px`;
-  }, [isMobileView, isSidebarStuck, sidebarHeight]);
+  }, [isSidebarStuck, sidebarHeight]);
 
   const recomputeStickyVisibility = useCallback(() => {
     const noHeadsVisible = visibleHeadIdsRef.current.size === 0;

@@ -103,7 +103,7 @@
   border-radius: 4vh;
   cursor: pointer;
   transition: transform 0.2s;
-  border: .3dvh solid #1E1E1E;
+  border: .15rem solid #1E1E1E;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   width: max-content;

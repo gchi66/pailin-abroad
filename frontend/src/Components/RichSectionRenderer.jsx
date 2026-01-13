@@ -914,7 +914,7 @@ function RichImage({ src, altText }) {
         src={src}
         alt={altText || "Lesson image"}
         style={{
-          maxWidth: "100%",
+          maxWidth: "min(100%, 550px)",
           height: "auto",
           borderRadius: "0.5rem",
           cursor: altText ? "context-menu" : "default",

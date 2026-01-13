@@ -58,10 +58,10 @@
 .exercise-bank-content,
 .exercise-section-content {
   width: 75%;
-  margin: 4rem auto;
+  margin: 1rem auto 4rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: .5rem;
 }
 
 .exercise-bank-toolbar-wrapper {
@@ -720,6 +720,17 @@
   .exercise-bank-content,
   .exercise-section-content {
     width: 90%;
+  }
+}
+
+@media (max-width: 848px) and (min-width: 769px) {
+  .exercise-bank-toolbar {
+    align-items: flex-start;
+  }
+
+  .exercise-bank-toolbar-right {
+    flex: 0 0 100%;
+    justify-content: flex-start;
   }
 }
 

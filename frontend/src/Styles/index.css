@@ -43,6 +43,14 @@ h2 {
 
 }
 
+.language-toggle-btn,
+.language-toggle-btn--disabled {
+  color: #1e1e1e;
+  -webkit-text-fill-color: #1e1e1e;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 @media (max-width: 480px) {
   :root {
     --audio-indent-step: 0.8rem;

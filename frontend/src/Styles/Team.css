@@ -75,7 +75,7 @@
   font-weight: 400;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1000px) {
   .team-container {
     gap: 2rem;
     padding: 2.5rem 1rem;

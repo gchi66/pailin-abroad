@@ -68,6 +68,8 @@
 .apply-submit {
   background: white;
   border: 0.1rem solid #1E1E1E;
+  color: #1e1e1e;
+  -webkit-text-fill-color: #1e1e1e;
   border-radius: 3rem;
   padding: 1rem 5rem;
   font-family: "Poppins", sans-serif;

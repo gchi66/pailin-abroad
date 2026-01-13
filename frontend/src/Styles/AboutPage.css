@@ -111,7 +111,7 @@
   display: block;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1000px) {
   .about-page-container {
     padding-top: 10vh;
     margin-top: 0;
