@@ -1767,12 +1767,7 @@ class GoogleDocsParser:
                 prompt_nodes = _build_nodes_from_lines(prompt_lines)
                 response_nodes = _build_nodes_from_lines(response_lines)
                 for node in response_nodes:
-                    if node.get("kind") not in {"paragraph", "list_item", "numbered_item"}:
-                        continue
-                    inlines = node.get("inlines") or []
-                    for inline in inlines:
-                        if "highlight" not in inline or inline.get("highlight") is None:
-                            inline["highlight"] = "#00ffff"
+                    node["is_response"] = True
 
                 body_parts = [
                     f"## {t.strip()}" if is_subheader(t, style) else t

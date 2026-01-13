@@ -273,6 +273,12 @@ const computeIndentLevel = (node) => {
   if (typeof node?.indent === "number" && Number.isFinite(node.indent)) {
     return node.indent;
   }
+  if (
+    typeof node?.indent_first_line_level === "number" &&
+    Number.isFinite(node.indent_first_line_level)
+  ) {
+    return node.indent_first_line_level;
+  }
   return 0;
 };
 
@@ -376,7 +382,7 @@ const paragraphTextStartRem = (indentLevel) => {
       const showDivider = isPhrasesSection && meta.showDivider;
       const boldPhrase = isPhrasesSection && meta.boldPhrase;
       const hasBold = nodeHasBold(node);
-      const hasAccent = hasCyanHighlight(node);
+      const hasAccent = hasCyanHighlight(node) || node?.is_response;
       const textSpans = (node.inlines || []).filter(
         (span) => typeof span?.text === "string" && span.text.trim() !== ""
       );
@@ -417,8 +423,10 @@ const paragraphTextStartRem = (indentLevel) => {
         );
       }
 
+      const isIndented = indentLevel > 0 || node?.is_indented === true;
       const shouldSuppressBaseOffset = suppressBaseOffset && !indentLevel && !hasAudio;
-      const baseOffsetRem = suppressBaseOffset && !indentLevel ? 0 : LIST_ITEM_BASE_OFFSET;
+      const baseOffsetRem =
+        shouldSuppressBaseOffset || !isIndented ? 0 : LIST_ITEM_BASE_OFFSET;
       const paragraphMarginLeft = shouldSuppressBaseOffset
         ? undefined
         : (indentLevel

@@ -331,16 +331,15 @@ export default function OpenEndedExercise({
   const firstQuestionEn = resolveQuestionText(items[0], "en");
   const firstQuestionTh = resolveQuestionText(items[0], "th");
   const normalizedPrompt = normalizeText(displayPrompt);
-  const normalizedFirstQuestion =
-    contentLang === "th"
-      ? normalizeText(firstQuestionTh)
-      : normalizeText(firstQuestionEn);
+  const normalizedFirstQuestionEn = normalizeText(firstQuestionEn);
+  const normalizedFirstQuestionTh = normalizeText(firstQuestionTh);
   const hasPromptTranslation =
     contentLang !== "th" || normalizeText(promptTh);
   const shouldRenderPrompt =
     hasPromptTranslation &&
     normalizedPrompt.length > 0 &&
-    normalizedPrompt !== normalizedFirstQuestion;
+    normalizedPrompt !== normalizedFirstQuestionEn &&
+    normalizedPrompt !== normalizedFirstQuestionTh;
 
   const defaultPlaceholder =
     contentLang === "th" ? "พิมพ์คำตอบของคุณที่นี่" : "Type your answer here";
