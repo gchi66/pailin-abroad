@@ -259,6 +259,8 @@
   font-family: "Poppins", sans-serif;
   background: #ffffff;
   box-shadow: inset 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08);
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .exercise-bank-search input:focus {
@@ -282,6 +284,14 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* Hide native search decorations (iOS adds its own magnifier) */
+.exercise-bank-search input::-webkit-search-decoration,
+.exercise-bank-search input::-webkit-search-cancel-button,
+.exercise-bank-search input::-webkit-search-results-button,
+.exercise-bank-search input::-webkit-search-results-decoration {
+  display: none;
 }
 
 .sr-only {
