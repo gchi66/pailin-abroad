@@ -733,7 +733,7 @@
   }
 }
 
-@media (max-width: 848px) and (min-width: 769px) {
+@media (max-width: 848px) and (min-width: 500px) {
   .exercise-bank-toolbar {
     align-items: flex-start;
   }
