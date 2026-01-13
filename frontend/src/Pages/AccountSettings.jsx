@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
 import SubscriptionBilling from "../Components/SubscriptionBilling";
+import ConfirmPasswordModal from "../Components/ConfirmPasswordModal";
+import PasswordResetSentModal from "../Components/PasswordResetSentModal";
 import { API_BASE_URL } from "../config/api";
 import { FREE_PLAN_BENEFITS } from "../constants/planBenefits";
 import "../Styles/AccountSettings.css";
@@ -19,6 +22,7 @@ const AccountSettings = () => {
     "/images/characters/avatar_5.webp",
     "/images/characters/avatar_6.webp",
     "/images/characters/avatar_7.webp",
+    "/images/characters/avatar_8.webp",
   ];
   const [activeTab, setActiveTab] = useState("profile");
   const [firstName, setFirstName] = useState("John");
@@ -28,16 +32,86 @@ const AccountSettings = () => {
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isPaidMember, setIsPaidMember] = useState(null);
+  const [showPasswordConfirmModal, setShowPasswordConfirmModal] = useState(false);
+  const [passwordConfirmError, setPasswordConfirmError] = useState("");
+  const [isPasswordConfirmLoading, setIsPasswordConfirmLoading] = useState(false);
+  const [showPasswordResetSentModal, setShowPasswordResetSentModal] = useState(false);
+  const [passwordResetSentMessage, setPasswordResetSentMessage] = useState("");
   const { ui: uiLang } = useUiLang();
+  const isGoogleAuth =
+    user?.app_metadata?.provider === "google" ||
+    user?.app_metadata?.providers?.includes("google");
 
   const handleSaveFirstName = () => {
     // TODO: Save to backend
     setIsEditingFirstName(false);
   };
 
+  const sendPasswordResetEmail = async () => {
+    if (!user?.email) {
+      throw new Error(t("authModals.confirmPassword.errors.noEmail", uiLang));
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/forgot-password/reset`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: user.email }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.error || t("authModals.forgotPassword.errors.resetFail", uiLang));
+    }
+
+    return data.message || "Password reset email sent. Please check your inbox.";
+  };
+
   const handleChangePassword = () => {
-    // TODO: Implement password change
-    console.log("Change password clicked");
+    setPasswordConfirmError("");
+    setShowPasswordConfirmModal(true);
+  };
+
+  const handleConfirmPasswordAndSendReset = async (password) => {
+    if (!password) {
+      setPasswordConfirmError(t("authModals.confirmPassword.errors.missing", uiLang));
+      return;
+    }
+    if (!user?.email) {
+      setPasswordConfirmError(t("authModals.confirmPassword.errors.noEmail", uiLang));
+      return;
+    }
+
+    setIsPasswordConfirmLoading(true);
+    setPasswordConfirmError("");
+
+    try {
+      const loginResponse = await fetch(`${API_BASE_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: user?.email, password }),
+      });
+      const loginData = await loginResponse.json();
+
+      if (!loginResponse.ok) {
+        throw new Error(loginData?.error || "Incorrect password. Please try again.");
+      }
+
+      const message = await sendPasswordResetEmail();
+      const localizedMessage =
+        uiLang === "th" ? t("authModals.resetSent.defaultMessage", uiLang) : message;
+      setShowPasswordConfirmModal(false);
+      setPasswordResetSentMessage(localizedMessage);
+      setShowPasswordResetSentModal(true);
+    } catch (error) {
+      console.error("Password confirmation error:", error.message);
+      setPasswordConfirmError(error.message || "Failed to confirm password.");
+    } finally {
+      setIsPasswordConfirmLoading(false);
+    }
   };
 
   const handleAvatarSelect = (src) => {
@@ -213,21 +287,22 @@ const AccountSettings = () => {
                 </div>
               </div>
 
-              {/* Password Field */}
-              <div className="account-field">
-                <label className="account-field-label">Password</label>
-                <div className="account-field-row account-field-row--center">
-                  <input
-                    type="password"
-                    value="••••••••"
-                    disabled
-                    className="account-input disabled"
-                  />
-                  <button className="account-btn" onClick={handleChangePassword}>
-                    Change Password
-                  </button>
+              {!isGoogleAuth && (
+                <div className="account-field">
+                  <label className="account-field-label">Password</label>
+                  <div className="account-field-row account-field-row--center">
+                    <input
+                      type="password"
+                      value="••••••••"
+                      disabled
+                      className="account-input disabled"
+                    />
+                    <button className="account-btn" onClick={handleChangePassword}>
+                      Change Password
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Manage Account Dropdown */}
@@ -304,37 +379,52 @@ const AccountSettings = () => {
   };
 
   return (
-    <main className="account-main">
-      <div className="account-container">
-        {/* Header */}
-        <div className="account-header">
-          <h1 className="account-title">ACCOUNT SETTINGS</h1>
-        </div>
-
-        {/* Navigation Tabs */}
-        <nav className="pathway-nav">
-          <div className="pathway-tabs">
-            <button
-              className={`pathway-tab ${activeTab === "profile" ? "active" : ""}`}
-              onClick={() => setActiveTab("profile")}
-            >
-              EDIT PROFILE
-            </button>
-            <button
-              className={`pathway-tab ${activeTab === "billing" ? "active" : ""}`}
-              onClick={() => setActiveTab("billing")}
-            >
-              SUBSCRIPTION & BILLING
-            </button>
+    <>
+      <main className="account-main">
+        <div className="account-container">
+          {/* Header */}
+          <div className="account-header">
+            <h1 className="account-title">ACCOUNT SETTINGS</h1>
           </div>
-        </nav>
 
-        {/* Tab Content */}
-        <div className="pathway-content">
-          {renderTabContent()}
+          {/* Navigation Tabs */}
+          <nav className="pathway-nav">
+            <div className="pathway-tabs">
+              <button
+                className={`pathway-tab ${activeTab === "profile" ? "active" : ""}`}
+                onClick={() => setActiveTab("profile")}
+              >
+                EDIT PROFILE
+              </button>
+              <button
+                className={`pathway-tab ${activeTab === "billing" ? "active" : ""}`}
+                onClick={() => setActiveTab("billing")}
+              >
+                SUBSCRIPTION & BILLING
+              </button>
+            </div>
+          </nav>
+
+          {/* Tab Content */}
+          <div className="pathway-content">
+            {renderTabContent()}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+
+      <ConfirmPasswordModal
+        isOpen={showPasswordConfirmModal}
+        onClose={() => setShowPasswordConfirmModal(false)}
+        onConfirm={handleConfirmPasswordAndSendReset}
+        isLoading={isPasswordConfirmLoading}
+        error={passwordConfirmError}
+      />
+      <PasswordResetSentModal
+        isOpen={showPasswordResetSentModal}
+        onClose={() => setShowPasswordResetSentModal(false)}
+        message={passwordResetSentMessage}
+      />
+    </>
   );
 };
 

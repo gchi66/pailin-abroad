@@ -235,7 +235,10 @@ def login():
         password = data.get('password')
 
         if not email or not password:
-            return jsonify({"error": "Email and password are required"}), 400
+            return jsonify({
+                "error": "MISSING_FIELDS",
+                "message": "Email and password are required."
+            }), 400
 
         response = supabase.auth.sign_in_with_password({
             "email": email,
@@ -243,7 +246,16 @@ def login():
         })
 
         if hasattr(response, "error") and response.error:
-            return jsonify({"error": str(response.error)}), 400
+            error_message = str(response.error)
+            if "invalid login credentials" in error_message.lower():
+                return jsonify({
+                    "error": "INVALID_CREDENTIALS",
+                    "message": "Invalid email or password."
+                }), 401
+            return jsonify({
+                "error": "AUTH_ERROR",
+                "message": error_message or "Authentication failed."
+            }), 401
 
         session_data = {
             "access_token": response.session.access_token,
@@ -258,7 +270,10 @@ def login():
 
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"error": "Internal server error"}), 500
+        return jsonify({
+            "error": "SERVER_ERROR",
+            "message": "Internal server error."
+        }), 500
 
 
 @routes.route('/api/user/profile', methods=['GET'])

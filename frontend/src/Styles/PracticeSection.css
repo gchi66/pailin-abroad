@@ -70,7 +70,7 @@ details[open] > .markdown-summary {
 /* body animation / padding */
 .markdown-content,
 .ps-accordion > *:not(summary) {
-  padding: 0 2rem 1.4dvh;
+  padding: 0 2rem 3.2dvh;
   line-height: var(--rich-text-line-height, 1.6);
   font-size: var(--rich-text-font-size, 1rem);
   overflow-wrap: anywhere;

@@ -54,8 +54,16 @@ export default function MarkdownSection({
   extraSections = [],
   sectionType = "",
 }) {
+  const filteredMarkdown =
+    sectionType === "phrases_verbs_item"
+      ? markdown
+          .split(/\r?\n/)
+          .filter((line) => !line.toLowerCase().includes("link xx"))
+          .join("\n")
+      : markdown;
+
   // 1. split the incoming markdown by `##` headings
-  const sections = splitByHeadings(markdown);
+  const sections = splitByHeadings(filteredMarkdown);
 
   // 2. Insert extra sections at marker positions for "understand"
   let allSections = [...sections];

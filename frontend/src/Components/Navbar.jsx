@@ -211,6 +211,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
 
   const mobileMenuAvailable = isMobileNav;
   const showMobilePanel = isMobileNav && isMobileUserMenuOpen;
+  const logoHref = withUi(user && profile?.is_paid ? "/pathway" : "/", ui);
 
   return (
     <header
@@ -235,7 +236,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
       )}
 
       <div className="logo">
-        <NavLink to={withUi("/", ui)}>
+        <NavLink to={logoHref}>
           <img src="/images/full-logo.webp" alt="Pailin Abroad Logo" />
         </NavLink>
       </div>

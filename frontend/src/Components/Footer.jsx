@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../Styles/Footer.css";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
+import { useAuth } from "../AuthContext";
+import supabaseClient from "../supabaseClient";
 
 const Footer = () => {
   const { ui } = useUiLang();
+  const { user } = useAuth();
   const footerCopy = copy.footer;
   const { resources, about, help } = footerCopy.sections;
+  const [profile, setProfile] = useState(null);
   const year = new Date().getFullYear();
 
   const isExternalLink = (url = "") =>
@@ -21,6 +25,51 @@ const Footer = () => {
     const queryString = params.toString();
     return queryString ? `${pathname}?${queryString}` : pathname;
   };
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) {
+        setProfile(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("is_paid")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching user profile:", error.message);
+          setProfile(null);
+        } else {
+          setProfile(data);
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        setProfile(null);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
+
+  const isPaidUser = Boolean(user && profile?.is_paid);
+  const resourcesItems = isPaidUser
+    ? [
+        { text: copy.nav.lessonLibrary, link: "/lessons" },
+        { text: copy.nav.exerciseBank, link: "/exercise-bank" },
+        { text: copy.nav.topicLibrary, link: "/topic-library" },
+      ]
+    : [
+        { text: copy.nav.sampleLessons, link: "/try-lessons" },
+        { text: copy.nav.lessonLibrary, link: "/lessons" },
+        { text: copy.nav.freeLessons, link: "/free-lessons" },
+        { text: copy.nav.exerciseBank, link: "/exercise-bank" },
+        { text: copy.nav.topicLibrary, link: "/topic-library" },
+      ];
+  const resourcesSection = { ...resources, items: resourcesItems };
 
   const renderItems = (section) =>
     (section.items || []).map((item, index) => {
@@ -54,7 +103,7 @@ const Footer = () => {
         <div className="footer-container">
           <div className="footer-column">
             <h3 className="footer-title">{pick(resources.title, ui)}</h3>
-            <ul>{renderItems(resources)}</ul>
+            <ul>{renderItems(resourcesSection)}</ul>
           </div>
           <div className="footer-column">
             <h3 className="footer-title">{pick(about.title, ui)}</h3>
@@ -71,18 +120,6 @@ const Footer = () => {
                 <img
                   src={`${process.env.PUBLIC_URL}/images/instagram-icon-black.png`}
                   alt="Instagram"
-                />
-              </button>
-              <button className="social-icon-link">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/youtube-icon-black.png`}
-                  alt="YouTube"
-                />
-              </button>
-              <button className="social-icon-link">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/tiktok-icon-black.png`}
-                  alt="TikTok"
                 />
               </button>
               <button className="social-icon-link">

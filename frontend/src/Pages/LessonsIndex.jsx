@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import supabaseClient from "../supabaseClient";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
 import PlanNotice from "../Components/PlanNotice";
 import "../Styles/LessonsIndex.css";
@@ -37,6 +39,7 @@ const LessonsIndex = () => {
   const [isMobileLayout, setIsMobileLayout] = useState(false);
   const [isMobileStageOpen, setIsMobileStageOpen] = useState(false);
   const { user } = useAuth();
+  const { ui: uiLang } = useUiLang();
 
   // Track whether the stage has just changed
   const isStageChanged = useRef(false);
@@ -335,6 +338,16 @@ const LessonsIndex = () => {
     ...lessons.filter((l) => (l.title || "").toLowerCase().includes("checkpoint")),
   ];
 
+  const pickUiLang = useCallback(
+    (en, th) => {
+      if (uiLang === "th") {
+        return th || en || "";
+      }
+      return en || th || "";
+    },
+    [uiLang]
+  );
+
   const stages = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
   const { levelCompletionMap, stageCompletionMap } = useMemo(() => {
@@ -397,8 +410,10 @@ const LessonsIndex = () => {
   return (
     <div className="lessons-index-page-container">
       <header className="lessons-index-page-header">
-        <h1 className="page-header-text">Lesson Library</h1>
-        <p className="lessons-index-page-header-subtitle">Over 150 conversation-based lessons to improve your English</p>
+        <h1 className="page-header-text">{t("lessonLibraryPage.title", uiLang)}</h1>
+        <p className="lessons-index-page-header-subtitle">
+          {t("lessonLibraryPage.subtitle", uiLang)}
+        </p>
       </header>
       <div className="lesson-library">
         {!user && (
@@ -599,11 +614,11 @@ const LessonsIndex = () => {
                         </div>
                         <div className="name-desc-container">
                           <span className="lesson-name">
-                            {lesson.title}
+                            {pickUiLang(lesson.title, lesson.title_th)}
                           </span>
-                          {lesson.focus && (
+                          {(lesson.focus || lesson.focus_th) && (
                             <span className="lesson-focus">
-                              {lesson.focus}
+                              {pickUiLang(lesson.focus, lesson.focus_th)}
                             </span>
                           )}
                         </div>

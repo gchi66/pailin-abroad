@@ -4,6 +4,8 @@ export const copy = {
     about: { en: "About", th: "เกี่ยวกับ" },
     lessons: { en: "Lessons", th: "บทเรียน" },
     resources: { en: "Resources", th: "แหล่งข้อมูล" },
+    exerciseBank: { en: "Exercise Bank", th: "คลังแบบฝึกหัด" },
+    topicLibrary: { en: "Topic Library", th: "คลังหัวข้อ" },
     contact: { en: "Contact", th: "ติดต่อ" },
     pricing: { en: "Pricing", th: "ราคา" },
     membership: { en: "Membership", th: "สมาชิก" },
@@ -64,8 +66,135 @@ export const copy = {
   },
   authButtons: {
     signUp: { en: "Sign Up", th: "สมัครสมาชิก" },
-    signIn: { en: "Sign In", th: "เข้าสู่ระบบ" },
+    signIn: { en: "Log In", th: "เข้าสู่ระบบ" },
     logout: { en: "Log Out", th: "ออกจากระบบ" },
+  },
+  authModals: {
+    signIn: {
+      title: { en: "Log In", th: "เข้าสู่ระบบ" },
+      emailLabel: { en: "Email", th: "อีเมล" },
+      emailPlaceholder: { en: "Enter your email", th: "กรอกอีเมลของคุณ" },
+      passwordLabel: { en: "Password", th: "รหัสผ่าน" },
+      passwordPlaceholder: { en: "Enter your password", th: "กรอกรหัสผ่านของคุณ" },
+      rememberMe: { en: "Remember me", th: "จดจำฉัน" },
+      forgotLink: { en: "Forgot username/password?", th: "ลืมชื่อผู้ใช้/รหัสผ่าน?" },
+      submit: { en: "LOG IN", th: "เข้าสู่ระบบ" },
+      submitting: { en: "LOGGING IN...", th: "กำลังเข้าสู่ระบบ..." },
+      divider: { en: "OR", th: "หรือ" },
+      google: { en: "Log In with Google", th: "เข้าสู่ระบบด้วย Google" },
+      googleConnecting: { en: "Connecting to Google...", th: "กำลังเชื่อมต่อกับ Google..." },
+      noAccount: { en: "Don't have an account?", th: "ยังไม่มีบัญชีใช่ไหม?" },
+      signUpLink: { en: "Sign Up", th: "สมัครสมาชิก" },
+      errors: {
+        missingFields: { en: "Please enter both email and password.", th: "กรุณากรอกอีเมลและรหัสผ่าน" },
+        invalidCredentials: {
+          en: "Email or password doesn't match. Try again or reset your password.",
+          th: "อีเมลหรือรหัสผ่านไม่ตรงกัน ลองอีกครั้งหรือรีเซ็ตรหัสผ่าน",
+        },
+        authError: {
+          en: "We couldn't sign you in. Please try again.",
+          th: "ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่อีกครั้ง",
+        },
+        network: {
+          en: "Can't reach the server. Check your connection and try again.",
+          th: "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่อแล้วลองใหม่",
+        },
+        fallbackHelp: {
+          en: "If this keeps happening, try resetting your password.",
+          th: "หากยังเกิดขึ้นอยู่ ลองรีเซ็ตรหัสผ่าน",
+        },
+      },
+    },
+    signUp: {
+      title: { en: "Sign Up for Pailin Abroad", th: "สมัครสมาชิก Pailin Abroad" },
+      subtitle: { en: "Make an account to get access to our free content!", th: "สร้างบัญชีเพื่อเข้าถึงเนื้อหาฟรีของเรา!" },
+      backAria: { en: "Back to sign up options", th: "กลับไปยังตัวเลือกการสมัครสมาชิก" },
+      emailPlaceholder: { en: "Email Address", th: "ที่อยู่อีเมล" },
+      createAccount: { en: "CREATE FREE ACCOUNT", th: "สร้างบัญชีฟรี" },
+      creatingAccount: { en: "SIGNING UP...", th: "กำลังสมัครสมาชิก..." },
+      google: { en: "Continue with Google", th: "ดำเนินการต่อด้วย Google" },
+      googleConnecting: { en: "Connecting to Google...", th: "กำลังเชื่อมต่อกับ Google..." },
+      emailContinue: { en: "Continue with email", th: "ดำเนินการต่อด้วยอีเมล" },
+      alreadyHave: { en: "Already have an account?", th: "มีบัญชีอยู่แล้ว?" },
+      loginLink: { en: "Log in", th: "เข้าสู่ระบบ" },
+      success: {
+        en: "Account created successfully! Redirecting to complete your profile setup...",
+        th: "สร้างบัญชีสำเร็จ! กำลังพาไปตั้งค่าโปรไฟล์...",
+      },
+      errors: {
+        missingEmail: { en: "Please enter your email address.", th: "กรุณากรอกที่อยู่อีเมล" },
+        invalidEmail: { en: "Please enter a valid email address.", th: "กรุณากรอกอีเมลให้ถูกต้อง" },
+        signupFailed: { en: "Signup failed", th: "การสมัครสมาชิกล้มเหลว" },
+        unexpected: { en: "An unexpected error occurred.", th: "เกิดข้อผิดพลาดที่ไม่คาดคิด" },
+      },
+      terms: {
+        prefix: { en: "By signing up, you agree to our", th: "การสมัครหมายความว่าคุณยอมรับ" },
+        termsLink: { en: "Terms of Service", th: "ข้อกำหนดการใช้บริการ" },
+        and: { en: "and", th: "และ" },
+        privacyLink: { en: "Privacy Policy", th: "นโยบายความเป็นส่วนตัว" },
+        suffix: { en: ".", th: "" },
+      },
+    },
+    forgotPassword: {
+      title: { en: "Forgot password?", th: "ลืมรหัสผ่าน?" },
+      passwordlessNote: {
+        en: "Go passwordless! We’ll send you an email.",
+        th: "เข้าสู่ระบบแบบไม่ใช้รหัสผ่าน! เราจะส่งอีเมลให้คุณ",
+      },
+      emailPlaceholder: { en: "Email Address", th: "ที่อยู่อีเมล" },
+      sendMagicLink: { en: "GET A LOG IN LINK", th: "รับลิงก์เข้าสู่ระบบ" },
+      sending: { en: "SENDING...", th: "กำลังส่ง..." },
+      divider: { en: "OR", th: "หรือ" },
+      resetTitle: { en: "Reset password", th: "รีเซ็ตรหัสผ่าน" },
+      resetDescription: {
+        en: "Click below to receive password reset instructions",
+        th: "คลิกด้านล่างเพื่อรับคำแนะนำการรีเซ็ตรหัสผ่าน",
+      },
+      resetButton: { en: "RESET PASSWORD", th: "รีเซ็ตรหัสผ่าน" },
+      backToLogin: { en: "← Back to log in", th: "← กลับไปเข้าสู่ระบบ" },
+      errors: {
+        missingEmailFirst: { en: "Please enter your email address first", th: "กรุณากรอกที่อยู่อีเมลก่อน" },
+        missingEmail: { en: "Please enter your email address", th: "กรุณากรอกที่อยู่อีเมล" },
+        magicFail: { en: "Failed to send magic link. Please try again.", th: "ส่งลิงก์ล้มเหลว กรุณาลองใหม่อีกครั้ง" },
+        resetFail: { en: "Failed to send reset email. Please try again.", th: "ส่งอีเมลรีเซ็ตไม่สำเร็จ กรุณาลองใหม่อีกครั้ง" },
+      },
+      success: {
+        magicSent: {
+          en: "Magic link sent! Check your email and click the link to log in.",
+          th: "ส่งลิงก์แล้ว! ตรวจสอบอีเมลและคลิกลิงก์เพื่อเข้าสู่ระบบ",
+        },
+        resetSent: {
+          en: "Password reset email sent! Check your email and follow the instructions to reset your password.",
+          th: "ส่งอีเมลรีเซ็ตรหัสผ่านแล้ว! กรุณาตรวจสอบอีเมลและทำตามขั้นตอนเพื่อรีเซ็ตรหัสผ่าน",
+        },
+      },
+    },
+    confirmPassword: {
+      title: { en: "Confirm your current password", th: "ยืนยันรหัสผ่านปัจจุบัน" },
+      label: { en: "Password", th: "รหัสผ่าน" },
+      placeholder: { en: "Enter your current password", th: "กรอกรหัสผ่านปัจจุบัน" },
+      confirm: { en: "CONFIRM", th: "ยืนยัน" },
+      confirming: { en: "CONFIRMING...", th: "กำลังยืนยัน..." },
+      errors: {
+        missing: { en: "Please enter your current password.", th: "กรุณากรอกรหัสผ่านปัจจุบัน" },
+        noEmail: { en: "No email found for your account. Please log in again.", th: "ไม่พบอีเมลของบัญชี กรุณาเข้าสู่ระบบใหม่" },
+      },
+    },
+    resetSent: {
+      title: { en: "Check your email", th: "ตรวจสอบอีเมลของคุณ" },
+      defaultMessage: {
+        en: "Password reset email sent. Please check your inbox.",
+        th: "ส่งอีเมลรีเซ็ตรหัสผ่านแล้ว กรุณาตรวจสอบกล่องจดหมายของคุณ",
+      },
+      ok: { en: "OK", th: "ตกลง" },
+    },
+  },
+  lessonLibraryPage: {
+    title: { en: "Lesson Library", th: "คลังบทเรียน" },
+    subtitle: {
+      en: "Over 150 conversation-based lessons to improve your English",
+      th: "บทเรียนสนทนามากกว่า 150 บทเพื่อพัฒนาภาษาอังกฤษของคุณ",
+    },
   },
   topicLibraryPage: {
     title: { en: "Topic Library", th: "คลังหัวข้อ" },
@@ -544,18 +673,15 @@ export const copy = {
       about: {
         title: { en: "ABOUT US", th: "เกี่ยวกับเรา" },
         items: [
-          { text: { en: "Why Choose Us?", th: "ทำไมต้องเลือกเรา?" } },
-          { text: { en: "About Pailin Abroad", th: "เกี่ยวกับ Pailin Abroad" }, link: "/about" },
+          { text: { en: "The Method", th: "วิธีการสอน" }, link: "/about?section=method" },
           { text: { en: "Our Team", th: "ทีมของเรา" }, link: "/about?section=our-team" },
-          { text: { en: "Membership Options", th: "ตัวเลือกสมาชิก" }, link: "/membership" },
-          { text: { en: "Work With Us", th: "ร่วมงานกับเรา" } },
+          { text: { en: "Membership", th: "สมาชิก" }, link: "/membership" },
         ],
       },
       help: {
         title: { en: "HELP CENTER", th: "ศูนย์ช่วยเหลือ" },
         items: [
           { text: { en: "Contact Us", th: "ติดต่อเรา" }, link: "/contact" },
-          { text: { en: "FAQ", th: "คำถามที่พบบ่อย" }, link: "/faq" },
           { text: { en: "Privacy Policy", th: "นโยบายความเป็นส่วนตัว" }, link: "/privacy" },
           { text: { en: "Terms & Conditions", th: "ข้อกำหนดและเงื่อนไข" }, link: "/terms" },
         ],

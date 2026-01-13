@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 import ForgotPasswordModal from "./ForgotPasswordModal";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/LoginModal.css";
 
 const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
@@ -14,6 +16,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [socialLoading, setSocialLoading] = useState("");
   const navigate = useNavigate();
+  const { ui } = useUiLang();
 
   if (!isOpen) return null;
 
@@ -22,7 +25,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
 
     // Basic validation
     if (!email || !password) {
-      setError("Please enter both email and password.");
+      setError(t("authModals.signIn.errors.missingFields", ui));
       return;
     }
 
@@ -54,8 +57,30 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
         navigate("/pathway"); // Navigate to pathway instead of profile
       }
     } catch (error) {
-      console.error("Login Error:", error.response?.data || error.message);
-      setError(error.response?.data?.error || error.message || "Login failed. Please try again.");
+      const backendError = error.response?.data;
+      console.error("Login Error:", backendError || error.message);
+
+      if (!error.response) {
+        setError(t("authModals.signIn.errors.network", ui));
+        return;
+      }
+
+      switch (backendError?.error) {
+        case "INVALID_CREDENTIALS":
+          setError(t("authModals.signIn.errors.invalidCredentials", ui));
+          return;
+        case "MISSING_FIELDS":
+          setError(t("authModals.signIn.errors.missingFields", ui));
+          return;
+        case "AUTH_ERROR":
+        case "SERVER_ERROR":
+          setError(t("authModals.signIn.errors.authError", ui));
+          return;
+        default: {
+          const message = backendError?.message || error.message || "Login failed.";
+          setError(`${message} ${t("authModals.signIn.errors.fallbackHelp", ui)}`.trim());
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -78,7 +103,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
       }
     } catch (oauthErr) {
       console.error(`Social login failed (${provider}):`, oauthErr);
-      setError(oauthErr.message || "Failed to sign in with social login.");
+      setError(oauthErr.message || "Failed to log in with social login.");
       setSocialLoading("");
     }
   };
@@ -89,18 +114,16 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
         <button className="login-modal-close" onClick={onClose}>
           &times;
         </button>
-        <h2>Sign In</h2>
+        <h2>{t("authModals.signIn.title", ui)}</h2>
         <form onSubmit={handleLogin}>
           {error && <div className="login-error-message">{error}</div>}
 
           <div className="login-form-group">
-            <label className="login-form-label">
-              Email
-            </label>
+            <label className="login-form-label">{t("authModals.signIn.emailLabel", ui)}</label>
             <input
               type="email"
               className="login-form-input"
-              placeholder="Enter your email"
+              placeholder={t("authModals.signIn.emailPlaceholder", ui)}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -108,13 +131,11 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
             />
           </div>
           <div className="login-form-group">
-            <label className="login-form-label">
-              Password
-            </label>
+            <label className="login-form-label">{t("authModals.signIn.passwordLabel", ui)}</label>
             <input
               type="password"
               className="login-form-input"
-              placeholder="Enter your password"
+              placeholder={t("authModals.signIn.passwordPlaceholder", ui)}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -123,7 +144,8 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
           </div>
           <div className="login-form-footer">
             <label className="login-remember-label">
-              <input type="checkbox" className="login-remember-checkbox" /> Remember me
+              <input type="checkbox" className="login-remember-checkbox" />{" "}
+              {t("authModals.signIn.rememberMe", ui)}
             </label>
             <span
               className="login-forgot-link"
@@ -133,7 +155,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
               }}
               style={{ cursor: 'pointer' }}
             >
-              Forgot username/password?
+              {t("authModals.signIn.forgotLink", ui)}
             </span>
           </div>
           <button
@@ -141,27 +163,29 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
             className={`login-submit-btn ${loading ? 'loading' : ''}`}
             disabled={loading}
           >
-            {loading ? "SIGNING IN..." : "SIGN IN"}
+            {loading ? t("authModals.signIn.submitting", ui) : t("authModals.signIn.submit", ui)}
           </button>
         </form>
-        <div className="login-divider">OR</div>
+        <div className="login-divider">{t("authModals.signIn.divider", ui)}</div>
         <button
           className="login-social-button google"
           onClick={() => handleSocialSignIn("google")}
           disabled={socialLoading === "google"}
           style={{ opacity: socialLoading === "google" ? 0.6 : 1 }}
         >
-          {socialLoading === "google" ? "Connecting to Google..." : "Sign In with Google"}
+          {socialLoading === "google"
+            ? t("authModals.signIn.googleConnecting", ui)
+            : t("authModals.signIn.google", ui)}
         </button>
 
         {toggleSignupModal && (
           <p className="login-switch-text">
-            Don't have an account?
+            {t("authModals.signIn.noAccount", ui)}
             <span className="login-switch-link" onClick={() => {
               onClose(); // Close login modal
               toggleSignupModal(); // Open signup modal
             }}>
-              Sign Up
+              {t("authModals.signIn.signUpLink", ui)}
             </span>
           </p>
         )}

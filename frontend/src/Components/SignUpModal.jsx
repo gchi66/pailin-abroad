@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { API_BASE_URL } from "../config/api";
 import supabaseClient from "../supabaseClient";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/Modal.css";
 
 const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
@@ -10,6 +12,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
   const [success, setSuccess] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [socialLoading, setSocialLoading] = useState("");
+  const { ui } = useUiLang();
   if (!isOpen) return null;
 
   // Handle signup form submission
@@ -18,14 +21,14 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
     // Basic validation
     if (!email) {
-      setError("Please enter your email address.");
+      setError(t("authModals.signUp.errors.missingEmail", ui));
       return;
     }
 
     // Simple email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      setError(t("authModals.signUp.errors.invalidEmail", ui));
       return;
     }
 
@@ -46,7 +49,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Signup failed");
+        throw new Error(data.error || t("authModals.signUp.errors.signupFailed", ui));
       }
 
       setSuccess(true);
@@ -60,7 +63,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
     } catch (error) {
       console.error("Sign Up Error:", error);
-      setError(error.message || "An unexpected error occurred.");
+      setError(error.message || t("authModals.signUp.errors.unexpected", ui));
     } finally {
       setLoading(false);
     }
@@ -103,15 +106,15 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
   const termsFooter = (
     <div className="form-footer">
-      By signing up, you agree to our{" "}
+      {t("authModals.signUp.terms.prefix", ui)}{" "}
       <a href="/terms" target="_blank" rel="noopener noreferrer">
-        Terms of Service
+        {t("authModals.signUp.terms.termsLink", ui)}
       </a>{" "}
-      and{" "}
+      {t("authModals.signUp.terms.and", ui)}{" "}
       <a href="/privacy" target="_blank" rel="noopener noreferrer">
-        Privacy Policy
+        {t("authModals.signUp.terms.privacyLink", ui)}
       </a>
-      .
+      {t("authModals.signUp.terms.suffix", ui)}
     </div>
   );
 
@@ -133,7 +136,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
               cursor: 'pointer',
               lineHeight: 1
             }}
-            aria-label="Back to sign up options"
+            aria-label={t("authModals.signUp.backAria", ui)}
           >
             ←
           </button>
@@ -143,8 +146,8 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
         </button>
         {/* Removed success state check for now - will be handled in onboarding flow */}
         <>
-          <h2>Sign Up for Pailin Abroad</h2>
-          <p>Make an account to get access to our free content!</p>
+          <h2>{t("authModals.signUp.title", ui)}</h2>
+          <p>{t("authModals.signUp.subtitle", ui)}</p>
 
             {showEmailForm ? (
               <form onSubmit={handleSignUp}>
@@ -164,7 +167,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
                   borderRadius: '5px',
                   marginBottom: '15px',
                   fontSize: '14px'
-                }}>Account created successfully! Redirecting to complete your profile setup...</div>}
+                }}>{t("authModals.signUp.success", ui)}</div>}
 
                 <div className="form-group">
                   <div style={{ position: 'relative' }}>
@@ -186,7 +189,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
                     </svg>
                     <input
                       type="email"
-                      placeholder="Email Address"
+                      placeholder={t("authModals.signUp.emailPlaceholder", ui)}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -201,7 +204,9 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
                   disabled={loading}
                   style={{ opacity: loading ? 0.6 : 1, fontSize: '0.9rem' }}
                 >
-                  {loading ? "SIGNING UP..." : "CREATE FREE ACCOUNT"}
+                  {loading
+                    ? t("authModals.signUp.creatingAccount", ui)
+                    : t("authModals.signUp.createAccount", ui)}
                 </button>
 
                 {termsFooter}
@@ -221,14 +226,16 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                   </svg>
-                  {socialLoading === "google" ? "Connecting to Google..." : "Continue with Google"}
+                  {socialLoading === "google"
+                    ? t("authModals.signUp.googleConnecting", ui)
+                    : t("authModals.signUp.google", ui)}
                 </button>
 
                 <button type="button" className="social-button" onClick={handleShowEmailForm}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                   </svg>
-                  Continue with email
+                  {t("authModals.signUp.emailContinue", ui)}
                 </button>
 
                 {termsFooter}
@@ -236,12 +243,12 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
             )}
 
             <p className="switch-text">
-              Already have an account?
+              {t("authModals.signUp.alreadyHave", ui)}
               <span className="link" onClick={() => {
                 onClose(); // Close signup modal
                 toggleLoginModal(); // Open login modal
               }}>
-                Log in
+                {t("authModals.signUp.loginLink", ui)}
               </span>
             </p>
           </>

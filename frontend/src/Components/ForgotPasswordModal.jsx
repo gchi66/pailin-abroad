@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../Styles/ForgotPasswordModal.css";
 import { API_BASE_URL } from "../config/api";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 
 const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
   const [email, setEmail] = useState("");
@@ -9,6 +11,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
   const [magicLinkLoading, setMagicLinkLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const { ui } = useUiLang();
 
   // Clear form when modal opens/closes
   React.useEffect(() => {
@@ -25,7 +28,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
 
   const handleMagicLink = async () => {
     if (!email) {
-      setError("Please enter your email address first");
+      setError(t("authModals.forgotPassword.errors.missingEmailFirst", ui));
       return;
     }
 
@@ -44,10 +47,14 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
         }
       );
 
-      setSuccess(response.data.message);
+      setSuccess(
+        ui === "th"
+          ? t("authModals.forgotPassword.success.magicSent", ui)
+          : response.data.message
+      );
     } catch (error) {
       console.error("Magic Link Error:", error.response?.data || error.message);
-      setError(error.response?.data?.error || "Failed to send magic link. Please try again.");
+      setError(error.response?.data?.error || t("authModals.forgotPassword.errors.magicFail", ui));
     } finally {
       setMagicLinkLoading(false);
     }
@@ -57,7 +64,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
     e.preventDefault();
 
     if (!email) {
-      setError("Please enter your email address");
+      setError(t("authModals.forgotPassword.errors.missingEmail", ui));
       return;
     }
 
@@ -76,10 +83,14 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
         }
       );
 
-      setSuccess(response.data.message);
+      setSuccess(
+        ui === "th"
+          ? t("authModals.forgotPassword.success.resetSent", ui)
+          : response.data.message
+      );
     } catch (error) {
       console.error("Reset Password Error:", error.response?.data || error.message);
-      setError(error.response?.data?.error || "Failed to send reset email. Please try again.");
+      setError(error.response?.data?.error || t("authModals.forgotPassword.errors.resetFail", ui));
     } finally {
       setLoading(false);
     }
@@ -105,19 +116,22 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
         <button className="forgot-password-modal-close" onClick={onClose}>
           &times;
         </button>
-        <h2>Forgot password?</h2>
+        <h2>{t("authModals.forgotPassword.title", ui)}</h2>
 
         {/* Error/Success Messages */}
         {error && <div className="forgot-password-error-message">{error}</div>}
         {success && <div className="forgot-password-success-message">{success}</div>}
 
         {/* Email Input - Shared for both options */}
+        <p className="forgot-password-description">
+          {t("authModals.forgotPassword.passwordlessNote", ui)}
+        </p>
         <div className="forgot-password-section">
           <div className="forgot-password-form-group">
             <input
               type="email"
               className="forgot-password-input"
-              placeholder="Email Address"
+              placeholder={t("authModals.forgotPassword.emailPlaceholder", ui)}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -132,27 +146,31 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
             onClick={handleMagicLink}
             disabled={magicLinkLoading || loading}
           >
-            {magicLinkLoading ? "SENDING..." : "Get a sign-in link"}
+            {magicLinkLoading
+              ? t("authModals.forgotPassword.sending", ui)
+              : t("authModals.forgotPassword.sendMagicLink", ui)}
           </button>
         </div>
 
         {/* Divider */}
-        <div className="forgot-password-divider">OR</div>
+        <div className="forgot-password-divider">{t("authModals.forgotPassword.divider", ui)}</div>
 
         {/* Reset Password Section */}
         <div className="forgot-password-section">
-          <h3>Reset password</h3>
+          <h3>{t("authModals.forgotPassword.resetTitle", ui)}</h3>
           <p className="forgot-password-description">
-            Click below to receive password reset instructions
+            {t("authModals.forgotPassword.resetDescription", ui)}
           </p>
 
           <form onSubmit={handleResetPassword}>
             <button
               type="submit"
-              className="submit-btn modal-form-submit"
+              className="submit-btn modal-form-submit forgot-password-reset-btn"
               disabled={loading || magicLinkLoading}
             >
-              {loading ? "SENDING..." : "RESET PASSWORD"}
+              {loading
+                ? t("authModals.forgotPassword.sending", ui)
+                : t("authModals.forgotPassword.resetButton", ui)}
             </button>
           </form>
         </div>
@@ -160,7 +178,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
         {/* Back to Login Link */}
         <div className="forgot-password-back">
           <span className="forgot-password-back-link" onClick={handleBackToLogin}>
-            &larr; Back to log in
+            {t("authModals.forgotPassword.backToLogin", ui)}
           </span>
         </div>
       </div>

@@ -550,6 +550,29 @@ def extract_sections(doc_json) -> List[Tuple[str, List[Tuple[str, str, dict | No
                 current_header = header_key
                 current_lines = []
             else:
+                # Some docs put headers and content in the same paragraph (e.g., "BACKSTORY\n...").
+                # Split if a paragraph starts with a known header so content doesn't bleed into prior sections.
+                split_header = None
+                split_rest = None
+                upper_text = text.upper()
+                for hdr in special_headers:
+                    if upper_text.startswith(hdr) and len(text) > len(hdr):
+                        next_char = text[len(hdr):len(hdr) + 1]
+                        if next_char in (" ", "\n", "\t", ":"):
+                            split_header = hdr
+                            split_rest = text[len(hdr):].lstrip(" \t:\n")
+                            break
+                if split_header:
+                    if current_header is not None:
+                        sections.append((current_header, current_lines))
+                    current_header = split_header
+                    current_lines = []
+                    if split_rest:
+                        for line in split_rest.splitlines():
+                            line = line.strip()
+                            if line:
+                                current_lines.append((line, style, spacing))
+                    continue
                 # Regular paragraph content
                 if current_header is not None:
                     current_lines.append((text, style, spacing))
