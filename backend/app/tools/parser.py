@@ -2487,13 +2487,19 @@ class GoogleDocsParser:
                     # Don't continue - let it process this directive
                 else:
                     # This is a continuation line
-                    # If we already have English text but no Thai, this is the Thai line
+                    # If we already have English text but no Thai, only treat the next line as Thai
+                    # when it actually contains Thai (or we're parsing the Thai doc).
                     if cur_items[-1].get("text") and not cur_items[-1].get("text_th"):
                         if lang == "th" and _has_th(stripped) and not _has_en(stripped):
                             cur_items[-1]["text_th"] = stripped
-                        else:
+                            collecting_text = False  # Done collecting
+                        elif _has_th(stripped) and not _has_en(stripped):
                             cur_items[-1]["text_th"] = stripped
-                        collecting_text = False  # Done collecting
+                            collecting_text = False  # Done collecting
+                        else:
+                            joiner = "\n" if re.match(r"^[A-Z]\s*:", stripped) else " "
+                            cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
+                            collecting_text = False  # Done collecting
                     else:
                         # Otherwise append to English text (or Thai if TH doc)
                         if lang == "th" and _has_th(stripped) and not _has_en(stripped):

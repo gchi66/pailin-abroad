@@ -26,7 +26,8 @@ export default function RichSectionRenderer({
   uiLang = "en",
   renderQuickPractice,
   noAccordion = false,
-  suppressBaseOffset = false
+  suppressBaseOffset = false,
+  accordionResetKey,
 }) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
@@ -848,6 +849,8 @@ const paragraphTextStartRem = (indentLevel) => {
       );
     };
 
+    const firstAccordionIndex = sections.findIndex((sec) => sec.heading);
+
     return (
       <div className="markdown-section">
         {sections.map((sec, i) => {
@@ -890,9 +893,10 @@ const paragraphTextStartRem = (indentLevel) => {
           // Render as accordion section
           return (
             <CollapsibleDetails
-              key={i}
+              key={`${accordionResetKey ?? "section"}-${i}`}
               className={`markdown-item${isLessonFocus ? " markdown-item-focus" : ""}`}
-              defaultOpen={i === 0}
+              defaultOpen={i === firstAccordionIndex}
+              resetKey={accordionResetKey}
               summaryContent={cleanHeadingText}
             >
               <div className="markdown-content">

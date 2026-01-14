@@ -45,6 +45,10 @@
   display: inline-block;
 }
 
+.lesson-navigation-compact {
+  display: none;
+}
+
 .lesson-navigation-text:hover:not(.disabled) {
   text-decoration: underline;
 }
@@ -115,6 +119,14 @@
 
   .lesson-navigation-text {
     font-size: 1rem;
+  }
+
+  .lesson-navigation-full {
+    display: none;
+  }
+
+  .lesson-navigation-compact {
+    display: inline;
   }
 }
 

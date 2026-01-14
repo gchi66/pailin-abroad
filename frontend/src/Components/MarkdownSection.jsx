@@ -53,6 +53,7 @@ export default function MarkdownSection({
   defaultOpenFirst = true,
   extraSections = [],
   sectionType = "",
+  accordionResetKey,
 }) {
   const filteredMarkdown =
     sectionType === "phrases_verbs_item"
@@ -76,9 +77,10 @@ export default function MarkdownSection({
       {allSections.length > 0 ? (
         allSections.map(({ key, title, body, preRendered }, idx) => (
           <CollapsibleDetails
-            key={key ?? idx}
+            key={`${accordionResetKey ?? "section"}-${key ?? idx}`}
             className="markdown-item"
             defaultOpen={defaultOpenFirst && idx === 0}
+            resetKey={accordionResetKey}
             summaryContent={title || "More Information"}
           >
             <div className="markdown-content">

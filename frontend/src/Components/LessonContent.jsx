@@ -464,6 +464,7 @@ export default function LessonContent({
                 key={idx}
                 className="markdown-item"
                 defaultOpen={idx === 0}
+                resetKey={activeId}
                 summaryContent={
                   <>
                     {phraseLabel}
@@ -679,9 +680,11 @@ export default function LessonContent({
           </div>
         </header>
         <RichSectionRenderer
+          key={section.id}
           nodes={processedContent}
           snipIdx={snipIdx}
           uiLang={uiLang}
+          accordionResetKey={section.id}
           renderQuickPractice={(exercise) => (
             <PracticeSection
               exercises={[exercise]}
@@ -717,8 +720,10 @@ export default function LessonContent({
       </header>
 
       <MarkdownSection
+        key={section.id}
         markdown={contentText}
         defaultOpenFirst={true}
+        accordionResetKey={section.id}
         sectionType={section.type}
       />
     </article>

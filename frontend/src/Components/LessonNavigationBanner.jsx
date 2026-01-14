@@ -107,6 +107,20 @@ const LessonNavigationBanner = ({
     return nextLesson?.lesson_order || "";
   };
 
+  const getLessonCompactLabel = (lesson, fallbackNumber) => {
+    if (!lesson) return "";
+    if (isCheckpointLesson(lesson)) {
+      return "CHECKPOINT";
+    }
+    return (
+      lesson.lesson_external_id ||
+      lesson.external_id ||
+      lesson.lessonId ||
+      fallbackNumber ||
+      ""
+    );
+  };
+
   const getNextLessonLabel = () => {
     if (!nextLesson) return "";
     if (isCheckpointLesson(nextLesson)) {
@@ -127,7 +141,12 @@ const LessonNavigationBanner = ({
             to={`/lesson/${prevLesson.id}`}
             className="lesson-navigation-text prev"
           >
-            ← LESSON {getPrevLessonNumber()}
+            <span className="lesson-navigation-full">
+              ← LESSON {getPrevLessonNumber()}
+            </span>
+            <span className="lesson-navigation-compact">
+              ← {getLessonCompactLabel(prevLesson, getPrevLessonNumber())}
+            </span>
           </Link>
         ) : (
           <div className="lesson-navigation-text disabled"></div>
@@ -162,7 +181,12 @@ const LessonNavigationBanner = ({
             to={`/lesson/${nextLesson.id}`}
             className="lesson-navigation-text next"
           >
-            {getNextLessonLabel()} →
+            <span className="lesson-navigation-full">
+              {getNextLessonLabel()} →
+            </span>
+            <span className="lesson-navigation-compact">
+              {getLessonCompactLabel(nextLesson, getNextLessonNumber())} →
+            </span>
           </Link>
         ) : (
           <div className="lesson-navigation-text disabled"></div>

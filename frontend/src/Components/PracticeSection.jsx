@@ -112,7 +112,7 @@ export default function PracticeSection({
 
   return (
     <div className="ps-container">
-      {list.map((ex) => {
+      {list.map((ex, idx) => {
         const Renderer = ex.kind ? kindToComponent[ex.kind] : null;
         if (!Renderer) {
           // eslint-disable-next-line no-console
@@ -143,7 +143,7 @@ export default function PracticeSection({
         }
 
         return (
-          <details key={ex.id} className="ps-accordion">
+          <details key={ex.id} className="ps-accordion" defaultOpen={idx === 0}>
             <summary className="ps-summary">
               {ex.title || ex.prompt || "Exercise"}
             </summary>

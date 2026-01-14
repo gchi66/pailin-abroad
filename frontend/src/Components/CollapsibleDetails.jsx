@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 export default function CollapsibleDetails({
   defaultOpen = false,
+  resetKey,
   className = "",
   summaryClassName = "markdown-summary",
   summaryContent,
@@ -11,8 +12,14 @@ export default function CollapsibleDetails({
 }) {
   const detailsRef = useRef(null);
   const initializedRef = useRef(false);
+  const prevResetRef = useRef(resetKey);
 
   useEffect(() => {
+    if (prevResetRef.current !== resetKey) {
+      prevResetRef.current = resetKey;
+      initializedRef.current = false;
+    }
+
     if (initializedRef.current) return;
 
     if (defaultOpen && detailsRef.current && !detailsRef.current.open) {
@@ -20,7 +27,7 @@ export default function CollapsibleDetails({
     }
 
     initializedRef.current = true;
-  }, [defaultOpen]);
+  }, [defaultOpen, resetKey]);
 
   return (
     <details ref={detailsRef} className={className} {...rest}>

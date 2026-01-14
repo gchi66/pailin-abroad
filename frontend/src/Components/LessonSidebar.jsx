@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
 import "../Styles/LessonSidebar.css";
@@ -45,6 +45,8 @@ const LessonSidebar = forwardRef(function LessonSidebar({
   const langForLabels = contentLang === "th" ? "th" : uiLang;
   const listRef = useRef(null);
   const prevMenuKeyRef = useRef("");
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
 
   const getLabel = (type) => {
     const key = LABEL_KEY_MAP[type];
@@ -114,6 +116,43 @@ const LessonSidebar = forwardRef(function LessonSidebar({
     return () => window.cancelAnimationFrame(frame);
   }, [activeId, menuKey]);
 
+  useEffect(() => {
+    const listNode = listRef.current;
+    if (!listNode) return;
+
+    const updateScrollState = () => {
+      const maxScrollLeft = listNode.scrollWidth - listNode.clientWidth;
+      const hasOverflow = maxScrollLeft > 1;
+      const nearStart = listNode.scrollLeft <= 1;
+      const nearEnd = listNode.scrollLeft >= maxScrollLeft - 1;
+      setCanScrollRight(hasOverflow && nearStart);
+      setCanScrollLeft(hasOverflow && nearEnd);
+    };
+
+    updateScrollState();
+    listNode.addEventListener("scroll", updateScrollState);
+    window.addEventListener("resize", updateScrollState);
+
+    return () => {
+      listNode.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [menuKey]);
+
+  const handleScrollToEnd = () => {
+    const listNode = listRef.current;
+    if (!listNode) return;
+    setCanScrollRight(false);
+    listNode.scrollTo({ left: listNode.scrollWidth, behavior: "smooth" });
+  };
+
+  const handleScrollToStart = () => {
+    const listNode = listRef.current;
+    if (!listNode) return;
+    setCanScrollLeft(false);
+    listNode.scrollTo({ left: 0, behavior: "smooth" });
+  };
+
   return (
     <nav
       ref={ref}
@@ -137,6 +176,34 @@ const LessonSidebar = forwardRef(function LessonSidebar({
           );
         })}
       </div>
+      {canScrollLeft ? (
+        <button
+          type="button"
+          className="ls-scroll-indicator ls-scroll-left"
+          onClick={handleScrollToStart}
+          aria-label="Scroll lesson sections to start"
+        >
+          <img
+            src="/images/black-carrot-arrow-left.webp"
+            alt=""
+            className="ls-scroll-indicator-icon"
+          />
+        </button>
+      ) : null}
+      {canScrollRight ? (
+        <button
+          type="button"
+          className="ls-scroll-indicator"
+          onClick={handleScrollToEnd}
+          aria-label="Scroll lesson sections"
+        >
+          <img
+            src="/images/black-carrot-arrow-right.webp"
+            alt=""
+            className="ls-scroll-indicator-icon"
+          />
+        </button>
+      ) : null}
     </nav>
   );
 });

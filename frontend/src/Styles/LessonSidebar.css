@@ -5,6 +5,8 @@
   align-self: flex-start;
   top: var(--navbar-height, 80px);
   z-index: 20;
+  display: flex;
+  justify-content: center;
 }
 
 .ls-list {
@@ -13,8 +15,10 @@
   justify-content: flex-start;
   gap: 0.8rem;
   padding: .5rem 0;
-  margin: 0;
+  margin: 0 auto;
   overflow-x: auto;
+  width: fit-content;
+  max-width: 100%;
   scroll-padding-left: var(--nav-side-padding, 2rem);
   scroll-padding-right: var(--nav-side-padding, 2rem);
   scrollbar-width: none; /* hide scrollbar in Firefox */
@@ -69,9 +73,53 @@
   pointer-events: none;
 }
 
+.ls-scroll-indicator {
+  position: absolute;
+  right: -1.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: none;
+  z-index: 2;
+}
+
+.ls-scroll-indicator:active {
+  transform: translateY(-50%);
+}
+
+.ls-scroll-indicator.ls-scroll-left {
+  left: -1.4rem;
+  right: auto;
+}
+
+.ls-scroll-indicator-icon {
+  display: block;
+  width: .6rem;
+  height: auto;
+}
+
+.ls-scroll-indicator:hover .ls-scroll-indicator-icon {
+  filter: saturate(1.2);
+}
+
+@media (min-width: 769px) {
+  /* .ls-list {
+    padding-right: 3rem;
+    padding-left: 3rem;
+  } */
+}
+
 @media (max-width: 768px) {
   .ls-sidebar {
     padding: 0.5rem 0 1rem 0;
+  }
+
+  .ls-scroll-indicator {
+    display: none;
   }
 }
 
