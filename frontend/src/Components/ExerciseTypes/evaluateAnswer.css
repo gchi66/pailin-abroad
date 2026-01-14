@@ -482,6 +482,16 @@
   white-space: nowrap;
 }
 
+.fb-row--wrapped .fb-inline-pair {
+  flex-wrap: wrap;
+  white-space: normal;
+  max-width: 100%;
+}
+
+.fb-row--wrapped .fb-inline-pair .fb-text-block {
+  white-space: normal;
+}
+
 .fb-line-break {
   flex-basis: 100%;
   height: 0;
