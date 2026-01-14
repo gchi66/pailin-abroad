@@ -376,6 +376,8 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   useEffect(() => {
     // Reset active section when navigating to a different lesson
     setActiveId(null);
+    setShowStickyPlayer(false);
+    setShouldAutoPlay(false);
   }, [id]);
 
   useEffect(() => {
@@ -457,12 +459,13 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
 
   const recomputeStickyVisibility = useCallback(() => {
     const noHeadsVisible = visibleHeadIdsRef.current.size === 0;
-    const shouldShow =
-      reachedHeadsRef.current &&
-      noHeadsVisible &&
-      !topSentinelVisibleRef.current;
+    const shouldShow = isMobileView
+      ? (isSidebarStuck && !topSentinelVisibleRef.current)
+      : (reachedHeadsRef.current &&
+          noHeadsVisible &&
+          !topSentinelVisibleRef.current);
     setShowStickyToggle(shouldShow);
-  }, [setShowStickyToggle]);
+  }, [isMobileView, isSidebarStuck, setShowStickyToggle]);
 
   const handleIntersection = useCallback((entries) => {
     if (headNodesRef.current.size === 0) return;
@@ -591,8 +594,13 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     if (!node) return undefined;
 
     const margin = computeNavbarMargin();
-    // turn "-80px 0px 0px 0px" into "80px 0px 0px 0px" to extend the root upward
-    const positiveMargin = margin.startsWith("-") ? margin.slice(1) : margin;
+    const marginValue = parseFloat(margin);
+    const baseOffset = Number.isNaN(marginValue) ? 0 : Math.abs(marginValue);
+    const mobileOffset = isMobileView ? 48 : 0;
+    const extraDelay = isMobileView ? 50 : 0;
+    const adjustedOffset = Math.max(0, baseOffset - mobileOffset + extraDelay);
+    // extend the root upward, with a smaller offset on mobile so the toggle appears sooner
+    const positiveMargin = `${adjustedOffset}px 0px 0px 0px`;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -611,7 +619,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
       observer.disconnect();
       topObserverRef.current = null;
     };
-  }, [computeNavbarMargin, recomputeStickyVisibility]);
+  }, [computeNavbarMargin, isMobileView, recomputeStickyVisibility]);
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;

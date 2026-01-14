@@ -529,8 +529,13 @@
 .mc-question-text {
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0 0 0.75rem;
+  margin: 0 0 0;
   line-height: 1.45;
+}
+
+.mc-question-text.th {
+  margin-bottom: .75rem;
+  margin-top: -.4rem;
 }
 
 .mc-options {

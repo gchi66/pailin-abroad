@@ -157,6 +157,16 @@ def _count_th(s: str) -> int:
 def _count_en(s: str) -> int:
     return len(EN.findall(s or ""))
 
+def _is_thai_dominant(line: str) -> bool:
+    """Return True if Thai characters clearly dominate Latin characters."""
+    thai = _count_th(line)
+    latin = _count_en(line)
+    if thai == 0:
+        return False
+    if latin == 0:
+        return True
+    return thai >= latin * 3
+
 def _norm_header_str(s: str | None) -> str:
     if not s: return ""
     return re.sub(r"\s+", " ", (s or "").replace("\u000b", " ").strip())
@@ -2390,7 +2400,7 @@ class GoogleDocsParser:
 
                 if content:
                     # There's content on the same line
-                    if lang == "th" and _has_th(content) and not _has_en(content):
+                    if lang == "th" and _is_thai_dominant(content):
                         cur_items[-1]["text_th"] = content
                         cur_items[-1]["text"] = cur_items[-1].get("text", "")
                     else:
@@ -2490,10 +2500,10 @@ class GoogleDocsParser:
                     # If we already have English text but no Thai, only treat the next line as Thai
                     # when it actually contains Thai (or we're parsing the Thai doc).
                     if cur_items[-1].get("text") and not cur_items[-1].get("text_th"):
-                        if lang == "th" and _has_th(stripped) and not _has_en(stripped):
+                        if lang == "th" and _is_thai_dominant(stripped):
                             cur_items[-1]["text_th"] = stripped
                             collecting_text = False  # Done collecting
-                        elif _has_th(stripped) and not _has_en(stripped):
+                        elif _is_thai_dominant(stripped):
                             cur_items[-1]["text_th"] = stripped
                             collecting_text = False  # Done collecting
                         else:
@@ -2502,7 +2512,7 @@ class GoogleDocsParser:
                             collecting_text = False  # Done collecting
                     else:
                         # Otherwise append to English text (or Thai if TH doc)
-                        if lang == "th" and _has_th(stripped) and not _has_en(stripped):
+                        if lang == "th" and _is_thai_dominant(stripped):
                             if cur_items[-1].get("text_th"):
                                 cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + " " + stripped
                             else:
@@ -2577,6 +2587,17 @@ class GoogleDocsParser:
 
             if exercise.get("items_th"):
                 for idx, item_th in enumerate(exercise["items_th"]):
+                    th_text_value = item_th.get("text")
+                    if isinstance(th_text_value, str):
+                        cleaned_text, image_key, alt_text, audio_key = extract_media_fields(th_text_value)
+                        if alt_text:
+                            item_th["alt_text"] = alt_text
+                        if image_key and "image_key" not in item_th:
+                            item_th["image_key"] = image_key
+                        if audio_key and "audio_key" not in item_th:
+                            item_th["audio_key"] = audio_key
+                        item_th["text"] = cleaned_text
+
                     if idx < len(exercise.get("items", [])):
                         src_item = exercise["items"][idx]
                         if src_item.get("audio_key") and "audio_key" not in item_th:

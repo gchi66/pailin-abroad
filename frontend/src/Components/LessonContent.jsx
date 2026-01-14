@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import LessonLanguageToggle from "./LessonLanguageToggle";
+import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 import ComprehensionQuiz from "./ComprehensionQuiz";
 import ApplySection from "./ApplySection";
 import MarkdownSection from "./MarkdownSection";
@@ -32,6 +33,8 @@ export default function LessonContent({
   onSelectSection,
 }) {
   const navigate = useNavigate();
+  const { showStickyToggle } = useStickyLessonToggle();
+  const showInlineToggle = !showStickyToggle;
   const fallbacks = copy.lessonPage.sectionFallbacks;
   const lockedCopy = copy.lessonPage.locked;
   const getFallbackHeader = (sectionType, defaultText) => {
@@ -294,7 +297,9 @@ export default function LessonContent({
             <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            {showInlineToggle && (
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            )}
           </div>
         </header>
 
@@ -319,7 +324,9 @@ export default function LessonContent({
             <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            {showInlineToggle && (
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            )}
           </div>
         </header>
 
@@ -378,7 +385,9 @@ export default function LessonContent({
             <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            {showInlineToggle && (
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            )}
           </div>
         </header>
 
@@ -425,7 +434,9 @@ export default function LessonContent({
             <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            {showInlineToggle && (
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            )}
           </div>
         </header>
 
@@ -545,7 +556,9 @@ export default function LessonContent({
             <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            {showInlineToggle && (
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            )}
           </div>
         </header>
 
@@ -676,7 +689,9 @@ export default function LessonContent({
             <span className="lc-head-title">{headerText}</span>
           </div>
           <div className="lc-head-right">
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            {showInlineToggle && (
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            )}
           </div>
         </header>
         <RichSectionRenderer
@@ -715,7 +730,9 @@ export default function LessonContent({
           <span className="lc-head-title">{headerText}</span>
         </div>
         <div className="lc-head-right">
-          <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+          {showInlineToggle && (
+            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+          )}
         </div>
       </header>
 
