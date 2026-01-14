@@ -225,6 +225,17 @@
   margin: -1rem 0 1.25rem 3rem;
 }
 
+.fb-row-th--inline {
+  margin: 0;
+}
+
+.st-example .fb-row-th--inline {
+  position: static;
+  float: none;
+  margin: -.5rem 0 0;
+  padding: 0;
+}
+
 .fb-row-th .fb-text-block {
   display: block;
   font-size: 1rem;

@@ -423,6 +423,13 @@ export default function FillBlankExercise({
                   );
                 })}
               </div>
+              {contentLang === "th" &&
+                typeof item.text_th === "string" &&
+                item.text_th.trim() && (
+                  <div className="fb-row-th fb-row-th--inline">
+                    {renderMultiline(item.text_th.trim())}
+                  </div>
+                )}
               {item.answer && (
                 <p className="st-example-meta st-example-answer">
                   <strong>Answer:</strong> {item.answer}
@@ -430,13 +437,6 @@ export default function FillBlankExercise({
               )}
             </div>
           </div>
-          {contentLang === "th" &&
-            typeof item.text_th === "string" &&
-            item.text_th.trim() && (
-              <div className="fb-row-th">
-                {renderMultiline(item.text_th.trim())}
-              </div>
-            )}
           </React.Fragment>
         );
       }
