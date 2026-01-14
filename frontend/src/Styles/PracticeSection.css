@@ -122,13 +122,17 @@ details[open] > .markdown-summary {
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
-  margin: 0.75rem 0;
+  margin: 0rem 0 .75rem;
 }
 
 .practice-audio-container .audio-button {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem !important;
+  height: 2rem !important;
   cursor: pointer;
+}
+
+.ps-quick-practice .fb-prompt {
+  margin-bottom: 2rem;
 }
 
 .fb-text-with-input {
@@ -168,7 +172,7 @@ details[open] > .markdown-summary {
   }
 
   details[open] > .markdown-summary {
-    padding-bottom: 0;
+    padding-bottom: 1rem;
   }
   .markdown-content {
     padding: 0 1.25rem .6dvh;

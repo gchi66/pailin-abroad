@@ -21,6 +21,13 @@ export default function TopicRichSectionRenderer({
 }) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
+  const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\])/g;
+  const INLINE_MARKER_COLORS = {
+    "[X]": "#FD6969",
+    "[✓]": "#3CA0FE",
+    "[-]": "#28A265",
+  };
+
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines) => {
     const processedInlines = inlines.map((span, idx) => {
@@ -72,40 +79,53 @@ export default function TopicRichSectionRenderer({
         whiteSpace: "pre-line",
       };
 
-      let element;
-      if (span.link) {
-        // Rewrite sentinel → internal lesson/topic path
-        let href = span.link;
-        if (href.startsWith("https://pa.invalid/lesson/")) {
-          href = href.replace("https://pa.invalid", "");
-        }
-        if (href.startsWith("https://pa.invalid/topic-library/")) {
-          href = href.replace("https://pa.invalid", "");
-        }
+      const renderTextWithMarkers = (text, keyPrefix) => {
+        const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
+        return segments.map((segment, segIdx) => {
+          const markerColor = INLINE_MARKER_COLORS[segment];
+          const style = markerColor
+            ? { ...commonStyle, color: markerColor, fontWeight: 600 }
+            : commonStyle;
 
-        const linkStyle = {
-          ...commonStyle,
-          color: span.underline ? "#676769" : commonStyle.color,
-        };
+          if (span.link) {
+            let href = span.link;
+            if (href.startsWith("https://pa.invalid/lesson/")) {
+              href = href.replace("https://pa.invalid", "");
+            }
+            if (href.startsWith("https://pa.invalid/topic-library/")) {
+              href = href.replace("https://pa.invalid", "");
+            }
 
-        element = (
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={linkStyle}
-          >
-            {cleanText}
-          </a>
-        );
-      } else {
-        element = <span style={commonStyle}>{cleanText}</span>;
-      }
+            const linkStyle = {
+              ...style,
+              color: span.underline ? "#676769" : style.color,
+            };
+
+            return (
+              <a
+                key={`${keyPrefix}-${segIdx}`}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={linkStyle}
+              >
+                {segment}
+              </a>
+            );
+          }
+
+          return (
+            <span key={`${keyPrefix}-${segIdx}`} style={style}>
+              {segment}
+            </span>
+          );
+        });
+      };
 
       return (
         <React.Fragment key={m}>
           {needsSpaceBefore && " "}
-          {element}
+          {renderTextWithMarkers(cleanText, `frag-${m}`)}
         </React.Fragment>
       );
     });

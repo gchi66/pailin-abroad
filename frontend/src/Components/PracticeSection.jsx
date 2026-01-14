@@ -135,10 +135,9 @@ export default function PracticeSection({
 
         if (!wrapInDetails) {
           return (
-            <Renderer
-              key={ex.id}
-              {...rendererProps}
-            />
+            <div key={ex.id} className={ex.isQuickPractice ? "ps-quick-practice" : ""}>
+              <Renderer {...rendererProps} />
+            </div>
           );
         }
 

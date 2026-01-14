@@ -128,6 +128,8 @@ def _manual_list_class(text: str) -> str | None:
     return None
 
 
+
+
 def _dominant_indent_threshold(doc_json: dict) -> int:
     """
     Return the most common indentFirstLine magnitude (≥36 PT) among
@@ -228,9 +230,13 @@ def paragraph_nodes(doc_json: dict):
         base_indent_dict = para_style.get("indentStart")
         first_line_indent_dict = para_style.get("indentFirstLine")
 
-        base_indent_pts = base_indent_dict.get("magnitude", 0) if isinstance(base_indent_dict, dict) else 0
+        base_indent_pts = (
+            base_indent_dict.get("magnitude") if isinstance(base_indent_dict, dict) and "magnitude" in base_indent_dict else None
+        )
         first_line_indent_pts = (
-            first_line_indent_dict.get("magnitude", 0) if isinstance(first_line_indent_dict, dict) else 0
+            first_line_indent_dict.get("magnitude")
+            if isinstance(first_line_indent_dict, dict) and "magnitude" in first_line_indent_dict
+            else None
         )
 
         if bullet_info:
@@ -240,12 +246,13 @@ def paragraph_nodes(doc_json: dict):
             nesting_levels = list_def.get("listProperties", {}).get("nestingLevels", [])
             list_level_def = nesting_levels[nesting_level] if nesting_level < len(nesting_levels) else {}
 
-            if (not isinstance(base_indent_dict, dict)) or ("magnitude" not in base_indent_dict):
-                base_indent_pts = list_level_def.get("indentStart", {}).get("magnitude", base_indent_pts)
-            if (not isinstance(first_line_indent_dict, dict)) or ("magnitude" not in first_line_indent_dict):
-                first_line_indent_pts = list_level_def.get("indentFirstLine", {}).get(
-                    "magnitude", first_line_indent_pts
-                )
+            if base_indent_pts is None:
+                base_indent_pts = list_level_def.get("indentStart", {}).get("magnitude")
+            if first_line_indent_pts is None:
+                first_line_indent_pts = list_level_def.get("indentFirstLine", {}).get("magnitude")
+
+        base_indent_pts = base_indent_pts or 0
+        first_line_indent_pts = first_line_indent_pts or 0
 
         # Normalize: subtract the accidental 36 PT base from levels 3-12
         if base_indent_pts >= 36:

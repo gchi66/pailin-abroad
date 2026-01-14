@@ -241,16 +241,17 @@ def _lang_of_entry(e: dict) -> str:
 
 
 # ───────────────────────────── module-level bilingual helpers
-def split_en_th(line: str):
+def split_en_th(line: str, ignore_paren: bool = False):
     if not line: return None, None
     line = line.strip()
 
     # "EN (TH)" pattern
-    m = re.match(r'^(.*?)\s*\(([\u0E00-\u0E7F].*?)\)\s*$', line)
-    if m:
-        en = m.group(1).strip() or None
-        th = m.group(2).strip() or None
-        return en, th
+    if not ignore_paren:
+        m = re.match(r'^(.*?)\s*\(([\u0E00-\u0E7F].*?)\)\s*$', line)
+        if m:
+            en = m.group(1).strip() or None
+            th = m.group(2).strip() or None
+            return en, th
 
     # "EN … TH" pattern (first Thai char starts TH)
     # Look for the first Thai character
@@ -354,7 +355,7 @@ def bilingualize_headers_th(nodes, default_level=3):
                     node["text"] = {**node["text"], "th": FOCUS_TH}
 
             s = node_plain_text(node)
-            en, th = split_en_th(s)
+            en, th = split_en_th(s, ignore_paren=True)
             if en or th:
                 out.append(_apply_bilingual_text(node, en, th))
             else:
@@ -659,7 +660,7 @@ def tag_nodes_with_sections(doc_json):
                     current_lesson      = hdr
                     current_lesson_key  = _lesson_key(hdr)
                     current_lesson_norm = _norm_header_str(hdr)
-                    current_lesson_en, current_lesson_th = split_en_th(hdr)
+                    current_lesson_en, current_lesson_th = split_en_th(hdr, ignore_paren=True)
                     current_section     = None
                     seq_counter         = {h: 0 for h in AUDIO_SECTION_HEADERS}
                 elif up in SECTION_ORDER:

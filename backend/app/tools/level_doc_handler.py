@@ -9,7 +9,7 @@ from typing import Dict, Tuple
 LEVEL_DOC_IDS: Dict[int, Dict[str, str]] = {
     1: {"en": "1VdXoHKRFd1PGgN317-JLZsusQwZLygaXns4DeA6jBns", "th": "1dpC-DhKJ6OCRNt9GgsmNHw7BD5dcCRRQUg-GMDeAInk"},
     2: {"en": "1ca6cFOwVsyqrJaagNMz78-2THMFVqy7ZmmAMqdkfVBU", "th": "1IC1xkAQv7LpFY3F9GMCHAzi_x5ZV_n_rNxAxdMq4kcs"},
-    3: {"en": "1D8TdA45pcFwQHwfAlgWEk1S8FO_qeRgTlc77ncBoA68", "th": "1oXAdR9Uq5oUEMXiQlNyeTCf9EfQtLzk2F20yqHwVm88"},
+    3: {"en": "1m2DCqs00sY7iNjP6Wc6UdVn4EaFVWkKEB7j_f8u40IA", "th": "1CwbS5BS1BQssCLC6u3pVKpIe9QJx9F2wqcU3uXfPdt4"},
     4: {"en": "1Wqa5L39_1Z2pFbBTJGng_pl3WO7lR9uUcK0jvys_lZs", "th": "1zwrm-oiQWpSOiyTDBFqIHMvWSdOitCWcxeoBZBRhKxc"},
     5: {"en": "13-30sdtvpJHinbwOtgJ4bM3bNfJPEYneUg2Do8QGE24", "th": "1o0rYbdgPdAXyHIddVcSjuFoabte0V2GSs_cITS1noJo"},
     6: {"en": "1rAJZ7dgRjZ00Jz1-YsNSZKLPfTorb2wNexDQ6Cv8iFc", "th": "1j_zzzdmeYJscvq7LJfQOhH72FSqVOraHFnRlzgIGEqE"},

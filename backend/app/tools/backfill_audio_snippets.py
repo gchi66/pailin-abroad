@@ -420,8 +420,11 @@ def main() -> None:
             seen_audio.add(key)
 
             # Generate audio_key for ALL section types following the pattern: {lesson}_{section}_{seq}
+            # Keep DB section as "extra_tip", but use "extra_tips" in audio_key to match doc tags.
             seq_str = str(seq).zfill(2)  # Zero-pad seq to 2 digits (01, 02, etc.)
-            audio_key = f"{lesson}_{section}_{seq_str}"
+            key_section = "extra_tips" if section == "extra_tip" else section
+            key_section = "common_mistakes" if key_section == "common_mistake" else key_section
+            audio_key = f"{lesson}_{key_section}_{seq_str}"
 
             row = {
                 "lesson_external_id": lesson,

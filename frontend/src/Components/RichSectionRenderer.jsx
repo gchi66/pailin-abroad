@@ -66,6 +66,12 @@ export default function RichSectionRenderer({
 const TH_RE = /[\u0E00-\u0E7F]/;
 const TH_PUNCT_ONLY_RE = /^[.,!?;:'"(){}\[\]<>\/\\\-–—…]+$/;
 const SPEAKER_PREFIX_RE = /^\s*((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0,40}):\s*)/;
+const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\])/g;
+const INLINE_MARKER_COLORS = {
+  "[X]": "#FD6969",
+  "[✓]": "#3CA0FE",
+  "[-]": "#28A265",
+};
 
 const isSpeakerLineText = (text) => {
   if (!text) return false;
@@ -138,65 +144,103 @@ const isEnglishSpeakerLineText = (text) => {
         // DON'T render the highlight color - it's just a spacing flag
       };
 
-      const hasThai = !!(thaiColor && TH_RE.test(currentText));
-      const thaiStartIndex = hasThai ? currentText.search(TH_RE) : -1;
-      const parts = hasThai
-        ? currentText.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}\[\]<>\/\\\-–—…]+)/)
-        : [currentText];
-      let partOffset = 0;
-      const partEntries = parts.map((part) => {
-        const entry = { part, start: partOffset };
-        partOffset += part.length;
-        return entry;
-      });
-
-      const fragmentNodes = partEntries
-        .filter(({ part }) => part !== "")
-        .map(({ part, start }, idx) => {
-          const isThaiLinePart = hasThai && start >= thaiStartIndex;
-          const style = {
-            ...commonStyle,
-            color: span.speakerColor || (isThaiLinePart && thaiColor ? thaiColor : undefined),
-            fontWeight:
-              isThaiLinePart && thaiColor
-                ? (span.speakerWeight || (span.bold ? 500 : 400))
-                : commonStyle.fontWeight,
-          };
-
-          if (span.link) {
-            // Rewrite sentinel → internal lesson/topic path
-            let href = span.link;
-            if (href.startsWith("https://pa.invalid/lesson/")) {
-              href = href.replace("https://pa.invalid", "");
-            }
-            if (href.startsWith("https://pa.invalid/topic-library/")) {
-              href = href.replace("https://pa.invalid", "");
-            }
-
-            const linkStyle = {
-              ...style,
-              color: span.underline ? "#676769" : style.color,
+      const renderTextWithMarkers = (text, keyPrefix) => {
+        const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
+        return segments.flatMap((segment, segIdx) => {
+          const markerColor = INLINE_MARKER_COLORS[segment];
+          if (markerColor) {
+            const markerStyle = {
+              ...commonStyle,
+              color: markerColor,
+              fontWeight: 600,
             };
-
+            if (span.link) {
+              return (
+                <a
+                  key={`${keyPrefix}-marker-${segIdx}`}
+                  href={span.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={markerStyle}
+                >
+                  {segment}
+                </a>
+              );
+            }
             return (
-              <a
-                key={`frag-${m}-${idx}`}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={linkStyle}
-              >
-                {part}
-              </a>
+              <span key={`${keyPrefix}-marker-${segIdx}`} style={markerStyle}>
+                {segment}
+              </span>
             );
           }
 
-          return (
-            <span key={`frag-${m}-${idx}`} style={style}>
-              {part}
-            </span>
-          );
+          const segmentHasThai = !!(thaiColor && TH_RE.test(segment));
+          const segmentThaiStart = segmentHasThai ? segment.search(TH_RE) : -1;
+          const segmentParts = segmentHasThai
+            ? segment.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}\[\]<>\/\\\-–—…]+)/)
+            : [segment];
+          let segmentOffset = 0;
+          const segmentEntries = segmentParts.map((part) => {
+            const entry = { part, start: segmentOffset };
+            segmentOffset += part.length;
+            return entry;
+          });
+
+          return segmentEntries
+            .filter(({ part }) => part !== "")
+            .map(({ part, start }, idx) => {
+              const isThaiBracket =
+                segmentHasThai &&
+                (part === "(" || part === "[") &&
+                start + part.length === segmentThaiStart;
+              const isThaiLinePart =
+                segmentHasThai && (start >= segmentThaiStart || isThaiBracket);
+              const style = {
+                ...commonStyle,
+                color: span.speakerColor || (isThaiLinePart && thaiColor ? thaiColor : undefined),
+                fontWeight:
+                  isThaiLinePart && thaiColor
+                    ? (span.speakerWeight || (span.bold ? 500 : 400))
+                    : commonStyle.fontWeight,
+              };
+
+              if (span.link) {
+                let href = span.link;
+                if (href.startsWith("https://pa.invalid/lesson/")) {
+                  href = href.replace("https://pa.invalid", "");
+                }
+                if (href.startsWith("https://pa.invalid/topic-library/")) {
+                  href = href.replace("https://pa.invalid", "");
+                }
+
+                const linkStyle = {
+                  ...style,
+                  color: span.underline ? "#676769" : style.color,
+                };
+
+                return (
+                  <a
+                    key={`${keyPrefix}-frag-${segIdx}-${idx}`}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={linkStyle}
+                  >
+                    {part}
+                  </a>
+                );
+              }
+
+              return (
+                <span key={`${keyPrefix}-frag-${segIdx}-${idx}`} style={style}>
+                  {part}
+                </span>
+              );
+            });
         });
+      };
+
+      const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`);
 
       return (
         <React.Fragment key={m}>
