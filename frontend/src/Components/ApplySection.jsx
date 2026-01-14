@@ -17,6 +17,7 @@ export default function ApplySection({
   contentLang = "en",
   contentNodes = [],
   responseNodes = [],
+  images,
 }) {
   const [text, setText] = useState("");
   const [showResponse, setShowResponse] = useState(false);
@@ -37,6 +38,7 @@ export default function ApplySection({
           <RichSectionRenderer
             nodes={contentNodes}
             uiLang={contentLang}
+            images={images}
             noAccordion
             suppressBaseOffset
           />
@@ -75,6 +77,7 @@ export default function ApplySection({
             <RichSectionRenderer
               nodes={responseNodes}
               uiLang={contentLang}
+              images={images}
               noAccordion
               suppressBaseOffset
             />

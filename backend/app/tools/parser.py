@@ -19,6 +19,7 @@ import sys
 import logging
 import dataclasses
 from pathlib import Path
+from copy import deepcopy
 from typing import Dict, List, Tuple, Union
 
 from .docs_fetch import fetch_doc      # fetch_doc uses the Google Docs API
@@ -106,6 +107,81 @@ def _plain_text(elems: list[dict]) -> str:
     text = "".join(parts)
     # Google Docs uses vertical tab (\u000b) for soft line breaks inside table cells.
     return text.replace("\u000b", "\n").strip()
+
+def _run_is_non_bold(run: dict) -> bool:
+    text_run = run.get("textRun")
+    if not text_run:
+        return False
+    text = text_run.get("content", "")
+    if not text:
+        return False
+    return not text_run.get("textStyle", {}).get("bold", False)
+
+def normalize_soft_break_subheaders(doc_json: dict) -> None:
+    """
+    Split paragraphs that contain a bold run ending in a soft break (\u000b)
+    followed by non-bold content. This turns bold inline "subheaders" into
+    standalone paragraphs so rich rendering can detect them.
+    """
+    body = doc_json.get("body", {})
+    content = body.get("content", [])
+    if not isinstance(content, list):
+        return
+
+    normalized = []
+    for elem in content:
+        para = elem.get("paragraph")
+        if not para:
+            normalized.append(elem)
+            continue
+
+        elements = para.get("elements", [])
+        split_idx = None
+        for idx, run in enumerate(elements):
+            text_run = run.get("textRun")
+            if not text_run:
+                continue
+            text = text_run.get("content", "")
+            is_bold = text_run.get("textStyle", {}).get("bold", False)
+            if is_bold and "\u000b" in text:
+                if any(_run_is_non_bold(r) for r in elements[idx + 1 :]):
+                    split_idx = idx
+                    break
+
+        if split_idx is None:
+            normalized.append(elem)
+            continue
+
+        header_elems = deepcopy(elements[: split_idx + 1])
+        body_elems = deepcopy(elements[split_idx + 1 :])
+
+        header_run = header_elems[-1]
+        header_text = header_run.get("textRun", {}).get("content", "")
+        before, after = header_text.split("\u000b", 1)
+        header_run["textRun"]["content"] = before
+        header_elems[-1] = header_run
+
+        if after:
+            carry_run = deepcopy(header_run)
+            carry_run["textRun"]["content"] = after
+            body_elems.insert(0, carry_run)
+
+        header_text_full = "".join(
+            r.get("textRun", {}).get("content", "") for r in header_elems
+        ).strip()
+        if not header_text_full or not body_elems:
+            normalized.append(elem)
+            continue
+
+        header_para = deepcopy(elem)
+        header_para["paragraph"]["elements"] = header_elems
+
+        body_para = deepcopy(elem)
+        body_para["paragraph"]["elements"] = body_elems
+
+        normalized.extend([header_para, body_para])
+
+    body["content"] = normalized
 
 def _table_block(elem: dict, tbl_id: int) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
@@ -2566,6 +2642,31 @@ class GoogleDocsParser:
             cleaned = cleaned.strip()
             return cleaned, image_key, alt_text, audio_key
 
+        def normalize_options_list(options_list: list) -> list:
+            normalized = []
+            for opt in options_list or []:
+                if isinstance(opt, dict):
+                    normalized.append(opt)
+                    continue
+                if not isinstance(opt, str):
+                    continue
+                match = OPTION_RE.match(opt.strip())
+                if match:
+                    label = match.group(1)
+                    body = match.group(2)
+                else:
+                    label = ""
+                    body = opt
+
+                cleaned_text, image_key, alt_text, _audio_key = extract_media_fields(body)
+                normalized.append({
+                    "label": label,
+                    "text": cleaned_text,
+                    "image_key": image_key,
+                    "alt_text": alt_text or cleaned_text or label,
+                })
+            return normalized
+
         for exercise in exercises:
             for item in exercise.get("items", []):
                 text_value = item.get("text")
@@ -2578,6 +2679,8 @@ class GoogleDocsParser:
                     item["audio_key"] = audio_key
                 if isinstance(cleaned_text, str):
                     item["text"] = cleaned_text
+                if item.get("options"):
+                    item["options"] = normalize_options_list(item["options"])
                 th_text_value = item.get("text_th")
                 if isinstance(th_text_value, str):
                     cleaned_th, _, _, _ = extract_media_fields(th_text_value)
@@ -2598,6 +2701,8 @@ class GoogleDocsParser:
                         if audio_key and "audio_key" not in item_th:
                             item_th["audio_key"] = audio_key
                         item_th["text"] = cleaned_text
+                    if item_th.get("options"):
+                        item_th["options"] = normalize_options_list(item_th["options"])
 
                     if idx < len(exercise.get("items", [])):
                         src_item = exercise["items"][idx]
@@ -2656,6 +2761,7 @@ class GoogleDocsParser:
         if not doc_json:
             logger.error("Failed to fetch document")
             return {}
+        normalize_soft_break_subheaders(doc_json)
         sections = extract_sections(doc_json)
         lessons = split_lessons_by_header(sections)
 

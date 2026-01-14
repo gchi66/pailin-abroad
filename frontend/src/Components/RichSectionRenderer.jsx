@@ -25,6 +25,7 @@ export default function RichSectionRenderer({
   isPhrasesSection = false,
   uiLang = "en",
   renderQuickPractice,
+  images,
   noAccordion = false,
   suppressBaseOffset = false,
   accordionResetKey,
@@ -402,6 +403,9 @@ const paragraphTextStartRem = (indentLevel) => {
     const phraseThaiOpts = isPhrasesSection
       ? { thaiColor: "#8C8D93", englishColor: "#1e1e1e" }
       : undefined;
+    const audioThaiOpts = isPhrasesSection
+      ? phraseThaiOpts
+      : { thaiColor: "#8C8D93" };
     if (isPhrasesSection) {
       const rawText = (node.inlines || []).map((s) => s.text || "").join("");
       if (rawText.toLowerCase().includes("link xx")) {
@@ -416,6 +420,7 @@ const paragraphTextStartRem = (indentLevel) => {
   if (node.kind === "image") {
     const src =
       node.image_url ||
+      (node.image_key && images ? images[node.image_key] : null) ||
       (node.image_key ? `/api/images/${encodeURIComponent(node.image_key)}` : null);
     if (!src) {
       return null;
@@ -476,7 +481,7 @@ const paragraphTextStartRem = (indentLevel) => {
                 className="select-none"
               />
               <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
-                {renderInlines(node.inlines, phraseThaiOpts)}
+                {renderInlines(node.inlines, audioThaiOpts)}
               </span>
             </p>
           </div>
@@ -552,7 +557,7 @@ const paragraphTextStartRem = (indentLevel) => {
               className="select-none"
             />
             <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
-              {renderInlines(node.inlines, phraseThaiOpts)}
+              {renderInlines(node.inlines, audioThaiOpts)}
             </span>
           </li>
         </div>
@@ -612,7 +617,7 @@ const paragraphTextStartRem = (indentLevel) => {
               className="select-none"
             />
             <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
-              {renderInlines(node.inlines, phraseThaiOpts)}
+              {renderInlines(node.inlines, audioThaiOpts)}
             </span>
           </div>
           </div>
@@ -690,6 +695,9 @@ const paragraphTextStartRem = (indentLevel) => {
     const phraseThaiOpts = isPhrasesSection
       ? { thaiColor: "#8C8D93", englishColor: "#1e1e1e" }
       : undefined;
+    const audioThaiOpts = isPhrasesSection
+      ? phraseThaiOpts
+      : { thaiColor: "#8C8D93" };
 
     if (hasAudio) {
       return (
@@ -713,7 +721,7 @@ const paragraphTextStartRem = (indentLevel) => {
             size={AUDIO_BUTTON_SIZE}
             className="select-none"
           />
-          <span>{renderInlines(node.inlines, phraseThaiOpts)}</span>
+          <span>{renderInlines(node.inlines, audioThaiOpts)}</span>
         </li>
       );
     }

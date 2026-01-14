@@ -568,6 +568,7 @@ export default function LessonContent({
           contentLang={contentLang}
           contentNodes={promptNodes}
           responseNodes={responseNodes}
+          images={images}
         />
       </article>
     );
