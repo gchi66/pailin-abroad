@@ -91,6 +91,7 @@ const isEnglishSpeakerLineText = (text) => {
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines, opts = {}) => {
     const thaiColor = opts.thaiColor || null;
+    const englishColor = opts.englishColor || null;
     const processedInlines = inlines.map((span, idx) => {
       const cleanText = cleanAudioTags(span.text);
       let displayText = cleanText;
@@ -144,7 +145,8 @@ const isEnglishSpeakerLineText = (text) => {
         // DON'T render the highlight color - it's just a spacing flag
       };
 
-      const renderTextWithMarkers = (text, keyPrefix) => {
+      const renderTextWithMarkers = (text, keyPrefix, opts = {}) => {
+        const thaiContext = opts.thaiContext === true;
         const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
         return segments.flatMap((segment, segIdx) => {
           const markerColor = INLINE_MARKER_COLORS[segment];
@@ -174,8 +176,7 @@ const isEnglishSpeakerLineText = (text) => {
             );
           }
 
-          const segmentHasThai = !!(thaiColor && TH_RE.test(segment));
-          const segmentThaiStart = segmentHasThai ? segment.search(TH_RE) : -1;
+          const segmentHasThai = !!(thaiColor && (thaiContext || TH_RE.test(segment)));
           const segmentParts = segmentHasThai
             ? segment.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}\[\]<>\/\\\-–—…]+)/)
             : [segment];
@@ -188,18 +189,23 @@ const isEnglishSpeakerLineText = (text) => {
 
           return segmentEntries
             .filter(({ part }) => part !== "")
-            .map(({ part, start }, idx) => {
-              const isThaiBracket =
-                segmentHasThai &&
-                (part === "(" || part === "[") &&
-                start + part.length === segmentThaiStart;
-              const isThaiLinePart =
-                segmentHasThai && (start >= segmentThaiStart || isThaiBracket);
+            .map(({ part }, idx) => {
+              const prev = segmentEntries[idx - 1]?.part || "";
+              const next = segmentEntries[idx + 1]?.part || "";
+              const partHasThai =
+                TH_RE.test(part) ||
+                (segmentHasThai &&
+                  TH_PUNCT_ONLY_RE.test(part) &&
+                  (thaiContext || TH_RE.test(prev) || TH_RE.test(next)));
               const style = {
                 ...commonStyle,
-                color: span.speakerColor || (isThaiLinePart && thaiColor ? thaiColor : undefined),
+                color:
+                  span.speakerColor ||
+                  (partHasThai && thaiColor
+                    ? thaiColor
+                    : (englishColor || undefined)),
                 fontWeight:
-                  isThaiLinePart && thaiColor
+                  partHasThai && thaiColor
                     ? (span.speakerWeight || (span.bold ? 500 : 400))
                     : commonStyle.fontWeight,
               };
@@ -240,7 +246,14 @@ const isEnglishSpeakerLineText = (text) => {
         });
       };
 
-      const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`);
+      const prevText = processedInlines[m - 1]?.displayText;
+      const nextText = processedInlines[m + 1]?.displayText;
+      const thaiContext = !!(thaiColor && (
+        TH_RE.test(currentText) ||
+        TH_RE.test(typeof prevText === "string" ? prevText : "") ||
+        TH_RE.test(typeof nextText === "string" ? nextText : "")
+      ));
+      const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`, { thaiContext });
 
       return (
         <React.Fragment key={m}>
@@ -386,7 +399,9 @@ const paragraphTextStartRem = (indentLevel) => {
         node = { ...node, _isSpeakerLine: true };
       }
     }
-    const phraseThaiOpts = isPhrasesSection ? { thaiColor: "#8C8D93" } : undefined;
+    const phraseThaiOpts = isPhrasesSection
+      ? { thaiColor: "#8C8D93", englishColor: "#1e1e1e" }
+      : undefined;
     if (isPhrasesSection) {
       const rawText = (node.inlines || []).map((s) => s.text || "").join("");
       if (rawText.toLowerCase().includes("link xx")) {
@@ -461,7 +476,7 @@ const paragraphTextStartRem = (indentLevel) => {
                 className="select-none"
               />
               <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
-                {renderInlines(node.inlines, { thaiColor: "#8C8D93" })}
+                {renderInlines(node.inlines, phraseThaiOpts)}
               </span>
             </p>
           </div>
@@ -537,7 +552,7 @@ const paragraphTextStartRem = (indentLevel) => {
               className="select-none"
             />
             <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
-              {renderInlines(node.inlines, { thaiColor: "#8C8D93" })}
+              {renderInlines(node.inlines, phraseThaiOpts)}
             </span>
           </li>
         </div>
@@ -597,7 +612,7 @@ const paragraphTextStartRem = (indentLevel) => {
               className="select-none"
             />
             <span className={boldPhrase ? "phrases-phrase-text" : undefined}>
-              {renderInlines(node.inlines, { thaiColor: "#8C8D93" })}
+              {renderInlines(node.inlines, phraseThaiOpts)}
             </span>
           </div>
           </div>
@@ -672,7 +687,9 @@ const paragraphTextStartRem = (indentLevel) => {
     const baseIndent = computeIndentLevel(node);
     const extraIndent = baseIndent - groupIndent;
     const extraIndentRem = extraIndent * INDENT_PER_LEVEL;
-    const phraseThaiOpts = isPhrasesSection ? { thaiColor: "#8C8D93" } : undefined;
+    const phraseThaiOpts = isPhrasesSection
+      ? { thaiColor: "#8C8D93", englishColor: "#1e1e1e" }
+      : undefined;
 
     if (hasAudio) {
       return (
@@ -696,7 +713,7 @@ const paragraphTextStartRem = (indentLevel) => {
             size={AUDIO_BUTTON_SIZE}
             className="select-none"
           />
-          <span>{renderInlines(node.inlines, { thaiColor: "#8C8D93" })}</span>
+          <span>{renderInlines(node.inlines, phraseThaiOpts)}</span>
         </li>
       );
     }

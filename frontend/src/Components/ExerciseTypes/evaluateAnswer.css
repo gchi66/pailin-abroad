@@ -898,6 +898,18 @@
     align-self: center;
   }
 
+  .fb-row--fill-blank.fb-row-multiline,
+  .fb-row--fill-blank.fb-row--wrapped {
+    align-items: flex-start;
+  }
+
+  .fb-row--fill-blank.fb-row-multiline .fb-row-number,
+  .fb-row--fill-blank.fb-row--wrapped .fb-row-number {
+    align-self: flex-start;
+    line-height: 1.45;
+    padding-top: 0;
+  }
+
   .fb-wrap,
   .st-wrap {
     max-width: 100%;
