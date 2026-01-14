@@ -503,7 +503,7 @@ export default function FillBlankExercise({
                         !segment.content?.includes("\n") &&
                         !nextNext.content?.includes("\n");
                       const answerLength = (item?.answer || "").trim().length;
-                      const isShortAnswer = answerLength > 0 && answerLength <= 8;
+                      const isShortAnswer = answerLength > 0 && answerLength <= 10;
 
                       if (canInline && isShortAnswer) {
                         const blankLength = next.length || 1;
@@ -559,7 +559,7 @@ export default function FillBlankExercise({
                     const blankLength = segment.length || 1;
                     const minWidthCh = 3 + blankLength * 2;
                     const answerLength = (item?.answer || "").trim().length;
-                    const isShortAnswer = answerLength > 0 && answerLength <= 8;
+                    const isShortAnswer = answerLength > 0 && answerLength <= 10;
                     const inputMinWidthCh = isShortAnswer ? 8 : minWidthCh;
                     nodes.push(
                       <div
@@ -586,7 +586,7 @@ export default function FillBlankExercise({
 
                   if (!hasBlank) {
                     const answerLength = (item?.answer || "").trim().length;
-                    const isShortAnswer = answerLength > 0 && answerLength <= 8;
+                    const isShortAnswer = answerLength > 0 && answerLength <= 10;
                     const inputMinWidthCh = isShortAnswer ? 8 : 12;
                     nodes.push(
                       <div

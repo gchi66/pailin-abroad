@@ -40,6 +40,12 @@ def is_subheader(text: str, style: str) -> bool:
 
     # ALL-CAPS test should ignore Thai letters
     ascii_only = TH_RX.sub("", normalized_text).strip()
+    has_thai = bool(TH_RX.search(normalized_text))
+    if has_thai:
+        # Avoid treating single-letter English + Thai as a subheader (e.g., "I (ฉัน)").
+        upper_letters = re.findall(r"[A-Z]", ascii_only)
+        if len(upper_letters) < 2:
+            return False
     # Check if text starts with Thai (after trimming whitespace)
     if normalized_text and '\u0E00' <= normalized_text[0] <= '\u0E7F':
         # Text starts with Thai, skip ALL-CAPS English header detection
