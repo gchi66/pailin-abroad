@@ -519,6 +519,19 @@ export default function FillBlankExercise({
           segment.type === "line-break" ||
           (segment.type === "text" && segment.content?.includes("\n"))
       );
+      const answerLength = (item?.answer || "").trim().length;
+      const isShortAnswer = answerLength > 0 && answerLength <= 10;
+      const prefersInlineFlow = isShortAnswer && segmentsToRender.some((segment, segmentIdx) => {
+        if (segment.type !== "text") return false;
+        const next = segmentsToRender[segmentIdx + 1];
+        const nextNext = segmentsToRender[segmentIdx + 2];
+        return (
+          next?.type === "blank" &&
+          nextNext?.type === "text" &&
+          !segment.content?.includes("\n") &&
+          !nextNext.content?.includes("\n")
+        );
+      });
       const questionInlines = item.text_jsonb || null;
       const questionInlinesTh = item.text_jsonb_th || null;
       const displayNumber = item.number ?? idx + 1;
@@ -554,7 +567,7 @@ export default function FillBlankExercise({
                 </div>
               )}
               <div
-                className="fb-row-text"
+                className={`fb-row-text${prefersInlineFlow ? " fb-row-text--inline" : ""}`}
                 ref={(el) => {
                   rowTextRefs.current[idx] = el;
                 }}
@@ -582,30 +595,28 @@ export default function FillBlankExercise({
                         const minWidthCh = 3 + blankLength * 2;
                         const inputMinWidthCh = 8;
                         nodes.push(
-                          <React.Fragment key={`inline-${idx}-${segmentIdx}`}>
-                            <span className="fb-inline-pair">
-                              {renderText}
-                              <span className="fb-input-wrap fb-input-wrap--short">
-                                <input
-                                  type="text"
-                                  className="fb-input fb-input--short"
-                                  value={questionState.answer}
-                                  onChange={(event) =>
-                                    handleAnswerChange(idx, event.target.value)
-                                  }
-                                  disabled={disabled}
-                                  placeholder=""
-                                  style={{
-                                    minWidth: `${inputMinWidthCh}ch`,
-                                  }}
-                                />
-                                <InlineStatus state={questionState} />
-                              </span>
+                          <span key={`inline-${idx}-${segmentIdx}`} className="fb-inline-flow">
+                            {renderText}
+                            <span className="fb-input-wrap fb-input-wrap--short">
+                              <input
+                                type="text"
+                                className="fb-input fb-input--short"
+                                value={questionState.answer}
+                                onChange={(event) =>
+                                  handleAnswerChange(idx, event.target.value)
+                                }
+                                disabled={disabled}
+                                placeholder=""
+                                style={{
+                                  minWidth: `${inputMinWidthCh}ch`,
+                                }}
+                              />
+                              <InlineStatus state={questionState} />
                             </span>
                             {nextNext?.style
                               ? renderStyledText(nextNext.content, nextNext.style)
                               : renderMultiline(nextNext?.content)}
-                          </React.Fragment>
+                          </span>
                         );
                         segmentIdx += 2;
                         continue;
