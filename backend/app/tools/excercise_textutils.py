@@ -4,6 +4,7 @@ TH_RX = re.compile(r"[\u0E00-\u0E7F]")  # Thai block
 UPPER_SUB_RE = re.compile(r"^[A-Z0-9 ,.&/()'‘’\-!?$%#\[\]:…]{2,80}$")
 HEADER_WITH_COLON_RE = re.compile(r"^[A-Z][A-Z0-9 ,.&'‘’\-!?$%#]+: [0-9]{1,2}:[0-9]{2} ?- ?[0-9]{1,2}:[0-9]{2}$")
 HEADER_TRAILING_VARIANT_RE = re.compile(r"\[\s*\d+\s*\]\s*$")  # e.g. [1], [ 2 ]
+NON_HEADER_TOKENS_RE = re.compile(r"^I\s*\(\s*ฉัน\s*\)\s*$")
 
 
 def is_subheader(text: str, style: str) -> bool:
@@ -14,6 +15,9 @@ def is_subheader(text: str, style: str) -> bool:
     single-token shouty words (e.g. 'CEO') are not treated as section headers.
     """
     normalized_text = text.replace("\u200b", "").strip()
+
+    if NON_HEADER_TOKENS_RE.match(normalized_text):
+        return False
 
     # treat as header if styled (H3+)
     if style.startswith("HEADING_") and style not in {"HEADING_1", "HEADING_2"}:

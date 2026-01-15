@@ -225,6 +225,65 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
 
     body["content"] = normalized
 
+def normalize_soft_breaks(doc_json: dict) -> None:
+    """
+    Normalize Google Docs soft breaks (\u000b) with conservative rules:
+    - Always convert double soft breaks to hard paragraph breaks.
+    - Convert single soft breaks to newlines when they precede known markers
+      (RESPONSE/PROMPT/QUESTION/ANSWER), speaker labels, or ALL-CAPS headers.
+    - Convert bold-run soft breaks when the following run is non-bold.
+    """
+    body = doc_json.get("body", {})
+    content = body.get("content", [])
+    if not isinstance(content, list):
+        return
+
+    marker_re = re.compile(r"\u000b(?=\\s*(?:RESPONSE:|PROMPT:|QUESTION:|ANSWER:))", re.I)
+    speaker_re = re.compile(r"\u000b(?=\\s*[A-Z][^:\\n]{0,40}:)")
+    caps_re = re.compile(
+        r"\u000b(?=\\s*[A-Z][A-Z0-9 ,.&/()+'‘’!?$%#\\[\\]:…-]{2,80})"
+    )
+
+    for elem in content:
+        para = elem.get("paragraph")
+        if not para:
+            continue
+        elements = para.get("elements", [])
+        if not elements:
+            continue
+
+        # Phase 1: safe global normalization
+        for run in elements:
+            text_run = run.get("textRun")
+            if not text_run:
+                continue
+            text = text_run.get("content", "")
+            if "\u000b\u000b" in text:
+                text_run["content"] = text.replace("\u000b\u000b", "\n\n")
+
+        # Phase 2: conditional normalization within runs
+        for idx, run in enumerate(elements):
+            text_run = run.get("textRun")
+            if not text_run:
+                continue
+            text = text_run.get("content", "")
+            if "\u000b" not in text:
+                continue
+
+            text = marker_re.sub("\n", text)
+            text = speaker_re.sub("\n", text)
+            text = caps_re.sub("\n", text)
+
+            # Bold-run boundary split (subheaders)
+            if "\u000b" in text:
+                is_bold = text_run.get("textStyle", {}).get("bold", False)
+                if is_bold and idx + 1 < len(elements):
+                    next_run = elements[idx + 1].get("textRun")
+                    if next_run and not next_run.get("textStyle", {}).get("bold", False):
+                        text = text.replace("\u000b", "\n")
+
+            text_run["content"] = text
+
 def _table_block(elem: dict, tbl_id: int) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
     rows = []
@@ -1191,9 +1250,20 @@ class GoogleDocsParser:
                 continue
 
             pieces = re.split(r"(?:\u000b|\n)+", raw_text)
+            line_list_node = None if len(pieces) > 1 else None
             for i, piece in enumerate(pieces):
                 text = (piece or "").strip()
                 if not text:
+                    continue
+
+                if line_list_node is not None:
+                    # Keep split speaker lines attached to the same list_item node.
+                    inlines = line_list_node.get("inlines", [])
+                    if inlines:
+                        inlines.append({"text": "\n", "bold": False, "italic": False, "underline": False})
+                    inlines.append({"text": text, "bold": False, "italic": False, "underline": False})
+                    line_list_node["inlines"] = inlines
+                    text_buffer.append(text)
                     continue
 
                 if looks_like_header(text, style, i):
@@ -1225,6 +1295,8 @@ class GoogleDocsParser:
                                 if key in last_audio_node and last_audio_node[key] is not None:
                                     node[key] = last_audio_node[key]
                     node_buffer.append(node)
+                    if len(pieces) > 1 and node.get("kind") == "list_item":
+                        line_list_node = node
                     if node.get("kind") == "list_item" and (node.get("audio_key") or node.get("audio_seq")):
                         last_audio_node = node
                 else:
@@ -1756,17 +1828,19 @@ class GoogleDocsParser:
                 in_response = False
                 for line in lines:
                     text_line, style, _spacing = _line_parts(line)
-                    if not in_response:
-                        match = response_re.match(text_line or "")
-                        if match:
-                            in_response = True
-                            first = match.group(1).strip()
-                            if first:
-                                response_lines.append((first, style))
-                            continue
-                        prompt_lines.append((text_line, style))
-                    else:
-                        response_lines.append((text_line, style))
+                    # Split embedded soft-break newlines into separate logical lines.
+                    for piece in (text_line or "").splitlines():
+                        if not in_response:
+                            match = response_re.match(piece or "")
+                            if match:
+                                in_response = True
+                                first = match.group(1).strip()
+                                if first:
+                                    response_lines.append((first, style))
+                                continue
+                            prompt_lines.append((piece, style))
+                        else:
+                            response_lines.append((piece, style))
 
                 text_to_nodes = {}
                 orig_kind_by_text = {}
@@ -2808,6 +2882,7 @@ class GoogleDocsParser:
             logger.error("Failed to fetch document")
             return {}
         normalize_soft_break_subheaders(doc_json)
+        normalize_soft_breaks(doc_json)
         sections = extract_sections(doc_json)
         lessons = split_lessons_by_header(sections)
 
