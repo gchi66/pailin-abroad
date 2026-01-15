@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import AudioButton from "../AudioButton";
+import InlineText from "../InlineText";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
@@ -79,10 +80,72 @@ const segmentTextWithBlanks = (text = "") => {
   return segments.length ? segments : [{ type: "text", content: "" }];
 };
 
+const buildInlineSegments = (inlines = []) => {
+  const segments = [];
+  inlines.forEach((span) => {
+    const text = span?.text || "";
+    if (!text) return;
+    let buffer = "";
+    let index = 0;
+
+    const flushBuffer = () => {
+      if (buffer) {
+        segments.push({ type: "text", content: buffer, style: span });
+        buffer = "";
+      }
+    };
+
+    while (index < text.length) {
+      const char = text[index];
+
+      if (char === "\n") {
+        flushBuffer();
+        segments.push({ type: "line-break" });
+        index += 1;
+        continue;
+      }
+
+      if (char === "_") {
+        flushBuffer();
+        let underscoreCount = 0;
+        while (
+          index + underscoreCount < text.length &&
+          text[index + underscoreCount] === "_"
+        ) {
+          underscoreCount += 1;
+        }
+        segments.push({ type: "blank", length: underscoreCount });
+        index += underscoreCount;
+        continue;
+      }
+
+      buffer += char;
+      index += 1;
+    }
+
+    flushBuffer();
+  });
+  return segments.length ? segments : [{ type: "text", content: "" }];
+};
+
 const renderMultiline = (text = "") => {
   if (!text) return null;
 
   return <span className="fb-text-block">{text}</span>;
+};
+
+const renderStyledText = (content, style) => {
+  const textStyle = {
+    fontWeight: style?.bold ? "700" : undefined,
+    fontStyle: style?.italic ? "italic" : undefined,
+    textDecoration: style?.underline ? "underline" : undefined,
+    whiteSpace: "pre-line",
+  };
+  return (
+    <span style={textStyle} className="fb-text-block">
+      {content}
+    </span>
+  );
 };
 
 export default function FillBlankExercise({
@@ -446,12 +509,18 @@ export default function FillBlankExercise({
         questionState.correct === true || questionState.loading === true;
       const imageUrl = item.image_key ? images[item.image_key] : null;
       const textSegments = segmentTextWithBlanks(item.text || "");
-      const hasBlank = textSegments.some((segment) => segment.type === "blank");
-      const hasMultiline = textSegments.some(
+      const inlineSegments = Array.isArray(item.text_jsonb)
+        ? buildInlineSegments(item.text_jsonb)
+        : null;
+      const segmentsToRender = inlineSegments || textSegments;
+      const hasBlank = segmentsToRender.some((segment) => segment.type === "blank");
+      const hasMultiline = segmentsToRender.some(
         (segment) =>
           segment.type === "line-break" ||
           (segment.type === "text" && segment.content?.includes("\n"))
       );
+      const questionInlines = item.text_jsonb || null;
+      const questionInlinesTh = item.text_jsonb_th || null;
       const displayNumber = item.number ?? idx + 1;
 
       return (
@@ -492,11 +561,11 @@ export default function FillBlankExercise({
               >
                 {(() => {
                   const nodes = [];
-                  for (let segmentIdx = 0; segmentIdx < textSegments.length; segmentIdx += 1) {
-                    const segment = textSegments[segmentIdx];
+                  for (let segmentIdx = 0; segmentIdx < segmentsToRender.length; segmentIdx += 1) {
+                    const segment = segmentsToRender[segmentIdx];
                     if (segment.type === "text") {
-                      const next = textSegments[segmentIdx + 1];
-                      const nextNext = textSegments[segmentIdx + 2];
+                      const next = segmentsToRender[segmentIdx + 1];
+                      const nextNext = segmentsToRender[segmentIdx + 2];
                       const canInline =
                         next?.type === "blank" &&
                         nextNext?.type === "text" &&
@@ -504,6 +573,9 @@ export default function FillBlankExercise({
                         !nextNext.content?.includes("\n");
                       const answerLength = (item?.answer || "").trim().length;
                       const isShortAnswer = answerLength > 0 && answerLength <= 10;
+                      const renderText = segment.style
+                        ? renderStyledText(segment.content, segment.style)
+                        : renderMultiline(segment.content);
 
                       if (canInline && isShortAnswer) {
                         const blankLength = next.length || 1;
@@ -512,7 +584,7 @@ export default function FillBlankExercise({
                         nodes.push(
                           <React.Fragment key={`inline-${idx}-${segmentIdx}`}>
                             <span className="fb-inline-pair">
-                              {renderMultiline(segment.content)}
+                              {renderText}
                               <span className="fb-input-wrap fb-input-wrap--short">
                                 <input
                                   type="text"
@@ -530,7 +602,9 @@ export default function FillBlankExercise({
                                 <InlineStatus state={questionState} />
                               </span>
                             </span>
-                            {renderMultiline(nextNext.content)}
+                            {nextNext?.style
+                              ? renderStyledText(nextNext.content, nextNext.style)
+                              : renderMultiline(nextNext?.content)}
                           </React.Fragment>
                         );
                         segmentIdx += 2;
@@ -539,7 +613,7 @@ export default function FillBlankExercise({
 
                       nodes.push(
                         <React.Fragment key={`text-${idx}-${segmentIdx}`}>
-                          {renderMultiline(segment.content)}
+                          {renderText}
                         </React.Fragment>
                       );
                       continue;
@@ -622,7 +696,10 @@ export default function FillBlankExercise({
           typeof item.text_th === "string" &&
           item.text_th.trim() && (
             <div className="fb-row-th">
-              {renderMultiline(item.text_th.trim())}
+              <InlineText
+                inlines={questionInlinesTh}
+                text={item.text_th.trim()}
+              />
             </div>
           )}
         </React.Fragment>

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
+import InlineText from "../InlineText";
 import { copy, pick } from "../../ui-lang/i18n";
 import CheckAnswersButton from "./CheckAnswersButton";
 
@@ -13,6 +14,7 @@ const normalizeOption = (option) => {
   return {
     label: option.label || option.letter || "",
     text: option.text || "",
+    text_jsonb: option.text_jsonb || null,
     image_key: option.image_key || null,
     alt_text: option.alt_text || option.text || option.label || "",
   };
@@ -154,6 +156,8 @@ export default function MultipleChoiceExercise({
         const numberLabel = q.number ?? qIdx + 1;
         const questionText = q.text;
         const questionTextTh = contentLang === "th" ? q.text_th : "";
+        const questionInlines = q.text_jsonb || null;
+        const questionInlinesTh = q.text_jsonb_th || null;
         const selected = normalizeArray(choices[qIdx]);
         const selectedSet = new Set(selected);
         const allowMultiple = q.answerLetters.length > 1;
@@ -187,13 +191,23 @@ export default function MultipleChoiceExercise({
                   </div>
                 )}
 
-                <p className="mc-question-text">{questionText}</p>
+                <InlineText
+                  as="p"
+                  className="mc-question-text"
+                  inlines={questionInlines}
+                  text={questionText}
+                />
                 {questionTextTh && (
-                  <p className="mc-question-text th">{questionTextTh}</p>
+                  <InlineText
+                    as="p"
+                    className="mc-question-text th"
+                    inlines={questionInlinesTh}
+                    text={questionTextTh}
+                  />
                 )}
 
                 <div className="mc-options">
-                  {q.options.map(({ label, text, image_key, alt_text }) => {
+                  {q.options.map(({ label, text, text_jsonb, image_key, alt_text }) => {
                     const normalizedLabel = normalizeArray([label])[0];
                     const isSelected = normalizedLabel
                       ? selectedSet.has(normalizedLabel)
@@ -223,7 +237,12 @@ export default function MultipleChoiceExercise({
                             />
                           )}
                           {text && (
-                            <span className="mc-option-text-lines">{text}</span>
+                            <InlineText
+                              as="span"
+                              className="mc-option-text-lines"
+                              inlines={text_jsonb}
+                              text={text}
+                            />
                           )}
 
                           {shouldShowResult && (

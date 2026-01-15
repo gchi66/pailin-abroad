@@ -255,6 +255,9 @@ function normalizeExercise(ex, contentLang) {
         if (thaiTextCandidate) {
           item.text_th = thaiTextCandidate;
         }
+        if (Array.isArray(thItem.text_jsonb)) {
+          item.text_jsonb_th = thItem.text_jsonb;
+        }
       }
       return item;
     });

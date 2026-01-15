@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
+import InlineText from "../InlineText";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
@@ -277,6 +278,8 @@ export default function SentenceTransformExercise({
           contentLang === "th" && typeof item?.text_th === "string"
             ? item.text_th.trim()
             : "";
+        const stemInlines = item?.text_jsonb || null;
+        const stemInlinesTh = item?.text_jsonb_th || null;
 
         if (exampleItem) {
           const imageUrl = item?.image_key ? images[item.image_key] : null;
@@ -314,7 +317,12 @@ export default function SentenceTransformExercise({
                       </div>
                     )}
                     <div className="st-stem-row">
-                      <p className="st-stem">{item?.text}</p>
+                      <InlineText
+                        as="p"
+                        className="st-stem"
+                        inlines={stemInlines}
+                        text={item?.text}
+                      />
                       {showMarkButtons && (
                         <div className="st-mark-buttons">
                           <button
@@ -344,7 +352,14 @@ export default function SentenceTransformExercise({
                         </div>
                       )}
                     </div>
-                    {thaiStem && <p className="st-stem-th">{thaiStem}</p>}
+                    {thaiStem && (
+                      <InlineText
+                        as="p"
+                        className="st-stem-th"
+                        inlines={stemInlinesTh}
+                        text={thaiStem}
+                      />
+                    )}
                     <div className="fb-input-wrap st-input-wrap">
                       <input
                         type="text"
@@ -396,7 +411,12 @@ export default function SentenceTransformExercise({
                   </div>
                 )}
                 <div className="st-stem-row">
-                  <p className="st-stem">{item.text}</p>
+                  <InlineText
+                    as="p"
+                    className="st-stem"
+                    inlines={stemInlines}
+                    text={item.text}
+                  />
                   {showMarkButtons && (
                     <div className="st-mark-buttons">
                       <button
@@ -428,7 +448,14 @@ export default function SentenceTransformExercise({
                     </div>
                   )}
                 </div>
-                {thaiStem && <p className="st-stem-th">{thaiStem}</p>}
+                {thaiStem && (
+                  <InlineText
+                    as="p"
+                    className="st-stem-th"
+                    inlines={stemInlinesTh}
+                    text={thaiStem}
+                  />
+                )}
                 <div className="fb-input-wrap st-input-wrap">
                   <input
                     type="text"

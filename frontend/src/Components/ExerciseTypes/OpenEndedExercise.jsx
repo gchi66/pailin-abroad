@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
+import InlineText from "../InlineText";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
@@ -357,6 +358,8 @@ export default function OpenEndedExercise({
         const questionTh = resolveQuestionText(item, "th");
         const displayQuestion =
           contentLang === "th" ? questionEn || questionTh : questionEn || questionTh;
+        const questionInlines = item.text_jsonb || null;
+        const questionInlinesTh = item.text_jsonb_th || null;
 
         if (isExampleItem(item)) {
           const imageUrl = item.image_key ? images[item.image_key] : null;
@@ -396,11 +399,19 @@ export default function OpenEndedExercise({
                         />
                       </div>
                     )}
-                    <p className="oe-question-text">
-                      {displayQuestion}
-                    </p>
+                    <InlineText
+                      as="p"
+                      className="oe-question-text"
+                      inlines={questionInlines}
+                      text={displayQuestion}
+                    />
                     {contentLang === "th" && questionTh && questionEn && (
-                      <p className="oe-question-text">{questionTh}</p>
+                      <InlineText
+                        as="p"
+                        className="oe-question-text"
+                        inlines={questionInlinesTh}
+                        text={questionTh}
+                      />
                     )}
                     {exampleAnswer && (
                       <div className="fb-input-wrap oe-input-wrap">
@@ -470,9 +481,19 @@ export default function OpenEndedExercise({
                   </div>
                 )}
 
-                <p className="oe-question-text">{displayQuestion}</p>
+                <InlineText
+                  as="p"
+                  className="oe-question-text"
+                  inlines={questionInlines}
+                  text={displayQuestion}
+                />
                 {contentLang === "th" && questionTh && questionEn && (
-                  <p className="oe-question-text">{questionTh}</p>
+                  <InlineText
+                    as="p"
+                    className="oe-question-text"
+                    inlines={questionInlinesTh}
+                    text={questionTh}
+                  />
                 )}
 
                 {answerParts.map((value, partIdx) => (

@@ -148,6 +148,7 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
         elements = para.get("elements", [])
         split_idx = None
         split_for_caps = False
+        split_after_bold = False
         header_part = ""
         body_part = ""
         before_chunks = []
@@ -162,6 +163,16 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
                     split_idx = idx
                     split_for_caps = False
                     break
+            if is_bold and idx + 1 < len(elements):
+                next_run = elements[idx + 1].get("textRun")
+                if next_run:
+                    next_text = next_run.get("content", "")
+                    next_is_bold = next_run.get("textStyle", {}).get("bold", False)
+                    if next_text.startswith("\u000b") and not next_is_bold:
+                        split_idx = idx
+                        split_after_bold = True
+                        split_for_caps = False
+                        break
             if "\u000b" in text:
                 before, after = text.split("\u000b", 1)
                 header_candidate = "".join(before_chunks) + before
@@ -186,14 +197,24 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
 
         header_run = header_elems[-1]
         header_text = header_run.get("textRun", {}).get("content", "")
-        before, after = header_text.split("\u000b", 1)
-        header_run["textRun"]["content"] = before
-        header_elems[-1] = header_run
+        if not split_after_bold and "\u000b" in header_text:
+            before, after = header_text.split("\u000b", 1)
+            header_run["textRun"]["content"] = before
+            header_elems[-1] = header_run
 
-        if after:
-            carry_run = deepcopy(header_run)
-            carry_run["textRun"]["content"] = after
-            body_elems.insert(0, carry_run)
+            if after:
+                carry_run = deepcopy(header_run)
+                carry_run["textRun"]["content"] = after
+                body_elems.insert(0, carry_run)
+        elif split_after_bold and body_elems:
+            body_first = body_elems[0]
+            body_text_run = body_first.get("textRun")
+            if body_text_run:
+                body_text = body_text_run.get("content", "")
+                if body_text.startswith("\u000b"):
+                    body_text_run["content"] = body_text.lstrip("\u000b")
+                    body_first["textRun"] = body_text_run
+                    body_elems[0] = body_first
 
         header_text_full = "".join(
             r.get("textRun", {}).get("content", "") for r in header_elems
@@ -1397,6 +1418,20 @@ class GoogleDocsParser:
             if n.get("kind") == "table"
             and _same_lesson(n)
         }
+        practice_nodes = {}
+        practice_fallback_nodes = {}
+        for n in tagged_nodes:
+            if not _same_lesson(n):
+                continue
+            if "inlines" not in n:
+                continue
+            plain = "".join(s.get("text", "") for s in n.get("inlines", []))
+            key = _norm2(plain)
+            if not key:
+                continue
+            practice_fallback_nodes.setdefault(key, []).append(n)
+            if n.get("section_context") == "PRACTICE":
+                practice_nodes.setdefault(key, []).append(n)
 
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
@@ -1829,7 +1864,8 @@ class GoogleDocsParser:
                 for line in lines:
                     text_line, style, _spacing = _line_parts(line)
                     # Split embedded soft-break newlines into separate logical lines.
-                    for piece in (text_line or "").splitlines():
+                    # Use split("\n") to preserve empty lines for spacing.
+                    for piece in (text_line or "").split("\n"):
                         if not in_response:
                             match = response_re.match(piece or "")
                             if match:
@@ -1844,17 +1880,59 @@ class GoogleDocsParser:
 
                 text_to_nodes = {}
                 orig_kind_by_text = {}
+
+                def _clone_inline_with_text(node: dict, text: str) -> dict:
+                    inline_src = (node.get("inlines") or [{}])[0]
+                    return {
+                        "kind": node.get("kind"),
+                        "level": node.get("level"),
+                        "inlines": [{
+                            "text": text,
+                            "bold": inline_src.get("bold", False),
+                            "italic": inline_src.get("italic", False),
+                            "underline": inline_src.get("underline", False),
+                            "link": inline_src.get("link"),
+                            "highlight": inline_src.get("highlight"),
+                        }],
+                        "indent": node.get("indent", 0),
+                        "detection_indent": node.get("detection_indent", 0),
+                        "indent_level": node.get("indent_level", 0),
+                        "indent_start_pts": node.get("indent_start_pts", 0),
+                        "indent_first_line_pts": node.get("indent_first_line_pts", 0),
+                        "indent_first_line_level": node.get("indent_first_line_level", 0),
+                        "lesson_context": node.get("lesson_context"),
+                        "lesson_key": node.get("lesson_key"),
+                        "lesson_context_norm": node.get("lesson_context_norm"),
+                        "lesson_context_en": node.get("lesson_context_en"),
+                        "lesson_context_th": node.get("lesson_context_th"),
+                        "section_context": node.get("section_context"),
+                        "style": node.get("style"),
+                        "is_indented": node.get("is_indented"),
+                    }
+
                 for n in tagged_nodes:
                     if not _same_lesson(n):
                         continue
                     if "inlines" in n:
                         plain = "".join(s["text"] for s in n["inlines"])
-                        k = _norm2(plain)
-                        if not k:
-                            continue
-                        text_to_nodes.setdefault(k, []).append(n)
-                        if n.get("kind") in {"list_item", "numbered_item"}:
-                            orig_kind_by_text[k] = n["kind"]
+                        if "\n" in plain:
+                            for part in plain.split("\n"):
+                                part = part.strip()
+                                if not part:
+                                    continue
+                                k = _norm2(part)
+                                if not k:
+                                    continue
+                                text_to_nodes.setdefault(k, []).append(_clone_inline_with_text(n, part))
+                                if n.get("kind") in {"list_item", "numbered_item"}:
+                                    orig_kind_by_text[k] = n["kind"]
+                        else:
+                            k = _norm2(plain)
+                            if not k:
+                                continue
+                            text_to_nodes.setdefault(k, []).append(n)
+                            if n.get("kind") in {"list_item", "numbered_item"}:
+                                orig_kind_by_text[k] = n["kind"]
 
                 def _build_nodes_from_lines(lines_list: list[tuple[str, str]]) -> list[dict]:
                     node_list: list[dict] = []
@@ -2031,7 +2109,12 @@ class GoogleDocsParser:
             "lesson":                  lesson,
             "transcript":              parsed_transcript,
             "comprehension_questions": self.parse_comprehension(comp_lines, lang=lang),
-            "practice_exercises":      self.parse_practice(embedded_practice_lines + practice_lines, lang=lang),
+            "practice_exercises":      self.parse_practice(
+                embedded_practice_lines + practice_lines,
+                lang=lang,
+                node_lookup=practice_nodes,
+                fallback_node_lookup=practice_fallback_nodes,
+            ),
             "sections":                other_sections,
             "tags":                    self.parse_tags(tags_lines),
         }
@@ -2401,7 +2484,13 @@ class GoogleDocsParser:
         return questions
 
 
-    def parse_practice(self, lines: List[str], lang: str = 'en') -> List[Dict]:
+    def parse_practice(
+        self,
+        lines: List[str],
+        lang: str = 'en',
+        node_lookup: dict[str, list[dict]] | None = None,
+        fallback_node_lookup: dict[str, list[dict]] | None = None,
+    ) -> List[Dict]:
         """
         Convert the flat "directive" block into structured exercises.
 
@@ -2434,6 +2523,37 @@ class GoogleDocsParser:
                 return n if n > 0 else 1
             except (TypeError, ValueError):
                 return 1
+
+        primary_nodes = {
+            key: list(nodes or [])
+            for key, nodes in (node_lookup or {}).items()
+        }
+        fallback_nodes = {
+            key: list(nodes or [])
+            for key, nodes in (fallback_node_lookup or {}).items()
+        }
+
+        def _pop_inlines_for_text(text_value: str | None) -> list[dict] | None:
+            if not text_value:
+                return None
+            candidates = [text_value] + [
+                part.strip()
+                for part in re.split(r"(?:\u000b|\n)+", text_value)
+                if part.strip()
+            ]
+            for candidate in candidates:
+                norm_key = _norm2(candidate)
+                if not norm_key:
+                    continue
+                for bucket_map in (primary_nodes, fallback_nodes):
+                    bucket = bucket_map.get(norm_key)
+                    if bucket:
+                        node = bucket.pop(0)
+                        if not bucket:
+                            bucket_map.pop(norm_key, None)
+                        inlines = node.get("inlines") or []
+                        return [dict(span) for span in inlines if span]
+            return None
 
         def append_text(target: dict, key: str, value: str, newline: bool = False):
             if not value:
@@ -2492,6 +2612,8 @@ class GoogleDocsParser:
                         if "number" in item:
                             th_entry["number"] = item["number"]
                         th_entry["text"] = th_text
+                        if item.get("text_jsonb_th"):
+                            th_entry["text_jsonb"] = item["text_jsonb_th"]
                         for key in ("answer", "keywords", "inputs", "options", "correct"):
                             if key in item and item[key] not in (None, ""):
                                 th_entry[key] = item[key]
@@ -2599,9 +2721,15 @@ class GoogleDocsParser:
                     if lang == "th" and _is_thai_dominant(content):
                         cur_items[-1]["text_th"] = content
                         cur_items[-1]["text"] = cur_items[-1].get("text", "")
+                        inlines = _pop_inlines_for_text(content)
+                        if inlines:
+                            cur_items[-1]["text_jsonb_th"] = inlines
                     else:
                         cur_items[-1]["text"] = content
                         cur_items[-1]["text_th"] = ""  # Initialize empty Thai
+                        inlines = _pop_inlines_for_text(content)
+                        if inlines:
+                            cur_items[-1]["text_jsonb"] = inlines
                     collecting_text = True  # Keep collecting for Thai on next line
                 else:
                     # Empty TEXT: line, start collecting multi-line
@@ -2673,7 +2801,13 @@ class GoogleDocsParser:
             if collecting_opts and m_opt:
                 if not cur_items:
                     cur_items.append({})
-                cur_items[-1].setdefault("options", []).append(line)
+                label = m_opt.group(1)
+                option_text = m_opt.group(2).strip()
+                option_entry = {"label": label, "text": option_text}
+                inlines = _pop_inlines_for_text(line) or _pop_inlines_for_text(option_text)
+                if inlines:
+                    option_entry["text_jsonb"] = inlines
+                cur_items[-1].setdefault("options", []).append(option_entry)
                 continue
 
             # Multi-line text collection
@@ -2698,9 +2832,15 @@ class GoogleDocsParser:
                     if cur_items[-1].get("text") and not cur_items[-1].get("text_th"):
                         if lang == "th" and _is_thai_dominant(stripped):
                             cur_items[-1]["text_th"] = stripped
+                            inlines = _pop_inlines_for_text(stripped)
+                            if inlines:
+                                cur_items[-1]["text_jsonb_th"] = inlines
                             collecting_text = False  # Done collecting
                         elif _is_thai_dominant(stripped):
                             cur_items[-1]["text_th"] = stripped
+                            inlines = _pop_inlines_for_text(stripped)
+                            if inlines:
+                                cur_items[-1]["text_jsonb_th"] = inlines
                             collecting_text = False  # Done collecting
                         else:
                             # Preserve speaker turns like "Luke: ..." on a new line.
@@ -2714,6 +2854,9 @@ class GoogleDocsParser:
                                 cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + " " + stripped
                             else:
                                 cur_items[-1]["text_th"] = stripped
+                                inlines = _pop_inlines_for_text(stripped)
+                                if inlines:
+                                    cur_items[-1]["text_jsonb_th"] = inlines
                         else:
                             if cur_items[-1].get("text"):
                                 cur_items[-1]["text"] = cur_items[-1]["text"] + " " + stripped
@@ -2766,7 +2909,16 @@ class GoogleDocsParser:
             normalized = []
             for opt in options_list or []:
                 if isinstance(opt, dict):
-                    normalized.append(opt)
+                    label = opt.get("label") or opt.get("letter") or ""
+                    body = opt.get("text") or ""
+                    cleaned_text, image_key, alt_text, _audio_key = extract_media_fields(body)
+                    normalized.append({
+                        **opt,
+                        "label": label,
+                        "text": cleaned_text,
+                        "image_key": opt.get("image_key") or image_key,
+                        "alt_text": opt.get("alt_text") or alt_text or cleaned_text or label,
+                    })
                     continue
                 if not isinstance(opt, str):
                     continue
@@ -2851,6 +3003,8 @@ class GoogleDocsParser:
                         if "number" in item:
                             th_item["number"] = item["number"]
                         th_item["text"] = item["text_th"]  # Thai text goes in "text" field
+                        if item.get("text_jsonb_th"):
+                            th_item["text_jsonb"] = item["text_jsonb_th"]
                         if "answer" in item:
                             th_item["answer"] = item["answer"]  # Answer stays same
                         if "image_key" in item:
