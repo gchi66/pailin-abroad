@@ -539,9 +539,13 @@ def bilingualize_headers_th(nodes, default_level=3):
 
     for original in nodes:
         node = _clone_node(original)
+        node_text = node_plain_text(node).strip()
+        if node_text.startswith("I (ฉัน)"):
+            out.append(node)
+            continue
 
         if node.get("kind") == "paragraph":
-            para_text = node_plain_text(node).strip()
+            para_text = node_text
             if para_text.upper() == FOCUS_EN:
                 out.append(_apply_bilingual_text(node, FOCUS_EN, FOCUS_TH))
                 continue
@@ -1420,6 +1424,30 @@ class GoogleDocsParser:
         }
         practice_nodes = {}
         practice_fallback_nodes = {}
+        directive_prefix_re = re.compile(r"^(TEXT|STEM|PROMPT|PARAGRAPH|TITLE)\s*:\s*", re.I)
+
+        def _strip_prefix_inlines(inlines: list[dict], prefix_len: int) -> list[dict]:
+            if prefix_len <= 0:
+                return [dict(span) for span in inlines if span]
+            stripped = []
+            remaining = prefix_len
+            for span in inlines:
+                if not span:
+                    continue
+                text = span.get("text", "")
+                if not text:
+                    continue
+                if remaining >= len(text):
+                    remaining -= len(text)
+                    continue
+                if remaining > 0:
+                    text = text[remaining:]
+                    remaining = 0
+                if text:
+                    new_span = dict(span)
+                    new_span["text"] = text
+                    stripped.append(new_span)
+            return stripped
         for n in tagged_nodes:
             if not _same_lesson(n):
                 continue
@@ -1432,6 +1460,17 @@ class GoogleDocsParser:
             practice_fallback_nodes.setdefault(key, []).append(n)
             if n.get("section_context") == "PRACTICE":
                 practice_nodes.setdefault(key, []).append(n)
+                prefix_match = directive_prefix_re.match(plain)
+                if prefix_match:
+                    stripped_plain = plain[prefix_match.end():].strip()
+                    stripped_key = _norm2(stripped_plain)
+                    if stripped_key:
+                        stripped_node = n.copy()
+                        stripped_node["inlines"] = _strip_prefix_inlines(
+                            n.get("inlines", []),
+                            prefix_match.end(),
+                        )
+                        practice_nodes.setdefault(stripped_key, []).append(stripped_node)
 
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
@@ -2515,6 +2554,8 @@ class GoogleDocsParser:
         collecting_text = False  # New flag for multi-line text collection
         collecting_paragraph = False  # New flag for multi-line paragraph collection
         item_complete = False  # Track completion of current item
+        pending_alt_text = None
+        waiting_alt_text = False
 
         def normalize_inputs(value) -> int:
             """Ensure inputs is a positive int, defaulting to 1."""
@@ -2657,6 +2698,28 @@ class GoogleDocsParser:
                         cur_ex["paragraph"] = current_paragraph + "\n"
                 continue
 
+            # Consume the next non-empty line as ALT text if we saw a bare ALT-TEXT:
+            if waiting_alt_text:
+                pending_alt_text = line.strip()
+                if cur_items:
+                    cur_items[-1]["alt_text"] = pending_alt_text
+                    pending_alt_text = None
+                waiting_alt_text = False
+                continue
+
+            # ALT-TEXT lines should not become visible stem/translation text.
+            alt_match = ALT_TEXT_RE.match(line)
+            if alt_match:
+                alt_text_value = (alt_match.group(1) or "").strip()
+                if alt_text_value:
+                    pending_alt_text = alt_text_value
+                    if cur_items:
+                        cur_items[-1]["alt_text"] = pending_alt_text
+                        pending_alt_text = None
+                else:
+                    waiting_alt_text = True
+                continue
+
             # Check for block-level directives
             m_type = re.match(r'^TYPE:\s*(\w+)', line, re.I)
             if m_type:
@@ -2701,6 +2764,9 @@ class GoogleDocsParser:
                 number = line.split(":", 1)[1].strip()
                 # Create a new question/item entry.
                 cur_items.append({"number": number})
+                if pending_alt_text:
+                    cur_items[-1]["alt_text"] = pending_alt_text
+                    pending_alt_text = None
                 collecting_opts = False
                 collecting_text = False
                 collecting_paragraph = False
@@ -2712,6 +2778,9 @@ class GoogleDocsParser:
                 if not cur_items:
                     cur_items.append({})
                     item_complete = False
+                if pending_alt_text:
+                    cur_items[-1]["alt_text"] = pending_alt_text
+                    pending_alt_text = None
 
                 # Get the content after the colon
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
@@ -2747,6 +2816,9 @@ class GoogleDocsParser:
                 if not cur_items:
                     cur_items.append({})
                     item_complete = False
+                if pending_alt_text:
+                    cur_items[-1]["alt_text"] = pending_alt_text
+                    pending_alt_text = None
                 cur_items[-1]["options"] = []
                 continue
 
@@ -2945,7 +3017,7 @@ class GoogleDocsParser:
                 cleaned_text, image_key, alt_text, audio_key = extract_media_fields(text_value)
                 if image_key:
                     item["image_key"] = image_key
-                if alt_text:
+                if alt_text and not item.get("alt_text"):
                     item["alt_text"] = alt_text
                 if audio_key:
                     item["audio_key"] = audio_key

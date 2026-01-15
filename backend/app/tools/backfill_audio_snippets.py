@@ -56,7 +56,7 @@ STANDARD_FILE_RE = re.compile(
     _
     (?P<section>understand|practice|extra_tips|common_mistakes|apply|culture_note|prepare)
     _
-    (?P<seq>\d{1,3})
+    (?P<seq>\d{1,3}(?:\.\d+)?)
     (?:_(?P<character>[A-Za-z]+))?
     \.mp3(?:\.mp3)?$
     """,
@@ -411,17 +411,20 @@ def main() -> None:
         if standard_match:
             lesson = standard_match["lesson"]
             section = SECTION_MAPPING[standard_match["section"].lower()]
-            seq = int(standard_match["seq"])
+            seq_raw = standard_match["seq"]
+            seq_parts = (seq_raw or "").split(".", 1)
+            seq = int(seq_parts[0])
+            seq_suffix = float(f"0.{seq_parts[1]}") if len(seq_parts) > 1 else 0.0
             character = standard_match["character"]
 
-            key = (lesson, section, seq)
+            key = (lesson, section, seq, seq_suffix)
             if key in seen_audio:
                 dupes[key].append(path); continue
             seen_audio.add(key)
 
             # Generate audio_key for ALL section types following the pattern: {lesson}_{section}_{seq}
             # Keep DB section as "extra_tip", but use "extra_tips" in audio_key to match doc tags.
-            seq_str = str(seq).zfill(2)  # Zero-pad seq to 2 digits (01, 02, etc.)
+            seq_str = seq_raw  # keep any .5 suffix for audio_key
             key_section = "extra_tips" if section == "extra_tip" else section
             key_section = "common_mistakes" if key_section == "common_mistake" else key_section
             audio_key = f"{lesson}_{key_section}_{seq_str}"
@@ -430,6 +433,7 @@ def main() -> None:
                 "lesson_external_id": lesson,
                 "section": section,
                 "seq": seq,
+                "seq_suffix": seq_suffix,
                 "character": character or None,
                 "storage_path": path,
                 "audio_key": audio_key  # Add audio_key for all sections
@@ -450,7 +454,7 @@ def main() -> None:
         print(f"\nUpserting {len(audio_snippets_rows)} rows to audio_snippets …")
         res = (
             sb.table("audio_snippets")
-              .upsert(audio_snippets_rows, on_conflict="lesson_external_id,section,seq")
+              .upsert(audio_snippets_rows, on_conflict="lesson_external_id,section,seq,seq_suffix")
               .execute()
         )
         print(f"✅ Success – {len(res.data)} audio_snippets rows upserted/updated.")

@@ -289,8 +289,12 @@ def paragraph_nodes(doc_json: dict):
         style_name = p.get("paragraphStyle", {}).get("namedStyleType", "")
 
         # HEADINGS -------------------------------------------------
-        if (style_name.startswith("HEADING_") and style_name not in {"HEADING_1","HEADING_2"}) \
-           or is_subheader(plain, style_name):
+        # Never treat "I (ฉัน)" as a header, even if styled as one.
+        is_forced_non_header = bool(re.match(r"^I\s*\(\s*ฉัน\s*\)\s*$", plain.strip()))
+        if not is_forced_non_header and (
+           (style_name.startswith("HEADING_") and style_name not in {"HEADING_1","HEADING_2"})
+           or is_subheader(plain, style_name)
+        ):
             lvl = 3
             if style_name.startswith("HEADING_") and style_name[-1].isdigit():
                 lvl = int(style_name[-1])
