@@ -28,8 +28,18 @@ const isExampleItem = (item) => {
   return false;
 };
 
+const cleanInlineMediaTags = (text) => {
+  if (!text || typeof text !== "string") return text;
+  return text
+    .replace(/\[audio:[^\]]+\]/gi, " ")
+    .replace(/\[img:[^\]]+\]/gi, " ")
+    .replace(/[^\S\r\n]+/g, " ")
+    .replace(/\s*\n\s*/g, "\n");
+};
+
 const segmentTextWithBlanks = (text = "") => {
-  if (typeof text !== "string" || text.length === 0) {
+  const cleaned = cleanInlineMediaTags(text);
+  if (typeof cleaned !== "string" || cleaned.length === 0) {
     return [{ type: "text", content: "" }];
   }
 
@@ -44,8 +54,8 @@ const segmentTextWithBlanks = (text = "") => {
     }
   };
 
-  while (index < text.length) {
-    const char = text[index];
+  while (index < cleaned.length) {
+    const char = cleaned[index];
 
     if (char === "\n") {
       flushBuffer();
@@ -59,8 +69,8 @@ const segmentTextWithBlanks = (text = "") => {
 
       let underscoreCount = 0;
       while (
-        index + underscoreCount < text.length &&
-        text[index + underscoreCount] === "_"
+        index + underscoreCount < cleaned.length &&
+        cleaned[index + underscoreCount] === "_"
       ) {
         underscoreCount += 1;
       }
@@ -83,7 +93,7 @@ const segmentTextWithBlanks = (text = "") => {
 const buildInlineSegments = (inlines = []) => {
   const segments = [];
   inlines.forEach((span) => {
-    const text = span?.text || "";
+    const text = cleanInlineMediaTags(span?.text || "");
     if (!text) return;
     let buffer = "";
     let index = 0;
