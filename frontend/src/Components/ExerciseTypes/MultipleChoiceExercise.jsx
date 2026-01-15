@@ -4,6 +4,23 @@ import InlineText from "../InlineText";
 import { copy, pick } from "../../ui-lang/i18n";
 import CheckAnswersButton from "./CheckAnswersButton";
 
+const stripOptionPrefix = (label, value) => {
+  if (!label || typeof value !== "string") return value;
+  const pattern = new RegExp(`^${label}\\.\\s*`, "i");
+  return value.replace(pattern, "");
+};
+
+const stripOptionPrefixInlines = (label, inlines) => {
+  if (!label || !Array.isArray(inlines) || inlines.length === 0) {
+    return inlines;
+  }
+  const [first, ...rest] = inlines;
+  const nextText = stripOptionPrefix(label, first?.text || "");
+  if (nextText === (first?.text || "")) return inlines;
+  if (!nextText) return rest;
+  return [{ ...first, text: nextText }, ...rest];
+};
+
 const normalizeOption = (option) => {
   if (typeof option === "string") {
     const match = option.match(/^([A-Z])\.\s*(.*)$/s);
@@ -11,12 +28,19 @@ const normalizeOption = (option) => {
       ? { label: match[1], text: match[2] }
       : { label: "", text: option };
   }
+  const label = option.label || option.letter || "";
+  const text = stripOptionPrefix(label, option.text || "");
+  const text_jsonb = stripOptionPrefixInlines(label, option.text_jsonb || null);
+  const alt_text = stripOptionPrefix(
+    label,
+    option.alt_text || option.text || option.label || ""
+  );
   return {
-    label: option.label || option.letter || "",
-    text: option.text || "",
-    text_jsonb: option.text_jsonb || null,
+    label,
+    text,
+    text_jsonb,
     image_key: option.image_key || null,
-    alt_text: option.alt_text || option.text || option.label || "",
+    alt_text,
   };
 };
 

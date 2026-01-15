@@ -5,6 +5,7 @@ function cleanAudioTags(text) {
   if (!text || typeof text !== "string") return text;
   return text
     .replace(/\[audio:[^\]]+\]/g, " ")
+    .replace(/\[img:[^\]]+\]/g, " ")
     .replace(/[^\S\r\n]+/g, " ")
     .replace(/\s*\n\s*/g, "\n");
 }
