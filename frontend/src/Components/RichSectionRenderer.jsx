@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
@@ -30,9 +30,42 @@ export default function RichSectionRenderer({
   suppressBaseOffset = false,
   accordionResetKey,
 }) {
-  if (!Array.isArray(nodes) || nodes.length === 0) return null;
+  const nodesList = Array.isArray(nodes) ? nodes : [];
+  const [preloadBySection, setPreloadBySection] = useState({});
+  const preloadTimersRef = useRef({});
 
-  console.log("RichSectionRenderer input nodes:", nodes.map((n, i) => ({
+  const setPreloadForSection = useCallback((sectionKey, value) => {
+    setPreloadBySection((prev) => {
+      if (prev[sectionKey] === value) return prev;
+      return { ...prev, [sectionKey]: value };
+    });
+  }, []);
+
+  const handleSectionToggle = useCallback(
+    (sectionKey, isOpen) => {
+      if (preloadTimersRef.current[sectionKey]) {
+        clearTimeout(preloadTimersRef.current[sectionKey]);
+        delete preloadTimersRef.current[sectionKey];
+      }
+
+      if (isOpen) {
+        preloadTimersRef.current[sectionKey] = setTimeout(() => {
+          setPreloadForSection(sectionKey, true);
+        }, 150);
+      } else {
+        setPreloadForSection(sectionKey, false);
+      }
+    },
+    [setPreloadForSection]
+  );
+
+  useEffect(() => {
+    Object.values(preloadTimersRef.current).forEach(clearTimeout);
+    preloadTimersRef.current = {};
+    setPreloadBySection({});
+  }, [accordionResetKey]);
+
+  console.log("RichSectionRenderer input nodes:", nodesList.map((n, i) => ({
   index: i,
   kind: n.kind,
   text: n.inlines?.[0]?.text?.substring(0, 30),
@@ -420,7 +453,8 @@ const paragraphTextStartRem = (indentLevel) => {
 };
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
-  const renderNode = (node, key, meta = {}) => {
+  const renderNode = (node, key, meta = {}, options = {}) => {
+    const shouldPreload = options.preloadAudio === true;
     if (node.kind === "heading") {
       if (meta.allowHeading) {
         return (
@@ -537,6 +571,7 @@ const paragraphTextStartRem = (indentLevel) => {
                 phrasesSnipIdx={phrasesSnipIdx}
                 phraseId={phraseId}
                 phraseVariant={phraseVariant}
+                preload={shouldPreload}
                 size={AUDIO_BUTTON_SIZE}
                 className="select-none"
               />
@@ -613,6 +648,7 @@ const paragraphTextStartRem = (indentLevel) => {
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
               phraseVariant={phraseVariant}
+              preload={shouldPreload}
               size={AUDIO_BUTTON_SIZE}
               className="select-none"
             />
@@ -673,6 +709,7 @@ const paragraphTextStartRem = (indentLevel) => {
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
               phraseVariant={phraseVariant}
+              preload={shouldPreload}
               size={AUDIO_BUTTON_SIZE}
               className="select-none"
             />
@@ -745,7 +782,8 @@ const paragraphTextStartRem = (indentLevel) => {
     return null;
   };
 
-  const renderNumberedListItem = (node, key, groupIndent) => {
+  const renderNumberedListItem = (node, key, groupIndent, options = {}) => {
+    const shouldPreload = options.preloadAudio === true;
     const hasAudio = node.audio_key || node.audio_seq;
     const hasBold = nodeHasBold(node);
     const multiline = hasLineBreak(node);
@@ -778,6 +816,7 @@ const paragraphTextStartRem = (indentLevel) => {
             phrasesSnipIdx={phrasesSnipIdx}
             phraseId={phraseId}
             phraseVariant={phraseVariant}
+            preload={shouldPreload}
             size={AUDIO_BUTTON_SIZE}
             className="select-none"
           />
@@ -799,7 +838,7 @@ const paragraphTextStartRem = (indentLevel) => {
     );
   };
 
-  const renderNumberedGroup = (items, keyPrefix) => {
+  const renderNumberedGroup = (items, keyPrefix, options = {}) => {
     if (!items.length) return null;
     const groupIndent = computeIndentLevel(items[0]);
     const listIndentRem = groupIndent * INDENT_PER_LEVEL;
@@ -813,7 +852,7 @@ const paragraphTextStartRem = (indentLevel) => {
         }}
       >
         {items.map((item, idx) =>
-          renderNumberedListItem(item, `${keyPrefix}-item-${idx}`, groupIndent)
+          renderNumberedListItem(item, `${keyPrefix}-item-${idx}`, groupIndent, options)
         )}
       </ol>
     );
@@ -843,7 +882,7 @@ const paragraphTextStartRem = (indentLevel) => {
           style={{ marginLeft: listIndentRem ? `${listIndentRem}rem` : undefined }}
           start={current}
         >
-          {renderNumberedListItem(node, `${key}-item`, indent)}
+          {renderNumberedListItem(node, `${key}-item`, indent, options)}
         </ol>
       );
     };
@@ -851,7 +890,7 @@ const paragraphTextStartRem = (indentLevel) => {
     nodeList.forEach((node, idx) => {
       if (node.kind === "heading" || isSubheaderNode(node)) {
         resetCounters();
-        elements.push(renderNode(node, idx, { allowHeading: allowHeadings }));
+        elements.push(renderNode(node, idx, { allowHeading: allowHeadings }, options));
         return;
       }
       if (node.kind === "numbered_item") {
@@ -880,7 +919,9 @@ const paragraphTextStartRem = (indentLevel) => {
       if (isPhrasesSection && phrasesAudioSeen === 1 && node.kind === "paragraph") {
         meta.keepThaiBlack = true;
       }
-      elements.push(renderNode(node, idx, allowHeadings ? { ...meta, allowHeading: true } : meta));
+      elements.push(
+        renderNode(node, idx, allowHeadings ? { ...meta, allowHeading: true } : meta, options)
+      );
     });
 
     return elements;
@@ -898,21 +939,11 @@ const paragraphTextStartRem = (indentLevel) => {
     ));
   };
 
-  if (noAccordion) {
-    return (
-      <div className="markdown-section">
-        <div className="markdown-content">
-          {renderZebraGroups(nodes, 0, { allowHeadings: true })}
-        </div>
-      </div>
-    );
-  }
-
   // Group nodes by heading (for accordion/dropdown)
   const sections = [];
   let current = null;
 
-  nodes.forEach((node, idx) => {
+  nodesList.forEach((node, idx) => {
     if (node.kind === "heading") {
       // Clean the heading text by trimming whitespace and tabs
       const headingText = node.inlines
@@ -952,6 +983,27 @@ const paragraphTextStartRem = (indentLevel) => {
 
   // If we have sections with headings, render as accordion
   const hasHeadings = sections.some(sec => sec.heading);
+  const firstAccordionIndex = hasHeadings
+    ? sections.findIndex((sec) => sec.heading)
+    : -1;
+
+  useEffect(() => {
+    if (noAccordion || !hasHeadings || firstAccordionIndex < 0) return;
+    const defaultKey = `${accordionResetKey ?? "section"}-${firstAccordionIndex}`;
+    handleSectionToggle(defaultKey, true);
+  }, [accordionResetKey, firstAccordionIndex, handleSectionToggle, hasHeadings, noAccordion]);
+
+  if (nodesList.length === 0) return null;
+
+  if (noAccordion) {
+    return (
+      <div className="markdown-section">
+        <div className="markdown-content">
+          {renderZebraGroups(nodesList, 0, { allowHeadings: true })}
+        </div>
+      </div>
+    );
+  }
 
   if (hasHeadings) {
     const getCleanHeadingText = (headingNode) => {
@@ -977,8 +1029,6 @@ const paragraphTextStartRem = (indentLevel) => {
         normalizedHeading.includes(marker)
       );
     };
-
-    const firstAccordionIndex = sections.findIndex((sec) => sec.heading);
 
     return (
       <div className="markdown-section">
@@ -1020,16 +1070,19 @@ const paragraphTextStartRem = (indentLevel) => {
           const sectionBody = sec.body?.[0]?.kind === "spacer" ? sec.body.slice(1) : sec.body;
 
           // Render as accordion section
+          const sectionKey = `${accordionResetKey ?? "section"}-${i}`;
+          const shouldPreload = preloadBySection[sectionKey] === true;
           return (
             <CollapsibleDetails
-              key={`${accordionResetKey ?? "section"}-${i}`}
+              key={sectionKey}
               className={`markdown-item${isLessonFocus ? " markdown-item-focus" : ""}`}
               defaultOpen={i === firstAccordionIndex}
               resetKey={accordionResetKey}
               summaryContent={cleanHeadingText}
+              onToggle={(isOpen) => handleSectionToggle(sectionKey, isOpen)}
             >
               <div className="markdown-content">
-                {renderZebraGroups(sectionBody, 0)}
+                {renderZebraGroups(sectionBody, 0, { preloadAudio: shouldPreload })}
               </div>
             </CollapsibleDetails>
           );
@@ -1042,7 +1095,7 @@ const paragraphTextStartRem = (indentLevel) => {
   return (
     <div className="markdown-section">
       <div className="markdown-content">
-        {renderZebraGroups(nodes, 0)}
+        {renderZebraGroups(nodesList, 0)}
       </div>
     </div>
   );

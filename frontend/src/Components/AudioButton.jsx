@@ -36,7 +36,8 @@ export default function AudioButton({
   phraseId,
   phraseVariant = 0,
   size = 1.2, // rem
-  className = ""
+  className = "",
+  preload = false
 }) {
   const [signedUrl, setSignedUrl] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -203,6 +204,22 @@ export default function AudioButton({
 
     return cleanup;
   }, [snip?.storage_path, snip?.signed_url]);
+
+  useEffect(() => {
+    if (!preload || !snip) return;
+    let isActive = true;
+
+    (async () => {
+      const audio = await ensureAudio();
+      if (!audio || !isActive) return;
+      audio.preload = "auto";
+      audio.load();
+    })();
+
+    return () => {
+      isActive = false;
+    };
+  }, [preload, snip?.storage_path, snip?.signed_url]);
 
   // Don't render anything if no snippet found
   if (!snip) return null;

@@ -7,6 +7,7 @@ export default function CollapsibleDetails({
   summaryClassName = "markdown-summary",
   summaryContent,
   summaryProps = {},
+  onToggle,
   children,
   ...rest
 }) {
@@ -29,8 +30,14 @@ export default function CollapsibleDetails({
     initializedRef.current = true;
   }, [defaultOpen, resetKey]);
 
+  const handleToggle = (event) => {
+    if (typeof onToggle === "function") {
+      onToggle(event.currentTarget.open);
+    }
+  };
+
   return (
-    <details ref={detailsRef} className={className} {...rest}>
+    <details ref={detailsRef} className={className} onToggle={handleToggle} {...rest}>
       <summary className={summaryClassName} {...summaryProps}>
         {summaryContent}
       </summary>

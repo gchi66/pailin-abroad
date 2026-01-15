@@ -120,6 +120,7 @@ export default function PrepareCard({
                   <AudioButton
                     node={node}
                     audioIndex={audioIndex}
+                    preload
                     size={1.4}
                     className="prepare-audio-button"
                   />

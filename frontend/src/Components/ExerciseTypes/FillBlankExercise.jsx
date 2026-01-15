@@ -523,6 +523,13 @@ export default function FillBlankExercise({
         ? buildInlineSegments(item.text_jsonb)
         : null;
       const segmentsToRender = inlineSegments || textSegments;
+      const hasBilingualAbPrompt =
+        contentLang === "th" &&
+        typeof item.text === "string" &&
+        typeof item.text_th === "string" &&
+        item.text_th.trim() &&
+        /^\s*A:/m.test(item.text) &&
+        /^\s*B:/m.test(item.text);
       const hasBlank = segmentsToRender.some((segment) => segment.type === "blank");
       const hasMultiline = segmentsToRender.some(
         (segment) =>
@@ -542,13 +549,14 @@ export default function FillBlankExercise({
           !nextNext.content?.includes("\n")
         );
       });
+      const useInlineFlow = prefersInlineFlow && !hasBilingualAbPrompt;
       const questionInlines = item.text_jsonb || null;
       const questionInlinesTh = item.text_jsonb_th || null;
       const displayNumber = item.number ?? idx + 1;
       const cleanedText = cleanInlineMediaTags(item.text || "").trim();
-      const shouldRenderPromptText = Boolean(inlineSegments && cleanedText);
       const promptHasInlineAnswer =
-        shouldRenderPromptText && /(^|\n)B:\s*/.test(cleanedText);
+        Boolean(inlineSegments && cleanedText) && /(^|\n)B:\s*/.test(cleanedText);
+      const shouldRenderPromptText = promptHasInlineAnswer;
 
       const renderPromptWithAnswer = () => {
         const lines = cleanedText.split("\n");
@@ -652,12 +660,111 @@ export default function FillBlankExercise({
                 </div>
               )}
               <div
-                className={`fb-row-text${prefersInlineFlow ? " fb-row-text--inline" : ""}`}
+                className={`fb-row-text${useInlineFlow ? " fb-row-text--inline" : ""}`}
                 ref={(el) => {
                   rowTextRefs.current[idx] = el;
                 }}
               >
                 {(() => {
+                  if (hasBilingualAbPrompt) {
+                    const lines = item.text.split("\n");
+                    const aLine =
+                      lines.find((line) => line.trim().startsWith("A:")) || lines[0];
+                    const bLine =
+                      lines.find((line) => line.trim().startsWith("B:")) ||
+                      lines[lines.length - 1];
+                    const thaiLine = item.text_th.trim();
+                    const nodes = [];
+                    nodes.push(
+                      <React.Fragment key={`ab-a-${idx}`}>
+                        {renderMultiline(aLine)}
+                      </React.Fragment>
+                    );
+                    nodes.push(
+                      <span
+                        key={`ab-a-break-${idx}`}
+                        className="fb-line-break"
+                        aria-hidden="true"
+                      />
+                    );
+                    nodes.push(
+                      <React.Fragment key={`ab-th-${idx}`}>
+                        {renderMultiline(thaiLine)}
+                      </React.Fragment>
+                    );
+                    nodes.push(
+                      <span
+                        key={`ab-th-break-${idx}`}
+                        className="fb-line-break"
+                        aria-hidden="true"
+                      />
+                    );
+
+                    const underscoreMatch = bLine.match(/_{2,}/);
+                    if (underscoreMatch) {
+                      const before = bLine.slice(0, underscoreMatch.index);
+                      const after = bLine.slice(
+                        underscoreMatch.index + underscoreMatch[0].length
+                      );
+                      const trimmedBefore = before.replace(/\s+$/, "");
+                      const hadTrailingSpace = /\s+$/.test(before);
+                      if (trimmedBefore) {
+                        nodes.push(
+                          <React.Fragment key={`ab-b-before-${idx}`}>
+                            {renderMultiline(trimmedBefore)}
+                          </React.Fragment>
+                        );
+                        if (hadTrailingSpace) {
+                          nodes.push(" ");
+                        }
+                      }
+                    } else {
+                      nodes.push(
+                        <React.Fragment key={`ab-b-${idx}`}>
+                          {renderMultiline(bLine)}
+                        </React.Fragment>
+                      );
+                      nodes.push(" ");
+                    }
+
+                    const inputMinWidthCh = isShortAnswer ? 8 : 12;
+                    nodes.push(
+                      <span
+                        key={`ab-input-${idx}`}
+                        className={`fb-input-wrap${isShortAnswer ? " fb-input-wrap--short" : " fb-input-wrap--long"}`}
+                      >
+                        <input
+                          type="text"
+                          className={`fb-input${isShortAnswer ? " fb-input--short" : " fb-input--long"}`}
+                          value={questionState.answer}
+                          onChange={(event) =>
+                            handleAnswerChange(idx, event.target.value)
+                          }
+                          disabled={disabled}
+                          placeholder=""
+                          style={{
+                            minWidth: `${inputMinWidthCh}ch`,
+                          }}
+                        />
+                        <InlineStatus state={questionState} />
+                      </span>
+                    );
+
+                    if (underscoreMatch) {
+                      const after = bLine.slice(
+                        underscoreMatch.index + underscoreMatch[0].length
+                      );
+                      if (after) {
+                        nodes.push(
+                          <React.Fragment key={`ab-b-after-${idx}`}>
+                            {renderMultiline(after)}
+                          </React.Fragment>
+                        );
+                      }
+                    }
+                    return nodes;
+                  }
+
                   const nodes = [];
                   for (let segmentIdx = 0; segmentIdx < segmentsToRender.length; segmentIdx += 1) {
                     const segment = segmentsToRender[segmentIdx];
@@ -754,7 +861,7 @@ export default function FillBlankExercise({
                     );
                   }
 
-                  if (!hasBlank && !promptHasInlineAnswer) {
+                  if (!hasBlank && !promptHasInlineAnswer && !hasBilingualAbPrompt) {
                     const inputMinWidthCh = isShortAnswer ? 8 : 12;
                     nodes.push(
                       <div
@@ -788,7 +895,8 @@ export default function FillBlankExercise({
         </div>
         {contentLang === "th" &&
           typeof item.text_th === "string" &&
-          item.text_th.trim() && (
+          item.text_th.trim() &&
+          !hasBilingualAbPrompt && (
             <div className="fb-row-th">
               <InlineText
                 inlines={questionInlinesTh}

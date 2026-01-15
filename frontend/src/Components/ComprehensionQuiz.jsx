@@ -93,6 +93,7 @@ const parseOptions = (q) => {
       textTh: opt.text_th || opt.textTh || th,
       image_key: opt.image_key || null,
       alt_text: opt.alt_text || "",
+      alt_text_th: opt.alt_text_th || opt.altTextTh || "",
     };
   };
 
@@ -140,8 +141,12 @@ const parseOptions = (q) => {
                   </div>
 
                   <div className="cq-option-list">
-                    {opts.map(({ label, text, textTh, image_key, alt_text }) => {
+                    {opts.map(({ label, text, textTh, image_key, alt_text, alt_text_th }) => {
                       const isSelected = currentSelections.includes(label);
+                      const resolvedAlt =
+                        contentLang === "th"
+                          ? alt_text_th || alt_text
+                          : alt_text || alt_text_th;
 
                       const shouldShowOptionResult = checked && isSelected;
                       const isOptionCorrect = answerSet.has(label);
@@ -160,7 +165,7 @@ const parseOptions = (q) => {
                             {image_key && (
                               <img
                                 src={images[image_key]}
-                                alt={alt_text || text || textTh || ""}
+                                alt={resolvedAlt || text || textTh || ""}
                                 className="cq-option-image"
                               />
                             )}

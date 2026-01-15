@@ -2439,22 +2439,16 @@ class GoogleDocsParser:
         """
         questions: list[dict] = []
         cur_q: dict | None = None
-        options: list[str] = []
+        options: list[dict] = []
         answer_key: list[str] = []
 
-        # When lang == "th", we collect an EN option, then append 1+ TH lines
-        pending_en: str | None = None
-        pending_th: list[str] = []
+        pending_option: dict | None = None
 
         def flush_pending():
-            nonlocal pending_en, pending_th, options
-            if pending_en is not None:
-                if pending_th:
-                    options.append(pending_en + "\n" + "\n".join(pending_th))
-                else:
-                    options.append(pending_en)
-            pending_en = None
-            pending_th = []
+            nonlocal pending_option, options
+            if pending_option is not None:
+                options.append(pending_option)
+            pending_option = None
 
         def is_thai_continuation(s: str) -> bool:
             # Thai chars, and not a new option, not an answer key, not a new question
@@ -2494,23 +2488,57 @@ class GoogleDocsParser:
                     continue
 
                 # Option line (A./B./C.)
-                if OPTION_RE.match(line):
+                m_opt = OPTION_RE.match(line)
+                if m_opt:
                     flush_pending()
-                    if lang == "th" and not _has_th(line):
-                        # EN only — wait for Thai continuation lines
-                        pending_en = line
-                        pending_th = []
+                    label = (m_opt.group(1) or "").strip()
+                    body = (m_opt.group(2) or "").strip()
+                    image_key = None
+                    img_match = IMG_TAG_RE.search(body)
+                    if img_match:
+                        image_key = (img_match.group(1) or "").strip() or None
+                        body = IMG_TAG_RE.sub("", body).strip()
+
+                    alt_text = None
+                    alt_match = ALT_TEXT_RE.search(body)
+                    if alt_match:
+                        alt_text = (alt_match.group(1) or "").strip()
+                        body = body[:alt_match.start()].strip()
+
+                    pending_option = {
+                        "label": label,
+                        "image_key": image_key,
+                    }
+                    if lang == "th":
+                        pending_option["text_th"] = body
+                        if alt_text:
+                            pending_option["alt_text_th"] = alt_text
                     else:
-                        options.append(line)
+                        pending_option["text"] = body
+                        if alt_text:
+                            pending_option["alt_text"] = alt_text
+                    continue
+
+                # Alt-text line after an option
+                alt_line = ALT_TEXT_RE.match(line)
+                if alt_line and pending_option:
+                    alt_val = (alt_line.group(1) or "").strip()
+                    if lang == "th":
+                        pending_option["alt_text_th"] = alt_val
+                    else:
+                        pending_option["alt_text"] = alt_val
                     continue
 
                 # Thai continuation lines after an English option
-                if lang == "th" and pending_en and is_thai_continuation(line):
-                    pending_th.append(line)
+                if lang == "th" and pending_option and is_thai_continuation(line):
+                    existing = (pending_option.get("text_th") or "").strip()
+                    pending_option["text_th"] = (
+                        f"{existing}\n{line}" if existing else line
+                    )
                     continue
 
                 # Extra text before any options → belongs to prompt
-                if cur_q and not options and not pending_en:
+                if cur_q and not options and not pending_option:
                     cur_q["prompt"] = (cur_q["prompt"] + " " + line).strip()
 
         # Final flush
