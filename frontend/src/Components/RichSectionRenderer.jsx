@@ -91,12 +91,63 @@ const isEnglishSpeakerLineText = (text) => {
 
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines, opts = {}) => {
-    const thaiColor = opts.thaiColor || null;
+    let thaiColor = opts.thaiColor || null;
     const englishColor = opts.englishColor || null;
-    const processedInlines = inlines.map((span, idx) => {
+    const normalizedInlines = [];
+    (inlines || []).forEach((span) => {
+      const text = span?.text || "";
+      if (text.includes("\n")) {
+        const parts = text.split("\n");
+        parts.forEach((part, idx) => {
+          if (idx > 0) {
+            normalizedInlines.push({ ...span, text: "\n" });
+          }
+          if (part) {
+            normalizedInlines.push({ ...span, text: part });
+          }
+        });
+      } else {
+        normalizedInlines.push(span);
+      }
+    });
+
+    let thaiZoneStartIndex = -1;
+    const hasLineBreak = normalizedInlines.some((span) => span?.text === "\n");
+
+    if (hasLineBreak) {
+      for (let i = 0; i < normalizedInlines.length; i += 1) {
+        const text = cleanAudioTags(normalizedInlines[i]?.text || "");
+        if (TH_RE.test(text)) {
+          thaiZoneStartIndex = i;
+          break;
+        }
+      }
+    } else {
+      for (let i = 1; i < normalizedInlines.length; i += 1) {
+        const text = cleanAudioTags(normalizedInlines[i]?.text || "");
+        if (!TH_RE.test(text)) continue;
+        const prevText = cleanAudioTags(normalizedInlines[i - 1]?.text || "");
+        if (prevText.includes("(") || TH_PUNCT_ONLY_RE.test(prevText)) {
+          thaiZoneStartIndex = i - 1;
+          break;
+        }
+      }
+    }
+
+    if (!hasLineBreak && thaiZoneStartIndex === -1) {
+      thaiColor = null;
+    }
+
+    if (thaiZoneStartIndex > 0) {
+      const prevText = cleanAudioTags(normalizedInlines[thaiZoneStartIndex - 1]?.text || "");
+      if (TH_PUNCT_ONLY_RE.test(prevText)) {
+        thaiZoneStartIndex -= 1;
+      }
+    }
+    const processedInlines = normalizedInlines.map((span, idx) => {
       const cleanText = cleanAudioTags(span.text);
       let displayText = cleanText;
-      const nextSpan = inlines[idx + 1];
+      const nextSpan = normalizedInlines[idx + 1];
 
       // Check if there's NO trailing space in the ORIGINAL text (before cleanAudioTags)
       const originalHadTrailingSpace = typeof span.text === "string" && /[ \t]+$/.test(span.text);
@@ -148,6 +199,7 @@ const isEnglishSpeakerLineText = (text) => {
 
       const renderTextWithMarkers = (text, keyPrefix, opts = {}) => {
         const thaiContext = opts.thaiContext === true;
+        const inThaiZone = opts.inThaiZone === true;
         const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
         return segments.flatMap((segment, segIdx) => {
           const markerColor = INLINE_MARKER_COLORS[segment];
@@ -177,7 +229,7 @@ const isEnglishSpeakerLineText = (text) => {
             );
           }
 
-          const segmentHasThai = !!(thaiColor && (thaiContext || TH_RE.test(segment)));
+          const segmentHasThai = !!(thaiColor && (inThaiZone || thaiContext || TH_RE.test(segment)));
           const segmentParts = segmentHasThai
             ? segment.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}\[\]<>\/\\\-–—…]+)/)
             : [segment];
@@ -193,11 +245,15 @@ const isEnglishSpeakerLineText = (text) => {
             .map(({ part }, idx) => {
               const prev = segmentEntries[idx - 1]?.part || "";
               const next = segmentEntries[idx + 1]?.part || "";
+              const isPunctOnly = TH_PUNCT_ONLY_RE.test(part);
+              const isNumericOnly = /^\d+(?:[.,]\d+)?$/.test(part);
+              const adjacentThai = TH_RE.test(prev) || TH_RE.test(next);
               const partHasThai =
+                inThaiZone ||
                 TH_RE.test(part) ||
                 (segmentHasThai &&
-                  TH_PUNCT_ONLY_RE.test(part) &&
-                  (thaiContext || TH_RE.test(prev) || TH_RE.test(next)));
+                  (isPunctOnly || isNumericOnly) &&
+                  adjacentThai);
               const style = {
                 ...commonStyle,
                 color:
@@ -254,7 +310,11 @@ const isEnglishSpeakerLineText = (text) => {
         TH_RE.test(typeof prevText === "string" ? prevText : "") ||
         TH_RE.test(typeof nextText === "string" ? nextText : "")
       ));
-      const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`, { thaiContext });
+      const inThaiZone = thaiZoneStartIndex >= 0 && m >= thaiZoneStartIndex;
+      const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`, {
+        thaiContext,
+        inThaiZone,
+      });
 
       return (
         <React.Fragment key={m}>
@@ -447,7 +507,7 @@ const paragraphTextStartRem = (indentLevel) => {
       const showDivider = isPhrasesSection && meta.showDivider;
       const boldPhrase = isPhrasesSection && meta.boldPhrase;
       const hasBold = nodeHasBold(node);
-      const hasAccent = hasCyanHighlight(node) || node?.is_response;
+      const hasAccent = (!isPhrasesSection && hasCyanHighlight(node)) || node?.is_response;
       const textSpans = (node.inlines || []).filter(
         (span) => typeof span?.text === "string" && span.text.trim() !== ""
       );

@@ -135,6 +135,10 @@ details[open] > .markdown-summary {
   margin-bottom: 2rem;
 }
 
+.ps-quick-practice .st-example {
+  padding-top: 2.5rem;
+}
+
 .fb-text-with-input {
   display: flex;
   align-items: center;
