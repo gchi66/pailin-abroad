@@ -545,6 +545,74 @@ export default function FillBlankExercise({
       const questionInlines = item.text_jsonb || null;
       const questionInlinesTh = item.text_jsonb_th || null;
       const displayNumber = item.number ?? idx + 1;
+      const cleanedText = cleanInlineMediaTags(item.text || "").trim();
+      const shouldRenderPromptText = Boolean(inlineSegments && cleanedText);
+      const promptHasInlineAnswer =
+        shouldRenderPromptText && /(^|\n)B:\s*/.test(cleanedText);
+
+      const renderPromptWithAnswer = () => {
+        const lines = cleanedText.split("\n");
+        const nodes = [];
+        lines.forEach((line, lineIdx) => {
+          if (lineIdx > 0) {
+            nodes.push(
+              <span
+                key={`prompt-break-${idx}-${lineIdx}`}
+                className="fb-line-break"
+                aria-hidden="true"
+              />
+            );
+          }
+          const match = line.match(/^B:\s*(.*)$/);
+          if (match) {
+            const suffix = match[1].replace(/_{2,}/g, "").trim();
+            const inputMinWidthCh = isShortAnswer ? 8 : 12;
+            nodes.push(
+              <span key={`prompt-b-${idx}-${lineIdx}`} className="fb-text-block">
+                B:&nbsp;
+              </span>
+            );
+            nodes.push(
+              <span
+                key={`prompt-input-${idx}-${lineIdx}`}
+                className={`fb-input-wrap${isShortAnswer ? " fb-input-wrap--short" : " fb-input-wrap--long"}`}
+              >
+                <input
+                  type="text"
+                  className={`fb-input${isShortAnswer ? " fb-input--short" : " fb-input--long"}`}
+                  value={questionState.answer}
+                  onChange={(event) =>
+                    handleAnswerChange(idx, event.target.value)
+                  }
+                  disabled={disabled}
+                  placeholder=""
+                  style={{
+                    minWidth: `${inputMinWidthCh}ch`,
+                  }}
+                />
+                <InlineStatus state={questionState} />
+              </span>
+            );
+            if (suffix) {
+              nodes.push(
+                <span
+                  key={`prompt-b-suffix-${idx}-${lineIdx}`}
+                  className="fb-text-block"
+                >
+                  {` ${suffix}`}
+                </span>
+              );
+            }
+            return;
+          }
+          nodes.push(
+            <span key={`prompt-text-${idx}-${lineIdx}`} className="fb-text-block">
+              {line}
+            </span>
+          );
+        });
+        return nodes;
+      };
 
       return (
         <React.Fragment key={`${item.number ?? idx}-${idx}`}>
@@ -574,6 +642,13 @@ export default function FillBlankExercise({
                     audioIndex={audioIndex}
                     className="practice-audio-button"
                   />
+                </div>
+              )}
+              {shouldRenderPromptText && (
+                <div className="fb-row-text">
+                  {promptHasInlineAnswer
+                    ? renderPromptWithAnswer()
+                    : renderMultiline(cleanedText)}
                 </div>
               )}
               <div
@@ -679,9 +754,7 @@ export default function FillBlankExercise({
                     );
                   }
 
-                  if (!hasBlank) {
-                    const answerLength = (item?.answer || "").trim().length;
-                    const isShortAnswer = answerLength > 0 && answerLength <= 10;
+                  if (!hasBlank && !promptHasInlineAnswer) {
                     const inputMinWidthCh = isShortAnswer ? 8 : 12;
                     nodes.push(
                       <div

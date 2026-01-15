@@ -67,6 +67,18 @@ const resolveQuestionText = (item, lang) => {
 const resolvePlaceholder = (item, lang) =>
   pickFieldByLang(item, "placeholder", lang);
 
+const stripInlineMediaTags = (text) => {
+  if (!text || typeof text !== "string") return text;
+  return text
+    .replace(/\[audio:[^\]]+\]/gi, " ")
+    .replace(/\[img:[^\]]+\]/gi, " ")
+    .trim();
+};
+
+const hasVisibleInlineText = (inlines) =>
+  Array.isArray(inlines) &&
+  inlines.some((span) => stripInlineMediaTags(span?.text || "").length > 0);
+
 const getInputCount = (item) => {
   const raw = item?.inputs;
   if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) {
@@ -360,6 +372,11 @@ export default function OpenEndedExercise({
           contentLang === "th" ? questionEn || questionTh : questionEn || questionTh;
         const questionInlines = item.text_jsonb || null;
         const questionInlinesTh = item.text_jsonb_th || null;
+        const hasQuestionText =
+          normalizeText(displayQuestion).length > 0 ||
+          normalizeText(questionTh).length > 0 ||
+          hasVisibleInlineText(questionInlines) ||
+          hasVisibleInlineText(questionInlinesTh);
 
         if (isExampleItem(item)) {
           const imageUrl = item.image_key ? images[item.image_key] : null;
@@ -434,6 +451,14 @@ export default function OpenEndedExercise({
         const disabled =
           questionState.correct === true || questionState.loading === true;
         const imageUrl = item.image_key ? images[item.image_key] : null;
+        const isMediaOnly =
+          Boolean(imageUrl) &&
+          !hasAudio &&
+          !hasQuestionText &&
+          !item.sample_answer &&
+          !item.answer &&
+          !item.expected_answer &&
+          !item.keywords;
         const numberLabel = item.number ?? qIdx + 1;
         const inputCount = getInputCount(item);
         const placeholder =
@@ -452,6 +477,27 @@ export default function OpenEndedExercise({
                 }
                 return next;
               })();
+
+        if (isMediaOnly) {
+          return (
+            <div key={`question-${qIdx}`} className="fb-row oe-question">
+              <div className="fb-row-number">
+                <span aria-hidden="true" />
+              </div>
+              <div className="fb-row-main">
+                <div className="fb-row-content">
+                  <div className="fb-image-container">
+                    <img
+                      src={imageUrl}
+                      alt={`Question ${numberLabel}`}
+                      className="fb-image"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
 
         return (
           <div key={`question-${qIdx}`} className="fb-row oe-question">
