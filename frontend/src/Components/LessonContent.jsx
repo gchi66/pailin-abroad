@@ -495,6 +495,7 @@ export default function LessonContent({
                     phraseVariant={item.variant || 0}
                     isPhrasesSection={true}
                     uiLang={uiLang}
+                    images={images}
                   />
                 ) : md ? (
                   <MarkdownSection
@@ -700,6 +701,7 @@ export default function LessonContent({
           nodes={processedContent}
           snipIdx={snipIdx}
           uiLang={uiLang}
+          images={images}
           accordionResetKey={section.id}
           renderQuickPractice={(exercise) => (
             <PracticeSection

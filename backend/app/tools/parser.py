@@ -123,6 +123,16 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
     followed by non-bold content. This turns bold inline "subheaders" into
     standalone paragraphs so rich rendering can detect them.
     """
+    def _looks_all_caps_header(text: str) -> bool:
+        if not text:
+            return False
+        normalized = re.sub(r"\s+", " ", text.replace("\u000b", " ").strip())
+        # Ignore Thai when checking for all-caps English headers.
+        ascii_only = TH.sub("", normalized).strip()
+        if not ascii_only:
+            return False
+        return bool(UPPER_SUB_RE.match(ascii_only))
+
     body = doc_json.get("body", {})
     content = body.get("content", [])
     if not isinstance(content, list):
@@ -137,6 +147,10 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
 
         elements = para.get("elements", [])
         split_idx = None
+        split_for_caps = False
+        header_part = ""
+        body_part = ""
+        before_chunks = []
         for idx, run in enumerate(elements):
             text_run = run.get("textRun")
             if not text_run:
@@ -146,7 +160,22 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
             if is_bold and "\u000b" in text:
                 if any(_run_is_non_bold(r) for r in elements[idx + 1 :]):
                     split_idx = idx
+                    split_for_caps = False
                     break
+            if "\u000b" in text:
+                before, after = text.split("\u000b", 1)
+                header_candidate = "".join(before_chunks) + before
+                remainder = after + "".join(
+                    r.get("textRun", {}).get("content", "")
+                    for r in elements[idx + 1 :]
+                )
+                if _looks_all_caps_header(header_candidate) and remainder.strip():
+                    split_idx = idx
+                    split_for_caps = True
+                    header_part = header_candidate
+                    body_part = remainder
+                    break
+            before_chunks.append(text)
 
         if split_idx is None:
             normalized.append(elem)
@@ -169,6 +198,19 @@ def normalize_soft_break_subheaders(doc_json: dict) -> None:
         header_text_full = "".join(
             r.get("textRun", {}).get("content", "") for r in header_elems
         ).strip()
+        if split_for_caps:
+            header_text_full = header_part.strip() or header_text_full
+            if body_part.strip():
+                # Ensure the body has content even if it was a single run.
+                if not body_elems:
+                    body_elems = [
+                        {
+                            "textRun": {
+                                "content": body_part,
+                                "textStyle": header_run.get("textRun", {}).get("textStyle", {}),
+                            }
+                        }
+                    ]
         if not header_text_full or not body_elems:
             normalized.append(elem)
             continue
@@ -1407,10 +1449,13 @@ class GoogleDocsParser:
 
                         # Check for section headers FIRST, before checking for Thai
                         if len(line_stripped) < 100:
-                            upper_check = line_stripped.upper()
-                            # Remove Thai to check if English part is all caps
-                            en_only = TH.sub('', line_stripped).strip()
-                            if en_only and upper_check[:len(en_only)] == en_only and not re.match(r'^[A-Z]\.\s', line_stripped):
+                            # Treat bilingual ALL-CAPS headers as headers too (Thai suffixes are common).
+                            en_only = TH.sub("", line_stripped).strip()
+                            is_caps_header = en_only and en_only == en_only.upper()
+                            if (
+                                not re.match(r"^[A-Z]\.\s", line_stripped)
+                                and (is_subheader(line_stripped, style) or is_caps_header)
+                            ):
                                 # This is a header, flush and continue
                                 embedded_practice_lines.extend(qp_chunk)
                                 qp_chunk = []
@@ -2584,7 +2629,8 @@ class GoogleDocsParser:
                             cur_items[-1]["text_th"] = stripped
                             collecting_text = False  # Done collecting
                         else:
-                            joiner = "\n" if re.match(r"^[A-Z]\s*:", stripped) else " "
+                            # Preserve speaker turns like "Luke: ..." on a new line.
+                            joiner = "\n" if re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped) else " "
                             cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
                             collecting_text = False  # Done collecting
                     else:

@@ -1,9 +1,9 @@
 [
   {
-    "section_index": 271,
+    "section_index": 448,
     "paragraphs": [
       {
-        "index": 272,
+        "index": 449,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -14,8 +14,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 273,
-        "text": "GUYS พวกคุณ",
+        "index": 450,
+        "text": "LET'S SEE ขอลองดูแปปนึงนะ มาดูกัน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -25,11 +25,99 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 274,
-        "text": "Guys พวกคุณ [audio:phrases_verbs_guys_1]",
+        "index": 451,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 452,
+        "text": "COOL! เยี่ยมเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 453,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 454,
+        "text": "CHECK OUT ไปดู ไปลองดู",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 455,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 456,
+        "text": "PERFECT เยี่ยมเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 457,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 458,
+        "text": "WHAT? อะไรนะ?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 459,
+        "text": "What? อะไรนะ? [audio:phrases_verbs_what_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.3pdlrq3m5f9e",
+          "listId": "kix.mx84gxg8fboc",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -44,8 +132,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 275,
-        "text": "เป็นคำเรียกกลุ่มคนแบบไม่ได้แบ่งแยกเพศ ในแบบไม่เป็นทางการและเป็นมิตร  ",
+        "index": 460,
+        "text": "ใช้แสดงให้เห็นว่าไม่น่าเชื่อหรือความประหลาดใจหลังจากได้ยินอะไรบางอย่าง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -55,7 +143,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 276,
+        "index": 461,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -66,11 +154,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 277,
-        "text": "Hey guys, how’s it going? [audio:phrases_verbs_guys_2]\u000bเฮ้ พวกเธอ เป็นยังไงบ้าง?",
+        "index": 462,
+        "text": "Pailin: I just saw the list of finalists for the competition. Looks like you’re one of them! [audio:phrases_verbs_what_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.ahpeircqoy9q",
+          "listId": "kix.mx84gxg8fboc",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -85,11 +173,55 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 278,
-        "text": "Guys, we’re going to be late if we don’t leave now. [audio:phrases_verbs_guys_3]\u000bพวกคุณ เรากำลังจะไปสายนะถ้าพวกเราไม่ออกไปตอนนี้",
+        "index": 463,
+        "text": "ไพลิน: ฉันเพิ่งไปเห็นรายชื่อผู้เข้ารอบสุดท้ายของการแข่งขันมาล่ะ ดูเหมือนคุณคือหนึ่งในนั้นนะคะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 464,
+        "text": "Luke: What?? I’m a finalist??",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 465,
+        "text": "ลูค: อะไรนะ??? ผมเป็นคนเข้ารอบสุดท้ายหรอ??",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 466,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 467,
+        "text": "Luke: Our boss really likes you. He said you’re one of his best employees. [audio:phrases_verbs_what_3]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.ahpeircqoy9q",
+          "listId": "kix.mx84gxg8fboc",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -104,7 +236,29 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 279,
+        "index": 468,
+        "text": "ลูค: หัวหน้าเราชอบคุณมากเลย เขาพูดว่าคุณเป็นหนึ่งในพนักงานที่ดีที่สุดของเขาด้วย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 469,
+        "text": "Pailin: What?? He said that? I thought he hated me!\u000bไพลิน: อะไรนะ?? เขาพูดแบบนั้นหรอคะ?? ฉันก็นึกว่าเขาเกลียดฉันซะอีก!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 470,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -115,8 +269,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 280,
-        "text": "(link xx)ดูการใช้เพิ่มเติมของ Guys",
+        "index": 471,
+        "text": "(link xx)ดูการใช้เพิ่มเติมของ What?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -126,7 +280,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 281,
+        "index": 472,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -137,7 +291,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 282,
+        "index": 473,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -148,8 +302,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 283,
-        "text": "OH NO โอ้ ไม่นะ",
+        "index": 474,
+        "text": "NO WAY ไม่มีทางน่า!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -159,11 +313,53 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 284,
-        "text": "Oh no โอ้ ไม่นะ [audio:phrases_verbs_oh_no_1]",
+        "index": 475,
+        "text": "No way! ไม่มีทางน่า! เหลือเชื่อ! [audio:phrases_verbs_no_way_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.ahpeircqoy9q",
+          "listId": "kix.yskgs57p3v5v",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 476,
+        "text": "พูดเพื่อแสดงถึงความประหลาดใจว่ามีอะไรที่ไม่ได้คาดคิดเกิดขึ้น",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 477,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 478,
+        "text": "Luke: Amy and I are engaged! [audio:phrases_verbs_no_way_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.kjjttvgkis0g",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -178,8 +374,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 285,
-        "text": "เป็นสำนวนที่ใช้แสดงออกถึงความตกใจหรือห่วงใย โดยเฉพาะเมื่อเกิดสิ่งที่ผิดปกติขึ้น  ",
+        "index": 479,
+        "text": "ลูค: เอมี่กับฉันเราเพิ่งหมั้นกันล่ะ!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -189,7 +385,40 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 286,
+        "index": 480,
+        "text": "Pailin: What! No way! Congratulations!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 481,
+        "text": "ไพลิน: อะไรนะ??? เหลือเชื่อเลย! ยินดีด้วยนะคะ!\u000b",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 482,
+        "text": "(link xx)ดูการใช้เพิ่มเติมของ No way!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 483,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -200,48 +429,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 287,
-        "text": "Oh no. I locked my keys in my car! [audio:phrases_verbs_oh_no_2]\u000bโอ้ ไม่นะ ฉันเผลอล็อกกุญแจเอาไว้ในรถของฉัน!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ahpeircqoy9q",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 288,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 289,
-        "text": "(link xx)ดูการใช้เพิ่มเติมของ Oh no",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 290,
+        "index": 484,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -254,10 +442,10 @@
     ]
   },
   {
-    "section_index": 1298,
+    "section_index": 910,
     "paragraphs": [
       {
-        "index": 1299,
+        "index": 911,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -268,8 +456,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1300,
-        "text": "OH NO โอ้ ไม่นะ",
+        "index": 912,
+        "text": "SURE! ได้เลย แน่นอน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -279,7 +467,371 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1301,
+        "index": 913,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 914,
+        "text": "OH MY GOD [1] โอ้พระเจ้า",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 915,
+        "text": "Oh my God โอ้พระเจ้า [audio:phrases_verbs_oh_my_god1_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.d14gu5ney4e1",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 916,
+        "text": "คำอุทานเพื่อแสดงความตกใจ หรือไม่เชื่อ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 917,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 918,
+        "text": "Oh my God. My sister’s house got broken into. [audio:phrases_verbs_oh_my_god1_2]\u000bโอ้พระเจ้า บ้านของพี่สาวฉันถูกงัดแงะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.21iga2c0wiqr",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 919,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 920,
+        "text": "(link xx)ดูการใช้เพิ่มเติมของ Oh my God",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 921,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 922,
+        "text": "OF COURSE  แน่นอน ได้เลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 923,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 924,
+        "text": "HERE ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 925,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 926,
+        "text": "GOOD WORK ทำได้ดีมาก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 927,
+        "text": "Good work ทำได้ดีมาก ดีมาก [audio:phrases_verbs_good_work_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.1qfohxvsdrro",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 928,
+        "text": "พูดเพื่อชื่นชมความพยายามของคนๆนั้น  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 929,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 930,
+        "text": "We finally finished painting all the bedrooms! Good work, guys! [audio:phrases_verbs_good_work_2]\u000bเราทาสีทุกห้องนอนเสร็จหมดแล้ว ทำได้ดีมากเลยทุกคน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.1qfohxvsdrro",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 931,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 932,
+        "text": "HERE YOU GO นี่ไง เอาไปสิ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 933,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 934,
+        "text": "TAKE A BREAK พักเบรก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 935,
+        "text": "Take a break หยุดพัก [audio:phrases_verbs_take_a_break_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.gxjwaewwc8ib",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 936,
+        "text": "Take a break / take a break from [อะไรสักอย่าง]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 937,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 938,
+        "text": "Okay class, let’s take a ten-minute break. You can use the bathroom, get some snacks. [audio:phrases_verbs_take_a_break_2]\u000bเอาล่ะ ชั้นเรียน เดี๋ยวมาพัก 10 นาทีกันดีกว่า คุณสามารถไปเข้าห้องน้ำหรือหาขนมกินได้นะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.gxjwaewwc8ib",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 939,
+        "text": "I need to take a break from working on my computer. My eyes are starting to hurt. [audio:phrases_verbs_take_a_break_3]\u000bฉันอยากหยุดพักจากการทำงานบนคอมพิวเตอร์หน่อย ตาฉันเริ่มจะปวดแล้ว",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.gxjwaewwc8ib",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 940,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 941,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -292,10 +844,10 @@
     ]
   },
   {
-    "section_index": 1691,
+    "section_index": 1240,
     "paragraphs": [
       {
-        "index": 1692,
+        "index": 1241,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -306,8 +858,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1693,
-        "text": "OH [1] โอ้",
+        "index": 1242,
+        "text": "AWW อุ้ยยย งุ้ยยย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -317,37 +869,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1694,
-        "text": "Oh โอ้ [audio:phrases_verbs_oh1_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.wctz56hshlwi",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1695,
-        "text": "ใช้พูดเมื่อคุณนึกอะไรบางอย่างออก ที่เป็นสิ่งคุณไม่ได้สังเกตมาก่อนหรือลืมไปแล้ว ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1696,
+        "index": 1243,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -358,752 +880,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1697,
-        "text": "I need to get milk from the store. Oh, and I need to get eggs, too. [audio:phrases_verbs_oh1_2]\u000bฉันต้องซื้อนมจากที่ร้าน โอ้ แล้วก็ต้องซื้อไข่ด้วย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.3bg5py4bqoy3",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 1698,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1699,
-        "text": "\t(link xx)ดูการใช้เพิ่มเติมของ Oh",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1700,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1701,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      }
-    ]
-  },
-  {
-    "section_index": 2003,
-    "paragraphs": [
-      {
-        "index": 2004,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2005,
-        "text": "WOW ว้าว!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2006,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2007,
-        "text": "COOL! เยี่ยมเลย!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2008,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2009,
-        "text": "GREAT IDEA ความคิดเริ่ดมาก เจ๋งมาก",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2010,
-        "text": "Great idea ความคิดเริ่ดมาก เจ๋งมาก [audio:phrases_verbs_great_idea_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.jvh42q4fq3si",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2011,
-        "text": "ใช้พูดเพื่อแสดงความเห็นด้วยอย่างกระตือรือร้นกับข้อเสนอหรือแผนการ ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2012,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2013,
-        "text": "Luke: Oh, it’s happy hour at Jay’s Bar. Should we go there? [audio:phrases_verbs_great_idea_2]\u000bลูค: โอ้ ตอนนี้เป็นช่วง happy hour ลดราคาที่บาร์ของเจย์นะ พวกเราควรไปที่นั้นกันไหม?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.jvh42q4fq3si",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2014,
-        "text": "Pailin: Yeah, great idea!\u000bไพลิน: เอาสิ ความคิดเจ๋งมาก",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2015,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      }
-    ]
-  },
-  {
-    "section_index": 2278,
-    "paragraphs": [
-      {
-        "index": 2279,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2280,
-        "text": "MEET UP นัดเจอกัน",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2281,
-        "text": "Meet up นัดเจอกัน [audio:phrases_verbs_meet_up_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.wba4c2fg38vu",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2282,
-        "text": "เป็นการนัดเจอกันในแบบไม่เป็นทางการ หรือสบายๆ ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2283,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2284,
-        "text": "Let’s meet up for coffee this week. [audio:phrases_verbs_meet_up_2]\u000bไว้มาเจอกันดื่มกาแฟกันในสัปดาห์นี้นะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.r9ckp7sqs402",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2285,
-        "text": "We’re going to meet up with friends tonight. [audio:phrases_verbs_meet_up_3]\u000bเราจะไปเจอกับเพื่อนๆกันคืนนี้ล่ะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.r9ckp7sqs402",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2286,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2287,
-        "text": "\tTHAT SOUNDS FUN ฟังดูน่าสนุกดีนะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2288,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2289,
-        "text": "OF COURSE แน่นอน ได้เลย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2290,
-        "text": "Of course แน่นอน ได้เลย [audio:phrases_verbs_of_course_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.kzuqui3fr16t",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2291,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2292,
-        "text": "Of course you can stay at my place! You don’t even have to ask. [audio:phrases_verbs_of_course_2]\u000bแน่นอน คุณมาพักที่บ้านฉันได้เลย! คุณไม่เห็นจะต้องถามเลยนะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.kzuqui3fr16t",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2293,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2294,
-        "text": "Pailin: Can I make myself another cup of coffee? [audio:phrases_verbs_of_course_3]\u000bไพลิน: ฉันขอทำกาแฟกินอีกแก้วได้ไหมคะ?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.xrgnp0fx1w3g",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2295,
-        "text": "Luke: Of course! Go ahead.\u000bลูค: แน่นอน! ทำได้เลยครับ\u000b",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2296,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2297,
-        "text": "IN TOWN ในเมือง อยู่แถวนี้",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2298,
-        "text": "In town ในเมือง อยู่แถวนี้ [audio:phrases_verbs_in_town_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.l1ztsuu4v9cu",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2299,
-        "text": "พูดเมื่อมีคนมาอยู่ในเมืองหรือสถานที่ที่คุณอยู่ตอนนี้เป็นช่วงเวลาสั้นๆ  ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2300,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2301,
-        "text": "My parents are in town this weekend, so I won’t be free. [audio:phrases_verbs_in_town_2]\u000bพ่อแม่ฉันเข้าเมืองช่วงสุดสัปดาห์นี้ล่ะ ดังนั้นเลยจะไม่ว่างแล้ว",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.t7l5p0h5owog",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2302,
-        "text": "Since you’re in town, we should catch up. [audio:phrases_verbs_in_town_3]\u000bไหนๆคุณก็เข้าเมืองมาละ เราน่าจะเจอกันหน่อยนะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.t7l5p0h5owog",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2303,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      }
-    ]
-  },
-  {
-    "section_index": 2595,
-    "paragraphs": [
-      {
-        "index": 2596,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2597,
-        "text": "LET’S SEE ขอลองดูแปปนึงนะ มาดูกัน",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2598,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2599,
-        "text": "IT’S MY TREAT ฉันเลี้ยงเอง",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2600,
-        "text": "It’s my treat ฉันเลี้ยงเอง [audio:phrases_verbs_its_my_treat_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.7li7jrcba3xx",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2601,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2602,
-        "text": "Let’s get coffee. Don’t worry, it’s my treat. [audio:phrases_verbs_its_my_treat_2]\u000bไปหากาแฟกินกันเถอะ อย่าห่วงเลย เดี๋ยวฉันเลี้ยงเอง",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.7li7jrcba3xx",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2603,
-        "text": "Since you’re visiting, the tickets are my treat. [audio:phrases_verbs_its_my_treat_3]\u000bไหนๆคุณก็มาเยี่ยมฉัน เดี๋ยวพวกตั๋วนี่ฉันเลี้ยงเอง",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.7li7jrcba3xx",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2604,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2605,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2606,
-        "text": "WOW ว้าว",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2607,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      }
-    ]
-  },
-  {
-    "section_index": 2959,
-    "paragraphs": [
-      {
-        "index": 2960,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2961,
+        "index": 1244,
         "text": "OH โอ้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1114,7 +891,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2962,
+        "index": 1245,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1125,365 +902,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2963,
-        "text": "I THINK SO ฉันก็คิดอย่างนั้น",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2964,
-        "text": "I think so ฉันก็คิดอย่างนั้น ฉันก็ว่าอย่างนั้น [audio:phrases_verbs_i_think_so_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.gkohkqlk8ncm",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2965,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2966,
-        "text": "Pailin: Is Sebastian majoring in Psychology? [audio:phrases_verbs_i_think_so_2]\u000bไพลิน: เซบาสเตียนกำลังเรียนเอกจิตวิทยาอยู่ใช่ไหม?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.gkohkqlk8ncm",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2967,
-        "text": "Luke: I think so.\u000bลูค: ฉันคิดว่านะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2968,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2969,
-        "text": "Luke: Do you have a band-aid by any chance? [audio:phrases_verbs_i_think_so_3]\u000bลูค: คุณพอจะมีพลาสเตอร์ยาบ้างไหมครับ?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.gkohkqlk8ncm",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2970,
-        "text": "Pailin: I think so, let me check my bag.\u000bไพลิน: ฉันคิดว่ามีนะคะ ขอฉันเช็คในกระเป๋าก่อนนะคะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2971,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2972,
-        "text": "NICE! เยี่ยม! เจ๋ง!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2973,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2974,
-        "text": "THAT’S OKAY ไม่เป็นไร",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2975,
-        "text": "That’s okay / It’s okay ไม่เป็นไร ไม่มีปัญหา [audio:phrases_verbs_thats_okay_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ho0463x95wcr",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2976,
-        "text": "สามารถใช้พูดเมื่อคุณไม่ได้รู้สึกเดือดร้อนกับสิ่งนั้น หรืออาจจะใช้เป็นวิธีการตอบว่า ‘ไม่’ เพื่อปฏิเสธแบบสุภาพ  ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2977,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2978,
-        "text": "Luke: Sorry, I forgot to bring you that book you wanted to borrow! [audio:phrases_verbs_thats_okay_2]\u000bลูค: ขอโทษนะครับ ผมลืมเอาหนังสือที่คุณอยากยืมมาด้วยน่ะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ho0463x95wcr",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2979,
-        "text": "Pailin: That’s okay, I’m not in a rush to read it.\u000bไพลิน: ไม่เป็นไรเลยค่ะ ฉันไม่ได้รีบอยากอ่านมันอยู่แล้ว",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2980,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2981,
-        "text": "Luke: Do you need help carrying that? [audio:phrases_verbs_thats_okay_3]\u000bลูค: คุณต้องการให้ช่วยถืออันนั้นไหมครับ?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ho0463x95wcr",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2982,
-        "text": "Pailin: It’s okay. It’s not heavy.\u000bไพลิน: ไม่เป็นไรค่ะ มันไม่ได้หนักอะไร",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2983,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2984,
-        "text": "FOLLOW ติดตาม",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2985,
-        "text": "Follow (บริบทที่ใช้กับโซเชียลมีเดีย) ติดตาม กดติดตาม [audio:phrases_verbs_follow_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.h1phsyxdbul7",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2986,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 2987,
-        "text": "I’m not following him on Instagram. [audio:phrases_verbs_follow_2]\u000bฉันไม่ได้กำลังติดตามเขาบนอินสตาแกรม",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.h1phsyxdbul7",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2988,
-        "text": "Do you follow Jeff on TikTok? [audio:phrases_verbs_follow_3]\u000bคุณได้ติดตามเจฟบน TikTok หรือเปล่า?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.h1phsyxdbul7",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 2989,
+        "index": 1246,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1496,10 +915,10 @@
     ]
   },
   {
-    "section_index": 3301,
+    "section_index": 1611,
     "paragraphs": [
       {
-        "index": 3302,
+        "index": 1612,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1510,8 +929,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3303,
-        "text": "MAN โถ่เอ๊ย โห โถ่",
+        "index": 1613,
+        "text": "SHOW AROUND พาเดินชมสถานที่รอบๆ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1521,11 +940,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3304,
-        "text": "Man โถ่เอ๊ย โห โถ่ [audio:phrases_verbs_man_1]",
+        "index": 1614,
+        "text": "Show [คน] around พาเดินชมสถานที่รอบๆ [audio:phrases_verbs_show_around_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.yvo5c3hbqcly",
+          "listId": "kix.7j7k37osas0m",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -1540,8 +959,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3305,
-        "text": "การใช้แบบไม่เป็นทางการ เพื่อแสดงออกถึงความผิดหวัง  ",
+        "index": 1615,
+        "text": "พาใครสักคนเดินชมสถานที่ โดยเฉพาะเมื่อพวกเขามาเที่ยวชมสถานที่เป็นครั้งแรก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1551,7 +970,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3306,
+        "index": 1616,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1562,11 +981,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3307,
-        "text": "Aw, some birds pooped all over my car! Man, and I just got a car wash, too. [audio:phrases_verbs_man_2]\u000bโอ้ย มีนกมาอึกใส่รถฉันเต็มไปหมดเลย! โถ่เอ๊ย ฉันเพิ่งเอารถไปล้างมาเองด้วย",
+        "index": 1617,
+        "text": "Let me show you around the office and introduce you to everyone. [audio:phrases_verbs_show_around_2]\u000bเดี๋ยวฉันพาคุณชมรอบๆออฟฟิศ และพาคุณไปแนะนำตัวกับทุกๆคน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.3uv7dgs1dowu",
+          "listId": "kix.7j7k37osas0m",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -1581,7 +1000,26 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3308,
+        "index": 1618,
+        "text": "I showed my cousin around the city when she visited. [audio:phrases_verbs_show_around_3]\u000bฉันพาลูกพี่ลูกน้องของฉันไปเที่ยวชมเมืองตอนที่เธอมาเยี่ยม",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.7j7k37osas0m",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1619,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1592,8 +1030,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3309,
-        "text": "(link xx)ดูการใช้เพิ่มเติมของ Man",
+        "index": 1620,
+        "text": "LIFTING WEIGHTS ยกเวท",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1603,7 +1041,37 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3310,
+        "index": 1621,
+        "text": "Lifting weights ยกเวท ยกน้ำหนัก [audio:phrases_verbs_lifting_weights_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.tx5xmfxjhfz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1622,
+        "text": "ออกกำลังกายแบบฝึกความแข็งแรง โดยใช้อุปกรณ์แบบ free weights เช่น ดัมเบล เพื่อสร้างความแข็งแรงและกล้ามเนื้อ  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1623,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1614,8 +1082,46 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3311,
-        "text": "COOL! เยี่ยมเลย",
+        "index": 1624,
+        "text": "My arms are sore from lifting weights yesterday. [audio:phrases_verbs_lifting_weights_2]\u000bแขนฉันปวดเมื่อยไปหมดจากการยกเวทเมื่อวานนี้",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.tx5xmfxjhfz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1625,
+        "text": "Do you prefer doing cardio or lifting weights at the gym? [audio:phrases_verbs_lifting_weights_3]\u000bคุณชอบออกกำลังกายในยิมแบบคาร์ดิโอ้หรือยกเวทมากกว่ากัน?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.tx5xmfxjhfz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1626,
+        "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1625,8 +1131,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3312,
-        "text": "\u000bCHECK OUT ไปดู ไปลองดู",
+        "index": 1627,
+        "text": "WAKE UP ตื่นนอน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1636,7 +1142,119 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3313,
+        "index": 1628,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1629,
+        "text": "BAD AT ไม่เก่ง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1630,
+        "text": "Bad at ไม่เก่ง แย่ในเรื่อง… [audio:phrases_verbs_bad_at_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.2tw84pdxpg82",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1631,
+        "text": "Bad at [อะไรสักอย่าง / กริยา-ing]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1632,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1633,
+        "text": "I’m really bad at math. [audio:phrases_verbs_bad_at_2]\u000bฉันไม่เก่งเลขเลยจริงๆ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.h1zc11c8taz1",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1634,
+        "text": "My brother usually orders take out, since he’s so bad at cooking. [audio:phrases_verbs_bad_at_3]\u000bน้องชายฉันมักจะสั่งอาหารมากิน เพราะเขาทำกับข้าวไม่เก่งเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.h1zc11c8taz1",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 1635,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1636,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1649,10 +1267,10 @@
     ]
   },
   {
-    "section_index": 3664,
+    "section_index": 2110,
     "paragraphs": [
       {
-        "index": 3665,
+        "index": 2111,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1663,8 +1281,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3666,
-        "text": "WHAT DO YOU DO? คุณทำงานอะไร?",
+        "index": 2112,
+        "text": "LOOK FOR มองหา",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1674,37 +1292,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3667,
-        "text": "What do you do? คุณทำงานอะไร? [audio:phrases_verbs_what_do_you_do_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ghlfrpyd4u42",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3668,
-        "text": "เป็นประโยคในการถามอาชีพที่ถูกใช้บ่อย  ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3669,
+        "index": 2113,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1715,46 +1303,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3670,
-        "text": "So, what do you do in Thailand? [audio:phrases_verbs_what_do_you_do_2]\u000bอืมม แล้วคุณทำงานอะไรในประเทศไทยล่ะ?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ghlfrpyd4u42",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3671,
-        "text": "What does your sister do? [audio:phrases_verbs_what_do_you_do_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ghlfrpyd4u42",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3672,
-        "text": "พี่สาวของคุณทำงานอะไร",
+        "index": 2114,
+        "text": "WELL [1] อืมม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1764,7 +1314,37 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3673,
+        "index": 2115,
+        "text": "Well อืมม เอ่ออ [audio:phrases_verbs_well1_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.m5sj8cisyei8",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2116,
+        "text": "เป็นคำเติมที่อยู่ต้นประโยค เพื่อใช้เกริ่นนำคำอธิบาย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2117,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1775,22 +1355,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3674,
-        "text": "DRINK ดื่มแอลกอฮอล์",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3675,
-        "text": "Drink ดื่มแอลกอฮอล์ [audio:phrases_verbs_drink_1]",
+        "index": 2118,
+        "text": "Luke: Why didn’t you call me back? [audio:phrases_verbs_well1_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.fixwtill0lwe",
+          "listId": "kix.lcv72m2fod2m",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -1805,8 +1374,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3676,
-        "text": "เมื่อใช้คำนี้เป็นคำกริยาแบบเดี่ยวๆ โดยไม่พูดถึงเครื่องดื่มอื่นๆ จะถือว่าเป็นที่รู้กันว่ากำลังพูดถึงการดื่มแอลกอฮอล์  ",
+        "index": 2119,
+        "text": "ลูค: ทำไมคุณถึงไม่โทรกลับหาผมล่ะ?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1816,7 +1385,18 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3677,
+        "index": 2120,
+        "text": "Pailin: Well, my phone died, and I didn’t have a charger.\u000bไพลิน: เอ่ออ โทรศัพท์ฉันแบตหมดน่ะ แล้วฉันก็ไม่มีที่ชาร์จโทรศัพท์ด้วย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2121,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1827,11 +1407,22 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3678,
-        "text": "My dad drinks too much. [audio:phrases_verbs_drink_2]\u000bพ่อฉันดื่มเหล้ามากเกินไป",
+        "index": 2122,
+        "text": "COME IN มี",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2123,
+        "text": "Come in มี มีเข้ามา มีวางจำหน่าย [audio:phrases_verbs_come_in_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.fixwtill0lwe",
+          "listId": "kix.39mpnrnc3kcu",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -1846,26 +1437,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3679,
-        "text": "Do you drink? [audio:phrases_verbs_drink_3]\u000bคุณดื่มแอลกอฮอล์ไหม?",
+        "index": 2124,
+        "text": "มีให้เลือกหลายแบบ ",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.fixwtill0lwe",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
+        "bullet": null,
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": "●"
+          "glyphSymbol": null
         },
-        "docwalker_kind_guess": "list_item"
+        "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3680,
+        "index": 2125,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1876,22 +1459,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3681,
-        "text": "WORK OUT ออกกำลังกาย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3682,
-        "text": "Work out ออกกำลังกาย [audio:phrases_verbs_work_out_1]",
+        "index": 2126,
+        "text": "Do these shoes come in size 10? [audio:phrases_verbs_come_in_2]\u000bรองเท้าแบบนี้มีไซส์ 10 ขายไหม?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.jjqtioch9fh0",
+          "listId": "kix.z9av66fx20ky",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -1906,33 +1478,11 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3683,
-        "text": "การออกกำลังกาย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3684,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3685,
-        "text": "I like to work out in the morning. [audio:phrases_verbs_work_out_2]\u000bฉันชอบออกกำลังกายในช่วงเช้า",
+        "index": 2127,
+        "text": "This couch only comes in grey. [audio:phrases_verbs_come_in_3]\u000bโซฟานี้มีจำหน่ายแค่สีเทาค่ะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.jjqtioch9fh0",
+          "listId": "kix.z9av66fx20ky",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -1947,7 +1497,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3686,
+        "index": 2128,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1958,8 +1508,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3687,
-        "text": "\t(link xx)ดูการใช้เพิ่มเติมของ Work out",
+        "index": 2129,
+        "text": "\t(link xx)ดูการใช้เพิ่มเติมของ Come in",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -1969,7 +1519,111 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3688,
+        "index": 2130,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2131,
+        "text": "HMM ฮืมมม",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2132,
+        "text": "Hmm ฮืมมม [audio:phrases_verbs_hmm_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.r0fqiqhkiay1",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2133,
+        "text": "เสียงที่ทำขึ้นเมื่อคุณกำลังนึก หรือพิจารณาอะไรสักอย่างอยู่",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2134,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2135,
+        "text": "Luke: Do you wanna eat pizza or burgers tonight? [audio:phrases_verbs_hmm_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.jfum2n37xrr9",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2136,
+        "text": "ลูค: คืนนี้คุณอยากกินพิซซ่าหรือเบอร์เกอร์ไหมครับ?\u000bPailin: Hmmm, I just had pizza a few days ago at work. Let’s get burgers.\u000bไพลิน: ฮืมมม ฉันเพิ่งกินพิซซ่าไปที่ทำงานเมื่อสองสามวันก่อนเอง งั้นเรากินเบอร์เกอร์กันเถอะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2137,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2138,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1982,10 +1636,10 @@
     ]
   },
   {
-    "section_index": 4186,
+    "section_index": 2428,
     "paragraphs": [
       {
-        "index": 4187,
+        "index": 2429,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -1996,8 +1650,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4188,
-        "text": "RUN ERRANDS ทำธุระ",
+        "index": 2430,
+        "text": "LOOK FOR มองหา",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -2007,37 +1661,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4189,
-        "text": "Run errands ทำธุระ [audio:phrases_verbs_run_errands_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.qgpw9xtj52e0",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4190,
-        "text": "การออกไปข้างนอกเพื่อทำธุระเล็กๆน้อยๆในรายการสิ่งที่ต้องทำของคุณ ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4191,
+        "index": 2431,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2048,46 +1672,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4192,
-        "text": "I’m exhausted. I’ve been running errands all morning. [audio:phrases_verbs_run_errands_2]\u000bฉันเหนื่อยจังเลย ฉันทำธุระทั้งเช้านี้เลย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.n0x8hzpkpzzp",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4193,
-        "text": "I’ll be back in about 2 hours. I’ve gotta run some errands. [audio:phrases_verbs_run_errands_3]\u000bเดี๋ยวฉันจะกลับมาในอีก 2 ชั่วโมงนะ ฉันต้องไปทำธุระหน่อย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.n0x8hzpkpzzp",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4194,
-        "text": "",
+        "index": 2432,
+        "text": "LOOK AT ดู จ้อง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -2097,464 +1683,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4195,
-        "text": "\t",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4196,
-        "text": "\tDROP OFF ไปส่ง",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4197,
-        "text": "Drop off ไปส่ง [audio:phrases_verbs_drop_off_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.i5pgyfrybbkg",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4198,
-        "text": "Drop off [คนหรือสิ่งของ] / drop [คนหรือสิ่งของ] off",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4199,
-        "text": "การพาคน หรือสิ่งของไปยังสถานที่ใดที่หนึ่ง และทิ้งไว้ที่นั่น ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4200,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4201,
-        "text": "I’ll drop off the kids at soccer practice on my way to work. [audio:phrases_verbs_drop_off_2]\u000bฉันจะไปส่งเด็กๆที่ซ้อมฟุตบอลตอนออกไปทำงานนะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.sdtyxbuqvcdg",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4202,
-        "text": "Could you drop these letters off at the post office for me? [audio:phrases_verbs_drop_off_3]\u000bคุณช่วยเอาจดหมายพวกนี้ไปส่งให้ที่ทำการไปรษณีย์หน่อยได้ไหม?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.sdtyxbuqvcdg",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4203,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4204,
-        "text": "\t",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4205,
-        "text": "\tPICK UP ไปรับ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4206,
-        "text": "Pick up ไปรับ [audio:phrases_verbs_pick_up_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.10igf2kvotfa",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4207,
-        "text": "Pick up [คนหรือสิ่งของ] / pick [คนหรือสิ่งของ] up",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4208,
-        "text": "การไปที่ไหนสักแห่งเพื่อไปรับคนหรือสิ่งของ  ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4209,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4210,
-        "text": "I have to pick my daughter up from daycare by 6PM. [audio:phrases_verbs_pick_up_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.n8qbwew8vgiq",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4211,
-        "text": "ฉันต้องไปรับลูกสาวที่ศูนย์ดูแลเด็กตอนหกโมงเย็น",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4212,
-        "text": "I’ll be leaving the airport soon. I’m just waiting to pick up my suitcase. [audio:phrases_verbs_pick_up_3] \u000bฉันจะออกจากสนามบินเร็วๆนี้ ฉันแค่กำลังรอรับกระเป๋าเดินทางของฉันอยู่น่ะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.n8qbwew8vgiq",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4213,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4214,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4215,
-        "text": "\tPERFECT เยี่ยมเลย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4216,
-        "text": "Perfect เยี่ยมเลย [audio:phrases_verbs_perfect_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.747aicc20vnf",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4217,
-        "text": "ใช้พูดเมื่อทุกอย่างเป็นไปได้ด้วยดี  ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4218,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4219,
-        "text": "Pailin: I’m off work at 5. How about you? [audio:phrases_verbs_perfect_2]\u000bไพลิน: ฉันเลิกงานตอนห้าโมงค่ะ แล้วคุณล่ะ?",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.qjiv6ajgyjm9",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4220,
-        "text": "Luke: Perfect, I’m off at 5, too. Let’s meet at the subway station at 5:30.\u000bลูค: เยี่ยมเลย ผมก็เลิกงานตอนห้าโมงเหมือนกัน เดี๋ยวมาเจอกันที่สถานีรถไฟใต้ดินตอน 5:30 นะครับ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4221,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4222,
-        "text": "Luke: How about I bring the pasta, and you bring the wine. [audio:phrases_verbs_perfect_3]\u000bลูค: เดี๋ยวผมจะเอาพาสต้ามาแล้วกัน ส่วนคุณก็เอาไวน์มานะครับ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.qjiv6ajgyjm9",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4223,
-        "text": "Pailin: That’s perfect. I’ll be at your place at 6 then.\u000bไพลิน: นั่นเยี่ยมไปเลย เดี๋ยวฉันจะไปที่บ้านคุณตอนหกโมงแล้วกันนะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4224,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4225,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4226,
-        "text": "GOOD IDEA ความคิดดีมากเลย แจ๋วเลย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4227,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4228,
-        "text": "COOL! เยี่ยมเลย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4229,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4230,
+        "index": 2433,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2567,10 +1696,10 @@
     ]
   },
   {
-    "section_index": 4600,
+    "section_index": 2753,
     "paragraphs": [
       {
-        "index": 4601,
+        "index": 2754,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2581,7 +1710,130 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4602,
+        "index": 2755,
+        "text": "GUESS WHAT? เฮ้รู้ไหม?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2756,
+        "text": "Guess what? เฮ้รู้ไหม? ลองเดาสิ! [audio:phrases_verbs_guess_what_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.nyyeiptfr42n",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2757,
+        "text": "เป็นวลีแบบไม่เป็นทางการที่ใช้ก่อนที่เราจะเล่าสิ่งที่น่าสนใจหรือน่าตื่นเต้น โดยใช้เพื่อสร้างความสนใจหรือการคาดหวังก่อนที่จะเปิดเผยข้อมูลนั้นๆ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2758,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2759,
+        "text": "Guess what? I got the job! [audio:phrases_verbs_guess_what_2]\u000bเฮ้รู้ไหม? ฉันเพิ่งได้งานล่ะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.bedgqlkezwse",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2760,
+        "text": "Guess what? I made dinner for you. [audio:phrases_verbs_guess_what_3]\u000bเฮ้รู้ไหม? ฉันทำมื้อค่ำให้คุณด้วยล่ะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.bedgqlkezwse",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2761,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2762,
+        "text": "WHAT? อะไรนะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2763,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2764,
         "text": "WOW ว้าว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2592,7 +1844,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4603,
+        "index": 2765,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2603,8 +1855,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4604,
-        "text": "I KNOW ฉันรู้",
+        "index": 2766,
+        "text": "OH โอ้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -2614,11 +1866,97 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4605,
-        "text": "I know ฉันรู้ / ใช่ไหมล่ะ! (พูดแบบเห็นด้วย) [audio:phrases_verbs_i_know_1]",
+        "index": 2767,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2768,
+        "text": "WELL อืมม",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2769,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2770,
+        "text": "CHECK OUT ไปดู ไปลองดู",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2771,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2772,
+        "text": "TREAT SOMEONE การเลี้ยง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2773,
+        "text": "Treat someone การเลี้ยง [audio:phrases_verbs_treat_someone_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.53shgz3h7zb4",
+          "listId": "kix.m0ufewpvv09d",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 2774,
+        "text": "Treat [ใครสักคน] to [อะไรสักอย่าง]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.m0ufewpvv09d",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -2633,8 +1971,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 4606,
-        "text": "ใช้พูดเมื่อคุณเห็นด้วยกับสิ่งที่คู่สนทนาพูด  ",
+        "index": 2775,
+        "text": "การเลี้ยง จ่ายเงินซื้อบางสิ่งให้ใครสักคน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -2644,7 +1982,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4607,
+        "index": 2776,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2655,11 +1993,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4608,
-        "text": "Pailin: That movie was so good! [audio:phrases_verbs_i_know_2]\u000bไพลิน: หนังเรื่องนั้นดีมากเลย!",
+        "index": 2777,
+        "text": "Let me treat you to dinner. It’s my way of saying thanks for helping me move everything to my new home. [audio:phrases_verbs_treat_someone_2]\u000bให้ฉันเลี้ยงมื้อค่ำคุณนะ มันเป็นวิธีการขอบคุณที่ช่วยฉันย้ายของทุกอย่างไปที่บ้านหลังใหม่น่ะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.4h6hsl365nra",
+          "listId": "kix.3q3m5lr9knur",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -2674,33 +2012,11 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 4609,
-        "text": "Luke: I know! The acting was incredible.\u000bลูค: ใช่ไหมล่ะ! การแสดงมันยอดเยี่ยมมากเลย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4610,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4611,
-        "text": "Pailin: I hate this gloomy weather. [audio:phrases_verbs_i_know_3]\u000bไพลิน: ฉันเกลียดอากาศอึมครึมแบบนี้จัง",
+        "index": 2778,
+        "text": "The hospital is treating everyone to lunch, since we’re all working on Christmas. [audio:phrases_verbs_treat_someone_3]\u000bโรงพยาบาลจะเลี้ยงอาหารกลางวันทุกคน เพราะพวกเราทั้งหมดมาทำงานในวันคริสมาสต์",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.hblscikx99au",
+          "listId": "kix.3q3m5lr9knur",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -2715,130 +2031,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 4612,
-        "text": "Luke: I know, it makes me depressed.\u000bลูค: ใช่ไหมล่ะ! มันทำให้ฉันรู้สึกหดหู่อ่ะ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4613,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4614,
-        "text": "\t(link xx)ดูการใช้เพิ่มเติมของ I know",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4615,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4616,
-        "text": "\tWAKE UP ตื่น",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4617,
-        "text": "Wake up / wake [คน] up ตื่น / ปลุก [audio:phrases_verbs_wake_up_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.74vm1dmj35b5",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4618,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 4619,
-        "text": "I keep waking up in the middle of the night. [audio:phrases_verbs_wake_up_2]\u000bฉันตื่นกลางดึกทั้งคืนเลย",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.74vm1dmj35b5",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4620,
-        "text": "My kids woke me up this morning. [audio:phrases_verbs_wake_up_3]\u000bลูกๆฉันปลุกฉันเมื่อเช้านี้",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.74vm1dmj35b5",
-          "textStyle": {
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 4621,
+        "index": 2779,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2851,10 +2044,10 @@
     ]
   },
   {
-    "section_index": 4740,
+    "section_index": 3170,
     "paragraphs": [
       {
-        "index": 4741,
+        "index": 3171,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2865,8 +2058,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4742,
-        "text": "\tJOIN IN เข้าร่วมในกิจกรรม",
+        "index": 3172,
+        "text": "MAN โอ้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -2876,11 +2069,33 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4743,
-        "text": "Join in เข้าร่วมในกิจกรรม [audio:phrases_verbs_join_in_1]",
+        "index": 3173,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3174,
+        "text": "GET AROUND การเดินทางไปไหนมาไหน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3175,
+        "text": "Get around การเดินทางไปไหนมาไหน [audio:phrases_verbs_get_around_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.cw4zlxgoplpd",
+          "listId": "kix.qncb99guytpp",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -2895,8 +2110,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 4744,
-        "text": "การเข้าร่วมในกิจกรรม ",
+        "index": 3176,
+        "text": "การเดินทางไปไหนมาไหนในเมืองหรือประเทศ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -2906,7 +2121,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4745,
+        "index": 3177,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2917,11 +2132,11 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4746,
-        "text": "Everyone was dancing, so I decided to join in. [audio:phrases_verbs_join_in_2]\u000bทุกๆคนกำลังเต้นกันอยู่ ฉันก็เลยตัดสินใจไปร่วมเต้นด้วย",
+        "index": 3178,
+        "text": "I think the subway is the most convenient way to get around Tokyo. [audio:phrases_verbs_get_around_2]\u000bฉันคิดว่ารถไฟใต้ดินเป็นวิธีที่สะดวกที่สุดที่จะเดินทางในโตเกียว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.cw4zlxgoplpd",
+          "listId": "kix.qncb99guytpp",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -2936,11 +2151,11 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 4747,
-        "text": "We’re playing volleyball, do you want to join in? [audio:phrases_verbs_join_in_3]\u000bพวกเรากำลังเล่นวอลเลย์บอลอยู่ คุณอยากเล่นด้วยไหม?",
+        "index": 3179,
+        "text": "How do you plan to get around Los Angeles without a car? [audio:phrases_verbs_get_around_3]\u000bคุณวางแผนจะเดินทางในลอสแอนเจลิสโดยไม่มีรถยนต์ได้ยังไง?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.cw4zlxgoplpd",
+          "listId": "kix.qncb99guytpp",
           "textStyle": {
             "weightedFontFamily": {
               "fontFamily": "Work Sans",
@@ -2955,7 +2170,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 4748,
+        "index": 3180,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2966,7 +2181,23 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4749,
+        "index": 3181,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 3632,
+    "paragraphs": [
+      {
+        "index": 3633,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2977,7 +2208,2380 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4750,
+        "index": 3634,
+        "text": "HOW COOL เจ๋งสุดๆ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3635,
+        "text": "How cool เจ๋งสุดๆ เจ๋งไปเลย [audio:phrases_verbs_how_cool_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.vvv57crkijm",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3636,
+        "text": "การแสดงออกเพื่อแสดงถึงการรับรู้หรือความชื่นชมที่กระตือรือร้น  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3637,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3638,
+        "text": "You met your favorite actor? How cool! [audio:phrases_verbs_how_cool_2]\u000bคุณได้เจอดาราคนโปรดของคุณหรอ? เจ๋งไปเลย!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.vvv57crkijm",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3639,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3640,
+        "text": "LOOK AT ดู จ้อง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3641,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3642,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 3927,
+    "paragraphs": [
+      {
+        "index": 3928,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3929,
+        "text": "MISS คุณผู้หญิง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3930,
+        "text": "Miss คุณผู้หญิง [audio:phrases_verbs_miss_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3npvltpfz0n3",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3931,
+        "text": "การเรียกผู้หญิงที่เป็นคนแปลกหน้าแบบเป็นทางการและสุภาพ มักจะถูกใช้โดยพนักงานบริการเมื่อพูดคุยกับลูกค้าผู้หญิง  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3932,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3933,
+        "text": "Excuse me, miss, you dropped your wallet. [audio:phrases_verbs_miss_2]\u000bขอโทษนะครับคุณผู้หญิง คุณทำกระเป๋าเงินหล่นน่ะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3npvltpfz0n3",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3934,
+        "text": "Hi, miss, how can I help you? [audio:phrases_verbs_miss_3]\u000bสวัสดีค่ะ คุณผู้หญิง มีอะไรให้ช่วยไหม?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3npvltpfz0n3",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3935,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3936,
+        "text": "HAPPY BIRTHDAY! สุขสันต์วันเกิด",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3937,
+        "text": "Happy birthday! สุขสันต์วันเกิด [audio:phrases_verbs_happy_birthday_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.gxtkow5mgms",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3938,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3939,
+        "text": "Happy birthday Dad! How old are you now, a hundred? [audio:phrases_verbs_happy_birthday_2]\u000bสุขสันต์วันเกิดนะพ่อ ปีนี้อายุเท่าไหร่แล้วเนี่ย ร้อยนึงใช่มะ?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.gxtkow5mgms",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3940,
+        "text": "Let’s go wish Pailin a happy birthday. [audio:phrases_verbs_happy_birthday_3]\u000bไปอวยพรวันเกิดกับไพลินกันเถอะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.gxtkow5mgms",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3941,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3942,
+        "text": "ON THE HOUSE ฟรี ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3943,
+        "text": "On the house ฟรี [audio:phrases_verbs_on_the_house_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.4lyob1ezyss3",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3944,
+        "text": "ใช้พูดเพื่อบอกว่าลูกค้าไม่ต้องจ่ายเงินเพื่อสิ่งของหรือการบริการ เพราะทางร้านจะให้ฟรี  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3945,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3946,
+        "text": "We’re so sorry about the long wait. Your drinks are on the house tonight. [audio:phrases_verbs_on_the_house_2]\u000bขอโทษที่ทำให้รอนาน เครื่องดื่มของคุณในคืนนี้ฟรีนะครับ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.4lyob1ezyss3",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3947,
+        "text": "The hotel gave us a bottle of wine on the house. [audio:phrases_verbs_on_the_house_3]\u000bโรงแรมให้ไวน์มาขวดนึงฟรีๆเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.4lyob1ezyss3",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3948,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3949,
+        "text": "SURE THING ได้เลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3950,
+        "text": "Sure thing ได้เลย [audio:phrases_verbs_sure_thing_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3w1aypyuzl7",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3951,
+        "text": "มีความหมายว่า Yes, definitely หรือ Certainly! ซึ่งมีความหมายว่า ใช่ ได้เลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3952,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3953,
+        "text": "Pailin: Could you put extra cheese on my pasta? The cheese is my favorite part. [audio:phrases_verbs_sure_thing_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3w1aypyuzl7",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3954,
+        "text": "ไพลิน: คุณช่วยใส่ชีสในพาสต้าของฉันเยอะๆหน่อยได้ไหมคะ? ฉันชอบกินชีสน่ะ\u000bLuke: Sure thing!\u000bลูค: ได้เลยครับ!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3955,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3956,
+        "text": "Luke: Could I get a ride home with you? [audio:phrases_verbs_sure_thing_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.3w1aypyuzl7",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3957,
+        "text": "ลูค: ขอผมติดรถกลับบ้านกับคุณได้ไหมครับ?\u000bPailin: Sure thing!\u000bไพลิน: ได้เลยสิคะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3958,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3959,
+        "text": "SPEND TIME ใช้เวลา",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3960,
+        "text": "Spend time ใช้เวลา [audio:phrases_verbs_spend_time_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.q6x1hskuqy26",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3961,
+        "text": "Spend [เวลา] with [ใครสักคน]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3962,
+        "text": "การใช้เวลาเพื่อเที่ยวเล่นกับใครสักคน หรือเพื่อทำกิจกรรมอะไรสักอย่าง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3963,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3964,
+        "text": "We spent the afternoon at the beach. [audio:phrases_verbs_spend_time_2]\u000bพวกเราใช้เวลาช่วงบ่ายที่ชายหาด",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.cz08vewmq9x",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3965,
+        "text": "She spends hours studying every day. [audio:phrases_verbs_spend_time_3]\u000bเธอใช้เวลาหลายชั่วโมงต่อวันในการอ่านหนังสือ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.cz08vewmq9x",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3966,
+        "text": "I like to spend time with my family. [audio:phrases_verbs_spend_time_4]\u000bฉันชอบใช้เวลากับครอบครัวฉัน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.cz08vewmq9x",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3967,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3968,
+        "text": "OF COURSE แน่นอน ได้เลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3969,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3970,
+        "text": "I KNOW ฉันรู้ / ใช่ไหมล่ะ (พูดแบบเห็นด้วย)",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3971,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 4361,
+    "paragraphs": [
+      {
+        "index": 4362,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4363,
+        "text": "OH NO [1] โอ้ ไม่นะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4364,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4365,
+        "text": "GO AHEAD ไปเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4366,
+        "text": "Go ahead ไปเลย เอาเลย [audio:phrases_verbs_go_ahead_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.uzseyu18r6xy",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4367,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4368,
+        "text": "Luke: Pai, could I open the window just a bit? [audio:phrases_verbs_go_ahead_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.ol3r8xl59kqz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4369,
+        "text": "ลูค: ไพครับ ผมขอเปิดหน้าต่างนิดนึงได้ไหมครับ?\u000bPailin: Sure, go ahead.\u000bไพลิน: ได้เลยค่ะ เปิดเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4370,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4371,
+        "text": "Go ahead and have more cake, Pailin. [audio:phrases_verbs_go_ahead_3]\u000bเอาสิ กินเค้กอีกสิไพลิน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.ol3r8xl59kqz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4372,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4373,
+        "text": "GOOD LUCK โชคดี",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4374,
+        "text": "Good luck โชคดี [audio:phrases_verbs_good_luck_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.f4gkgjhq3e8x",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4375,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4376,
+        "text": "Good luck on your driving test tomorrow! [audio:phrases_verbs_good_luck_2]\u000bโชคดีกับการสอบขับรถยนต์ในวันพรุ่งนี้นะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.f4gkgjhq3e8x",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4377,
+        "text": "Good luck, let me know how it goes! [audio:phrases_verbs_good_luck_3]\u000bโชคดีนะ มาบอกฉันด้วยล่ะว่าเป็นยังไงบ้าง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.f4gkgjhq3e8x",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4378,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 4796,
+    "paragraphs": [
+      {
+        "index": 4797,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4798,
+        "text": "COME ON น่านะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4799,
+        "text": "Come on น่านะ [audio:phrases_verbs_come_on_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.upq3vh9wewhh",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4800,
+        "text": "ใช้พูดเพื่อแสดงกำลังใจแบบเร่งด่วน หรือให้ทำอะไรบางอย่างในทันที ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4801,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4802,
+        "text": "Come on, we’re gonna be late if you don’t hurry. [audio:phrases_verbs_come_on_2]\u000bน่านะ เราจะไปสายนะถ้าเราไม่รีบ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.cp8bvaok3k6p",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4803,
+        "text": "Come on, we have to finish this before tomorrow. We don’t have time for a break. [audio:phrases_verbs_come_on_3]\u000bน่านะ เราต้องทำอันนี้ให้เสร็จก่อนวันพรุ่งนี้ เราไม่มีเวลามาพักเบรกนะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.cp8bvaok3k6p",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4804,
+        "text": "\t",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4805,
+        "text": "\t(link xx) ดูการใช้เพิ่มเติมของ Come on",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4806,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4807,
+        "text": "IN A HURRY รีบไป",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4808,
+        "text": "In a hurry รีบไป [audio:phrases_verbs_in_a_hurry_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.m2z2jmnrklwa",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4809,
+        "text": "เมื่อคุณรีบทำอะไรสักอย่างเพราะคุณมีเวลาไม่มากนัก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4810,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4811,
+        "text": "Can we just pick up some McDonalds? I’m in a hurry to get home. [audio:phrases_verbs_in_a_hurry_2]\u000bเราแค่แวะไปซื้อแม็คโดนัลด์ได้ไหม? ฉันรีบกลับบ้านน่ะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.m2z2jmnrklwa",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4812,
+        "text": "I haven’t had any coffee yet since I was in a hurry to get to class on time. [audio:phrases_verbs_in_a_hurry_3]\u000bฉันยังไม่ได้ดื่มกาแฟเลยเพราะฉันรีบไปเรียนให้ทันเวลา",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.m2z2jmnrklwa",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4813,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4814,
+        "text": "OKAY, FINE โอเค",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4815,
+        "text": "Okay, fine / Fine โอเค ก็ได้ [audio:phrases_verbs_okay_fine_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.a5jauiz6tqv9",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4816,
+        "text": "พูดเมื่อคุณยอมทำอะไรสักอย่างแบบไม่ค่อยเต็มใจนัก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4817,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4818,
+        "text": "Luke: Are you sure you don’t wanna come out with us? You’ve got nothing better to do at home! [audio:phrases_verbs_okay_fine_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.a5jauiz6tqv9",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4819,
+        "text": "ลูค: คุณมั่นใจนะว่าคุณไม่อยากมากับเรา? คุณไม่ได้มีอะไรดีกว่าที่จะทำที่บ้านเลยนี่นา!\u000bPailin: Okay, fine, I’ll come out.\u000bไพลิน: โอเค ก็ได้ค่ะ ฉันจะไปด้วย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4820,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4821,
+        "text": "Pailin: Can you please give me your grandma’s cookie recipe? [audio:phrases_verbs_okay_fine_3]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.4t0fupe27wo",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 4822,
+        "text": "ไพลิน: คุณช่วยบอกสูตรคุกกี้ของคุณยายคุณหน่อยได้ไหมคะ?\u000bLuke: Fine, I’ll give it to you. But you can’t share it with anyone!\u000bลูค: ก็ได้ครับ ผมจะให้คุณ แต่คุณอย่าเอาไปบอกใครเด็ดขาดเลยนะครับ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 4823,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 5338,
+    "paragraphs": [
+      {
+        "index": 5339,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5340,
+        "text": "WAIT FOR รอ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5341,
+        "text": "Wait for รอ [audio:phrases_verbs_wait_for_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.15y6z8cwlq0m",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 5342,
+        "text": "Wait for [คน / สิ่งของ] / wait [สถานที่] for [คน]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5343,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5344,
+        "text": "I’ve been waiting for this bus for over 20 minutes! [audio:phrases_verbs_wait_for_2]\u000bฉันรอรถบัสนี้มาเป็นเวลามากกว่า 20 นาทีกว่าแล้ว!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.1g9klkxoj0",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 5345,
+        "text": "Wait for me, guys! I’m just filling up my water bottle. [audio:phrases_verbs_wait_for_3]\u000bรอฉันด้วยสิ พวกคุณ! ฉันแค่กำลังเติมน้ำในขวดอยู่",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.1g9klkxoj0",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 5346,
+        "text": "Let’s wait in front of the theater for Timmy. [audio:phrases_verbs_wait_for_4]\u000bไปรอทิมมี่ที่หน้าโรงหนังกันเถอะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.1g9klkxoj0",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 5347,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 5788,
+    "paragraphs": [
+      {
+        "index": 5789,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5790,
+        "text": "HONESTLY จริงๆแล้ว",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5791,
+        "text": "Honestly จริงๆแล้ว [audio:phrases_verbs_honestly_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.9kqj85lavxcq",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 5792,
+        "text": "ใช้พูดตอนเริ่มต้น หรือท้ายประโยค เมื่อคุณกำลังจะแสดงออกถึงความคิดเห็น ความรู้สึกส่วนตัว โดยเฉพาะอย่างยิ่งสำหรับความคิดเห็นที่ดูไม่สบายใจหรือฟังดูตรงๆเกินไป",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5793,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 5794,
+        "text": "Honestly, that was one of the worst movies I’ve ever seen. [audio:phrases_verbs_honestly_2]\u000bจริงๆแล้ว นั่นเป็นหนังที่แย่ที่สุดเท่าที่ฉันเคยดูมาเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.9kqj85lavxcq",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 5795,
+        "text": "Honestly, I don’t really wanna go on the camping trip. [audio:phrases_verbs_honestly_3]\u000bจริงๆแล้ว ฉันไม่ค่อยอยากไปทริปตั้งแคมป์นี้เท่าไหร่เลยอ่ะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.9kqj85lavxcq",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 5796,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 6108,
+    "paragraphs": [
+      {
+        "index": 6109,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6110,
+        "text": "CLOCK OUT ออกจากที่ทำงาน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6111,
+        "text": "Clock out ออกจากที่ทำงาน [audio:phrases_verbs_clock_out_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.z1awz2pxclrz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6112,
+        "text": "เป็นการจบกะการทำงาน โดยเฉพาะที่ทำงานที่มีการบันทึกเวลาเข้า-ออก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6113,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6114,
+        "text": "He clocked out early because he was feeling sick. [audio:phrases_verbs_clock_out_2]\u000bเขาออกจากที่ทำงานเร็วเพราะเขารู้สึกป่วย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.z1awz2pxclrz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6115,
+        "text": "Don’t forget to clock out at 5PM sharp. [audio:phrases_verbs_clock_out_3]\u000bอย่าลืมออกจากที่ทำงานตอนห้าโมงตรงนะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.z1awz2pxclrz",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6116,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6117,
+        "text": "TEAM PLAYER คนที่ช่วยกันทำงาน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6118,
+        "text": "Team player คนที่ช่วยกันทำงาน [audio:phrases_verbs_team_player_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.wh3xx7ktrher",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6119,
+        "text": "คนที่ให้ความร่วมมือและสนับสนุนเป้าหมายของทีม",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6120,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6121,
+        "text": "Thank you guys for being team players on this difficult project. [audio:phrases_verbs_team_player_2]\u000bขอบคุณทุกคนที่ช่วยกันทำงานโปรเจคที่ยากลำบากอันนี้ด้วย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.wh3xx7ktrher",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6122,
+        "text": "You need to be more of a team player if you want this company to succeed. [audio:phrases_verbs_team_player_3]\u000bคุณต้องให้ความร่วมมือกับทีมมากกว่านี้หากคุณอยากให้บริษัทนี้ประสบความสำเร็จ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.wh3xx7ktrher",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6123,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6124,
+        "text": "AWW อุ้ยยย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6125,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6126,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      }
+    ]
+  },
+  {
+    "section_index": 6281,
+    "paragraphs": [
+      {
+        "index": 6282,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6283,
+        "text": "COOL! เยี่ยมเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6284,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6285,
+        "text": "TOTALLY แน่นอนเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6286,
+        "text": "Totally แน่นอนเลย ใช่แล้ว [audio:phrases_verbs_totally_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.4qk3nt2wj5ok",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6287,
+        "text": "การแสดงออกถึงความเห็นด้วยอย่างยิ่ง  ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6288,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6289,
+        "text": "Luke: We should go to that concert. [audio:phrases_verbs_totally_2]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.4qk3nt2wj5ok",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6290,
+        "text": "ลูค: เราน่าจะไปคอนเสิร์ตนั้นกันนะครับ\u000bPailin: Totally! I’ve been wanting to see them play for a long time.\u000bไพลิน: ใช่แล้ว ฉันอยากดูพวกเขาเล่นสดมาเป็นเวลานานมากๆเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6291,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6292,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6293,
+        "text": "LOOK FOR มองหา",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6294,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6295,
+        "text": "NICE! เยี่ยม! เจ๋ง!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6296,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6297,
+        "text": "I KNOW ฉันรู้ / ใช่ไหมล่ะ! (พูดแบบเห็นด้วย)",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6298,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6299,
+        "text": "CALL BACK โทรกลับ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6300,
+        "text": "Call [ใครสักคน] back โทรกลับ [audio:phrases_verbs_call_back_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.fnw90185t9bx",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6301,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6302,
+        "text": "Can I call you back in 10 minutes? [audio:phrases_verbs_call_back_2]\u000bฉันโทรกลับหาคุณในอีก 10 นาทีได้ไหม?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.fnw90185t9bx",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6303,
+        "text": "Sorry I forgot to call you back, I was in the middle of a meeting. [audio:phrases_verbs_call_back_3]\u000bขอโทษด้วยนะที่ฉันลืมโทรกลับหาคุณ ตอนนั้นฉันอยู่ในระหว่างการประชุม",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.fnw90185t9bx",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6304,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6305,
+        "text": "OF COURSE แน่นอน ได้เลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6306,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6307,
+        "text": "CATCH UP การถามไถ่สารทุกข์สุขดิบ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6308,
+        "text": "Catch up การถามไถ่สารทุกข์สุขดิบ การถามไถ่ข่าวคราว [audio:phrases_verbs_catch_up_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.jzb9cd9zsukk",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6309,
+        "text": "การพูดคุยกับใครสักคนที่คุณไม่ได้เจอกันเป็นเวลาสักพักนึง เพื่อถามว่าพวกเขาทำอะไรอยู่บ้าง? ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6310,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6311,
+        "text": "It was great seeing you! We should catch up later this week over coffee. [audio:phrases_verbs_catch_up_2]\u000bดีใจที่ได้พบคุณนะ! เราน่าจะมาพูดคุยถามไถ่อีกสักทีช่วงสัปดาห์หน้าพร้อมดื่มกาแฟกันนะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.jzb9cd9zsukk",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6312,
+        "text": "Sorry I haven’t called in a while, I’ve been so busy. I wanted to catch up and see how things are with you. [audio:phrases_verbs_catch_up_3]\u000bขอโทษด้วยนะที่ฉันไม่ได้โทรหาคุณมาสักพักแล้ว ฉันยุ่งมากเลย ฉันอยากจะพูดคุยถามไถ่สารทุกข์สุขดิบเพื่อดูว่าคุณเป็นยังไงบ้างนะ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.jzb9cd9zsukk",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6313,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6314,
+        "text": "HAVE FUN สนุกเพลิดเพลิน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6315,
+        "text": "Have fun สนุกเพลิดเพลิน [audio:phrases_verbs_have_fun_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.821b1x954lck",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6316,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6317,
+        "text": "Have fun on your trip to Hawaii! And be safe! [audio:phrases_verbs_have_fun_2]\u000bขอให้สนุกกับทริปท่องเที่ยวที่ฮาวายนะ! และก็ขอให้ปลอดภัยด้วย!",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.821b1x954lck",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6318,
+        "text": "I had so much fun at your wedding, and it was so beautiful! [audio:phrases_verbs_have_fun_3]\u000bฉันสนุกมากๆในงานแต่งของคุณ และมันก็งดงามมากๆเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.821b1x954lck",
+          "textStyle": {
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 6319,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6320,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6321,
         "text": "PINNED COMMENT",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2988,7 +4592,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4751,
+        "index": 6322,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2999,8 +4603,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4752,
-        "text": "วิชาโปรดของคุณสมัยเรียนที่โรงเรียนคือวิชาอะไร?",
+        "index": 6323,
+        "text": "คุณได้อยู่ในชมรม การเล่นกีฬา หรือกิจกรรมพิเศษอะไรในช่วงมัธยมปลายหรือไม่? ถ้าใช่ คุณทำอะไร?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -3010,7 +4614,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4753,
+        "index": 6324,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3021,7 +4625,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4754,
+        "index": 6325,
         "text": "TAGS",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3032,7 +4636,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4755,
+        "index": 6326,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3043,8 +4647,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4756,
-        "text": "มหาวิทยาลัย, โรงเรียน, วันแรกที่โรงเรียน, ศาสตราจารย์, การสอน, การบ้าน, ศิลปะ, ประวัติศาสตร์ศิลปะ, งานที่ได้รับมอบหมาย, เวลาทำการ",
+        "index": 6327,
+        "text": "การพูดคุยทางโทรศัพท์, การถามไถ่ชีวิต, การพูดคุยกับเพื่อน, การออกเดท, งาน, กีฬา, ชมรม, มหาวิทยาลัย, ฟุตบอล, อาสาสมัคร, วิชาเอก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -3054,7 +4658,29 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4757,
+        "index": 6328,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6329,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6330,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
