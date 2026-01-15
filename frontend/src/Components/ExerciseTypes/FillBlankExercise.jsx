@@ -666,6 +666,39 @@ export default function FillBlankExercise({
                 }}
               >
                 {(() => {
+                  const shouldShowThaiLine =
+                    contentLang === "th" &&
+                    typeof item.text_th === "string" &&
+                    item.text_th.trim() &&
+                    !hasBilingualAbPrompt;
+                  let insertedThaiLine = false;
+                  const pushThaiLine = () => {
+                    if (!shouldShowThaiLine || insertedThaiLine) return;
+                    nodes.push(
+                      <span
+                        key={`th-break-before-${idx}`}
+                        className="fb-line-break"
+                        aria-hidden="true"
+                      />
+                    );
+                    nodes.push(
+                      <span key={`th-line-${idx}`} className="fb-row-th fb-row-th--inline">
+                        <InlineText
+                          inlines={questionInlinesTh}
+                          text={item.text_th.trim()}
+                        />
+                      </span>
+                    );
+                    nodes.push(
+                      <span
+                        key={`th-break-after-${idx}`}
+                        className="fb-line-break"
+                        aria-hidden="true"
+                      />
+                    );
+                    insertedThaiLine = true;
+                  };
+
                   if (hasBilingualAbPrompt) {
                     const lines = item.text.split("\n");
                     const aLine =
@@ -838,6 +871,7 @@ export default function FillBlankExercise({
                     const answerLength = (item?.answer || "").trim().length;
                     const isShortAnswer = answerLength > 0 && answerLength <= 10;
                     const inputMinWidthCh = isShortAnswer ? 8 : minWidthCh;
+                    pushThaiLine();
                     nodes.push(
                       <div
                         key={`blank-${idx}-${segmentIdx}`}
@@ -863,6 +897,7 @@ export default function FillBlankExercise({
 
                   if (!hasBlank && !promptHasInlineAnswer && !hasBilingualAbPrompt) {
                     const inputMinWidthCh = isShortAnswer ? 8 : 12;
+                    pushThaiLine();
                     nodes.push(
                       <div
                         key={`blank-${idx}-fallback`}
@@ -893,17 +928,6 @@ export default function FillBlankExercise({
             </div>
           </div>
         </div>
-        {contentLang === "th" &&
-          typeof item.text_th === "string" &&
-          item.text_th.trim() &&
-          !hasBilingualAbPrompt && (
-            <div className="fb-row-th">
-              <InlineText
-                inlines={questionInlinesTh}
-                text={item.text_th.trim()}
-              />
-            </div>
-          )}
         </React.Fragment>
       );
     });

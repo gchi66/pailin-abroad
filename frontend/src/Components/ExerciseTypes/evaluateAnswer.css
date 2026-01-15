@@ -225,6 +225,10 @@
   margin: -1rem 0 1.25rem 3rem;
 }
 
+.fb-row-content .fb-row-th {
+  margin: 0;
+}
+
 .fb-row-th--inline {
   margin: 0;
 }
