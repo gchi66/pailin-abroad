@@ -164,7 +164,6 @@ export default function DiscussionBoard({
 
 function CommentItem({ comment, onReply, onPin, canReply, depth }) {
   const [replyBody, setReplyBody] = useState("");
-  const [postingReply, setPostingReply] = useState(false);
 
   const isPinned = Boolean(comment?.pinned);
 
@@ -176,19 +175,6 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
     "Anonymous";
 
   const metaDetails = buildCommentMeta(comment);
-
-  async function handleReplySubmit(event) {
-    event.preventDefault();
-    if (!replyBody.trim() || !onReply) return;
-
-    setPostingReply(true);
-    try {
-      await onReply(comment, replyBody.trim());
-      setReplyBody("");
-    } finally {
-      setPostingReply(false);
-    }
-  }
 
   return (
     <div

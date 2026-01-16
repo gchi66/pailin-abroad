@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import LessonLanguageToggle from "./LessonLanguageToggle";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";

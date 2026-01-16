@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import "../Styles/AudioBar.css";
 
 /**
@@ -70,7 +70,7 @@ export default function AudioBar({
     setPlaying(!playing);
   };
 
-  const forcePlay = () => {
+  const forcePlay = useCallback(() => {
     if (isLocked) return;
     if (hasSplit) {
       if (!voiceRef.current || !bgRef.current) return;
@@ -82,7 +82,7 @@ export default function AudioBar({
       voiceRef.current.play().catch(() => {});
     }
     setPlaying(true);
-  };
+  }, [isLocked, hasSplit]);
 
   const seek = (pct) => {
     if (isLocked) return; // Disable seeking for locked lessons
@@ -174,7 +174,7 @@ export default function AudioBar({
   };
 
   // Handle rate change
-  const changeRate = (newRate) => {
+  const changeRate = useCallback((newRate) => {
     setRate(newRate);
 
     if (hasSplit) {
@@ -192,9 +192,9 @@ export default function AudioBar({
         voiceRef.current.playbackRate = newRate;
       }
     }
-  };
+  }, [hasSplit]);
 
-  const updateVolumeFromPosition = (clientY) => {
+  const updateVolumeFromPosition = useCallback((clientY) => {
     const track = volumeTrackRef.current;
     if (!track) return;
     const rect = track.getBoundingClientRect();
@@ -202,7 +202,7 @@ export default function AudioBar({
     const offset = clamp(rect.bottom - clientY, 0, rect.height);
     const newVolume = rect.height ? offset / rect.height : 0;
     handleVolumeChange(parseFloat(newVolume.toFixed(2)));
-  };
+  }, [volumeTrackRef, handleVolumeChange]);
 
   // Attach listeners
   useEffect(() => {
@@ -359,7 +359,7 @@ export default function AudioBar({
     setIsDraggingPanel(true);
   };
 
-  const applyPanelDrag = (clientY) => {
+  const applyPanelDrag = useCallback((clientY) => {
     if (!isSticky || !panelDragStartRef.current || isScrubbingRef.current) return;
     const deltaY = clientY - panelDragStartRef.current.y;
     const maxOffset = controlsHeightRef.current || 200;
@@ -376,9 +376,9 @@ export default function AudioBar({
     }
 
     setDragOffset(visualOffset);
-  };
+  }, [isSticky, panelDragStartRef, isScrubbingRef, controlsHeightRef, dragOffsetRef, isCollapsed, setDragOffset]);
 
-  const finishPanelDrag = () => {
+  const finishPanelDrag = useCallback(() => {
     if (!isSticky || !panelDragStartRef.current) {
       setIsDraggingPanel(false);
       setDragOffset(0);
@@ -414,7 +414,7 @@ export default function AudioBar({
     });
 
     panelDragStartRef.current = null;
-  };
+  }, [isSticky, panelDragStartRef, setIsDraggingPanel, setDragOffset, dragOffsetRef, controlsHeightRef, isCollapsed, setIsCollapsed, setIsSnapping]);
 
   const handleTouchStartDrag = (event) => {
     const t = event.touches?.[0];
@@ -422,31 +422,31 @@ export default function AudioBar({
     startPanelDrag(t.clientY);
   };
 
-  const handleTouchMoveDrag = (event) => {
+  const handleTouchMoveDrag = useCallback((event) => {
     if (isDraggingPanel && event.cancelable) {
       event.preventDefault();
     }
     const t = event.touches?.[0];
     if (!t) return;
     applyPanelDrag(t.clientY);
-  };
+  }, [isDraggingPanel, applyPanelDrag]);
 
-  const handleTouchEndDrag = () => {
+  const handleTouchEndDrag = useCallback(() => {
     finishPanelDrag();
-  };
+  }, [finishPanelDrag]);
 
   const handleHandleMouseDown = (event) => {
     startPanelDrag(event.clientY);
   };
 
-  const handleMouseMoveDrag = (event) => {
+  const handleMouseMoveDrag = useCallback((event) => {
     if (!isDraggingPanel) return;
     applyPanelDrag(event.clientY);
-  };
+  }, [isDraggingPanel, applyPanelDrag]);
 
-  const handleMouseUpDrag = () => {
+  const handleMouseUpDrag = useCallback(() => {
     if (isDraggingPanel) finishPanelDrag();
-  };
+  }, [isDraggingPanel, finishPanelDrag]);
 
   useEffect(() => {
     if (!isDraggingPanel) return;

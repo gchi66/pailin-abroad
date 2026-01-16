@@ -98,8 +98,8 @@ export default function RichSectionRenderer({
   };
 
 const TH_RE = /[\u0E00-\u0E7F]/;
-const TH_PUNCT_ONLY_RE = /^[.,!?;:'"(){}\[\]<>\/\\\-–—…]+$/;
-const SPEAKER_PREFIX_RE = /^\s*((?:[A-Za-z][^:\[\n]{0,40}|[\u0E00-\u0E7F][^:\[\n]{0,40}):\s*)/;
+const TH_PUNCT_ONLY_RE = /^[.,!?;:'"(){}[\]<>\/\\\-–—…]+$/;
+const SPEAKER_PREFIX_RE = /^\s*((?:[A-Za-z][^:[\n]{0,40}|[\u0E00-\u0E7F][^:[\n]{0,40}):\s*)/;
 const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\])/g;
 const INLINE_MARKER_COLORS = {
   "[X]": "#FD6969",
@@ -213,8 +213,8 @@ const isEnglishSpeakerLineText = (text) => {
 
           // Add space if previous span doesn't end with whitespace or punctuation
           // and current span doesn't start with whitespace or punctuation
-          const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]$/.test(prevText);
-          const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]/.test(currentText);
+          const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()[\]{}]$/.test(prevText);
+          const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()[\]{}]/.test(currentText);
 
           needsSpaceBefore =
             !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && currentText.trim();
@@ -264,7 +264,7 @@ const isEnglishSpeakerLineText = (text) => {
 
           const segmentHasThai = !!(thaiColor && (inThaiZone || thaiContext || TH_RE.test(segment)));
           const segmentParts = segmentHasThai
-            ? segment.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}\[\]<>\/\\\-–—…]+)/)
+            ? segment.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}[\]<>\\\/\-–—…]+)/)
             : [segment];
           let segmentOffset = 0;
           const segmentEntries = segmentParts.map((part) => {
@@ -358,12 +358,6 @@ const isEnglishSpeakerLineText = (text) => {
     });
   };
 
-  const getNodeText = (node) =>
-    (node?.inlines || [])
-      .map((span) => span?.text || "")
-      .join("")
-      .trim();
-
   const nodeHasBold = (node) =>
     Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
 
@@ -443,13 +437,6 @@ const listTextStartRem = (indentLevel) => {
   const base = indentLevel ? calcIndentRem(indentLevel) : 0;
   const offset = indentLevel ? LIST_ITEM_OFFSET : LIST_ITEM_BASE_OFFSET;
   return base + offset;
-};
-
-const paragraphTextStartRem = (indentLevel) => {
-  const base = indentLevel ? calcIndentRem(indentLevel) : 0;
-  // mimic the space the audio button consumes + gap (use base offset for consistency)
-  const audioLikeOffset = LIST_ITEM_BASE_OFFSET;
-  return base + audioLikeOffset;
 };
 
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
@@ -835,26 +822,6 @@ const paragraphTextStartRem = (indentLevel) => {
       >
         {renderInlines(node.inlines, phraseThaiOpts)}
       </li>
-    );
-  };
-
-  const renderNumberedGroup = (items, keyPrefix, options = {}) => {
-    if (!items.length) return null;
-    const groupIndent = computeIndentLevel(items[0]);
-    const listIndentRem = groupIndent * INDENT_PER_LEVEL;
-
-    return (
-      <ol
-        key={keyPrefix}
-        className="rich-numbered-list"
-        style={{
-          marginLeft: listIndentRem ? `${listIndentRem}rem` : undefined,
-        }}
-      >
-        {items.map((item, idx) =>
-          renderNumberedListItem(item, `${keyPrefix}-item-${idx}`, groupIndent, options)
-        )}
-      </ol>
     );
   };
 

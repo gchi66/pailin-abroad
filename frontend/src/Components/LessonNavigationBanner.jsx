@@ -92,13 +92,7 @@ const LessonNavigationBanner = ({
     return title.includes("checkpoint");
   };
 
-  const isCurrentCheckpoint = isCheckpointLesson(currentLesson);
-
   // Extract lesson numbers from lesson_external_id (e.g., "1.1")
-  const getCurrentLessonNumber = () => {
-    return currentLesson?.lesson_external_id || currentLesson?.external_id || "X";
-  };
-
   const getPrevLessonNumber = () => {
     return prevLesson?.lesson_order || "";
   };

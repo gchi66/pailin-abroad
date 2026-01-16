@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import supabaseClient from "../supabaseClient";
 import "../Styles/AudioBullet.css";
 
@@ -67,7 +67,7 @@ export default function AudioButton({
     lookupMethod = "audio_seq_legacy";
   }
 
-  async function fetchSignedUrl() {
+  const fetchSignedUrl = useCallback(async () => {
     if (signedUrl) return signedUrl;
     if (fetchPromiseRef.current) return fetchPromiseRef.current;
     if (snip?.signed_url) {
@@ -103,9 +103,9 @@ export default function AudioButton({
 
     fetchPromiseRef.current = fetchPromise;
     return fetchPromise;
-  }
+  }, [signedUrl, snip, supabaseClient, fetchPromiseRef]);
 
-  async function ensureAudio() {
+  const ensureAudio = useCallback(async () => {
     if (audioRef.current) return audioRef.current;
 
     const urlToUse = await fetchSignedUrl();
@@ -130,7 +130,7 @@ export default function AudioButton({
     audio.addEventListener("error", handleError);
 
     return audio;
-  }
+  }, [snip, audioRef, setIsPlaying, fetchSignedUrl]);
 
   async function togglePlayback() {
     console.log("🎵 Universal Audio button clicked!");

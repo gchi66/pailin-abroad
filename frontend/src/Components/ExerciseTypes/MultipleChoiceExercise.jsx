@@ -185,7 +185,6 @@ export default function MultipleChoiceExercise({
         const selected = normalizeArray(choices[qIdx]);
         const selectedSet = new Set(selected);
         const allowMultiple = q.answerLetters.length > 1;
-        const isCorrect = checked && arraysMatch(selected, q.answerLetters);
 
         return (
           <div key={`mc-question-${qIdx}`} className="fb-row mc-question">

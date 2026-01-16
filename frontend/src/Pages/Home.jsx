@@ -25,7 +25,7 @@ const Home = ({ toggleSignupModal }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data: { user } } = await supabaseClient.auth.getUser(); // Updated to use getUser
+        const { data } = await supabaseClient.auth.getUser(); // Updated to use getUser
       } catch (error) {
         console.error("Error fetching user:", error.message);
       }

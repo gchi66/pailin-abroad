@@ -23,7 +23,7 @@ function renderInlines(inlines = []) {
     };
     return (
       <React.Fragment key={idx}>
-        {idx > 0 && !/^[\s.,!?;:'"()\[\]\-]/.test(text) ? " " : ""}
+        {idx > 0 && !/^[\s.,!?;:'"()[\]\-]/.test(text) ? " " : ""}
         <span style={style}>{text}</span>
       </React.Fragment>
     );
@@ -114,7 +114,6 @@ export default function PrepareCard({
                 key={node.audio_seq ? `prep-${node.audio_seq}` : `prep-${idx}`}
                 className={`prepare-item ${isLocked ? "prepare-item-locked" : ""}`}
                 style={itemStyle}
-                aria-disabled={isLocked || undefined}
               >
                 {hasSnippet ? (
                   <AudioButton

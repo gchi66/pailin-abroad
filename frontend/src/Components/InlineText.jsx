@@ -21,7 +21,7 @@ export function renderInlines(inlines = []) {
     };
     return (
       <React.Fragment key={idx}>
-        {idx > 0 && !/^[\s.,!?;:'"()\[\]\-]/.test(text) ? " " : ""}
+        {idx > 0 && !/^[\s.,!?;:'"()[\]\-]/.test(text) ? " " : ""}
         <span style={style}>{text}</span>
       </React.Fragment>
     );

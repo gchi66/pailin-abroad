@@ -717,7 +717,6 @@ export default function FillBlankExercise({
           );
         });
       const useInlineFlow = prefersInlineFlow && !hasBilingualAbPrompt;
-      const questionInlines = item.text_jsonb || null;
       const questionInlinesTh = item.text_jsonb_th || null;
       const displayNumber = item.number ?? idx + 1;
       const cleanedText = cleanInlineMediaTags(item.text || "").trim();
@@ -1034,9 +1033,6 @@ export default function FillBlankExercise({
                     const underscoreMatch = bLine.match(/_{2,}/);
                     if (underscoreMatch) {
                       const before = bLine.slice(0, underscoreMatch.index);
-                      const after = bLine.slice(
-                        underscoreMatch.index + underscoreMatch[0].length
-                      );
                       const trimmedBefore = before.replace(/\s+$/, "");
                       const hadTrailingSpace = /\s+$/.test(before);
                       if (trimmedBefore) {
@@ -1115,7 +1111,6 @@ export default function FillBlankExercise({
 
                       if (canInline && isShortAnswer) {
                         const blankLength = next.length || 1;
-                        const minWidthCh = 3 + blankLength * 2;
                         const inputMinWidthCh = 8;
                         nodes.push(
                           <span key={`inline-${idx}-${segmentIdx}`} className="fb-inline-flow">

@@ -171,6 +171,7 @@ function insertExtraSections(sections, extraSections) {
 
     // Insert all extras whose marker is found in this section, in order
     while (true) {
+      // eslint-disable-next-line no-loop-func
       // Find the first extra whose marker is in the body
       const idx = availableExtras.findIndex((ex) => workingBody.includes(ex.marker));
       if (idx === -1) break;

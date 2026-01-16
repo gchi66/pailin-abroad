@@ -28,7 +28,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   useEffect(() => {
     async function fetchComments() {
       setLoading(true);
-      const { data, error } = await supabaseClient
+      const { data } = await supabaseClient
         .from("comments")
         .select("*, users(username, email, avatar_image)")
         .eq("lesson_id", lessonId)
@@ -43,7 +43,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   // Add new comment (requires login)
   async function handleNewComment(body) {
     if (!user) return;
-    const { data, error } = await supabaseClient
+    const { data } = await supabaseClient
       .from("comments")
       .insert({ lesson_id: lessonId, user_id: user.id, body })
       .select();
@@ -64,7 +64,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   // Reply handler
   async function handleReply(parentComment, replyBody) {
     if (!user) return;
-    const { data, error } = await supabaseClient
+    const { data } = await supabaseClient
       .from("comments")
       .insert({ lesson_id: lessonId, user_id: user.id, body: replyBody, parent_comment_id: parentComment.id })
       .select();
