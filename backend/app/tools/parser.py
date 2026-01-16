@@ -2581,6 +2581,7 @@ class GoogleDocsParser:
         collecting_opts = False
         collecting_text = False  # New flag for multi-line text collection
         collecting_paragraph = False  # New flag for multi-line paragraph collection
+        collecting_prompt = False
         item_complete = False  # Track completion of current item
         pending_alt_text = None
         waiting_alt_text = False
@@ -2724,6 +2725,8 @@ class GoogleDocsParser:
                     current_paragraph = cur_ex.get("paragraph", "")
                     if current_paragraph and not current_paragraph.endswith("\n"):
                         cur_ex["paragraph"] = current_paragraph + "\n"
+                elif collecting_prompt and cur_ex:
+                    cur_ex.setdefault("_prompt_lines", []).append("")
                 continue
 
             # Consume the next non-empty line as ALT text if we saw a bare ALT-TEXT:
@@ -2748,12 +2751,26 @@ class GoogleDocsParser:
                     waiting_alt_text = True
                 continue
 
+            if collecting_prompt and cur_ex:
+                directive_re_check = re.compile(
+                    r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
+                    r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
+                    re.I
+                )
+                if directive_re_check.match(upper_line):
+                    collecting_prompt = False
+                else:
+                    cur_ex.setdefault("_prompt_lines", []).append(original_line.strip())
+                    append_bilingual(cur_ex, "prompt", "prompt_th", original_line, newline=True)
+                    continue
+
             # Check for block-level directives
             m_type = re.match(r'^TYPE:\s*(\w+)', line, re.I)
             if m_type:
                 cur_ex = new_exercise(m_type.group(1).lower())
                 collecting_text = False
                 collecting_opts = False
+                collecting_prompt = False
                 continue
 
             if cur_ex is None:
@@ -2771,6 +2788,11 @@ class GoogleDocsParser:
                 set_bilingual(cur_ex, "prompt", "prompt_th", value)
                 collecting_text = False
                 collecting_paragraph = False
+                if cur_ex.get("kind") == "fill_blank":
+                    cur_ex.setdefault("_prompt_lines", [])
+                    if value:
+                        cur_ex["_prompt_lines"].append(value)
+                    collecting_prompt = True
                 continue
             if upper_line.startswith("PARAGRAPH:"):
                 # Get the content after the colon
@@ -2857,6 +2879,7 @@ class GoogleDocsParser:
                 collecting_opts = False
                 collecting_text = False
                 collecting_paragraph = False
+                collecting_prompt = False
                 continue
 
             if upper_line.startswith("CORRECT:"):
@@ -2870,6 +2893,7 @@ class GoogleDocsParser:
                 collecting_opts = False
                 collecting_text = False
                 collecting_paragraph = False
+                collecting_prompt = False
                 continue
 
             if upper_line.startswith("ANSWER:"):
@@ -2881,6 +2905,7 @@ class GoogleDocsParser:
                 collecting_opts = False
                 collecting_text = False
                 collecting_paragraph = False
+                collecting_prompt = False
                 item_complete = True
                 continue
 
@@ -2894,6 +2919,7 @@ class GoogleDocsParser:
                 collecting_opts = False
                 collecting_text = False
                 collecting_paragraph = False
+                collecting_prompt = False
                 continue
 
             # Item bullet lines (e.g., "A. option text")
@@ -3039,6 +3065,212 @@ class GoogleDocsParser:
                 })
             return normalized
 
+        def build_prompt_blocks(lines: list[str], lang: str) -> list[dict]:
+            blocks: list[dict] = []
+            text_lines: list[str] = []
+            list_items: list[str] = []
+
+            def flush_text():
+                nonlocal text_lines
+                if not text_lines:
+                    return
+                text = "\n".join(text_lines).strip()
+                if text:
+                    blocks.append({"type": "text", "text": text})
+                text_lines = []
+
+            def flush_list():
+                nonlocal list_items
+                if not list_items:
+                    return
+                blocks.append({"type": "list", "items": list_items})
+                list_items = []
+
+            def split_mixed_bilingual_line(line: str) -> tuple[str, str] | None:
+                if not (_has_en(line) and _has_th(line)):
+                    return None
+                for idx, ch in enumerate(line):
+                    if TH.match(ch):
+                        text_en = line[:idx].strip()
+                        text_th = line[idx:].strip()
+                        if text_en and text_th:
+                            return text_en, text_th
+                        return None
+                return None
+
+            lines = lines or []
+            idx = 0
+            while idx < len(lines):
+                raw = lines[idx]
+                line = (raw or "").strip()
+                if not line:
+                    if list_items:
+                        flush_list()
+                    text_lines.append("")
+                    idx += 1
+                    continue
+
+                if BULLET_RE.match(line):
+                    flush_text()
+                    list_items.append(BULLET_RE.sub("", line).strip())
+                    idx += 1
+                    continue
+
+                cleaned_text, image_key, alt_text, audio_key = extract_media_fields(line)
+                if image_key or audio_key:
+                    if cleaned_text:
+                        text_lines.append(cleaned_text)
+                        flush_text()
+                    if image_key:
+                        blocks.append({
+                            "type": "image",
+                            "image_key": image_key,
+                            "alt_text": alt_text or "",
+                        })
+                    if audio_key:
+                        blocks.append({"type": "audio", "audio_key": audio_key})
+                    idx += 1
+                    continue
+
+                if lang == "th" and _has_en(line) and not _has_th(line):
+                    next_line = lines[idx + 1].strip() if idx + 1 < len(lines) else ""
+                    if next_line and _has_th(next_line) and not _has_en(next_line):
+                        flush_text()
+                        blocks.append({
+                            "type": "text",
+                            "text": line,
+                            "text_th": next_line,
+                        })
+                        idx += 2
+                        continue
+
+                mixed = split_mixed_bilingual_line(line) if lang == "th" else None
+                if mixed:
+                    flush_text()
+                    blocks.append({
+                        "type": "text",
+                        "text": mixed[0],
+                        "text_th": mixed[1],
+                    })
+                    idx += 1
+                    continue
+
+                if lang == "th" and _has_en(line) and _has_th(line):
+                    flush_text()
+                    blocks.append({
+                        "type": "text",
+                        "text": line,
+                        "mixed": True,
+                    })
+                    idx += 1
+                    continue
+
+                text_lines.append(line)
+                idx += 1
+
+            if list_items:
+                flush_list()
+            flush_text()
+            return blocks
+
+        def tokenize_fill_blank_text(text: str) -> tuple[list[dict], list[dict]]:
+            tokens: list[dict] = []
+            blanks: list[dict] = []
+            buffer = ""
+            blank_idx = 1
+            index = 0
+            while index < len(text):
+                char = text[index]
+                if char == "\n":
+                    if buffer:
+                        tokens.append({"type": "text", "text": buffer})
+                        buffer = ""
+                    tokens.append({"type": "line_break"})
+                    index += 1
+                    continue
+                if char == "_":
+                    if buffer:
+                        tokens.append({"type": "text", "text": buffer})
+                        buffer = ""
+                    underscore_count = 0
+                    while index + underscore_count < len(text) and text[index + underscore_count] == "_":
+                        underscore_count += 1
+                    blank_id = f"b{blank_idx}"
+                    blanks.append({"id": blank_id, "min_len": max(1, underscore_count)})
+                    tokens.append({"type": "blank", "id": blank_id})
+                    blank_idx += 1
+                    index += underscore_count
+                    continue
+                buffer += char
+                index += 1
+
+            if buffer:
+                tokens.append({"type": "text", "text": buffer})
+            if not blanks:
+                blank_id = "b1"
+                tokens.append({"type": "blank", "id": blank_id})
+                blanks.append({"id": blank_id, "min_len": 1})
+            return tokens, blanks
+
+        def build_answers_v2(raw_answer: str | None, blank_count: int) -> list[list[str]]:
+            if not raw_answer or not isinstance(raw_answer, str):
+                return []
+            raw = raw_answer.strip()
+            if not raw:
+                return []
+
+            uses_semicolon = ";" in raw
+            if uses_semicolon:
+                groups = [g.strip() for g in raw.split(";")]
+                answers = [
+                    [opt.strip() for opt in g.split(",") if opt.strip()]
+                    for g in groups
+                ]
+                if blank_count and len(answers) != blank_count:
+                    logger.warning(
+                        "fill_blank answer count mismatch (expected %s, got %s): %s",
+                        blank_count,
+                        len(answers),
+                        raw,
+                    )
+                return answers
+
+            if blank_count > 1:
+                logger.warning(
+                    "fill_blank answer missing ';' separators; splitting by commas: %s",
+                    raw,
+                )
+                groups = [g.strip() for g in raw.split(",") if g.strip()]
+                answers = [[g] for g in groups]
+                if len(answers) != blank_count:
+                    logger.warning(
+                        "fill_blank answer count mismatch (expected %s, got %s): %s",
+                        blank_count,
+                        len(answers),
+                        raw,
+                    )
+                return answers
+
+            return [[opt.strip() for opt in raw.split(",") if opt.strip()]]
+
+        def normalize_fill_blank_exercise(exercise: dict) -> None:
+            if exercise.get("kind") != "fill_blank":
+                return
+            exercise["schema_version"] = "2"
+            prompt_lines = exercise.pop("_prompt_lines", None)
+            if prompt_lines is None:
+                prompt_text = exercise.get("prompt") or ""
+                prompt_lines = [prompt_text] if prompt_text else []
+            exercise["prompt_blocks"] = build_prompt_blocks(prompt_lines, lang)
+            for item in exercise.get("items", []):
+                text_value = item.get("text") or ""
+                tokens, blanks = tokenize_fill_blank_text(text_value)
+                item["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
+                item["blanks"] = blanks
+                answers_v2 = build_answers_v2(item.get("answer"), len(blanks))
+                if answers_v2:
+                    item["answers_v2"] = answers_v2
+
         for exercise in exercises:
             for item in exercise.get("items", []):
                 text_value = item.get("text")
@@ -3091,6 +3323,7 @@ class GoogleDocsParser:
                 exercise["prompt_th"] = exercise["prompt_th"].strip() or ""
             if exercise.get("paragraph_th") is not None:
                 exercise["paragraph_th"] = exercise["paragraph_th"].strip()
+            normalize_fill_blank_exercise(exercise)
 
         # Build items_th array from text_th fields in items
         for ex in exercises:

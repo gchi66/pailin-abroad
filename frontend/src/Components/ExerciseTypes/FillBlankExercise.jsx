@@ -15,6 +15,7 @@ const DEFAULT_QUESTION_STATE = {
   correct: null,
   score: null,
   loading: false,
+  answersByBlank: {},
 };
 
 const isExampleItem = (item) => {
@@ -158,6 +159,22 @@ const renderStyledText = (content, style) => {
   );
 };
 
+const normalizeWhitespace = (value) =>
+  (value || "").toString().replace(/\s+/g, " ").trim();
+
+const buildAnswersByBlank = (item) => {
+  const blanks = Array.isArray(item?.blanks) ? item.blanks : [];
+  const answersV2 = Array.isArray(item?.answers_v2) ? item.answers_v2 : [];
+  if (!blanks.length || !answersV2.length) return {};
+  return blanks.reduce((acc, blank, idx) => {
+    const options = answersV2[idx];
+    if (Array.isArray(options) && options.length) {
+      acc[blank.id] = options[0];
+    }
+    return acc;
+  }, {});
+};
+
 export default function FillBlankExercise({
   exercise,
   images = {},
@@ -177,6 +194,9 @@ export default function FillBlankExercise({
     ? (sourceType || "").toLowerCase()
     : "practice";
   const resolvedExerciseId = exerciseId ?? exercise?.id ?? null;
+  const promptBlocks = Array.isArray(exercise?.prompt_blocks)
+    ? exercise.prompt_blocks
+    : null;
 
   const initialQuestions = useMemo(
     () =>
@@ -187,6 +207,7 @@ export default function FillBlankExercise({
               correct: true,
               loading: false,
               answer: item.answer || "",
+              answersByBlank: buildAnswersByBlank(item),
             }
           : {}),
       })),
@@ -241,8 +262,37 @@ export default function FillBlankExercise({
     [questions]
   );
 
+  const isItemAnswered = (item, questionState) => {
+    const blanks = Array.isArray(item?.blanks) ? item.blanks : [];
+    if (!blanks.length) {
+      return Boolean((questionState?.answer || "").trim());
+    }
+    const answersByBlank = questionState?.answersByBlank || {};
+    return blanks.every((blank) =>
+      Boolean((answersByBlank[blank.id] || "").trim())
+    );
+  };
+
+  const buildUserAnswer = (item, questionState) => {
+    const blanks = Array.isArray(item?.blanks) ? item.blanks : [];
+    const answersByBlank = questionState?.answersByBlank || {};
+    const hasBlankAnswers = blanks.some((blank) =>
+      Object.prototype.hasOwnProperty.call(answersByBlank, blank.id)
+    );
+    if (!blanks.length || !hasBlankAnswers) {
+      return questionState?.answer || "";
+    }
+    const normalized = blanks.map((blank) =>
+      normalizeWhitespace(answersByBlank[blank.id])
+    );
+    if (blanks.length === 1) {
+      return normalized[0];
+    }
+    return normalized.join("; ");
+  };
+
   const allPendingAnswered = pendingIndexes.every((idx) =>
-    (questions[idx]?.answer || "").trim()
+    isItemAnswered(items[idx], questions[idx])
   );
   const hasIncompleteAnswers =
     pendingIndexes.length > 0 && !allPendingAnswered;
@@ -259,6 +309,31 @@ export default function FillBlankExercise({
         if (questionIdx !== idx || question.correct === true || question.loading)
           return question;
         return { ...question, answer: value };
+      })
+    );
+    if (error) {
+      setError("");
+    }
+  };
+
+  const handleBlankAnswerChange = (idx, blankId, value, item) => {
+    setQuestions((prev) =>
+      prev.map((question, questionIdx) => {
+        if (questionIdx !== idx || question.correct === true || question.loading)
+          return question;
+        const nextAnswers = {
+          ...(question.answersByBlank || {}),
+          [blankId]: value,
+        };
+        const userAnswer = buildUserAnswer(item, {
+          ...question,
+          answersByBlank: nextAnswers,
+        });
+        return {
+          ...question,
+          answersByBlank: nextAnswers,
+          answer: userAnswer,
+        };
       })
     );
     if (error) {
@@ -295,7 +370,7 @@ export default function FillBlankExercise({
     await Promise.all(
       pendingIndexes.map(async (idx) => {
         const item = items[idx] || {};
-        const userAnswer = questions[idx]?.answer || "";
+        const userAnswer = buildUserAnswer(item, questions[idx]);
 
         try {
           const result = await evaluateAnswer({
@@ -371,6 +446,65 @@ export default function FillBlankExercise({
     setIsChecking(false);
     setHasChecked(false);
     setError("");
+  };
+
+  const renderPromptBlocks = () => {
+    if (!promptBlocks?.length) {
+      return prompt ? <p className="fb-prompt">{prompt}</p> : null;
+    }
+    return (
+      <div className="fb-prompt">
+        {promptBlocks.map((block, blockIdx) => {
+          if (!block || typeof block !== "object") return null;
+          if (block.type === "text") {
+            return (
+              <div key={`prompt-text-${blockIdx}`} className="fb-prompt-block">
+                {block.text && <p className="fb-prompt-text">{block.text}</p>}
+                {block.text_th && (
+                  <p className="fb-prompt-th">{block.text_th}</p>
+                )}
+              </div>
+            );
+          }
+          if (block.type === "list") {
+            const itemsList = Array.isArray(block.items) ? block.items : [];
+            return (
+              <ul key={`prompt-list-${blockIdx}`} className="fb-prompt-list">
+                {itemsList.map((itemText, itemIdx) => (
+                  <li key={`prompt-list-${blockIdx}-${itemIdx}`}>{itemText}</li>
+                ))}
+              </ul>
+            );
+          }
+          if (block.type === "image") {
+            const imgSrc = block.image_key ? images[block.image_key] : null;
+            if (!imgSrc) return null;
+            return (
+              <div key={`prompt-image-${blockIdx}`} className="fb-prompt-media">
+                <img
+                  src={imgSrc}
+                  alt={block.alt_text || "Prompt image"}
+                  className="fb-image"
+                />
+              </div>
+            );
+          }
+          if (block.type === "audio") {
+            if (!block.audio_key) return null;
+            return (
+              <div key={`prompt-audio-${blockIdx}`} className="fb-prompt-media">
+                <AudioButton
+                  audioKey={block.audio_key}
+                  audioIndex={audioIndex}
+                  className="practice-audio-button"
+                />
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    );
   };
 
   const renderParagraphWithInputs = () => {
@@ -518,6 +652,24 @@ export default function FillBlankExercise({
       const disabled =
         questionState.correct === true || questionState.loading === true;
       const imageUrl = item.image_key ? images[item.image_key] : null;
+      const useSchemaV2 = Array.isArray(item?.stem?.blocks) && item.stem.blocks.length > 0;
+      const hasSingleBlankV2 =
+        useSchemaV2 &&
+        Array.isArray(item?.blanks) &&
+        item.blanks.length === 1;
+      const hasLineBreakV2 =
+        useSchemaV2 &&
+        item.stem.blocks.some((block) =>
+          block?.type === "inline" &&
+          Array.isArray(block.tokens) &&
+          block.tokens.some((token) => token.type === "line_break")
+        );
+      const isInlineSingleBlank =
+        useSchemaV2 &&
+        hasSingleBlankV2 &&
+        !hasLineBreakV2 &&
+        !item.image_key &&
+        !item.audio_key;
       const textSegments = segmentTextWithBlanks(item.text || "");
       const inlineSegments = Array.isArray(item.text_jsonb)
         ? buildInlineSegments(item.text_jsonb)
@@ -530,25 +682,39 @@ export default function FillBlankExercise({
         item.text_th.trim() &&
         /^\s*A:/m.test(item.text) &&
         /^\s*B:/m.test(item.text);
-      const hasBlank = segmentsToRender.some((segment) => segment.type === "blank");
-      const hasMultiline = segmentsToRender.some(
-        (segment) =>
-          segment.type === "line-break" ||
-          (segment.type === "text" && segment.content?.includes("\n"))
-      );
+      const hasBlank = useSchemaV2
+        ? Array.isArray(item?.blanks) && item.blanks.length > 0
+        : segmentsToRender.some((segment) => segment.type === "blank");
+      const hasMultiline = useSchemaV2
+        ? item.stem.blocks.some((block) =>
+            block?.type === "inline" &&
+            Array.isArray(block.tokens) &&
+            block.tokens.some((token) => token.type === "line_break")
+          )
+        : segmentsToRender.some(
+            (segment) =>
+              segment.type === "line-break" ||
+              (segment.type === "text" && segment.content?.includes("\n"))
+          );
       const answerLength = (item?.answer || "").trim().length;
-      const isShortAnswer = answerLength > 0 && answerLength <= 10;
-      const prefersInlineFlow = isShortAnswer && segmentsToRender.some((segment, segmentIdx) => {
-        if (segment.type !== "text") return false;
-        const next = segmentsToRender[segmentIdx + 1];
-        const nextNext = segmentsToRender[segmentIdx + 2];
-        return (
-          next?.type === "blank" &&
-          nextNext?.type === "text" &&
-          !segment.content?.includes("\n") &&
-          !nextNext.content?.includes("\n")
-        );
-      });
+      const isShortAnswer =
+        !useSchemaV2 &&
+        answerLength > 0 &&
+        answerLength <= 10;
+      const prefersInlineFlow =
+        !useSchemaV2 &&
+        isShortAnswer &&
+        segmentsToRender.some((segment, segmentIdx) => {
+          if (segment.type !== "text") return false;
+          const next = segmentsToRender[segmentIdx + 1];
+          const nextNext = segmentsToRender[segmentIdx + 2];
+          return (
+            next?.type === "blank" &&
+            nextNext?.type === "text" &&
+            !segment.content?.includes("\n") &&
+            !nextNext.content?.includes("\n")
+          );
+        });
       const useInlineFlow = prefersInlineFlow && !hasBilingualAbPrompt;
       const questionInlines = item.text_jsonb || null;
       const questionInlinesTh = item.text_jsonb_th || null;
@@ -625,7 +791,7 @@ export default function FillBlankExercise({
       return (
         <React.Fragment key={`${item.number ?? idx}-${idx}`}>
         <div
-          className={`fb-row fb-row--fill-blank${hasMultiline ? " fb-row-multiline" : ""}${wrappedRows[idx] ? " fb-row--wrapped" : ""}`}
+          className={`fb-row fb-row--fill-blank${hasMultiline ? " fb-row-multiline" : ""}${wrappedRows[idx] ? " fb-row--wrapped" : ""}${isInlineSingleBlank ? " fb-row--inline-single" : ""}`}
         >
           <div className="fb-row-number fb-row-number--fill-blank">
             <span>{displayNumber}</span>
@@ -665,12 +831,143 @@ export default function FillBlankExercise({
                   rowTextRefs.current[idx] = el;
                 }}
               >
-                {(() => {
-                  const shouldShowThaiLine =
-                    contentLang === "th" &&
-                    typeof item.text_th === "string" &&
-                    item.text_th.trim() &&
-                    !hasBilingualAbPrompt;
+                {useSchemaV2 ? (
+                  (() => {
+                    const shouldShowThaiLine =
+                      contentLang === "th" &&
+                      typeof item.text_th === "string" &&
+                      item.text_th.trim() &&
+                      !hasBilingualAbPrompt;
+                    const nodes = [];
+                    let insertedThaiLine = false;
+                    const allowInlineThaiInsertion = !isInlineSingleBlank;
+                    const pushThaiLine = () => {
+                      if (!allowInlineThaiInsertion || !shouldShowThaiLine || insertedThaiLine)
+                        return;
+                      nodes.push(
+                        <span
+                          key={`th-break-before-${idx}`}
+                          className="fb-line-break"
+                          aria-hidden="true"
+                        />
+                      );
+                      nodes.push(
+                        <span key={`th-line-${idx}`} className="fb-row-th fb-row-th--inline">
+                          <InlineText
+                            inlines={questionInlinesTh}
+                            text={item.text_th.trim()}
+                          />
+                        </span>
+                      );
+                      nodes.push(
+                        <span
+                          key={`th-break-after-${idx}`}
+                          className="fb-line-break"
+                          aria-hidden="true"
+                        />
+                      );
+                      insertedThaiLine = true;
+                    };
+
+                    item.stem.blocks.forEach((block, blockIdx) => {
+                      if (block?.type !== "inline" || !Array.isArray(block.tokens)) {
+                        return;
+                      }
+                      block.tokens.forEach((token, tokenIdx) => {
+                        if (token.type === "text") {
+                          nodes.push(
+                            <span
+                              key={`v2-text-${idx}-${blockIdx}-${tokenIdx}`}
+                              className="fb-text-block"
+                            >
+                              {token.text}
+                            </span>
+                          );
+                          return;
+                        }
+                        if (token.type === "line_break") {
+                          nodes.push(
+                            <span
+                              key={`v2-break-${idx}-${blockIdx}-${tokenIdx}`}
+                              className="fb-line-break"
+                              aria-hidden="true"
+                            />
+                          );
+                          return;
+                        }
+                        if (token.type === "blank") {
+                          const blankId = token.id;
+                          const blankMeta = Array.isArray(item.blanks)
+                            ? item.blanks.find((blank) => blank.id === blankId)
+                            : null;
+                          const blankLength = blankMeta?.min_len || 1;
+                          const blankAnswers = Array.isArray(item.answers_v2)
+                            ? item.answers_v2[item.blanks.findIndex((blank) => blank.id === blankId)] || []
+                            : [];
+                          const maxAnswerLen = blankAnswers.reduce(
+                            (maxLen, answer) =>
+                              Math.max(maxLen, normalizeWhitespace(answer).length),
+                            0
+                          );
+                          const isShortBlank =
+                            (maxAnswerLen > 0 && maxAnswerLen <= 10) ||
+                            (maxAnswerLen === 0 && blankLength <= 4);
+                          const minWidthCh = isShortBlank
+                            ? 8
+                            : Math.max(12, 3 + blankLength * 2);
+                          pushThaiLine();
+                          nodes.push(
+                            <span
+                              key={`v2-blank-${idx}-${blockIdx}-${tokenIdx}`}
+                              className={`fb-input-wrap${isShortBlank ? " fb-input-wrap--short" : " fb-input-wrap--long"}`}
+                            >
+                              <input
+                                type="text"
+                                className={`fb-input${isShortBlank ? " fb-input--short" : " fb-input--long"}`}
+                                value={questionState.answersByBlank?.[blankId] || ""}
+                                onChange={(event) =>
+                                  handleBlankAnswerChange(idx, blankId, event.target.value, item)
+                                }
+                                disabled={disabled}
+                                placeholder=""
+                                style={{
+                                  minWidth: `${minWidthCh}ch`,
+                                }}
+                              />
+                              <InlineStatus state={questionState} />
+                            </span>
+                          );
+                        }
+                      });
+                    });
+
+                    if (isInlineSingleBlank && shouldShowThaiLine) {
+                      nodes.push(
+                        <span
+                          key={`th-break-inline-${idx}`}
+                          className="fb-line-break"
+                          aria-hidden="true"
+                        />
+                      );
+                      nodes.push(
+                        <span key={`th-line-inline-${idx}`} className="fb-row-th fb-row-th--inline">
+                          <InlineText
+                            inlines={questionInlinesTh}
+                            text={item.text_th.trim()}
+                          />
+                        </span>
+                      );
+                    }
+
+                    return nodes;
+                  })()
+                ) : (
+                  (() => {
+                    const shouldShowThaiLine =
+                      contentLang === "th" &&
+                      typeof item.text_th === "string" &&
+                      item.text_th.trim() &&
+                      !hasBilingualAbPrompt;
                   let insertedThaiLine = false;
                   const pushThaiLine = () => {
                     if (!shouldShowThaiLine || insertedThaiLine) return;
@@ -921,7 +1218,8 @@ export default function FillBlankExercise({
                     );
                   }
                   return nodes;
-                })()}
+                })()
+                )}
               </div>
 
               <QuestionFeedback state={questionState} />
@@ -935,7 +1233,7 @@ export default function FillBlankExercise({
   return (
     <div className="fb-wrap">
       {/* {title && showTitle && <h3 className="fb-title">{title}</h3>} */}
-      {prompt && <p className="fb-prompt">{prompt}</p>}
+      {renderPromptBlocks()}
 
       {paragraph ? (
         <p className="fb-paragraph">{renderParagraphWithInputs()}</p>
