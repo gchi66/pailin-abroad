@@ -774,13 +774,15 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   }, [rebuildObserver, sidebarHeight, isSidebarStuck, isMobileView]);
 
   useEffect(() => {
+    const headNodes = headNodesRef.current;
+    const visibleHeadIds = visibleHeadIdsRef.current;
     return () => {
       if (observerRef.current) {
         observerRef.current.disconnect();
         observerRef.current = null;
       }
-      headNodesRef.current.clear();
-      visibleHeadIdsRef.current.clear();
+      headNodes.clear();
+      visibleHeadIds.clear();
       setShowStickyToggle(false);
     };
   }, [setShowStickyToggle]);
@@ -1070,7 +1072,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     return () => {
       cancelled = true;
     };
-  }, [id, lesson?.id, lesson?.lesson_external_id, lesson?.conversation_audio_url]);
+  }, [id, lesson, lesson?.id, lesson?.lesson_external_id, lesson?.conversation_audio_url]);
 
   if (!lesson) {
     return <div style={{ padding: "10vh", textAlign: "center" }}>Loading…</div>;

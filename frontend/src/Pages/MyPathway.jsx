@@ -12,7 +12,6 @@ const MyPathway = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [pathwayLessons, setPathwayLessons] = useState([]);
-  const [nextLesson, setNextLesson] = useState(null);
   const [userStats, setUserStats] = useState(null);
   const [userComments, setUserComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -147,14 +146,12 @@ const MyPathway = () => {
         const [
           profileResponse,
           lessonsResponse,
-          nextLessonResponse,
           pathwayResponse,
           statsResponse,
           commentsResponse
         ] = await Promise.all([
           fetch(`${API_BASE_URL}/api/user/profile`, { method: 'GET', headers }),
           fetch(`${API_BASE_URL}/api/user/completed-lessons`, { method: 'GET', headers }),
-          fetch(`${API_BASE_URL}/api/user/next-lesson`, { method: 'GET', headers }),
           fetch(`${API_BASE_URL}/api/user/pathway-lessons`, { method: 'GET', headers }),
           fetch(`${API_BASE_URL}/api/user/stats`, { method: 'GET', headers }),
           fetch(`${API_BASE_URL}/api/user/comments`, { method: 'GET', headers })
@@ -172,11 +169,6 @@ const MyPathway = () => {
           const lessonsData = await lessonsResponse.json();
           console.log('Completed lessons data:', lessonsData.completed_lessons);
           setCompletedLessons(lessonsData.completed_lessons || []);
-        }
-
-        if (nextLessonResponse.ok) {
-          const nextLessonData = await nextLessonResponse.json();
-          setNextLesson(nextLessonData.next_lesson);
         }
 
         if (pathwayResponse.ok) {

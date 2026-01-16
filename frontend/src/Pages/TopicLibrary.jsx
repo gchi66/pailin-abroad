@@ -67,7 +67,7 @@ const TopicLibrary = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterMode, setFilterMode] = useState("featured");
-  const [searchTerm, setSearchTerm] = useState("");
+  const searchTerm = "";
   const [isMobile, setIsMobile] = useState(false);
   const [isMobileFilterMenuOpen, setIsMobileFilterMenuOpen] = useState(false);
   const [profile, setProfile] = useState(null);

@@ -223,13 +223,15 @@ const TopicDetail = () => {
   }, [rebuildObserver]);
 
   useEffect(() => {
+    const stickyNodes = stickyNodesRef.current;
+    const visibleNodeIds = visibleNodeIdsRef.current;
     return () => {
       if (observerRef.current) {
         observerRef.current.disconnect();
         observerRef.current = null;
       }
-      stickyNodesRef.current.clear();
-      visibleNodeIdsRef.current.clear();
+      stickyNodes.clear();
+      visibleNodeIds.clear();
       setShowStickyToggle(false);
     };
   }, [setShowStickyToggle]);

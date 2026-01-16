@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import PlanNotice from "../Components/PlanNotice";
 import { useAuth } from "../AuthContext";
 import "../Styles/TryLessons.css";
@@ -8,8 +7,6 @@ import MembershipFeatures from "../Components/MembershipFeatures";
 
 const TryLessons = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const handleSignupClick = () => navigate("/signup");
 
   return (
     <div className="try-lessons-page-container">

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
-import { useWithUi } from "../ui-lang/withUi";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 import useSwipe from "../hooks/useSwipe";
@@ -22,14 +21,12 @@ const Onboarding = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [error, setError] = useState("");
-  const [userProfile, setUserProfile] = useState(null);
   const [skipPasswordStep, setSkipPasswordStep] = useState(false);
   const [hasSyncedUser, setHasSyncedUser] = useState(false);
   const [syncingUser, setSyncingUser] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const { ui: uiLang, setUi: setUiLang } = useUiLang();
-  const withUi = useWithUi();
   const isDevPreview =
     process.env.NODE_ENV === "development" &&
     typeof window !== "undefined" &&
@@ -90,13 +87,6 @@ const Onboarding = () => {
   // Fetch user profile and determine starting step
   useEffect(() => {
     if (isDevPreview) {
-      setUserProfile({
-        username: "Preview Student",
-        avatar_image: "",
-        is_verified: true,
-        is_paid: false,
-        is_active: false
-      });
       setSkipPasswordStep(false);
       setStep(0);
       setLoadingProfile(false);
@@ -141,8 +131,6 @@ const Onboarding = () => {
           return;
         }
 
-        setUserProfile(profile);
-
         // Edge case 1: If user is already active, redirect to My Pathway
         if (profile?.is_active) {
           console.log("User already active, redirecting to My Pathway");
@@ -167,8 +155,6 @@ const Onboarding = () => {
             .update({ is_verified: true })
             .eq("id", session.user.id);
 
-          // Update local profile state
-          setUserProfile(prev => ({ ...prev, is_verified: true }));
         }
 
         // Determine if we should skip password step

@@ -664,6 +664,7 @@ export default function FillBlankExercise({
           Array.isArray(block.tokens) &&
           block.tokens.some((token) => token.type === "line_break")
         );
+      const isInlineMultilineV2 = useSchemaV2 && hasLineBreakV2;
       const isInlineSingleBlank =
         useSchemaV2 &&
         hasSingleBlankV2 &&
@@ -791,7 +792,7 @@ export default function FillBlankExercise({
       return (
         <React.Fragment key={`${item.number ?? idx}-${idx}`}>
         <div
-          className={`fb-row fb-row--fill-blank${hasMultiline ? " fb-row-multiline" : ""}${wrappedRows[idx] ? " fb-row--wrapped" : ""}${isInlineSingleBlank ? " fb-row--inline-single" : ""}`}
+          className={`fb-row fb-row--fill-blank${hasMultiline ? " fb-row-multiline" : ""}${wrappedRows[idx] ? " fb-row--wrapped" : ""}${isInlineSingleBlank ? " fb-row--inline-single" : ""}${isInlineMultilineV2 ? " fb-row--inline-multiline" : ""}`}
         >
           <div className="fb-row-number fb-row-number--fill-blank">
             <span>{displayNumber}</span>
