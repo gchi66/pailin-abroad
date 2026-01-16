@@ -722,7 +722,7 @@ export default function FillBlankExercise({
       const cleanedText = cleanInlineMediaTags(item.text || "").trim();
       const promptHasInlineAnswer =
         Boolean(inlineSegments && cleanedText) && /(^|\n)B:\s*/.test(cleanedText);
-      const shouldRenderPromptText = promptHasInlineAnswer;
+      const shouldRenderPromptText = !useSchemaV2 && promptHasInlineAnswer;
 
       const renderPromptWithAnswer = () => {
         const lines = cleanedText.split("\n");
