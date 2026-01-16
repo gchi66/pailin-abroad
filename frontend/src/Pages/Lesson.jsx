@@ -590,7 +590,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
 
     visibleHeadIdsRef.current = visibleNow;
     recomputeStickyVisibility();
-  }, [ensureObserver, recomputeStickyVisibility]);
+  }, [ensureObserver, recomputeStickyVisibility, setShowStickyToggle]);
 
   // Observe the top sentinel to know when the lesson is at the top of the screen
   useEffect(() => {

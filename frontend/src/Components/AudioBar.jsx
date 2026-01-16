@@ -35,7 +35,6 @@ export default function AudioBar({
   const [isDraggingPanel, setIsDraggingPanel] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [isSnapping, setIsSnapping] = useState(false);
-  const [showVolume, setShowVolume] = useState(false);
   const volumeTrackRef = useRef(null);
   const volumeControlRef = useRef(null);
   const isScrubbingRef = useRef(false);
@@ -144,16 +143,6 @@ export default function AudioBar({
     if (hasSplit && bgRef.current) {
       bgRef.current.currentTime = newTime;
     }
-  };
-
-  const toggleMute = () => {
-    if (hasSplit) {
-      if (voiceRef.current) voiceRef.current.muted = !muted;
-      if (bgRef.current) bgRef.current.muted = !muted;
-    } else {
-      if (voiceRef.current) voiceRef.current.muted = !muted;
-    }
-    setMuted(!muted);
   };
 
   const handleVolumeChange = (newVolume) => {
@@ -271,12 +260,12 @@ export default function AudioBar({
       voice.removeEventListener("loadedmetadata", onMeta);
       voice.removeEventListener("ended", onEnded);
     };
-  }, [rate, hasSplit]);
+  }, [rate, hasSplit, changeRate]);
 
   // Handle rate changes when rate state updates
   useEffect(() => {
     changeRate(rate);
-  }, [rate, hasSplit]);
+  }, [rate, hasSplit, changeRate]);
 
   const fmt = (s) =>
     !s
@@ -288,23 +277,6 @@ export default function AudioBar({
     if (event?.touches?.length) return event.touches[0].clientY;
     if (event?.changedTouches?.length) return event.changedTouches[0].clientY;
     return null;
-  };
-
-  const handleVolumeMouseDown = (event) => {
-    event.preventDefault();
-    const clientY = extractClientY(event);
-    if (clientY !== null) {
-      updateVolumeFromPosition(clientY);
-      setIsDraggingVolume(true);
-    }
-  };
-
-  const handleVolumeTouchMove = (event) => {
-    if (event.cancelable) event.preventDefault();
-    const clientY = extractClientY(event);
-    if (clientY !== null) {
-      updateVolumeFromPosition(clientY);
-    }
   };
 
   useEffect(() => {
@@ -339,11 +311,7 @@ export default function AudioBar({
       window.removeEventListener("touchend", handleUp);
       window.removeEventListener("touchcancel", handleUp);
     };
-  }, [isDraggingVolume]);
-
-  const volumeHandleStyle = {
-    bottom: `calc(${((muted ? 0 : volume) * 100).toFixed(2)}% - 0.5rem)`
-  };
+  }, [isDraggingVolume, updateVolumeFromPosition]);
 
   const pauseAll = () => {
     if (voiceRef.current) {
@@ -495,7 +463,7 @@ export default function AudioBar({
       window.removeEventListener("touchend", handleTouchEndDrag);
       window.removeEventListener("touchcancel", handleTouchEndDrag);
     };
-  }, [isDraggingPanel]);
+  }, [isDraggingPanel, handleMouseMoveDrag, handleMouseUpDrag, handleTouchEndDrag, handleTouchMoveDrag]);
 
   useEffect(() => {
     if (!isSnapping) return;
@@ -519,7 +487,7 @@ export default function AudioBar({
         onAutoPlayComplete();
       }
     }
-  }, [shouldAutoPlay, playing, onAutoPlayComplete]);
+  }, [shouldAutoPlay, playing, onAutoPlayComplete, forcePlay]);
 
   useEffect(() => {
     if (!isSticky || typeof window === "undefined") return;

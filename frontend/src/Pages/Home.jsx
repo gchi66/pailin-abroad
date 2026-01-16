@@ -3,11 +3,7 @@ import axios from "axios";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 import Hero from "../Components/Hero";
-import FreeLessonHeader from "../Components/FreeLessonHeader";
 import FreeLessonCards from "../Components/FreeLessonCards";
-import ReusablePlacementTest from "../Components/ReusablePlacementTest";
-import Features from "../Components/Features";
-import Method from "../Components/Method"
 import ChooseUs from "../Components/ChooseUs";
 import HowItWorks from '../Components/HowItWorks';
 import SignUpCTA from '../Components/SignUpCTA';
@@ -18,11 +14,9 @@ import FAQ from '../Components/FAQ';
 // import About from "../Components/About";
 import Characters from "../Components/Characters";
 import Reviews from "../Components/Reviews";
-import CTA from "../Components/CTA";
 
 const Home = ({ toggleSignupModal }) => {
   const [message, setMessage] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // const handleChatClick = () => {
   //   alert("Chat feature coming soon!");
@@ -32,7 +26,6 @@ const Home = ({ toggleSignupModal }) => {
     const fetchUser = async () => {
       try {
         const { data: { user } } = await supabaseClient.auth.getUser(); // Updated to use getUser
-        setIsLoggedIn(!!user);
       } catch (error) {
         console.error("Error fetching user:", error.message);
       }

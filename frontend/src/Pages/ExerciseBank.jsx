@@ -223,9 +223,6 @@ const ExerciseBank = () => {
   const getSectionTitle = (section) =>
     uiLang === "th" ? section.section_th || section.section : section.section || "";
 
-  const getExerciseTitle = (exercise) =>
-    uiLang === "th" ? exercise.title_th || exercise.title : exercise.title || "";
-
   const formatExerciseCount = (count) => {
     const key = count === 1 ? "singular" : "plural";
     return `${count} ${translate(exerciseBankCopy.exerciseCount[key])}`;

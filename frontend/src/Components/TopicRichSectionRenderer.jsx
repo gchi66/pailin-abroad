@@ -64,8 +64,8 @@ export default function TopicRichSectionRenderer({
 
           // Add space if previous span doesn't end with whitespace or punctuation
           // and current span doesn't start with whitespace or punctuation
-          const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]$/.test(prevText);
-          const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()\[\]{}]/.test(currentText);
+          const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()[\]{}]$/.test(prevText);
+          const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()[\]{}]/.test(currentText);
 
           needsSpaceBefore =
             !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && currentText.trim();
@@ -130,12 +130,6 @@ export default function TopicRichSectionRenderer({
       );
     });
   };
-
-  const getNodeText = (node) =>
-    (node?.inlines || [])
-      .map((span) => span?.text || "")
-      .join("")
-      .trim();
 
 const computeIndent = (node) =>
   typeof node?.indent === "number" && Number.isFinite(node.indent)

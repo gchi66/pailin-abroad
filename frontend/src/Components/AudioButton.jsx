@@ -219,7 +219,7 @@ export default function AudioButton({
     return () => {
       isActive = false;
     };
-  }, [preload, snip?.storage_path, snip?.signed_url]);
+  }, [preload, snip?.storage_path, snip?.signed_url, ensureAudio, snip]);
 
   // Don't render anything if no snippet found
   if (!snip) return null;

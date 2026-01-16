@@ -163,7 +163,6 @@ export default function DiscussionBoard({
 }
 
 function CommentItem({ comment, onReply, onPin, canReply, depth }) {
-  const [showReply, setShowReply] = useState(false);
   const [replyBody, setReplyBody] = useState("");
   const [postingReply, setPostingReply] = useState(false);
 
@@ -186,7 +185,6 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
     try {
       await onReply(comment, replyBody.trim());
       setReplyBody("");
-      setShowReply(false);
     } finally {
       setPostingReply(false);
     }
