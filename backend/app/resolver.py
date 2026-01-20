@@ -378,6 +378,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         prompt_en = prompt_md or ex.get("prompt")
         prompt_th = ex.get("prompt_th")
         prompt_blocks = ex.get("prompt_blocks")
+        prompt_blocks_th = ex.get("prompt_blocks_th")
         paragraph_en = ex.get("paragraph")
         paragraph_th = ex.get("paragraph_th")
         items_en = ex.get("items")
@@ -385,6 +386,10 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         options_en = ex.get("options")
         options_th = ex.get("options_th")
         answer_key_th = ex.get("answer_key_th")
+
+        resolved_prompt_blocks = (
+            prompt_blocks_th if (lang == "th" and prompt_blocks_th) else prompt_blocks
+        )
 
         rexs.append(
             {
@@ -399,7 +404,8 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
                 "prompt_en": prompt_en,
                 "prompt_th": prompt_th,
                 "prompt_md": prompt_md,
-                "prompt_blocks": prompt_blocks,
+                "prompt_blocks": resolved_prompt_blocks,
+                "prompt_blocks_th": prompt_blocks_th,
                 "paragraph": _pick_lang(paragraph_en, paragraph_th, lang),
                 "paragraph_en": paragraph_en,
                 "paragraph_th": paragraph_th,

@@ -234,6 +234,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
                 # Store the validated Thai items (with alt text / answers). We do NOT attempt to
                 # reconcile or alter image keys here; EN remains source-of-truth.
                 "items_th":     th_items_validated,
+                "prompt_blocks_th": ex.get("prompt_blocks") or ex.get("prompt_blocks_th"),
                 # if you ever add localized MCQ choices for practice, include options_th here
             }
 
