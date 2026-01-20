@@ -131,7 +131,7 @@ const parseOptions = (q) => {
     <>
       <div className="cq-questions">
         {questions.map((q, idx) => {
-          const promptEn = q.prompt || "";
+          const promptEn = q.prompt_en || q.prompt || "";
           const promptTh = q.prompt_th || "";
           const opts = parseOptions(q);
           const isMulti = (q.answer_key || []).length > 1;

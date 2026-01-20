@@ -318,6 +318,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
             "prompt_md":  (ex.get("prompt_md") or ex.get("prompt")) or None,
             "paragraph":  ex.get("paragraph") or None,
             "items":      ex.get("items", []),
+            "prompt_blocks": ex.get("prompt_blocks", None),
             "options":    ex.get("options", []),    # EN-only, keep NOT NULL
             "answer_key": ex.get("answer_key", {}), # EN-only, keep NOT NULL if you want
         })

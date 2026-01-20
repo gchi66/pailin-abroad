@@ -377,6 +377,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         prompt_md = ex.get("prompt_md")
         prompt_en = prompt_md or ex.get("prompt")
         prompt_th = ex.get("prompt_th")
+        prompt_blocks = ex.get("prompt_blocks")
         paragraph_en = ex.get("paragraph")
         paragraph_th = ex.get("paragraph_th")
         items_en = ex.get("items")
@@ -398,6 +399,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
                 "prompt_en": prompt_en,
                 "prompt_th": prompt_th,
                 "prompt_md": prompt_md,
+                "prompt_blocks": prompt_blocks,
                 "paragraph": _pick_lang(paragraph_en, paragraph_th, lang),
                 "paragraph_en": paragraph_en,
                 "paragraph_th": paragraph_th,

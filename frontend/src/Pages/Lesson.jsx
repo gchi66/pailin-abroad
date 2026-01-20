@@ -217,6 +217,7 @@ function normalizeExercise(ex, contentLang) {
   const options_en = safeJSON(ex.options_en ?? ex.options, []);
   const options_th = safeJSON(ex.options_th, []);
   const answer_key = safeJSON(ex.answer_key, {});
+  const prompt_blocks = safeJSON(ex.prompt_blocks, null);
 
   const title = pickLang(title_en, title_th, contentLang) ?? null;
   let prompt = pickLang(prompt_en, prompt_th, contentLang) ?? null;
@@ -264,11 +265,13 @@ function normalizeExercise(ex, contentLang) {
             ? item.options.map((opt, optIdx) => {
                 const thOpt = item.options_th[optIdx];
                 if (!thOpt) return opt;
+                const rawThText = thOpt.text_th || thOpt.text || "";
+                const hasThaiText = /[\u0E00-\u0E7F]/.test(rawThText);
                 return {
                   ...(opt || {}),
-                  text_th: thOpt.text_th || thOpt.text || "",
-                  text_jsonb_th: thOpt.text_jsonb || thOpt.text_jsonb_th || null,
-                  alt_text_th: thOpt.alt_text_th || thOpt.alt_text || "",
+                  text_th: hasThaiText ? rawThText : "",
+                  text_jsonb_th: hasThaiText ? (thOpt.text_jsonb || thOpt.text_jsonb_th || null) : null,
+                  alt_text_th: hasThaiText ? (thOpt.alt_text_th || thOpt.alt_text || "") : "",
                 };
               })
             : item.options;
@@ -302,6 +305,7 @@ function normalizeExercise(ex, contentLang) {
     prompt_en,
     prompt_th,
     paragraph,
+    prompt_blocks,
     items,
     items_th,
     options,
@@ -313,6 +317,8 @@ function normalizeExercise(ex, contentLang) {
 // Normalize comprehension question rows to match backend fields
 function normalizeQuestion(q, contentLang) {
   // Use prompt and prompt_th from backend
+  const prompt_en = q.prompt || null;
+  const prompt_th = q.prompt_th || null;
   const prompt = pickLang(q.prompt, q.prompt_th, contentLang) || q.prompt || null;
   // Options now may already be structured (array of {label,text,image_key?,alt_text?})
   let options;
@@ -349,6 +355,8 @@ function normalizeQuestion(q, contentLang) {
     sort_order: q.sort_order ?? 0,
     question_type: q.question_type || null,
     prompt,
+    prompt_en,
+    prompt_th,
     options, // structured options available to UI
     correct_choice,
     answer_key,

@@ -51,6 +51,7 @@ const transformExercise = (row) => {
 
   const title = textOr(row.title, row.prompt, row.prompt_md, `Exercise ${row.sort_order ?? ""}`);
   const paragraph = row.paragraph || "";
+  const prompt_blocks = Array.isArray(row.prompt_blocks) ? row.prompt_blocks : null;
 
   return {
     id: row.id,
@@ -58,6 +59,7 @@ const transformExercise = (row) => {
     title,
     prompt: prompt || "",
     paragraph,
+    prompt_blocks,
     items,
     options,
     answer_key,

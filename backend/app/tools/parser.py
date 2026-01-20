@@ -2585,6 +2585,8 @@ class GoogleDocsParser:
         item_complete = False  # Track completion of current item
         pending_alt_text = None
         waiting_alt_text = False
+        pending_prompt_alt_text = None
+        waiting_prompt_alt_text = False
         pending_option = None
 
         def normalize_inputs(value) -> int:
@@ -2747,6 +2749,20 @@ class GoogleDocsParser:
                 continue
 
             # Consume the next non-empty line as ALT text if we saw a bare ALT-TEXT:
+            if waiting_prompt_alt_text:
+                prompt_alt_text = line.strip()
+                if prompt_alt_text and cur_ex:
+                    prompt_lines = cur_ex.get("_prompt_lines") or []
+                    if prompt_lines:
+                        last_line = prompt_lines[-1]
+                        if "[img:" in last_line and "ALT-TEXT" not in last_line.upper():
+                            prompt_lines[-1] = f"{last_line} ALT-TEXT: {prompt_alt_text}".strip()
+                        else:
+                            pending_prompt_alt_text = prompt_alt_text
+                    else:
+                        pending_prompt_alt_text = prompt_alt_text
+                waiting_prompt_alt_text = False
+                continue
             if waiting_alt_text:
                 pending_alt_text = line.strip()
                 if cur_items:
@@ -2759,6 +2775,20 @@ class GoogleDocsParser:
             alt_match = ALT_TEXT_RE.match(line)
             if alt_match:
                 alt_text_value = (alt_match.group(1) or "").strip()
+                if collecting_prompt and cur_ex:
+                    if alt_text_value:
+                        prompt_lines = cur_ex.get("_prompt_lines") or []
+                        if prompt_lines:
+                            last_line = prompt_lines[-1]
+                            if "[img:" in last_line and "ALT-TEXT" not in last_line.upper():
+                                prompt_lines[-1] = f"{last_line} ALT-TEXT: {alt_text_value}".strip()
+                            else:
+                                pending_prompt_alt_text = alt_text_value
+                        else:
+                            pending_prompt_alt_text = alt_text_value
+                    else:
+                        waiting_prompt_alt_text = True
+                    continue
                 if alt_text_value:
                     pending_alt_text = alt_text_value
                     if cur_items:
@@ -2777,7 +2807,11 @@ class GoogleDocsParser:
                 if directive_re_check.match(upper_line):
                     collecting_prompt = False
                 else:
-                    cur_ex.setdefault("_prompt_lines", []).append(original_line.strip())
+                    line_to_add = original_line.strip()
+                    if pending_prompt_alt_text and "[img:" in line_to_add and "ALT-TEXT" not in line_to_add.upper():
+                        line_to_add = f"{line_to_add} ALT-TEXT: {pending_prompt_alt_text}".strip()
+                        pending_prompt_alt_text = None
+                    cur_ex.setdefault("_prompt_lines", []).append(line_to_add)
                     append_bilingual(cur_ex, "prompt", "prompt_th", original_line, newline=True)
                     continue
 
