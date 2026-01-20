@@ -2585,6 +2585,7 @@ class GoogleDocsParser:
         item_complete = False  # Track completion of current item
         pending_alt_text = None
         waiting_alt_text = False
+        pending_option = None
 
         def normalize_inputs(value) -> int:
             """Ensure inputs is a positive int, defaulting to 1."""
@@ -2624,6 +2625,22 @@ class GoogleDocsParser:
                         inlines = node.get("inlines") or []
                         return [dict(span) for span in inlines if span]
             return None
+
+        def split_bilingual_option(text_value: str) -> tuple[str, str | None]:
+            if not text_value:
+                return "", None
+            if "\u000b" in text_value:
+                before, after = text_value.split("\u000b", 1)
+                text_en = before.strip()
+                text_th = after.strip()
+                return text_en, text_th or None
+            if _has_en(text_value) and _has_th(text_value):
+                for idx, ch in enumerate(text_value):
+                    if TH.match(ch):
+                        text_en = text_value[:idx].strip()
+                        text_th = text_value[idx:].strip()
+                        return text_en, text_th or None
+            return text_value.strip(), None
 
         def append_text(target: dict, key: str, value: str, newline: bool = False):
             if not value:
@@ -2929,11 +2946,20 @@ class GoogleDocsParser:
                     cur_items.append({})
                 label = m_opt.group(1)
                 option_text = m_opt.group(2).strip()
-                option_entry = {"label": label, "text": option_text}
+                text_en, text_th = split_bilingual_option(option_text)
+                option_entry = {"label": label, "text": text_en}
+                if text_th:
+                    option_entry["text_th"] = text_th
                 inlines = _pop_inlines_for_text(line) or _pop_inlines_for_text(option_text)
                 if inlines:
                     option_entry["text_jsonb"] = inlines
                 cur_items[-1].setdefault("options", []).append(option_entry)
+                pending_option = option_entry
+                continue
+
+            if collecting_opts and pending_option and _is_thai_dominant(line):
+                existing = (pending_option.get("text_th") or "").strip()
+                pending_option["text_th"] = f"{existing}\n{line}" if existing else line
                 continue
 
             # Multi-line text collection
@@ -3038,10 +3064,16 @@ class GoogleDocsParser:
                     label = opt.get("label") or opt.get("letter") or ""
                     body = opt.get("text") or ""
                     cleaned_text, image_key, alt_text, _audio_key = extract_media_fields(body)
+                    text_th = opt.get("text_th")
+                    if isinstance(text_th, str):
+                        cleaned_th, _, _, _ = extract_media_fields(text_th)
+                    else:
+                        cleaned_th = None
                     normalized.append({
                         **opt,
                         "label": label,
                         "text": cleaned_text,
+                        "text_th": cleaned_th if cleaned_th is not None else opt.get("text_th"),
                         "image_key": opt.get("image_key") or image_key,
                         "alt_text": opt.get("alt_text") or alt_text or cleaned_text or label,
                     })
@@ -3346,6 +3378,25 @@ class GoogleDocsParser:
                             th_item["audio_key"] = item["audio_key"]
                         if "alt_text" in item:
                             th_item["alt_text"] = item["alt_text"]
+                        if item.get("options"):
+                            th_options = []
+                            for opt in item["options"]:
+                                opt_th_text = opt.get("text_th") or opt.get("text")
+                                if not opt_th_text:
+                                    continue
+                                th_opt = {
+                                    "label": opt.get("label") or "",
+                                    "text": opt_th_text,
+                                }
+                                if "image_key" in opt:
+                                    th_opt["image_key"] = opt["image_key"]
+                                if opt.get("alt_text_th"):
+                                    th_opt["alt_text"] = opt["alt_text_th"]
+                                elif opt.get("alt_text"):
+                                    th_opt["alt_text"] = opt["alt_text"]
+                                th_options.append(th_opt)
+                            if th_options:
+                                th_item["options"] = th_options
                         items_th.append(th_item)
 
                 if items_th:

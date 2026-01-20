@@ -44,6 +44,7 @@ export default function AudioButton({
   const audioRef = useRef(null);
   const listenersRef = useRef(null);
   const fetchPromiseRef = useRef(null);
+  const lastPathRef = useRef(null);
 
   // Try audio_key first (preferred method) - now includes both standard and phrases audio
   let snip = null;
@@ -145,6 +146,23 @@ export default function AudioButton({
     }
 
     console.log("snip.storage_path:", snip.storage_path);
+
+    if (audioRef.current && lastPathRef.current && lastPathRef.current !== snip.storage_path) {
+      console.log("🔄 Storage path changed, recreating audio element");
+      const audio = audioRef.current;
+      const listeners = listenersRef.current;
+      if (listeners) {
+        audio.removeEventListener("play", listeners.handlePlay);
+        audio.removeEventListener("pause", listeners.handlePause);
+        audio.removeEventListener("ended", listeners.handleEnded);
+        audio.removeEventListener("error", listeners.handleError);
+      }
+      audio.pause();
+      audioRef.current = null;
+      listenersRef.current = null;
+      setIsPlaying(false);
+    }
+    lastPathRef.current = snip.storage_path;
 
     const audio = await ensureAudio();
     if (!audio) return;

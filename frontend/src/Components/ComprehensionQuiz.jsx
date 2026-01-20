@@ -76,21 +76,31 @@ const parseOptions = (q) => {
     return { en: english, th: thai };
   };
 
+  const splitThaiPair = (value, fallbackTh = "") => {
+    const { en, th } = splitThaiText(value);
+    return {
+      text: en,
+      textTh: th || fallbackTh,
+    };
+  };
+
   const parseSingle = (opt) => {
     if (typeof opt === "string") {
       const match = opt.match(/^([A-Z])\.\s*(.*)$/s);
       const label = match ? match[1] : "";
       const body = match ? match[2] : opt;
-      const { en, th } = splitThaiText(body);
-      return { label, text: en, textTh: th };
+      const { text, textTh } = splitThaiPair(body);
+      return { label, text, textTh };
     }
 
-    const { en, th } = splitThaiText(opt.text || "");
+    const { text, textTh } = splitThaiPair(opt.text || "");
+    const thTextRaw = opt.text_th || opt.textTh || "";
+    const thSplit = thTextRaw ? splitThaiPair(thTextRaw) : { text: "", textTh: "" };
 
     return {
       label: opt.label || opt.letter || "",
-      text: en,
-      textTh: opt.text_th || opt.textTh || th,
+      text: text || thSplit.text || "",
+      textTh: textTh || thSplit.textTh || "",
       image_key: opt.image_key || null,
       alt_text: opt.alt_text || "",
       alt_text_th: opt.alt_text_th || opt.altTextTh || "",

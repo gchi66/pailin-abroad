@@ -442,10 +442,16 @@ const listTextStartRem = (indentLevel) => {
   // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
   const renderNode = (node, key, meta = {}, options = {}) => {
     const shouldPreload = options.preloadAudio === true;
+    const audioIdentity =
+      node?.audio_key ||
+      (node?.audio_section != null && node?.audio_seq != null
+        ? `${node.audio_section}-${node.audio_seq}`
+        : null);
+    const nodeKey = audioIdentity ? `${key}-audio-${audioIdentity}` : key;
     if (node.kind === "heading") {
       if (meta.allowHeading) {
         return (
-          <p key={key} className="rich-subheader">
+          <p key={nodeKey} className="rich-subheader">
             {renderInlines(node.inlines)}
           </p>
         );
@@ -537,7 +543,7 @@ const listTextStartRem = (indentLevel) => {
       if (hasAudio) {
         const multiline = hasLineBreak(node);
         return (
-          <div key={key} className="phrases-audio-block">
+          <div key={nodeKey} className="phrases-audio-block">
             {showDivider && <div className="phrases-divider" aria-hidden="true" />}
             <p
               className={`audio-bullet${hasAccent ? " rich-accent" : ""}`}
@@ -581,7 +587,7 @@ const listTextStartRem = (indentLevel) => {
             : `${baseOffsetRem}rem`);
       return (
         <p
-          key={key}
+          key={nodeKey}
           className={`${isSubheader ? "rich-subheader" : ""}${hasAccent ? " rich-accent" : ""}`}
           style={{
             marginLeft: hasAudio
@@ -614,7 +620,7 @@ const listTextStartRem = (indentLevel) => {
       const boldPhrase = isPhrasesSection && meta.boldPhrase;
       const multiline = hasLineBreak(node);
       return (
-        <div key={key} className="phrases-audio-block">
+        <div key={nodeKey} className="phrases-audio-block">
           {showDivider && <div className="phrases-divider" aria-hidden="true" />}
           <li
               className="audio-bullet"
@@ -648,7 +654,7 @@ const listTextStartRem = (indentLevel) => {
     }
     return (
           <li
-            key={key}
+            key={nodeKey}
             style={{
               marginLeft: indentLevel
                 ? `${listTextStartRem(indentLevel) + 3}rem`
@@ -677,7 +683,7 @@ const listTextStartRem = (indentLevel) => {
         const boldPhrase = isPhrasesSection && meta.boldPhrase;
         const multiline = hasLineBreak(node);
         return (
-          <div key={key} className="phrases-audio-block">
+          <div key={nodeKey} className="phrases-audio-block">
             {showDivider && <div className="phrases-divider" aria-hidden="true" />}
             <div
               className="audio-bullet"
@@ -709,7 +715,7 @@ const listTextStartRem = (indentLevel) => {
     }
       return (
         <div
-          key={key}
+          key={nodeKey}
           style={{
             marginLeft: indentLevel
               ? `${listTextStartRem(indentLevel) + 3}rem`
@@ -729,7 +735,7 @@ const listTextStartRem = (indentLevel) => {
   }
 
   if (node.kind === "spacer") {
-    return <div key={key} className="para-spacer" aria-hidden="true" />;
+    return <div key={nodeKey} className="para-spacer" aria-hidden="true" />;
   }
 
   if (node.kind === "table") {
@@ -743,7 +749,7 @@ const listTextStartRem = (indentLevel) => {
 
     return (
       <LessonTable
-        key={key}
+        key={nodeKey}
         data={{
             cells: node.cells,
             indent: node.indent,
@@ -760,7 +766,7 @@ const listTextStartRem = (indentLevel) => {
     // Handle Quick Practice exercises
     if (node.kind === "quick_practice_exercise" && renderQuickPractice) {
       return (
-        <div key={key} className="quick-practice-inline">
+        <div key={nodeKey} className="quick-practice-inline">
           {renderQuickPractice(node.exercise)}
         </div>
       );
@@ -784,10 +790,17 @@ const listTextStartRem = (indentLevel) => {
       ? phraseThaiOpts
       : { thaiColor: "#8C8D93" };
 
+    const audioIdentity =
+      node?.audio_key ||
+      (node?.audio_section != null && node?.audio_seq != null
+        ? `${node.audio_section}-${node.audio_seq}`
+        : null);
+    const nodeKey = audioIdentity ? `${key}-audio-${audioIdentity}` : key;
+
     if (hasAudio) {
       return (
         <li
-          key={key}
+          key={nodeKey}
           className="audio-bullet"
           style={{
             marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
@@ -814,7 +827,7 @@ const listTextStartRem = (indentLevel) => {
 
     return (
       <li
-        key={key}
+        key={nodeKey}
         style={{
           marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
           marginBottom: hasBold ? 0 : undefined,

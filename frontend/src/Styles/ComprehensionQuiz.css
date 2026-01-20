@@ -109,6 +109,7 @@
   font-size: var(--lesson-core-text-size);
   color: rgba(15, 23, 42, 0.75);
   line-height: 1.4;
+  white-space: pre-line;
 }
 
 .cq-check-btn {
