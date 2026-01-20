@@ -266,7 +266,13 @@ export default function FillBlankExercise({
   showTitle = true,
   contentLang = "en",
 }) {
-  const { title, prompt, paragraph, items = [] } = exercise || {};
+  const {
+    title,
+    prompt,
+    paragraph,
+    items: rawItems = [],
+    items_th: rawItemsTh = [],
+  } = exercise || {};
   const { user } = useAuth();
   const userId = userIdProp || user?.id || null;
   const evaluationSourceType = ["bank", "practice"].includes(
@@ -278,6 +284,42 @@ export default function FillBlankExercise({
   const promptBlocks = Array.isArray(exercise?.prompt_blocks)
     ? exercise.prompt_blocks
     : null;
+
+  const displayItems = useMemo(() => {
+    const thItems = rawItemsTh.length ? rawItemsTh : [];
+    const enItems =
+      contentLang === "th" && Array.isArray(exercise?.items_en) && exercise.items_en.length
+        ? exercise.items_en
+        : rawItems;
+
+    if (contentLang !== "th" || !thItems.length) {
+      return enItems;
+    }
+
+    const thByNumber = new Map();
+    thItems.forEach((thItem, idx) => {
+      if (!thItem) return;
+      const key = thItem.number ?? idx;
+      const normalizedKey = key !== undefined && key !== null ? String(key) : null;
+      if (normalizedKey && !thByNumber.has(normalizedKey)) {
+        thByNumber.set(normalizedKey, thItem);
+      }
+    });
+
+    return enItems.map((item, idx) => {
+      if (!item) return item;
+      const key = item.number ?? idx;
+      const normalizedKey = key !== undefined && key !== null ? String(key) : null;
+      const thItem = (normalizedKey && thByNumber.get(normalizedKey)) || thItems[idx];
+      return {
+        ...item,
+        text_th: item.text_th || thItem?.text,
+        text_jsonb_th: item.text_jsonb_th || thItem?.text_jsonb,
+      };
+    });
+  }, [rawItems, rawItemsTh, contentLang, exercise?.items_en]);
+
+  const items = displayItems;
 
   const initialQuestions = useMemo(
     () =>
@@ -926,13 +968,19 @@ export default function FillBlankExercise({
                     const shouldShowThaiLine =
                       contentLang === "th" &&
                       typeof item.text_th === "string" &&
-                      item.text_th.trim() &&
-                      !hasBilingualAbPrompt;
+                      item.text_th.trim();
                     const nodes = [];
                     let insertedThaiLine = false;
+                    const shouldInsertThaiAfterFirstBreak =
+                      shouldShowThaiLine && hasBilingualAbPrompt;
                     const allowInlineThaiInsertion = !isInlineSingleBlank;
                     const pushThaiLine = () => {
-                      if (!allowInlineThaiInsertion || !shouldShowThaiLine || insertedThaiLine)
+                      if (
+                        shouldInsertThaiAfterFirstBreak ||
+                        !allowInlineThaiInsertion ||
+                        !shouldShowThaiLine ||
+                        insertedThaiLine
+                      )
                         return;
                       nodes.push(
                         <span
@@ -997,6 +1045,24 @@ export default function FillBlankExercise({
                               aria-hidden="true"
                             />
                           );
+                          if (shouldInsertThaiAfterFirstBreak && !insertedThaiLine) {
+                            nodes.push(
+                              <span key={`th-line-${idx}`} className="fb-row-th fb-row-th--inline">
+                                <InlineText
+                                  inlines={questionInlinesTh}
+                                  text={item.text_th.trim()}
+                                />
+                              </span>
+                            );
+                            nodes.push(
+                              <span
+                                key={`th-break-after-${idx}`}
+                                className="fb-line-break"
+                                aria-hidden="true"
+                              />
+                            );
+                            insertedThaiLine = true;
+                          }
                           return;
                         }
                         if (token.type === "blank") {

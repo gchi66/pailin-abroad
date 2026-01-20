@@ -17,6 +17,7 @@ import json
 import argparse
 import unicodedata
 import time
+import httpx
 from postgrest.exceptions import APIError
 from app.supabase_client import supabase
 
@@ -161,6 +162,13 @@ def _execute_with_retry(builder, label, retries=3, backoff_seconds=0.5):
                 raise
             sleep_for = backoff_seconds * (2 ** (attempt - 1))
             print(f"[WARN] {label} failed with transient error; retrying in {sleep_for:.1f}s ({attempt}/{retries})")
+            time.sleep(sleep_for)
+        except httpx.TransportError as e:
+            attempt += 1
+            if attempt > retries:
+                raise
+            sleep_for = backoff_seconds * (2 ** (attempt - 1))
+            print(f"[WARN] {label} failed with network error ({e}); retrying in {sleep_for:.1f}s ({attempt}/{retries})")
             time.sleep(sleep_for)
 
 #______________________ REGULAR METHODS
