@@ -131,7 +131,8 @@ const parseOptions = (q) => {
     <>
       <div className="cq-questions">
         {questions.map((q, idx) => {
-          const prompt = contentLang === "th" && q.prompt_th ? q.prompt_th : q.prompt;
+          const promptEn = q.prompt || "";
+          const promptTh = q.prompt_th || "";
           const opts = parseOptions(q);
           const isMulti = (q.answer_key || []).length > 1;
           const questionNumber = q.sort_order ?? idx + 1;
@@ -147,7 +148,14 @@ const parseOptions = (q) => {
               <div className="fb-row-main">
                 <div className="fb-row-content">
                   <div className="cq-prompt">
-                    <ReactMarkdown>{prompt}</ReactMarkdown>
+                    {contentLang === "th" ? (
+                      <>
+                        {promptEn && <ReactMarkdown>{promptEn}</ReactMarkdown>}
+                        {promptTh && <ReactMarkdown>{promptTh}</ReactMarkdown>}
+                      </>
+                    ) : (
+                      <ReactMarkdown>{promptEn || promptTh}</ReactMarkdown>
+                    )}
                   </div>
 
                   <div className="cq-option-list">

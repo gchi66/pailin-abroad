@@ -31,14 +31,22 @@ const normalizeOption = (option) => {
   const label = option.label || option.letter || "";
   const text = stripOptionPrefix(label, option.text || "");
   const text_jsonb = stripOptionPrefixInlines(label, option.text_jsonb || null);
+  const text_th = option.text_th
+    ? stripOptionPrefix(label, option.text_th || "")
+    : "";
+  const text_jsonb_th = option.text_jsonb_th
+    ? stripOptionPrefixInlines(label, option.text_jsonb_th || null)
+    : null;
   const alt_text = stripOptionPrefix(
     label,
-    option.alt_text || option.text || option.label || ""
+    option.alt_text_th || option.alt_text || option.text || option.label || ""
   );
   return {
     label,
     text,
     text_jsonb,
+    text_th,
+    text_jsonb_th,
     image_key: option.image_key || null,
     alt_text,
   };
@@ -95,7 +103,7 @@ export default function MultipleChoiceExercise({
     () =>
       items.map((item = {}) => {
         const options = Array.isArray(item.options)
-          ? item.options.map(normalizeOption)
+          ? item.options.map((option) => normalizeOption(option))
           : [];
         const answerLetters = parseAnswerString(item.answer);
         const answerDisplay =
@@ -230,7 +238,7 @@ export default function MultipleChoiceExercise({
                 )}
 
                 <div className="mc-options">
-                  {q.options.map(({ label, text, text_jsonb, image_key, alt_text }) => {
+                  {q.options.map(({ label, text, text_jsonb, text_th, text_jsonb_th, image_key, alt_text }) => {
                     const normalizedLabel = normalizeArray([label])[0];
                     const isSelected = normalizedLabel
                       ? selectedSet.has(normalizedLabel)
@@ -259,13 +267,24 @@ export default function MultipleChoiceExercise({
                               className="mc-option-image"
                             />
                           )}
-                          {text && (
-                            <InlineText
-                              as="span"
-                              className="mc-option-text-lines"
-                              inlines={text_jsonb}
-                              text={text}
-                            />
+                          {(text || text_th) && (
+                            <span className="mc-option-text-lines">
+                              {text && (
+                                <InlineText
+                                  as="span"
+                                  inlines={text_jsonb}
+                                  text={text}
+                                />
+                              )}
+                              {contentLang === "th" && text_th && (
+                                <InlineText
+                                  as="span"
+                                  className="th"
+                                  inlines={text_jsonb_th}
+                                  text={text_th}
+                                />
+                              )}
+                            </span>
                           )}
 
                           {shouldShowResult && (

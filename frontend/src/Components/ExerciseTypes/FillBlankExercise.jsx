@@ -139,6 +139,14 @@ const buildInlineSegments = (inlines = []) => {
   return segments.length ? segments : [{ type: "text", content: "" }];
 };
 
+const buildStyledRunsFromInlines = (inlines = []) =>
+  (inlines || [])
+    .map((span) => ({
+      text: cleanInlineMediaTags(span?.text || ""),
+      style: span,
+    }))
+    .filter((run) => run.text);
+
 const renderMultiline = (text = "") => {
   if (!text) return null;
 
@@ -157,6 +165,79 @@ const renderStyledText = (content, style) => {
       {content}
     </span>
   );
+};
+
+const renderTokenWithStyles = (text, cursor, keyPrefix) => {
+  if (!text) return null;
+  const nodes = [];
+  let remaining = text;
+  let pieceIndex = 0;
+
+  while (remaining) {
+    if (!cursor || cursor.disabled || !cursor.runs?.length) {
+      nodes.push(
+        <React.Fragment key={`${keyPrefix}-plain-${pieceIndex}`}>
+          {renderMultiline(remaining)}
+        </React.Fragment>
+      );
+      break;
+    }
+
+    const run = cursor.runs[cursor.index];
+    if (!run) {
+      cursor.disabled = true;
+      nodes.push(
+        <React.Fragment key={`${keyPrefix}-plain-${pieceIndex}`}>
+          {renderMultiline(remaining)}
+        </React.Fragment>
+      );
+      break;
+    }
+
+    const runText = run.text.slice(cursor.offset);
+    if (!runText) {
+      cursor.index += 1;
+      cursor.offset = 0;
+      continue;
+    }
+
+    if (!remaining.startsWith(runText[0])) {
+      cursor.disabled = true;
+      nodes.push(
+        <React.Fragment key={`${keyPrefix}-plain-${pieceIndex}`}>
+          {renderMultiline(remaining)}
+        </React.Fragment>
+      );
+      break;
+    }
+
+    const takeLen = Math.min(remaining.length, runText.length);
+    const piece = remaining.slice(0, takeLen);
+    if (piece !== runText.slice(0, takeLen)) {
+      cursor.disabled = true;
+      nodes.push(
+        <React.Fragment key={`${keyPrefix}-plain-${pieceIndex}`}>
+          {renderMultiline(remaining)}
+        </React.Fragment>
+      );
+      break;
+    }
+
+    nodes.push(
+      <React.Fragment key={`${keyPrefix}-styled-${pieceIndex}`}>
+        {renderStyledText(piece, run.style)}
+      </React.Fragment>
+    );
+    remaining = remaining.slice(takeLen);
+    cursor.offset += takeLen;
+    if (cursor.offset >= run.text.length) {
+      cursor.index += 1;
+      cursor.offset = 0;
+    }
+    pieceIndex += 1;
+  }
+
+  return nodes;
 };
 
 const normalizeWhitespace = (value) =>
@@ -577,6 +658,10 @@ export default function FillBlankExercise({
       if (example) {
         const imageUrl = item.image_key ? images[item.image_key] : null;
         const textSegments = segmentTextWithBlanks(item.text || "");
+        const inlineSegments = Array.isArray(item.text_jsonb)
+          ? buildInlineSegments(item.text_jsonb)
+          : null;
+        const segmentsToRender = inlineSegments || textSegments;
         return (
           <React.Fragment key={`example-${idx}`}>
           <div
@@ -600,11 +685,13 @@ export default function FillBlankExercise({
                 </div>
               )}
               <div className="fb-row-text">
-                {textSegments.map((segment, segmentIdx) => {
+                {segmentsToRender.map((segment, segmentIdx) => {
                   if (segment.type === "text") {
                     return (
                       <React.Fragment key={`example-text-${idx}-${segmentIdx}`}>
-                        {renderMultiline(segment.content)}
+                        {segment.style
+                          ? renderStyledText(segment.content, segment.style)
+                          : renderMultiline(segment.content)}
                       </React.Fragment>
                     );
                   }
@@ -653,6 +740,9 @@ export default function FillBlankExercise({
         questionState.correct === true || questionState.loading === true;
       const imageUrl = item.image_key ? images[item.image_key] : null;
       const useSchemaV2 = Array.isArray(item?.stem?.blocks) && item.stem.blocks.length > 0;
+      const styledRuns = Array.isArray(item?.text_jsonb)
+        ? buildStyledRunsFromInlines(item.text_jsonb)
+        : null;
       const hasSingleBlankV2 =
         useSchemaV2 &&
         Array.isArray(item?.blanks) &&
@@ -869,20 +959,34 @@ export default function FillBlankExercise({
                       insertedThaiLine = true;
                     };
 
+                    const styledCursor = styledRuns?.length
+                      ? { runs: styledRuns, index: 0, offset: 0, disabled: false }
+                      : null;
                     item.stem.blocks.forEach((block, blockIdx) => {
                       if (block?.type !== "inline" || !Array.isArray(block.tokens)) {
                         return;
                       }
                       block.tokens.forEach((token, tokenIdx) => {
                         if (token.type === "text") {
-                          nodes.push(
-                            <span
-                              key={`v2-text-${idx}-${blockIdx}-${tokenIdx}`}
-                              className="fb-text-block"
-                            >
-                              {token.text}
-                            </span>
-                          );
+                          if (styledCursor) {
+                            const styledNodes = renderTokenWithStyles(
+                              token.text,
+                              styledCursor,
+                              `v2-text-${idx}-${blockIdx}-${tokenIdx}`
+                            );
+                            if (styledNodes) {
+                              nodes.push(...styledNodes);
+                            }
+                          } else {
+                            nodes.push(
+                              <span
+                                key={`v2-text-${idx}-${blockIdx}-${tokenIdx}`}
+                                className="fb-text-block"
+                              >
+                                {token.text}
+                              </span>
+                            );
+                          }
                           return;
                         }
                         if (token.type === "line_break") {

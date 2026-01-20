@@ -258,6 +258,21 @@ function normalizeExercise(ex, contentLang) {
         if (Array.isArray(thItem.text_jsonb)) {
           item.text_jsonb_th = thItem.text_jsonb;
         }
+        if (Array.isArray(thItem.options)) {
+          item.options_th = thItem.options.map((opt) => ({ ...(opt || {}) }));
+          item.options = Array.isArray(item.options)
+            ? item.options.map((opt, optIdx) => {
+                const thOpt = item.options_th[optIdx];
+                if (!thOpt) return opt;
+                return {
+                  ...(opt || {}),
+                  text_th: thOpt.text_th || thOpt.text || "",
+                  text_jsonb_th: thOpt.text_jsonb || thOpt.text_jsonb_th || null,
+                  alt_text_th: thOpt.alt_text_th || thOpt.alt_text || "",
+                };
+              })
+            : item.options;
+        }
       }
       return item;
     });
@@ -288,6 +303,7 @@ function normalizeExercise(ex, contentLang) {
     prompt_th,
     paragraph,
     items,
+    items_th,
     options,
     answer_key,
     isQuickPractice,
