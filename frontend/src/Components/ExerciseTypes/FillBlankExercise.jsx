@@ -704,6 +704,13 @@ export default function FillBlankExercise({
           ? buildInlineSegments(item.text_jsonb)
           : null;
         const segmentsToRender = inlineSegments || textSegments;
+        const hasBilingualAbPrompt =
+          contentLang === "th" &&
+          typeof item.text === "string" &&
+          typeof item.text_th === "string" &&
+          item.text_th.trim() &&
+          /^\s*A:/m.test(item.text) &&
+          /^\s*B:/m.test(item.text);
         return (
           <React.Fragment key={`example-${idx}`}>
           <div
@@ -727,7 +734,93 @@ export default function FillBlankExercise({
                 </div>
               )}
               <div className="fb-row-text">
-                {segmentsToRender.map((segment, segmentIdx) => {
+                {hasBilingualAbPrompt
+                  ? (() => {
+                      const lines = item.text.split("\n");
+                      const aLine =
+                        lines.find((line) => line.trim().startsWith("A:")) || lines[0];
+                      const bLine =
+                        lines.find((line) => line.trim().startsWith("B:")) ||
+                        lines[lines.length - 1];
+                      const thaiLine = item.text_th.trim();
+                      const nodes = [];
+                      nodes.push(
+                        <React.Fragment key={`example-ab-a-${idx}`}>
+                          {renderMultiline(aLine)}
+                        </React.Fragment>
+                      );
+                      nodes.push(
+                        <span
+                          key={`example-ab-a-break-${idx}`}
+                          className="fb-line-break"
+                          aria-hidden="true"
+                        />
+                      );
+                      nodes.push(
+                        <React.Fragment key={`example-ab-th-${idx}`}>
+                          {renderMultiline(thaiLine)}
+                        </React.Fragment>
+                      );
+                      nodes.push(
+                        <span
+                          key={`example-ab-th-break-${idx}`}
+                          className="fb-line-break"
+                          aria-hidden="true"
+                        />
+                      );
+
+                      const underscoreMatch = bLine.match(/_{2,}/);
+                      if (underscoreMatch) {
+                        const before = bLine.slice(0, underscoreMatch.index);
+                        const trimmedBefore = before.replace(/\s+$/, "");
+                        const hadTrailingSpace = /\s+$/.test(before);
+                        if (trimmedBefore) {
+                          nodes.push(
+                            <React.Fragment key={`example-ab-b-before-${idx}`}>
+                              {renderMultiline(trimmedBefore)}
+                            </React.Fragment>
+                          );
+                          if (hadTrailingSpace) {
+                            nodes.push(" ");
+                          }
+                        }
+                      } else {
+                        nodes.push(
+                          <React.Fragment key={`example-ab-b-${idx}`}>
+                            {renderMultiline(bLine)}
+                          </React.Fragment>
+                        );
+                        nodes.push(" ");
+                      }
+
+                      const blankLength = underscoreMatch
+                        ? Math.min(underscoreMatch[0].length, 4)
+                        : 1;
+                      const minWidthCh = 3 + blankLength * 2;
+                      nodes.push(
+                        <span
+                          key={`example-ab-blank-${idx}`}
+                          className="fb-example-blank"
+                          style={{ minWidth: `${minWidthCh}ch` }}
+                        />
+                      );
+
+                      if (underscoreMatch) {
+                        const after = bLine.slice(
+                          underscoreMatch.index + underscoreMatch[0].length
+                        );
+                        if (after) {
+                          nodes.push(
+                            <React.Fragment key={`example-ab-b-after-${idx}`}>
+                              {renderMultiline(after)}
+                            </React.Fragment>
+                          );
+                        }
+                      }
+
+                      return nodes;
+                    })()
+                  : segmentsToRender.map((segment, segmentIdx) => {
                   if (segment.type === "text") {
                     return (
                       <React.Fragment key={`example-text-${idx}-${segmentIdx}`}>
@@ -761,7 +854,8 @@ export default function FillBlankExercise({
               </div>
               {contentLang === "th" &&
                 typeof item.text_th === "string" &&
-                item.text_th.trim() && (
+                item.text_th.trim() &&
+                !hasBilingualAbPrompt && (
                   <div className="fb-row-th fb-row-th--inline">
                     {renderMultiline(item.text_th.trim())}
                   </div>

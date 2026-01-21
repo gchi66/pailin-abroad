@@ -156,22 +156,91 @@ const speakerLineIsThai = (line) => {
       }
     });
 
+    const applyThaiSpeakerPrefix = (list) => {
+      const updated = [];
+      let lineStart = 0;
+      let idx = 0;
+      while (idx <= list.length) {
+        const entry = list[idx];
+        const isLineBreak = !entry || entry.text === "\n";
+        if (isLineBreak) {
+          const lineInlines = list.slice(lineStart, idx);
+          const lineText = lineInlines.map((span) => span?.text || "").join("");
+          if (speakerLineIsThai(lineText)) {
+            const match = lineText.match(SPEAKER_PREFIX_RE);
+            if (match) {
+              const prefix = match[0];
+              let remaining = prefix.length;
+              lineInlines.forEach((span) => {
+                if (remaining <= 0) {
+                  updated.push({ ...span });
+                  return;
+                }
+                const text = span?.text || "";
+                if (!text) return;
+                if (text.length <= remaining) {
+                  updated.push({
+                    ...span,
+                    text,
+                    speakerWeight: opts.speakerPrefixWeight || 500,
+                    speakerColor: opts.speakerPrefixColor || "#111",
+                  });
+                  remaining -= text.length;
+                  return;
+                }
+                const prefixPart = text.slice(0, remaining);
+                const restPart = text.slice(remaining);
+                updated.push({
+                  ...span,
+                  text: prefixPart,
+                  speakerWeight: opts.speakerPrefixWeight || 500,
+                  speakerColor: opts.speakerPrefixColor || "#111",
+                });
+                if (restPart) {
+                  updated.push({ ...span, text: restPart });
+                }
+                remaining = 0;
+              });
+              if (entry) {
+                updated.push(entry);
+              }
+              lineStart = idx + 1;
+              idx += 1;
+              continue;
+            }
+          }
+          updated.push(...lineInlines.map((span) => ({ ...span })));
+          if (entry) {
+            updated.push(entry);
+          }
+          lineStart = idx + 1;
+        }
+        idx += 1;
+      }
+      return updated;
+    };
+
+    const normalizedWithSpeaker =
+      opts.speakerPrefixColor && opts.speakerPrefixWeight
+        ? applyThaiSpeakerPrefix(normalizedInlines)
+        : normalizedInlines;
+
     let thaiZoneStartIndex = -1;
-    const hasLineBreak = normalizedInlines.some((span) => span?.text === "\n");
+    const hasLineBreak = normalizedWithSpeaker.some((span) => span?.text === "\n");
 
     if (hasLineBreak) {
-      for (let i = 0; i < normalizedInlines.length; i += 1) {
-        const text = cleanAudioTags(normalizedInlines[i]?.text || "");
+      for (let i = 0; i < normalizedWithSpeaker.length; i += 1) {
+        const text = cleanAudioTags(normalizedWithSpeaker[i]?.text || "");
         if (TH_RE.test(text)) {
           thaiZoneStartIndex = i;
           break;
         }
       }
     } else {
-      for (let i = 1; i < normalizedInlines.length; i += 1) {
-        const text = cleanAudioTags(normalizedInlines[i]?.text || "");
+      for (let i = 1; i < normalizedWithSpeaker.length; i += 1) {
+        const text = cleanAudioTags(normalizedWithSpeaker[i]?.text || "");
         if (!TH_RE.test(text)) continue;
-        const prevText = cleanAudioTags(normalizedInlines[i - 1]?.text || "");
+        const prevText = cleanAudioTags(normalizedWithSpeaker[i - 1]?.text || "");
         if (prevText.includes("(") || TH_PUNCT_ONLY_RE.test(prevText)) {
           thaiZoneStartIndex = i - 1;
           break;
@@ -179,20 +248,16 @@ const speakerLineIsThai = (line) => {
       }
     }
 
-    if (!hasLineBreak && thaiZoneStartIndex === -1) {
-      thaiColor = null;
-    }
-
     if (thaiZoneStartIndex > 0) {
-      const prevText = cleanAudioTags(normalizedInlines[thaiZoneStartIndex - 1]?.text || "");
+      const prevText = cleanAudioTags(normalizedWithSpeaker[thaiZoneStartIndex - 1]?.text || "");
       if (TH_PUNCT_ONLY_RE.test(prevText)) {
         thaiZoneStartIndex -= 1;
       }
     }
-    const processedInlines = normalizedInlines.map((span, idx) => {
+    const processedInlines = normalizedWithSpeaker.map((span, idx) => {
       const cleanText = cleanAudioTags(span.text);
       let displayText = cleanText;
-      const nextSpan = normalizedInlines[idx + 1];
+      const nextSpan = normalizedWithSpeaker[idx + 1];
 
       // Check if there's NO trailing space in the ORIGINAL text (before cleanAudioTags)
       const originalHadTrailingSpace = typeof span.text === "string" && /[ \t]+$/.test(span.text);
@@ -231,6 +296,13 @@ const speakerLineIsThai = (line) => {
       if (isThaiLine === null) return;
       lineOverrides.set(start, { isThai: isThaiLine });
     });
+    const hasThaiOverride = [...lineOverrides.values()].some(
+      (entry) => entry.isThai === true
+    );
+
+    if (!hasLineBreak && thaiZoneStartIndex === -1 && !hasThaiOverride) {
+      thaiColor = null;
+    }
 
     return processedInlines.map((entry, m) => {
       const { span, displayText } = entry;
@@ -497,37 +569,82 @@ const listTextStartRem = (indentLevel) => {
       }
       return null;
     }
-    if (isPhrasesSection && Array.isArray(node.inlines) && node.inlines[0]?.text) {
-      const firstText = node.inlines[0].text;
-      const match = isSpeakerLineText(firstText) ? firstText.match(SPEAKER_PREFIX_RE) : null;
+    if (isPhrasesSection && Array.isArray(node.inlines) && node.inlines.length) {
+      const firstLineText = (node.inlines || [])
+        .map((span) => span?.text || "")
+        .join("")
+        .split("\n")[0];
+      const match = isSpeakerLineText(firstLineText)
+        ? firstLineText.match(SPEAKER_PREFIX_RE)
+        : null;
       if (match) {
         const prefix = match[0];
-        const rest = firstText.slice(prefix.length);
-        const firstSpan = { ...node.inlines[0] };
-        const speakerSpan = {
-          ...firstSpan,
-          text: prefix,
-          bold: false,
-          speakerWeight: 500,
-          speakerColor: "#111",
-        };
-        if (rest) {
-          const restSpan = { ...firstSpan, text: rest };
+        const prefixLen = prefix.length;
+        let consumed = 0;
+        let speakerSpan = null;
+        const newInlines = [];
+
+        node.inlines.forEach((span) => {
+          if (consumed >= prefixLen) {
+            newInlines.push({ ...span });
+            return;
+          }
+          const text = span?.text || "";
+          if (!text) {
+            return;
+          }
+          const remaining = prefixLen - consumed;
+          if (text.length <= remaining) {
+            if (!speakerSpan) {
+              speakerSpan = {
+                ...span,
+                text,
+                bold: false,
+                speakerWeight: 500,
+                speakerColor: "#111",
+              };
+            } else {
+              speakerSpan.text += text;
+            }
+            consumed += text.length;
+            return;
+          }
+
+          const prefixPart = text.slice(0, remaining);
+          const restPart = text.slice(remaining);
+          if (!speakerSpan) {
+            speakerSpan = {
+              ...span,
+              text: prefixPart,
+              bold: false,
+              speakerWeight: 500,
+              speakerColor: "#111",
+            };
+          } else {
+            speakerSpan.text += prefixPart;
+          }
+          consumed += remaining;
+          if (restPart) {
+            newInlines.push({ ...span, text: restPart });
+          }
+        });
+
+        if (speakerSpan) {
           node = {
             ...node,
-            inlines: [speakerSpan, restSpan, ...node.inlines.slice(1).map((s) => ({ ...s }))],
+            inlines: [speakerSpan, ...newInlines],
           };
-        } else {
-          node = {
-            ...node,
-            inlines: [speakerSpan, ...node.inlines.slice(1).map((s) => ({ ...s }))],
-          };
+          node = { ...node, _isSpeakerLine: true };
         }
-        node = { ...node, _isSpeakerLine: true };
       }
     }
     const phraseThaiOpts = isPhrasesSection
-      ? { thaiColor: "#8C8D93", englishColor: "#1e1e1e" }
+      ? {
+          thaiColor: "#8C8D93",
+          englishColor: "#1e1e1e",
+          speakerPrefixColor: "#111",
+          speakerPrefixWeight: 500,
+        }
       : undefined;
     const audioThaiOpts = isPhrasesSection
       ? phraseThaiOpts
