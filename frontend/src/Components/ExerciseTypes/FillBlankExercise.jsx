@@ -803,6 +803,25 @@ export default function FillBlankExercise({
         !hasLineBreakV2 &&
         !item.image_key &&
         !item.audio_key;
+      const isMobile =
+        typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(max-width: 480px)").matches;
+      const singleBlankMeta = isInlineSingleBlank ? item?.blanks?.[0] : null;
+      const singleBlankLength = singleBlankMeta?.min_len || 1;
+      const singleBlankAnswers = Array.isArray(item.answers_v2)
+        ? item.answers_v2[0] || []
+        : [];
+      const singleBlankMaxAnswerLen = singleBlankAnswers.reduce(
+        (maxLen, answer) =>
+          Math.max(maxLen, normalizeWhitespace(answer).length),
+        0
+      );
+      const isShortSingleBlank =
+        (singleBlankMaxAnswerLen > 0 && singleBlankMaxAnswerLen <= 10) ||
+        (singleBlankMaxAnswerLen === 0 && singleBlankLength <= 4);
+      const shouldStackThaiAboveLongBlank =
+        isInlineSingleBlank && isMobile && !isShortSingleBlank;
       const textSegments = segmentTextWithBlanks(item.text || "");
       const inlineSegments = Array.isArray(item.text_jsonb)
         ? buildInlineSegments(item.text_jsonb)
@@ -973,7 +992,8 @@ export default function FillBlankExercise({
                     let insertedThaiLine = false;
                     const shouldInsertThaiAfterFirstBreak =
                       shouldShowThaiLine && hasBilingualAbPrompt;
-                    const allowInlineThaiInsertion = !isInlineSingleBlank;
+                    const allowInlineThaiInsertion =
+                      !isInlineSingleBlank || shouldStackThaiAboveLongBlank;
                     const pushThaiLine = () => {
                       if (
                         shouldInsertThaiAfterFirstBreak ||
@@ -1111,7 +1131,11 @@ export default function FillBlankExercise({
                       });
                     });
 
-                    if (isInlineSingleBlank && shouldShowThaiLine) {
+                    if (
+                      isInlineSingleBlank &&
+                      shouldShowThaiLine &&
+                      !shouldStackThaiAboveLongBlank
+                    ) {
                       nodes.push(
                         <span
                           key={`th-break-inline-${idx}`}
