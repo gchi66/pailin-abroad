@@ -122,6 +122,18 @@ const isEnglishSpeakerLineText = (text) => {
   return /^[A-Za-z]/.test(trimmed);
 };
 
+const speakerLineIsThai = (line) => {
+  if (!isSpeakerLineText(line)) return null;
+  const match = line.match(SPEAKER_PREFIX_RE);
+  if (!match) return null;
+  const speaker = match[0].replace(/:\s*$/, "");
+  const content = line.slice(match[0].length);
+  const speakerHasThai = TH_RE.test(speaker);
+  const contentHasThai = TH_RE.test(content);
+  if (!speakerHasThai && !contentHasThai) return false;
+  return true;
+};
+
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines, opts = {}) => {
     let thaiColor = opts.thaiColor || null;
@@ -195,6 +207,29 @@ const isEnglishSpeakerLineText = (text) => {
       const suppressSpaceBefore = styleChangesNext && !originalHadTrailingSpace;
 
       return { span, cleanText, displayText, suppressSpaceBefore };
+    });
+
+    const lineRanges = [];
+    let lineStart = 0;
+    for (let i = 0; i < processedInlines.length; i += 1) {
+      if (processedInlines[i].displayText === "\n") {
+        lineRanges.push({ start: lineStart, end: i - 1 });
+        lineStart = i + 1;
+      }
+    }
+    if (lineStart <= processedInlines.length - 1) {
+      lineRanges.push({ start: lineStart, end: processedInlines.length - 1 });
+    }
+
+    const lineOverrides = new Map();
+    lineRanges.forEach(({ start, end }) => {
+      const lineText = processedInlines
+        .slice(start, end + 1)
+        .map((entry) => entry.displayText || "")
+        .join("");
+      const isThaiLine = speakerLineIsThai(lineText);
+      if (isThaiLine === null) return;
+      lineOverrides.set(start, { isThai: isThaiLine });
     });
 
     return processedInlines.map((entry, m) => {
@@ -343,7 +378,11 @@ const isEnglishSpeakerLineText = (text) => {
         TH_RE.test(typeof prevText === "string" ? prevText : "") ||
         TH_RE.test(typeof nextText === "string" ? nextText : "")
       ));
-      const inThaiZone = thaiZoneStartIndex >= 0 && m >= thaiZoneStartIndex;
+      let inThaiZone = thaiZoneStartIndex >= 0 && m >= thaiZoneStartIndex;
+      const lineOverride = lineRanges.find(({ start, end }) => m >= start && m <= end);
+      if (lineOverride && lineOverrides.has(lineOverride.start)) {
+        inThaiZone = lineOverrides.get(lineOverride.start).isThai;
+      }
       const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`, {
         thaiContext,
         inThaiZone,

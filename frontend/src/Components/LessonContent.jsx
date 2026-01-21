@@ -619,10 +619,45 @@ export default function LessonContent({
     // Process content to insert Quick Practice exercises inline
     const processedContent = [];
     let quickPracticeIndex = 0;
-
+    const QUICK_PRACTICE_FILTER_WINDOW = 8;
+    let quickPracticeFilter = null;
+    let quickPracticeFilterRemaining = 0;
+    const normalizeQuickPracticeText = (value) =>
+      String(value || "")
+        .replace(/\s+/g, " ")
+        .trim();
+    const collectQuickPracticeTexts = (exercise) => {
+      const set = new Set();
+      const addText = (value) => {
+        const normalized = normalizeQuickPracticeText(value);
+        if (normalized) {
+          set.add(normalized);
+        }
+      };
+      const addInlinesText = (inlines) => {
+        if (!Array.isArray(inlines)) return;
+        const merged = inlines.map((inl) => inl?.text || "").join("");
+        addText(merged);
+      };
+      const addItems = (items) => {
+        if (!Array.isArray(items)) return;
+        items.forEach((item) => {
+          if (!item) return;
+          addText(item.text);
+          addText(item.text_th);
+          addInlinesText(item.text_jsonb);
+          addInlinesText(item.text_jsonb_th);
+        });
+      };
+      addItems(exercise?.items);
+      addItems(exercise?.items_th);
+      addItems(exercise?.items_en);
+      return set;
+    };
 
     for (let i = 0; i < baseNodes.length; i++) {
       const node = baseNodes[i];
+      let skipFilterDecrement = false;
 
       // Check if this is a Quick Practice heading
       const isQuickPracticeHeading =
@@ -649,6 +684,11 @@ export default function LessonContent({
         })();
       if (isQuickPracticeHeading && quickPracticeIndex < quickExercises.length) {
         processedContent.push(node);
+        quickPracticeFilter = collectQuickPracticeTexts(
+          quickExercises[quickPracticeIndex]
+        );
+        quickPracticeFilterRemaining = QUICK_PRACTICE_FILTER_WINDOW;
+        skipFilterDecrement = true;
         processedContent.push({
           kind: "quick_practice_exercise",
           exercise: quickExercises[quickPracticeIndex],
@@ -657,6 +697,23 @@ export default function LessonContent({
         quickPracticeIndex++;
       } else {
         // Skip any content that appears to be exercise data
+        if (quickPracticeFilter && quickPracticeFilterRemaining > 0) {
+          const paragraphText =
+            node.kind === "paragraph"
+              ? normalizeQuickPracticeText(
+                  (node.inlines || []).map((inline) => inline?.text || "").join("")
+                )
+              : "";
+          if (paragraphText && quickPracticeFilter.has(paragraphText)) {
+            if (!skipFilterDecrement) {
+              quickPracticeFilterRemaining -= 1;
+              if (quickPracticeFilterRemaining <= 0) {
+                quickPracticeFilter = null;
+              }
+            }
+            continue;
+          }
+        }
         const isExerciseContent =
           node.type === "exercise" ||
           node.title?.toLowerCase().includes("quick practice") ||
@@ -666,6 +723,13 @@ export default function LessonContent({
             ));
         if (!isExerciseContent) {
           processedContent.push(node);
+        }
+      }
+
+      if (quickPracticeFilter && !skipFilterDecrement) {
+        quickPracticeFilterRemaining -= 1;
+        if (quickPracticeFilterRemaining <= 0) {
+          quickPracticeFilter = null;
         }
       }
     }
