@@ -37,7 +37,7 @@ def run(cmd: list[str]) -> None:
     subprocess.run(cmd, check=True)
 
 
-def process_level(level: int, skip_import: bool, skip_th: bool, skip_en: bool) -> None:
+def process_level(level: int, skip_import: bool, skip_th: bool, skip_en: bool, skip_parse: bool) -> None:
     stage = stage_for_level(level)
     en_id = LEVEL_DOC_IDS[level]["en"]
     th_id = LEVEL_DOC_IDS[level]["th"]
@@ -51,10 +51,13 @@ def process_level(level: int, skip_import: bool, skip_th: bool, skip_en: bool) -
         print("===============================")
 
         # Parse EN
-        run([
-            sys.executable, "-m", "app.tools.parser",
-            en_id, "--stage", stage, "--output", en_out
-        ])
+        if not skip_parse:
+            run([
+                sys.executable, "-m", "app.tools.parser",
+                en_id, "--stage", stage, "--output", en_out
+            ])
+        else:
+            print("⚠️  Skipping EN parse; importing existing JSON.")
 
         # Import EN
         if not skip_import:
@@ -75,10 +78,13 @@ def process_level(level: int, skip_import: bool, skip_th: bool, skip_en: bool) -
     print("===============================")
 
     # Parse TH
-    run([
-        sys.executable, "-m", "app.tools.parser",
-        th_id, "--stage", stage, "--lang", "th", "--output", th_out
-    ])
+    if not skip_parse:
+        run([
+            sys.executable, "-m", "app.tools.parser",
+            th_id, "--stage", stage, "--lang", "th", "--output", th_out
+        ])
+    else:
+        print("⚠️  Skipping TH parse; importing existing JSON.")
 
     # Import TH
     if not skip_import:
@@ -92,6 +98,7 @@ def parse_args(argv: list[str]):
     parser = argparse.ArgumentParser(description="Parse + import lesson docs.")
     parser.add_argument("start", type=int)
     parser.add_argument("end", type=int, nargs="?")
+    parser.add_argument("--skip-parse", action="store_true", help="Skip parsing; only import existing JSON")
     parser.add_argument("--skip-import", action="store_true", help="Skip importing into Supabase")
     parser.add_argument("--skip-th", action="store_true", help="Skip parsing/importing Thai docs")
     parser.add_argument("--skip-en", action="store_true", help="Skip parsing/importing English docs")
@@ -99,14 +106,14 @@ def parse_args(argv: list[str]):
 
     start = args.start
     end = args.end if args.end else start
-    return start, end, args.skip_import, args.skip_th, args.skip_en
+    return start, end, args.skip_import, args.skip_th, args.skip_en, args.skip_parse
 
 
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
 
-    start, end, skip_import, skip_th, skip_en = parse_args(argv)
+    start, end, skip_import, skip_th, skip_en, skip_parse = parse_args(argv)
 
     print(f"Processing levels {start} → {end}")
     if skip_import:
@@ -115,9 +122,11 @@ def main(argv=None):
         print("⚠️  Skipping Thai docs")
     if skip_en:
         print("⚠️  Skipping English docs")
+    if skip_parse:
+        print("⚠️  Skipping parsing; importing only")
 
     for level in range(start, end + 1):
-        process_level(level, skip_import, skip_th, skip_en)
+        process_level(level, skip_import, skip_th, skip_en, skip_parse)
 
     print("\n✅ Done.")
 

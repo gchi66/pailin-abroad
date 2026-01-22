@@ -1023,6 +1023,7 @@ export default function FillBlankExercise({
       }
 
       if (shouldUseThaiStem) {
+        const shouldRenderThaiInputs = item.render_blanks !== false;
         const displayNumber = item.number ?? idx + 1;
         const imageUrl = item.image_key ? images[item.image_key] : null;
         const stemStats = getStemStats(item);
@@ -1031,6 +1032,8 @@ export default function FillBlankExercise({
           : stemStats.blankCount === 1
           ? " fb-row--inline-single"
           : "";
+        const thaiInlines = item.text_jsonb || null;
+        const thaiText = item.text || "";
         return (
           <React.Fragment key={`${item.number ?? idx}-${idx}`}>
             <div className={`fb-row fb-row--fill-blank${inlineClass}`}>
@@ -1058,13 +1061,21 @@ export default function FillBlankExercise({
                     </div>
                   )}
                   <div className="fb-row-text">
-                    {renderStemBlocks({
-                      item,
-                      questionState,
-                      questionIndex: idx,
-                      disabled,
-                      onBlankChange: handleBlankAnswerChange,
-                    })}
+                    {shouldRenderThaiInputs ? (
+                      renderStemBlocks({
+                        item,
+                        questionState,
+                        questionIndex: idx,
+                        disabled,
+                        onBlankChange: handleBlankAnswerChange,
+                      })
+                    ) : (
+                      <InlineText
+                        inlines={thaiInlines}
+                        text={thaiText}
+                        className="fb-text-block"
+                      />
+                    )}
                   </div>
                   <QuestionFeedback state={questionState} />
                 </div>

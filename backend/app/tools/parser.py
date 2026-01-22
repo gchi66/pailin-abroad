@@ -2713,7 +2713,8 @@ class GoogleDocsParser:
                 style = _style_payload(span)
                 span_allow_blanks = allow_blanks
                 if not allow_blanks:
-                    span_allow_blanks = not _has_th(text)
+                    # Allow blanks in any span that contains underscores, even if Thai.
+                    span_allow_blanks = (not _has_th(text)) or ("_" in text)
 
                 index = 0
                 while index < len(text):
@@ -2747,6 +2748,27 @@ class GoogleDocsParser:
                 tokens.append({"type": "blank", "id": blank_id})
                 blanks.append({"id": blank_id, "min_len": 1})
             return tokens, blanks
+
+        def _merge_inlines_into_text(full_text: str, inlines: list[dict]) -> list[dict] | None:
+            if not full_text or not inlines:
+                return None
+            combined = "".join(span.get("text", "") for span in inlines if span)
+            if not combined:
+                return None
+            idx = full_text.find(combined)
+            if idx < 0:
+                return None
+            merged: list[dict] = []
+            before = full_text[:idx]
+            after = full_text[idx + len(combined):]
+            if before:
+                merged.append({"text": before})
+            for span in inlines:
+                if span and span.get("text"):
+                    merged.append(dict(span))
+            if after:
+                merged.append({"text": after})
+            return merged
 
         def _split_inlines_at_break(inlines: list[dict], full_text: str) -> tuple[list[dict], list[dict]] | None:
             """Split inline spans at the first soft break or newline, dropping the break."""
@@ -2885,6 +2907,11 @@ class GoogleDocsParser:
                         if "number" in item:
                             th_entry["number"] = item["number"]
                         th_entry["text"] = th_text
+                        # If Thai replaces English entirely, allow blanks to render as inputs.
+                        if item.get("text") and item.get("text_th"):
+                            th_entry["render_blanks"] = False
+                        else:
+                            th_entry["render_blanks"] = True
                         if item.get("text_jsonb_th"):
                             th_entry["text_jsonb"] = item["text_jsonb_th"]
                         for key in ("answer", "keywords", "inputs", "options", "correct"):
@@ -3105,6 +3132,10 @@ class GoogleDocsParser:
                     # For Thai fill_blank, treat the TEXT field as an ordered bilingual stream.
                     cur_items[-1]["text_th"] = content if content else ""
                     cur_items[-1]["text"] = cur_items[-1].get("text", "")
+                    if content:
+                        inlines = _pop_inlines_for_text(content)
+                        if inlines:
+                            cur_items[-1]["text_jsonb_th"] = inlines
                     collecting_text = True
                     collecting_opts = False
                     continue
@@ -3123,6 +3154,12 @@ class GoogleDocsParser:
                         inlines = _pop_inlines_for_text(content)
                         if inlines:
                             cur_items[-1]["text_jsonb"] = inlines
+                        if lang == "th":
+                            # Preserve English lines in Thai docs so bilingual display keeps styling.
+                            if not cur_items[-1].get("text_th"):
+                                cur_items[-1]["text_th"] = content
+                            if inlines:
+                                cur_items[-1]["text_jsonb_th"] = [dict(span) for span in inlines if span]
                     collecting_text = True  # Keep collecting for Thai on next line
                 else:
                     # Empty TEXT: line, start collecting multi-line
@@ -3225,6 +3262,17 @@ class GoogleDocsParser:
                 if not stripped:
                     continue
 
+                if cur_ex and cur_ex.get("kind") == "multiple_choice" and upper_line.startswith("ALT-TEXT:"):
+                    alt_text_value = line.split(":", 1)[1].strip() if ":" in line else ""
+                    if alt_text_value:
+                        pending_alt_text = alt_text_value
+                        cur_items[-1]["alt_text"] = pending_alt_text
+                        pending_alt_text = None
+                    else:
+                        waiting_alt_text = True
+                    collecting_text = False
+                    continue
+
                 # Check if this is a directive line
                 directive_re_check = re.compile(
                     r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
@@ -3239,6 +3287,12 @@ class GoogleDocsParser:
                         existing = cur_items[-1].get("text_th") or ""
                         joiner = "\n" if existing else ""
                         cur_items[-1]["text_th"] = f"{existing}{joiner}{stripped}"
+                        _append_inlines_for_fill_blank(
+                            cur_items[-1],
+                            "text_jsonb_th",
+                            joiner,
+                            stripped,
+                        )
                         continue
                     # This is a continuation line
                     # If we already have English text but no Thai, only treat the next line as Thai
@@ -3280,7 +3334,13 @@ class GoogleDocsParser:
                             collecting_text = False  # Done collecting
                         else:
                             # Preserve speaker turns like "Luke: ..." on a new line.
-                            joiner = "\n" if re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped) else " "
+                            is_speaker_turn = bool(re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped))
+                            if cur_ex and cur_ex.get("kind") == "fill_blank":
+                                prev_text = (cur_items[-1].get("text") or "").rstrip()
+                                has_blank = "_" in stripped
+                                joiner = "\n" if (is_speaker_turn or prev_text.endswith("?") or (prev_text.endswith((".", "!", "?")) and has_blank)) else " "
+                            else:
+                                joiner = "\n" if is_speaker_turn else " "
                             cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
                             if cur_ex and cur_ex.get("kind") == "fill_blank":
                                 _append_inlines_for_fill_blank(
@@ -3297,7 +3357,8 @@ class GoogleDocsParser:
                         # Otherwise append to English text (or Thai if TH doc)
                         if lang == "th" and _is_thai_dominant(stripped):
                             if cur_items[-1].get("text_th"):
-                                cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + " " + stripped
+                                joiner = "\n" if (cur_ex and cur_ex.get("kind") == "multiple_choice") else " "
+                                cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + joiner + stripped
                                 if cur_ex and cur_ex.get("kind") == "fill_blank":
                                     _append_inlines_for_fill_blank(
                                         cur_items[-1],
@@ -3610,7 +3671,8 @@ class GoogleDocsParser:
                 if piece == "":
                     continue
                 has_thai = _has_th(piece)
-                tokenize_line(piece, allow_blanks=not has_thai)
+                allow_blanks = (not has_thai) or ("_" in piece)
+                tokenize_line(piece, allow_blanks=allow_blanks)
 
             if not blanks:
                 blank_id = "b1"
@@ -3670,9 +3732,12 @@ class GoogleDocsParser:
             exercise["prompt_blocks"] = build_prompt_blocks(prompt_lines, lang)
             for item in exercise.get("items", []):
                 text_value = item.get("text") or ""
+                tokens = blanks = None
                 if item.get("text_jsonb"):
-                    tokens, blanks = tokenize_fill_blank_inlines(item["text_jsonb"], allow_blanks=True)
-                else:
+                    combined = "".join(span.get("text", "") for span in item["text_jsonb"])
+                    if combined and text_value and combined.strip() in text_value:
+                        tokens, blanks = tokenize_fill_blank_inlines(item["text_jsonb"], allow_blanks=True)
+                if tokens is None:
                     tokens, blanks = tokenize_fill_blank_text(text_value)
                 item["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
                 item["blanks"] = blanks
@@ -3682,9 +3747,13 @@ class GoogleDocsParser:
             if lang == "th":
                 for item_th in exercise.get("items_th", []):
                     text_value = item_th.get("text") or ""
+                    tokens = blanks = None
+                    allow_blanks_th = bool(item_th.get("render_blanks", True))
                     if item_th.get("text_jsonb"):
-                        tokens, blanks = tokenize_fill_blank_inlines(item_th["text_jsonb"], allow_blanks=False)
-                    else:
+                        merged_inlines = _merge_inlines_into_text(text_value, item_th["text_jsonb"])
+                        if merged_inlines:
+                            tokens, blanks = tokenize_fill_blank_inlines(merged_inlines, allow_blanks=allow_blanks_th)
+                    if tokens is None:
                         tokens, blanks = tokenize_fill_blank_text_th(text_value)
                     item_th["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
                     item_th["blanks"] = blanks
