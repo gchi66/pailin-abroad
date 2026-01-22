@@ -1596,8 +1596,10 @@ class GoogleDocsParser:
                         # Check for section headers FIRST, before checking for Thai
                         if len(line_stripped) < 100:
                             # Treat bilingual ALL-CAPS headers as headers too (Thai suffixes are common).
+                            # Guard: require at least one Latin letter so punctuation like "?" doesn't trigger.
                             en_only = TH.sub("", line_stripped).strip()
-                            is_caps_header = en_only and en_only == en_only.upper()
+                            has_latin = bool(re.search(r"[A-Za-z]", en_only))
+                            is_caps_header = has_latin and en_only == en_only.upper()
                             if (
                                 not re.match(r"^[A-Z]\.\s", line_stripped)
                                 and (is_subheader(line_stripped, style) or is_caps_header)

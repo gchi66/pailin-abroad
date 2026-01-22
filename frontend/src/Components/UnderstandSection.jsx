@@ -46,6 +46,30 @@ export default function UnderstandSection({ lessonId }) {
 
   if (!markdown) return null;      // or a spinner
 
+  const stripQuickPracticeSections = (content) => {
+    if (!content) return "";
+    const lines = content.split("\n");
+    const output = [];
+    let skipping = false;
+
+    lines.forEach((line) => {
+      if (line.startsWith("## ")) {
+        const title = line.slice(3).trim().toLowerCase();
+        if (title.startsWith("quick practice")) {
+          skipping = true;
+          return;
+        }
+        skipping = false;
+      }
+      if (!skipping) {
+        output.push(line);
+      }
+    });
+
+    return output.join("\n").trim();
+  };
+  const cleanedMarkdown = stripQuickPracticeSections(markdown);
+
   /* ── 3. build extra accordion cards for each practice row ───── */
   const extras = quick.map((ex) => {
     const Comp = COMPONENT_FOR_KIND[ex.kind];
@@ -64,8 +88,9 @@ export default function UnderstandSection({ lessonId }) {
 
   return (
     <MarkdownSection
-      markdown={markdown}
+      markdown={cleanedMarkdown}
       extraSections={extras}   /* new prop, see next step */
+      sectionType="understand"
     />
   );
 }
