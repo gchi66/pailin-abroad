@@ -1458,9 +1458,19 @@ class GoogleDocsParser:
             if not key:
                 continue
             practice_fallback_nodes.setdefault(key, []).append(n)
+            prefix_match = directive_prefix_re.match(plain)
+            if prefix_match:
+                stripped_plain = plain[prefix_match.end():].strip()
+                stripped_key = _norm2(stripped_plain)
+                if stripped_key:
+                    stripped_node = n.copy()
+                    stripped_node["inlines"] = _strip_prefix_inlines(
+                        n.get("inlines", []),
+                        prefix_match.end(),
+                    )
+                    practice_fallback_nodes.setdefault(stripped_key, []).append(stripped_node)
             if n.get("section_context") == "PRACTICE":
                 practice_nodes.setdefault(key, []).append(n)
-                prefix_match = directive_prefix_re.match(plain)
                 if prefix_match:
                     stripped_plain = plain[prefix_match.end():].strip()
                     stripped_key = _norm2(stripped_plain)
@@ -2630,6 +2640,178 @@ class GoogleDocsParser:
                         return [dict(span) for span in inlines if span]
             return None
 
+        def _append_inlines_for_fill_blank(
+            target: dict,
+            inlines_key: str,
+            joiner: str,
+            new_text: str,
+        ) -> None:
+            if not new_text:
+                return
+            existing = target.get(inlines_key)
+            new_inlines = _pop_inlines_for_text(new_text)
+            if existing is None and not new_inlines:
+                return
+            if existing is None:
+                existing = []
+                target[inlines_key] = existing
+            if joiner and existing:
+                existing.append({
+                    "text": joiner,
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                    "highlight": None,
+                })
+            if new_inlines:
+                existing.extend([dict(span) for span in new_inlines if span])
+            else:
+                existing.append({
+                    "text": new_text,
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                    "highlight": None,
+                })
+
+        def _style_payload(span: dict) -> dict | None:
+            if not span:
+                return None
+            style = {
+                "bold": bool(span.get("bold")),
+                "italic": bool(span.get("italic")),
+                "underline": bool(span.get("underline")),
+                "link": span.get("link"),
+                "highlight": span.get("highlight"),
+            }
+            if not any([style["bold"], style["italic"], style["underline"], style["link"], style["highlight"]]):
+                return None
+            return style
+
+        def tokenize_fill_blank_inlines(inlines: list[dict], allow_blanks: bool) -> tuple[list[dict], list[dict]]:
+            tokens: list[dict] = []
+            blanks: list[dict] = []
+            blank_idx = 1
+            buffer = ""
+            buffer_style = None
+
+            def flush_buffer():
+                nonlocal buffer, buffer_style
+                if buffer:
+                    token = {"type": "text", "text": buffer}
+                    if buffer_style:
+                        token["style"] = buffer_style
+                    tokens.append(token)
+                    buffer = ""
+
+            for span in inlines or []:
+                text = span.get("text", "")
+                if not text:
+                    continue
+                style = _style_payload(span)
+                span_allow_blanks = allow_blanks
+                if not allow_blanks:
+                    span_allow_blanks = not _has_th(text)
+
+                index = 0
+                while index < len(text):
+                    char = text[index]
+                    if char == "\n" or char == "\u000b":
+                        flush_buffer()
+                        tokens.append({"type": "line_break"})
+                        index += 1
+                        continue
+                    if char == "_" and span_allow_blanks:
+                        flush_buffer()
+                        underscore_count = 0
+                        while index + underscore_count < len(text) and text[index + underscore_count] == "_":
+                            underscore_count += 1
+                        blank_id = f"b{blank_idx}"
+                        blanks.append({"id": blank_id, "min_len": max(1, underscore_count)})
+                        tokens.append({"type": "blank", "id": blank_id})
+                        blank_idx += 1
+                        index += underscore_count
+                        continue
+                    if buffer_style != style and buffer:
+                        flush_buffer()
+                    buffer_style = style
+                    buffer += char
+                    index += 1
+
+                flush_buffer()
+
+            if not blanks:
+                blank_id = "b1"
+                tokens.append({"type": "blank", "id": blank_id})
+                blanks.append({"id": blank_id, "min_len": 1})
+            return tokens, blanks
+
+        def _split_inlines_at_break(inlines: list[dict], full_text: str) -> tuple[list[dict], list[dict]] | None:
+            """Split inline spans at the first soft break or newline, dropping the break."""
+            if not inlines:
+                return None
+            split_idx = None
+            for ch in ("\u000b", "\n"):
+                if ch in full_text:
+                    idx = full_text.index(ch)
+                    if split_idx is None or idx < split_idx:
+                        split_idx = idx
+            if split_idx is None:
+                return None
+            left: list[dict] = []
+            right: list[dict] = []
+            pos = 0
+            split_found = False
+            drop_leading_break = False
+
+            for span in inlines:
+                if not span:
+                    continue
+                text = span.get("text", "")
+                if not text:
+                    continue
+
+                if not split_found:
+                    span_end = pos + len(text)
+                    if split_idx < span_end:
+                        cut = split_idx - pos
+                        left_text = text[:cut]
+                        right_text = text[cut + 1:]  # skip the soft break char
+                        if left_text:
+                            left_span = dict(span)
+                            left_span["text"] = left_text
+                            left.append(left_span)
+                        if right_text:
+                            right_span = dict(span)
+                            right_span["text"] = right_text
+                            right.append(right_span)
+                        split_found = True
+                    elif split_idx == span_end:
+                        left.append(dict(span))
+                        split_found = True
+                        drop_leading_break = True
+                    else:
+                        left.append(dict(span))
+                    pos = span_end
+                    continue
+
+                # After split: push remaining spans to right
+                text_to_add = text
+                if drop_leading_break and text_to_add.startswith("\u000b"):
+                    text_to_add = text_to_add[1:]
+                    drop_leading_break = False
+                if text_to_add:
+                    right_span = dict(span)
+                    right_span["text"] = text_to_add
+                    right.append(right_span)
+                pos += len(text)
+
+            if not split_found:
+                return None
+            return left, right
+
         def split_bilingual_option(text_value: str) -> tuple[str, str | None]:
             if not text_value:
                 return "", None
@@ -2893,6 +3075,32 @@ class GoogleDocsParser:
                 # Get the content after the colon
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
+                if content and ("\u000b" in content or "\n" in content):
+                    if "\u000b" in content:
+                        before, after = content.split("\u000b", 1)
+                    else:
+                        before, after = content.split("\n", 1)
+                    text_en = before.strip()
+                    text_th = after.strip()
+                    if text_en:
+                        cur_items[-1]["text"] = text_en
+                    if text_th:
+                        cur_items[-1]["text_th"] = text_th
+                    inlines = _pop_inlines_for_text(content)
+                    if inlines:
+                        split_inlines = _split_inlines_at_break(inlines, content)
+                        if split_inlines:
+                            left_inlines, right_inlines = split_inlines
+                            if left_inlines:
+                                cur_items[-1]["text_jsonb"] = left_inlines
+                            if right_inlines:
+                                cur_items[-1]["text_jsonb_th"] = right_inlines
+                        else:
+                            cur_items[-1]["text_jsonb"] = inlines
+                    collecting_text = True
+                    collecting_opts = False
+                    continue
+
                 if lang == "th" and cur_ex and cur_ex.get("kind") == "fill_blank":
                     # For Thai fill_blank, treat the TEXT field as an ordered bilingual stream.
                     cur_items[-1]["text_th"] = content if content else ""
@@ -3041,37 +3249,94 @@ class GoogleDocsParser:
                             inlines = _pop_inlines_for_text(stripped)
                             if inlines:
                                 cur_items[-1]["text_jsonb_th"] = inlines
+                            else:
+                                combined = f"{cur_items[-1].get('text', '')}\n{stripped}"
+                                combo_inlines = _pop_inlines_for_text(combined)
+                                if combo_inlines:
+                                    split_inlines = _split_inlines_at_break(combo_inlines, combined)
+                                    if split_inlines:
+                                        left_inlines, right_inlines = split_inlines
+                                        if left_inlines:
+                                            cur_items[-1]["text_jsonb"] = left_inlines
+                                        if right_inlines:
+                                            cur_items[-1]["text_jsonb_th"] = right_inlines
                             collecting_text = False  # Done collecting
                         elif _is_thai_dominant(stripped):
                             cur_items[-1]["text_th"] = stripped
                             inlines = _pop_inlines_for_text(stripped)
                             if inlines:
                                 cur_items[-1]["text_jsonb_th"] = inlines
+                            else:
+                                combined = f"{cur_items[-1].get('text', '')}\n{stripped}"
+                                combo_inlines = _pop_inlines_for_text(combined)
+                                if combo_inlines:
+                                    split_inlines = _split_inlines_at_break(combo_inlines, combined)
+                                    if split_inlines:
+                                        left_inlines, right_inlines = split_inlines
+                                        if left_inlines:
+                                            cur_items[-1]["text_jsonb"] = left_inlines
+                                        if right_inlines:
+                                            cur_items[-1]["text_jsonb_th"] = right_inlines
                             collecting_text = False  # Done collecting
                         else:
                             # Preserve speaker turns like "Luke: ..." on a new line.
                             joiner = "\n" if re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped) else " "
                             cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
-                            if cur_items[-1].get("text_jsonb"):
-                                cur_items[-1].pop("text_jsonb", None)
+                            if cur_ex and cur_ex.get("kind") == "fill_blank":
+                                _append_inlines_for_fill_blank(
+                                    cur_items[-1],
+                                    "text_jsonb",
+                                    joiner,
+                                    stripped,
+                                )
+                            else:
+                                if cur_items[-1].get("text_jsonb"):
+                                    cur_items[-1].pop("text_jsonb", None)
                             collecting_text = False  # Done collecting
                     else:
                         # Otherwise append to English text (or Thai if TH doc)
                         if lang == "th" and _is_thai_dominant(stripped):
                             if cur_items[-1].get("text_th"):
                                 cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + " " + stripped
-                                if cur_items[-1].get("text_jsonb_th"):
-                                    cur_items[-1].pop("text_jsonb_th", None)
+                                if cur_ex and cur_ex.get("kind") == "fill_blank":
+                                    _append_inlines_for_fill_blank(
+                                        cur_items[-1],
+                                        "text_jsonb_th",
+                                        " ",
+                                        stripped,
+                                    )
+                                else:
+                                    if cur_items[-1].get("text_jsonb_th"):
+                                        cur_items[-1].pop("text_jsonb_th", None)
                             else:
                                 cur_items[-1]["text_th"] = stripped
                                 inlines = _pop_inlines_for_text(stripped)
                                 if inlines:
                                     cur_items[-1]["text_jsonb_th"] = inlines
+                                else:
+                                    combined = f"{cur_items[-1].get('text', '')}\n{stripped}"
+                                    combo_inlines = _pop_inlines_for_text(combined)
+                                    if combo_inlines:
+                                        split_inlines = _split_inlines_at_break(combo_inlines, combined)
+                                        if split_inlines:
+                                            left_inlines, right_inlines = split_inlines
+                                            if left_inlines:
+                                                cur_items[-1]["text_jsonb"] = left_inlines
+                                            if right_inlines:
+                                                cur_items[-1]["text_jsonb_th"] = right_inlines
                         else:
                             if cur_items[-1].get("text"):
                                 cur_items[-1]["text"] = cur_items[-1]["text"] + " " + stripped
-                                if cur_items[-1].get("text_jsonb"):
-                                    cur_items[-1].pop("text_jsonb", None)
+                                if cur_ex and cur_ex.get("kind") == "fill_blank":
+                                    _append_inlines_for_fill_blank(
+                                        cur_items[-1],
+                                        "text_jsonb",
+                                        " ",
+                                        stripped,
+                                    )
+                                else:
+                                    if cur_items[-1].get("text_jsonb"):
+                                        cur_items[-1].pop("text_jsonb", None)
                             else:
                                 cur_items[-1]["text"] = stripped
                     continue
@@ -3405,7 +3670,10 @@ class GoogleDocsParser:
             exercise["prompt_blocks"] = build_prompt_blocks(prompt_lines, lang)
             for item in exercise.get("items", []):
                 text_value = item.get("text") or ""
-                tokens, blanks = tokenize_fill_blank_text(text_value)
+                if item.get("text_jsonb"):
+                    tokens, blanks = tokenize_fill_blank_inlines(item["text_jsonb"], allow_blanks=True)
+                else:
+                    tokens, blanks = tokenize_fill_blank_text(text_value)
                 item["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
                 item["blanks"] = blanks
                 answers_v2 = build_answers_v2(item.get("answer"), len(blanks))
@@ -3414,7 +3682,10 @@ class GoogleDocsParser:
             if lang == "th":
                 for item_th in exercise.get("items_th", []):
                     text_value = item_th.get("text") or ""
-                    tokens, blanks = tokenize_fill_blank_text_th(text_value)
+                    if item_th.get("text_jsonb"):
+                        tokens, blanks = tokenize_fill_blank_inlines(item_th["text_jsonb"], allow_blanks=False)
+                    else:
+                        tokens, blanks = tokenize_fill_blank_text_th(text_value)
                     item_th["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
                     item_th["blanks"] = blanks
                     answers_v2 = build_answers_v2(item_th.get("answer"), len(blanks))

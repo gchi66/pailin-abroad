@@ -269,6 +269,16 @@ const renderStemBlocks = ({
     if (block?.type !== "inline" || !Array.isArray(block.tokens)) return;
     block.tokens.forEach((token, tokenIdx) => {
       if (token.type === "text") {
+        if (token.style) {
+          nodes.push(
+            <React.Fragment
+              key={`stem-text-${questionIndex}-${blockIdx}-${tokenIdx}`}
+            >
+              {renderStyledText(token.text, token.style)}
+            </React.Fragment>
+          );
+          return;
+        }
         nodes.push(
           <span
             key={`stem-text-${questionIndex}-${blockIdx}-${tokenIdx}`}
