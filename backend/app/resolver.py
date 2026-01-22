@@ -1,6 +1,7 @@
 # app/resolver.py
 import os
 import re
+import json
 from typing import Any, Dict, List, Optional
 from app.supabase_client import supabase
 from app.merge_jsonb import merge_content_nodes
@@ -70,6 +71,18 @@ def _normalize_audio_key(raw_key: str) -> str:
         if suffix.isdigit():
             return f"{prefix}_{int(suffix):02d}"
     return key
+
+
+def _ensure_json_list(value: Any) -> Any:
+    if isinstance(value, list):
+        return value
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            return value
+        return parsed if isinstance(parsed, list) else value
+    return value
 
 
 def _inject_audio_metadata(nodes: List[Dict[str, Any]], fallback_section: Optional[str] = None) -> None:
@@ -381,10 +394,10 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         prompt_blocks_th = ex.get("prompt_blocks_th")
         paragraph_en = ex.get("paragraph")
         paragraph_th = ex.get("paragraph_th")
-        items_en = ex.get("items")
-        items_th = ex.get("items_th")
-        options_en = ex.get("options")
-        options_th = ex.get("options_th")
+        items_en = _ensure_json_list(ex.get("items"))
+        items_th = _ensure_json_list(ex.get("items_th"))
+        options_en = _ensure_json_list(ex.get("options"))
+        options_th = _ensure_json_list(ex.get("options_th"))
         answer_key_th = ex.get("answer_key_th")
 
         resolved_prompt_blocks = (

@@ -2737,9 +2737,14 @@ class GoogleDocsParser:
             if not line:
                 # If we're collecting text or paragraph, preserve empty lines as line breaks
                 if collecting_text and cur_items:
-                    current_text = cur_items[-1].get("text", "")
-                    if current_text and not current_text.endswith("\n"):
-                        cur_items[-1]["text"] = current_text + "\n"
+                    if lang == "th" and cur_ex and cur_ex.get("kind") == "fill_blank":
+                        current_text = cur_items[-1].get("text_th", "")
+                        if current_text and not current_text.endswith("\n"):
+                            cur_items[-1]["text_th"] = current_text + "\n"
+                    else:
+                        current_text = cur_items[-1].get("text", "")
+                        if current_text and not current_text.endswith("\n"):
+                            cur_items[-1]["text"] = current_text + "\n"
                 elif collecting_paragraph and cur_ex:
                     current_paragraph = cur_ex.get("paragraph", "")
                     if current_paragraph and not current_paragraph.endswith("\n"):
@@ -2886,6 +2891,14 @@ class GoogleDocsParser:
                 # Get the content after the colon
                 content = line.split(":", 1)[1].strip() if ":" in line else ""
 
+                if lang == "th" and cur_ex and cur_ex.get("kind") == "fill_blank":
+                    # For Thai fill_blank, treat the TEXT field as an ordered bilingual stream.
+                    cur_items[-1]["text_th"] = content if content else ""
+                    cur_items[-1]["text"] = cur_items[-1].get("text", "")
+                    collecting_text = True
+                    collecting_opts = False
+                    continue
+
                 if content:
                     # There's content on the same line
                     if lang == "th" and _is_thai_dominant(content):
@@ -3012,6 +3025,11 @@ class GoogleDocsParser:
                     collecting_text = False
                     # Don't continue - let it process this directive
                 else:
+                    if lang == "th" and cur_ex and cur_ex.get("kind") == "fill_blank":
+                        existing = cur_items[-1].get("text_th") or ""
+                        joiner = "\n" if existing else ""
+                        cur_items[-1]["text_th"] = f"{existing}{joiner}{stripped}"
+                        continue
                     # This is a continuation line
                     # If we already have English text but no Thai, only treat the next line as Thai
                     # when it actually contains Thai (or we're parsing the Thai doc).
@@ -3032,12 +3050,16 @@ class GoogleDocsParser:
                             # Preserve speaker turns like "Luke: ..." on a new line.
                             joiner = "\n" if re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped) else " "
                             cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
+                            if cur_items[-1].get("text_jsonb"):
+                                cur_items[-1].pop("text_jsonb", None)
                             collecting_text = False  # Done collecting
                     else:
                         # Otherwise append to English text (or Thai if TH doc)
                         if lang == "th" and _is_thai_dominant(stripped):
                             if cur_items[-1].get("text_th"):
                                 cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + " " + stripped
+                                if cur_items[-1].get("text_jsonb_th"):
+                                    cur_items[-1].pop("text_jsonb_th", None)
                             else:
                                 cur_items[-1]["text_th"] = stripped
                                 inlines = _pop_inlines_for_text(stripped)
@@ -3046,6 +3068,8 @@ class GoogleDocsParser:
                         else:
                             if cur_items[-1].get("text"):
                                 cur_items[-1]["text"] = cur_items[-1]["text"] + " " + stripped
+                                if cur_items[-1].get("text_jsonb"):
+                                    cur_items[-1].pop("text_jsonb", None)
                             else:
                                 cur_items[-1]["text"] = stripped
                     continue
@@ -3247,7 +3271,7 @@ class GoogleDocsParser:
             index = 0
             while index < len(text):
                 char = text[index]
-                if char == "\n":
+                if char == "\n" or char == "\u000b":
                     if buffer:
                         tokens.append({"type": "text", "text": buffer})
                         buffer = ""
@@ -3272,6 +3296,55 @@ class GoogleDocsParser:
 
             if buffer:
                 tokens.append({"type": "text", "text": buffer})
+            if not blanks:
+                blank_id = "b1"
+                tokens.append({"type": "blank", "id": blank_id})
+                blanks.append({"id": blank_id, "min_len": 1})
+            return tokens, blanks
+
+        def tokenize_fill_blank_text_th(text: str) -> tuple[list[dict], list[dict]]:
+            tokens: list[dict] = []
+            blanks: list[dict] = []
+            blank_idx = 1
+            buffer = ""
+
+            def flush_buffer():
+                nonlocal buffer
+                if buffer:
+                    tokens.append({"type": "text", "text": buffer})
+                    buffer = ""
+
+            def tokenize_line(line_text: str, allow_blanks: bool):
+                nonlocal blank_idx, buffer
+                index = 0
+                while index < len(line_text):
+                    char = line_text[index]
+                    if char == "_" and allow_blanks:
+                        flush_buffer()
+                        underscore_count = 0
+                        while index + underscore_count < len(line_text) and line_text[index + underscore_count] == "_":
+                            underscore_count += 1
+                        blank_id = f"b{blank_idx}"
+                        blanks.append({"id": blank_id, "min_len": max(1, underscore_count)})
+                        tokens.append({"type": "blank", "id": blank_id})
+                        blank_idx += 1
+                        index += underscore_count
+                        continue
+                    buffer += char
+                    index += 1
+                flush_buffer()
+
+            # Split into lines, preserving \n and \u000b as explicit breaks.
+            pieces = re.split(r"(\n|\u000b)", text or "")
+            for piece in pieces:
+                if piece in ("\n", "\u000b"):
+                    tokens.append({"type": "line_break"})
+                    continue
+                if piece == "":
+                    continue
+                has_thai = _has_th(piece)
+                tokenize_line(piece, allow_blanks=not has_thai)
+
             if not blanks:
                 blank_id = "b1"
                 tokens.append({"type": "blank", "id": blank_id})
@@ -3336,6 +3409,15 @@ class GoogleDocsParser:
                 answers_v2 = build_answers_v2(item.get("answer"), len(blanks))
                 if answers_v2:
                     item["answers_v2"] = answers_v2
+            if lang == "th":
+                for item_th in exercise.get("items_th", []):
+                    text_value = item_th.get("text") or ""
+                    tokens, blanks = tokenize_fill_blank_text_th(text_value)
+                    item_th["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
+                    item_th["blanks"] = blanks
+                    answers_v2 = build_answers_v2(item_th.get("answer"), len(blanks))
+                    if answers_v2:
+                        item_th["answers_v2"] = answers_v2
 
         for exercise in exercises:
             for item in exercise.get("items", []):

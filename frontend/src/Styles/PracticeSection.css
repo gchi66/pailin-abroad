@@ -204,4 +204,8 @@ details[open] > .markdown-summary {
     padding: 0 1.25rem 1dvh;
     --rich-text-font-size: 0.95rem;
   }
+
+  .ps-quick-practice .st-example {
+    padding-top: 0;
+  }
 }

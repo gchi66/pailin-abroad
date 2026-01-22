@@ -25,7 +25,8 @@ const isExampleItem = (item) => {
   }
   const number = item.number;
   if (typeof number === "string") {
-    return number.trim().toLowerCase() === "example";
+    const normalized = number.trim().toLowerCase();
+    return normalized === "example" || normalized === "ex" || normalized === "ตัวอย่าง";
   }
   return false;
 };
@@ -365,7 +366,7 @@ export default function SentenceTransformExercise({
                         type="text"
                         value={answerValue}
                         disabled
-                        className="fb-input st-input"
+                        className="fb-input st-input st-input--example"
                       />
                       <InlineStatus state={questionState} />
                     </div>

@@ -1045,6 +1045,9 @@
  }
 
 @media (max-width: 30rem) {
+  .fb-input.st-input.st-input--example {
+    font-size: 12px;
+  }
   .fb-row--fill-blank {
     align-items: center;
   }

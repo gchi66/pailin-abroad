@@ -24,7 +24,8 @@ const isExampleItem = (item) => {
     return item.is_example;
   }
   if (typeof item.number === "string") {
-    return item.number.trim().toLowerCase() === "example";
+    const normalized = item.number.trim().toLowerCase();
+    return normalized === "example" || normalized === "ex" || normalized === "ตัวอย่าง";
   }
   return false;
 };
@@ -243,6 +244,118 @@ const renderTokenWithStyles = (text, cursor, keyPrefix) => {
 const normalizeWhitespace = (value) =>
   (value || "").toString().replace(/\s+/g, " ").trim();
 
+const renderStemBlocks = ({
+  item,
+  questionState,
+  questionIndex,
+  disabled,
+  onBlankChange,
+  readOnly = false,
+}) => {
+  const blocks = Array.isArray(item?.stem?.blocks) ? item.stem.blocks : [];
+  const blanks = Array.isArray(item?.blanks) ? item.blanks : [];
+  const nodes = [];
+
+  const getBlankMeta = (blankId) =>
+    blanks.find((blank) => blank.id === blankId) || { min_len: 1 };
+  const answersV2 = Array.isArray(item?.answers_v2) ? item.answers_v2 : [];
+  const getBlankAnswers = (blankId) => {
+    const idx = blanks.findIndex((blank) => blank.id === blankId);
+    if (idx === -1) return [];
+    return Array.isArray(answersV2[idx]) ? answersV2[idx] : [];
+  };
+
+  blocks.forEach((block, blockIdx) => {
+    if (block?.type !== "inline" || !Array.isArray(block.tokens)) return;
+    block.tokens.forEach((token, tokenIdx) => {
+      if (token.type === "text") {
+        nodes.push(
+          <span
+            key={`stem-text-${questionIndex}-${blockIdx}-${tokenIdx}`}
+            className="fb-text-block"
+          >
+            {token.text}
+          </span>
+        );
+        return;
+      }
+      if (token.type === "line_break") {
+        nodes.push(
+          <span
+            key={`stem-break-${questionIndex}-${blockIdx}-${tokenIdx}`}
+            className="fb-line-break"
+            aria-hidden="true"
+          />
+        );
+        return;
+      }
+      if (token.type === "blank") {
+        const blankId = token.id;
+        const blankMeta = getBlankMeta(blankId);
+        const blankLength = blankMeta?.min_len || 1;
+        const blankAnswers = getBlankAnswers(blankId);
+        const maxAnswerLen = blankAnswers.reduce(
+          (maxLen, answer) => Math.max(maxLen, normalizeWhitespace(answer).length),
+          0
+        );
+        const isShortBlank =
+          (maxAnswerLen > 0 && maxAnswerLen <= 10) ||
+          (maxAnswerLen === 0 && blankLength <= 4);
+        const minWidthCh = isShortBlank ? 8 : Math.max(12, 3 + blankLength * 2);
+
+        if (readOnly) {
+          nodes.push(
+            <span
+              key={`stem-blank-${questionIndex}-${blockIdx}-${tokenIdx}`}
+              className="fb-example-blank"
+              style={{ minWidth: `${minWidthCh}ch` }}
+            />
+          );
+          return;
+        }
+
+        nodes.push(
+          <span
+            key={`stem-input-${questionIndex}-${blockIdx}-${tokenIdx}`}
+            className={`fb-input-wrap${isShortBlank ? " fb-input-wrap--short" : " fb-input-wrap--long"}`}
+          >
+            <input
+              type="text"
+              className={`fb-input${isShortBlank ? " fb-input--short" : " fb-input--long"}`}
+              value={questionState.answersByBlank?.[blankId] || ""}
+              onChange={(event) =>
+                onBlankChange(questionIndex, blankId, event.target.value, item)
+              }
+              disabled={disabled}
+              placeholder=""
+              style={{
+                minWidth: `${minWidthCh}ch`,
+              }}
+            />
+            <InlineStatus state={questionState} />
+          </span>
+        );
+      }
+    });
+  });
+
+  return nodes;
+};
+
+const getStemStats = (item) => {
+  const blocks = Array.isArray(item?.stem?.blocks) ? item.stem.blocks : [];
+  let hasLineBreak = false;
+  let blankCount = 0;
+  blocks.forEach((block) => {
+    if (block?.type !== "inline" || !Array.isArray(block.tokens)) return;
+    block.tokens.forEach((token) => {
+      if (token.type === "line_break") hasLineBreak = true;
+      if (token.type === "blank") blankCount += 1;
+    });
+  });
+  return { hasLineBreak, blankCount };
+};
+
 const buildAnswersByBlank = (item) => {
   const blanks = Array.isArray(item?.blanks) ? item.blanks : [];
   const answersV2 = Array.isArray(item?.answers_v2) ? item.answers_v2 : [];
@@ -286,37 +399,17 @@ export default function FillBlankExercise({
     : null;
 
   const displayItems = useMemo(() => {
-    const thItems = rawItemsTh.length ? rawItemsTh : [];
-    const enItems =
-      contentLang === "th" && Array.isArray(exercise?.items_en) && exercise.items_en.length
-        ? exercise.items_en
-        : rawItems;
-
-    if (contentLang !== "th" || !thItems.length) {
-      return enItems;
+    if (contentLang === "th" && rawItemsTh.length) {
+      return rawItemsTh;
     }
-
-    const thByNumber = new Map();
-    thItems.forEach((thItem, idx) => {
-      if (!thItem) return;
-      const key = thItem.number ?? idx;
-      const normalizedKey = key !== undefined && key !== null ? String(key) : null;
-      if (normalizedKey && !thByNumber.has(normalizedKey)) {
-        thByNumber.set(normalizedKey, thItem);
-      }
-    });
-
-    return enItems.map((item, idx) => {
-      if (!item) return item;
-      const key = item.number ?? idx;
-      const normalizedKey = key !== undefined && key !== null ? String(key) : null;
-      const thItem = (normalizedKey && thByNumber.get(normalizedKey)) || thItems[idx];
-      return {
-        ...item,
-        text_th: item.text_th || thItem?.text,
-        text_jsonb_th: item.text_jsonb_th || thItem?.text_jsonb,
-      };
-    });
+    if (
+      contentLang !== "th" &&
+      Array.isArray(exercise?.items_en) &&
+      exercise.items_en.length
+    ) {
+      return exercise.items_en;
+    }
+    return rawItems;
   }, [rawItems, rawItemsTh, contentLang, exercise?.items_en]);
 
   const items = displayItems;
@@ -696,8 +789,56 @@ export default function FillBlankExercise({
     items.map((item, idx) => {
       const hasAudio = Boolean(item.audio_key);
       const example = isExampleItem(item);
+      const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
+      const disabled =
+        questionState.correct === true || questionState.loading === true;
+      const shouldUseThaiStem =
+        contentLang === "th" &&
+        Array.isArray(item?.stem?.blocks) &&
+        item.stem.blocks.length > 0;
 
       if (example) {
+        if (shouldUseThaiStem) {
+          const imageUrl = item.image_key ? images[item.image_key] : null;
+          return (
+            <React.Fragment key={`example-${idx}`}>
+              <div className="fb-row fb-example st-example">
+                <p className="st-example-label">Example</p>
+                {imageUrl && (
+                  <div className="fb-image-container">
+                    <img src={imageUrl} alt="Example item" className="fb-image" />
+                  </div>
+                )}
+                <div className="fb-row-content">
+                  {hasAudio && (
+                    <div className="practice-audio-container">
+                      <AudioButton
+                        audioKey={item.audio_key}
+                        audioIndex={audioIndex}
+                        className="practice-audio-button"
+                      />
+                    </div>
+                  )}
+                  <div className="fb-row-text">
+                    {renderStemBlocks({
+                      item,
+                      questionState,
+                      questionIndex: idx,
+                      disabled: true,
+                      onBlankChange: handleBlankAnswerChange,
+                      readOnly: true,
+                    })}
+                  </div>
+                  {item.answer && (
+                    <p className="st-example-meta st-example-answer">
+                      <strong>Answer:</strong> {item.answer}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </React.Fragment>
+          );
+        }
         const imageUrl = item.image_key ? images[item.image_key] : null;
         const textSegments = segmentTextWithBlanks(item.text || "");
         const inlineSegments = Array.isArray(item.text_jsonb)
@@ -871,9 +1012,58 @@ export default function FillBlankExercise({
         );
       }
 
-      const questionState = questions[idx] || DEFAULT_QUESTION_STATE;
-      const disabled =
-        questionState.correct === true || questionState.loading === true;
+      if (shouldUseThaiStem) {
+        const displayNumber = item.number ?? idx + 1;
+        const imageUrl = item.image_key ? images[item.image_key] : null;
+        const stemStats = getStemStats(item);
+        const inlineClass = stemStats.hasLineBreak
+          ? " fb-row--inline-multiline"
+          : stemStats.blankCount === 1
+          ? " fb-row--inline-single"
+          : "";
+        return (
+          <React.Fragment key={`${item.number ?? idx}-${idx}`}>
+            <div className={`fb-row fb-row--fill-blank${inlineClass}`}>
+              <div className="fb-row-number fb-row-number--fill-blank">
+                <span>{displayNumber}</span>
+              </div>
+              <div className="fb-row-main">
+                {imageUrl && (
+                  <div className="fb-image-container">
+                    <img
+                      src={imageUrl}
+                      alt={`Exercise ${item.number ?? idx + 1}`}
+                      className="fb-image"
+                    />
+                  </div>
+                )}
+                <div className="fb-row-content">
+                  {hasAudio && (
+                    <div className="practice-audio-container">
+                      <AudioButton
+                        audioKey={item.audio_key}
+                        audioIndex={audioIndex}
+                        className="practice-audio-button"
+                      />
+                    </div>
+                  )}
+                  <div className="fb-row-text">
+                    {renderStemBlocks({
+                      item,
+                      questionState,
+                      questionIndex: idx,
+                      disabled,
+                      onBlankChange: handleBlankAnswerChange,
+                    })}
+                  </div>
+                  <QuestionFeedback state={questionState} />
+                </div>
+              </div>
+            </div>
+          </React.Fragment>
+        );
+      }
+
       const imageUrl = item.image_key ? images[item.image_key] : null;
       const useSchemaV2 = Array.isArray(item?.stem?.blocks) && item.stem.blocks.length > 0;
       const styledRuns = Array.isArray(item?.text_jsonb)

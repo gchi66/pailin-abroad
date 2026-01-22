@@ -94,7 +94,8 @@ const isExampleItem = (item) => {
     return item.is_example;
   }
   if (typeof item.number === "string") {
-    return item.number.trim().toLowerCase() === "example";
+    const normalized = item.number.trim().toLowerCase();
+    return normalized === "example" || normalized === "ex" || normalized === "ตัวอย่าง";
   }
   return false;
 };
@@ -422,7 +423,10 @@ export default function OpenEndedExercise({
                       inlines={questionInlines}
                       text={displayQuestion}
                     />
-                    {contentLang === "th" && questionTh && questionEn && (
+                    {contentLang === "th" &&
+                      questionTh &&
+                      questionEn &&
+                      normalizeText(questionTh) !== normalizeText(questionEn) && (
                       <InlineText
                         as="p"
                         className="oe-question-text"
@@ -533,7 +537,10 @@ export default function OpenEndedExercise({
                   inlines={questionInlines}
                   text={displayQuestion}
                 />
-                {contentLang === "th" && questionTh && questionEn && (
+                {contentLang === "th" &&
+                  questionTh &&
+                  questionEn &&
+                  normalizeText(questionTh) !== normalizeText(questionEn) && (
                   <InlineText
                     as="p"
                     className="oe-question-text"

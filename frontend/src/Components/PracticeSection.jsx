@@ -38,6 +38,16 @@ const transformExercise = (row) => {
     const inputs = normalizeInputs(item.inputs);
     return { ...item, inputs };
   });
+  const items_th = arr(row.items_th).map((item) => {
+    if (!item) return item;
+    const inputs = normalizeInputs(item.inputs);
+    return { ...item, inputs };
+  });
+  const items_en = arr(row.items_en).map((item) => {
+    if (!item) return item;
+    const inputs = normalizeInputs(item.inputs);
+    return { ...item, inputs };
+  });
   const options = arr(row.options);
   const answer_key = row.answer_key || {}; // object for fill_blank/open; array for MCQ is fine too
 
@@ -61,6 +71,8 @@ const transformExercise = (row) => {
     paragraph,
     prompt_blocks,
     items,
+    items_th,
+    items_en,
     options,
     answer_key,
     sort_order: row.sort_order ?? 0,
