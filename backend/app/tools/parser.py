@@ -2690,7 +2690,7 @@ class GoogleDocsParser:
                 return None
             return style
 
-        def tokenize_fill_blank_inlines(inlines: list[dict], allow_blanks: bool) -> tuple[list[dict], list[dict]]:
+        def tokenize_fill_blank_inlines(inlines: list[dict]) -> tuple[list[dict], list[dict]]:
             tokens: list[dict] = []
             blanks: list[dict] = []
             blank_idx = 1
@@ -2711,10 +2711,6 @@ class GoogleDocsParser:
                 if not text:
                     continue
                 style = _style_payload(span)
-                span_allow_blanks = allow_blanks
-                if not allow_blanks:
-                    # Allow blanks in any span that contains underscores, even if Thai.
-                    span_allow_blanks = (not _has_th(text)) or ("_" in text)
 
                 index = 0
                 while index < len(text):
@@ -2724,7 +2720,7 @@ class GoogleDocsParser:
                         tokens.append({"type": "line_break"})
                         index += 1
                         continue
-                    if char == "_" and span_allow_blanks:
+                    if char == "_":
                         flush_buffer()
                         underscore_count = 0
                         while index + underscore_count < len(text) and text[index + underscore_count] == "_":
@@ -2907,11 +2903,6 @@ class GoogleDocsParser:
                         if "number" in item:
                             th_entry["number"] = item["number"]
                         th_entry["text"] = th_text
-                        # If Thai replaces English entirely, allow blanks to render as inputs.
-                        if item.get("text") and item.get("text_th"):
-                            th_entry["render_blanks"] = False
-                        else:
-                            th_entry["render_blanks"] = True
                         if item.get("text_jsonb_th"):
                             th_entry["text_jsonb"] = item["text_jsonb_th"]
                         for key in ("answer", "keywords", "inputs", "options", "correct"):
@@ -3636,12 +3627,12 @@ class GoogleDocsParser:
                     tokens.append({"type": "text", "text": buffer})
                     buffer = ""
 
-            def tokenize_line(line_text: str, allow_blanks: bool):
+            def tokenize_line(line_text: str):
                 nonlocal blank_idx, buffer
                 index = 0
                 while index < len(line_text):
                     char = line_text[index]
-                    if char == "_" and allow_blanks:
+                    if char == "_":
                         flush_buffer()
                         underscore_count = 0
                         while index + underscore_count < len(line_text) and line_text[index + underscore_count] == "_":
@@ -3664,9 +3655,7 @@ class GoogleDocsParser:
                     continue
                 if piece == "":
                     continue
-                has_thai = _has_th(piece)
-                allow_blanks = (not has_thai) or ("_" in piece)
-                tokenize_line(piece, allow_blanks=allow_blanks)
+                tokenize_line(piece)
 
             if not blanks:
                 blank_id = "b1"
@@ -3730,7 +3719,7 @@ class GoogleDocsParser:
                 if item.get("text_jsonb"):
                     combined = "".join(span.get("text", "") for span in item["text_jsonb"])
                     if combined and text_value and combined.strip() in text_value:
-                        tokens, blanks = tokenize_fill_blank_inlines(item["text_jsonb"], allow_blanks=True)
+                        tokens, blanks = tokenize_fill_blank_inlines(item["text_jsonb"])
                 if tokens is None:
                     tokens, blanks = tokenize_fill_blank_text(text_value)
                 item["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
@@ -3742,11 +3731,10 @@ class GoogleDocsParser:
                 for item_th in exercise.get("items_th", []):
                     text_value = item_th.get("text") or ""
                     tokens = blanks = None
-                    allow_blanks_th = bool(item_th.get("render_blanks", True))
                     if item_th.get("text_jsonb"):
                         merged_inlines = _merge_inlines_into_text(text_value, item_th["text_jsonb"])
                         if merged_inlines:
-                            tokens, blanks = tokenize_fill_blank_inlines(merged_inlines, allow_blanks=allow_blanks_th)
+                            tokens, blanks = tokenize_fill_blank_inlines(merged_inlines)
                     if tokens is None:
                         tokens, blanks = tokenize_fill_blank_text_th(text_value)
                     item_th["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}

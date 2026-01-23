@@ -148,10 +148,17 @@ const buildStyledRunsFromInlines = (inlines = []) =>
     }))
     .filter((run) => run.text);
 
+const THAI_RE = /[\u0E00-\u0E7F]/;
+const hasThai = (value) => THAI_RE.test(value || "");
+
 const renderMultiline = (text = "") => {
   if (!text) return null;
 
-  return <span className="fb-text-block">{text}</span>;
+  return (
+    <span className={`fb-text-block${hasThai(text) ? " fb-text-th" : ""}`}>
+      {text}
+    </span>
+  );
 };
 
 const renderStyledText = (content, style) => {
@@ -161,8 +168,9 @@ const renderStyledText = (content, style) => {
     textDecoration: style?.underline ? "underline" : undefined,
     whiteSpace: "pre-line",
   };
+  const thaiClass = hasThai(content) ? " fb-text-th" : "";
   return (
-    <span style={textStyle} className="fb-text-block">
+    <span style={textStyle} className={`fb-text-block${thaiClass}`}>
       {content}
     </span>
   );
@@ -279,10 +287,11 @@ const renderStemBlocks = ({
           );
           return;
         }
+        const tokenThaiClass = hasThai(token.text) ? " fb-text-th" : "";
         nodes.push(
           <span
             key={`stem-text-${questionIndex}-${blockIdx}-${tokenIdx}`}
-            className="fb-text-block"
+            className={`fb-text-block${tokenThaiClass}`}
           >
             {token.text}
           </span>
@@ -1023,7 +1032,6 @@ export default function FillBlankExercise({
       }
 
       if (shouldUseThaiStem) {
-        const shouldRenderThaiInputs = item.render_blanks !== false;
         const displayNumber = item.number ?? idx + 1;
         const imageUrl = item.image_key ? images[item.image_key] : null;
         const stemStats = getStemStats(item);
@@ -1061,21 +1069,13 @@ export default function FillBlankExercise({
                     </div>
                   )}
                   <div className="fb-row-text">
-                    {shouldRenderThaiInputs ? (
-                      renderStemBlocks({
-                        item,
-                        questionState,
-                        questionIndex: idx,
-                        disabled,
-                        onBlankChange: handleBlankAnswerChange,
-                      })
-                    ) : (
-                      <InlineText
-                        inlines={thaiInlines}
-                        text={thaiText}
-                        className="fb-text-block"
-                      />
-                    )}
+                    {renderStemBlocks({
+                      item,
+                      questionState,
+                      questionIndex: idx,
+                      disabled,
+                      onBlankChange: handleBlankAnswerChange,
+                    })}
                   </div>
                   <QuestionFeedback state={questionState} />
                 </div>
@@ -1725,8 +1725,10 @@ export default function FillBlankExercise({
       );
     });
 
+  const langClass = contentLang === "th" ? " fb-lang-th" : "";
+
   return (
-    <div className="fb-wrap">
+    <div className={`fb-wrap${langClass}`}>
       {/* {title && showTitle && <h3 className="fb-title">{title}</h3>} */}
       {renderPromptBlocks()}
 
