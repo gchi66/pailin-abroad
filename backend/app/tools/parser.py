@@ -3154,12 +3154,6 @@ class GoogleDocsParser:
                         inlines = _pop_inlines_for_text(content)
                         if inlines:
                             cur_items[-1]["text_jsonb"] = inlines
-                        if lang == "th":
-                            # Preserve English lines in Thai docs so bilingual display keeps styling.
-                            if not cur_items[-1].get("text_th"):
-                                cur_items[-1]["text_th"] = content
-                            if inlines:
-                                cur_items[-1]["text_jsonb_th"] = [dict(span) for span in inlines if span]
                     collecting_text = True  # Keep collecting for Thai on next line
                 else:
                     # Empty TEXT: line, start collecting multi-line

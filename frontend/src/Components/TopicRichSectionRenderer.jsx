@@ -21,6 +21,7 @@ export default function TopicRichSectionRenderer({
 }) {
   if (!Array.isArray(nodes) || nodes.length === 0) return null;
 
+  const TH_RE = /[\u0E00-\u0E7F]/;
   const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\])/g;
   const INLINE_MARKER_COLORS = {
     "[X]": "#FD6969",
@@ -67,8 +68,17 @@ export default function TopicRichSectionRenderer({
           const prevEndsWithSpaceOrPunct = /[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()[\]{}]$/.test(prevText);
           const currentStartsWithSpaceOrPunct = /^[\s.,!?;:'\u2019\u2018\u201c\u201d\u2026\u2014\u2013\-()[\]{}]/.test(currentText);
 
+          const prevEndsWithWordChar = /[A-Za-z0-9]$/.test(prevText);
+          const currentStartsWithWordChar = /^[A-Za-z0-9]/.test(currentText);
+          const hasThaiBoundary = TH_RE.test(prevText) || TH_RE.test(currentText);
+          const looksLikeSplitWord = prevEndsWithWordChar && currentStartsWithWordChar;
+
           needsSpaceBefore =
-            !prevEndsWithSpaceOrPunct && !currentStartsWithSpaceOrPunct && currentText.trim();
+            !hasThaiBoundary &&
+            !looksLikeSplitWord &&
+            !prevEndsWithSpaceOrPunct &&
+            !currentStartsWithSpaceOrPunct &&
+            currentText.trim();
         }
       }
 
