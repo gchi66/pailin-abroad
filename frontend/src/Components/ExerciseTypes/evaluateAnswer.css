@@ -1071,6 +1071,8 @@
   .mc-question-text {
     font-weight: 400;
   }
+
+
  }
 
 @media (max-width: 30rem) {
@@ -1129,6 +1131,10 @@
   .oe-prompt {
     font-size: clamp(0.95rem, 1.2vw + 0.6rem, 1.05rem);
     line-height: 1.45;
+  }
+
+  .oe-prompt {
+    margin-block-start: 0;
   }
 
   .fb-row-text,
