@@ -474,7 +474,7 @@
 
 .fb-row--inline-single .fb-row-text {
   display: block;
-  line-height: 1.45;
+  line-height: 1.8;
 }
 
 .fb-row--inline-single .fb-text-block {
@@ -507,7 +507,7 @@
 
 .fb-row--inline-multiline .fb-row-text {
   display: block;
-  line-height: 1.45;
+  line-height: 1.8;
 }
 
 .fb-row--inline-multiline .fb-text-block {
@@ -516,7 +516,7 @@
 
 .fb-row--inline-multiline .fb-text-block.fb-text-th {
   position: relative;
-  top: -0.2rem;
+  top: -0.05rem;
   display: inline-block;
 }
 
@@ -551,7 +551,6 @@
 .fb-row--inline-multiline .fb-row-number {
   align-self: flex-start;
   line-height: 1;
-  margin-top: -0.2rem;
 }
 
 .fb-row--inline-multiline .fb-row-number span {
@@ -560,7 +559,7 @@
 }
 
 .fb-lang-th .fb-row--inline-multiline .fb-row-number span {
-  line-height: 1.78;
+  line-height: 1.8;
 }
 
 .fb-row--fill-blank.fb-row--wrapped {
@@ -852,11 +851,13 @@
   width: clamp(6ch, 20vw, 9ch);
   min-width: 6ch;
   max-width: 9ch;
+  padding: 0 .2rem;
 }
 
 .fb-wrap .fb-input.fb-input--long {
   width: min(100%, 32ch);
   min-width: 0;
+  padding: 0 .2rem;
 }
 
 .fb-input-wrap--short {
@@ -928,6 +929,10 @@
 }
 
 @media (max-width: 48rem) {
+
+  .oe-wrap {
+    padding-top: 1rem;
+  }
   .fb-row {
     align-items: flex-start;
     gap: 0.75rem;
@@ -1082,8 +1087,8 @@
   .fb-row--fill-blank.fb-row--inline-multiline .fb-row-number {
     align-self: flex-start;
     line-height: 1;
-    margin-top: -0.2rem;
     padding-top: 0;
+    margin-top: 0;
   }
 
   .fb-row--fill-blank.fb-row-multiline,
@@ -1095,7 +1100,7 @@
   .fb-row--fill-blank.fb-row--wrapped .fb-row-number {
     align-self: flex-start;
     line-height: 1.45;
-    padding-top: .4rem;
+    transform: translateY(.4rem);
   }
 
   .fb-wrap,
