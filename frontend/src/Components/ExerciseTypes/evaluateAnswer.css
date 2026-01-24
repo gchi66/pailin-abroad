@@ -1012,6 +1012,11 @@
     line-height: 1.45;
   }
 
+  .mc-question-text.th {
+    margin-bottom: .75rem;
+    margin-top: 0;
+  }
+
   .st-stem-row {
     flex-wrap: wrap;
     gap: 0.5rem;

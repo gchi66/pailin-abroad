@@ -274,21 +274,51 @@ const speakerLineIsThai = (line) => {
       return { span, cleanText, displayText, suppressSpaceBefore };
     });
 
+    const collapseInlineMarkers = (entries) => {
+      const out = [];
+      for (let i = 0; i < entries.length; i += 1) {
+        const current = entries[i];
+        const next = entries[i + 1];
+        const next2 = entries[i + 2];
+        const currentText = typeof current?.displayText === "string" ? current.displayText : "";
+        const nextText = typeof next?.displayText === "string" ? next.displayText : "";
+        const next2Text = typeof next2?.displayText === "string" ? next2.displayText : "";
+
+        const isMarkerMiddle = ["X", "✓", "-", "check"].includes(nextText);
+        if (currentText === "[" && isMarkerMiddle && next2Text.startsWith("]")) {
+          const rest = next2Text.slice(1);
+          const mergedText = `[${nextText}]${rest}`;
+          out.push({
+            ...current,
+            cleanText: mergedText,
+            displayText: mergedText,
+          });
+          i += 2;
+          continue;
+        }
+
+        out.push(current);
+      }
+      return out;
+    };
+
+    const collapsedInlines = collapseInlineMarkers(processedInlines);
+
     const lineRanges = [];
     let lineStart = 0;
-    for (let i = 0; i < processedInlines.length; i += 1) {
-      if (processedInlines[i].displayText === "\n") {
+    for (let i = 0; i < collapsedInlines.length; i += 1) {
+      if (collapsedInlines[i].displayText === "\n") {
         lineRanges.push({ start: lineStart, end: i - 1 });
         lineStart = i + 1;
       }
     }
-    if (lineStart <= processedInlines.length - 1) {
-      lineRanges.push({ start: lineStart, end: processedInlines.length - 1 });
+    if (lineStart <= collapsedInlines.length - 1) {
+      lineRanges.push({ start: lineStart, end: collapsedInlines.length - 1 });
     }
 
     const lineOverrides = new Map();
     lineRanges.forEach(({ start, end }) => {
-      const lineText = processedInlines
+      const lineText = collapsedInlines
         .slice(start, end + 1)
         .map((entry) => entry.displayText || "")
         .join("");
@@ -304,14 +334,14 @@ const speakerLineIsThai = (line) => {
       thaiColor = null;
     }
 
-    return processedInlines.map((entry, m) => {
+    return collapsedInlines.map((entry, m) => {
       const { span, displayText } = entry;
       const currentText = typeof displayText === "string" ? displayText : "";
 
       // Check if we need a space before this span
       let needsSpaceBefore = false;
       if (m > 0) {
-        const prevEntry = processedInlines[m - 1];
+        const prevEntry = collapsedInlines[m - 1];
         if (prevEntry.suppressSpaceBefore) {
           needsSpaceBefore = false;
         } else {
@@ -452,8 +482,8 @@ const speakerLineIsThai = (line) => {
         });
       };
 
-      const prevText = processedInlines[m - 1]?.displayText;
-      const nextText = processedInlines[m + 1]?.displayText;
+      const prevText = collapsedInlines[m - 1]?.displayText;
+      const nextText = collapsedInlines[m + 1]?.displayText;
       const thaiContext = !!(thaiColor && (
         TH_RE.test(currentText) ||
         TH_RE.test(typeof prevText === "string" ? prevText : "") ||

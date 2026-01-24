@@ -111,7 +111,7 @@ details[open] > .markdown-summary {
 .fb-image {
   max-width: 100%;
   height: auto;
-  max-height: 18.75rem;
+  max-height: 45rem;
   border-radius: 0.5rem;
   box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
   object-fit: contain;

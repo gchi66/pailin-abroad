@@ -50,14 +50,43 @@ export default function TopicRichSectionRenderer({
       return { span, cleanText, suppressSpaceBefore };
     });
 
-    return processedInlines.map((entry, m) => {
+    const collapseInlineMarkers = (entries) => {
+      const out = [];
+      for (let i = 0; i < entries.length; i += 1) {
+        const current = entries[i];
+        const next = entries[i + 1];
+        const next2 = entries[i + 2];
+        const currentText = typeof current?.cleanText === "string" ? current.cleanText : "";
+        const nextText = typeof next?.cleanText === "string" ? next.cleanText : "";
+        const next2Text = typeof next2?.cleanText === "string" ? next2.cleanText : "";
+
+        const isMarkerMiddle = ["X", "✓", "-", "check"].includes(nextText);
+        if (currentText === "[" && isMarkerMiddle && next2Text.startsWith("]")) {
+          const rest = next2Text.slice(1);
+          const mergedText = `[${nextText}]${rest}`;
+          out.push({
+            ...current,
+            cleanText: mergedText,
+          });
+          i += 2;
+          continue;
+        }
+
+        out.push(current);
+      }
+      return out;
+    };
+
+    const collapsedInlines = collapseInlineMarkers(processedInlines);
+
+    return collapsedInlines.map((entry, m) => {
       const { span, cleanText } = entry;
       const currentText = typeof cleanText === "string" ? cleanText : "";
 
       // Check if we need a space before this span
       let needsSpaceBefore = false;
       if (m > 0) {
-        const prevEntry = processedInlines[m - 1];
+        const prevEntry = collapsedInlines[m - 1];
         if (prevEntry.suppressSpaceBefore) {
           needsSpaceBefore = false;
         } else {

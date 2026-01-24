@@ -46,6 +46,41 @@ function splitByHeadings(markdown) {
 }
 
 /* ------------------------------------------------------------
+   Utility: inline marker coloring for plain markdown content
+------------------------------------------------------------ */
+const INLINE_MARKER_MAP = {
+  "[X]": "#FD6969",
+  "[✓]": "#3CA0FE",
+  "[-]": "#28A265",
+  "[check]": "#3CA0FE",
+};
+
+function applyInlineMarkerStyles(markdown) {
+  if (!markdown) return markdown;
+
+  const replaceMarkers = (text) =>
+    text.replace(/\[(?:X|✓|-|check)\]/g, (match) => {
+      const color = INLINE_MARKER_MAP[match];
+      if (!color) return match;
+      return `<span style="color:${color};font-weight:600;">${match}</span>`;
+    });
+
+  // Avoid replacing inside fenced code blocks and inline code.
+  const fenceParts = String(markdown).split(/(```[\s\S]*?```)/g);
+  return fenceParts
+    .map((part, idx) => {
+      if (idx % 2 === 1) return part; // inside fenced code
+      const inlineParts = part.split(/(`[^`]*`)/g);
+      return inlineParts
+        .map((inlinePart, inlineIdx) =>
+          inlineIdx % 2 === 1 ? inlinePart : replaceMarkers(inlinePart)
+        )
+        .join("");
+    })
+    .join("");
+}
+
+/* ------------------------------------------------------------
    Presentational component
 ------------------------------------------------------------ */
 export default function MarkdownSection({
@@ -63,8 +98,10 @@ export default function MarkdownSection({
           .join("\n")
       : markdown;
 
+  const styledMarkdown = applyInlineMarkerStyles(filteredMarkdown);
+
   // 1. split the incoming markdown by `##` headings
-  const sections = splitByHeadings(filteredMarkdown);
+  const sections = splitByHeadings(styledMarkdown);
 
   // 2. Insert extra sections at marker positions for "understand"
   let allSections = [...sections];
@@ -145,7 +182,7 @@ export default function MarkdownSection({
             remarkPlugins={[remarkGfm, remarkBreaks]}   // GitHub‑flavoured markdown
             rehypePlugins={[rehypeRaw]}
           >
-            {markdown}
+            {styledMarkdown}
           </ReactMarkdown>
         </div>
       )}
