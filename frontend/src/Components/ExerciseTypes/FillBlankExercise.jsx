@@ -1101,7 +1101,8 @@ export default function FillBlankExercise({
           Array.isArray(block.tokens) &&
           block.tokens.some((token) => token.type === "line_break")
         );
-      const isInlineMultilineV2 = useSchemaV2 && hasLineBreakV2;
+      const isInlineMultilineV2 =
+        useSchemaV2 && (hasLineBreakV2 || item?.inline_multiline);
       const isInlineSingleBlank =
         useSchemaV2 &&
         hasSingleBlankV2 &&

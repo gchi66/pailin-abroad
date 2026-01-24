@@ -379,6 +379,7 @@ const speakerLineIsThai = (line) => {
       const renderTextWithMarkers = (text, keyPrefix, opts = {}) => {
         const thaiContext = opts.thaiContext === true;
         const inThaiZone = opts.inThaiZone === true;
+        const strictThaiSplit = opts.strictThaiSplit === true;
         const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
         return segments.flatMap((segment, segIdx) => {
           const markerColor = INLINE_MARKER_COLORS[segment];
@@ -408,7 +409,11 @@ const speakerLineIsThai = (line) => {
             );
           }
 
-          const segmentHasThai = !!(thaiColor && (inThaiZone || thaiContext || TH_RE.test(segment)));
+          const segmentHasThai = !!(thaiColor && (
+            strictThaiSplit
+              ? TH_RE.test(segment)
+              : (inThaiZone || thaiContext || TH_RE.test(segment))
+          ));
           const segmentParts = segmentHasThai
             ? segment.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}[\]<>\\\/\-–—…]+)/)
             : [segment];
@@ -427,12 +432,13 @@ const speakerLineIsThai = (line) => {
               const isPunctOnly = TH_PUNCT_ONLY_RE.test(part);
               const isNumericOnly = /^\d+(?:[.,]\d+)?$/.test(part);
               const adjacentThai = TH_RE.test(prev) || TH_RE.test(next);
-              const partHasThai =
-                inThaiZone ||
-                TH_RE.test(part) ||
-                (segmentHasThai &&
-                  (isPunctOnly || isNumericOnly) &&
-                  adjacentThai);
+              const partHasThai = strictThaiSplit
+                ? (TH_RE.test(part) || ((isPunctOnly || isNumericOnly) && adjacentThai))
+                : (inThaiZone ||
+                    TH_RE.test(part) ||
+                    (segmentHasThai &&
+                      (isPunctOnly || isNumericOnly) &&
+                      adjacentThai));
               const style = {
                 ...commonStyle,
                 color:
@@ -497,6 +503,7 @@ const speakerLineIsThai = (line) => {
       const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`, {
         thaiContext,
         inThaiZone,
+        strictThaiSplit: opts.strictThaiSplit,
       });
 
       return (
@@ -683,6 +690,7 @@ const listTextStartRem = (indentLevel) => {
           englishColor: "#1e1e1e",
           speakerPrefixColor: "#111",
           speakerPrefixWeight: 500,
+          strictThaiSplit: true,
         }
       : undefined;
     const audioThaiOpts = isPhrasesSection

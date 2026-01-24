@@ -12,18 +12,50 @@ function cleanAudioTags(text) {
     .replace(/\s*\n\s*/g, "\n");
 }
 
+const TH_RE = /[\u0E00-\u0E7F]/;
+
 function renderInlines(inlines = []) {
-  return inlines.map((span, idx) => {
+  const processed = (inlines || []).map((span) => {
     const text = cleanAudioTags(span?.text || "");
+    const originalHadTrailingSpace =
+      typeof span?.text === "string" && /[ \t]+$/.test(span.text);
+    return { span, text, originalHadTrailingSpace };
+  });
+
+  return processed.map((entry, idx) => {
+    const { span, text } = entry;
     const style = {
       fontWeight: span?.bold ? "700" : undefined,
       fontStyle: span?.italic ? "italic" : undefined,
       textDecoration: span?.underline ? "underline" : undefined,
       whiteSpace: "pre-line",
     };
+    let needsSpaceBefore = false;
+    if (idx > 0) {
+      const prev = processed[idx - 1];
+      const prevText = prev.text || "";
+      const currentText = text || "";
+      const prevEndsWithSpaceOrPunct =
+        /[\s.,!?;:'"()[\]\-]$/.test(prevText);
+      const currentStartsWithSpaceOrPunct =
+        /^[\s.,!?;:'"()[\]\-]/.test(currentText);
+      const prevEndsWithWordChar = /[A-Za-z0-9]$/.test(prevText);
+      const currentStartsWithWordChar = /^[A-Za-z0-9]/.test(currentText);
+      const hasThaiBoundary =
+        TH_RE.test(prevText) || TH_RE.test(currentText);
+      const looksLikeSplitWord =
+        prevEndsWithWordChar && currentStartsWithWordChar;
+
+      needsSpaceBefore =
+        !hasThaiBoundary &&
+        !(looksLikeSplitWord && !prev.originalHadTrailingSpace) &&
+        !prevEndsWithSpaceOrPunct &&
+        !currentStartsWithSpaceOrPunct &&
+        currentText.trim();
+    }
     return (
       <React.Fragment key={idx}>
-        {idx > 0 && !/^[\s.,!?;:'"()[\]\-]/.test(text) ? " " : ""}
+        {needsSpaceBefore ? " " : ""}
         <span style={style}>{text}</span>
       </React.Fragment>
     );

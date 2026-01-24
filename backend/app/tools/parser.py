@@ -309,14 +309,18 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
     rows = []
     max_cols = 0
+    active_rowspans: dict[int, int] = {}
     for row in elem["table"]["tableRows"]:
         row_cells = []
-        row_col_count = 0
-        skip_cells = 0
+        # Decrement active rowspans as we move to a new row.
+        for col in list(active_rowspans.keys()):
+            active_rowspans[col] -= 1
+            if active_rowspans[col] <= 0:
+                del active_rowspans[col]
+        col_idx = 0
         for cell in row["tableCells"]:
-            if skip_cells > 0:
-                skip_cells -= 1
-                continue
+            while col_idx in active_rowspans:
+                col_idx += 1
             cell_lines = []
             for para in cell.get("content", []):
                 if "paragraph" in para:
@@ -325,9 +329,9 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
             cell_style = cell.get("tableCellStyle", {})
             colspan = cell_style.get("columnSpan", 1)
             rowspan = cell_style.get("rowSpan", 1)
-            row_col_count += colspan or 1
-            if colspan and colspan > 1:
-                skip_cells = max(skip_cells, (colspan - 1))
+            if rowspan and rowspan > 1:
+                for c in range(col_idx, col_idx + (colspan or 1)):
+                    active_rowspans[c] = max(active_rowspans.get(c, 0), rowspan - 1)
             if (colspan and colspan > 1) or (rowspan and rowspan > 1):
                 cell_payload = {"text": cell_text}
                 if colspan and colspan > 1:
@@ -337,8 +341,12 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
                 row_cells.append(cell_payload)
             else:
                 row_cells.append(cell_text)
+            col_idx += colspan or 1
         rows.append(row_cells)
-        max_cols = max(max_cols, row_col_count)
+        if active_rowspans:
+            max_cols = max(max_cols, col_idx, max(active_rowspans) + 1)
+        else:
+            max_cols = max(max_cols, col_idx)
 
     return {
         "kind":  "table",
@@ -447,8 +455,17 @@ def split_en_th(line: str, ignore_paren: bool = False):
     if not ignore_paren:
         m = re.match(r'^(.*?)\s*\(([\u0E00-\u0E7F].*?)\)\s*$', line)
         if m:
-            en = m.group(1).strip() or None
-            th = m.group(2).strip() or None
+            en_part = m.group(1).strip()
+            th_part = m.group(2).strip()
+            if TH.search(en_part):
+                # If EN part contains Thai, split again to keep Thai out of the EN phrase.
+                en_split, th_split = split_en_th(en_part, ignore_paren=True)
+                combined_th = " ".join(
+                    [part for part in (th_split, th_part) if part]
+                ).strip() or None
+                return (en_split or None), combined_th
+            en = en_part or None
+            th = th_part or None
             return en, th
 
     # "EN … TH" pattern (first Thai char starts TH)
@@ -764,7 +781,9 @@ def extract_sections(doc_json) -> List[Tuple[str, List[Tuple[str, str, dict | No
             is_checkpoint = header_candidate.startswith("CHECKPOINT")
 
             # Check if this is a section header
-            if style.startswith("HEADING") or header_candidate in special_headers or is_checkpoint:
+            is_explicit_header = style.startswith("HEADING") or is_checkpoint
+            is_caps_special = header_candidate in special_headers and text == text.upper()
+            if is_explicit_header or is_caps_special:
                 if current_header is not None:
                     sections.append((current_header, current_lines))
                 header_key = header_candidate if (header_candidate in special_headers or is_checkpoint) else stripped
@@ -1239,6 +1258,7 @@ class GoogleDocsParser:
             - (first piece only) text is ALL CAPS (ignoring Thai) and short/title-ish.
             """
             s = _strip_bullets_tabs(chunk)
+            starts_with_ascii = bool(re.search(r"^[A-Za-z0-9]", s))
 
             # 1) Explicit variant marker always wins
             if HEADER_TRAILING_VARIANT_RX.search(s):
@@ -1251,6 +1271,8 @@ class GoogleDocsParser:
             # Remove Thai for EN-only check
             ascii_only = TH_RX.sub("", s).strip()
             if not ascii_only:
+                return False
+            if not starts_with_ascii:
                 return False
 
             # Must have at least one A–Z, and NO lowercase letters
@@ -1536,17 +1558,9 @@ class GoogleDocsParser:
                 "UNDERSTAND", "EXTRA TIPS", "CULTURE NOTE", "COMMON MISTAKES", "PREPARE"
             }
             if norm_header in RICH_AUDIO_HEADERS:
-                # Add directive regex for quick practice harvesting
-                directive_re = re.compile(
-                    r"^(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:|INPUTS:)",
-                    re.I
-                )
-                qp_chunk, keep_lines = [], []
-
                 node_list: list[dict] = []
                 # Track tables added to prevent duplicates within this section
                 table_ids_added = set()
-                last_qp_directive: str | None = None
 
                 def _append_spacer():
                     if node_list and node_list[-1].get("kind") == "spacer":
@@ -1567,81 +1581,93 @@ class GoogleDocsParser:
                     if spacing and spacing.get("below"):
                         _append_spacer()
 
-                for line in lines:
-                    text_line, style, spacing = _line_parts(line)
-                    line_stripped = (text_line or "").strip()
-                    upper = line_stripped.upper()
+                if norm_header == "PREPARE":
+                    # Do not treat any "Answer:"-style lines as practice directives in PREPARE.
+                    keep_lines = list(lines)
+                else:
+                    # Add directive regex for quick practice harvesting
+                    directive_re = re.compile(
+                        r"^(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:|INPUTS:)",
+                        re.I
+                    )
+                    qp_chunk, keep_lines = [], []
+                    last_qp_directive: str | None = None
 
-                    # keep the visible header
-                    if upper.startswith("QUICK PRACTICE"):
-                        keep_lines.append((text_line, style, spacing))
-                        continue
+                    for line in lines:
+                        text_line, style, spacing = _line_parts(line)
+                        line_stripped = (text_line or "").strip()
+                        upper = line_stripped.upper()
 
-                    # ---- start of a new directive block ----
-                    directive_match = directive_re.match(line_stripped)
-                    if directive_match:
-                        directive_name = directive_match.group(1).rstrip(":").upper()
-                        if directive_name == "TYPE":
-                            if qp_chunk:                            # flush the previous block
-                                embedded_practice_lines.extend(qp_chunk)
-                                qp_chunk = []
-                                last_qp_directive = None
-                        if directive_name == "TITLE":
-                            title_text = line_stripped.split(":", 1)[1].strip() if ":" in line_stripped else ""
-                            if title_text:
-                                title_upper = title_text.upper()
-                                if "QUICK PRACTICE" in title_upper or "แบบฝึกหัด" in title_text:
-                                    # Preserve the Quick Practice heading at its original position.
-                                    keep_lines.append((title_text, "HEADING_3", spacing))
-                        qp_chunk.append(line_stripped)
-                        last_qp_directive = directive_name
-                        continue
-
-                    # ---- continuation lines for directives ----
-                    if qp_chunk:
-                        if not line_stripped:
-                            qp_chunk.append(line_stripped)
+                        # keep the visible header
+                        if upper.startswith("QUICK PRACTICE"):
+                            keep_lines.append((text_line, style, spacing))
                             continue
 
-                        # Check for section headers FIRST, before checking for Thai
-                        if len(line_stripped) < 100:
-                            # Treat bilingual ALL-CAPS headers as headers too (Thai suffixes are common).
-                            # Guard: require at least one Latin letter so punctuation like "?" doesn't trigger.
-                            en_only = TH.sub("", line_stripped).strip()
-                            has_latin = bool(re.search(r"[A-Za-z]", en_only))
-                            is_caps_header = has_latin and en_only == en_only.upper()
-                            if (
-                                not re.match(r"^[A-Z]\.\s", line_stripped)
-                                and (is_subheader(line_stripped, style) or is_caps_header)
-                            ):
-                                # This is a header, flush and continue
-                                embedded_practice_lines.extend(qp_chunk)
-                                qp_chunk = []
-                                last_qp_directive = None
-                                keep_lines.append((text_line, style, spacing))
+                        # ---- start of a new directive block ----
+                        directive_match = directive_re.match(line_stripped)
+                        if directive_match:
+                            directive_name = directive_match.group(1).rstrip(":").upper()
+                            if directive_name == "TYPE":
+                                if qp_chunk:                            # flush the previous block
+                                    embedded_practice_lines.extend(qp_chunk)
+                                    qp_chunk = []
+                                    last_qp_directive = None
+                            if directive_name == "TITLE":
+                                title_text = line_stripped.split(":", 1)[1].strip() if ":" in line_stripped else ""
+                                if title_text:
+                                    title_upper = title_text.upper()
+                                    if "QUICK PRACTICE" in title_upper or "แบบฝึกหัด" in title_text:
+                                        # Preserve the Quick Practice heading at its original position.
+                                        keep_lines.append((title_text, "HEADING_3", spacing))
+                            qp_chunk.append(line_stripped)
+                            last_qp_directive = directive_name
+                            continue
+
+                        # ---- continuation lines for directives ----
+                        if qp_chunk:
+                            if not line_stripped:
+                                qp_chunk.append(line_stripped)
                                 continue
 
-                        if TH.search(line_stripped):
-                            qp_chunk.append(line_stripped)
+                            # Check for section headers FIRST, before checking for Thai
+                            if len(line_stripped) < 200:
+                                # Treat bilingual ALL-CAPS headers as headers too (Thai suffixes are common).
+                                # Guard: require at least one Latin letter so punctuation like "?" doesn't trigger.
+                                en_only = TH.sub("", line_stripped).strip()
+                                has_latin = bool(re.search(r"[A-Za-z]", en_only))
+                                is_caps_header = has_latin and en_only == en_only.upper()
+                                if (
+                                    not re.match(r"^[A-Z]\.\s", line_stripped)
+                                    and (is_subheader(line_stripped, style) or is_caps_header)
+                                ):
+                                    # This is a header, flush and continue
+                                    embedded_practice_lines.extend(qp_chunk)
+                                    qp_chunk = []
+                                    last_qp_directive = None
+                                    keep_lines.append((text_line, style, spacing))
+                                    continue
+
+                            if TH.search(line_stripped):
+                                qp_chunk.append(line_stripped)
+                                continue
+
+                            if last_qp_directive in {"TITLE", "PROMPT", "PARAGRAPH", "TEXT", "STEM"}:
+                                qp_chunk.append(line_stripped)
                             continue
 
-                        if last_qp_directive in {"TITLE", "PROMPT", "PARAGRAPH", "TEXT", "STEM"}:
-                            qp_chunk.append(line_stripped)
-                        continue
+                        # ---- normal prose (including table placeholders) ----
+                        if qp_chunk:                               # flush finished block
+                            print(f"DEBUG: Flushing qp_chunk (normal prose) with {len(qp_chunk)} lines")
+                            embedded_practice_lines.extend(qp_chunk)
+                            qp_chunk = []
+                            last_qp_directive = None
+                        keep_lines.append((text_line, style, spacing))
 
-                    # ---- normal prose (including table placeholders) ----
-                    if qp_chunk:                               # flush finished block
-                        print(f"DEBUG: Flushing qp_chunk (normal prose) with {len(qp_chunk)} lines")
+                    # flush any trailing block
+                    if qp_chunk:
+                        print(f"DEBUG: Flushing trailing qp_chunk with {len(qp_chunk)} lines")
                         embedded_practice_lines.extend(qp_chunk)
-                        qp_chunk = []
                         last_qp_directive = None
-                    keep_lines.append((text_line, style, spacing))
-
-                # flush any trailing block
-                if qp_chunk:
-                    print(f"DEBUG: Flushing trailing qp_chunk with {len(qp_chunk)} lines")
-                    embedded_practice_lines.extend(qp_chunk)
-                    last_qp_directive = None
 
                 # keep_lines now holds the real prose + table placeholders in correct order
                 lines = keep_lines
@@ -3727,6 +3753,28 @@ class GoogleDocsParser:
                 answers_v2 = build_answers_v2(item.get("answer"), len(blanks))
                 if answers_v2:
                     item["answers_v2"] = answers_v2
+                if lang != "th" and blanks:
+                    has_line_break = any(token.get("type") == "line_break" for token in tokens or [])
+                    if not has_line_break and len(blanks) > 1:
+                        is_short_blanks = True
+                        for idx, blank in enumerate(blanks):
+                            blank_min_len = blank.get("min_len") or 1
+                            answer_group = (
+                                answers_v2[idx]
+                                if answers_v2 and idx < len(answers_v2)
+                                else []
+                            )
+                            max_answer_len = max(
+                                (len((answer or "").strip()) for answer in answer_group),
+                                default=0,
+                            )
+                            short_by_answer = max_answer_len > 0 and max_answer_len <= 10
+                            short_by_min_len = max_answer_len == 0 and blank_min_len <= 4
+                            if not (short_by_answer or short_by_min_len):
+                                is_short_blanks = False
+                                break
+                        if is_short_blanks:
+                            item["inline_multiline"] = True
             if lang == "th":
                 for item_th in exercise.get("items_th", []):
                     text_value = item_th.get("text") or ""
