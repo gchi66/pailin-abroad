@@ -2924,11 +2924,13 @@ class GoogleDocsParser:
                 items_th_collection = []
                 for item in cur_items:
                     th_text = item.get("text_th")
-                    if th_text:
+                    th_options = item.get("options") or []
+                    has_th_option = any(opt.get("text_th") for opt in th_options if isinstance(opt, dict))
+                    if th_text or has_th_option:
                         th_entry = {}
                         if "number" in item:
                             th_entry["number"] = item["number"]
-                        th_entry["text"] = th_text
+                        th_entry["text"] = th_text or ""
                         if item.get("text_jsonb_th"):
                             th_entry["text_jsonb"] = item["text_jsonb_th"]
                         for key in ("answer", "keywords", "inputs", "options", "correct"):

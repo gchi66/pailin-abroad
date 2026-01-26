@@ -409,10 +409,13 @@ const speakerLineIsThai = (line) => {
             );
           }
 
+          const lineThaiOverride = opts.lineIsThaiOverride === true && !span.speakerColor;
           const segmentHasThai = !!(thaiColor && (
-            strictThaiSplit
-              ? TH_RE.test(segment)
-              : (inThaiZone || thaiContext || TH_RE.test(segment))
+            lineThaiOverride
+              ? true
+              : (strictThaiSplit
+                  ? TH_RE.test(segment)
+                  : (inThaiZone || thaiContext || TH_RE.test(segment)))
           ));
           const segmentParts = segmentHasThai
             ? segment.split(/([\u0E00-\u0E7F]+|[.,!?;:'"(){}[\]<>\\\/\-–—…]+)/)
@@ -432,13 +435,15 @@ const speakerLineIsThai = (line) => {
               const isPunctOnly = TH_PUNCT_ONLY_RE.test(part);
               const isNumericOnly = /^\d+(?:[.,]\d+)?$/.test(part);
               const adjacentThai = TH_RE.test(prev) || TH_RE.test(next);
-              const partHasThai = strictThaiSplit
-                ? (TH_RE.test(part) || ((isPunctOnly || isNumericOnly) && adjacentThai))
-                : (inThaiZone ||
-                    TH_RE.test(part) ||
-                    (segmentHasThai &&
-                      (isPunctOnly || isNumericOnly) &&
-                      adjacentThai));
+              const partHasThai = lineThaiOverride
+                ? true
+                : (strictThaiSplit
+                    ? (TH_RE.test(part) || ((isPunctOnly || isNumericOnly) && adjacentThai))
+                    : (inThaiZone ||
+                        TH_RE.test(part) ||
+                        (segmentHasThai &&
+                          (isPunctOnly || isNumericOnly) &&
+                          adjacentThai)));
               const style = {
                 ...commonStyle,
                 color:
@@ -497,13 +502,16 @@ const speakerLineIsThai = (line) => {
       ));
       let inThaiZone = thaiZoneStartIndex >= 0 && m >= thaiZoneStartIndex;
       const lineOverride = lineRanges.find(({ start, end }) => m >= start && m <= end);
+      let lineIsThaiOverride = null;
       if (lineOverride && lineOverrides.has(lineOverride.start)) {
-        inThaiZone = lineOverrides.get(lineOverride.start).isThai;
+        lineIsThaiOverride = lineOverrides.get(lineOverride.start).isThai;
+        inThaiZone = lineIsThaiOverride;
       }
       const fragmentNodes = renderTextWithMarkers(currentText, `frag-${m}`, {
         thaiContext,
         inThaiZone,
         strictThaiSplit: opts.strictThaiSplit,
+        lineIsThaiOverride,
       });
 
       return (

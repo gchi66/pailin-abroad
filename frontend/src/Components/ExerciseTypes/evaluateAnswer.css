@@ -738,7 +738,7 @@
 }
 
 .mc-option-image {
-  max-width: 6.875rem;
+  max-width: 28rem;
   border-radius: 0.35rem;
   box-shadow: 0 0.2rem 0.6rem rgba(15, 23, 42, 0.15);
 }
@@ -1211,5 +1211,9 @@
 
   .mc-option-image {
     max-width: 100%;
+  }
+
+  .mc-prompt {
+    margin-top: 1rem;
   }
 }

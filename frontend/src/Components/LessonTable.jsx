@@ -89,28 +89,51 @@ export default function LessonTable({
     >
       <table>
         <tbody>
-          {data.cells.map((row, rIdx) => (
-            <tr key={rIdx}>
-              {row.map((cell, cIdx) => {
-                const rowHasColspan = row.some(
-                  (rowCell) => rowCell && typeof rowCell === "object" && rowCell.colspan > 1
-                );
-                if (rowHasColspan && (cell == null || (typeof cell === "string" && cell.trim() === ""))) {
-                  return null;
+          {data.cells.map((row, rIdx) => {
+            const rowSpans = [];
+            let spanSlots = 0;
+            for (let prevRow = 0; prevRow < rIdx; prevRow += 1) {
+              const prev = data.cells[prevRow] || [];
+              prev.forEach((cell) => {
+                if (cell && typeof cell === "object" && cell.rowspan > 1) {
+                  const spanEnd = prevRow + cell.rowspan - 1;
+                  if (rIdx <= spanEnd) {
+                    const spanCols = typeof cell.colspan === "number" && cell.colspan > 1 ? cell.colspan : 1;
+                    spanSlots += spanCols;
+                  }
                 }
-                if (cell == null) return null;
-                const { text, colspan, rowspan } = normalizeCell(cell);
-                const colSpan = typeof colspan === "number" && colspan > 1 ? colspan : undefined;
-                const rowSpan = typeof rowspan === "number" && rowspan > 1 ? rowspan : undefined;
+              });
+            }
+            for (let i = 0; i < spanSlots; i += 1) {
+              rowSpans.push(1);
+            }
 
-                return (
-                  <td key={cIdx} colSpan={colSpan} rowSpan={rowSpan}>
-                    {renderCellContent(text, rIdx, cIdx)}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
+            return (
+              <tr key={rIdx}>
+                {row.map((cell, cIdx) => {
+                  if (rowSpans[cIdx] > 0) {
+                    return null;
+                  }
+                  const rowHasColspan = row.some(
+                    (rowCell) => rowCell && typeof rowCell === "object" && rowCell.colspan > 1
+                  );
+                  if (rowHasColspan && (cell == null || (typeof cell === "string" && cell.trim() === ""))) {
+                    return null;
+                  }
+                  if (cell == null) return null;
+                  const { text, colspan, rowspan } = normalizeCell(cell);
+                  const colSpan = typeof colspan === "number" && colspan > 1 ? colspan : undefined;
+                  const rowSpan = typeof rowspan === "number" && rowspan > 1 ? rowspan : undefined;
+
+                  return (
+                    <td key={cIdx} colSpan={colSpan} rowSpan={rowSpan}>
+                      {renderCellContent(text, rIdx, cIdx)}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

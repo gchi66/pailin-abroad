@@ -180,6 +180,12 @@
     width: min(100%, 18rem);
     color: white !important;
   }
+
+  .hero-buttons .free-lessons:hover,
+  .hero-buttons .free-lessons:active,
+  .hero-buttons .free-lessons:focus {
+    color: #1E1E1E !important;
+  }
 }
 
 

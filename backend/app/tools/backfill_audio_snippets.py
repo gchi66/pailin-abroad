@@ -359,6 +359,10 @@ def main() -> None:
             variant = int(phrases_match["variant"]) if phrases_match["variant"] else 0
             seq = int(phrases_match["seq"])
 
+            # Skip COME ON variant 2 snippets (seq 1-3) to preserve manual audio_key fix.
+            if phrase_key == "come_on" and variant == 2:
+                continue
+
             phrase_text = phrase_key.replace("_", " ").upper()
             # Match exact audio tag first if phrase text lookup fails.
             audio_key_tag = f"phrases_verbs_{phrase_key}{variant if variant > 0 else ''}_{seq}"

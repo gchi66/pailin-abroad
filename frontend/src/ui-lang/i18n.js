@@ -1,19 +1,19 @@
 export const copy = {
   nav: {
-    home: { en: "Home", th: "หน้าแรก" },
-    about: { en: "About", th: "เกี่ยวกับ" },
+    home: { en: "Home", th: "หน้าหลัก" },
+    about: { en: "About", th: "เกี่ยวกับเรา" },
     lessons: { en: "Lessons", th: "บทเรียน" },
-    resources: { en: "Resources", th: "แหล่งข้อมูล" },
+    resources: { en: "Resources", th: "สื่อการเรียน" },
     exerciseBank: { en: "Exercise Bank", th: "คลังแบบฝึกหัด" },
     topicLibrary: { en: "Topic Library", th: "คลังหัวข้อ" },
-    contact: { en: "Contact", th: "ติดต่อ" },
+    contact: { en: "Contact", th: "ติดต่อเรา" },
     pricing: { en: "Pricing", th: "ราคา" },
     membership: { en: "Membership", th: "สมาชิก" },
-    myPathway: { en: "My Pathway", th: "เส้นทางของฉัน" },
-    myPathwayDropdown: { en: "My Pathway", th: "เส้นทางของฉัน" },
-    sampleLessons: { en: "4 Sample Lessons", th: "บทเรียนตัวอย่าง 4 บท" },
+    myPathway: { en: "My Pathway", th: "แผนการเรียนของฉัน" },
+    myPathwayDropdown: { en: "My Pathway", th: "แผนการเรียนของฉัน" },
+    sampleLessons: { en: "4 Sample Lessons", th: "ตัวอย่างบทเรียน 4 บท" },
     lessonLibrary: { en: "Lesson Library", th: "คลังบทเรียน" },
-    freeLessons: { en: "Free Lessons", th: "บทเรียนฟรี" },
+    freeLessons: { en: "Free Lessons", th: "บทเรียนทดลองฟรี" },
   },
   uiLabel: { en: "UI:", th: "ภาษา:" },
   lessonHeader: {
@@ -61,7 +61,7 @@ export const copy = {
     },
   },
   profileDropdown: {
-    accountSettings: { en: "Account Settings", th: "การตั้งค่าบัญชี" },
+    accountSettings: { en: "Account Settings", th: "ตั้งค่าบัญชีผู้ใช้" },
     logout: { en: "Log Out", th: "ออกจากระบบ" },
   },
   authButtons: {
@@ -272,7 +272,7 @@ export const copy = {
       },
       noAccount: {
         heading: { en: "Unlock our Exercise Bank.", th: "ปลดล็อกคลังแบบฝึกหัดของเรา" },
-        signupLink: { en: "Sign up for free", th: "สมัครฟรี" },
+        signupLink: { en: "Sign up for free", th: "สมัครเรียนฟรี" },
         signupRest: {
           en: "to access our featured exercises.",
           th: "เพื่อเข้าถึงแบบฝึกหัดแนะนำ",
@@ -402,56 +402,56 @@ export const copy = {
       title: { en: "English learning for Thai speakers", th: "เรียนภาษาอังกฤษสำหรับคนไทย" },
       subtitle: {
         en: "Lessons based on audio conversations to teach useful, conversational English.",
-        th: "บทเรียนจากบทสนทนาเสียงเพื่อสอนภาษาอังกฤษที่ใช้ได้จริงในการสนทนา",
+        th: "บทเรียนผ่านทางบทสนทนาเสียง เพื่อฝึกการใช้ภาษาอังกฤษที่ใช้ได้จริงในชีวิตประจำวัน",
       },
-      cta: { en: "SIGN UP FOR FREE", th: "สมัครสมาชิกฟรี" },
+      cta: { en: "SIGN UP FOR FREE", th: "สมัครเรียนฟรี" },
     },
     freeLessons: {
-      headerTitle: { en: "Try a free lesson now!", th: "ลองบทเรียนฟรีตอนนี้!" },
+      headerTitle: { en: "Try a free lesson now!", th: "ลองเรียนบทเรียนฟรีตอนนี้เลย!" },
       headerSubtitle: { en: "No sign up needed.", th: "ไม่ต้องสมัครสมาชิก" },
-      headerTitleFirst: { en: "Try a free", th: "ลองบทเรียนฟรี" },
-      headerTitleSecond: { en: "lesson now!", th: "ตอนนี้!" },
-      header: { en: "Try a free lesson now! No sign up needed.", th: "ลองบทเรียนฟรีตอนนี้! ไม่ต้องสมัครสมาชิก" },
+      headerTitleFirst: { en: "Try a free", th: "ลองเรียนบทเรียนฟรี" },
+      headerTitleSecond: { en: "lesson now!", th: "ตอนนี้เลย!" },
+      header: { en: "Try a free lesson now! No sign up needed.", th: "ลองเรียนบทเรียนฟรีตอนนี้เลย! ไม่ต้องสมัครสมาชิก" },
       cards: [
         {
           level: { en: "BEGINNER", th: "BEGINNER" },
-          title: { en: "Surfing at Venice Beach", th: "เล่นเซิร์ฟที่เวนิสบีช" },
-          focusLabel: { en: "LESSON FOCUS", th: "จุดเน้นบทเรียน" },
+          title: { en: "Surfing at Venice Beach", th: "เล่นเซิร์ฟที่หาดเวนิส" },
+          focusLabel: { en: "LESSON FOCUS", th: "เนื้อหาบทเรียน" },
           description: {
-            en: "How to use present simple tense",
-            th: "วิธีใช้ Present Simple Tense",
+            en: "Habits and routines with present simple tense",
+            th: "การพูดถึงนิสัยและกิจวัตรประจำวันด้วย present simple tense (กาลปัจจุบันธรรมดา)",
           },
         },
         {
           level: { en: "INTERMEDIATE", th: "INTERMEDIATE" },
-          title: { en: "Look, there's a celebrity!", th: "ดูสิ มีคนดังอยู่ตรงนั้น!" },
-          focusLabel: { en: "LESSON FOCUS", th: "จุดเน้นบทเรียน" },
+          title: { en: "Look, there's a celebrity!", th: "ดูสิ มีคนดังด้วยนะ!" },
+          focusLabel: { en: "LESSON FOCUS", th: "เนื้อหาบทเรียน" },
           description: {
             en: "How to use 'There is' and 'There Are'",
-            th: "วิธีใช้ There is และ There are",
+            th: "การใช้ ‘There is’ (มี) และ ‘There are’ (มี)",
           },
         },
         {
           level: { en: "ADVANCED", th: "ADVANCED" },
-          title: { en: "At the baseball game", th: "ที่สนามเบสบอล" },
-          focusLabel: { en: "LESSON FOCUS", th: "จุดเน้นบทเรียน" },
+          title: { en: "At the baseball game", th: "ที่สนามแข่งเบสบอล" },
+          focusLabel: { en: "LESSON FOCUS", th: "เนื้อหาบทเรียน" },
           description: {
             en: "Practice -ing and -ed adjectives",
-            th: "ฝึกใช้คำคุณศัพท์ที่ลงท้ายด้วย -ing และ -ed",
+            th: "ฝึกใช้คำคุณศัพท์ -ing และ -ed",
           },
         },
         {
           level: { en: "EXPERT", th: "EXPERT" },
-          title: { en: "Spaghetti sauce everywhere!", th: "สปาเก็ตตี้เลอะไปหมด!" },
-          focusLabel: { en: "LESSON FOCUS", th: "จุดเน้นบทเรียน" },
+          title: { en: "Spaghetti sauce everywhere!", th: "ซอสสปาเก็ตตี้เลอะเทอะไปหมด!" },
+          focusLabel: { en: "LESSON FOCUS", th: "เนื้อหาบทเรียน" },
           description: {
-            en: "Discourse markers and filler words",
-            th: "คำเชื่อมบทสนทนาและคำเติมแต่ง",
+            en: "How to use past perfect tense",
+            th: "การใช้ past perfect tense (กาลต่อเนื่องอดีต)",
           },
         },
       ],
-      comingSoon: { en: "COMING SOON!", th: "เร็วๆ นี้!" },
-      button: { en: "GO TO LESSON", th: "ไปยังบทเรียน" },
+      comingSoon: { en: "COMING SOON!", th: "เร็วๆนี้!" },
+      button: { en: "GO TO LESSON", th: "ไปที่บทเรียน" },
     },
     placement: {
       title: { en: "Not sure where to start?", th: "ยังไม่แน่ใจว่าจะเริ่มตรงไหน?" },
@@ -472,40 +472,40 @@ export const copy = {
       },
     },
     chooseUs: {
-      title: { en: "Why choose Pailin Abroad?", th: "ทำไมต้องเลือก Pailin Abroad?" },
+      title: { en: "Why choose Pailin Abroad?", th: "ทำไมถึงต้องเลือกเรียนกับ Pailin Abroad?" },
       reasons: [
-        { text: { en: "Natural, everyday English", th: "ภาษาอังกฤษธรรมชาติในชีวิตประจำวัน" } },
-        { text: { en: "Content by native English speakers", th: "เนื้อหาโดยเจ้าของภาษาอังกฤษ" } },
-        { text: { en: "All content translated to Thai", th: "มีคำแปลภาษาไทยครบถ้วน" } },
-        { text: { en: "Listen to real conversations", th: "ฟังบทสนทนาจริง" } },
-        { text: { en: "Learn common mistakes by Thais", th: "เรียนรู้ข้อผิดพลาดที่คนไทยมักทำ" } },
+        { text: { en: "Natural, everyday English", th: "ภาษาอังกฤษที่มีการใช้จริงในชีวิตประจำวัน" } },
+        { text: { en: "Content by native English speakers", th: "เนื้อหาเขียนโดยเจ้าของภาษา" } },
+        { text: { en: "All content translated to Thai", th: "เนื้อหาทุกบทแปลเป็นภาษาไทย" } },
+        { text: { en: "Listen to real conversations", th: "ได้ฟังบทสนทนาจริงจากสถานการณ์จริง" } },
+        { text: { en: "Learn common mistakes by Thais", th: "เรียนรู้ข้อผิดพลาดที่คนไทยมักใช้ผิด" } },
       ],
     },
     howItWorks: {
-      title: { en: "How it works", th: "วิธีใช้งาน" },
+      title: { en: "How it works", th: "วิธีการเรียน" },
       steps: [
         {
           number: "1",
           header: { en: "Listen to the conversation", th: "ฟังบทสนทนา" },
           text: {
             en: "Move from Beginner to Expert level conversations that follow Pailin as she navigates life in a new country.",
-            th: "ไต่ระดับจากบทสนทนาระดับ Beginner ถึง Expert ที่ติดตามไพลินขณะใช้ชีวิตในประเทศใหม่",
+            th: "เริ่มตั้งแต่ระดับ Beginner (มือใหม่) ไปจนถึง Expert (มือโปร) โดยเรียนผ่านตัวละคร ‘ไพลิน’ ที่เล่าเรื่องการใช้ชีวิตในประเทศใหม่",
           },
         },
         {
           number: "2",
-          header: { en: "Dive into the lesson focus", th: "เจาะลึกหัวข้อสำคัญของบทเรียน" },
+          header: { en: "Dive into the lesson focus", th: "เจาะลึกเนื้อหาบทเรียน" },
           text: {
             en: "Learn the lesson's grammar topic or important word in the context of a real conversation, not just by memorizing rules.",
-            th: "เรียนรู้หัวข้อไวยากรณ์หรือคำสำคัญของบทเรียนในบริบทของบทสนทนาจริง ไม่ใช่แค่ท่องกฎ",
+            th: "เรียนรู้ไวยาการณ์หรือคำศัพท์สำคัญในบทเรียนผ่านบทสนทนาจริง ไม่ใช่แต่การท่องจำกฎการใช้เพียงอย่างเดียว",
           },
         },
         {
           number: "3",
-          header: { en: "Build your fluency", th: "เสริมความคล่องแคล่ว" },
+          header: { en: "Build your fluency", th: "พัฒนาความคล่องแคล่วในการใช้ภาษาของคุณ" },
           text: {
             en: "Solidify your learning with exercises, common mistakes, useful phrases, and American culture insights.",
-            th: "ตอกย้ำสิ่งที่เรียนรู้ด้วยแบบฝึกหัด ข้อผิดพลาดที่พบบ่อย วลีที่ใช้บ่อย และเกร็ดวัฒนธรรมอเมริกัน",
+            th: "เสริมการเรียนรู้ของคุณด้วยแบบฝึกหัด ข้อผิดพลาดที่พบบ่อย วลีที่ใช้บ่อย และเกร็ดน่ารู้ในวัฒนธรรมอเมริกัน",
           },
         },
       ],
@@ -536,7 +536,7 @@ export const copy = {
           name: { en: "Luke", th: "ลุค" },
           description: {
             en: "Meet Luke! He’s Pailin’s 22-year-old host brother. He was born and raised in Los Angeles and is also a student at UCLA. With his friendly personality, he’s the perfect guide to help Pailin navigate life in the US, and he quickly becomes one of Pailin’s closest friends. Luke is into basketball, hip-hop music, and late-night taco runs.",
-            th: "",
+            th: "ทำความรู้จักลุค! เขาเป็นพี่ชายโฮสต์ของไพลิน อายุ 22 ปี เขาเกิดและโตที่ลอสแอนเจลิส และเป็นนักศึกษาที่ UCLA ด้วย ด้วยบุคลิกที่เป็นมิตร เขาเป็นไกด์ที่ยอดเยี่ยมที่จะช่วยไพลินปรับตัวกับชีวิตในอเมริกา และไม่นานก็กลายเป็นเพื่อนสนิทคนหนึ่งของไพลิน ลุคชอบบาสเกตบอล ดนตรีฮิปฮอป และออกไปกินทาโก้ดึกๆ",
           },
         },
         {

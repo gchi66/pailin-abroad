@@ -66,6 +66,8 @@ def _normalize_audio_key(raw_key: str) -> str:
     key = (raw_key or "").strip()
     if not key:
         return ""
+    if key.startswith("phrases_verbs_"):
+        return key
     if "_" in key:
         prefix, suffix = key.rsplit("_", 1)
         if suffix.isdigit():

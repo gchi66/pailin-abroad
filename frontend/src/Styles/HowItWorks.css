@@ -65,7 +65,8 @@
   font-weight: 620;
   margin: 0;
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.2;
 }
 
 /* Card Text */
