@@ -19,6 +19,7 @@ class Inline:
     underline: bool = False
     link: str | None = None
     highlight: str | None = None  # Add this field
+    color: str | None = None
 
 
 @dataclass
@@ -165,7 +166,7 @@ def _dominant_indent_threshold(doc_json: dict) -> int:
 # ────────────────────────────────────────────────────────────
 #   Public generator
 # ────────────────────────────────────────────────────────────
-def paragraph_nodes(doc_json: dict):
+def paragraph_nodes(doc_json: dict, *, include_text_color: bool = False):
     """
     Yield a stream of Node objects, one per paragraph.
 
@@ -208,6 +209,16 @@ def paragraph_nodes(doc_json: dict):
                     b = int(rgb.get('blue', 0) * 255)
                     highlight = f"#{r:02x}{g:02x}{b:02x}"
 
+            color = None
+            if include_text_color and 'foregroundColor' in st:
+                fg_color = st['foregroundColor']
+                if 'color' in fg_color and 'rgbColor' in fg_color['color']:
+                    rgb = fg_color['color']['rgbColor']
+                    r = int(rgb.get('red', 0) * 255)
+                    g = int(rgb.get('green', 0) * 255)
+                    b = int(rgb.get('blue', 0) * 255)
+                    color = f"#{r:02x}{g:02x}{b:02x}"
+
             spans.append(
                 Inline(
                     text       = txt,
@@ -216,6 +227,7 @@ def paragraph_nodes(doc_json: dict):
                     underline  = bool(st.get("underline")),
                     link       = link,
                     highlight  = highlight,  # Add this field
+                    color      = color,
                 )
             )
         plain = "".join(s.text for s in spans).strip()

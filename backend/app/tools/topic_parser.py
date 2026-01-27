@@ -39,6 +39,8 @@ logger = logging.getLogger(__name__)
 
 TH = re.compile(r'[\u0E00-\u0E7F]')
 EN = re.compile(r'[A-Za-z]')
+IMG_TAG_RE = re.compile(r'\[img:\s*([^\]]+?)\s*\]', re.IGNORECASE)
+ALT_TEXT_RE = re.compile(r'ALT[\s-]*TEXT\s*:\s*(.+)', re.IGNORECASE | re.DOTALL)
 
 
 def split_en_th(line: str):
@@ -85,6 +87,16 @@ def node_plain_text(node):
     if "inlines" in node:
         return ''.join(run.get("text", "") for run in node["inlines"])
     return ""
+
+
+def _extract_img_key(text: str | None) -> str | None:
+    if not text:
+        return None
+    match = IMG_TAG_RE.search(text)
+    if not match:
+        return None
+    key = (match.group(1) or "").strip()
+    return key or None
 
 
 def bilingualize_headers_th(nodes, default_level=4):
@@ -268,10 +280,13 @@ class TopicParser:
 
         for elem in doc_json.get("body", {}).get("content", []):
             if "paragraph" in elem:
-                para_nodes = list(paragraph_nodes({
-                    "body": {"content": [elem]},
-                    "lists": doc_json.get("lists", {}),
-                }))
+                para_nodes = list(paragraph_nodes(
+                    {
+                        "body": {"content": [elem]},
+                        "lists": doc_json.get("lists", {}),
+                    },
+                    include_text_color=True,
+                ))
 
                 for node in para_nodes:
                     node_dict = dataclasses.asdict(node)
@@ -321,12 +336,54 @@ class TopicParser:
                 pending_table_label = None
                 all_nodes.append(table_node)
 
+        # Handle inline [img:...] tags and ALT-TEXT lines before topic split
+        processed_nodes = []
+        skip_until_index = None
+        for idx, node in enumerate(all_nodes):
+            if skip_until_index is not None and idx <= skip_until_index:
+                continue
+
+            if node.get("kind") == "paragraph":
+                text = node_plain_text(node)
+                image_key = _extract_img_key(text)
+                if image_key:
+                    alt_text = None
+                    lookahead = idx + 1
+                    while lookahead < len(all_nodes):
+                        next_node = all_nodes[lookahead]
+                        if next_node.get("kind") == "spacer":
+                            lookahead += 1
+                            continue
+                        if next_node.get("kind") != "paragraph":
+                            break
+                        next_text = node_plain_text(next_node).strip()
+                        if not next_text:
+                            lookahead += 1
+                            continue
+                        alt_match = ALT_TEXT_RE.match(next_text)
+                        if alt_match:
+                            alt_text = (alt_match.group(1) or "").strip()
+                            skip_until_index = lookahead
+                        break
+
+                    processed_nodes.append({
+                        "kind": "image",
+                        "image_key": image_key,
+                        "alt_text": alt_text,
+                        "inlines": [],
+                        "indent": 0,
+                        "level": None,
+                    })
+                    continue
+
+            processed_nodes.append(node)
+
         # Split into topics based on level 3 headings (but ignore TABLE-XX headings)
         topics = []
         current_topic = None
         current_nodes = []
 
-        for node in all_nodes:
+        for node in processed_nodes:
             # Check if this is a real topic heading (level 3) but not a table heading
             is_topic_heading = (
                 node.get("kind") == "heading" and

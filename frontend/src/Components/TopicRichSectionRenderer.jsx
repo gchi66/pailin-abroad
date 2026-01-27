@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import "../Styles/LessonContent.css";
 import "../Styles/MarkdownSection.css";
 import "../Styles/LessonTable.css";
 import LessonTable from "./LessonTable";
 import CollapsibleDetails from "./CollapsibleDetails";
+import supabaseClient from "../supabaseClient";
 
 // Helper function to clean audio tags from text - FIXED to handle [audio:...] format
 function cleanAudioTags(text) {
@@ -19,7 +20,28 @@ export default function TopicRichSectionRenderer({
   nodes,
   uiLang = "en"
 }) {
-  if (!Array.isArray(nodes) || nodes.length === 0) return null;
+  const nodesList = Array.isArray(nodes) ? nodes : [];
+
+  const topicImageUrls = useMemo(() => {
+    const map = new Map();
+    nodesList.forEach((node) => {
+      if (node?.kind !== "image") return;
+      if (node.image_url) {
+        map.set(node.image_key, node.image_url);
+        return;
+      }
+      const key = typeof node.image_key === "string" ? node.image_key.trim() : "";
+      if (!key || map.has(key)) return;
+      const normalized = key.includes(".") ? key : `${key}.webp`;
+      const { data } = supabaseClient.storage.from("lesson-images").getPublicUrl(normalized);
+      if (data?.publicUrl) {
+        map.set(key, data.publicUrl);
+      }
+    });
+    return map;
+  }, [nodesList]);
+
+  if (nodesList.length === 0) return null;
 
   const TH_RE = /[\u0E00-\u0E7F]/;
   const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\])/g;
@@ -28,6 +50,7 @@ export default function TopicRichSectionRenderer({
     "[✓]": "#3CA0FE",
     "[-]": "#28A265",
   };
+  const HEX_COLOR_RE = /^#[0-9a-f]{6}$/;
 
   // Helper for rendering inlines with proper spacing AND audio tag removal
   const renderInlines = (inlines) => {
@@ -111,10 +134,15 @@ export default function TopicRichSectionRenderer({
         }
       }
 
+      const normalizedColor =
+        typeof span?.color === "string" ? span.color.trim().toLowerCase() : "";
+      const colorStyle = HEX_COLOR_RE.test(normalizedColor) ? normalizedColor : undefined;
+
       const commonStyle = {
         fontWeight: span.bold ? "bold" : undefined,
         fontStyle: span.italic ? "italic" : undefined,
         textDecoration: span.underline ? "underline" : undefined,
+        color: colorStyle,
         whiteSpace: "pre-line",
       };
 
@@ -197,8 +225,10 @@ const renderNode = (node, key) => {
   }
 
   if (node.kind === "image") {
+    const key = typeof node.image_key === "string" ? node.image_key.trim() : "";
     const src =
       node.image_url ||
+      (key ? topicImageUrls.get(key) : null) ||
       (node.image_key ? `/api/images/${encodeURIComponent(node.image_key)}` : null);
     if (!src) {
       return null;
