@@ -30,6 +30,9 @@ export default function LessonHeader({
   const fallbackBackstory = trimOrEmpty(backstory) || "";
   const backLinkText = t("lessonHeader.backLink", uiLang) || "< BACK TO LESSON LIBRARY";
   const backstoryLabel = t("lessonHeader.backstoryLabel", uiLang) || "Backstory";
+  const levelPrefix = t("lessonHeader.levelPrefix", uiLang) || "Level";
+  const lessonPrefix = t("lessonHeader.lessonPrefix", uiLang) || "Lesson";
+  const checkpointLabel = t("lessonHeader.checkpointLabel", uiLang) || "Checkpoint";
   const backLinkHref = stage
     ? `/lessons?stage=${encodeURIComponent(stage)}&level=${encodeURIComponent(level ?? "")}`
     : "/lessons";
@@ -49,8 +52,8 @@ export default function LessonHeader({
   const hasImage = Boolean(imageSrc);
   const hasBackstory = Boolean(fallbackBackstory);
   const lessonLabel = isCheckpoint
-    ? `Level ${level} · Checkpoint`
-    : `Level ${level} · Lesson ${lessonOrder}`;
+    ? `${levelPrefix} ${level} · ${checkpointLabel}`
+    : `${levelPrefix} ${level} · ${lessonPrefix} ${lessonOrder}`;
 
   return (
     <section

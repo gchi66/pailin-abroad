@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
-import { t } from "../ui-lang/i18n";
+import { copy, pick, t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
 import SubscriptionBilling from "../Components/SubscriptionBilling";
 import ConfirmPasswordModal from "../Components/ConfirmPasswordModal";
 import PasswordResetSentModal from "../Components/PasswordResetSentModal";
 import { API_BASE_URL } from "../config/api";
-import { FREE_PLAN_BENEFITS } from "../constants/planBenefits";
 import "../Styles/AccountSettings.css";
 
 const AccountSettings = () => {
@@ -38,6 +37,7 @@ const AccountSettings = () => {
   const [showPasswordResetSentModal, setShowPasswordResetSentModal] = useState(false);
   const [passwordResetSentMessage, setPasswordResetSentMessage] = useState("");
   const { ui: uiLang } = useUiLang();
+  const freePlanBenefits = (copy.freePlanBenefits?.items || []).map((item) => pick(item, uiLang));
   const isGoogleAuth =
     user?.app_metadata?.provider === "google" ||
     user?.app_metadata?.providers?.includes("google");
@@ -65,7 +65,7 @@ const AccountSettings = () => {
       throw new Error(data?.error || t("authModals.forgotPassword.errors.resetFail", uiLang));
     }
 
-    return data.message || "Password reset email sent. Please check your inbox.";
+    return data.message || t("accountSettings.resetEmailSent", uiLang);
   };
 
   const handleChangePassword = () => {
@@ -97,7 +97,7 @@ const AccountSettings = () => {
       const loginData = await loginResponse.json();
 
       if (!loginResponse.ok) {
-        throw new Error(loginData?.error || "Incorrect password. Please try again.");
+        throw new Error(loginData?.error || t("accountSettings.incorrectPassword", uiLang));
       }
 
       const message = await sendPasswordResetEmail();
@@ -108,7 +108,7 @@ const AccountSettings = () => {
       setShowPasswordResetSentModal(true);
     } catch (error) {
       console.error("Password confirmation error:", error.message);
-      setPasswordConfirmError(error.message || "Failed to confirm password.");
+      setPasswordConfirmError(error.message || t("accountSettings.confirmPasswordFail", uiLang));
     } finally {
       setIsPasswordConfirmLoading(false);
     }
@@ -175,9 +175,7 @@ const AccountSettings = () => {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmation = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
-    );
+    const confirmation = window.confirm(t("accountSettings.deleteConfirm", uiLang));
     if (!confirmation) return;
 
     try {
@@ -190,7 +188,7 @@ const AccountSettings = () => {
         });
 
         if (response.ok) {
-          alert("Account deleted successfully.");
+          alert(t("accountSettings.deleteSuccess", uiLang));
           await supabaseClient.auth.signOut();
           navigate("/");
         } else {
@@ -200,7 +198,7 @@ const AccountSettings = () => {
       }
     } catch (error) {
       console.error("Deletion Error:", error.message);
-      alert("An error occurred while deleting your account. Please try again.");
+      alert(t("accountSettings.deleteError", uiLang));
     }
   };
 
@@ -209,22 +207,22 @@ const AccountSettings = () => {
       case "profile":
         return (
           <div className="account-profile-section">
-            <h3 className="account-section-title">MY PROFILE</h3>
+            <h3 className="account-section-title">{t("accountSettings.myProfileTitle", uiLang)}</h3>
 
             {/* Avatar Section */}
             <div className="account-field">
-              <label className="account-field-label">Avatar</label>
+              <label className="account-field-label">{t("accountSettings.avatarLabel", uiLang)}</label>
               <div className="account-avatar-row">
                 <div className="account-avatar-wrapper">
                   <img
                     src={profileImage}
-                    alt="Profile Avatar"
+                    alt={t("accountSettings.profileAvatarAlt", uiLang)}
                     className="account-avatar"
                   />
                   <button
                     className="account-avatar-edit"
                     onClick={() => setShowAvatarPicker(!showAvatarPicker)}
-                    aria-label="Change avatar"
+                    aria-label={t("accountSettings.changeAvatarAria", uiLang)}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
@@ -239,9 +237,9 @@ const AccountSettings = () => {
                         key={avatar}
                         className="account-avatar-option"
                         onClick={() => handleAvatarSelect(avatar)}
-                        aria-label="Choose avatar"
+                        aria-label={t("accountSettings.chooseAvatarAria", uiLang)}
                       >
-                        <img src={avatar} alt="Selectable avatar" />
+                        <img src={avatar} alt={t("accountSettings.selectableAvatarAlt", uiLang)} />
                       </button>
                     ))}
                   </div>
@@ -253,7 +251,7 @@ const AccountSettings = () => {
             <div className="account-form-section">
               {/* First Name Field */}
               <div className="account-field">
-                <label className="account-field-label">First Name</label>
+                <label className="account-field-label">{t("accountSettings.firstNameLabel", uiLang)}</label>
                 <div className="account-field-row account-field-row--center">
                   <input
                     type="text"
@@ -264,11 +262,11 @@ const AccountSettings = () => {
                   />
                   {isEditingFirstName ? (
                     <button className="account-btn primary" onClick={handleSaveFirstName}>
-                      Save
+                      {t("accountSettings.save", uiLang)}
                     </button>
                   ) : (
                     <button className="account-btn" onClick={() => setIsEditingFirstName(true)}>
-                      Edit
+                      {t("accountSettings.edit", uiLang)}
                     </button>
                   )}
                 </div>
@@ -276,7 +274,7 @@ const AccountSettings = () => {
 
               {/* Email Field */}
               <div className="account-field">
-                <label className="account-field-label">Email Address</label>
+                <label className="account-field-label">{t("accountSettings.emailAddressLabel", uiLang)}</label>
                 <div className="account-field-row account-field-row--center">
                   <input
                     type="email"
@@ -289,7 +287,7 @@ const AccountSettings = () => {
 
               {!isGoogleAuth && (
                 <div className="account-field">
-                  <label className="account-field-label">Password</label>
+                  <label className="account-field-label">{t("accountSettings.passwordLabel", uiLang)}</label>
                   <div className="account-field-row account-field-row--center">
                     <input
                       type="password"
@@ -298,7 +296,7 @@ const AccountSettings = () => {
                       className="account-input disabled"
                     />
                     <button className="account-btn" onClick={handleChangePassword}>
-                      Change Password
+                      {t("accountSettings.changePassword", uiLang)}
                     </button>
                   </div>
                 </div>
@@ -311,7 +309,7 @@ const AccountSettings = () => {
                 className="account-manage-toggle"
                 onClick={() => setShowManageAccount(!showManageAccount)}
               >
-                <span>MANAGE MY ACCOUNT</span>
+                <span>{t("accountSettings.manageAccount", uiLang)}</span>
                 <svg
                   className={`account-caret ${showManageAccount ? 'rotated' : ''}`}
                   width="16"
@@ -326,10 +324,10 @@ const AccountSettings = () => {
               {showManageAccount && (
                 <div className="account-manage-content">
                   <button className="account-manage-item" onClick={handleLogout}>
-                    Log Out
+                    {t("accountSettings.logout", uiLang)}
                   </button>
                   <button className="account-manage-item delete" onClick={handleDeleteAccount}>
-                    Delete Account
+                    {t("accountSettings.deleteAccount", uiLang)}
                   </button>
                 </div>
               )}
@@ -341,13 +339,13 @@ const AccountSettings = () => {
         return isMobile && isPaidMember === false ? (
           <div className="account-free-plan-card">
             <div className="account-free-plan-header">
-              <span className="account-free-plan-label">Current plan:</span>
-              <span className="account-free-plan-value">FREE</span>
+              <span className="account-free-plan-label">{t("accountSettings.currentPlan", uiLang)}</span>
+              <span className="account-free-plan-value">{t("accountSettings.freePlan", uiLang)}</span>
             </div>
             <div className="account-free-plan-body">
-              <p className="account-free-plan-included">Included in plan:</p>
+              <p className="account-free-plan-included">{t("accountSettings.includedInPlan", uiLang)}</p>
               <ul className="account-free-plan-list">
-                {(uiLang === "th" ? FREE_PLAN_BENEFITS.th : FREE_PLAN_BENEFITS.en).map((item) => (
+                {freePlanBenefits.map((item) => (
                   <li key={item} className="account-free-plan-item">
                     <img
                       src="/images/blue-checkmark.webp"
@@ -362,10 +360,10 @@ const AccountSettings = () => {
             </div>
             <div className="account-free-plan-footer">
               <p className="account-free-plan-cta-text">
-                Want access to our <em>full</em> lesson library?
+                {t("accountSettings.fullLibraryCta", uiLang)}
               </p>
               <Link to="/membership" className="account-free-plan-btn">
-                BECOME A MEMBER
+                {t("accountSettings.becomeMember", uiLang)}
               </Link>
             </div>
           </div>
@@ -384,7 +382,7 @@ const AccountSettings = () => {
         <div className="account-container">
           {/* Header */}
           <div className="account-header">
-            <h1 className="account-title">ACCOUNT SETTINGS</h1>
+            <h1 className="account-title">{t("accountSettings.title", uiLang)}</h1>
           </div>
 
           {/* Navigation Tabs */}
@@ -394,13 +392,13 @@ const AccountSettings = () => {
                 className={`pathway-tab ${activeTab === "profile" ? "active" : ""}`}
                 onClick={() => setActiveTab("profile")}
               >
-                EDIT PROFILE
+                {t("accountSettings.editProfileTab", uiLang)}
               </button>
               <button
                 className={`pathway-tab ${activeTab === "billing" ? "active" : ""}`}
                 onClick={() => setActiveTab("billing")}
               >
-                SUBSCRIPTION & BILLING
+                {t("accountSettings.subscriptionBillingTab", uiLang)}
               </button>
             </div>
           </nav>

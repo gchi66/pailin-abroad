@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/DiscussionBoard.css";
 
 function formatDateLabel(createdAt) {
@@ -77,11 +79,14 @@ export default function DiscussionBoard({
   onReply,
   onPin,
   canPost = false,
-  loginPrompt = "You must be logged in to post a comment.",
+  loginPrompt,
   isLoading = false,
 }) {
+  const { ui: uiLang } = useUiLang();
   const [newComment, setNewComment] = useState("");
   const [posting, setPosting] = useState(false);
+  const resolvedLoginPrompt =
+    loginPrompt || t("lessonDiscussion.loginPrompt", uiLang);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -105,13 +110,15 @@ export default function DiscussionBoard({
       <div className="discussion-wrapper">
         <section className="discussion-board">
           <div className="discussion-header">
-            <h2 className="discussion-title">Join the Discussion</h2>
+            <h2 className="discussion-title">
+              {t("lessonDiscussion.title", uiLang)}
+            </h2>
             {canPost && onNewComment ? (
               <form className="discussion-form" onSubmit={handleSubmit}>
                 <textarea
                   value={newComment}
                   onChange={(event) => setNewComment(event.target.value)}
-                  placeholder="Respond to our pinned comment or leave a question!"
+                  placeholder={t("lessonDiscussion.placeholder", uiLang)}
                   rows={4}
                   className="discussion-textarea"
                   required
@@ -121,25 +128,29 @@ export default function DiscussionBoard({
                   className="discussion-submit-btn"
                   disabled={posting || !newComment.trim()}
                 >
-                  {posting ? "Submitting..." : "Submit"}
+                  {posting
+                    ? t("lessonDiscussion.submitting", uiLang)
+                    : t("lessonDiscussion.submit", uiLang)}
                 </button>
               </form>
             ) : (
               <div className="discussion-locked">
-                <p>{loginPrompt}</p>
+                <p>{resolvedLoginPrompt}</p>
               </div>
             )}
           </div>
 
           <div className="comments-section">
             <h3 className="comments-title">
-              Comments ({commentCount})
+              {t("lessonDiscussion.comments", uiLang)} ({commentCount})
             </h3>
             {isLoading ? (
-              <div className="discussion-loading">Loading comments…</div>
+              <div className="discussion-loading">
+                {t("lessonDiscussion.loading", uiLang)}
+              </div>
             ) : commentCount === 0 ? (
               <div className="discussion-empty">
-                Be the first to start the conversation.
+                {t("lessonDiscussion.empty", uiLang)}
               </div>
             ) : (
               <div className="comments-list">
@@ -164,6 +175,7 @@ export default function DiscussionBoard({
 
 function CommentItem({ comment, onReply, onPin, canReply, depth }) {
   const [replyBody, setReplyBody] = useState("");
+  const { ui: uiLang } = useUiLang();
 
   const isPinned = Boolean(comment?.pinned);
 
@@ -206,7 +218,7 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
             {isPinned && (
               <img
                 src="/images/pinned_comment_pin.png"
-                alt="Pinned comment"
+                alt={t("lessonDiscussion.pinnedAlt", uiLang)}
                 className="comment-pin-icon"
               />
             )}
@@ -216,7 +228,9 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
                 className="comment-pin-toggle"
                 onClick={() => onPin(comment.id, !isPinned)}
               >
-                {isPinned ? "Unpin" : "Pin"}
+                {isPinned
+                  ? t("lessonDiscussion.unpin", uiLang)
+                  : t("lessonDiscussion.pin", uiLang)}
               </button>
             )}
           </div>

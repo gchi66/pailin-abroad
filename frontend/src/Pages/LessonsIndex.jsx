@@ -40,6 +40,21 @@ const LessonsIndex = () => {
   const [isMobileStageOpen, setIsMobileStageOpen] = useState(false);
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
+  const stageLabelMap = useMemo(() => ({
+    Beginner: t("lessonsIndexPage.stages.beginner", uiLang),
+    Intermediate: t("lessonsIndexPage.stages.intermediate", uiLang),
+    Advanced: t("lessonsIndexPage.stages.advanced", uiLang),
+    Expert: t("lessonsIndexPage.stages.expert", uiLang),
+  }), [uiLang]);
+  const getStageLabel = useCallback((stage) => stageLabelMap[stage] || stage, [stageLabelMap]);
+  const formatStageLabel = useCallback(
+    (stage) => (uiLang === "th" ? getStageLabel(stage) : getStageLabel(stage).toUpperCase()),
+    [getStageLabel, uiLang]
+  );
+  const formatLevelLabel = useCallback(
+    (lvl) => (uiLang === "th" ? `${t("lessonsIndexPage.levelLabel", uiLang)} ${lvl}` : `LEVEL ${lvl}`),
+    [uiLang]
+  );
 
   // Track whether the stage has just changed
   const isStageChanged = useRef(false);
@@ -418,26 +433,28 @@ const LessonsIndex = () => {
       <div className="lesson-library">
         {!user && (
           <PlanNotice
-            heading="Unlock our full Lesson Library."
+            heading={t("lessonsIndexPage.unlockHeading", uiLang)}
             subtext={
               <>
-                All our lessons are locked. Create a free account to access our{" "}
-                <Link to="/free-lessons">free lessons</Link>, or become a member for full access to over 150 lessons!
+                {t("lessonsIndexPage.unlockBodyPrefix", uiLang)}{" "}
+                <Link to="/free-lessons">{t("lessonsIndexPage.freeLessonsLink", uiLang)}</Link>
+                {t("lessonsIndexPage.unlockBodySuffix", uiLang)}
               </>
             }
             cta={{
-              label: "SIGN UP FOR FREE",
+              label: t("lessonsIndexPage.signUpFree", uiLang),
               to: "/signup",
             }}
             secondaryCta={{
-              label: "BECOME A MEMBER",
+              label: t("lessonsIndexPage.becomeMember", uiLang),
               to: "/membership",
             }}
             footerNote={
               <>
-                <span>Not ready to create an account?</span>
+                <span>{t("lessonsIndexPage.footerNotePrefix", uiLang)}</span>
                 <span>
-                  <Link to="/try-lessons">Click here</Link> to try 4 free lessons, no sign-up required!
+                  <Link to="/try-lessons">{t("lessonsIndexPage.footerNoteLink", uiLang)}</Link>{" "}
+                  {t("lessonsIndexPage.footerNoteSuffix", uiLang)}
                 </span>
               </>
             }
@@ -445,14 +462,15 @@ const LessonsIndex = () => {
         )}
         {user && profile?.is_paid === false && (
           <PlanNotice
-            heading="You're on our free plan."
+            heading={t("lessonsIndexPage.freePlanHeading", uiLang)}
             subtext={[
               <>
-                <Link to="/membership">Upgrade</Link> to enjoy access to our full lesson library.
+                <Link to="/membership">{t("lessonsIndexPage.upgrade", uiLang)}</Link>{" "}
+                {t("lessonsIndexPage.freePlanLine1Prefix", uiLang)}
               </>,
               <>
-                Or, explore the lessons available to you in our{" "}
-                <Link to="/free-lessons">free lesson library</Link>.
+                {t("lessonsIndexPage.freePlanLine2Prefix", uiLang)}{" "}
+                <Link to="/free-lessons">{t("lessonsIndexPage.freeLessonLibrary", uiLang)}</Link>.
               </>,
             ]}
           />
@@ -468,7 +486,7 @@ const LessonsIndex = () => {
                   onClick={() => setIsMobileStageOpen((prev) => !prev)}
                   aria-expanded={isMobileStageOpen}
                 >
-                  <span>{selectedStage.toUpperCase()}</span>
+                  <span>{formatStageLabel(selectedStage)}</span>
                   <span className="mobile-stage-caret">▾</span>
                 </button>
                 {isMobileStageOpen && (
@@ -483,14 +501,14 @@ const LessonsIndex = () => {
                           setIsMobileStageOpen(false);
                         }}
                       >
-                        <span>{stage.toUpperCase()}</span>
+                        <span>{formatStageLabel(stage)}</span>
                         {stageCompletionMap[stage] && (
                           <span className="completion-checkmark" aria-hidden="true">
                             ✓
                           </span>
                         )}
                         {stage === "Expert" && (
-                          <span className="stage-coming-soon-inline">Coming Soon!</span>
+                          <span className="stage-coming-soon-inline">{t("lessonsIndexPage.comingSoon", uiLang)}</span>
                         )}
                       </button>
                     ))}
@@ -505,7 +523,7 @@ const LessonsIndex = () => {
                     className={`mobile-level-btn ${selectedLevel === lvl ? "active" : ""}`}
                     onClick={() => handleLevelSelect(lvl)}
                   >
-                    LEVEL {lvl}
+                    {formatLevelLabel(lvl)}
                     {levelCompletionMap[`${selectedStage}-${lvl}`] && (
                       <span className="completion-checkmark" aria-hidden="true">
                         ✓
@@ -524,7 +542,7 @@ const LessonsIndex = () => {
                       className={`stage-btn ${selectedStage === stage ? "active" : ""}`}
                       onClick={() => handleStageChange(stage)}
                     >
-                      {stage.toUpperCase()}
+                      {formatStageLabel(stage)}
                       {stageCompletionMap[stage] && (
                         <span className="completion-checkmark" aria-hidden="true">
                           ✓
@@ -532,7 +550,7 @@ const LessonsIndex = () => {
                       )}
                     </button>
                     {stage === "Expert" && (
-                      <span className="stage-coming-soon-badge">COMING SOON!</span>
+                      <span className="stage-coming-soon-badge">{t("lessonsIndexPage.comingSoon", uiLang)}</span>
                     )}
                   </div>
                 ))}
@@ -547,7 +565,7 @@ const LessonsIndex = () => {
                     className={`level-btn ${selectedLevel === lvl ? "active" : ""}`}
                     onClick={() => handleLevelSelect(lvl)}
                   >
-                    LEVEL {lvl}
+                    {formatLevelLabel(lvl)}
                     {levelCompletionMap[`${selectedStage}-${lvl}`] && (
                       <span className="completion-checkmark" aria-hidden="true">
                         ✓
@@ -568,11 +586,11 @@ const LessonsIndex = () => {
                 <div className="level-text-graphic">
                   <div className="level-title-group">
                     <span className="level-header-text">
-                      LEVEL {selectedLevel}
+                      {formatLevelLabel(selectedLevel)}
                     </span>
                     {levelCompletionStatus?.is_completed && (
                       <span className="level-complete-badge">
-                        LEVEL COMPLETE <span role="img" aria-label="Party popper">🎉</span>
+                        {t("lessonsIndexPage.levelComplete", uiLang)} <span role="img" aria-label="Party popper">🎉</span>
                       </span>
                     )}
                   </div>
@@ -580,14 +598,16 @@ const LessonsIndex = () => {
                 </div>
 
                 <div className="backstory-arrow-group">
-                  <span className="backstory-header-text">{isBackstoryOpen ? "HIDE BACKSTORY" : "VIEW BACKSTORY"}</span>
+                  <span className="backstory-header-text">
+                    {isBackstoryOpen ? t("lessonsIndexPage.hideBackstory", uiLang) : t("lessonsIndexPage.viewBackstory", uiLang)}
+                  </span>
                 </div>
               </div>
 
               <div className={`backstory-container ${isBackstoryOpen ? "open" : ""}`}>
                 {isBackstoryOpen && (
                   <div className="backstory-content">
-                    <span>Pailin has just moved from Bangkok to Los Angeles. She's at a summer orientation for foreign exchange students at University of California, Los Angeles, where she will be meeting other foreign exchange students and will be learning more about the program.</span>
+                    <span>{t(`lessonsIndexPage.backstories.${selectedLevel}`, uiLang)}</span>
                   </div>
                 )}
               </div>
@@ -607,7 +627,7 @@ const LessonsIndex = () => {
                       <div className="lesson-item-left">
                         <div className="lesson-index-slot">
                           {(lesson.title || "").toLowerCase().includes("checkpoint") ? (
-                            <img src="/images/black-checkmark-level-checkpoint.webp" alt="Lesson Checkpoint" className="level-checkmark" />
+                            <img src="/images/black-checkmark-level-checkpoint.webp" alt={t("lessonsIndexPage.lessonCheckpoint", uiLang)} className="level-checkmark" />
                           ) : (
                             <span className="lesson-number">{lesson.level}.{lesson.lesson_order}</span>
                           )}
@@ -627,13 +647,13 @@ const LessonsIndex = () => {
                         {shouldShowLock(lesson) ? (
                           <img
                             src="/images/lock.webp"
-                            alt="Locked"
+                              alt={t("lessonsIndexPage.locked", uiLang)}
                             className="lesson-lock-icon"
                           />
                         ) : lessonCompleted ? (
                           <img
                             src="/images/filled-checkmark-lesson-complete.webp"
-                            alt="Completed"
+                              alt={t("lessonsIndexPage.completed", uiLang)}
                             className="checkmark-img checkmark-completed"
                           />
                         ) : null}
@@ -654,11 +674,11 @@ const LessonsIndex = () => {
                 onClick={() => handleLevelSelect(prevLevel)}
                 aria-label={`Go to level ${prevLevel}`}
               >
-                ← LEVEL {prevLevel}
+                ← {formatLevelLabel(prevLevel)}
               </button>
             ) : (
               <span className="lesson-navigation-text prev disabled" aria-hidden="true">
-                ← LEVEL {selectedLevel}
+                ← {formatLevelLabel(selectedLevel)}
               </span>
             )}
           </div>
@@ -670,11 +690,11 @@ const LessonsIndex = () => {
                 onClick={() => handleLevelSelect(nextLevel)}
                 aria-label={`Go to level ${nextLevel}`}
               >
-                LEVEL {nextLevel} →
+                {formatLevelLabel(nextLevel)} →
               </button>
             ) : (
               <span className="lesson-navigation-text next disabled" aria-hidden="true">
-                LEVEL {selectedLevel} →
+                {formatLevelLabel(selectedLevel)} →
               </span>
             )}
           </div>

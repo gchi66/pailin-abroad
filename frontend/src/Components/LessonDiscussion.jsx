@@ -3,6 +3,8 @@ import supabaseClient from "../supabaseClient";
 import DiscussionBoard from "./DiscussionBoard";
 import "../Styles/DiscussionBoard.css";
 import { useAuth } from "../AuthContext";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 
 // Utility to nest comments by parent_comment_id
 function nestComments(comments) {
@@ -23,6 +25,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { ui: uiLang } = useUiLang();
 
   // Fetch comments for this lesson
   useEffect(() => {
@@ -85,7 +88,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
         onReply={canPost ? handleReply : undefined}
         onPin={isAdmin ? handlePin : undefined}
         canPost={canPost}
-        loginPrompt="You must be logged in to post a comment."
+        loginPrompt={t("lessonDiscussion.loginPrompt", uiLang)}
         isLoading={loading}
       />
     </section>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/PaymentSuccess.css";
 
 const PaymentSuccess = () => {
@@ -9,6 +11,7 @@ const PaymentSuccess = () => {
   const [resendLoading, setResendLoading] = useState(false);
   const [resendMessage, setResendMessage] = useState("");
   const { user } = useAuth();
+  const { ui: uiLang } = useUiLang();
 
   // Check if user email is verified
   const isVerified = user?.user_metadata?.is_verified || user?.email_confirmed_at;
@@ -29,7 +32,7 @@ const PaymentSuccess = () => {
   // Resend verification email
   const handleResendEmail = async () => {
     if (!user?.email) {
-      setResendMessage("Error: No email found");
+      setResendMessage(t("paymentSuccess.noEmail", uiLang));
       return;
     }
 
@@ -48,10 +51,10 @@ const PaymentSuccess = () => {
       if (error) {
         setResendMessage(`Error: ${error.message}`);
       } else {
-        setResendMessage("Verification email sent! Check your inbox.");
+        setResendMessage(t("paymentSuccess.resendSuccess", uiLang));
       }
     } catch (err) {
-      setResendMessage("Failed to send email. Please try again.");
+      setResendMessage(t("paymentSuccess.resendFail", uiLang));
       console.error("Resend email error:", err);
     } finally {
       setResendLoading(false);
@@ -82,33 +85,39 @@ const PaymentSuccess = () => {
         {isVerified ? (
           // Verified user - full access
           <>
-            <h1 className="success-main-title">Payment Successful!</h1>
-            <p className="success-subtitle">Welcome to Pailin Abroad Premium!</p>
+            <h1 className="success-main-title">{t("paymentSuccess.verifiedTitle", uiLang)}</h1>
+            <p className="success-subtitle">{t("paymentSuccess.verifiedSubtitle", uiLang)}</p>
 
-            <p className="success-message">
-              Your membership is now active. You now have full access to all lessons and features.
-            </p>
+            <p className="success-message">{t("paymentSuccess.verifiedMessage", uiLang)}</p>
 
             <Link to="/pathway" className="signup-cta-button success-cta-btn">
-              Go to My Pathway
+              {t("paymentSuccess.goToPathway", uiLang)}
             </Link>
 
             <Link to="/" className="secondary-link">
-              Return to Homepage
+              {t("paymentSuccess.returnHome", uiLang)}
             </Link>
           </>
         ) : (
           // Unverified user - needs to verify email first
           <>
-            <h1 className="success-main-title">Payment Received!</h1>
-            <p className="success-subtitle">One More Step...</p>
+            <h1 className="success-main-title">{t("paymentSuccess.unverifiedTitle", uiLang)}</h1>
+            <p className="success-subtitle">{t("paymentSuccess.unverifiedSubtitle", uiLang)}</p>
 
             <p className="success-message">
-              We've sent you a verification email. Please check your inbox and click the verification link to activate your account and access all lessons.
+              {uiLang === "th"
+                ? (
+                  <>
+                    {t("paymentSuccess.unverifiedMessagePrefix", uiLang)}
+                    <strong>{user?.email}</strong>
+                    {t("paymentSuccess.unverifiedMessageSuffix", uiLang)}
+                  </>
+                )
+                : t("paymentSuccess.unverifiedMessagePrefix", uiLang)}
             </p>
 
             <p className="success-message" style={{ fontSize: '0.9rem', color: '#666' }}>
-              Once verified, you can log in and start learning!
+              {t("paymentSuccess.unverifiedNote", uiLang)}
             </p>
 
             <button
@@ -116,7 +125,7 @@ const PaymentSuccess = () => {
               onClick={handleResendEmail}
               disabled={resendLoading}
             >
-              {resendLoading ? "Sending..." : "Resend Verification Email"}
+              {resendLoading ? t("paymentSuccess.sending", uiLang) : t("paymentSuccess.resendEmail", uiLang)}
             </button>
 
             {resendMessage && (
@@ -126,7 +135,7 @@ const PaymentSuccess = () => {
             )}
 
             <Link to="/" className="secondary-link" style={{ marginTop: '1rem' }}>
-              Return to Homepage to Log In
+              {t("paymentSuccess.returnHomeToLogin", uiLang)}
             </Link>
           </>
         )}

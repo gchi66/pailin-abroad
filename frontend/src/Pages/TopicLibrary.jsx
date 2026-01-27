@@ -266,19 +266,23 @@ const TopicLibrary = () => {
             <div className={`topic-library-plan-notice ${isFreePlan ? "is-free-plan" : "is-no-account"}`}>
               <div className="topic-library-plan-copy">
                 <p className="topic-library-plan-title">
-                  {isFreePlan ? "You're on our free plan." : "Looks like you don't have an account."}
+                  {isFreePlan
+                    ? t("topicLibraryPage.planNotice.freeTitle", uiLang)
+                    : t("topicLibraryPage.planNotice.noAccountTitle", uiLang)}
                 </p>
                 <p className="topic-library-plan-desc">
                   {isFreePlan
-                    ? "Upgrade to enjoy full access to our Topic Library."
-                    : "Sign up for free to access our featured topics!"}
+                    ? t("topicLibraryPage.planNotice.freeDesc", uiLang)
+                    : t("topicLibraryPage.planNotice.noAccountDesc", uiLang)}
                 </p>
               </div>
               <Link
                 className="topic-library-plan-cta"
                 to={isFreePlan ? "/membership" : "/signup"}
               >
-                {isFreePlan ? "BECOME A MEMBER" : "SIGN UP FOR FREE"}
+                {isFreePlan
+                  ? t("topicLibraryPage.planNotice.freeCta", uiLang)
+                  : t("topicLibraryPage.planNotice.noAccountCta", uiLang)}
               </Link>
             </div>
           )}

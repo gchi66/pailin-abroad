@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "../Styles/Contact.css";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
 
 const Contact = () => {
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
+  const { ui } = useUiLang();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,10 +35,10 @@ const Contact = () => {
       });
       if (response.ok) {
         setStatus("success");
-        setFeedback("Message sent successfully! We'll get back to you soon.");
+        setFeedback(t("contactPage.statusSuccess", ui));
         setFormData({ name: "", email: "", message: "" });
       } else {
-        let errorMessage = "Error sending message. Please try again.";
+        let errorMessage = t("contactPage.statusError", ui);
         try {
           const data = await response.json();
           if (data?.message) {
@@ -50,7 +53,7 @@ const Contact = () => {
     } catch (error) {
       console.error("Error:", error);
       setStatus("error");
-      setFeedback("Something went wrong. Please try again.");
+      setFeedback(t("contactPage.statusUnexpected", ui));
     }
   };
 
@@ -58,15 +61,15 @@ const Contact = () => {
     <div className="contact-page-container">
       {/* page header */}
       <header className="contact-page-header">
-        <h1 className="contact-page-header-text">Contact Us</h1>
-        <p className="contact-page-header-subtitle">We'd love to hear from you! Reach out with questions or feedback</p>
+        <h1 className="contact-page-header-text">{t("contactPage.title", ui)}</h1>
+        <p className="contact-page-header-subtitle">{t("contactPage.subtitle", ui)}</p>
       </header>
 
       <div className="contact-elements-container">
 
         {/* card */}
         <div className="contact-card">
-          We’re here to help. Please check out our FAQ page to see if your question has already been answered. To contact us with further questions or feedback, please message us through any of the following platforms, or fill out the form below.
+          {t("contactPage.cardBody", ui)}
         </div>
 
         {/* form */}
@@ -78,39 +81,38 @@ const Contact = () => {
                 role="status"
                 aria-live="polite"
               >
-                {feedback || (status === "sending" ? "Sending your message..." : "")}
+                {feedback || (status === "sending" ? t("contactPage.statusSendingMessage", ui) : "")}
               </div>
             )}
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{t("contactPage.nameLabel", ui)}</label>
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Name"
+              placeholder={t("contactPage.namePlaceholder", ui)}
               value={formData.name}
               onChange={handleChange}
               required
             />
 
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t("contactPage.emailLabel", ui)}</label>
             <input
               type="email"
               id="email"
               name="email"
-              placeholder="Email"
+              placeholder={t("contactPage.emailPlaceholder", ui)}
               value={formData.email}
               onChange={handleChange}
               required
             />
 
             <label htmlFor="message">
-              Type your question, suggestion, or feedback.
-              Please provide as much detail as possible.
+              {t("contactPage.messageLabel", ui)}
             </label>
             <textarea
               id="message"
               name="message"
-              placeholder="Your message here..."
+              placeholder={t("contactPage.messagePlaceholder", ui)}
               rows="5"
               value={formData.message}
               onChange={handleChange}
@@ -118,7 +120,7 @@ const Contact = () => {
             ></textarea>
 
             <button type="submit" disabled={status === "sending"}>
-              {status === "sending" ? "Sending..." : "Submit"}
+              {status === "sending" ? t("contactPage.sending", ui) : t("contactPage.submit", ui)}
             </button>
           </form>
         </div>
@@ -126,7 +128,7 @@ const Contact = () => {
         {/* pailin image */}
         <img
           src="/images/characters/pailin-blue-right.png"
-          alt="Pailin"
+          alt={t("contactPage.pailinAlt", ui)}
           className="contact-pailin-image"
         />
       </div>

@@ -10,13 +10,13 @@ import { copy, pick } from "../ui-lang/i18n";
 import "../Styles/ExerciseBank.css";
 
 const CATEGORY_OPTIONS = [
-  { slug: "verbs-and-tenses", label: { en: "Verbs & Tenses", th: "กริยาและกาล" } },
-  { slug: "nouns-and-articles", label: { en: "Nouns & Articles", th: "คำนามและคำนำหน้านาม" } },
+  { slug: "verbs-and-tenses", label: { en: "Verbs & Tenses", th: "คำกริยา & รูปกาลกริยา" } },
+  { slug: "nouns-and-articles", label: { en: "Nouns & Articles", th: "คำนาม & คำนำหน้านาม" } },
   { slug: "pronouns", label: { en: "Pronouns", th: "คำสรรพนาม" } },
   { slug: "adjectives", label: { en: "Adjectives", th: "คำคุณศัพท์" } },
-  { slug: "conjunctions", label: { en: "Conjunctions", th: "คำสันธาน" } },
+  { slug: "conjunctions", label: { en: "Conjunctions", th: "คำเชื่อม" } },
   { slug: "prepositions", label: { en: "Prepositions", th: "คำบุพบท" } },
-  { slug: "other-concepts", label: { en: "Other Concepts", th: "แนวคิดอื่น ๆ" } },
+  { slug: "other-concepts", label: { en: "Other Concepts", th: "แนวคิดการเรียนอื่นๆ" } },
   { slug: "all", label: { en: "View All", th: "ดูทั้งหมด" } },
 ];
 

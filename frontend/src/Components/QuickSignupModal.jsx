@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import supabaseClient from "../supabaseClient";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/QuickSignupModal.css";
 
 const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
@@ -11,6 +13,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { ui } = useUiLang();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,13 +32,13 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
 
     // Basic validation
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("quickSignup.passwordMismatch", ui));
       setLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError(t("quickSignup.passwordTooShort", ui));
       setLoading(false);
       return;
     }
@@ -65,7 +68,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
       setLoading(false);
 
     } catch (err) {
-      setError("An error occurred during signup. Please try again.");
+      setError(t("quickSignup.signupError", ui));
       setLoading(false);
       console.error("Signup error:", err);
     }
@@ -82,12 +85,12 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
 
         {!success ? (
           <>
-            <h2 className="modal-title">Create an Account</h2>
-            <p className="modal-subtitle">Sign Up to continue to checkout</p>
+            <h2 className="modal-title">{t("quickSignup.title", ui)}</h2>
+            <p className="modal-subtitle">{t("quickSignup.subtitle", ui)}</p>
 
             <form onSubmit={handleSubmit} className="signup-form">
               <div className="form-group">
-                <label htmlFor="email" className="form-label">Email</label>
+                <label htmlFor="email" className="form-label">{t("quickSignup.emailLabel", ui)}</label>
                 <input
                   type="email"
                   id="email"
@@ -95,13 +98,13 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
                   value={formData.email}
                   onChange={handleChange}
                   className="form-input"
-                  placeholder="your@email.com"
+                  placeholder={t("quickSignup.emailPlaceholder", ui)}
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="password" className="form-label">Password</label>
+                <label htmlFor="password" className="form-label">{t("quickSignup.passwordLabel", ui)}</label>
                 <input
                   type="password"
                   id="password"
@@ -109,13 +112,13 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
                   value={formData.password}
                   onChange={handleChange}
                   className="form-input"
-                  placeholder="Enter password"
+                  placeholder={t("quickSignup.passwordPlaceholder", ui)}
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+                <label htmlFor="confirmPassword" className="form-label">{t("quickSignup.confirmPasswordLabel", ui)}</label>
                 <input
                   type="password"
                   id="confirmPassword"
@@ -123,7 +126,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="form-input"
-                  placeholder="Confirm password"
+                  placeholder={t("quickSignup.confirmPasswordPlaceholder", ui)}
                   required
                 />
               </div>
@@ -139,16 +142,16 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
                 className="signup-cta-button modal-signup-btn"
                 disabled={loading}
               >
-                {loading ? "Signing up..." : "Sign Up"}
+                {loading ? t("quickSignup.submitting", ui) : t("quickSignup.submit", ui)}
               </button>
 
               <p className="secondary-text">
-                Already have an account?{" "}
+                {t("quickSignup.alreadyHaveAccount", ui)}{" "}
                 <button type="button" className="login-link" onClick={() => {
                   // TODO: Toggle to login modal
                   console.log("Switch to login");
                 }}>
-                  Log in
+                  {t("quickSignup.loginLink", ui)}
                 </button>
               </p>
             </form>
@@ -156,9 +159,9 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
         ) : (
           <div className="success-state">
             <div className="success-icon">✉️</div>
-            <h3 className="success-title">Account Created!</h3>
+            <h3 className="success-title">{t("quickSignup.successTitle", ui)}</h3>
             <p className="success-message">
-              We've sent you a verification email. You can proceed to checkout now and verify your email later.
+              {t("quickSignup.successMessage", ui)}
             </p>
             <button
               className="signup-cta-button modal-signup-btn"
@@ -170,10 +173,10 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
                 }
               }}
             >
-              Continue to Checkout
+              {t("quickSignup.continueCheckout", ui)}
             </button>
             <p className="success-message" style={{ fontSize: '0.85rem', marginTop: '1rem', color: '#666' }}>
-              Please verify your email to unlock all features
+              {t("quickSignup.verifyNote", ui)}
             </p>
           </div>
         )}

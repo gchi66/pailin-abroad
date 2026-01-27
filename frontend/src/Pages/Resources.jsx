@@ -7,40 +7,42 @@ import { copy, pick } from "../ui-lang/i18n";
 const Resources = () => {
   const { ui } = useUiLang();
   const resourcesCopy = copy.resourcesPage;
+  const cardsCopy = resourcesCopy.cards || {};
+  const comingSoon = pick(resourcesCopy.comingSoon, ui);
   const resourceCards = [
     {
-      title: "Exercise Bank",
-      description: "Additional practice exercises for those difficult grammar topics",
+      title: pick(cardsCopy.exerciseBank?.title, ui),
+      description: pick(cardsCopy.exerciseBank?.description, ui),
       to: "/exercise-bank",
       disabled: false,
       image: "/images/resources_exercise_bank.webp",
     },
     {
-      title: "Topic Library",
-      description: "Further explorations on a range of interesting ESL topics",
+      title: pick(cardsCopy.topicLibrary?.title, ui),
+      description: pick(cardsCopy.topicLibrary?.description, ui),
       to: "/topic-library",
       disabled: false,
       image: "/images/resources_topic_library.webp",
     },
     {
-      title: "Common Mistakes",
-      description: "View our full library of common mistakes made by Thai speakers and how to fix them",
+      title: pick(cardsCopy.commonMistakes?.title, ui),
+      description: pick(cardsCopy.commonMistakes?.description, ui),
       disabled: true,
-      badge: "COMING SOON",
+      badge: comingSoon,
       image: "/images/resources_common_mistakes.webp",
     },
     {
-      title: "Phrases & Phrasal Verbs",
-      description: "Explore our bank of phrases, phrasal verbs, and idioms in our lessons",
+      title: pick(cardsCopy.phrasesVerbs?.title, ui),
+      description: pick(cardsCopy.phrasesVerbs?.description, ui),
       disabled: true,
-      badge: "COMING SOON",
+      badge: comingSoon,
       image: "/images/resources_phrases_and_verbs.webp",
     },
     {
-      title: "Culture Notes",
-      description: "View our full collection of Culture Notes from our lessons",
+      title: pick(cardsCopy.cultureNotes?.title, ui),
+      description: pick(cardsCopy.cultureNotes?.description, ui),
       disabled: true,
-      badge: "COMING SOON",
+      badge: comingSoon,
       image: "/images/resources_culture_notes.webp",
     },
   ];

@@ -123,7 +123,9 @@ export default function LessonContent({
         className="lesson-back-to-top"
         onClick={handleBackToTop}
       >
-        <span className="lesson-back-to-top-label">BACK TO TOP</span>
+        <span className="lesson-back-to-top-label">
+          {pick(copy.lessonPage.backToTop, uiLang)}
+        </span>
         <span aria-hidden="true" className="lesson-back-to-top-arrow">
           ▸
         </span>
@@ -517,7 +519,11 @@ export default function LessonContent({
   =============================================================== */
   const section = sections.find((s) => s.id === activeId);
   if (!section) {
-    return <article className="lc-card">Select a section</article>;
+    return (
+      <article className="lc-card">
+        {pick(copy.lessonPage.selectSection, uiLang)}
+      </article>
+    );
   }
 
   // choose Thai or English copy for plain/markdown content

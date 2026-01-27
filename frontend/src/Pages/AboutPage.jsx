@@ -1,16 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/AboutPage.css";
 import AboutMethod from "../Components/AboutMethod";
 import Team from "../Components/Team";
 
 const AboutPage = () => {
+  const { ui } = useUiLang();
   const sections = useMemo(
     () => [
-      { label: "The Method", slug: "the-method" },
-      { label: "Our Team", slug: "our-team" }
+      { label: t("aboutPage.sectionMethod", ui), slug: "the-method" },
+      { label: t("aboutPage.sectionTeam", ui), slug: "our-team" }
     ],
-    []
+    [ui]
   );
   const defaultSection = sections[0];
   const [searchParams, setSearchParams] = useSearchParams();
@@ -38,8 +41,8 @@ const AboutPage = () => {
     <div className="about-page-container">
       {/* Page header */}
       <header className="about-page-header">
-        <h1 className="about-page-header-text">About Pailin Abroad</h1>
-        <p className="about-page-header-subtitle">Learn all you need to know about us - our method, our team, and our story!</p>
+        <h1 className="about-page-header-text">{t("aboutPage.title", ui)}</h1>
+        <p className="about-page-header-subtitle">{t("aboutPage.subtitle", ui)}</p>
       </header>
 
       {/* Section navigation */}
@@ -54,10 +57,10 @@ const AboutPage = () => {
           </button>
         ))}
       </div>
-      <div className={`about-method-section ${selectedSection === "The Method" ? "visible" : ""}`}>
+      <div className={`about-method-section ${selectedSection === t("aboutPage.sectionMethod", ui) ? "visible" : ""}`}>
         <AboutMethod />
       </div>
-      <div className={`about-method-section ${selectedSection === "Our Team" ? "visible" : ""}`}>
+      <div className={`about-method-section ${selectedSection === t("aboutPage.sectionTeam", ui) ? "visible" : ""}`}>
         <Team />
       </div>
 

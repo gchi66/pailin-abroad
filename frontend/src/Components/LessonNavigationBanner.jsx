@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../Styles/LessonNavigationBanner.css";
 import supabase from "../supabaseClient";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 
 const LessonNavigationBanner = ({
   prevLesson,
@@ -9,6 +11,7 @@ const LessonNavigationBanner = ({
   currentLesson,
   onMarkComplete
 }) => {
+  const { ui: uiLang } = useUiLang();
   const [isCompleted, setIsCompleted] = useState(false);
 
   // Load saved completion state for this lesson
@@ -101,30 +104,49 @@ const LessonNavigationBanner = ({
     return nextLesson?.lesson_order || "";
   };
 
+  const lessonLabel = t("lessonNav.lessonLabel", uiLang) || "Lesson";
+  const checkpointLabel = t("lessonNav.checkpointLabel", uiLang) || "Checkpoint";
+  const formatLessonLabel = (number) =>
+    number ? `${lessonLabel} ${number}` : lessonLabel;
+
   const getLessonCompactLabel = (lesson, fallbackNumber) => {
     if (!lesson) return "";
     if (isCheckpointLesson(lesson)) {
-      return "CHECKPOINT";
+      return checkpointLabel;
     }
-    return (
+    const raw =
       lesson.lesson_external_id ||
       lesson.external_id ||
       lesson.lessonId ||
       fallbackNumber ||
-      ""
-    );
+      "";
+    if (!raw) return "";
+    return formatLessonLabel(raw);
   };
 
   const getNextLessonLabel = () => {
     if (!nextLesson) return "";
     if (isCheckpointLesson(nextLesson)) {
-      return "CHECKPOINT";
+      return checkpointLabel;
     }
     const nextNumber = getNextLessonNumber();
-    return nextNumber ? `LESSON ${nextNumber}` : "LESSON";
+    return formatLessonLabel(nextNumber);
   };
 
-  const getMarkCompleteLabel = () => "MARK LESSON COMPLETE";
+  const getMarkCompleteLabel = () => {
+    const raw =
+      currentLesson?.lesson_external_id ||
+      currentLesson?.external_id ||
+      currentLesson?.lessonId ||
+      "";
+    if (!raw) {
+      return t("lessonNav.markCompleteFallback", uiLang);
+    }
+    const label = formatLessonLabel(raw);
+    const template = t("lessonNav.markComplete", uiLang);
+    if (!template) return label;
+    return template.replace("{lesson}", label);
+  };
 
   return (
     <section className="lesson-navigation-banner">
@@ -136,7 +158,7 @@ const LessonNavigationBanner = ({
             className="lesson-navigation-text prev"
           >
             <span className="lesson-navigation-full">
-              ← LESSON {getPrevLessonNumber()}
+              ← {formatLessonLabel(getPrevLessonNumber())}
             </span>
             <span className="lesson-navigation-compact">
               ← {getLessonCompactLabel(prevLesson, getPrevLessonNumber())}
@@ -162,7 +184,11 @@ const LessonNavigationBanner = ({
                 ? "/images/check_circle_blue.webp"
                 : "/images/CheckCircle.png"
             }
-            alt={isCompleted ? "Completed" : "Mark as complete"}
+            alt={
+              isCompleted
+                ? t("lessonNav.completedAlt", uiLang)
+                : t("lessonNav.markCompleteAlt", uiLang)
+            }
             className="lesson-checkmark-icon"
           />
         </button>

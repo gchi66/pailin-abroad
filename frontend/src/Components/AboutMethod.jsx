@@ -1,9 +1,12 @@
 // AboutMethod.jsx
 import React, { useState } from "react";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/AboutMethod.css";
 
 const AboutMethod = () => {
   const [expandedCards, setExpandedCards] = useState({ 0: true });
+  const { ui } = useUiLang();
 
   const toggleCard = (index) => {
     setExpandedCards(prev => ({
@@ -14,141 +17,141 @@ const AboutMethod = () => {
 
   const cards = [
     {
-      header: "What is the Pailin Abroad method?",
+      header: t("aboutMethod.card1Header", ui),
       content: (
         <>
-          Pailin Abroad is a narrative-driven English learning platform with over 150 lessons, each based on a conversation. Instead of memorizing disconnected grammar rules or vocabulary lists, you'll follow a continuous story that follows Pailin's life in Los Angeles, which gives you an engaging and natural way of learning English in context.
+          {t("aboutMethod.card1P1", ui)}
         </>
       )
     },
     {
-      header: "Who is Pailin?",
+      header: t("aboutMethod.card2Header", ui),
       content: (
         <>
-          Pailin is a 21-year-old girl from Bangkok who will study abroad in Los Angeles for a year.
+          {t("aboutMethod.card2P1", ui)}
           <br /><br />
-          You'll follow her journey as she navigates friendship, love, family, school, work, and life in a new country. As you get to know Pailin and the other characters, you'll feel connected to their stories and be motivated to move through the narrative, all while improving your English along the way.
+          {t("aboutMethod.card2P2", ui)}
           <br /><br />
-          <strong>Did you know?</strong> You can see what Pailin is up to in LA on Instagram! @pailinabroad ✨
+          {t("aboutMethod.card2DidYouKnow", ui)}
         </>
       ),
       hasImage: true
     },
     {
-      header: "What kind of English will I learn?",
+      header: t("aboutMethod.card3Header", ui),
       content: (
         <>
-          You'll learn natural, conversational English with Pailin Abroad - the English that native speakers actually use.
+          {t("aboutMethod.card3P1", ui)}
           <br /><br />
-          Many ESL resources teach stiff, formal English that sounds awkward in casual conversation. We skip that textbook formality and focus on the real-life conversations you'll have with friends, family, coworkers, romantic interests, and strangers.
+          {t("aboutMethod.card3P2", ui)}
           <br /><br />
-          Our goal is to help you use English to show your true personality. The characters in Pailin Abroad get excited, sad, angry, annoyed, confused, and embarrassed - just like all of us! Through their real-life dialogues, you'll learn authentic ways to express your feelings in English.
+          {t("aboutMethod.card3P3", ui)}
         </>
       )
     },
     {
-      header: "What English level is Pailin Abroad for?",
+      header: t("aboutMethod.card4Header", ui),
       content: (
         <>
-          Pailin Abroad is designed to support all levels of English learners! We offer Beginner, Intermediate, and Advanced skill levels, with an Expert level coming soon.
+          {t("aboutMethod.card4P1", ui)}
           <br /><br />
-          Level 1 of our Beginner course is perfect if you're starting your English learning from scratch.
+          {t("aboutMethod.card4P2", ui)}
           <br /><br />
-          Best of all, you're not stuck on a pathway - you can jump into any level that suits your skills. But we think that intermediate and advanced learners will still find our beginner lessons interesting and insightful!
+          {t("aboutMethod.card4P3", ui)}
         </>
       )
     },
     {
-      header: "How does Pailin Abroad specifically benefit Thai people?",
+      header: t("aboutMethod.card5Header", ui),
       content: (
         <>
-          There are two huge advantages that Pailin Abroad offers for Thai people:
+          {t("aboutMethod.card5Intro", ui)}
           <br /><br />
-          <strong>All content is translated in English and Thai</strong>
+          <strong>{t("aboutMethod.card5Strong1", ui)}</strong>
           <br />
-          Most ESL resources are only available in English, so they're not beginner-friendly! Or, you must use Google Translate for all the content, which leads to wildly inaccurate translations. With Pailin Abroad, you don't have to worry about this - you can just focus on learning.
+          {t("aboutMethod.card5P1", ui)}
           <br /><br />
-          <strong>All lessons are created by native English speakers who lived in Thailand for years</strong>
+          <strong>{t("aboutMethod.card5Strong2", ui)}</strong>
           <br />
-          Our team understands the unique challenges that Thai people face when learning English. Our Common Mistakes library gives specific insights into the mistakes that Thai people often make, and why. We also offer ways to fix these mistakes!
+          {t("aboutMethod.card5P2", ui)}
         </>
       )
     },
     {
-      header: "How will Pailin Abroad help me improve my English in the real world?",
+      header: t("aboutMethod.card6Header", ui),
       content: (
         <>
-          <strong>Has this ever happened to you?</strong>
+          <strong>{t("aboutMethod.card6StrongIntro", ui)}</strong>
           <br />
-          You study English and feel confident in your skills, but then a native speaker talks so quickly and uses so much slang! You freeze, and suddenly all the English you learned has disappeared.
+          {t("aboutMethod.card6P1", ui)}
           <br /><br />
-          We totally get it! That's what happens when you learn English out of context, usually from outdated textbooks in the classroom.
+          {t("aboutMethod.card6P2", ui)}
           <br /><br />
-          In real life, you can't always ask people to slow down or repeat themselves. But with Pailin Abroad, you are in control. You can slow down the audio, replay the conversation, and listen as many times as you need until you fully grasp the dialogue. Soon enough, you'll stop translating every single word into Thai in your head, and you'll start naturally understanding English at a real-life pace.
+          {t("aboutMethod.card6P3", ui)}
         </>
       )
     },
     {
-      header: "What's included in each lesson?",
+      header: t("aboutMethod.card7Header", ui),
       content: (
         <>
-          Each lesson contains all or most of these items, in this specific flow to guide your practice:
+          {t("aboutMethod.card7Intro", ui)}
           <br /><br />
-          <strong>Audio Conversation</strong>
+          <strong>{t("aboutMethod.card7AudioTitle", ui)}</strong>
           <br />
-          Slow down and relisten to the conversation as many times as you need! Try not to look at the translation first - see how much you can understand just by listening.
+          {t("aboutMethod.card7AudioBody", ui)}
           <br /><br />
-          <strong>Lesson Focus</strong>
+          <strong>{t("aboutMethod.card7FocusTitle", ui)}</strong>
           <br />
-          Each lesson revolves around one grammar point or key concept that's used throughout the conversation, so you can hear it in a natural context.
+          {t("aboutMethod.card7FocusBody", ui)}
           <br /><br />
-          <strong>Comprehension Questions</strong>
+          <strong>{t("aboutMethod.card7ComprehensionTitle", ui)}</strong>
           <br />
-          Test your overall understanding of the conversation.
+          {t("aboutMethod.card7ComprehensionBody", ui)}
           <br /><br />
-          <strong>Apply</strong>
+          <strong>{t("aboutMethod.card7ApplyTitle", ui)}</strong>
           <br />
-          This is your chance to try using the lesson focus in a sentence on your own before learning about it! This will help concepts stick better in your brain.
+          {t("aboutMethod.card7ApplyBody", ui)}
           <br /><br />
-          <strong>Understand</strong>
+          <strong>{t("aboutMethod.card7UnderstandTitle", ui)}</strong>
           <br />
-          Dive into the lesson focus, using the conversation for context. Listen to example sentences with audio to further practice your listening and comprehension skills.
+          {t("aboutMethod.card7UnderstandBody", ui)}
           <br /><br />
-          <strong>Extra Tips</strong>
+          <strong>{t("aboutMethod.card7TipsTitle", ui)}</strong>
           <br />
-          These are tips that can further your understanding of the lesson focus.
+          {t("aboutMethod.card7TipsBody", ui)}
           <br /><br />
-          <strong>Common Mistakes</strong>
+          <strong>{t("aboutMethod.card7MistakesTitle", ui)}</strong>
           <br />
-          These are common mistakes made by Thai people, along with ways to fix them.
+          {t("aboutMethod.card7MistakesBody", ui)}
           <br /><br />
-          <strong>Phrases & Phrasal Verbs</strong>
+          <strong>{t("aboutMethod.card7PhrasesTitle", ui)}</strong>
           <br />
-          We've highlighted the important phrases and phrasal verbs used in the conversation, complete with examples of them used in a sentence.
+          {t("aboutMethod.card7PhrasesBody", ui)}
           <br /><br />
-          <strong>Culture Notes</strong>
+          <strong>{t("aboutMethod.card7CultureTitle", ui)}</strong>
           <br />
-          These are insights into American culture that are mentioned in the conversation that you will find interesting or useful to know.
+          {t("aboutMethod.card7CultureBody", ui)}
           <br /><br />
-          <strong>Practice</strong>
+          <strong>{t("aboutMethod.card7PracticeTitle", ui)}</strong>
           <br />
-          Every lesson has practice exercises for you to complete to further your understanding of the lesson focus.
+          {t("aboutMethod.card7PracticeBody", ui)}
           <br /><br />
-          <strong>Comment</strong>
+          <strong>{t("aboutMethod.card7CommentTitle", ui)}</strong>
           <br />
-          Practice your writing skills by responding to the Pinned Comment! We'll respond with personalized feedback and corrections.
+          {t("aboutMethod.card7CommentBody", ui)}
         </>
       )
     },
     {
-      header: "Who is Pailin Abroad best for?",
+      header: t("aboutMethod.card8Header", ui),
       content: (
         <>
-          You've definitely heard this advice for learning a language: 'Just go out there and start speaking!'
+          {t("aboutMethod.card8P1", ui)}
           <br /><br />
-          But the truth is, not all of us are naturally gifted at learning a language just by immersion alone.
+          {t("aboutMethod.card8P2", ui)}
           <br /><br />
-          Pailin Abroad is designed to be a comfortable, structured space to practice your English and build your confidence. By greatly improving your listening skills with our lessons, you'll no longer feel intimidated to talk with native English speakers!
+          {t("aboutMethod.card8P3", ui)}
         </>
       )
     }

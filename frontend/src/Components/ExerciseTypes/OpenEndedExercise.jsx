@@ -356,7 +356,8 @@ export default function OpenEndedExercise({
     normalizedPrompt !== normalizedFirstQuestionTh;
 
   const defaultPlaceholder =
-    contentLang === "th" ? "พิมพ์คำตอบของคุณที่นี่" : "Type your answer here";
+    pick(copy.lessonPage.placeholders.answer, contentLang) ||
+    (contentLang === "th" ? "พิมพ์คำตอบของคุณที่นี่" : "Type your answer here");
 
   return (
     <div className="fb-wrap oe-wrap">

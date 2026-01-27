@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 import PlanNotice from "../Components/PlanNotice";
@@ -57,65 +58,69 @@ const MyPathway = () => {
   // UI translations
   const uiText = {
     // Progress section
-    yourNextLesson: uiLang === "th" ? "บทเรียนถัดไป:" : "Your next lesson:",
-    checkpoint: uiLang === "th" ? "จุดตรวจสอบ" : "Checkpoint",
-    loading: uiLang === "th" ? "กำลังโหลด..." : "Loading...",
+    yourNextLesson: t("pathway.yourNextLesson", uiLang),
+    checkpoint: t("pathway.checkpoint", uiLang),
+    loading: t("pathway.loading", uiLang),
 
     // Tab content
-    completedLessons: uiLang === "th" ? "บทเรียนที่เสร็จแล้ว" : "Completed Lessons",
-    noCompletedLessons: uiLang === "th" ? "ยังไม่มีบทเรียนที่เสร็จสิ้น เริ่มเรียนเพื่อดูความคืบหน้าของคุณที่นี่!" : "No completed lessons yet. Start learning to see your progress here!",
-    myLikedLessons: uiLang === "th" ? "บทเรียนที่ฉันชอบ" : "My Liked Lessons",
-    likedLessonsPlaceholder: uiLang === "th" ? "บทเรียนที่คุณชอบจะปรากฏที่นี่" : "Your liked lessons will appear here.",
-    commentHistory: uiLang === "th" ? "ประวัติความคิดเห็น" : "Comment History",
-    noComments: uiLang === "th" ? "ยังไม่มีความคิดเห็น เริ่มมีส่วนร่วมกับบทเรียนเพื่อดูประวัติความคิดเห็นของคุณที่นี่!" : "No comments yet. Start engaging with lessons to see your comment history here!",
-    lessonNoLongerAvailable: uiLang === "th" ? "บทเรียนไม่พร้อมใช้งานแล้ว" : "Lesson no longer available",
-    pinnedComment: uiLang === "th" ? "ความคิดเห็นที่ปักหมุด" : "Pinned comment",
+    completedLessons: t("pathway.completedLessons", uiLang),
+    noCompletedLessons: t("pathway.noCompletedLessons", uiLang),
+    myLikedLessons: t("pathway.myLikedLessons", uiLang),
+    likedLessonsPlaceholder: t("pathway.likedLessonsPlaceholder", uiLang),
+    commentHistory: t("pathway.commentHistory", uiLang),
+    noComments: t("pathway.noComments", uiLang),
+    lessonNoLongerAvailable: t("pathway.lessonNoLongerAvailable", uiLang),
+    pinnedComment: t("pathway.pinnedComment", uiLang),
 
     // Expand/collapse
-    seeMore: uiLang === "th" ? "ดูเพิ่มเติม" : "See more",
-    seeLess: uiLang === "th" ? "ดูน้อยลง" : "See less",
+    seeMore: t("pathway.seeMore", uiLang),
+    seeLess: t("pathway.seeLess", uiLang),
 
     // Loading and error states
-    loadingPathway: uiLang === "th" ? "กำลังโหลดเส้นทางการเรียนของคุณ..." : "Loading your pathway...",
-    errorPrefix: uiLang === "th" ? "ข้อผิดพลาด:" : "Error:",
-    noAuthToken: uiLang === "th" ? "ไม่พบโทเค็นการตรวจสอบสิทธิ์" : "No authentication token found",
+    loadingPathway: t("pathway.loadingPathway", uiLang),
+    errorPrefix: t("pathway.errorPrefix", uiLang),
+    noAuthToken: t("pathway.noAuthToken", uiLang),
 
     // Header section
-    welcomeBack: uiLang === "th" ? "ยินดีต้อนรับกลับ," : "Welcome back,",
-    welcome: uiLang === "th" ? "ยินดีต้อนรับ" : "Welcome,",
-    user: uiLang === "th" ? "ผู้ใช้" : "User",
-    plan: uiLang === "th" ? "แผน:" : "Plan:",
-    fullAccess: uiLang === "th" ? "เข้าถึงเต็มรูปแบบ" : "Full Access",
-    freeAccess: uiLang === "th" ? "ฟรี" : "Free",
-    upgrade: uiLang === "th" ? "อัปเกรด" : "Upgrade",
-    accountSettings: uiLang === "th" ? "การตั้งค่าบัญชี" : "Account Settings",
-    lessonsComplete: uiLang === "th" ? "บทเรียนที่เสร็จสิ้น" : "Lessons Complete",
-    levelsComplete: uiLang === "th" ? "ระดับที่เสร็จสิ้น" : "Levels Complete",
+    welcomeBack: t("pathway.welcomeBack", uiLang),
+    welcome: t("pathway.welcome", uiLang),
+    user: t("pathway.user", uiLang),
+    plan: t("pathway.plan", uiLang),
+    fullAccess: t("pathway.fullAccess", uiLang),
+    freeAccess: t("pathway.freeAccess", uiLang),
+    upgrade: t("pathway.upgrade", uiLang),
+    accountSettings: t("pathway.accountSettings", uiLang),
+    lessonsComplete: t("pathway.lessonsComplete", uiLang),
+    levelsComplete: t("pathway.levelsComplete", uiLang),
 
     // Navigation tabs
-    myPathway: uiLang === "th" ? "เส้นทางของฉัน" : "My Pathway",
-    completed: uiLang === "th" ? "เสร็จสิ้นแล้ว" : "Completed",
-    myLikedLessonsTab: uiLang === "th" ? "บทเรียนที่ชอบ" : "My Liked Lessons",
-    commentHistoryTab: uiLang === "th" ? "ประวัติความคิดเห็น" : "Comment History",
+    myPathway: t("pathway.myPathway", uiLang),
+    completed: t("pathway.completed", uiLang),
+    myLikedLessonsTab: t("pathway.myLikedLessonsTab", uiLang),
+    commentHistoryTab: t("pathway.commentHistoryTab", uiLang),
 
     // Footer
-    goToFreeLessonLibrary: uiLang === "th" ? "ไปที่ไลบรารีบทเรียนฟรี →" : "Go to Free Lesson Library →",
-    goToLessonLibrary: uiLang === "th" ? "ไปที่คลังบทเรียน →" : "Go to Lesson Library →",
-    freePlanNoticeHeading: uiLang === "th" ? "คุณอยู่ในแผนฟรี" : "You're on our free plan.",
-    freePlanNoticeCopy: uiLang === "th"
-      ? "อัปเกรดเพื่อเข้าถึงคลังบทเรียนทั้งหมดของเรา!"
-      : "Upgrade to enjoy access to our full lesson library!",
-    ctaBecomeMember: uiLang === "th" ? "สมัครเป็นสมาชิก" : "BECOME A MEMBER",
+    goToFreeLessonLibrary: t("pathway.goToFreeLessonLibrary", uiLang),
+    goToLessonLibrary: t("pathway.goToLessonLibrary", uiLang),
+    freePlanNoticeHeading: t("pathway.freePlanNoticeHeading", uiLang),
+    freePlanNoticeCopy: t("pathway.freePlanNoticeCopy", uiLang),
+    ctaBecomeMember: t("pathway.ctaBecomeMember", uiLang),
+
+    featuredResourcesTitle: t("pathway.featuredResourcesTitle", uiLang),
+    featuredResourcesFree: t("pathway.featuredResourcesFree", uiLang),
+    featuredResourcesMember: t("pathway.featuredResourcesMember", uiLang),
+    featuredResourcesCta: t("pathway.featuredResourcesCta", uiLang),
 
     // Alt text and accessibility
-    profileAvatar: uiLang === "th" ? "รูปโปรไฟล์" : "Profile Avatar",
-    lessonCheckpoint: uiLang === "th" ? "จุดตรวจสอบบทเรียน" : "Lesson Checkpoint",
-    notCompleted: uiLang === "th" ? "ยังไม่เสร็จสิ้น" : "Not completed",
-    completedAlt: uiLang === "th" ? "เสร็จสิ้นแล้ว" : "Completed",
-    locked: uiLang === "th" ? "ถูกล็อก" : "Locked",
+    profileAvatar: t("pathway.profileAvatar", uiLang),
+    lessonCheckpoint: t("pathway.lessonCheckpoint", uiLang),
+    notCompleted: t("pathway.notCompleted", uiLang),
+    completedAlt: t("pathway.completedAlt", uiLang),
+    locked: t("pathway.locked", uiLang),
 
     // Default fallbacks
-    lessonTitle: uiLang === "th" ? "ชื่อบทเรียน" : "Lesson Title"
+    lessonTitle: t("pathway.lessonTitle", uiLang),
+    viewLabel: t("pathway.viewLabel", uiLang),
   };
 
   // Fetch user profile data from backend
@@ -614,7 +619,7 @@ const MyPathway = () => {
 
             <div className="pathway-mobile-nav">
               <label className="pathway-mobile-nav-label" htmlFor="pathway-mobile-nav-select">
-                View
+                {uiText.viewLabel}
               </label>
               <select
                 id="pathway-mobile-nav-select"
@@ -649,36 +654,33 @@ const MyPathway = () => {
             {/* Featured Resources (mobile emphasis) */}
               <div className="pathway-featured-resources">
               <div className="pathway-featured-header">
-                <h3 className="pathway-featured-title">Featured Resources</h3>
-                {isFreePlanUser && (
-                  <p className="pathway-featured-subtitle">
-                    Members get full access to all of our Resource pages! Here are some that we think you’d like.
-                    <Link to="/membership" className="pathway-featured-upgrade"> Upgrade</Link> your membership to get full access!
-                  </p>
-                )}
+                <h3 className="pathway-featured-title">{uiText.featuredResourcesTitle}</h3>
+                <p className="pathway-featured-subtitle">
+                  {isFreePlanUser ? uiText.featuredResourcesFree : uiText.featuredResourcesMember}
+                </p>
               </div>
               <div className="pathway-featured-cards">
                 <Link to="/exercise-bank" className="resource-card-compact">
                   <div className="resource-card-compact-media">
-                    <img src="/images/resources_exercise_bank.webp" alt="Exercise Bank" />
+                    <img src="/images/resources_exercise_bank.webp" alt={t("resourcesPage.cards.exerciseBank.title", uiLang)} />
                   </div>
                   <div className="resource-card-compact-copy">
-                    <h4 className="resource-card-compact-title">Exercise Bank</h4>
-                    <p className="resource-card-compact-desc">Additional practice exercises for those difficult grammar topics</p>
+                    <h4 className="resource-card-compact-title">{t("resourcesPage.cards.exerciseBank.title", uiLang)}</h4>
+                    <p className="resource-card-compact-desc">{t("resourcesPage.cards.exerciseBank.description", uiLang)}</p>
                   </div>
                 </Link>
                 <Link to="/topic-library" className="resource-card-compact">
                   <div className="resource-card-compact-media">
-                    <img src="/images/resources_topic_library.webp" alt="Topic Library" />
+                    <img src="/images/resources_topic_library.webp" alt={t("resourcesPage.cards.topicLibrary.title", uiLang)} />
                   </div>
                   <div className="resource-card-compact-copy">
-                    <h4 className="resource-card-compact-title">Topic Library</h4>
-                    <p className="resource-card-compact-desc">Browse grammar and vocab explainers by topic</p>
+                    <h4 className="resource-card-compact-title">{t("resourcesPage.cards.topicLibrary.title", uiLang)}</h4>
+                    <p className="resource-card-compact-desc">{t("resourcesPage.cards.topicLibrary.description", uiLang)}</p>
                   </div>
                 </Link>
               </div>
               <div className="pathway-featured-cta">
-                <Link to="/resources" className="pathway-featured-link">SEE ALL RESOURCE PAGES →</Link>
+                <Link to="/resources" className="pathway-featured-link">{uiText.featuredResourcesCta}</Link>
               </div>
             </div>
           </>

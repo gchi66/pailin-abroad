@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 import useSwipe from "../hooks/useSwipe";
@@ -193,64 +194,57 @@ const Onboarding = () => {
     };
   }, []);
 
-  // Helper function to pick the right language content
-  const pickLang = (en, th) => {
-    if (uiLang === "th") {
-      return th || en; // fallback to English if Thai is not available
-    }
-    return en || th; // fallback to Thai if English is not available
-  };
-
   // UI translations
   const uiText = {
     // Welcome Step (Step 0)
-    welcomeTitle: pickLang("Welcome to Pailin Abroad!", "ยินดีต้อนรับสู่ Pailin Abroad!"),
-    welcomeSubtitle: pickLang("Hi, I'm Pailin! I'm so excited to be your guide on this English journey.", "สวัสดีค่ะ ฉันไพลิน! ฉันตื่นเต้นมากที่จะเป็นไกด์ในการเรียนภาษาอังกฤษของคุณ"),
-    welcomeDescription: pickLang("In a few quick steps, we'll get you ready to explore my world and the language I use every day.", "ในไม่กี่ขั้นตอนง่ายๆ เราจะเตรียมคุณให้พร้อมสำหรับการสำรวจโลกของฉันและภาษาที่ฉันใช้ทุกวัน"),
+    welcomeTitle: t("onboarding.welcomeTitle", uiLang),
+    welcomeSubtitle: t("onboarding.welcomeSubtitle", uiLang),
+    welcomeDescription: t("onboarding.welcomeDescription", uiLang),
 
     // Password Step (Step 1)
-    passwordTitle: pickLang("Let's set up your password", "มาตั้งค่ารหัสผ่านของคุณกันเถอะ"),
-    emailLabel: pickLang("Email address", "ที่อยู่อีเมล"),
-    newPassword: pickLang("New password", "รหัสผ่านใหม่"),
-    confirmPassword: pickLang("Confirm password", "ยืนยันรหัสผ่าน"),
-    passwordRule1: pickLang("At least 8 characters", "อย่างน้อย 8 ตัวอักษร"),
-    passwordRule2: pickLang("At least 1 number or special character", "อย่างน้อย 1 ตัวเลขหรือสัญลักษณ์พิเศษ"),
-    passwordRule3: pickLang("At least 1 uppercase letter", "อย่างน้อย 1 ตัวอักษรพิมพ์ใหญ่"),
-    passwordMismatch: pickLang("Passwords don't match.", "รหัสผ่านไม่ตรงกัน"),
-    setPassword: pickLang("CREATE ACCOUNT", "สร้างบัญชี"),
+    passwordTitle: t("onboarding.passwordTitle", uiLang),
+    emailLabel: t("onboarding.emailLabel", uiLang),
+    newPassword: t("onboarding.newPassword", uiLang),
+    confirmPassword: t("onboarding.confirmPassword", uiLang),
+    passwordRule1: t("onboarding.passwordRule1", uiLang),
+    passwordRule2: t("onboarding.passwordRule2", uiLang),
+    passwordRule3: t("onboarding.passwordRule3", uiLang),
+    passwordMismatch: t("onboarding.passwordMismatch", uiLang),
+    setPassword: t("onboarding.setPassword", uiLang),
 
     // Username & Avatar Step (Step 2)
-    whatToCallYou: pickLang("What should we call you?", "เราควรเรียกคุณว่าอะไรดี?"),
-    firstNameLabel: pickLang("First Name or Nickname", "ชื่อจริงหรือชื่อเล่น"),
-    chooseAvatar: pickLang("Choose an avatar", "เลือกรูปโปรไฟล์"),
+    whatToCallYou: t("onboarding.whatToCallYou", uiLang),
+    firstNameLabel: t("onboarding.firstNameLabel", uiLang),
+    chooseAvatar: t("onboarding.chooseAvatar", uiLang),
 
     // Benefits Step (Step 3)
-    benefitsTitle: pickLang("What's included in my free account?", "บัญชีฟรีของฉันมีอะไรบ้าง?"),
-    benefit1: pickLang("Access to the 1st lesson of each level – 12 lessons total!", "เข้าถึงบทเรียนแรกของแต่ละระดับ – รวม 12 บทเรียน!"),
-    benefit2: pickLang("See common mistakes made by Thai speakers", "ดูข้อผิดพลาดที่พบบ่อยของผู้พูดภาษาไทย"),
-    benefit3: pickLang("Access to our Featured Exercises Bank", "เข้าถึงคลังแบบฝึกหัดเด่นของเรา"),
-    benefit4: pickLang("Access to our Featured Topics Library", "เข้าถึงคลังหัวข้อเด่นของเรา"),
-    benefit5: pickLang("Learn useful phrases & phrasal verbs", "เรียนรู้วลีและสำนวนที่มีประโยชน์"),
-    benefit6: pickLang("Leave comments on free lessons and get feedback from us!", "แสดงความคิดเห็นในบทเรียนฟรีและรับคำตอบจากเรา!"),
+    benefitsTitle: t("onboarding.benefitsTitle", uiLang),
+    benefit1: t("onboarding.benefit1", uiLang),
+    benefit2: t("onboarding.benefit2", uiLang),
+    benefit3: t("onboarding.benefit3", uiLang),
+    benefit4: t("onboarding.benefit4", uiLang),
+    benefit5: t("onboarding.benefit5", uiLang),
+    benefit6: t("onboarding.benefit6", uiLang),
 
     // Confirmation Step (Step 4)
-    confirmationTitle: pickLang("You're all set!", "เสร็จเรียบร้อยแล้ว!"),
-    confirmationSubtitle: pickLang("Your profile is complete and you're officially part of the Pailin Abroad community. Get ready to learn!", "โปรไฟล์ของคุณสมบูรณ์แล้วและคุณได้เป็นส่วนหนึ่งของชุมชน Pailin Abroad อย่างเป็นทางการ เตรียมตัวเรียนกันเถอะ!"),
-    getStarted: pickLang("GET STARTED!", "เริ่มเรียนเลย!"),
+    confirmationTitle: t("onboarding.confirmationTitle", uiLang),
+    confirmationSubtitle: t("onboarding.confirmationSubtitle", uiLang),
+    confirmationCta: t("onboarding.confirmationCta", uiLang),
+    getStarted: t("onboarding.getStarted", uiLang),
 
     // Navigation
-    back: pickLang("BACK", "ย้อนกลับ"),
-    next: pickLang("NEXT", "ถัดไป"),
+    back: t("onboarding.back", uiLang),
+    next: t("onboarding.next", uiLang),
 
     // Avatar labels for accessibility/tooltips
-    avatar1: pickLang("Avatar 1", "อวตาร 1"),
-    avatar2: pickLang("Avatar 2", "อวตาร 2"),
-    avatar3: pickLang("Avatar 3", "อวตาร 3"),
-    avatar4: pickLang("Avatar 4", "อวตาร 4"),
-    avatar5: pickLang("Avatar 5", "อวตาร 5"),
-    avatar6: pickLang("Avatar 6", "อวตาร 6"),
-    avatar7: pickLang("Avatar 7", "อวตาร 7"),
-    avatar8: pickLang("Avatar 8", "อวตาร 8")
+    avatar1: t("onboarding.avatar1", uiLang),
+    avatar2: t("onboarding.avatar2", uiLang),
+    avatar3: t("onboarding.avatar3", uiLang),
+    avatar4: t("onboarding.avatar4", uiLang),
+    avatar5: t("onboarding.avatar5", uiLang),
+    avatar6: t("onboarding.avatar6", uiLang),
+    avatar7: t("onboarding.avatar7", uiLang),
+    avatar8: t("onboarding.avatar8", uiLang)
   };
 
   const nextStep = () => {
@@ -731,6 +725,9 @@ const Onboarding = () => {
             <h2 className="onboarding-confirmation-title">{uiText.confirmationTitle}</h2>
             <p className="onboarding-confirmation-subtitle">
               {uiText.confirmationSubtitle}
+            </p>
+            <p className="onboarding-confirmation-subtitle">
+              {uiText.confirmationCta}
             </p>
             <button
               onClick={handleFinishOnboarding}  // ✅ Call the function that sets is_active

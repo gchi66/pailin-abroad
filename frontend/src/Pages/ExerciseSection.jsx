@@ -6,6 +6,8 @@ import MultipleChoiceExercise from "../Components/ExerciseTypes/MultipleChoiceEx
 import SentenceTransformExercise from "../Components/ExerciseTypes/SentenceTransformExercise";
 import { API_BASE_URL } from "../config/api";
 import Breadcrumbs from "../Components/Breadcrumbs";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/ExerciseBank.css";
 
 const EXERCISE_COMPONENTS = {
@@ -27,6 +29,7 @@ const ExerciseSection = () => {
   const [error, setError] = useState(null);
   const [contentLang, setContentLang] = useState("en");
   const [expandedIds, setExpandedIds] = useState(() => new Set());
+  const { ui: uiLang } = useUiLang();
 
   useEffect(() => {
     if (!categorySlug || !sectionSlug) return;
@@ -52,7 +55,7 @@ const ExerciseSection = () => {
         if (err.name === "AbortError") return;
         console.error("Error fetching exercise section:", err);
         if (isMounted) {
-          setError(err.message || "Unable to load this section.");
+          setError(err.message || t("exerciseSection.notFound", uiLang));
           setSection(null);
         }
       } finally {
@@ -123,15 +126,15 @@ const ExerciseSection = () => {
       <div className="exercise-section-page-container">
         <header className="exercise-bank-page-header">
           <div className="exercise-bank-header-content">
-            <h1 className="exercise-bank-page-header-text">Exercise Bank</h1>
+            <h1 className="exercise-bank-page-header-text">{t("exerciseSection.title", uiLang)}</h1>
             <p className="exercise-bank-page-subtitle">
-              Additional practice exercises for those difficult grammar topics.
+              {t("exerciseSection.subtitle", uiLang)}
             </p>
           </div>
         </header>
         <div className="exercise-section-content">
           <div className="exercise-bank-placeholder">
-            <p>Loading section...</p>
+            <p>{t("exerciseSection.loadingSection", uiLang)}</p>
           </div>
         </div>
       </div>
@@ -143,21 +146,21 @@ const ExerciseSection = () => {
       <div className="exercise-section-page-container">
         <header className="exercise-bank-page-header">
           <div className="exercise-bank-header-content">
-            <h1 className="exercise-bank-page-header-text">Exercise Bank</h1>
+            <h1 className="exercise-bank-page-header-text">{t("exerciseSection.title", uiLang)}</h1>
             <p className="exercise-bank-page-subtitle">
-              Additional practice exercises for those difficult grammar topics.
+              {t("exerciseSection.subtitle", uiLang)}
             </p>
           </div>
         </header>
         <div className="exercise-section-content">
           <div className="exercise-bank-placeholder">
-            <p>{error || "We couldn't find that section."}</p>
+            <p>{error || t("exerciseSection.notFound", uiLang)}</p>
             <Breadcrumbs
               className="exercise-section-breadcrumbs"
               items={[
-                { label: "Resources", to: "/resources" },
-                { label: "Exercise Bank", to: "/exercise-bank" },
-                { label: section?.section || "Section" },
+                { label: t("exerciseSection.resourcesLabel", uiLang), to: "/resources" },
+                { label: t("exerciseSection.title", uiLang), to: "/exercise-bank" },
+                { label: section?.section || t("exerciseSection.sectionLabel", uiLang) },
               ]}
             />
           </div>
@@ -170,9 +173,9 @@ const ExerciseSection = () => {
     <div className="exercise-section-page-container">
       <header className="exercise-bank-page-header">
         <div className="exercise-bank-header-content">
-          <h1 className="exercise-bank-page-header-text">Exercise Bank</h1>
+          <h1 className="exercise-bank-page-header-text">{t("exerciseSection.title", uiLang)}</h1>
           <p className="exercise-bank-page-subtitle">
-            Additional practice exercises for those difficult grammar topics.
+            {t("exerciseSection.subtitle", uiLang)}
           </p>
         </div>
       </header>
@@ -182,9 +185,9 @@ const ExerciseSection = () => {
           <Breadcrumbs
             className="exercise-section-breadcrumbs"
             items={[
-              { label: "Resources", to: "/resources" },
-              { label: "Exercise Bank", to: "/exercise-bank" },
-              { label: section.section || "Section" },
+              { label: t("exerciseSection.resourcesLabel", uiLang), to: "/resources" },
+              { label: t("exerciseSection.title", uiLang), to: "/exercise-bank" },
+              { label: section.section || t("exerciseSection.sectionLabel", uiLang) },
             ]}
           />
           <div className="exercise-section-nav-actions">
@@ -197,7 +200,10 @@ const ExerciseSection = () => {
           <h2 className="exercise-section-title">{section.section}</h2>
           {section.section_th && <p className="exercise-section-title-th">{section.section_th}</p>}
           <p className="exercise-section-meta">
-            {localizedExercises.length} exercise{localizedExercises.length === 1 ? "" : "s"} in this section
+            {localizedExercises.length}{" "}
+            {localizedExercises.length === 1
+              ? t("exerciseSection.exercisesCount.singular", uiLang)
+              : t("exerciseSection.exercisesCount.plural", uiLang)}
           </p>
         </div>
 

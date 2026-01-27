@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 import "../Styles/EmailConfirmation.css";
 
 const EmailConfirmationPage = ({ userEmail = "your email" }) => {
@@ -13,10 +15,11 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
 
   const [resendLoading, setResendLoading] = useState(false);
   const [resendMessage, setResendMessage] = useState("");
+  const { ui } = useUiLang();
 
   const handleResendEmail = async () => {
     if (!effectiveEmail || effectiveEmail === "your email") {
-      setResendMessage("Error: No email found");
+      setResendMessage(t("authModals.emailConfirmation.noEmailError", ui));
       return;
     }
 
@@ -35,10 +38,10 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
       if (error) {
         setResendMessage(`Error: ${error.message}`);
       } else {
-        setResendMessage("Verification email sent! Check your inbox.");
+        setResendMessage(t("authModals.emailConfirmation.resendSuccess", ui));
       }
     } catch (err) {
-      setResendMessage("Failed to send email. Please try again.");
+      setResendMessage(t("authModals.emailConfirmation.resendFail", ui));
       console.error("Resend email error:", err);
     } finally {
       setResendLoading(false);
@@ -48,14 +51,16 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
   return (
     <main className="email-confirmation-main">
       <div className="email-confirmation-container">
-        <h1 className="email-confirmation-heading">You've got mail!</h1>
+        <h1 className="email-confirmation-heading">{t("authModals.emailConfirmation.heading", ui)}</h1>
 
         <p className="email-confirmation-message">
-          We just sent a message to you at <strong>{effectiveEmail}</strong>. Click the link inside to verify your email and complete your sign-up.
+          {t("authModals.emailConfirmation.messagePrefix", ui)}
+          <strong>{effectiveEmail}</strong>
+          {t("authModals.emailConfirmation.messageSuffix", ui)}
         </p>
 
         <p className="email-confirmation-instructions">
-          If you don't receive the email within a few minutes, please check your spam or junk folder. Or, you can click the button below to resend it.
+          {t("authModals.emailConfirmation.instructions", ui)}
         </p>
 
         <button
@@ -63,7 +68,7 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
           onClick={handleResendEmail}
           disabled={resendLoading}
         >
-          {resendLoading ? "Sending..." : "RESEND EMAIL"}
+          {resendLoading ? t("authModals.emailConfirmation.sending", ui) : t("authModals.emailConfirmation.resend", ui)}
         </button>
 
         {resendMessage && (

@@ -54,11 +54,7 @@ export default function ApplySection({
         <textarea
           className="apply-input"
           rows={2}
-          placeholder={
-            contentLang === "th"
-              ? "พิมพ์คำตอบของคุณที่นี่…"
-              : "Type your response here…"
-          }
+          placeholder={pick(copy.lessonPage.placeholders.applyResponse, contentLang)}
           value={text}
           onChange={(e) => setText(e.target.value)}
           disabled={showResponse}
