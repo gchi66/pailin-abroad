@@ -71,6 +71,7 @@
 .lc-head-title {
   font-weight: 700;
   font-size: 1.6rem;
+  text-transform: uppercase;
 }
 
 .lc-head-title-th {
@@ -225,6 +226,7 @@
 
 .lc-section-nav-label {
   white-space: nowrap;
+  text-transform: uppercase;
 }
 
 /* ===============================================

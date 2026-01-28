@@ -31,7 +31,7 @@ export const copy = {
     },
   },
   listenCta: {
-    listen: { en: "Listen to the Conversation", th: "ฟังบทสนทนา" },
+    listen: { en: "LISTEN TO THE CONVERSATION", th: "ฟังบทสนทนา" },
     playing: { en: "Now Playing", th: "กำลังเล่น" },
   },
   lessonSidebar: {
@@ -44,7 +44,7 @@ export const copy = {
       understand: { en: "Understand", th: "การทำความเข้าใจ" },
       extra_tip: { en: "Extra Tips", th: "เคล็ดลับเพิ่มเติม" },
       common_mistake: { en: "Common Mistakes", th: "ข้อผิดพลาดที่พบบ่อย" },
-      phrases_verbs: { en: "Phrases & Verbs", th: "วลี & คำกริยา" },
+      phrases_verbs: { en: "Phrases & Verbs", th: "วลีและคำกริยา" },
       culture_note: { en: "Culture Note", th: "เกร็ดความรู้ทางวัฒนธรรม" },
       practice: { en: "Practice", th: "แบบฝึกหัด" },
     },
@@ -1371,7 +1371,7 @@ export const copy = {
       comprehension: { en: "Comprehension", th: "ความเข้าใจ" },
       transcript: { en: "Transcript", th: "สคริปต์บท" },
       practice: { en: "Practice", th: "แบบฝึกหัด" },
-      phrasesVerbs: { en: "Phrases & Verbs", th: "วลี & คำกริยา" },
+      phrasesVerbs: { en: "Phrases & Verbs", th: "วลีและคำกริยา" },
       apply: { en: "Apply", th: "การนำไปใช้" },
       extraTip: { en: "Extra Tips", th: "เคล็ดลับเพิ่มเติม" },
       commonMistake: { en: "Common Mistakes", th: "ข้อผิดพลาดที่พบบ่อย" },
@@ -1412,8 +1412,8 @@ export const copy = {
     lessonLabel: { en: "Lesson", th: "บทเรียน" },
     checkpointLabel: { en: "Checkpoint", th: "จุดตรวจสอบ" },
     markComplete: {
-      en: "Mark Lesson {lesson} as Finished",
-      th: "ทำเครื่องหมายว่าบทเรียน {lesson} เสร็จแล้ว",
+      en: "Mark Lesson as Finished",
+      th: "ทำเครื่องหมายว่าบทเรียนเสร็จแล้ว",
     },
     markCompleteFallback: {
       en: "Mark Lesson as Finished",

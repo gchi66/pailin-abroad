@@ -206,6 +206,6 @@ details[open] > .markdown-summary {
   }
 
   .ps-quick-practice .st-example {
-    padding-top: 0;
+    padding-top: 1rem;
   }
 }

@@ -1216,4 +1216,8 @@
   .mc-prompt {
     margin-top: 1rem;
   }
+
+  .st-prompt {
+    margin-bottom: 1rem !important;
+  }
 }

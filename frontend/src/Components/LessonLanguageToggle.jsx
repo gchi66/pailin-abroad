@@ -9,14 +9,14 @@ const LessonLanguageToggle = ({
   className = "",
   disabled = false,
 }) => {
-  const { ui: uiLang } = useUiLang();
   const isEnglish = contentLang === "en";
+  // Always show the target language text based on content language, not UI language.
   const buttonText = isEnglish
-    ? t("lessonToggle.toThai", uiLang)
-    : t("lessonToggle.toEnglish", uiLang);
+    ? t("lessonToggle.toThai", "th")
+    : t("lessonToggle.toEnglish", "en");
   const ariaLabel = isEnglish
-    ? t("lessonToggle.toThaiContent", uiLang)
-    : t("lessonToggle.toEnglishContent", uiLang);
+    ? t("lessonToggle.toThaiContent", "th")
+    : t("lessonToggle.toEnglishContent", "en");
   const nextLang = isEnglish ? "th" : "en";
   const classes = ["language-toggle-btn"];
   if (className) classes.push(className);

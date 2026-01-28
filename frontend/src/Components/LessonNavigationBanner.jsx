@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../Styles/LessonNavigationBanner.css";
 import supabase from "../supabaseClient";
-import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
 
 const LessonNavigationBanner = ({
   prevLesson,
   nextLesson,
   currentLesson,
-  onMarkComplete
+  onMarkComplete,
+  contentLang = "en",
 }) => {
-  const { ui: uiLang } = useUiLang();
+  const langForLabels = contentLang === "th" ? "th" : "en";
   const [isCompleted, setIsCompleted] = useState(false);
 
   // Load saved completion state for this lesson
@@ -104,10 +104,8 @@ const LessonNavigationBanner = ({
     return nextLesson?.lesson_order || "";
   };
 
-  const lessonLabel = t("lessonNav.lessonLabel", uiLang) || "Lesson";
-  const checkpointLabel = t("lessonNav.checkpointLabel", uiLang) || "Checkpoint";
-  const formatLessonLabel = (number) =>
-    number ? `${lessonLabel} ${number}` : lessonLabel;
+  const checkpointLabel = t("lessonNav.checkpointLabel", langForLabels) || "Checkpoint";
+  const formatLessonLabel = (number) => (number ? `${number}` : "");
 
   const getLessonCompactLabel = (lesson, fallbackNumber) => {
     if (!lesson) return "";
@@ -134,18 +132,7 @@ const LessonNavigationBanner = ({
   };
 
   const getMarkCompleteLabel = () => {
-    const raw =
-      currentLesson?.lesson_external_id ||
-      currentLesson?.external_id ||
-      currentLesson?.lessonId ||
-      "";
-    if (!raw) {
-      return t("lessonNav.markCompleteFallback", uiLang);
-    }
-    const label = formatLessonLabel(raw);
-    const template = t("lessonNav.markComplete", uiLang);
-    if (!template) return label;
-    return template.replace("{lesson}", label);
+    return t("lessonNav.markCompleteFallback", langForLabels);
   };
 
   return (
@@ -186,8 +173,8 @@ const LessonNavigationBanner = ({
             }
             alt={
               isCompleted
-                ? t("lessonNav.completedAlt", uiLang)
-                : t("lessonNav.markCompleteAlt", uiLang)
+                ? t("lessonNav.completedAlt", langForLabels)
+                : t("lessonNav.markCompleteAlt", langForLabels)
             }
             className="lesson-checkmark-icon"
           />

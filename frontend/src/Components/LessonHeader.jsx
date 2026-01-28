@@ -28,7 +28,7 @@ export default function LessonHeader({
   const fallbackTitle = trimOrEmpty(title) || "";
   const fallbackFocus = trimOrEmpty(focus) || "";
   const fallbackBackstory = trimOrEmpty(backstory) || "";
-  const backLinkText = t("lessonHeader.backLink", uiLang) || "< BACK TO LESSON LIBRARY";
+  const backLinkText = `← ${t("lessonHeader.backLink", uiLang) || "Back to Lesson Library"}`;
   const backstoryLabel = t("lessonHeader.backstoryLabel", uiLang) || "Backstory";
   const levelPrefix = t("lessonHeader.levelPrefix", uiLang) || "Level";
   const lessonPrefix = t("lessonHeader.lessonPrefix", uiLang) || "Lesson";

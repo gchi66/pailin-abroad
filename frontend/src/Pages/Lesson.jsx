@@ -97,15 +97,16 @@ function computeDefaultActiveId({ sections, questions, transcript, practiceExerc
   return null;
 }
 
-function getSectionLabel(type, uiLang) {
+function getSectionLabel(type, uiLang, contentLang) {
   const key = LABEL_KEY_MAP[type];
   if (!key) return (type || "").toUpperCase();
-  const translated = t(key, uiLang);
+  const langForLabels = contentLang === "th" ? "th" : uiLang;
+  const translated = t(key, langForLabels);
   if (translated) return translated;
   return (type || "").toUpperCase();
 }
 
-function buildSectionMenu({ sections = [], questions = [], transcript = [], practiceExercises = [], lessonPhrases = [], isLocked = false, uiLang = "en" }) {
+function buildSectionMenu({ sections = [], questions = [], transcript = [], practiceExercises = [], lessonPhrases = [], isLocked = false, uiLang = "en", contentLang = "en" }) {
   const items = MASTER_ORDER
     .map((type) => {
       if (isLocked) {
@@ -138,7 +139,7 @@ function buildSectionMenu({ sections = [], questions = [], transcript = [], prac
 
   return items.map((item) => ({
     ...item,
-    label: getSectionLabel(item.type, uiLang),
+    label: getSectionLabel(item.type, uiLang, contentLang),
   }));
 }
 
@@ -1131,6 +1132,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     lessonPhrases,
     isLocked,
     uiLang,
+    contentLang,
   });
   const prepareSection = sections.find((s) => s.type === "prepare");
   return (
@@ -1237,6 +1239,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
             prevLesson={prevLesson}
             nextLesson={nextLesson}
             currentLesson={lesson}
+            contentLang={contentLang}
             onMarkComplete={(isCompleted) => {
               console.log(`Lesson ${lesson.lesson_external_id} marked as ${isCompleted ? 'completed' : 'incomplete'}`);
               // TODO: Add actual completion tracking logic here

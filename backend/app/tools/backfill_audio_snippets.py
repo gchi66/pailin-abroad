@@ -26,6 +26,7 @@ Run:
 """
 
 from __future__ import annotations
+import argparse
 import json
 import os, re, sys
 from collections import defaultdict
@@ -337,6 +338,14 @@ def update_lesson_sections_with_audio_keys():
 
 # ─── 6. Main ───────────────────────────────────────────────────────────────
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Backfill audio snippets from storage.")
+    parser.add_argument(
+        "--phrases-only",
+        action="store_true",
+        help="Only backfill phrases_verbs audio snippets.",
+    )
+    args = parser.parse_args()
+
     print("Gathering objects …")
     all_objects = list_objects_recursive()
     print(f"Found {len(all_objects)} objects in bucket")
@@ -400,6 +409,9 @@ def main() -> None:
                 "audio_key": audio_key,
             })
             continue  # done with phrases file
+
+        if args.phrases_only:
+            continue
 
         # 2) Standard sections (these live under {Stage}/L{n}/{Section}/...)
         parts = path.split("/")

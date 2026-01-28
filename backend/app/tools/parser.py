@@ -2911,6 +2911,30 @@ class GoogleDocsParser:
             if th_part:
                 append_text(target, key_th, th_part, newline=newline)
 
+        def should_drop_mc_text_jsonb_th(item: dict) -> bool:
+            text_th = item.get("text_th") or ""
+            text_jsonb_th = item.get("text_jsonb_th")
+            if not text_th or not text_jsonb_th:
+                return False
+
+            def count_speaker_lines(text: str) -> int:
+                return sum(
+                    1
+                    for line in text.splitlines()
+                    if re.match(r"^[^:\n]{1,40}:\s*", line.strip())
+                )
+
+            jsonb_text = "".join(
+                span.get("text", "") for span in text_jsonb_th if isinstance(span, dict)
+            )
+            th_speakers = count_speaker_lines(text_th)
+            jsonb_speakers = count_speaker_lines(jsonb_text)
+            if th_speakers >= 2 and jsonb_speakers < th_speakers:
+                return True
+            if text_th.count("\n") >= 1 and jsonb_text.count("\n") == 0:
+                return True
+            return False
+
         def flush_exercise():
             nonlocal cur_ex, cur_items, item_complete
             if cur_ex is not None:
@@ -2920,6 +2944,10 @@ class GoogleDocsParser:
                             item["inputs"] = 1
                         else:
                             item["inputs"] = normalize_inputs(item["inputs"])
+                if cur_ex.get("kind") == "multiple_choice":
+                    for item in cur_items:
+                        if should_drop_mc_text_jsonb_th(item):
+                            item.pop("text_jsonb_th", None)
                 cur_ex["items"] = cur_items
                 items_th_collection = []
                 for item in cur_items:
