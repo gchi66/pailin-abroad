@@ -5,6 +5,17 @@
   display: inline-block;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .profile-dropdown::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    height: 0.6rem;
+  }
+}
+
 .profile-button {
   background: none !important;
   border: none !important;
@@ -82,6 +93,7 @@
 
 .dropdown-link {
   display: block;
+  box-sizing: border-box;
   padding: 0.75rem 1rem;
   color: #1E1E1E;
   text-decoration: none;
