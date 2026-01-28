@@ -527,6 +527,7 @@
     flex-direction: row;
     align-items: center;
     gap: 0.75rem;
+    box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
   }
 
   .topic-library-arrow {
@@ -622,7 +623,7 @@
     justify-content: center;
     gap: 0.35rem;
     cursor: pointer;
-    box-shadow: none;
+    box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
   }
 
   .topic-library-mobile-view-toggle {
