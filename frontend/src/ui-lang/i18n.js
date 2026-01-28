@@ -250,6 +250,13 @@ export const copy = {
       freeCta: { en: "BECOME A MEMBER", th: "สมัครสมาชิก" },
       noAccountCta: { en: "SIGN UP FOR FREE", th: "สมัครสมาชิกฟรี" },
     },
+    lockNotice: {
+      link: { en: "Sign up for free", th: "สมัครสมาชิกฟรี" },
+      suffix: {
+        en: " to access our featured resources!",
+        th: "เพื่อเข้าถึงสื่อการเรียนแนะนำของเรา",
+      },
+    },
   },
   exerciseBankPage: {
     title: { en: "Exercise Bank", th: "คลังแบบฝึกหัด" },
@@ -262,8 +269,8 @@ export const copy = {
     searchPlaceholder: { en: "Search exercises", th: "ค้นหาแบบฝึกหัด" },
     selectCategory: { en: "Select a category", th: "เลือกหมวดหมู่" },
     viewSection: { en: "View section →", th: "ดูหัวข้อนี้ →" },
-    exploreSection: { en: "Explore section →", th: "ดูรายละเอียดหัวข้อนี้ →" },
-    featuredCountLabel: { en: "featured", th: "แบบฝึกหัดแนะนำ" },
+    exploreSection: { en: "Go to Exercises →", th: "ไปที่แบบฝึกหัด →" },
+    featuredCountLabel: { en: "Featured", th: "แบบฝึกหัดแนะนำ" },
     exerciseCount: {
       singular: { en: "exercise in this section.", th: "แบบฝึกหัดในหัวข้อนี้" },
       plural: { en: "exercises in this section.", th: "แบบฝึกหัดในหัวข้อนี้" },
@@ -305,16 +312,12 @@ export const copy = {
         },
       },
       noAccount: {
-        heading: { en: "Unlock our Exercise Bank.", th: "ปลดล็อกคลังแบบฝึกหัดของเรา" },
-        signupLink: { en: "Sign up for free", th: "สมัครสมาชิกฟรี" },
-        signupRest: {
-          en: "to access our featured exercises.",
-          th: "เพื่อเข้าถึงแบบฝึกหัดแนะนำ",
+        heading: { en: "Looks like you don't have an account.", th: "ดูเหมือนว่าคุณยังไม่มีบัญชีผู้ใช้" },
+        desc: {
+          en: "Sign up for free to access our featured resources!",
+          th: "สมัครสมาชิกฟรีเพื่อเข้าถึงสื่อการเรียนแนะนำของเรา",
         },
-        memberRest: {
-          en: "Become a member to unlock the full Exercise Bank.",
-          th: "เป็นสมาชิกเพื่อปลดล็อกคลังแบบฝึกหัดทั้งหมด",
-        },
+        cta: { en: "SIGN UP FOR FREE", th: "สมัครสมาชิกฟรี" },
       },
     },
   },
@@ -434,6 +437,74 @@ export const copy = {
       12: {
         en: "As Pailin's relationship with Tyler becomes more serious, she learns of her host brother Luke’s dating mishaps. She is also looking forward to Thanksgiving and Black Friday!",
         th: "เมื่อความสัมพันธ์ของไพลินและไทเลอร์เริ่มมีความจริงจังมากขึ้น เธอก็รู้เรื่องปัญหาความรักของลูค พี่ชายโฮสต์ของเธอ และเธอยังตั้งตารอเทศกาลขอบคุณพระเจ้า และช่วงเทศกาลของลดราคา Black Friday",
+      },
+    },
+  },
+  freeLessonsIndexPage: {
+    title: { en: "Free Lesson Library", th: "คลังบทเรียนฟรี" },
+    subtitle: {
+      en: "Explore the lessons available to you on your free plan",
+      th: "เข้าสำรวจบทเรียนที่คุณเข้าได้เรียนได้ด้วยแพ็กเกจเรียนฟรี",
+    },
+    noAccount: {
+      heading: { en: "Looks like you don't have an account.", th: "ดูเหมือนว่าคุณยังไม่มีบัญชีผู้ใช้" },
+      subtextPrefix: { en: "Make a ", th: "สร้างบัญชีผู้ใช้" },
+      subtextEm: { en: "free", th: "ฟรี" },
+      subtextSuffix: {
+        en: " account to access all the lessons below, along with access to our featured resources!",
+        th: "เพื่อเข้าถึงบทเรียนด้านล่างทั้งหมด และเข้าถึงสื่อการเรียนแนะนำของเรา!",
+      },
+    },
+    freePlan: {
+      line1: {
+        en: "Your free plan gives you access to the first lesson of each level!",
+        th: "แพ็กเกจเรียนฟรีของคุณสามารถเข้าถึงบทเรียนแรกของทุกระดับการเรียน!",
+      },
+      upgradeLink: { en: "Upgrade", th: "อัพเกรด" },
+      upgradeRest: { en: "to enjoy access to our ", th: "เพื่อเข้าถึง" },
+      libraryLink: { en: "full lesson library", th: "คลังบทเรียนของเราทั้งหมด" },
+      upgradeSuffix: { en: ".", th: "" },
+    },
+    stages: {
+      beginner: { en: "BEGINNER", th: "ระดับเริ่มต้น" },
+      intermediate: { en: "INTERMEDIATE", th: "ระดับกลาง" },
+      advanced: { en: "ADVANCED", th: "ระดับสูง" },
+      expert: { en: "EXPERT", th: "ระดับเชี่ยวชาญ" },
+    },
+    comingSoon: { en: "Coming Soon", th: "เร็วๆ นี้" },
+    notCompleted: { en: "Not completed", th: "ยังไม่เสร็จ" },
+  },
+  tryLessonsPage: {
+    title: { en: "Try Our Lessons", th: "ทดลองเรียน" },
+    subtitle: {
+      en: "4 free lessons for you to try, no sign-up needed!",
+      th: "ลองเรียนฟรี 4 บทเรียน ไม่จำเป็นต้องสมัครสมาชิก!",
+    },
+    introLine1: {
+      en: "We're confident you'll love our unique, narrative-driven method of learning English.",
+      th: "เรามั่นใจว่าคุณจะหลงรักวิธีการเรียนภาษาอังกฤษแบบเล่าเรื่องที่ไม่เหมือนใครแบบเราแน่นอน",
+    },
+    introLine2: {
+      en: "Explore a lesson from each level to see for yourself.",
+      th: "ลองสำรวจบทเรียนแรกจากแต่ละระดับการเรียนด้วยตัวคุณเองดูก่อนสิ",
+    },
+    planNotice: {
+      heading: { en: "Ready to continue your journey?", th: "พร้อมเรียนแล้วหรือยัง?" },
+      noAccountSubtext: {
+        en: "You can create a free account to unlock our entire library of free lessons.",
+        th: "คุณสามารถสร้างบัญชีผู้ใช้ฟรีเพื่อปลดล็อกคลังบทเรียนฟรีทั้งหมดของเรา",
+      },
+      dividerPrefix: { en: "Or, get full access to ", th: "หรือ อัพเกรดเป็นสมาชิกของเราเพื่อเข้าถึง " },
+      dividerEm: { en: "all 150+ lessons", th: "บทเรียนมากกว่า 200 บท" },
+      dividerSuffix: {
+        en: " and take your English to the next level with a full membership.",
+        th: " และพัฒนายกระดับภาษาอังกฤษของคุณขึ้นไปอีกขั้น",
+      },
+      loggedInPrefix: { en: "Get full access to ", th: "เข้าถึง" },
+      loggedInEm: { en: "all 150+ lessons", th: "บทเรียนมากกว่า 200 บททั้งหมด" },
+      loggedInSuffix: {
+        en: " and take your English to the next level with a full membership.",
+        th: " และพัฒนายกระดับภาษาอังกฤษของคุณขึ้นไปอีกขั้นด้วยการเป็นสมาชิก",
       },
     },
   },

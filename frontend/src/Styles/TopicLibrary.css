@@ -134,7 +134,7 @@
   justify-content: flex-start;
   gap: 1.5rem;
   width: 100%;
-  padding: 1.5rem 0rem;
+  padding: 0rem 0rem 1.5rem;
   box-sizing: border-box;
   flex-wrap: wrap;
   font-family: "Poppins", "Anuphan", sans-serif;
@@ -403,6 +403,11 @@
   color: #1e1e1e;
   text-decoration: underline;
   font-weight: 800;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
 }
 
 /* Placeholder Content */

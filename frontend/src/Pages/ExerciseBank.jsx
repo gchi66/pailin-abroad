@@ -228,7 +228,7 @@ const ExerciseBank = () => {
     return `${count} ${translate(exerciseBankCopy.exerciseCount[key])}`;
   };
 
-  const formatFeaturedCount = (count) => `${count} ${translate(exerciseBankCopy.featuredCountLabel)}`;
+  const formatFeaturedCount = () => `${translate(exerciseBankCopy.featuredCountLabel)}`;
 
   const isCardLocked = (isFeaturedCard) => {
     if (isPaid) return false;
@@ -256,6 +256,15 @@ const ExerciseBank = () => {
     });
     return Array.from(map.values());
   }, [featured]);
+
+  const sectionExerciseCountByKey = useMemo(() => {
+    const map = new Map();
+    sections.forEach((section) => {
+      const key = `${section.category_slug}/${section.section_slug}`;
+      map.set(key, section.exercise_count);
+    });
+    return map;
+  }, [sections]);
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
@@ -398,13 +407,15 @@ const ExerciseBank = () => {
                     </>,
                     translate(exerciseBankCopy.planNotice.free.browse),
                   ]
-                : [
-                    <>
-                      <Link to="/signup">{translate(exerciseBankCopy.planNotice.noAccount.signupLink)}</Link>{" "}
-                      {translate(exerciseBankCopy.planNotice.noAccount.signupRest)}
-                    </>,
-                    translate(exerciseBankCopy.planNotice.noAccount.memberRest),
-                  ]
+                : translate(exerciseBankCopy.planNotice.noAccount.desc)
+            }
+            cta={
+              isFreePlan
+                ? null
+                : {
+                    to: "/signup",
+                    label: translate(exerciseBankCopy.planNotice.noAccount.cta),
+                  }
             }
           />
         )}
@@ -594,6 +605,9 @@ const ExerciseBank = () => {
                   {filteredFeaturedBySection.map((group) => {
                     const isLocked = isCardLocked(true);
                     const destination = `/exercise-bank/${group.category_slug}/${group.section_slug}`;
+                    const groupKey = `${group.category_slug}/${group.section_slug}`;
+                    const totalCount =
+                      sectionExerciseCountByKey.get(groupKey) ?? group.exercises.length;
                     return (
                     <div
                       key={`${group.category_slug}-${group.section_slug}`}
@@ -638,7 +652,7 @@ const ExerciseBank = () => {
                       </div>
                       <div className="exercise-bank-card-body">
                         <p className="exercise-bank-card-copy">
-                          {formatExerciseCount(group.exercises.length)}
+                          {formatExerciseCount(totalCount)}
                         </p>
                         <span className="exercise-bank-card-link" aria-hidden="true">
                           {translate(exerciseBankCopy.exploreSection)}

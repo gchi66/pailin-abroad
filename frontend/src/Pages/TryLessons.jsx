@@ -4,25 +4,28 @@ import { useAuth } from "../AuthContext";
 import "../Styles/TryLessons.css";
 import FreeLessonCards from "../Components/FreeLessonCards";
 import MembershipFeatures from "../Components/MembershipFeatures";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 
 const TryLessons = () => {
   const { user } = useAuth();
+  const { ui: uiLang } = useUiLang();
 
   return (
     <div className="try-lessons-page-container">
       {/* Header */}
       <header className="try-lessons-page-header">
-        <h1 className="try-lessons-header-text">Try Our Lessons</h1>
+        <h1 className="try-lessons-header-text">{t("tryLessonsPage.title", uiLang)}</h1>
         <p className="try-lessons-header-subtitle">
-          4 free lessons for you to try, no sign-up needed!
+          {t("tryLessonsPage.subtitle", uiLang)}
         </p>
       </header>
 
       {/* Intro Text */}
       <div className="try-lessons-intro-section">
         <p className="try-lessons-intro">
-          We're confident you'll love our unique, narrative-driven method of learning English.
-          Explore a lesson from each level to see for yourself.
+          {t("tryLessonsPage.introLine1", uiLang)}{" "}
+          {t("tryLessonsPage.introLine2", uiLang)}
         </p>
       </div>
 
@@ -34,34 +37,36 @@ const TryLessons = () => {
       <div className="try-lessons-plan-notice-wrapper">
         {!user ? (
           <PlanNotice
-            heading="Ready to continue your journey?"
-            subtext={[
-              "You can create a free account to unlock our entire library of free lessons.",
-            ]}
+            heading={t("tryLessonsPage.planNotice.heading", uiLang)}
+            subtext={[t("tryLessonsPage.planNotice.noAccountSubtext", uiLang)]}
             cta={{
-              label: "SIGN UP FOR FREE",
+              label: t("lessonsIndexPage.signUpFree", uiLang),
               to: "/signup",
             }}
             secondaryCta={{
-              label: "BECOME A MEMBER",
+              label: t("lessonsIndexPage.becomeMember", uiLang),
               to: "/membership",
             }}
             ctaDivider={
               <>
-                Or, get full access to <strong>all 150+ lessons</strong> and take your English to the next level with a full membership.
+                {t("tryLessonsPage.planNotice.dividerPrefix", uiLang)}
+                <strong>{t("tryLessonsPage.planNotice.dividerEm", uiLang)}</strong>
+                {t("tryLessonsPage.planNotice.dividerSuffix", uiLang)}
               </>
             }
           />
         ) : (
           <PlanNotice
-            heading="Ready to continue your journey?"
+            heading={t("tryLessonsPage.planNotice.heading", uiLang)}
             subtext={
               <>
-                Get full access to <strong>all 150+ lessons</strong> and take your English to the next level with a full membership.
+                {t("tryLessonsPage.planNotice.loggedInPrefix", uiLang)}
+                <strong>{t("tryLessonsPage.planNotice.loggedInEm", uiLang)}</strong>
+                {t("tryLessonsPage.planNotice.loggedInSuffix", uiLang)}
               </>
             }
             cta={{
-              label: "BECOME A MEMBER",
+              label: t("lessonsIndexPage.becomeMember", uiLang),
               to: "/membership",
             }}
           />

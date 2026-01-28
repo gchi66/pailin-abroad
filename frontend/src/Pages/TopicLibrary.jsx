@@ -5,6 +5,7 @@ import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
 import Breadcrumbs from "../Components/Breadcrumbs";
+import PlanNotice from "../Components/PlanNotice";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
 import "../Styles/TopicLibrary.css";
@@ -62,7 +63,7 @@ const formatTopicTitle = (title = "") => {
     .join(" ");
 };
 
-const TopicLibrary = () => {
+const TopicLibrary = ({ toggleSignupModal }) => {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -263,28 +264,24 @@ const TopicLibrary = () => {
             ]}
           />
           {(isFreePlan || isNoAccount) && (
-            <div className={`topic-library-plan-notice ${isFreePlan ? "is-free-plan" : "is-no-account"}`}>
-              <div className="topic-library-plan-copy">
-                <p className="topic-library-plan-title">
-                  {isFreePlan
-                    ? t("topicLibraryPage.planNotice.freeTitle", uiLang)
-                    : t("topicLibraryPage.planNotice.noAccountTitle", uiLang)}
-                </p>
-                <p className="topic-library-plan-desc">
-                  {isFreePlan
-                    ? t("topicLibraryPage.planNotice.freeDesc", uiLang)
-                    : t("topicLibraryPage.planNotice.noAccountDesc", uiLang)}
-                </p>
-              </div>
-              <Link
-                className="topic-library-plan-cta"
-                to={isFreePlan ? "/membership" : "/signup"}
-              >
-                {isFreePlan
+            <PlanNotice
+              heading={
+                isFreePlan
+                  ? t("topicLibraryPage.planNotice.freeTitle", uiLang)
+                  : t("topicLibraryPage.planNotice.noAccountTitle", uiLang)
+              }
+              subtext={
+                isFreePlan
+                  ? t("topicLibraryPage.planNotice.freeDesc", uiLang)
+                  : t("topicLibraryPage.planNotice.noAccountDesc", uiLang)
+              }
+              cta={{
+                label: isFreePlan
                   ? t("topicLibraryPage.planNotice.freeCta", uiLang)
-                  : t("topicLibraryPage.planNotice.noAccountCta", uiLang)}
-              </Link>
-            </div>
+                  : t("topicLibraryPage.planNotice.noAccountCta", uiLang),
+                to: isFreePlan ? "/membership" : "/signup",
+              }}
+            />
           )}
           {!isMobile && (
             <div className="topic-library-toolbar">
@@ -378,10 +375,22 @@ const TopicLibrary = () => {
                           className="topic-library-lock-icon"
                         />
                         <div className="topic-library-lock-text">
-                          <span>Upgrade to view!</span>
-                          <Link to="/membership" className="topic-library-lock-link">
-                            Become a member
-                          </Link>
+                          <span>
+                            <button
+                              type="button"
+                              className="topic-library-lock-link"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                if (typeof toggleSignupModal === "function") {
+                                  toggleSignupModal();
+                                }
+                              }}
+                            >
+                              {t("topicLibraryPage.lockNotice.link", uiLang)}
+                            </button>
+                            {t("topicLibraryPage.lockNotice.suffix", uiLang)}
+                          </span>
                         </div>
                       </div>
                     </div>

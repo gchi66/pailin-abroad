@@ -289,6 +289,8 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
           isMobileNav ? null : (
             <ProfileDropdown
               extraLinks={isCompactNav ? staticNavLinks : null}
+              avatarSrc={userProfileInfo.avatar}
+              avatarAlt={userProfileInfo.name || user?.email || "User avatar"}
             />
           )
         ) : (

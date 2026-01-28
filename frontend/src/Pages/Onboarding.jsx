@@ -502,7 +502,7 @@ const Onboarding = () => {
           <div className="onboarding-welcome">
             <div className="onboarding-avatar">
               <img
-                src="/images/characters/pailin-blue-left.png"
+                src="/images/characters/pailin_blue_circle_right.webp"
                 alt="Pailin illustration"
                 className="onboarding-avatar-image"
               />

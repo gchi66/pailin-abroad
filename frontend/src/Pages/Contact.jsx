@@ -71,6 +71,29 @@ const Contact = () => {
         <div className="contact-card">
           {t("contactPage.cardBody", ui)}
         </div>
+        <div className="contact-social-links">
+          <a
+            href="#"
+            className="contact-social-link"
+            aria-label="Facebook"
+          >
+            <img src="/images/facebook_icon.png" alt="Facebook" />
+          </a>
+          <a
+            href="#"
+            className="contact-social-link"
+            aria-label="Instagram"
+          >
+            <img src="/images/instagram_icon.png" alt="Instagram" />
+          </a>
+          <a
+            href="#"
+            className="contact-social-link"
+            aria-label="Line"
+          >
+            <img src="/images/line_icon.png" alt="Line" />
+          </a>
+        </div>
 
         {/* form */}
         <div className="form-container">
@@ -125,12 +148,6 @@ const Contact = () => {
           </form>
         </div>
 
-        {/* pailin image */}
-        <img
-          src="/images/characters/pailin-blue-right.png"
-          alt={t("contactPage.pailinAlt", ui)}
-          className="contact-pailin-image"
-        />
       </div>
     </div>
   );

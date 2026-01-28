@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import LessonLanguageToggle from "../Components/LessonLanguageToggle";
 import FillBlankExercise from "../Components/ExerciseTypes/FillBlankExercise";
@@ -8,18 +8,13 @@ import { API_BASE_URL } from "../config/api";
 import Breadcrumbs from "../Components/Breadcrumbs";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
+import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 import "../Styles/ExerciseBank.css";
 
 const EXERCISE_COMPONENTS = {
   fill_blank: FillBlankExercise,
   sentence_transform: SentenceTransformExercise,
   multiple_choice: MultipleChoiceExercise,
-};
-
-const EXERCISE_LABELS = {
-  fill_blank: "Fill in the Blank",
-  sentence_transform: "Sentence Transform",
-  multiple_choice: "Multiple Choice",
 };
 
 const ExerciseSection = () => {
@@ -30,6 +25,13 @@ const ExerciseSection = () => {
   const [contentLang, setContentLang] = useState("en");
   const [expandedIds, setExpandedIds] = useState(() => new Set());
   const { ui: uiLang } = useUiLang();
+  const toggleSlotRef = useRef(null);
+  const {
+    registerLessonToggle,
+    unregisterLessonToggle,
+    updateContentLang: updateStickyContentLang,
+    setShowStickyToggle,
+  } = useStickyLessonToggle();
 
   useEffect(() => {
     if (!categorySlug || !sectionSlug) return;
@@ -77,6 +79,57 @@ const ExerciseSection = () => {
     setExpandedIds(new Set());
   }, [section]);
 
+  useEffect(() => {
+    registerLessonToggle({ contentLang, setContentLang });
+    return () => {
+      unregisterLessonToggle();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registerLessonToggle, unregisterLessonToggle, setContentLang]);
+
+  useEffect(() => {
+    updateStickyContentLang(contentLang);
+  }, [contentLang, updateStickyContentLang]);
+
+  useEffect(() => {
+    // Only set up observer after section has loaded
+    if (!section) return undefined;
+
+    const node = toggleSlotRef.current;
+    if (!node || typeof window === "undefined") return undefined;
+
+    let observer = null;
+
+    const computeMargin = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--navbar-height");
+      const parsed = parseFloat(raw);
+      const navbarHeight = Number.isNaN(parsed) ? 0 : parsed;
+      return `-${navbarHeight}px 0px 0px 0px`;
+    };
+
+    const setupObserver = () => {
+      if (observer) observer.disconnect();
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            setShowStickyToggle(!entry.isIntersecting);
+          });
+        },
+        { threshold: 0, rootMargin: computeMargin() }
+      );
+      observer.observe(node);
+    };
+
+    setupObserver();
+    window.addEventListener("resize", setupObserver);
+
+    return () => {
+      window.removeEventListener("resize", setupObserver);
+      if (observer) observer.disconnect();
+      setShowStickyToggle(false);
+    };
+  }, [section, setShowStickyToggle]);
+
   const toggleExercise = (id) => {
     setExpandedIds((prev) => {
       const next = new Set(prev);
@@ -109,6 +162,9 @@ const ExerciseSection = () => {
       };
     });
   }, [section, contentLang]);
+
+  const sectionTitle =
+    contentLang === "th" ? section?.section_th || section?.section || "" : section?.section || "";
 
   const renderWithBreaks = (text = "") => {
     if (!text) return null;
@@ -192,13 +248,14 @@ const ExerciseSection = () => {
           />
           <div className="exercise-section-nav-actions">
             <span className="exercise-section-category-chip">{section.category_label}</span>
-            <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            <div ref={toggleSlotRef} className="exercise-section-toggle-slot">
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            </div>
           </div>
         </div>
 
         <div className="exercise-section-summary">
-          <h2 className="exercise-section-title">{section.section}</h2>
-          {section.section_th && <p className="exercise-section-title-th">{section.section_th}</p>}
+          <h2 className="exercise-section-title">{sectionTitle}</h2>
           <p className="exercise-section-meta">
             {localizedExercises.length}{" "}
             {localizedExercises.length === 1
@@ -207,50 +264,51 @@ const ExerciseSection = () => {
           </p>
         </div>
 
-        <div className="exercise-section-list">
-          {localizedExercises.map((exercise, idx) => {
-            const exerciseId = exercise.id || `${exercise.title}-${idx}`;
-            const isOpen = expandedIds.has(exerciseId);
-            const exerciseType = (exercise.exercise_type || "").toLowerCase();
-            const ExerciseComponent = EXERCISE_COMPONENTS[exerciseType];
-            const exerciseLabel = EXERCISE_LABELS[exerciseType] || exercise.exercise_type || "Exercise";
+        <div className="exercise-section-box">
+          <div className="exercise-section-list">
+            {localizedExercises.map((exercise, idx) => {
+              const exerciseId = exercise.id || `${exercise.title}-${idx}`;
+              const isOpen = expandedIds.has(exerciseId);
+              const exerciseType = (exercise.exercise_type || "").toLowerCase();
+              const ExerciseComponent = EXERCISE_COMPONENTS[exerciseType];
 
-            return (
-              <div
-                key={exerciseId}
-                className={`exercise-section-item ${isOpen ? "open" : ""}`}
-              >
-                <button
-                  type="button"
-                  className="exercise-section-item-toggle"
-                  onClick={() => toggleExercise(exerciseId)}
+              return (
+                <div
+                  key={exerciseId}
+                  className={`exercise-section-item ${isOpen ? "open" : ""}`}
                 >
-                  <div className="exercise-section-item-heading">
-                    <h3>{exercise.title || "Exercise"}</h3>
-                    <span className="exercise-section-item-type">{exerciseLabel}</span>
-                  </div>
-                  <span className="exercise-section-item-icon">{isOpen ? "−" : "+"}</span>
-                </button>
-                {isOpen && (
-                  <div className="exercise-section-item-body">
-                    {ExerciseComponent ? (
-                      <ExerciseComponent
-                        key={`${exerciseId}-${contentLang}`}
-                        exercise={exercise}
-                        images={{}}
-                        audioIndex={{}}
-                        sourceType="bank"
-                        exerciseId={exercise.id}
-                        contentLang={contentLang}
-                      />
-                    ) : (
-                      <FallbackExercise exercise={exercise} renderWithBreaks={renderWithBreaks} />
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  <button
+                    type="button"
+                    className="exercise-section-item-toggle"
+                    onClick={() => toggleExercise(exerciseId)}
+                  >
+                    <div className="exercise-section-item-heading">
+                      <h3>{exercise.title || "Exercise"}</h3>
+                    </div>
+                    <span className="exercise-section-item-icon">{isOpen ? "−" : "+"}</span>
+                  </button>
+                  {isOpen && (
+                    <div className="exercise-section-item-body">
+                      {ExerciseComponent ? (
+                        <ExerciseComponent
+                          key={`${exerciseId}-${contentLang}`}
+                          exercise={exercise}
+                          images={{}}
+                          audioIndex={{}}
+                          sourceType="bank"
+                          exerciseId={exercise.id}
+                          contentLang={contentLang}
+                          showTitle={false}
+                        />
+                      ) : (
+                        <FallbackExercise exercise={exercise} renderWithBreaks={renderWithBreaks} />
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

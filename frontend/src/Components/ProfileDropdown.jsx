@@ -8,7 +8,7 @@ import "../Styles/ProfileDropdown.css";
 import supabaseClient from "../supabaseClient";
 import LanguageToggle from "./LanguageToggle";
 
-const ProfileDropdown = ({ extraLinks = null }) => {
+const ProfileDropdown = ({ extraLinks = null, avatarSrc = "", avatarAlt = "User avatar" }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [extraDropdowns, setExtraDropdowns] = useState({});
   const { user } = useAuth();
@@ -67,6 +67,9 @@ const ProfileDropdown = ({ extraLinks = null }) => {
 
   if (!user) return null;
 
+  const resolvedAvatar =
+    avatarSrc || user.user_metadata?.avatar || "/images/characters/pailin_blue_circle_left.webp";
+
   return (
     <div
       className="profile-dropdown"
@@ -76,8 +79,8 @@ const ProfileDropdown = ({ extraLinks = null }) => {
     >
       <button className="profile-button" onClick={openDropdown}>
         <img
-          src="/images/characters/pailin-blue-right.png"
-          alt="Profile"
+          src={resolvedAvatar}
+          alt={avatarAlt}
           className="profile-image"
         />
       </button>

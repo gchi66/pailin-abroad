@@ -6,6 +6,8 @@ import "../Styles/FreeLessonsIndex.css";
 import PlanNotice from "../Components/PlanNotice";
 import "../Styles/LessonsIndex.css";
 import { API_BASE_URL } from "../config/api";
+import { useUiLang } from "../ui-lang/UiLangContext";
+import { t } from "../ui-lang/i18n";
 
 const FreeLessonsIndex = () => {
   const [lessonsByStage, setLessonsByStage] = useState({
@@ -15,6 +17,7 @@ const FreeLessonsIndex = () => {
   });
   const [completedLessons, setCompletedLessons] = useState([]);
   const [sessionUser, setSessionUser] = useState(null);
+  const { ui: uiLang } = useUiLang();
 
   // Fetch all lessons and group by stage, filtering to only first lesson of each level
   useEffect(() => {
@@ -162,7 +165,7 @@ const FreeLessonsIndex = () => {
           {isCheckpoint ? (
             <img
               src="/images/black-checkmark-level-checkpoint.webp"
-              alt="Lesson Checkpoint"
+              alt={t("lessonsIndexPage.lessonCheckpoint", uiLang)}
               className="level-checkmark"
             />
           ) : (
@@ -183,7 +186,7 @@ const FreeLessonsIndex = () => {
     const rightContent = showLock ? (
       <img
         src="/images/lock.webp"
-        alt="Locked"
+        alt={t("lessonsIndexPage.locked", uiLang)}
         className="lesson-lock-icon"
       />
     ) : (
@@ -193,7 +196,11 @@ const FreeLessonsIndex = () => {
             ? "/images/filled-checkmark-lesson-complete.webp"
             : "/images/CheckCircle.png"
         }
-        alt={completed ? "Completed" : "Not completed"}
+        alt={
+          completed
+            ? t("lessonsIndexPage.completed", uiLang)
+            : t("freeLessonsIndexPage.notCompleted", uiLang)
+        }
         className={`checkmark-img ${completed ? "checkmark-completed" : ""}`}
       />
     );
@@ -211,11 +218,13 @@ const FreeLessonsIndex = () => {
     if (comingSoon) {
       return (
         <div className="free-stage-block coming-soon">
-          <div className="free-stage-header">
-            <span className="free-stage-title">{title}</span>
-            <span className="coming-soon-badge">Coming Soon</span>
-          </div>
+        <div className="free-stage-header">
+          <span className="free-stage-title">{title}</span>
+          <span className="coming-soon-badge">
+            {t("freeLessonsIndexPage.comingSoon", uiLang)}
+          </span>
         </div>
+      </div>
       );
     }
 
@@ -239,44 +248,48 @@ const FreeLessonsIndex = () => {
   return (
     <div className="free-lessons-index-page-container">
       <header className="lessons-index-page-header">
-        <h1 className="page-header-text">Free Lesson Library</h1>
+        <h1 className="page-header-text">{t("freeLessonsIndexPage.title", uiLang)}</h1>
         <p className="lessons-index-page-header-subtitle">
-          Explore the lessons available to you on your free plan
+          {t("freeLessonsIndexPage.subtitle", uiLang)}
         </p>
       </header>
 
       {!currentUser && !authLoading ? (
         <div className="free-plan-notice-wrapper">
           <PlanNotice
-            heading="Looks like you don't have an account."
+            heading={t("freeLessonsIndexPage.noAccount.heading", uiLang)}
             subtext={[
               <>
-                Make a <em>free</em> account to access all the lessons below, along with access to our featured resources!
+                {t("freeLessonsIndexPage.noAccount.subtextPrefix", uiLang)}
+                <em>{t("freeLessonsIndexPage.noAccount.subtextEm", uiLang)}</em>
+                {t("freeLessonsIndexPage.noAccount.subtextSuffix", uiLang)}
               </>,
             ]}
             cta={{
-              label: "SIGN UP FOR FREE",
+              label: t("lessonsIndexPage.signUpFree", uiLang),
               to: "/signup",
             }}
             footerNote={
               <span>
-                Not ready to create an account? <a href="/try-lessons">Click here</a> to try 4 free lessons, no sign-up required!
+                {t("lessonsIndexPage.footerNotePrefix", uiLang)}{" "}
+                <a href="/try-lessons">{t("lessonsIndexPage.footerNoteLink", uiLang)}</a>{" "}
+                {t("lessonsIndexPage.footerNoteSuffix", uiLang)}
               </span>
             }
           />
         </div>
       ) : currentUser ? (
         <div className="free-upgrade-message">
-          <p>Your free plan gives you access to the first lesson of each level!</p>
+          <p>{t("freeLessonsIndexPage.freePlan.line1", uiLang)}</p>
           <p className="free-upgrade-actions">
             <Link to="/membership" className="upgrade-link upgrade-link--primary">
-              Upgrade
+              {t("freeLessonsIndexPage.freePlan.upgradeLink", uiLang)}
             </Link>{" "}
-            to enjoy access to our{" "}
+            {t("freeLessonsIndexPage.freePlan.upgradeRest", uiLang)}
             <Link to="/lessons" className="upgrade-link upgrade-link--secondary">
-              full lesson library
+              {t("freeLessonsIndexPage.freePlan.libraryLink", uiLang)}
             </Link>
-            .
+            {t("freeLessonsIndexPage.freePlan.upgradeSuffix", uiLang)}
           </p>
         </div>
       ) : null}
@@ -284,18 +297,18 @@ const FreeLessonsIndex = () => {
       <div className="free-lessons-content">
         <section className="free-lessons-section">
           <StageBlock
-            title="BEGINNER"
+            title={t("freeLessonsIndexPage.stages.beginner", uiLang)}
             lessons={lessonsByStage.Beginner}
           />
           <StageBlock
-            title="INTERMEDIATE"
+            title={t("freeLessonsIndexPage.stages.intermediate", uiLang)}
             lessons={lessonsByStage.Intermediate}
           />
           <StageBlock
-            title="ADVANCED"
+            title={t("freeLessonsIndexPage.stages.advanced", uiLang)}
             lessons={lessonsByStage.Advanced}
           />
-          <StageBlock title="EXPERT" comingSoon />
+          <StageBlock title={t("freeLessonsIndexPage.stages.expert", uiLang)} comingSoon />
         </section>
       </div>
     </div>

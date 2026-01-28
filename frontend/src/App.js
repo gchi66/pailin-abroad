@@ -93,7 +93,7 @@ function App() {
                   />
                   <Route path="/pathway" element={<MyPathway />} />
                   <Route path="/resources" element={<Resources />} />
-                  <Route path="/topic-library" element={<TopicLibrary />} />
+                  <Route path="/topic-library" element={<TopicLibrary toggleSignupModal={toggleSignupModal} />} />
                   <Route path="/topic-library/:slug" element={<TopicDetail />} />
                   <Route path="/exercise-bank" element={<ExerciseBank />} />
                   <Route path="/exercise-bank/:categorySlug/:sectionSlug" element={<ExerciseSection />} />
