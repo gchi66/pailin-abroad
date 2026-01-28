@@ -75,6 +75,10 @@
   margin-top: 1rem;
 }
 
+.social-icon-link {
+  padding: .2rem;
+}
+
 /* Adjust icon size as needed: 24px -> 1.5rem */
 .social-icon-link img {
   width: 1.5rem;

@@ -4,13 +4,16 @@
   position: sticky;
   align-self: flex-start;
   top: var(--navbar-height, 80px);
-  z-index: 20;
+  z-index: 60;
+  isolation: isolate;
   display: flex;
   justify-content: center;
 }
 
 .ls-list {
   display: flex;
+  position: relative;
+  z-index: 3;
   align-items: center;
   justify-content: flex-start;
   gap: 0.8rem;
@@ -124,10 +127,19 @@
 }
 
 .ls-sidebar.ls-stuck {
-  background: #ffffff;
-  box-shadow: 0 0.001rem 0 #e5e7eb;
+  background: transparent;
+  box-shadow: none;
   padding-top: .6rem;
   padding-bottom: .5rem;
+}
+
+.ls-sidebar.ls-stuck::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--app-bg);
+  z-index: 0;
+  right: -0.25rem;
 }
 
 @media (max-width: 480px) {

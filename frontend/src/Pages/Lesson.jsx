@@ -1192,7 +1192,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
           <div ref={topSentinelRef} className="lesson-top-sentinel" aria-hidden="true" />
 
           {/* Body */}
-          <div className="lesson-body">
+          <div className={`lesson-body${isSidebarStuck ? " lesson-body--sidebar-stuck" : ""}`}>
             <div ref={sidebarSentinelRef} className="lesson-sidebar-sentinel" aria-hidden="true" />
             <LessonSidebar
               ref={sidebarRef}

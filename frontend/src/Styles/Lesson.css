@@ -26,6 +26,12 @@
   flex-direction: column;
   gap: 1.6rem;
   width: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+.lesson-body.lesson-body--sidebar-stuck {
+  gap: 0;
 }
 
 .lesson-sidebar-sentinel {
@@ -135,6 +141,10 @@
     border-top: 0.10rem solid #1e1e1e;
     border-bottom: 0.10rem solid #1e1e1e;
     border-radius: 0;
+    box-shadow: none;
+  }
+
+  .lc-card::before {
     box-shadow: none;
   }
 

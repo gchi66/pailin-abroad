@@ -17,8 +17,12 @@ const ProfileDropdown = ({ extraLinks = null }) => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+  const openDropdown = () => {
+    setIsOpen(true);
+  };
+
+  const closeDropdown = () => {
+    setIsOpen(false);
   };
 
   const handleLogout = async () => {
@@ -64,8 +68,13 @@ const ProfileDropdown = ({ extraLinks = null }) => {
   if (!user) return null;
 
   return (
-    <div className="profile-dropdown" ref={dropdownRef}>
-      <button className="profile-button" onClick={toggleDropdown}>
+    <div
+      className="profile-dropdown"
+      ref={dropdownRef}
+      onMouseEnter={openDropdown}
+      onMouseLeave={closeDropdown}
+    >
+      <button className="profile-button" onClick={openDropdown}>
         <img
           src="/images/characters/pailin-blue-right.png"
           alt="Profile"
