@@ -23,6 +23,9 @@
 }
 
 /* Logo */
+.logo {
+  height: 1.7rem;
+}
 .logo img {
   height: 1.7rem; /* Adjust as needed */
 }
