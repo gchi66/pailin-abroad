@@ -32,7 +32,7 @@ export const copy = {
   },
   listenCta: {
     listen: { en: "LISTEN TO THE CONVERSATION", th: "ฟังบทสนทนา" },
-    playing: { en: "Now Playing", th: "กำลังเล่น" },
+    playing: { en: "NOW PLAYING", th: "กำลังเล่น" },
   },
   lessonSidebar: {
     lessonLabel: { en: "Lesson", th: "บทเรียน" },
@@ -627,7 +627,7 @@ export const copy = {
         {
           text: {
             en: "Our Phrases & Phrasal Verbs Bank",
-            th: "คลังวลี & Phrasal Verbs ของเรา",
+            th: "คลังวลีและกริยาวลีของเรา",
           },
         },
         {

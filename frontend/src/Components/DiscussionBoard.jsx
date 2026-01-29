@@ -194,9 +194,15 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
       style={{ "--comment-depth": depth }}
     >
       <div className="comment-avatar">
-        {comment?.users?.avatar_image ? (
+        {comment?.users?.avatar_image ||
+        comment?.users?.avatar ||
+        comment?.users?.avatar_url ? (
           <img
-            src={comment.users.avatar_image}
+            src={
+              comment.users.avatar_image ||
+              comment.users.avatar ||
+              comment.users.avatar_url
+            }
             alt={userDisplay}
             className="comment-avatar-image"
           />

@@ -318,6 +318,7 @@ def get_user_profile():
             "name": user_data.get("username") or user_data.get("email", "User"),
             "username": user_data.get("username"),
             "email": user_data.get("email"),
+            "avatar_image": user_data.get("avatar_image"),
             "is_admin": user_data.get("is_admin", False),
             "created_at": user_data.get("created_at"),
             "lessons_complete": lessons_complete

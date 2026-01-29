@@ -160,7 +160,11 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
             const data = await response.json();
             if (data?.profile) {
               name = data.profile.name || name;
-              avatar = data.profile.avatar || data.profile.avatar_url || avatar;
+              avatar =
+                data.profile.avatar_image ||
+                data.profile.avatar ||
+                data.profile.avatar_url ||
+                avatar;
             }
           }
         }

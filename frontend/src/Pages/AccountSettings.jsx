@@ -28,6 +28,7 @@ const AccountSettings = () => {
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [showManageAccount, setShowManageAccount] = useState(false);
   const [profileImage, setProfileImage] = useState(avatarOptions[0]);
+  const [profileName, setProfileName] = useState("");
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isPaidMember, setIsPaidMember] = useState(null);
@@ -114,9 +115,42 @@ const AccountSettings = () => {
     }
   };
 
-  const handleAvatarSelect = (src) => {
+  const handleAvatarSelect = async (src) => {
+    const prevImage = profileImage;
     setProfileImage(src);
     setShowAvatarPicker(false);
+
+    if (!user) return;
+
+    try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session?.access_token) {
+        throw new Error("Missing access token");
+      }
+
+      const payload = { avatar_image: src };
+      if (profileName?.trim()) {
+        payload.username = profileName.trim();
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error("Failed to update avatar");
+      }
+    } catch (error) {
+      console.error("Avatar update error:", error);
+      setProfileImage(prevImage);
+    }
   };
 
   useEffect(() => {
@@ -163,6 +197,43 @@ const AccountSettings = () => {
     };
 
     fetchPlanStatus();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) return;
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session?.access_token) return;
+        const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+          },
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        const profile = data?.profile || {};
+        const avatar =
+          profile.avatar_image ||
+          profile.avatar ||
+          profile.avatar_url ||
+          "";
+        if (avatar) {
+          setProfileImage(avatar);
+        }
+        const name = profile.name || profile.username || "";
+        if (name) {
+          setProfileName(name);
+          setFirstName(name);
+        }
+      } catch (error) {
+        console.error("Profile fetch error:", error);
+      }
+    };
+
+    fetchProfile();
   }, [user]);
 
   const handleLogout = async () => {

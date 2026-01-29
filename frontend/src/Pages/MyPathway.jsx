@@ -542,7 +542,12 @@ const MyPathway = () => {
             <div className="pathway-header-left">
               <Link to="/profile" className="pathway-avatar-link">
                 <img
-                  src={userProfile?.avatar_image || "/images/characters/pailin_blue_circle_right.webp"}
+                  src={
+                    userProfile?.avatar_image ||
+                    userProfile?.avatar ||
+                    userProfile?.avatar_url ||
+                    "/images/characters/pailin_blue_circle_right.webp"
+                  }
                   alt={uiText.profileAvatar}
                   className="pathway-avatar"
                 />
