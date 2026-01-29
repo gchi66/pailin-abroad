@@ -229,9 +229,19 @@ TABLE_HEADING_RE = re.compile(r'^TABLE[-\s]*\d+[:：]?$' , re.IGNORECASE)
 def _table_block(elem: dict, tbl_id: int, label: str | None = None) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
     rows = []
+    max_cols = 0
+    active_rowspans: dict[int, int] = {}
     for row in elem["table"]["tableRows"]:
         row_cells = []
+        # Decrement active rowspans as we move to a new row.
+        for col in list(active_rowspans.keys()):
+            active_rowspans[col] -= 1
+            if active_rowspans[col] <= 0:
+                del active_rowspans[col]
+        col_idx = 0
         for cell in row["tableCells"]:
+            while col_idx in active_rowspans:
+                col_idx += 1
             cell_lines = []
             for para in cell.get("content", []):
                 if "paragraph" in para:
@@ -240,15 +250,35 @@ def _table_block(elem: dict, tbl_id: int, label: str | None = None) -> dict:
                         for r in para["paragraph"]["elements"]
                     )
                     cell_lines.append(text.strip())
-            row_cells.append("\n".join(cell_lines))
+            cell_text = "\n".join(cell_lines)
+            cell_style = cell.get("tableCellStyle", {})
+            colspan = cell_style.get("columnSpan", 1)
+            rowspan = cell_style.get("rowSpan", 1)
+            if rowspan and rowspan > 1:
+                for c in range(col_idx, col_idx + (colspan or 1)):
+                    active_rowspans[c] = max(active_rowspans.get(c, 0), rowspan - 1)
+            if (colspan and colspan > 1) or (rowspan and rowspan > 1):
+                cell_payload = {"text": cell_text}
+                if colspan and colspan > 1:
+                    cell_payload["colspan"] = colspan
+                if rowspan and rowspan > 1:
+                    cell_payload["rowspan"] = rowspan
+                row_cells.append(cell_payload)
+            else:
+                row_cells.append(cell_text)
+            col_idx += colspan or 1
         rows.append(row_cells)
+        if active_rowspans:
+            max_cols = max(max_cols, col_idx, max(active_rowspans) + 1)
+        else:
+            max_cols = max(max_cols, col_idx)
 
     table_node = {
         "kind": "table",
         "type": "table",
         "id": f"table-{tbl_id}",
         "rows": len(rows),
-        "cols": len(rows[0]) if rows else 0,
+        "cols": max_cols if rows else 0,
         "cells": rows,
     }
 
@@ -291,9 +321,7 @@ class TopicParser:
                 for node in para_nodes:
                     node_dict = dataclasses.asdict(node)
 
-                    if "inlines" in node_dict:
-                        for inline in node_dict["inlines"]:
-                            inline.pop("link", None)
+                    # Preserve inline links for topic library
 
                     # Preserve blank paragraphs as spacer nodes to control vertical gaps.
                     if node_dict.get("kind") == "paragraph":
@@ -319,8 +347,8 @@ class TopicParser:
                             node_dict["level"] = node_dict.get("level") or 4
                             node_dict["is_subheader"] = True
 
-                    # Detect TABLE-XX headings and treat them as labels for the next table
-                    if node_dict.get("kind") in {"heading", "header"}:
+                    # Detect TABLE-XX headings/paragraphs and treat them as labels for the next table
+                    if node_dict.get("kind") in {"heading", "header", "paragraph"}:
                         heading_text = node_plain_text(node_dict).strip()
                         if heading_text and TABLE_HEADING_RE.match(heading_text):
                             pending_table_label = heading_text
@@ -333,6 +361,8 @@ class TopicParser:
             elif "table" in elem:
                 table_counter += 1
                 table_node = _table_block(elem, table_counter, label=pending_table_label)
+                if isinstance(pending_table_label, str) and pending_table_label.upper().endswith("-M:"):
+                    table_node["table_visibility"] = "mobile"
                 pending_table_label = None
                 all_nodes.append(table_node)
 

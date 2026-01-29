@@ -198,10 +198,68 @@ export default function TopicRichSectionRenderer({
     });
   };
 
-const computeIndent = (node) =>
-  typeof node?.indent === "number" && Number.isFinite(node.indent)
-    ? node.indent
-    : 0;
+const DEFAULT_INDENT_PER_LEVEL = 1.5; // rem (24px / 16 = 1.5rem)
+const DEFAULT_MANUAL_INDENT_REM = 3;   // rem applied to flagged paragraphs
+
+function getIndentConfig() {
+  if (typeof window === "undefined") {
+    return {
+      indentPerLevel: DEFAULT_INDENT_PER_LEVEL,
+      manualIndentRem: DEFAULT_MANUAL_INDENT_REM,
+      listItemOffset: DEFAULT_INDENT_PER_LEVEL * 3,
+      listItemBaseOffset: (DEFAULT_INDENT_PER_LEVEL * 4) / 3,
+    };
+  }
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  const indentPerLevel =
+    parseFloat(rootStyle.getPropertyValue("--audio-indent-step")) ||
+    DEFAULT_INDENT_PER_LEVEL;
+  const manualIndentRem =
+    parseFloat(rootStyle.getPropertyValue("--audio-manual-indent")) ||
+    DEFAULT_MANUAL_INDENT_REM;
+
+  return {
+    indentPerLevel,
+    manualIndentRem,
+    listItemOffset: indentPerLevel * 3,
+    listItemBaseOffset: (indentPerLevel * 4) / 3,
+  };
+}
+
+const {
+  indentPerLevel: INDENT_PER_LEVEL,
+  manualIndentRem: MANUAL_INDENT_REM,
+  listItemOffset: LIST_ITEM_OFFSET,
+  listItemBaseOffset: LIST_ITEM_BASE_OFFSET,
+} = getIndentConfig();
+
+const computeIndentLevel = (node) => {
+  if (typeof node?.indent_level === "number" && Number.isFinite(node.indent_level)) {
+    return node.indent_level;
+  }
+  if (typeof node?.indent === "number" && Number.isFinite(node.indent)) {
+    return node.indent;
+  }
+  if (
+    typeof node?.indent_first_line_level === "number" &&
+    Number.isFinite(node.indent_first_line_level)
+  ) {
+    return node.indent_first_line_level;
+  }
+  return 0;
+};
+
+const calcIndentRem = (indentLevel) => {
+  if (!indentLevel) return 0;
+  return indentLevel * INDENT_PER_LEVEL;
+};
+
+const listTextStartRem = (indentLevel) => {
+  const base = indentLevel ? calcIndentRem(indentLevel) : 0;
+  const offset = indentLevel ? LIST_ITEM_OFFSET : LIST_ITEM_BASE_OFFSET;
+  return base + offset;
+};
 
 const nodeHasBold = (node) =>
   Array.isArray(node?.inlines) && node.inlines.some((span) => span?.bold);
@@ -214,8 +272,6 @@ const isSubheaderNode = (node) => {
   );
   return textSpans.length > 0 && textSpans.every((span) => !!span.bold);
 };
-
-const INDENT_PER_LEVEL = 1.5; // rem
 
 // Helper for rendering individual nodes (NON-HEADING NODES ONLY)
 const renderNode = (node, key) => {
@@ -242,8 +298,8 @@ const renderNode = (node, key) => {
     );
   }
 
-  const indentValue = computeIndent(node);
-  const baseIndentRem = indentValue * INDENT_PER_LEVEL;
+  const indentLevel = computeIndentLevel(node);
+  const baseIndentRem = indentLevel * INDENT_PER_LEVEL;
   const hasBold = nodeHasBold(node);
 
   if (node.kind === "heading" && node.is_subheader) {
@@ -267,12 +323,16 @@ const renderNode = (node, key) => {
       );
       const allTextBold = textSpans.length > 0 && textSpans.every((span) => !!span.bold);
       const isSubheader = allTextBold;
+      const isIndented = indentLevel > 0 || node?.is_indented === true;
+      const paragraphMarginLeft = indentLevel
+        ? `${listTextStartRem(indentLevel)}rem`
+        : (isIndented ? `${MANUAL_INDENT_REM}rem` : undefined);
       return (
         <p
           key={key}
           className={isSubheader ? "rich-subheader" : undefined}
           style={{
-            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+            marginLeft: paragraphMarginLeft,
             marginBottom: isSubheader ? "1rem" : (hasBold ? 0 : undefined),
           }}
         >
@@ -286,7 +346,9 @@ const renderNode = (node, key) => {
         <li
           key={key}
           style={{
-            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+            marginLeft: indentLevel
+              ? `${listTextStartRem(indentLevel) + 3}rem`
+              : undefined,
             marginBottom: hasBold ? 0 : undefined,
           }}
         >
@@ -300,7 +362,9 @@ const renderNode = (node, key) => {
         <div
           key={key}
           style={{
-            marginLeft: baseIndentRem ? `${baseIndentRem}rem` : undefined,
+            marginLeft: indentLevel
+              ? `${listTextStartRem(indentLevel) + 3}rem`
+              : undefined,
             marginBottom: hasBold ? 0 : undefined,
           }}
         >
@@ -314,6 +378,13 @@ const renderNode = (node, key) => {
     }
 
     if (node.kind === "table") {
+      const tableVisibility = typeof node.table_visibility === "string"
+        ? node.table_visibility
+        : (
+          typeof node.table_label === "string" && /-M:?\s*$/i.test(node.table_label)
+            ? "mobile"
+            : null
+        );
       return (
         <LessonTable
           key={key}
@@ -321,6 +392,7 @@ const renderNode = (node, key) => {
             cells: node.cells,
             indent: node.indent,
           }}
+          tableVisibility={tableVisibility}
         />
       );
     }
@@ -332,17 +404,12 @@ const renderNode = (node, key) => {
     return null;
   };
 
-  const renderNumberedListItem = (node, key, groupIndent) => {
+  const renderNumberedListItem = (node, key) => {
     const hasBold = nodeHasBold(node);
-    const baseIndent = computeIndent(node);
-    const extraIndent = baseIndent - groupIndent;
-    const extraIndentRem = extraIndent * INDENT_PER_LEVEL;
-
     return (
       <li
         key={key}
         style={{
-          marginLeft: extraIndentRem ? `${extraIndentRem}rem` : undefined,
           marginBottom: hasBold ? 0 : undefined,
         }}
       >
@@ -351,50 +418,43 @@ const renderNode = (node, key) => {
     );
   };
 
-  const renderNumberedGroup = (items, keyPrefix) => {
-    if (!items.length) return null;
-    const groupIndent = computeIndent(items[0]);
-    const listIndentRem = groupIndent * INDENT_PER_LEVEL;
-
-    return (
-      <ol
-        key={keyPrefix}
-        className="rich-numbered-list"
-        style={{
-          marginLeft: listIndentRem ? `${listIndentRem}rem` : undefined,
-        }}
-      >
-        {items.map((item, idx) =>
-          renderNumberedListItem(item, `${keyPrefix}-item-${idx}`, groupIndent)
-        )}
-      </ol>
-    );
-  };
-
   const renderNodesWithNumberedLists = (nodeList) => {
     const elements = [];
-    let i = 0;
-    let groupIndex = 0;
+    const countsByIndent = new Map();
 
-    while (i < nodeList.length) {
-      const node = nodeList[i];
+    const resetCounters = () => {
+      countsByIndent.clear();
+    };
+
+    const renderNumberedItemWithCounter = (node, key) => {
+      const indent = computeIndentLevel(node);
+      const current = countsByIndent.has(indent) ? countsByIndent.get(indent) : 1;
+      countsByIndent.set(indent, current + 1);
+      const listIndentRem = indent * INDENT_PER_LEVEL;
+      return (
+        <ol
+          key={key}
+          className="rich-numbered-list"
+          style={{ marginLeft: listIndentRem ? `${listIndentRem}rem` : undefined }}
+          start={current}
+        >
+          {renderNumberedListItem(node, `${key}-item`)}
+        </ol>
+      );
+    };
+
+    nodeList.forEach((node, idx) => {
       if (node.kind === "heading" || isSubheaderNode(node)) {
-        elements.push(renderNode(node, i));
-        i++;
-        continue;
+        resetCounters();
+        elements.push(renderNode(node, idx));
+        return;
       }
       if (node.kind === "numbered_item") {
-        const group = [];
-        while (i < nodeList.length && nodeList[i].kind === "numbered_item") {
-          group.push(nodeList[i]);
-          i++;
-        }
-        elements.push(renderNumberedGroup(group, `numbered-group-${groupIndex++}`));
-      } else {
-        elements.push(renderNode(node, i));
-        i++;
+        elements.push(renderNumberedItemWithCounter(node, `numbered-${idx}`));
+        return;
       }
-    }
+      elements.push(renderNode(node, idx));
+    });
 
     return elements;
   };
