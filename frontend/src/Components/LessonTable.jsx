@@ -8,7 +8,8 @@ export default function LessonTable({
   phrasesSnipIdx,
   phraseId,
   phraseVariant = 0,
-  tableVisibility = null
+  tableVisibility = null,
+  enableCellHighlights = false
 }) {
   const thaiRegex = /[\u0E00-\u0E7F]/;
 
@@ -34,12 +35,56 @@ export default function LessonTable({
   const renderCellContent = (cellText, rowIdx, colIdx) => {
     if (!cellText) return null;
 
+    const renderTextWithLinks = (text, keyPrefix) => {
+      const linkRe = /\[link:([^\]]+)\]([\s\S]*?)\[\/link\]/g;
+      const out = [];
+      let lastIndex = 0;
+      let match;
+      let linkIdx = 0;
+
+      while ((match = linkRe.exec(text)) !== null) {
+        const [raw, hrefRaw, linkText] = match;
+        const start = match.index;
+        const end = start + raw.length;
+        if (start > lastIndex) {
+          out.push(<React.Fragment key={`${keyPrefix}-text-${linkIdx}`}>{text.slice(lastIndex, start)}</React.Fragment>);
+        }
+        let href = (hrefRaw || "").trim();
+        if (href.startsWith("https://pa.invalid/lesson/")) {
+          href = href.replace("https://pa.invalid", "");
+        }
+        if (href.startsWith("https://pa.invalid/topic-library/")) {
+          href = href.replace("https://pa.invalid", "");
+        }
+        out.push(
+          <a
+            key={`${keyPrefix}-link-${linkIdx}`}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "underline", color: "#676769" }}
+          >
+            {linkText || href}
+          </a>
+        );
+        lastIndex = end;
+        linkIdx += 1;
+      }
+
+      if (lastIndex < text.length) {
+        out.push(<React.Fragment key={`${keyPrefix}-tail`}>{text.slice(lastIndex)}</React.Fragment>);
+      }
+
+      return out.length ? out : text;
+    };
+
     const lines = cellText.split("\n");
 
     return lines.map((line, lineIdx) => {
       const { cleanText, audioKeys } = parseAudioInText(line);
       const isThaiLine = thaiRegex.test(cleanText) && !/[A-Za-z]/.test(cleanText);
       const lineSpanClassName = isThaiLine ? "lesson-table-thai" : undefined;
+      const content = renderTextWithLinks(cleanText, `cell-${rowIdx}-${colIdx}-${lineIdx}`);
 
       // If line has audio, render with audio button
       if (audioKeys.length > 0) {
@@ -53,7 +98,7 @@ export default function LessonTable({
               phraseVariant={phraseVariant}
               className="mr-2 h-4 w-4 select-none flex-shrink-0"
             />
-            <span className={lineSpanClassName}>{cleanText}</span>
+            <span className={lineSpanClassName}>{content}</span>
           </div>
         );
       }
@@ -61,7 +106,7 @@ export default function LessonTable({
       // Regular line without audio
       return (
         <div key={lineIdx} className={lineSpanClassName}>
-          {cleanText}
+          {content}
         </div>
       );
     });
@@ -72,7 +117,8 @@ export default function LessonTable({
       return {
         text: cell.text || "",
         colspan: cell.colspan,
-        rowspan: cell.rowspan
+        rowspan: cell.rowspan,
+        background: cell.background
       };
     }
 
@@ -121,12 +167,15 @@ export default function LessonTable({
                     return null;
                   }
                   if (cell == null) return null;
-                  const { text, colspan, rowspan } = normalizeCell(cell);
+                  const { text, colspan, rowspan, background } = normalizeCell(cell);
                   const colSpan = typeof colspan === "number" && colspan > 1 ? colspan : undefined;
                   const rowSpan = typeof rowspan === "number" && rowspan > 1 ? rowspan : undefined;
+                  const cellStyle = enableCellHighlights && background
+                    ? { background }
+                    : undefined;
 
                   return (
-                    <td key={cIdx} colSpan={colSpan} rowSpan={rowSpan}>
+                    <td key={cIdx} colSpan={colSpan} rowSpan={rowSpan} style={cellStyle}>
                       {renderCellContent(text, rIdx, cIdx)}
                     </td>
                   );

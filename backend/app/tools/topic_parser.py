@@ -223,7 +223,7 @@ def _extract_title_from_doc(doc_json: dict) -> str:
     return "Untitled Topic"
 
 
-TABLE_HEADING_RE = re.compile(r'^TABLE[-\s]*\d+[:：]?$' , re.IGNORECASE)
+TABLE_HEADING_RE = re.compile(r'^TABLE[-\s]*\d+(?:-M)?[:：]?$' , re.IGNORECASE)
 
 
 def _table_block(elem: dict, tbl_id: int, label: str | None = None) -> dict:
@@ -245,11 +245,18 @@ def _table_block(elem: dict, tbl_id: int, label: str | None = None) -> dict:
             cell_lines = []
             for para in cell.get("content", []):
                 if "paragraph" in para:
-                    text = "".join(
-                        r.get("textRun", {}).get("content", "")
-                        for r in para["paragraph"]["elements"]
-                    )
-                    cell_lines.append(text.strip())
+                    parts = []
+                    for r in para["paragraph"].get("elements", []):
+                        tr = r.get("textRun")
+                        if not tr:
+                            continue
+                        text = (tr.get("content") or "").replace("\u000b", "\n")
+                        link = tr.get("textStyle", {}).get("link", {}).get("url")
+                        if link:
+                            parts.append(f"[link:{link}]{text}[/link]")
+                        else:
+                            parts.append(text)
+                    cell_lines.append("".join(parts).strip())
             cell_text = "\n".join(cell_lines)
             cell_style = cell.get("tableCellStyle", {})
             colspan = cell_style.get("columnSpan", 1)
@@ -363,6 +370,8 @@ class TopicParser:
                 table_node = _table_block(elem, table_counter, label=pending_table_label)
                 if isinstance(pending_table_label, str) and pending_table_label.upper().endswith("-M:"):
                     table_node["table_visibility"] = "mobile"
+                else:
+                    table_node["table_visibility"] = "all"
                 pending_table_label = None
                 all_nodes.append(table_node)
 

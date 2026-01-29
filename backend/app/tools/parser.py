@@ -310,6 +310,7 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
     rows = []
     max_cols = 0
     active_rowspans: dict[int, int] = {}
+    allowed_highlight = {"#f4cccc", "#d9ead3", "#c9daf7", "#c9daf8"}
     for row in elem["table"]["tableRows"]:
         row_cells = []
         # Decrement active rowspans as we move to a new row.
@@ -327,6 +328,17 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
                     cell_lines.append(_plain_text(para["paragraph"]["elements"]))
             cell_text = "\n".join(cell_lines)
             cell_style = cell.get("tableCellStyle", {})
+            bg_hex = None
+            bg = cell_style.get("backgroundColor")
+            if bg and isinstance(bg, dict):
+                rgb = bg.get("color", {}).get("rgbColor")
+                if rgb:
+                    r = int(rgb.get("red", 0) * 255)
+                    g = int(rgb.get("green", 0) * 255)
+                    b = int(rgb.get("blue", 0) * 255)
+                    candidate = f"#{r:02x}{g:02x}{b:02x}"
+                    if candidate in allowed_highlight:
+                        bg_hex = candidate
             colspan = cell_style.get("columnSpan", 1)
             rowspan = cell_style.get("rowSpan", 1)
             if rowspan and rowspan > 1:
@@ -338,9 +350,14 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
                     cell_payload["colspan"] = colspan
                 if rowspan and rowspan > 1:
                     cell_payload["rowspan"] = rowspan
+                if bg_hex:
+                    cell_payload["background"] = bg_hex
                 row_cells.append(cell_payload)
             else:
-                row_cells.append(cell_text)
+                if bg_hex:
+                    row_cells.append({"text": cell_text, "background": bg_hex})
+                else:
+                    row_cells.append(cell_text)
             col_idx += colspan or 1
         rows.append(row_cells)
         if active_rowspans:

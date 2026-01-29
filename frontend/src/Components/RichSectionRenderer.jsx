@@ -29,6 +29,7 @@ export default function RichSectionRenderer({
   noAccordion = false,
   suppressBaseOffset = false,
   accordionResetKey,
+  sectionType,
 }) {
   const nodesList = Array.isArray(nodes) ? nodes : [];
   const [preloadBySection, setPreloadBySection] = useState({});
@@ -368,12 +369,21 @@ const speakerLineIsThai = (line) => {
       }
 
 
+      const highlightColor = shouldShowHighlights
+        ? (typeof span?.highlight === "string" ? span.highlight.trim().toLowerCase() : "")
+        : "";
+      const shouldApplyHighlight = highlightColor && ALLOWED_HIGHLIGHTS.has(highlightColor);
+
       const commonStyle = {
         fontWeight: span.speakerWeight || (span.bold ? "bold" : undefined),
         fontStyle: span.italic ? "italic" : undefined,
         textDecoration: span.underline ? "underline" : undefined,
         whiteSpace: "pre-line",
-        // DON'T render the highlight color - it's just a spacing flag
+        backgroundColor: shouldApplyHighlight ? highlightColor : undefined,
+        WebkitBoxDecorationBreak: shouldApplyHighlight ? "clone" : undefined,
+        boxDecorationBreak: shouldApplyHighlight ? "clone" : undefined,
+        borderRadius: shouldApplyHighlight ? "0.2rem" : undefined,
+        padding: shouldApplyHighlight ? "0 0.15rem" : undefined,
       };
 
       const renderTextWithMarkers = (text, keyPrefix, opts = {}) => {
@@ -528,6 +538,13 @@ const speakerLineIsThai = (line) => {
 
   const CYAN_HIGHLIGHT = "#00ffff";
   const ACCENT_COLOR = "#7BE6C9";
+  const ALLOWED_HIGHLIGHTS = new Set([
+    "#f4cccc",
+    "#d9ead3",
+    "#c9daf7",
+    "#c9daf8",
+  ]);
+  const shouldShowHighlights = sectionType === "understand";
 
   // Detect cyan highlights in source text
   const hasCyanHighlight = (node) =>
@@ -969,10 +986,11 @@ const listTextStartRem = (indentLevel) => {
           phrasesSnipIdx={phrasesSnipIdx}
           phraseId={phraseId}
           phraseVariant={phraseVariant}
+          enableCellHighlights={shouldShowHighlights}
           tableVisibility={tableVisibility}
         />
-      );
-    }
+    );
+  }
 
     // Handle Quick Practice exercises
     if (node.kind === "quick_practice_exercise" && renderQuickPractice) {

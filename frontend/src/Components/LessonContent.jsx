@@ -773,6 +773,7 @@ export default function LessonContent({
           uiLang={uiLang}
           images={images}
           accordionResetKey={section.id}
+          sectionType={section.type}
           renderQuickPractice={(exercise) => (
             <PracticeSection
               exercises={[exercise]}

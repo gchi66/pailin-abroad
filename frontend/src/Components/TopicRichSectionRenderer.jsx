@@ -383,7 +383,7 @@ const renderNode = (node, key) => {
         : (
           typeof node.table_label === "string" && /-M:?\s*$/i.test(node.table_label)
             ? "mobile"
-            : null
+            : "all"
         );
       return (
         <LessonTable
