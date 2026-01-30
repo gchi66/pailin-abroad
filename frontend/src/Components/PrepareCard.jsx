@@ -108,7 +108,8 @@ export default function PrepareCard({
 
   if (!section || items.length === 0) return null;
 
-  const title = pick(copy.prepareCard.title, uiLang) || "BEFORE YOU LISTEN";
+  const baseTitle = pick(copy.prepareCard.title, uiLang) || "BEFORE YOU LISTEN";
+  const title = uiLang === "en" ? baseTitle.toUpperCase() : baseTitle;
   const subtitle =
     pick(copy.prepareCard.subtitle, uiLang) ||
     "Get familiar with the words you'll hear in the conversation.";

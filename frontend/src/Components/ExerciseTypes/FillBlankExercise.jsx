@@ -822,13 +822,13 @@ export default function FillBlankExercise({
           return (
             <React.Fragment key={`example-${idx}`}>
               <div className="fb-row fb-example st-example">
-                <p className="st-example-label">Example</p>
                 {imageUrl && (
                   <div className="fb-image-container">
                     <img src={imageUrl} alt="Example item" className="fb-image" />
                   </div>
                 )}
                 <div className="fb-row-content">
+                  <p className="st-example-label">Example</p>
                   {hasAudio && (
                     <div className="practice-audio-container">
                       <AudioButton
@@ -876,7 +876,6 @@ export default function FillBlankExercise({
           <div
             className="fb-row fb-example st-example"
           >
-            <p className="st-example-label">Example</p>
             {imageUrl && (
               <div className="fb-image-container">
                 <img src={imageUrl} alt="Example item" className="fb-image" />
@@ -884,6 +883,7 @@ export default function FillBlankExercise({
             )}
 
             <div className="fb-row-content">
+              <p className="st-example-label">Example</p>
               {hasAudio && (
                 <div className="practice-audio-container">
                   <AudioButton
