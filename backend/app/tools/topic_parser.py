@@ -357,6 +357,8 @@ class TopicParser:
                     # Detect TABLE-XX headings/paragraphs and treat them as labels for the next table
                     if node_dict.get("kind") in {"heading", "header", "paragraph"}:
                         heading_text = node_plain_text(node_dict).strip()
+                        if heading_text and ALT_TEXT_RE.match(heading_text):
+                            continue
                         if heading_text and TABLE_HEADING_RE.match(heading_text):
                             pending_table_label = heading_text
                             continue
@@ -500,7 +502,7 @@ class TopicParser:
                         else:
                             n.pop('text', None)
 
-                        combined = " ".join(filter(None, [en_text, th_text])).strip()
+                        combined = (th_text or en_text or "").strip()
                         if combined:
                             template = (n.get('inlines') or [{}])[0]
                             n['inlines'] = [{
@@ -512,7 +514,7 @@ class TopicParser:
                     processed_nodes.append(n)
 
                 en_name, th_name = split_en_th(topic.get('name', ''))
-                display_name = " ".join(filter(None, [en_name, th_name])).strip()
+                display_name = (th_name or en_name or "").strip()
                 if display_name:
                     topic['name'] = display_name
 

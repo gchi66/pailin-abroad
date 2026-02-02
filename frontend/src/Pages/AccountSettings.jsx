@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick, t } from "../ui-lang/i18n";
@@ -12,6 +12,7 @@ import "../Styles/AccountSettings.css";
 
 const AccountSettings = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const avatarOptions = [
     "/images/characters/avatar_1.webp",
@@ -235,6 +236,14 @@ const AccountSettings = () => {
 
     fetchProfile();
   }, [user]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search || "");
+    const tab = params.get("tab");
+    if (tab === "billing" || tab === "profile") {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
 
   const handleLogout = async () => {
     try {

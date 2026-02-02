@@ -22,6 +22,7 @@ const SubscriptionBilling = () => {
 
   // Invoices state
   const [invoices, setInvoices] = useState([]);
+  const [subscriptionSummary, setSubscriptionSummary] = useState(null);
 
   // Cancellation state
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -50,6 +51,7 @@ const SubscriptionBilling = () => {
 
         // Only fetch Stripe data if user has an active subscription
         if (profile?.stripe_subscription_id && profile?.is_paid) {
+          await fetchSubscriptionSummary();
           // Fetch payment method
           await fetchPaymentMethod();
 
@@ -116,6 +118,30 @@ const SubscriptionBilling = () => {
     }
   };
 
+  const fetchSubscriptionSummary = async () => {
+    try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session?.access_token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/get-subscription-summary`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${session.access_token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSubscriptionSummary(data.subscription || null);
+      } else {
+        console.error("Failed to fetch subscription summary");
+      }
+    } catch (err) {
+      console.error("Error fetching subscription summary:", err);
+    }
+  };
+
   const handleChangePlan = async () => {
     try {
       setActionLoading({ ...actionLoading, changePlan: true });
@@ -133,7 +159,7 @@ const SubscriptionBilling = () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          return_url: `${window.location.origin}/account-settings`
+          return_url: `${window.location.origin}/profile?tab=billing`
         })
       });
 
@@ -234,9 +260,16 @@ const SubscriptionBilling = () => {
     }
   };
 
-  const formatCurrency = (amount) => {
-    if (!amount) return "฿0";
-    return `฿${(amount / 100).toFixed(0)}`;
+  const formatCurrency = (amount, currency) => {
+    if (!amount) return "";
+    const normalizedCurrency = currency ? currency.toUpperCase() : "THB";
+    const formatter = new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: normalizedCurrency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    });
+    return formatter.format(amount / 100);
   };
 
   const formatDate = (timestamp) => {
@@ -294,6 +327,15 @@ const SubscriptionBilling = () => {
     );
   }
 
+  const latestInvoice = invoices.length > 0 ? invoices[0] : null;
+  const currentPriceLabel = subscriptionSummary?.next_unit_amount
+    ? formatCurrency(subscriptionSummary.next_unit_amount, subscriptionSummary.next_currency || subscriptionSummary.currency)
+    : (subscriptionSummary?.unit_amount
+      ? formatCurrency(subscriptionSummary.unit_amount, subscriptionSummary.currency)
+      : (latestInvoice
+        ? formatCurrency(latestInvoice.amount, latestInvoice.currency)
+        : t("subscriptionBilling.priceMonthly", uiLang)));
+
   return (
     <div className="subscription-billing">
       {/* SUBSCRIPTION SECTION */}
@@ -314,7 +356,7 @@ const SubscriptionBilling = () => {
           </div>
           <div className="detail-row">
             <span className="detail-label">{t("subscriptionBilling.priceLabel", uiLang)}</span>
-            <span className="detail-value">{t("subscriptionBilling.priceMonthly", uiLang)}</span>
+            <span className="detail-value">{currentPriceLabel}</span>
           </div>
           <div className="detail-row">
             <span className="detail-label">{t("subscriptionBilling.statusLabel", uiLang)}</span>
@@ -377,7 +419,7 @@ const SubscriptionBilling = () => {
                   </span>
                 </div>
                 <div className="invoice-actions">
-                  <span className="invoice-amount">{formatCurrency(invoice.amount)}</span>
+                  <span className="invoice-amount">{formatCurrency(invoice.amount, invoice.currency)}</span>
                   <button
                     className="download-btn"
                     onClick={() => handleDownloadInvoice(invoice.id)}

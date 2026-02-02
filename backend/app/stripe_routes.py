@@ -1,8 +1,11 @@
 import os
 import stripe
+from datetime import datetime, timezone
+import time
 from flask import Blueprint, request, jsonify, send_file
 from app.supabase_client import supabase
 from app.config import Config
+from app.pricing_utils import resolve_region_key
 import io
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
@@ -15,6 +18,17 @@ PRICE_ID_BY_PLAN_KEY = {
     "SIX_MONTHS": os.getenv("STRIPE_PRICE_6_MONTH"),
 }
 
+
+def to_iso_date(unix_ts):
+    """Convert a Unix timestamp (in seconds) to ISO 8601 string."""
+    if not unix_ts:
+        return None
+    try:
+        dt = datetime.fromtimestamp(int(unix_ts), tz=timezone.utc)
+        return dt.isoformat()
+    except Exception as e:
+        print(f"⚠️ Error converting timestamp {unix_ts}: {e}")
+        return None
 
 def get_current_period_end(subscription):
     """
@@ -50,17 +64,32 @@ def create_checkout_session():
     """
     try:
         data = request.get_json()
-        plan_key = data.get('plan_key')
+        billing_period = data.get('billing_period')
         customer_email = data.get('email')
         success_url = f'{Config.FRONTEND_URL}/payment-success'
         cancel_url = f'{Config.FRONTEND_URL}/checkout'
 
-        if not plan_key:
-            return jsonify({'error': 'plan_key is required'}), 400
+        if not billing_period:
+            return jsonify({'error': 'billing_period is required'}), 400
 
-        price_id = PRICE_ID_BY_PLAN_KEY.get(plan_key)
+        region_key = resolve_region_key()
+        tier_result = (
+            supabase
+            .table("pricing_tiers")
+            .select("stripe_price_id")
+            .eq("active", True)
+            .eq("region_key", region_key)
+            .eq("billing_period", billing_period)
+            .limit(1)
+            .execute()
+        )
+        tier_rows = tier_result.data or []
+        if not tier_rows:
+            return jsonify({'error': 'No matching pricing tier found'}), 404
+
+        price_id = tier_rows[0].get("stripe_price_id")
         if not price_id:
-            return jsonify({'error': 'Invalid plan_key'}), 400
+            return jsonify({'error': 'Missing stripe_price_id for tier'}), 500
 
         # Create Checkout Session
         session = stripe.checkout.Session.create(
@@ -74,7 +103,9 @@ def create_checkout_session():
             success_url=success_url,
             cancel_url=cancel_url,
             metadata={
-                'customer_email': customer_email
+                'customer_email': customer_email,
+                'region_key': region_key,
+                'billing_period': billing_period
             }
         )
 
@@ -115,7 +146,7 @@ def create_portal_session():
 
         # Get return URL from request
         data = request.get_json() or {}
-        return_url = data.get('return_url', f'{Config.FRONTEND_URL}/account-settings')
+        return_url = data.get('return_url', f'{Config.FRONTEND_URL}/profile')
 
         # Create portal session
         portal_session = stripe.billing_portal.Session.create(
@@ -258,6 +289,114 @@ def get_invoices():
         return jsonify({'error': str(e)}), 400
 
 
+@stripe_routes.route('/api/get-subscription-summary', methods=['GET'])
+def get_subscription_summary():
+    """
+    Get the customer's current subscription price details.
+    """
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+
+        # Get the authenticated user
+        user_response = supabase.auth.get_user(access_token)
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+
+        # Get user's Stripe subscription ID
+        result = supabase.table('users').select('stripe_subscription_id').eq('id', user_id).single().execute()
+
+        if not result.data or not result.data.get('stripe_subscription_id'):
+            return jsonify({"error": "No active subscription found"}), 404
+
+        stripe_subscription_id = result.data['stripe_subscription_id']
+
+        subscription = stripe.Subscription.retrieve(
+            stripe_subscription_id,
+            expand=['items.data.price']
+        )
+
+        items = getattr(subscription, 'items', None)
+        data = getattr(items, 'data', []) if items else []
+        if not data:
+            try:
+                items_list = stripe.SubscriptionItem.list(
+                    subscription=stripe_subscription_id,
+                    expand=['data.price']
+                )
+                data = items_list.data or []
+            except Exception as e:
+                print(f"⚠️ Error listing subscription items: {e}")
+
+        if not data:
+            return jsonify({"error": "Subscription has no items"}), 404
+
+        item = data[0]
+        price = getattr(item, 'price', None)
+        if price is None and isinstance(item, dict):
+            price = item.get('price')
+
+        if not price:
+            return jsonify({"error": "Subscription item missing price"}), 404
+
+        recurring = getattr(price, 'recurring', None)
+        if recurring is None and isinstance(price, dict):
+            recurring = price.get('recurring')
+
+        response = {
+            "unit_amount": getattr(price, 'unit_amount', None) if not isinstance(price, dict) else price.get('unit_amount'),
+            "currency": getattr(price, 'currency', None) if not isinstance(price, dict) else price.get('currency'),
+            "interval": getattr(recurring, 'interval', None) if not isinstance(recurring, dict) else recurring.get('interval'),
+            "interval_count": getattr(recurring, 'interval_count', None) if not isinstance(recurring, dict) else recurring.get('interval_count'),
+            "price_id": getattr(price, 'id', None) if not isinstance(price, dict) else price.get('id'),
+            "next_unit_amount": None,
+            "next_currency": None,
+            "next_price_id": None
+        }
+
+        pending_update = getattr(subscription, 'pending_update', None)
+        if pending_update and getattr(pending_update, 'subscription_items', None):
+            pending_items = pending_update.subscription_items or []
+            if pending_items:
+                pending_price_id = pending_items[0].get('price')
+                if pending_price_id:
+                    pending_price = stripe.Price.retrieve(pending_price_id)
+                    response["next_unit_amount"] = pending_price.unit_amount
+                    response["next_currency"] = pending_price.currency
+                    response["next_price_id"] = pending_price.id
+
+        schedule_id = getattr(subscription, 'schedule', None)
+        if schedule_id and not response["next_price_id"]:
+            schedule = stripe.SubscriptionSchedule.retrieve(
+                schedule_id,
+                expand=['phases.items.price']
+            )
+            phases = getattr(schedule, 'phases', []) or []
+            now = int(time.time())
+            upcoming = [phase for phase in phases if getattr(phase, 'start_date', 0) and phase.start_date > now]
+            if upcoming:
+                next_phase = min(upcoming, key=lambda phase: phase.start_date)
+                phase_items = getattr(next_phase, 'items', []) or []
+                if phase_items:
+                    phase_price = getattr(phase_items[0], 'price', None)
+                    if phase_price:
+                        response["next_unit_amount"] = phase_price.unit_amount
+                        response["next_currency"] = phase_price.currency
+                        response["next_price_id"] = phase_price.id
+
+        return jsonify({"subscription": response}), 200
+
+    except Exception as e:
+        print(f"Error getting subscription summary: {e}")
+        return jsonify({'error': str(e)}), 400
+
+
 @stripe_routes.route('/api/download-invoice/<invoice_id>', methods=['GET'])
 def download_invoice(invoice_id):
     """
@@ -354,6 +493,8 @@ def cancel_subscription():
         # Extract current_period_end (handles Flexible Billing mode)
         current_period_end = get_current_period_end(full_subscription)
         cancel_at = getattr(full_subscription, 'cancel_at', current_period_end)
+        cancel_at_iso = to_iso_date(cancel_at)
+        current_period_end_iso = to_iso_date(current_period_end)
 
         print(f"📅 current_period_end extracted: {current_period_end}")
         print(f"📅 cancel_at extracted: {cancel_at}")
@@ -362,15 +503,15 @@ def cancel_subscription():
         supabase.table('users').update({
             'subscription_status': 'cancelled',
             'cancel_at_period_end': True,
-            'cancel_at': cancel_at
+            'cancel_at': cancel_at_iso
         }).eq('id', user_id).execute()
 
         print(f"✅ Subscription {stripe_subscription_id} scheduled for cancellation for user {user_id}")
 
         return jsonify({
             "message": "Subscription cancelled. You'll retain access until the end of your billing period.",
-            "cancel_at": cancel_at,
-            "current_period_end": current_period_end
+            "cancel_at": cancel_at_iso,
+            "current_period_end": current_period_end_iso
         }), 200
 
     except Exception as e:

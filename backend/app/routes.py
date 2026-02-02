@@ -7,12 +7,12 @@ from email.mime.text import MIMEText
 import smtplib
 import re
 import os
-import requests
 from datetime import datetime, timedelta, timezone
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 from app.config import Config
+from app.pricing_utils import resolve_region_key
 
 routes = Blueprint("routes", __name__)
 
@@ -35,6 +35,7 @@ TRY_AUDIO_TTL_SECONDS = 2 * 60 * 60
 TRY_AUDIO_CACHE_TTL_SECONDS = 50 * 60
 TRY_AUDIO_MAX_WORKERS = 8
 _try_audio_cache = {}
+
 
 
 def _sign_audio_path(path):
@@ -113,10 +114,47 @@ def handle_options(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 @routes.route("/", methods=["GET"])
 @handle_options
 def home():
     return jsonify({}), 204
+
+
+@routes.route("/api/pricing", methods=["GET"])
+@handle_options
+def get_pricing():
+    region_key = resolve_region_key()
+    tiers_result = (
+        supabase
+        .table("pricing_tiers")
+        .select("billing_period, currency, amount_total, amount_per_month, is_promo, sort_order")
+        .eq("active", True)
+        .eq("region_key", region_key)
+        .order("sort_order", desc=False)
+        .execute()
+    )
+
+    tiers = tiers_result.data or []
+    if not tiers:
+        return jsonify({"error": "No active pricing tiers found"}), 404
+
+    currency = tiers[0].get("currency")
+    response = {
+        "region_key": region_key,
+        "currency": currency,
+        "plans": [
+            {
+                "billing_period": tier.get("billing_period"),
+                "amount_total": tier.get("amount_total"),
+                "amount_per_month": tier.get("amount_per_month"),
+                "is_promo": tier.get("is_promo"),
+            }
+            for tier in tiers
+        ],
+    }
+
+    return jsonify(response), 200
 
 @routes.route('/api/try-lessons/<lesson_id>/audio-url', methods=['GET'])
 @handle_options

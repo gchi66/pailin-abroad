@@ -13,6 +13,12 @@ const Checkout = () => {
   const [userEmail, setUserEmail] = useState("");
 
   const selectedPlan = location.state?.selectedPlan;
+  const currencySymbol = selectedPlan?.currency === "USD" ? "$" : "฿";
+  const formatAmount = (value) => {
+    const amount = Number(value);
+    if (!Number.isFinite(amount)) return value;
+    return amount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  };
 
   // ✅ Fetch user email on mount
   useEffect(() => {
@@ -39,28 +45,12 @@ const Checkout = () => {
     setError(null);
 
     try {
-      // ✅ Match keys exactly to your Membership plans
-      const planKeyMap = {
-        "1 MONTH": "ONE_MONTH",
-        "3 MONTHS": "THREE_MONTHS",
-        "6 MONTHS": "SIX_MONTHS",
-      };
-
-      const planKey = planKeyMap[selectedPlan.duration];
-      console.log("Selected plan duration:", selectedPlan.duration);
-
-      if (!planKey) {
-        setError("Invalid plan selected");
-        setLoading(false);
-        return;
-      }
-
       // ✅ Create checkout session
       const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          plan_key: planKey,
+          billing_period: selectedPlan.billingPeriod,
           email: userEmail,
         }),
       });
@@ -103,7 +93,7 @@ const Checkout = () => {
                 {selectedPlan.duration}
               </span>
               <span className="plan-summary-price">
-                {selectedPlan.totalPrice}฿
+                {currencySymbol}{formatAmount(selectedPlan.totalPrice)}
               </span>
             </div>
             {selectedPlan.savings && (
@@ -132,7 +122,7 @@ const Checkout = () => {
           >
             {loading
               ? "Redirecting to checkout..."
-              : `Subscribe for ${selectedPlan.totalPrice}฿`}
+              : `Subscribe for ${currencySymbol}${formatAmount(selectedPlan.totalPrice)}`}
           </button>
 
           <p className="checkout-security-note">

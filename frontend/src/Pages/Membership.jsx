@@ -5,11 +5,19 @@ import QuickSignupModal from "../Components/QuickSignupModal";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
+import { API_BASE_URL } from "../config/api";
 import "../Styles/Membership.css";
 
 const Membership = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [selectedPlanId, setSelectedPlanId] = useState("6-month");
+  const [pricingState, setPricingState] = useState({
+    loading: true,
+    error: null,
+    regionKey: null,
+    currency: null,
+    plans: []
+  });
   const [showPlanWarning, setShowPlanWarning] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const touchStateRef = useRef({ x: 0, y: 0, dragging: false, suppressClick: false, touchStartTime: 0 });
@@ -19,6 +27,51 @@ const Membership = () => {
   const { user } = useAuth();
   const { ui } = useUiLang();
   const membershipCopy = copy.membershipPage;
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadPricing = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/pricing`);
+        if (!response.ok) {
+          throw new Error("Failed to load pricing");
+        }
+        const data = await response.json();
+        if (cancelled) return;
+        setPricingState({
+          loading: false,
+          error: null,
+          regionKey: data.region_key,
+          currency: data.currency,
+          plans: data.plans || []
+        });
+      } catch (err) {
+        if (cancelled) return;
+        setPricingState({
+          loading: false,
+          error: err?.message || "Failed to load pricing",
+          regionKey: null,
+          currency: null,
+          plans: []
+        });
+      }
+    };
+    loadPricing();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (pricingState.loading || pricingState.plans.length === 0) return;
+    const availableIds = new Set(pricingState.plans.map((plan) => plan.billing_period));
+    if (!availableIds.has(selectedPlanId)) {
+      const preferred = availableIds.has("6-month")
+        ? "6-month"
+        : pricingState.plans[0].billing_period;
+      setSelectedPlanId(preferred);
+    }
+  }, [pricingState, selectedPlanId]);
 
   // Always start the membership page at the top when navigated to
   useEffect(() => {
@@ -33,38 +86,46 @@ const Membership = () => {
     };
   }, []);
 
-  const planDefinitions = [
-    {
-      id: "6-month",
-      price: "300฿",
+  const currencySymbol = pricingState.currency === "USD" ? "$" : "฿";
+  const formatAmount = (value) => {
+    const amount = Number(value);
+    if (!Number.isFinite(amount)) return value;
+    return amount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  };
+  const formatWithSymbol = (value) => `${currencySymbol}${formatAmount(value)}`;
+
+  const billingPeriodToCopyKey = {
+    "monthly": "oneMonth",
+    "3-month": "threeMonth",
+    "6-month": "sixMonth"
+  };
+
+  const monthsByPeriod = {
+    "monthly": 1,
+    "3-month": 3,
+    "6-month": 6
+  };
+
+  const monthlyTier = pricingState.plans.find((plan) => plan.billing_period === "monthly");
+  const baseMonthlyPrice = monthlyTier ? Number(monthlyTier.amount_per_month) : null;
+
+  const planDefinitions = pricingState.plans.map((plan) => {
+    const copyKey = billingPeriodToCopyKey[plan.billing_period] || "oneMonth";
+    const months = monthsByPeriod[plan.billing_period] || 1;
+    const originalPrice = baseMonthlyPrice && months > 1 ? baseMonthlyPrice * months : null;
+    return {
+      id: plan.billing_period,
+      price: formatWithSymbol(plan.amount_per_month),
       periodKey: "month",
-      isRecommended: true,
-      totalPrice: 1800,
-      originalPrice: 2400,
-      monthlyPrice: 300,
-      copyKey: "sixMonth"
-    },
-    {
-      id: "3-month",
-      price: "350฿",
-      periodKey: "month",
-      isRecommended: false,
-      totalPrice: 1050,
-      originalPrice: 1200,
-      monthlyPrice: 350,
-      copyKey: "threeMonth"
-    },
-    {
-      id: "1-month",
-      price: "400฿",
-      periodKey: "month",
-      isRecommended: false,
-      totalPrice: 400,
-      originalPrice: null,
-      monthlyPrice: 400,
-      copyKey: "oneMonth"
-    }
-  ];
+      isRecommended: plan.billing_period === "6-month",
+      totalPrice: Number(plan.amount_total),
+      originalPrice,
+      monthlyPrice: Number(plan.amount_per_month),
+      billingPeriod: plan.billing_period,
+      currency: pricingState.currency,
+      copyKey
+    };
+  });
 
   const plans = planDefinitions.map((plan) => {
     const planCopy = membershipCopy.plans?.[plan.copyKey] ?? {};
@@ -166,7 +227,7 @@ const Membership = () => {
     if (!plan) return null;
 
     // For 1-month plan, show only final price
-    if (plan.id === "1-month") {
+    if (plan.id === "monthly") {
       return {
         showComparison: false,
         finalPrice: plan.totalPrice
@@ -175,7 +236,7 @@ const Membership = () => {
 
     // For 3 and 6 month plans, show comparison
     return {
-      showComparison: true,
+      showComparison: Boolean(plan.originalPrice),
       originalPrice: plan.originalPrice,
       finalPrice: plan.totalPrice
     };
@@ -193,7 +254,13 @@ const Membership = () => {
 
       {/* Pricing Cards */}
       <div className="pricing-cards-container">
-        {plans.map((plan) => (
+        {pricingState.loading && (
+          <div className="pricing-loading">Loading pricing...</div>
+        )}
+        {!pricingState.loading && pricingState.error && (
+          <div className="pricing-loading">Pricing is unavailable right now.</div>
+        )}
+        {!pricingState.loading && !pricingState.error && plans.map((plan) => (
           <div
             key={plan.id}
             className={`pricing-card ${selectedPlanId === plan.id ? 'selected' : ''} ${hoveredCard === plan.id ? 'hovered' : ''}`}
@@ -239,9 +306,9 @@ const Membership = () => {
             return (
               <div className="pricing-comparison">
                 {pricing.showComparison && (
-                  <span className="original-price">{pricing.originalPrice}฿</span>
+                  <span className="original-price">{formatWithSymbol(pricing.originalPrice)}</span>
                 )}
-                <span className="final-price">{pricing.finalPrice}฿</span>
+                <span className="final-price">{formatWithSymbol(pricing.finalPrice)}</span>
               </div>
             );
           })()}
