@@ -104,7 +104,10 @@ const LessonNavigationBanner = ({
     return nextLesson?.lesson_order || "";
   };
 
-  const checkpointLabel = t("lessonNav.checkpointLabel", langForLabels) || "Checkpoint";
+  const checkpointLabel =
+    langForLabels === "th"
+      ? t("lessonNav.checkpointLabel", langForLabels) || "จุดตรวจสอบ"
+      : "CHP";
   const formatLessonLabel = (number) => (number ? `${number}` : "");
 
   const getLessonCompactLabel = (lesson, fallbackNumber) => {

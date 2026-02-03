@@ -22,6 +22,7 @@ export const copy = {
     levelPrefix: { en: "Level", th: "ระดับที่" },
     lessonPrefix: { en: "Lesson", th: "บทเรียน" },
     checkpointLabel: { en: "Checkpoint", th: "จุดตรวจสอบ" },
+    checkpointLabelShort: { en: "CHP", th: "จุดตรวจสอบ" },
   },
   prepareCard: {
     title: { en: "Before you Listen", th: "ก่อนฟังบทสนทนา" },

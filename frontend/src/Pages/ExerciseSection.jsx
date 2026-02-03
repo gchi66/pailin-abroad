@@ -254,14 +254,16 @@ const ExerciseSection = () => {
           </div>
         </div>
 
-        <div className="exercise-section-summary">
-          <h2 className="exercise-section-title">{sectionTitle}</h2>
-          <p className="exercise-section-meta">
-            {localizedExercises.length}{" "}
-            {localizedExercises.length === 1
-              ? t("exerciseSection.exercisesCount.singular", uiLang)
-              : t("exerciseSection.exercisesCount.plural", uiLang)}
-          </p>
+        <div className="exercise-section-summary-wrap">
+          <div className="exercise-section-summary">
+            <h2 className="exercise-section-title">{sectionTitle}</h2>
+            <p className="exercise-section-meta">
+              {localizedExercises.length}{" "}
+              {localizedExercises.length === 1
+                ? t("exerciseSection.exercisesCount.singular", uiLang)
+                : t("exerciseSection.exercisesCount.plural", uiLang)}
+            </p>
+          </div>
         </div>
 
         <div className="exercise-section-box">

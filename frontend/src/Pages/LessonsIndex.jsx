@@ -652,7 +652,7 @@ const LessonsIndex = () => {
                           />
                         ) : lessonCompleted ? (
                           <img
-                            src="/images/filled-checkmark-lesson-complete.webp"
+                            src="/images/check_circle_blue.webp"
                               alt={t("lessonsIndexPage.completed", uiLang)}
                             className="checkmark-img checkmark-completed"
                           />

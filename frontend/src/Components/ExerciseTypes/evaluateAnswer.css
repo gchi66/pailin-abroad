@@ -1017,6 +1017,10 @@
     margin-top: 0;
   }
 
+  .mc-question-text.no-thai {
+    margin-bottom: .75rem;
+  }
+
   .st-stem-row {
     flex-wrap: wrap;
     gap: 0.5rem;

@@ -221,6 +221,25 @@ details[open] > .markdown-summary::after {
 }
 
 @media (max-width: 768px) {
+  .lesson-table-wrapper {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lesson-table {
+    font-size: 0.875rem;
+  }
+
+  .lesson-table th,
+  .lesson-table td {
+    min-width: 80px;
+    padding: 0.5rem 0.375rem;
+  }
+
+  .lesson-table th:first-child,
+  .lesson-table td:first-child {
+    min-width: 60px;
+  }
+
   .markdown-content .rich-zebra {
     padding: 1.5rem 0;
     margin-left: -2.25rem;

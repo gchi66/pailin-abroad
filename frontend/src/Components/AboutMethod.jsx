@@ -191,7 +191,7 @@ const AboutMethod = () => {
               <div className="about-method-card-content">
                 {card.hasImage && (
                   <img
-                    src="/images/characters/im-pailin.png"
+                    src="/images/characters/pailin_meet_the_characters.webp"
                     alt="I'm Pailin"
                     className="about-im-pailin-pic"
                   />
@@ -203,7 +203,7 @@ const AboutMethod = () => {
 
                 {card.hasImage && card.align === 'right' && (
                   <img
-                    src="/images/characters/im-pailin.png"
+                    src="/images/characters/pailin_meet_the_characters.webp"
                     alt="I'm Pailin"
                     className="about-im-pailin-pic"
                   />

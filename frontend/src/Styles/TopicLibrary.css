@@ -278,12 +278,12 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0.15rem 0.15rem 0 #1e1e1e;
 }
 
 .topic-library-item:hover {
   transform: translateY(-0.2rem);
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0.15rem 0.15rem 0 #1e1e1e;
   text-decoration: none;
   color: #1E1E1E;
   background: #e9f4ff;
@@ -292,7 +292,7 @@
 .topic-library-item:active,
 .topic-library-item:focus,
 .topic-library-item:focus-visible {
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0.15rem 0.15rem 0 #1e1e1e;
 }
 
 .topic-library-content-wrapper {
@@ -537,6 +537,13 @@
     box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
   }
 
+  .topic-library-item:hover,
+  .topic-library-item:active,
+  .topic-library-item:focus,
+  .topic-library-item:focus-visible {
+    box-shadow: 0.1rem 0.1rem 0 #1E1E1E;
+  }
+
   .topic-library-arrow {
     top: 0.65rem;
     right: 0.65rem;
@@ -662,6 +669,7 @@
     font-size: 1.05rem;
     font-weight: 600;
     color: #1e1e1e;
+    border-radius: 0;
   }
 
   .topic-library-mobile-menu-item:last-child {

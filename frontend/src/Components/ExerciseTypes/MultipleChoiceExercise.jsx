@@ -188,6 +188,7 @@ export default function MultipleChoiceExercise({
         const numberLabel = q.number ?? qIdx + 1;
         const questionText = q.text;
         const questionTextTh = contentLang === "th" ? q.text_th : "";
+        const hasThaiQuestion = Boolean(questionTextTh && String(questionTextTh).trim());
         const questionInlines = q.text_jsonb || null;
         const questionInlinesTh = q.text_jsonb_th || null;
         const selected = normalizeArray(choices[qIdx]);
@@ -224,11 +225,11 @@ export default function MultipleChoiceExercise({
 
                 <InlineText
                   as="p"
-                  className="mc-question-text"
+                  className={`mc-question-text${hasThaiQuestion ? "" : " no-thai"}`}
                   inlines={questionInlines}
                   text={questionText}
                 />
-                {questionTextTh && (
+                {hasThaiQuestion && (
                   <InlineText
                     as="p"
                     className="mc-question-text th"
@@ -236,6 +237,7 @@ export default function MultipleChoiceExercise({
                     text={questionTextTh}
                   />
                 )}
+                
 
                 <div className="mc-options">
                   {q.options.map(({ label, text, text_jsonb, text_th, text_jsonb_th, image_key, alt_text }) => {
