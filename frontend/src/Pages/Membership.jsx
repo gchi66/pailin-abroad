@@ -362,10 +362,11 @@ const Membership = () => {
       <QuickSignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
-        onSuccess={() => {
+        onSuccess={(email) => {
           setShowSignupModal(false);
           // User is now logged in, proceed to checkout
-          navigate('/checkout', { state: { selectedPlan } });
+          const emailParam = email ? `?email=${encodeURIComponent(email)}` : "";
+          navigate(`/checkout${emailParam}`, { state: { selectedPlan } });
         }}
       />
     </div>

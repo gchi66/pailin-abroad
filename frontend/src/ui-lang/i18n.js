@@ -905,7 +905,11 @@ export const copy = {
     alreadyHaveAccount: { en: "Already have an account?", th: "มีบัญชีอยู่แล้ว?" },
     loginLink: { en: "Log in", th: "เข้าสู่ระบบ" },
     passwordMismatch: { en: "Passwords do not match", th: "รหัสผ่านไม่ตรงกัน" },
-    passwordTooShort: { en: "Password must be at least 6 characters", th: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร" },
+    passwordTooShort: { en: "Password must be at least 8 characters", th: "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร" },
+    passwordRequirements: { en: "Password must include an uppercase letter and a number or symbol", th: "รหัสผ่านต้องมีอักษรพิมพ์ใหญ่ และตัวเลขหรือสัญลักษณ์" },
+    passwordRule1: { en: "At least 8 characters", th: "อย่างน้อย 8 ตัวอักษร" },
+    passwordRule2: { en: "At least one number or symbol", th: "มีอย่างน้อย 1 ตัวเลขหรือสัญลักษณ์" },
+    passwordRule3: { en: "At least one uppercase letter", th: "มีอย่างน้อย 1 ตัวอักษรพิมพ์ใหญ่" },
     signupError: { en: "An error occurred during signup. Please try again.", th: "เกิดข้อผิดพลาดระหว่างสมัครสมาชิก กรุณาลองใหม่อีกครั้ง" },
     successTitle: { en: "Account Created!", th: "สร้างบัญชีสำเร็จ!" },
     successMessage: {

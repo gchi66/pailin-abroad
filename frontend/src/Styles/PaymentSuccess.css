@@ -2,7 +2,7 @@
 .payment-success-page {
   position: relative;
   min-height: 100vh;
-  background-color: #FDF7F4;
+  background-color: var(--app-bg);
   display: flex;
   align-items: center;
   justify-content: center;

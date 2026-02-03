@@ -11,8 +11,11 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [userEmail, setUserEmail] = useState("");
+  const [emailInput, setEmailInput] = useState("");
 
   const selectedPlan = location.state?.selectedPlan;
+  const searchParams = new URLSearchParams(location.search || "");
+  const emailFromUrl = searchParams.get("email") || "";
   const currencySymbol = selectedPlan?.currency === "USD" ? "$" : "฿";
   const formatAmount = (value) => {
     const amount = Number(value);
@@ -28,10 +31,16 @@ const Checkout = () => {
       } = await supabaseClient.auth.getUser();
       if (user) {
         setUserEmail(user.email);
+        setEmailInput(user.email);
+        return;
+      }
+      if (emailFromUrl) {
+        setUserEmail(emailFromUrl);
+        setEmailInput(emailFromUrl);
       }
     };
     getUserEmail();
-  }, []);
+  }, [emailFromUrl]);
 
   // ✅ Redirect if no plan selected
   useEffect(() => {
@@ -45,13 +54,20 @@ const Checkout = () => {
     setError(null);
 
     try {
+      const finalEmail = (userEmail || emailInput || "").trim();
+      if (!finalEmail) {
+        setError("Please enter a valid email address.");
+        setLoading(false);
+        return;
+      }
+
       // ✅ Create checkout session
       const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           billing_period: selectedPlan.billingPeriod,
-          email: userEmail,
+          email: finalEmail,
         }),
       });
 
@@ -112,6 +128,24 @@ const Checkout = () => {
           {error && (
             <div className="checkout-error" role="alert">
               {error}
+            </div>
+          )}
+
+          {!userEmail && (
+            <div className="checkout-email-entry">
+              <label htmlFor="checkout-email" className="form-label">Email address</label>
+              <input
+                id="checkout-email"
+                type="email"
+                className="form-input"
+                value={emailInput}
+                onChange={(event) => {
+                  setEmailInput(event.target.value);
+                  setError(null);
+                }}
+                placeholder="you@example.com"
+                required
+              />
             </div>
           )}
 

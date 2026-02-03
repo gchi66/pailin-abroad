@@ -14,6 +14,15 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { ui } = useUiLang();
+  const passwordValue = formData.password;
+  const confirmPasswordValue = formData.confirmPassword;
+  const meetsLength = passwordValue.length >= 8;
+  const meetsNumberOrSymbol = /[\d!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
+  const meetsUppercase = /[A-Z]/.test(passwordValue);
+  const shouldShowMismatch =
+    confirmPasswordValue.length > 0 &&
+    passwordValue.length > 0 &&
+    passwordValue !== confirmPasswordValue;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,19 +40,32 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
     setError("");
 
     // Basic validation
+    if (!meetsLength) {
+      setError(t("quickSignup.passwordTooShort", ui));
+      setLoading(false);
+      return;
+    }
+
+    if (!meetsNumberOrSymbol || !meetsUppercase) {
+      setError(t("quickSignup.passwordRequirements", ui));
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError(t("quickSignup.passwordMismatch", ui));
       setLoading(false);
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError(t("quickSignup.passwordTooShort", ui));
-      setLoading(false);
-      return;
-    }
-
     try {
+      console.debug("[QuickSignup] submit", {
+        emailProvided: Boolean(formData.email),
+        emailValue: formData.email,
+        passwordLength: formData.password.length,
+        confirmPasswordLength: formData.confirmPassword.length
+      });
+
       // Supabase signup with email confirmation
       const { error: signupError } = await supabaseClient.auth.signUp({
         email: formData.email,
@@ -57,10 +79,17 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
       });
 
       if (signupError) {
+        console.warn("[QuickSignup] supabase signup error", {
+          message: signupError.message,
+          status: signupError.status,
+          name: signupError.name
+        });
         setError(signupError.message);
         setLoading(false);
         return;
       }
+
+      console.info("[QuickSignup] signup success", { email: formData.email });
 
       // User is now logged in (but not verified)
       // Show success message and allow them to continue
@@ -68,9 +97,9 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
       setLoading(false);
 
     } catch (err) {
+      console.error("[QuickSignup] signup exception", err);
       setError(t("quickSignup.signupError", ui));
       setLoading(false);
-      console.error("Signup error:", err);
     }
   };
 
@@ -129,6 +158,44 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
                   placeholder={t("quickSignup.confirmPasswordPlaceholder", ui)}
                   required
                 />
+                {shouldShowMismatch && (
+                  <div className="onboarding-password-mismatch" role="alert">
+                    {t("quickSignup.passwordMismatch", ui)}
+                  </div>
+                )}
+              </div>
+
+              <div className="onboarding-password-rules">
+                <div className="onboarding-password-rule">
+                  <img
+                    src={meetsLength ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsLength ? "✓ Length requirement met" : "Length requirement not met"}
+                    className={`onboarding-rule-icon ${meetsLength ? "met" : ""}`}
+                  />
+                  <span className={`onboarding-rule-text ${meetsLength ? "met" : ""}`}>
+                    {t("quickSignup.passwordRule1", ui)}
+                  </span>
+                </div>
+                <div className="onboarding-password-rule">
+                  <img
+                    src={meetsNumberOrSymbol ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsNumberOrSymbol ? "✓ Number or symbol requirement met" : "Number or symbol requirement not met"}
+                    className={`onboarding-rule-icon ${meetsNumberOrSymbol ? "met" : ""}`}
+                  />
+                  <span className={`onboarding-rule-text ${meetsNumberOrSymbol ? "met" : ""}`}>
+                    {t("quickSignup.passwordRule2", ui)}
+                  </span>
+                </div>
+                <div className="onboarding-password-rule">
+                  <img
+                    src={meetsUppercase ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsUppercase ? "✓ Uppercase letter requirement met" : "Uppercase letter requirement not met"}
+                    className={`onboarding-rule-icon ${meetsUppercase ? "met" : ""}`}
+                  />
+                  <span className={`onboarding-rule-text ${meetsUppercase ? "met" : ""}`}>
+                    {t("quickSignup.passwordRule3", ui)}
+                  </span>
+                </div>
               </div>
 
               {error && (
@@ -167,7 +234,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
               className="signup-cta-button modal-signup-btn"
               onClick={() => {
                 if (onSuccess) {
-                  onSuccess(); // Trigger callback to proceed to checkout
+                  onSuccess(formData.email); // Trigger callback to proceed to checkout
                 } else {
                   onClose();
                 }
