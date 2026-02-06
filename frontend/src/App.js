@@ -32,6 +32,7 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
 import SignUpModal from "./Components/SignUpModal";
 import ScrollToTop from "./Components/ScrollToTop";
+import Analytics from "./Components/Analytics";
 import { AuthProvider } from "./AuthContext";
 
 // ⬇️ import the provider
@@ -55,6 +56,7 @@ function App() {
         <UiLangProvider>
           <StickyLessonToggleProvider>
             <ScrollToTop />
+            <Analytics />
             <Routes>
             {/* Full-screen onboarding route - isolated from main app structure */}
             <Route path="/onboarding" element={<Onboarding />} />
