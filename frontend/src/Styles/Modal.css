@@ -63,6 +63,7 @@
   margin-bottom: 0.75rem;
   font-size: 0.95rem;
   font-weight: 500;
+  font-family: "Poppins", "Anuphan", sans-serif;
   border: var(--border-thin) solid #ddd;
   border-radius: 999px;
   background: #fff;
@@ -171,4 +172,12 @@
 
 .form-footer a:hover {
   text-decoration: underline;
+}
+
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+    width: 87%;
+  }
 }

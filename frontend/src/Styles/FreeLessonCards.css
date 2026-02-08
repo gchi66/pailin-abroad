@@ -202,7 +202,7 @@ h3 {
 
   .fl-card-img {
     height: clamp(5rem, 15vw, 8rem);
-    margin: 1rem 0;
+    margin: 0;
   }
 
   .fl-card-focus {

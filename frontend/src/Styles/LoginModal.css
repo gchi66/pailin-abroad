@@ -267,11 +267,11 @@
 @media (max-width: 480px) {
   .login-modal-content {
     padding: 1.5rem;
-    width: 95%;
+    width: 87%;
   }
 
   .login-form-footer {
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
     align-items: flex-start;
   }

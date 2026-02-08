@@ -260,7 +260,7 @@ export const copy = {
     },
   },
   exerciseBankPage: {
-    title: { en: "Exercise Bank", th: "คลังแบบฝึกหัด" },
+    title: { en: "Exercise Bank", th: "สื่อการเรียน" },
     subtitle: {
       en: "Additional practice exercises for those difficult grammar topics.",
       th: "แบบฝึกหัดเพิ่มเติมสำหรับกฎไวยากรณ์ที่เข้าใจยาก",
@@ -331,7 +331,7 @@ export const copy = {
     emptyContent: { en: "No content available for this topic yet.", th: "ยังไม่มีเนื้อหาสำหรับหัวข้อนี้" },
   },
   exerciseSection: {
-    title: { en: "Exercise Bank", th: "คลังแบบฝึกหัด" },
+    title: { en: "Exercise Bank", th: "สื่อการเรียน" },
     subtitle: {
       en: "Additional practice exercises for those difficult grammar topics.",
       th: "แบบฝึกหัดเพิ่มเติมสำหรับกฎไวยากรณ์ที่เข้าใจยาก",
@@ -1168,7 +1168,7 @@ export const copy = {
           focusLabel: { en: "LESSON FOCUS", th: "เนื้อหาบทเรียน" },
           description: {
             en: "How to use 'There is' and 'There Are'",
-            th: "การใช้ ‘There is’ (มี) และ ‘There are’ (มี)",
+            th: "การใช้ There is และ There are (มี)",
           },
         },
         {

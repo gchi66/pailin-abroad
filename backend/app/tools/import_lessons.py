@@ -722,9 +722,12 @@ def upsert_sections(lesson_id, sections, lang="en", dry_run=False):
 
 
 def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
+    saw_phrases_section = False
+    desired_phrase_ids = []
     for sec in sections:
         if sec.get("type") != "phrases_verbs":
             continue
+        saw_phrases_section = True
         for idx, item in enumerate(sec.get("items", []), start=1):
             phrase_raw = (item.get("phrase") or "").strip()
             if not phrase_raw:
@@ -800,6 +803,7 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                             refetched = _find_phrase_by_norm(variant, phrase_raw)
                             phrase_id = refetched["id"] if refetched else None
             if phrase_id:
+                desired_phrase_ids.append(phrase_id)
                 # Ensure this lesson only links the variant specified in the doc.
                 norm_phrase = _normalize_phrase(phrase_raw)
                 if norm_phrase:
@@ -835,6 +839,21 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                     print("[DRY RUN] Link lesson_phrases upsert:", link)
                 else:
                     supabase.table("lesson_phrases").upsert(link, on_conflict="lesson_id,phrase_id", returning="minimal").execute()
+
+    # Prune stale phrases: keep only phrases present in the current JSON section.
+    if saw_phrases_section:
+        desired_phrase_ids = [pid for pid in desired_phrase_ids if pid]
+        if dry_run:
+            print("[DRY RUN] Prune lesson_phrases not in current JSON:",
+                  {"lesson_id": lesson_id, "keep_phrase_ids": desired_phrase_ids})
+        else:
+            try:
+                q = supabase.table("lesson_phrases").delete().eq("lesson_id", lesson_id)
+                if desired_phrase_ids:
+                    q = q.not_.in_("phrase_id", desired_phrase_ids)
+                q.execute()
+            except Exception as e:
+                print(f"[WARN] Could not prune stale phrases for lesson {lesson_id}: {e}")
 
 
 def upsert_tags(lesson_id, tags, dry_run=False):
