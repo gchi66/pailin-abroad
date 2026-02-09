@@ -28,6 +28,13 @@
   font-size: 2.5rem;
   color: #333;
   line-height: 1.2;
+  white-space: normal;
+  text-align: center;
+  width: 100%;
+}
+
+.membership-title-highlight {
+  color: #3CA0FE;
 }
 
 .membership-subtitle {

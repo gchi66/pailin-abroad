@@ -555,10 +555,12 @@ export const copy = {
     },
   },
   membershipPage: {
-    title: { en: "Choose the best plan for you", th: "เลือกแพ็คเกจที่เหมาะสมกับคุณที่สุด" },
+    title: { en: "50% off for our first 200 users!", th: "ลด 50% สำหรับสมาชิก 200 คนแรก!" },
+    titleHighlight: { en: "50% off", th: "ลด 50%" },
+    titleRest: { en: "for our first 200 users!", th: "สำหรับสมาชิก 200 คนแรก!" },
     subtitle: {
-      en: "For the price of one private English lesson, get a whole month of Pailin Abroad!",
-      th: "ในราคาที่เรียนคอร์สภาษาอังกฤษตัวต่อตัวเพียงหนึ่งครั้ง คุณสามารถเรียนกับ Pailin Abroad ได้ทั้งเดือนเลย!",
+      en: "We just launched. We want to invite you to try Pailin Abroad!",
+      th: "เราเพิ่งเปิดตัว และอยากเชิญคุณมาลองใช้ Pailin Abroad!",
     },
     bestForLabel: { en: "BEST FOR:", th: "เหมาะสำหรับ:" },
     periods: {

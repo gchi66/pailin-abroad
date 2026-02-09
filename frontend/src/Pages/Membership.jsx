@@ -246,7 +246,12 @@ const Membership = () => {
     <div className="membership-container">
       {/* Header Section */}
       <div className="membership-header">
-        <h1 className="membership-title">{pick(membershipCopy.title, ui)}</h1>
+        <h1 className="membership-title">
+          <span className="membership-title-highlight">
+            {pick(membershipCopy.titleHighlight, ui)}
+          </span>{" "}
+          {pick(membershipCopy.titleRest, ui)}
+        </h1>
         <p className="membership-subtitle">
           {pick(membershipCopy.subtitle, ui)}
         </p>
