@@ -45,6 +45,14 @@
   font-weight: 500;
 }
 
+.membership-launch-banner {
+  display: block;
+  margin: 0.75rem auto 0;
+  width: 100%;
+  max-width: 34rem;
+  height: auto;
+}
+
 /* Pricing Cards Container */
 .pricing-cards-container {
   display: flex;
@@ -126,6 +134,7 @@
 
 /* Savings badge */
 .savings-badge {
+  display: none;
   position: absolute;
   top: -1.25rem;
   right: 1.25rem;
@@ -204,8 +213,18 @@
 /* Price Section */
 .price-section {
   display: flex;
-  align-items: baseline;
-  gap: 0.25rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+}
+
+.original-monthly-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #9D9D9D;
+  text-decoration: line-through;
+  line-height: 1;
+  font-family: 'Poppins', 'Anuphan', sans-serif;
 }
 
 .price {
@@ -416,6 +435,11 @@
 @media (max-width: 480px) {
   .membership-title {
     font-size: 1.7rem;
+  }
+
+
+  .membership-launch-banner {
+    margin-top: -1rem;
   }
 
   .pricing-card {

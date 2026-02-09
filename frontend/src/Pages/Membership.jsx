@@ -113,6 +113,8 @@ const Membership = () => {
     const copyKey = billingPeriodToCopyKey[plan.billing_period] || "oneMonth";
     const months = monthsByPeriod[plan.billing_period] || 1;
     const originalPrice = baseMonthlyPrice && months > 1 ? baseMonthlyPrice * months : null;
+    const monthlyPrice = Number(plan.amount_per_month);
+    const originalMonthlyPrice = Number.isFinite(monthlyPrice) ? monthlyPrice * 2 : null;
     return {
       id: plan.billing_period,
       price: formatWithSymbol(plan.amount_per_month),
@@ -120,7 +122,8 @@ const Membership = () => {
       isRecommended: plan.billing_period === "6-month",
       totalPrice: Number(plan.amount_total),
       originalPrice,
-      monthlyPrice: Number(plan.amount_per_month),
+      monthlyPrice,
+      originalMonthlyPrice,
       billingPeriod: plan.billing_period,
       currency: pricingState.currency,
       copyKey
@@ -256,6 +259,11 @@ const Membership = () => {
           {pick(membershipCopy.subtitle, ui)}
         </p>
       </div>
+      <img
+        className="membership-launch-banner"
+        src="/images/membership_launch_pricing_banner.webp"
+        alt="Membership launch pricing banner"
+      />
 
       {/* Pricing Cards */}
       <div className="pricing-cards-container">
@@ -294,6 +302,11 @@ const Membership = () => {
 
               <div className="right-section">
                 <div className="price-section">
+                  {Number.isFinite(plan.originalMonthlyPrice) && (
+                    <span className="original-monthly-price">
+                      {formatWithSymbol(plan.originalMonthlyPrice)}
+                    </span>
+                  )}
                   <span className="price">{plan.price}</span>
                   <span className="period">/ {plan.period}</span>
                 </div>
