@@ -112,7 +112,7 @@ const Membership = () => {
 
   const isUsdPricing = pricingState.currency === "USD";
   const lifetimePrice = isUsdPricing ? 150 : 3500;
-  const lifetimeOriginalPrice = isUsdPricing ? 250 : 4500;
+  const lifetimeOriginalPrice = lifetimePrice * 2;
   const lifetimePlan = {
     id: "lifetime",
     billingPeriod: "lifetime",
@@ -315,7 +315,7 @@ const Membership = () => {
           >
             <div className="lifetime-header">
               <div className="lifetime-title">{lifetimePlan.duration}</div>
-              <div className="lifetime-payment">{lifetimePlan.paymentLabel}</div>
+              <div className="lifetime-payment desktop-only">{lifetimePlan.paymentLabel}</div>
             </div>
 
             <div className="lifetime-top-row">
@@ -323,6 +323,7 @@ const Membership = () => {
                 <span className="best-for-label">{pick(membershipCopy.bestForLabel, ui)}</span>
                 <span className="best-for-text">{lifetimePlan.bestFor}</span>
               </div>
+              <div className="lifetime-payment mobile-only">{lifetimePlan.paymentLabel}</div>
               <div className="lifetime-price">
                 <span className="lifetime-original-price">{lifetimePlan.originalPriceDisplay}</span>
                 <span className="price lifetime-final-price">{lifetimePlan.price}</span>
