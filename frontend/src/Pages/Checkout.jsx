@@ -90,6 +90,7 @@ const Checkout = () => {
   };
 
   if (!selectedPlan) return null;
+  const isLifetime = selectedPlan.billingPeriod === "lifetime";
 
   return (
     <div className="checkout-page-container">
@@ -117,12 +118,14 @@ const Checkout = () => {
                 {selectedPlan.savings}
               </span>
             )}
-            <p
-              style={{ marginTop: "1rem", fontSize: "0.9rem", color: "#666" }}
-            >
-              Auto-renews every {selectedPlan.duration.toLowerCase()}. Cancel
-              anytime.
-            </p>
+            {!isLifetime && (
+              <p
+                style={{ marginTop: "1rem", fontSize: "0.9rem", color: "#666" }}
+              >
+                Auto-renews every {selectedPlan.duration.toLowerCase()}. Cancel
+                anytime.
+              </p>
+            )}
           </div>
 
           {error && (
@@ -156,7 +159,9 @@ const Checkout = () => {
           >
             {loading
               ? "Redirecting to checkout..."
-              : `Subscribe for ${currencySymbol}${formatAmount(selectedPlan.totalPrice)}`}
+              : isLifetime
+                ? `Pay ${currencySymbol}${formatAmount(selectedPlan.totalPrice)}`
+                : `Subscribe for ${currencySymbol}${formatAmount(selectedPlan.totalPrice)}`}
           </button>
 
           <p className="checkout-security-note">

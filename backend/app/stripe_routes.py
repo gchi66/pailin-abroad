@@ -18,6 +18,10 @@ PRICE_ID_BY_PLAN_KEY = {
     "SIX_MONTHS": os.getenv("STRIPE_PRICE_6_MONTH"),
 }
 
+LIFETIME_PRICE_ID_BY_REGION = {
+    "US": "price_1Sz61E2FEde6izNxSCiNWNxB",
+    "INTL": "price_1Sz60s2FEde6izNxmX5y2ivY",
+}
 
 def to_iso_date(unix_ts):
     """Convert a Unix timestamp (in seconds) to ISO 8601 string."""
@@ -73,28 +77,36 @@ def create_checkout_session():
             return jsonify({'error': 'billing_period is required'}), 400
 
         region_key = resolve_region_key()
-        tier_result = (
-            supabase
-            .table("pricing_tiers")
-            .select("stripe_price_id")
-            .eq("active", True)
-            .eq("region_key", region_key)
-            .eq("billing_period", billing_period)
-            .limit(1)
-            .execute()
-        )
-        tier_rows = tier_result.data or []
-        if not tier_rows:
-            return jsonify({'error': 'No matching pricing tier found'}), 404
+        mode = 'subscription'
+        price_id = None
 
-        price_id = tier_rows[0].get("stripe_price_id")
+        if billing_period == "lifetime":
+            price_id = LIFETIME_PRICE_ID_BY_REGION.get(region_key)
+            mode = 'payment'
+        else:
+            tier_result = (
+                supabase
+                .table("pricing_tiers")
+                .select("stripe_price_id")
+                .eq("active", True)
+                .eq("region_key", region_key)
+                .eq("billing_period", billing_period)
+                .limit(1)
+                .execute()
+            )
+            tier_rows = tier_result.data or []
+            if not tier_rows:
+                return jsonify({'error': 'No matching pricing tier found'}), 404
+
+            price_id = tier_rows[0].get("stripe_price_id")
+
         if not price_id:
             return jsonify({'error': 'Missing stripe_price_id for tier'}), 500
 
         # Create Checkout Session
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
-            mode='subscription',  # This makes it recurring!
+            mode=mode,
             customer_email=customer_email,
             line_items=[{
                 'price': price_id,

@@ -47,10 +47,19 @@
 
 .membership-launch-banner {
   display: block;
-  margin: 0.75rem auto 0;
+  margin: -3rem auto 0;
   width: 100%;
   max-width: 50rem;
   height: auto;
+}
+
+.lifetime-followup {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1E1E1E;
+  text-align: center;
+  margin-top: -1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Pricing Cards Container */
@@ -74,6 +83,12 @@
   transition: all 0.3s ease;
   box-shadow: 0.25rem 0.25rem 0rem #9D9D9D;
   touch-action: pan-y;
+}
+
+.pricing-card.lifetime-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -216,6 +231,103 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 0.1rem;
+}
+
+.lifetime-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lifetime-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.lifetime-payment {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.lifetime-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.lifetime-best-for {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.lifetime-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.lifetime-original-price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #9D9D9D;
+  text-decoration: line-through;
+}
+
+.lifetime-final-price {
+  font-size: 2rem;
+}
+
+.lifetime-divider {
+  height: 0.0625rem;
+  width: 100%;
+  background: #D9D9D9;
+}
+
+.lifetime-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.lifetime-includes {
+  flex: 1;
+}
+
+.lifetime-includes-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.lifetime-includes-list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.lifetime-includes-item {
+  font-size: 0.95rem;
+  color: #1E1E1E;
+}
+
+.lifetime-badge {
+  color: #F36B6B;
+  font-weight: 700;
+  font-size: 1.2rem;
+  align-self: center;
+  text-align: center;
 }
 
 .original-monthly-price {
@@ -410,6 +522,24 @@
     gap: 0.1rem;
   }
 
+  .lifetime-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lifetime-price {
+    align-self: flex-end;
+  }
+
+  .lifetime-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lifetime-badge {
+    align-self: flex-start;
+  }
+
   .price {
     font-size: 1.6rem;
   }
@@ -439,7 +569,7 @@
 
 
   .membership-launch-banner {
-    margin-top: -1rem;
+    margin-top: -2rem;
   }
 
   .pricing-card {
@@ -463,6 +593,14 @@
 
   .price {
     font-size: 1.4rem;
+  }
+
+  .lifetime-title {
+    font-size: 1.2rem;
+  }
+
+  .lifetime-final-price {
+    font-size: 1.6rem;
   }
 
   .period {

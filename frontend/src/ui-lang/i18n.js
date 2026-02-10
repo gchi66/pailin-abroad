@@ -578,6 +578,30 @@ export const copy = {
         th: "ภายใน 30 วันหลังจากวันชำระเงิน หากคุณไม่พึงพอใจในการเป็นสมาชิกกับเรา แต่เรามั่นใจว่าคุณจะหลงรัก Pailin Abroad อย่างแน่นอนเลย!",
       },
     },
+    lifetime: {
+      title: { en: "LIFETIME MEMBERSHIP", th: "สมาชิกตลอดชีพ" },
+      paymentLabel: { en: "One-time payment", th: "ชำระครั้งเดียว" },
+      bestFor: {
+        en: "Learners who want full access, forever!",
+        th: "ผู้เรียนที่ต้องการเข้าถึงแบบเต็มรูปแบบตลอดไป!",
+      },
+      includesLabel: { en: "INCLUDES:", th: "รวม:" },
+      includes: [
+        {
+          en: "Full access to all lessons, for life",
+          th: "เข้าถึงบทเรียนทั้งหมดตลอดชีพ",
+        },
+        {
+          en: "All future updates included at no extra cost",
+          th: "อัปเดตใหม่ทั้งหมดในอนาคตโดยไม่เสียค่าใช้จ่ายเพิ่ม",
+        },
+        {
+          en: "One simple payment, no renewals",
+          th: "ชำระครั้งเดียว ไม่มีต่ออายุ",
+        },
+      ],
+      bestValue: { en: "Best value!", th: "คุ้มที่สุด!" },
+    },
     plans: {
       sixMonth: {
         duration: { en: "6 MONTHS", th: "6 เดือน" },

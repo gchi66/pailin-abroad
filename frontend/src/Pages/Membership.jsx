@@ -28,6 +28,12 @@ const Membership = () => {
   const { ui } = useUiLang();
   const membershipCopy = copy.membershipPage;
 
+  // Always start the membership page at the top when navigated to
+  useEffect(() => {
+    // Instant jump to top to avoid preserved scroll position from previous page
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     const loadPricing = async () => {
@@ -65,6 +71,7 @@ const Membership = () => {
   useEffect(() => {
     if (pricingState.loading || pricingState.plans.length === 0) return;
     const availableIds = new Set(pricingState.plans.map((plan) => plan.billing_period));
+    availableIds.add("lifetime");
     if (!availableIds.has(selectedPlanId)) {
       const preferred = availableIds.has("6-month")
         ? "6-month"
@@ -72,12 +79,6 @@ const Membership = () => {
       setSelectedPlanId(preferred);
     }
   }, [pricingState, selectedPlanId]);
-
-  // Always start the membership page at the top when navigated to
-  useEffect(() => {
-    // Instant jump to top to avoid preserved scroll position from previous page
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, []);
 
   useEffect(() => {
     document.body.classList.add("membership-page");
@@ -109,7 +110,32 @@ const Membership = () => {
   const monthlyTier = pricingState.plans.find((plan) => plan.billing_period === "monthly");
   const baseMonthlyPrice = monthlyTier ? Number(monthlyTier.amount_per_month) : null;
 
-  const planDefinitions = pricingState.plans.map((plan) => {
+  const isUsdPricing = pricingState.currency === "USD";
+  const lifetimePrice = isUsdPricing ? 150 : 3500;
+  const lifetimeOriginalPrice = isUsdPricing ? 250 : 4500;
+  const lifetimePlan = {
+    id: "lifetime",
+    billingPeriod: "lifetime",
+    duration: pick(membershipCopy.lifetime?.title, ui),
+    bestFor: pick(membershipCopy.lifetime?.bestFor, ui),
+    includesLabel: pick(membershipCopy.lifetime?.includesLabel, ui),
+    includes: (membershipCopy.lifetime?.includes || []).map((item) => pick(item, ui)),
+    paymentLabel: pick(membershipCopy.lifetime?.paymentLabel, ui),
+    bestValue: pick(membershipCopy.lifetime?.bestValue, ui),
+    price: formatWithSymbol(lifetimePrice),
+    originalPriceDisplay: formatWithSymbol(lifetimeOriginalPrice),
+    totalPrice: lifetimePrice,
+    originalPrice: lifetimeOriginalPrice,
+    currency: pricingState.currency
+  };
+
+  const planDefinitions = [...pricingState.plans]
+    .sort((a, b) => {
+      const aMonths = monthsByPeriod[a.billing_period] || 0;
+      const bMonths = monthsByPeriod[b.billing_period] || 0;
+      return bMonths - aMonths;
+    })
+    .map((plan) => {
     const copyKey = billingPeriodToCopyKey[plan.billing_period] || "oneMonth";
     const months = monthsByPeriod[plan.billing_period] || 1;
     const originalPrice = baseMonthlyPrice && months > 1 ? baseMonthlyPrice * months : null;
@@ -128,7 +154,7 @@ const Membership = () => {
       currency: pricingState.currency,
       copyKey
     };
-  });
+    });
 
   const plans = planDefinitions.map((plan) => {
     const planCopy = membershipCopy.plans?.[plan.copyKey] ?? {};
@@ -141,7 +167,8 @@ const Membership = () => {
     };
   });
 
-  const selectedPlan = plans.find((plan) => plan.id === selectedPlanId) || null;
+  const allPlans = [lifetimePlan, ...plans];
+  const selectedPlan = allPlans.find((plan) => plan.id === selectedPlanId) || null;
 
   const handleCardClick = (planId) => {
     setSelectedPlanId(planId);
@@ -229,6 +256,14 @@ const Membership = () => {
   const calculatePricingDisplay = (plan) => {
     if (!plan) return null;
 
+    if (plan.id === "lifetime") {
+      return {
+        showComparison: Number.isFinite(plan.originalPrice),
+        originalPrice: plan.originalPrice,
+        finalPrice: plan.totalPrice
+      };
+    }
+
     // For 1-month plan, show only final price
     if (plan.id === "monthly") {
       return {
@@ -267,6 +302,53 @@ const Membership = () => {
 
       {/* Pricing Cards */}
       <div className="pricing-cards-container">
+        {!pricingState.loading && !pricingState.error && (
+          <div
+            className={`pricing-card lifetime-card ${selectedPlanId === lifetimePlan.id ? 'selected' : ''} ${hoveredCard === lifetimePlan.id ? 'hovered' : ''}`}
+            onMouseEnter={() => setHoveredCard(lifetimePlan.id)}
+            onMouseLeave={() => setHoveredCard(null)}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={(event) => handleTouchEnd(lifetimePlan.id, event)}
+            onTouchCancel={handleTouchCancel}
+            onClick={(event) => handleClickFallback(lifetimePlan.id, event)}
+          >
+            <div className="lifetime-header">
+              <div className="lifetime-title">{lifetimePlan.duration}</div>
+              <div className="lifetime-payment">{lifetimePlan.paymentLabel}</div>
+            </div>
+
+            <div className="lifetime-top-row">
+              <div className="lifetime-best-for">
+                <span className="best-for-label">{pick(membershipCopy.bestForLabel, ui)}</span>
+                <span className="best-for-text">{lifetimePlan.bestFor}</span>
+              </div>
+              <div className="lifetime-price">
+                <span className="lifetime-original-price">{lifetimePlan.originalPriceDisplay}</span>
+                <span className="price lifetime-final-price">{lifetimePlan.price}</span>
+              </div>
+            </div>
+
+            <div className="lifetime-divider" />
+
+            <div className="lifetime-body">
+              <div className="lifetime-includes">
+                <div className="lifetime-includes-label">{lifetimePlan.includesLabel}</div>
+                <ul className="lifetime-includes-list">
+                  {lifetimePlan.includes.map((item) => (
+                    <li key={item} className="lifetime-includes-item">{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="lifetime-badge">{lifetimePlan.bestValue}</div>
+            </div>
+          </div>
+        )}
+        {!pricingState.loading && !pricingState.error && (
+          <div className="lifetime-followup">
+            Not ready for lifetime access? Choose a monthly plan below
+          </div>
+        )}
         {pricingState.loading && (
           <div className="pricing-loading">Loading pricing...</div>
         )}
