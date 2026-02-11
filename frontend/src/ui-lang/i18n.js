@@ -338,7 +338,7 @@ export const copy = {
     },
     loadingSection: { en: "Loading section...", th: "กำลังโหลดหัวข้อ..." },
     notFound: { en: "We couldn't find that section.", th: "ไม่พบหัวข้อนี้" },
-    resourcesLabel: { en: "Resources", th: "แหล่งข้อมูล" },
+    resourcesLabel: { en: "Resources", th: "สื่อการเรียน" },
     sectionLabel: { en: "Section", th: "หัวข้อ" },
     exercisesCount: {
       singular: { en: "exercise in this section", th: "แบบฝึกหัดในหัวข้อนี้" },

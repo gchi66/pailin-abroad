@@ -611,9 +611,11 @@ export default function LessonContent({
       full_node: i === 8 ? n : undefined
     })));
 
-    // Get quick practice exercises for "understand" sections only
+    // Get quick practice exercises for "understand" and "extra_tip" sections only
     let quickExercises = [];
-    if (section.type === "understand") {
+    const allowQuickPractice =
+      section.type === "understand" || section.type === "extra_tip";
+    if (allowQuickPractice) {
       quickExercises = practiceExercises.filter((ex) => {
         if (!ex || !ex.sort_order) return false;
         if (ex.isQuickPractice) return true;

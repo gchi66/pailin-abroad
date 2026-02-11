@@ -3216,6 +3216,15 @@ class GoogleDocsParser:
                         inlines = _pop_inlines_for_text(content)
                         if inlines:
                             cur_items[-1]["text_jsonb"] = inlines
+                        if (
+                            lang == "th"
+                            and cur_ex
+                            and cur_ex.get("kind") == "multiple_choice"
+                            and _has_th(content)
+                        ):
+                            cur_items[-1]["text_th"] = content
+                            if inlines:
+                                cur_items[-1]["text_jsonb_th"] = inlines
                     collecting_text = True  # Keep collecting for Thai on next line
                 else:
                     # Empty TEXT: line, start collecting multi-line
@@ -3307,10 +3316,12 @@ class GoogleDocsParser:
                 pending_option = option_entry
                 continue
 
-            if collecting_opts and pending_option and _is_thai_dominant(line):
-                existing = (pending_option.get("text_th") or "").strip()
-                pending_option["text_th"] = f"{existing}\n{line}" if existing else line
-                continue
+            if collecting_opts and pending_option:
+                is_thai_line = _is_thai_dominant(line) or (lang == "th" and _has_th(line))
+                if is_thai_line and not OPTION_RE.match(line.strip()):
+                    existing = (pending_option.get("text_th") or "").strip()
+                    pending_option["text_th"] = f"{existing}\n{line}" if existing else line
+                    continue
 
             # Multi-line text collection
             if collecting_text and cur_items:
@@ -3354,7 +3365,30 @@ class GoogleDocsParser:
                     # If we already have English text but no Thai, only treat the next line as Thai
                     # when it actually contains Thai (or we're parsing the Thai doc).
                     if cur_items[-1].get("text") and not cur_items[-1].get("text_th"):
-                        if lang == "th" and _is_thai_dominant(stripped):
+                        if (
+                            lang == "th"
+                            and cur_ex
+                            and cur_ex.get("kind") == "multiple_choice"
+                            and _has_th(stripped)
+                        ):
+                            cur_items[-1]["text_th"] = stripped
+                            inlines = _pop_inlines_for_text(stripped)
+                            if inlines:
+                                cur_items[-1]["text_jsonb_th"] = inlines
+                            else:
+                                combined = f"{cur_items[-1].get('text', '')}\n{stripped}"
+                                combo_inlines = _pop_inlines_for_text(combined)
+                                if combo_inlines:
+                                    split_inlines = _split_inlines_at_break(combo_inlines, combined)
+                                    if split_inlines:
+                                        left_inlines, right_inlines = split_inlines
+                                        if left_inlines:
+                                            cur_items[-1]["text_jsonb"] = left_inlines
+                                        if right_inlines:
+                                            cur_items[-1]["text_jsonb_th"] = right_inlines
+                            if not (lang == "th" and cur_ex and cur_ex.get("kind") == "multiple_choice"):
+                                collecting_text = False  # Done collecting
+                        elif lang == "th" and _is_thai_dominant(stripped):
                             cur_items[-1]["text_th"] = stripped
                             inlines = _pop_inlines_for_text(stripped)
                             if inlines:
