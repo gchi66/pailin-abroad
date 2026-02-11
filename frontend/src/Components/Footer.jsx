@@ -5,6 +5,7 @@ import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
+import { FACEBOOK_URL } from "../config/social";
 
 const Footer = () => {
   const { ui } = useUiLang();
@@ -122,12 +123,18 @@ const Footer = () => {
                   alt="Instagram"
                 />
               </button>
-              <button className="social-icon-link">
+              <a
+                className="social-icon-link"
+                href={FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+              >
                 <img
                   src={`${process.env.PUBLIC_URL}/images/facebook-icon-black.png`}
                   alt="Facebook"
                 />
-              </button>
+              </a>
             </div>
           </div>
         </div>

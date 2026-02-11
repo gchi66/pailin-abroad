@@ -250,7 +250,7 @@ def list_objects_recursive(prefix: str = "") -> list[str]:
     return objects
 
 # ─── 5. Update content_jsonb with audio_key ─────────────────────────────────
-def update_lesson_sections_with_audio_keys():
+def update_lesson_sections_with_audio_keys(level: int | None = None, stage: str | None = None):
     """Update content_jsonb in lesson_sections to include audio_key for nodes with audio_seq"""
     print("\nUpdating lesson_sections content_jsonb with audio_key values...")
 
@@ -298,6 +298,12 @@ def update_lesson_sections_with_audio_keys():
                 continue
 
             lesson_data = lesson_res.data[0]
+            if level is not None and lesson_data.get("level") != level:
+                continue
+            if stage is not None:
+                lesson_stage = (lesson_data.get("stage") or "").strip()
+                if lesson_stage != stage:
+                    continue
             lesson_external_id = f"{lesson_data['level']}.{lesson_data['lesson_order']}"
         except Exception as e:
             print(f"Error getting lesson external ID: {e}")
@@ -344,7 +350,23 @@ def main() -> None:
         action="store_true",
         help="Only backfill phrases_verbs audio snippets.",
     )
+    parser.add_argument(
+        "--level",
+        type=int,
+        help="Only backfill standard section audio for a specific level (e.g. 10).",
+    )
+    parser.add_argument(
+        "--stage",
+        type=str,
+        help="Only backfill standard section audio for a specific stage (Beginner, Intermediate, Advanced, Expert).",
+    )
     args = parser.parse_args()
+
+    stage_filter = args.stage.strip() if args.stage else None
+    if stage_filter:
+        stage_filter = stage_filter.title()
+        if stage_filter not in STAGES:
+            raise SystemExit(f"--stage must be one of: {sorted(STAGES)}")
 
     print("Gathering objects …")
     all_objects = list_objects_recursive()
@@ -364,6 +386,9 @@ def main() -> None:
         # 1) Phrases & Verbs first (these live under Phrases_Verbs/, no stage directory)
         phrases_match = PHRASES_FILE_RE.fullmatch(filename)
         if phrases_match:
+            if args.level or stage_filter:
+                # Level/stage filters only apply to standard lesson sections.
+                continue
             phrase_key = phrases_match["phrase_key"]
             variant = int(phrases_match["variant"]) if phrases_match["variant"] else 0
             seq = int(phrases_match["seq"])
@@ -422,10 +447,19 @@ def main() -> None:
             # Debug log so we can see what’s actually coming back
             print(f"Skipping path with unexpected stage={stage_raw!r}: {path}")
             continue
+        if stage_filter and stage != stage_filter:
+            continue
 
         standard_match = STANDARD_FILE_RE.fullmatch(filename)
         if standard_match:
             lesson = standard_match["lesson"]
+            if args.level is not None:
+                try:
+                    lesson_level = int(str(lesson).split(".", 1)[0])
+                except ValueError:
+                    continue
+                if lesson_level != args.level:
+                    continue
             section = SECTION_MAPPING[standard_match["section"].lower()]
             seq_raw = standard_match["seq"]
             seq_parts = (seq_raw or "").split(".", 1)
@@ -489,7 +523,7 @@ def main() -> None:
         print("Nothing to do.")
     else:
         # After upserting audio snippets, update content_jsonb in lesson_sections
-        update_lesson_sections_with_audio_keys()
+        update_lesson_sections_with_audio_keys(level=args.level, stage=stage_filter)
 
 if __name__ == "__main__":
     main()

@@ -3370,7 +3370,8 @@ class GoogleDocsParser:
                                             cur_items[-1]["text_jsonb"] = left_inlines
                                         if right_inlines:
                                             cur_items[-1]["text_jsonb_th"] = right_inlines
-                            collecting_text = False  # Done collecting
+                            if not (lang == "th" and cur_ex and cur_ex.get("kind") == "multiple_choice"):
+                                collecting_text = False  # Done collecting
                         elif _is_thai_dominant(stripped):
                             cur_items[-1]["text_th"] = stripped
                             inlines = _pop_inlines_for_text(stripped)
@@ -3387,7 +3388,8 @@ class GoogleDocsParser:
                                             cur_items[-1]["text_jsonb"] = left_inlines
                                         if right_inlines:
                                             cur_items[-1]["text_jsonb_th"] = right_inlines
-                            collecting_text = False  # Done collecting
+                            if not (lang == "th" and cur_ex and cur_ex.get("kind") == "multiple_choice"):
+                                collecting_text = False  # Done collecting
                         else:
                             # Preserve speaker turns like "Luke: ..." on a new line.
                             is_speaker_turn = bool(re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped))
@@ -3408,9 +3410,83 @@ class GoogleDocsParser:
                             else:
                                 if cur_items[-1].get("text_jsonb"):
                                     cur_items[-1].pop("text_jsonb", None)
-                            collecting_text = False  # Done collecting
+                            if not (lang == "th" and cur_ex and cur_ex.get("kind") == "multiple_choice"):
+                                collecting_text = False  # Done collecting
                     else:
                         # Otherwise append to English text (or Thai if TH doc)
+                        if lang == "th" and cur_ex and cur_ex.get("kind") == "multiple_choice":
+                            has_bilingual_break = "\u000b" in stripped
+                            has_bilingual_mix = _has_en(stripped) and _has_th(stripped)
+                            if has_bilingual_break or has_bilingual_mix:
+                                speaker_match = re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped)
+                                if has_bilingual_mix and speaker_match:
+                                    rest = stripped[speaker_match.end():]
+                                    if _has_th(rest) and not _has_en(rest):
+                                        en_part, th_part = None, stripped
+                                    else:
+                                        en_part, th_part = split_en_th(stripped)
+                                elif has_bilingual_break:
+                                    en_part, th_part = stripped.split("\u000b", 1)
+                                    en_part = en_part.strip() or None
+                                    th_part = th_part.strip() or None
+                                else:
+                                    en_part, th_part = split_en_th(stripped)
+                                is_speaker_turn = bool(speaker_match or re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped))
+                                joiner = "\n" if is_speaker_turn else " "
+
+                                if en_part:
+                                    if cur_items[-1].get("text"):
+                                        cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + en_part
+                                    else:
+                                        cur_items[-1]["text"] = en_part
+                                if th_part:
+                                    if cur_items[-1].get("text_th"):
+                                        cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + joiner + th_part
+                                    else:
+                                        cur_items[-1]["text_th"] = th_part
+
+                                if cur_ex and cur_ex.get("kind") == "fill_blank":
+                                    if en_part:
+                                        _append_inlines_for_fill_blank(
+                                            cur_items[-1],
+                                            "text_jsonb",
+                                            joiner if cur_items[-1].get("text_jsonb") else "",
+                                            en_part,
+                                        )
+                                    if th_part:
+                                        _append_inlines_for_fill_blank(
+                                            cur_items[-1],
+                                            "text_jsonb_th",
+                                            joiner if cur_items[-1].get("text_jsonb_th") else "",
+                                            th_part,
+                                        )
+                                else:
+                                    if cur_items[-1].get("text_jsonb"):
+                                        cur_items[-1].pop("text_jsonb", None)
+                                    if cur_items[-1].get("text_jsonb_th"):
+                                        cur_items[-1].pop("text_jsonb_th", None)
+                                continue
+
+                            # Some Thai docs split bilingual turns into separate lines (no \u000b).
+                            # If the line contains Thai and looks like a speaker turn, keep it in Thai.
+                            if _has_th(stripped) and re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped):
+                                joiner = "\n"
+                                if cur_items[-1].get("text_th"):
+                                    cur_items[-1]["text_th"] = cur_items[-1]["text_th"] + joiner + stripped
+                                else:
+                                    cur_items[-1]["text_th"] = stripped
+                                if cur_ex and cur_ex.get("kind") == "fill_blank":
+                                    _append_inlines_for_fill_blank(
+                                        cur_items[-1],
+                                        "text_jsonb_th",
+                                        joiner if cur_items[-1].get("text_jsonb_th") else "",
+                                        stripped,
+                                    )
+                                else:
+                                    if cur_items[-1].get("text_jsonb_th"):
+                                        cur_items[-1].pop("text_jsonb_th", None)
+                                continue
+
                         if lang == "th" and _is_thai_dominant(stripped):
                             if cur_items[-1].get("text_th"):
                                 joiner = "\n" if (cur_ex and cur_ex.get("kind") == "multiple_choice") else " "
@@ -3443,12 +3519,16 @@ class GoogleDocsParser:
                                                 cur_items[-1]["text_jsonb_th"] = right_inlines
                         else:
                             if cur_items[-1].get("text"):
-                                cur_items[-1]["text"] = cur_items[-1]["text"] + " " + stripped
+                                if cur_ex and cur_ex.get("kind") == "multiple_choice" and re.match(r"^[A-Za-z][^:\n]{0,40}:\s*", stripped):
+                                    joiner = "\n"
+                                else:
+                                    joiner = " "
+                                cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
                                 if cur_ex and cur_ex.get("kind") == "fill_blank":
                                     _append_inlines_for_fill_blank(
                                         cur_items[-1],
                                         "text_jsonb",
-                                        " ",
+                                        joiner,
                                         stripped,
                                     )
                                 else:
