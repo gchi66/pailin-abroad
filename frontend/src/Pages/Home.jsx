@@ -13,7 +13,6 @@ import FAQ from '../Components/FAQ';
 
 // import About from "../Components/About";
 import Characters from "../Components/Characters";
-import Reviews from "../Components/Reviews";
 
 const Home = ({ toggleSignupModal }) => {
   const [message, setMessage] = useState("");
@@ -54,7 +53,6 @@ const Home = ({ toggleSignupModal }) => {
       <HowItWorks />
       <SignUpCTA onSignupClick={toggleSignupModal} />
       <Characters />
-      <Reviews />
       <TakeTheLeapCTA onSignupClick={toggleSignupModal} />
       <FAQ />
 

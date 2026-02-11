@@ -2693,8 +2693,6 @@ class GoogleDocsParser:
                 return
             existing = target.get(inlines_key)
             new_inlines = _pop_inlines_for_text(new_text)
-            if existing is None and not new_inlines:
-                return
             if existing is None:
                 existing = []
                 target[inlines_key] = existing
@@ -3458,6 +3456,13 @@ class GoogleDocsParser:
                                         cur_items[-1].pop("text_jsonb", None)
                             else:
                                 cur_items[-1]["text"] = stripped
+                                if cur_ex and cur_ex.get("kind") == "fill_blank":
+                                    _append_inlines_for_fill_blank(
+                                        cur_items[-1],
+                                        "text_jsonb",
+                                        "",
+                                        stripped,
+                                    )
                     continue
 
             # Multi-line paragraph collection
