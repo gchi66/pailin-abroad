@@ -237,25 +237,7 @@ const ExerciseBank = () => {
     return false;
   };
 
-  const featuredBySection = useMemo(() => {
-    const map = new Map();
-    featured.forEach((exercise) => {
-      const key = `${exercise.category_slug}/${exercise.section_slug}`;
-      if (!map.has(key)) {
-        map.set(key, {
-          category: exercise.category,
-          category_label: exercise.category_label,
-          category_slug: exercise.category_slug,
-          section: exercise.section,
-          section_th: exercise.section_th,
-          section_slug: exercise.section_slug,
-          exercises: [],
-        });
-      }
-      map.get(key).exercises.push(exercise);
-    });
-    return Array.from(map.values());
-  }, [featured]);
+  const featuredSections = useMemo(() => featured || [], [featured]);
 
   const sectionExerciseCountByKey = useMemo(() => {
     const map = new Map();
@@ -322,47 +304,21 @@ const ExerciseBank = () => {
     return sorted;
   }, [filteredSectionsForSelectedCategory]);
 
-  const filteredFeaturedBySection = useMemo(() => {
-    if (!normalizedSearch) return featuredBySection;
+  const filteredFeaturedSections = useMemo(() => {
+    if (!normalizedSearch) return featuredSections;
 
-    return featuredBySection
-      .map((group) => {
-        const filteredExercises = group.exercises.filter((exercise) => {
-          const haystack = [
-            exercise.title,
-            exercise.title_th,
-            exercise.prompt,
-            exercise.prompt_th,
-            exercise.exercise_type,
-            group.category_label,
-            group.section,
-            group.section_th,
-          ]
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase();
-          return haystack.includes(normalizedSearch);
-        });
-
-        const groupMatches =
-          filteredExercises.length > 0 ||
-          [group.section, group.section_th, group.category_label]
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase()
-            .includes(normalizedSearch);
-
-        if (!groupMatches) {
-          return null;
-        }
-
-        return {
-          ...group,
-          exercises: filteredExercises.length > 0 ? filteredExercises : group.exercises,
-        };
-      })
-      .filter(Boolean);
-  }, [featuredBySection, normalizedSearch]);
+    return featuredSections.filter((section) => {
+      const haystack = [
+        section.section,
+        section.section_th,
+        section.category_label,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(normalizedSearch);
+    });
+  }, [featuredSections, normalizedSearch]);
 
   const isLoading = loadingSections;
 
@@ -591,7 +547,7 @@ const ExerciseBank = () => {
                   <p>{featuredError}</p>
                 </div>
               )}
-              {!loadingFeatured && !featuredError && filteredFeaturedBySection.length === 0 && (
+              {!loadingFeatured && !featuredError && filteredFeaturedSections.length === 0 && (
                 <div className="exercise-bank-placeholder">
                   <p>
                     {normalizedSearch
@@ -600,14 +556,14 @@ const ExerciseBank = () => {
                   </p>
                 </div>
               )}
-              {!loadingFeatured && !featuredError && filteredFeaturedBySection.length > 0 && (
+              {!loadingFeatured && !featuredError && filteredFeaturedSections.length > 0 && (
                 <div className="exercise-bank-card-grid">
-                  {filteredFeaturedBySection.map((group) => {
+                  {filteredFeaturedSections.map((group) => {
                     const isLocked = isCardLocked(true);
                     const destination = `/exercise-bank/${group.category_slug}/${group.section_slug}`;
                     const groupKey = `${group.category_slug}/${group.section_slug}`;
                     const totalCount =
-                      sectionExerciseCountByKey.get(groupKey) ?? group.exercises.length;
+                      sectionExerciseCountByKey.get(groupKey) ?? group.exercise_count ?? 0;
                     return (
                     <div
                       key={`${group.category_slug}-${group.section_slug}`}
@@ -643,9 +599,9 @@ const ExerciseBank = () => {
                         </div>
                         <div className="exercise-bank-card-meta">
                           <span className="exercise-bank-category-chip">{group.category_label}</span>
-                          {group.exercises.length > 0 && (
+                          {(group.exercise_count ?? 0) > 0 && (
                             <span className="exercise-bank-featured-count">
-                              {formatFeaturedCount(group.exercises.length)}
+                              {formatFeaturedCount(group.exercise_count ?? 0)}
                             </span>
                           )}
                         </div>

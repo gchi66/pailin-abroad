@@ -1520,10 +1520,20 @@ def get_exercise_sections():
     """Return sections grouped by category for the exercise bank."""
     try:
         category_filter = (request.args.get("category") or "").strip().lower()
+        featured_result = (
+            supabase.table("featured_sections")
+            .select("section")
+            .execute()
+        )
+        featured_sections = {
+            (row.get("section") or "").strip()
+            for row in (featured_result.data or [])
+            if row.get("section")
+        }
 
         result = (
             supabase.table("exercise_bank")
-            .select("id, category, section, section_th, is_featured")
+            .select("id, category, section, section_th")
             .execute()
         )
 
@@ -1534,6 +1544,7 @@ def get_exercise_sections():
             category = row.get("category") or ""
             section = row.get("section") or ""
             key = (category, section)
+            is_featured = section in featured_sections
 
             if key not in sections_map:
                 section_th = row.get("section_th") or None
@@ -1545,12 +1556,11 @@ def get_exercise_sections():
                     "section_th": section_th,
                     "section_slug": _section_slug(section),
                     "exercise_count": 0,
-                    "featured_count": 0,
+                    "featured_count": 1 if is_featured else 0,
+                    "is_featured": is_featured,
                 }
 
             sections_map[key]["exercise_count"] += 1
-            if row.get("is_featured"):
-                sections_map[key]["featured_count"] += 1
 
         sections = list(sections_map.values())
         if category_filter:
@@ -1599,41 +1609,46 @@ def get_exercise_sections():
 def get_featured_exercises():
     """Return featured exercises across the exercise bank."""
     try:
+        featured_result = (
+            supabase.table("featured_sections")
+            .select("section")
+            .execute()
+        )
+        featured_sections = [
+            (row.get("section") or "").strip()
+            for row in (featured_result.data or [])
+            if row.get("section")
+        ]
+        if not featured_sections:
+            return jsonify({"featured": []}), 200
+
         result = (
             supabase.table("exercise_bank")
-            .select(
-                "id, category, section, section_th, title, title_th, prompt, prompt_th, "
-                "exercise_type, items, items_th, is_featured"
-            )
-            .eq("is_featured", True)
-            .order("category")
-            .order("section")
-            .order("title")
+            .select("category, section, section_th")
+            .in_("section", featured_sections)
             .execute()
         )
 
         rows = result.data or []
-        featured = []
+        sections_map = {}
         for row in rows:
-            featured.append(
-                {
-                    "id": row.get("id"),
-                    "category": row.get("category"),
-                    "category_label": _category_label(row.get("category")),
-                    "category_slug": _category_slug(row.get("category")),
-                    "section": row.get("section"),
-                    "section_th": row.get("section_th"),
-                    "section_slug": _section_slug(row.get("section")),
-                    "title": row.get("title"),
-                    "title_th": row.get("title_th"),
-                    "prompt": row.get("prompt"),
-                    "prompt_th": row.get("prompt_th"),
-                    "exercise_type": row.get("exercise_type"),
-                    "items": row.get("items") or [],
-                    "items_th": row.get("items_th") or [],
-                    "sort_order": row.get("sort_order"),
+            category = row.get("category") or ""
+            section = row.get("section") or ""
+            key = (category, section)
+            if key not in sections_map:
+                sections_map[key] = {
+                    "category": category,
+                    "category_label": _category_label(category),
+                    "category_slug": _category_slug(category),
+                    "section": section,
+                    "section_th": row.get("section_th") or None,
+                    "section_slug": _section_slug(section),
+                    "exercise_count": 0,
                 }
-            )
+            sections_map[key]["exercise_count"] += 1
+
+        featured = list(sections_map.values())
+        featured.sort(key=lambda item: (item["category_label"], item["section"]))
 
         return jsonify({"featured": featured}), 200
 
