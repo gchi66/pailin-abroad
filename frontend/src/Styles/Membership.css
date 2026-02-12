@@ -257,6 +257,7 @@
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+  line-height: 1.4;
 }
 
 .lifetime-best-for {
@@ -265,6 +266,8 @@
   align-items: baseline;
   gap: 0.25rem;
   flex: 1;
+  position: relative;
+  top: -1rem;
 }
 
 .lifetime-price {
@@ -304,7 +307,7 @@
 
 .lifetime-includes-label {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 0.5rem;
 }
 

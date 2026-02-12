@@ -15,13 +15,6 @@ const teamMembers = [
     image: "/images/grant.webp",
     description:
       "I'm passionate about teaching English to non-native speakers and creating engaging, accessible resources on my ESL education website. I focus on quality, clarity, and inclusivity, offering free lessons and placement tests to guide learners on their journey. With thoughtful design and messaging."
-  },
-  {
-    name: "LEEH",
-    location: "Head Translator",
-    image: "/images/rose.webp",
-    description:
-      "I'm passionate about teaching English to non-native speakers and creating engaging, accessible resources on my ESL education website. I focus on quality, clarity, and inclusivity, offering free lessons and placement tests to guide learners on their journey. With thoughtful design and messaging."
   }
 ];
 

@@ -19,6 +19,10 @@ LEVEL_DOC_IDS: Dict[int, Dict[str, str]] = {
     10: {"en": "14ogr25RAFGbIgUoeX6O9b5RuoRATRvyoaEVXZb4GhkM", "th": "1MfkKQDP26KG-PbwKNyeG9omyYus6AteQ7xcSlJ1SFdE"},
     11: {"en": "10TaSOUsaGj9YHZn-XlpEEw6x789CRajOQTgYZErdtek", "th": "14V4jovYayaMabpZwo5obWDS3gUb4a9kUisHHvdmhNko"},
     12: {"en": "1vBxUOrpK9UFgguG7oy7XDsKxhJQa4OugCVsCSQU2U48", "th": "1a9a9AuVvKqMPzViSGkP5FoE5Pkcwh8_uQhQYq0dxDlA"},
+    13: {"en": "13iiq-u3npl0-7cNRn0W1L8boxuwkhvcUnVqag7znJsY", "th": ""},
+    14: {"en": "1sRWYOhAs0BoLrsjLyQrYibCoDD2hR8O0gSALIydHZEc", "th": ""},
+    15: {"en": "1kRrX97_DBEMNmunH79V8VFMUHcvEuTnB2zdEWsktPqw", "th": ""},
+    16: {"en": "1tWkViUwHwAYb-6-xADXHWYEpf4T7ydXoiBgnfWqbHuQ", "th": ""},
 }
 
 
@@ -29,6 +33,8 @@ def stage_for_level(level: int) -> str:
         return "Intermediate"
     if 9 <= level <= 12:
         return "Advanced"
+    if 13 <= level <= 16:
+        return "Expert"
     raise ValueError(f"No stage mapping configured for level {level}")
 
 
@@ -44,6 +50,9 @@ def process_level(level: int, skip_import: bool, skip_th: bool, skip_en: bool, s
 
     en_out = f"data/level_{level}.json"
     th_out = f"data/level_{level}_th.json"
+
+    if not en_id:
+        raise ValueError(f"Missing EN doc id for level {level}")
 
     if not skip_en:
         print("\n===============================")
@@ -68,8 +77,10 @@ def process_level(level: int, skip_import: bool, skip_th: bool, skip_en: bool, s
     else:
         print(f"⚠️  Skipping English for level {level}")
 
-    # Optionally skip Thai
-    if skip_th:
+    # Optionally skip Thai (or if no TH doc id configured)
+    if skip_th or not th_id:
+        if not th_id and not skip_th:
+            print(f"⚠️  No Thai doc id for level {level}; skipping Thai.")
         print(f"⚠️  Skipping Thai for level {level}")
         return
 

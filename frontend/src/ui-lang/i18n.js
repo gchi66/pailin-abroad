@@ -510,7 +510,7 @@ export const copy = {
     },
   },
   resourcesPage: {
-    title: { en: "Resources", th: "แหล่งข้อมูล" },
+    title: { en: "Resources", th: "สื่อการเรียน" },
     subtitle: {
       en: "Extra materials to guide your English-learning journey with Pailin",
       th: "สื่อการเรียนรู้เพิ่มเติมเพื่อช่วยในการเรียนรู้ภาษาอังกฤษไปกับไพลิน",

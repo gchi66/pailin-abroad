@@ -177,7 +177,7 @@
 }
 
 .dropdown-link.pricing {
-  color: #FF4545;
+  color: #FF4545 !important;
 }
 
 .dropdown-link.pricing:hover {

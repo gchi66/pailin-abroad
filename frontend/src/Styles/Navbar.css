@@ -503,6 +503,14 @@
   gap: 0.35rem;
 }
 
+.mobile-navlinks .dropdown-link.pricing {
+  color: #FF4545;
+}
+
+.mobile-navlinks .dropdown-link.pricing:hover {
+  color: #91CAFF;
+}
+
 .mobile-collapsible .dropdown-collapsible-content {
   padding-left: 0.75rem;
 }
