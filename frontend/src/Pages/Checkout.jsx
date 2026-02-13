@@ -13,7 +13,17 @@ const Checkout = () => {
   const [userEmail, setUserEmail] = useState("");
   const [emailInput, setEmailInput] = useState("");
 
-  const selectedPlan = location.state?.selectedPlan;
+  const [selectedPlan, setSelectedPlan] = useState(() => {
+    if (location.state?.selectedPlan) return location.state.selectedPlan;
+    const storedPlan = sessionStorage.getItem("checkout_selected_plan");
+    if (!storedPlan) return null;
+    try {
+      return JSON.parse(storedPlan);
+    } catch (err) {
+      console.warn("Failed to parse stored checkout plan:", err);
+      return null;
+    }
+  });
   const searchParams = new URLSearchParams(location.search || "");
   const emailFromUrl = searchParams.get("email") || "";
   const currencySymbol = selectedPlan?.currency === "USD" ? "$" : "฿";
@@ -42,11 +52,19 @@ const Checkout = () => {
     getUserEmail();
   }, [emailFromUrl]);
 
+  useEffect(() => {
+    if (location.state?.selectedPlan) {
+      setSelectedPlan(location.state.selectedPlan);
+    }
+  }, [location.state?.selectedPlan]);
+
   // ✅ Redirect if no plan selected
   useEffect(() => {
     if (!selectedPlan) {
       navigate("/membership");
+      return;
     }
+    sessionStorage.removeItem("checkout_selected_plan");
   }, [selectedPlan, navigate]);
 
   const handleCheckout = async () => {

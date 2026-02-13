@@ -463,6 +463,7 @@ const Membership = () => {
       <QuickSignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
+        selectedPlan={selectedPlan}
         onSuccess={(email) => {
           setShowSignupModal(false);
           // User is now logged in, proceed to checkout

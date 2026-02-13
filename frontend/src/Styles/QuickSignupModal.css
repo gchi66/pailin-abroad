@@ -87,6 +87,37 @@
   margin: 0 0 2rem 0;
 }
 
+/* Social Button + Divider */
+.quick-signup-social {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.quick-signup-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+  margin: 0 0 1.25rem 0;
+}
+
+.quick-signup-divider::before,
+.quick-signup-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.quick-signup-divider::before {
+  margin-right: 0.75em;
+}
+
+.quick-signup-divider::after {
+  margin-left: 0.75em;
+}
+
 /* Signup Form */
 .signup-form {
   display: flex;

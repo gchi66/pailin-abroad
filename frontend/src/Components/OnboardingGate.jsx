@@ -3,7 +3,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { useAuth } from "../AuthContext";
 
-const ONBOARDING_PATHS = ["/onboarding", "/verify-email", "/email-confirmation", "/reset-password"];
+const ONBOARDING_PATHS = [
+  "/onboarding",
+  "/verify-email",
+  "/email-confirmation",
+  "/reset-password",
+  "/checkout",
+  "/payment-success"
+];
 
 const OnboardingGate = ({ children }) => {
   const { user } = useAuth();
