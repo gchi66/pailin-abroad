@@ -8,6 +8,7 @@ import SubscriptionBilling from "../Components/SubscriptionBilling";
 import ConfirmPasswordModal from "../Components/ConfirmPasswordModal";
 import PasswordResetSentModal from "../Components/PasswordResetSentModal";
 import { API_BASE_URL } from "../config/api";
+import { resolveAvatarUrl } from "../lib/resolveAvatarUrl";
 import "../Styles/AccountSettings.css";
 
 const AccountSettings = () => {
@@ -23,7 +24,7 @@ const AccountSettings = () => {
     "/images/characters/avatar_6.webp",
     "/images/characters/avatar_7.webp",
     "/images/characters/avatar_8.webp",
-  ];
+  ].map((path) => resolveAvatarUrl(path));
   const [activeTab, setActiveTab] = useState("profile");
   const [firstName, setFirstName] = useState("John");
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
@@ -216,11 +217,12 @@ const AccountSettings = () => {
         if (!response.ok) return;
         const data = await response.json();
         const profile = data?.profile || {};
-        const avatar =
+        const avatar = resolveAvatarUrl(
           profile.avatar_image ||
           profile.avatar ||
           profile.avatar_url ||
-          "";
+          ""
+        );
         if (avatar) {
           setProfileImage(avatar);
         }

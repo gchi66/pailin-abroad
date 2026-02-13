@@ -26,6 +26,7 @@ const Onboarding = () => {
   const [hasSyncedUser, setHasSyncedUser] = useState(false);
   const [syncingUser, setSyncingUser] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [preferPngAvatars, setPreferPngAvatars] = useState(false);
   const navigate = useNavigate();
   const { ui: uiLang, setUi: setUiLang } = useUiLang();
   const isDevPreview =
@@ -192,6 +193,12 @@ const Onboarding = () => {
         mq.removeListener(update);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+    setPreferPngAvatars(isIOS);
   }, []);
 
   // UI translations
@@ -414,14 +421,14 @@ const Onboarding = () => {
 
   // Available avatars for selection
   const avatarOptions = [
-    { path: "/images/characters/avatar_1.webp", name: "avatar1" },
-    { path: "/images/characters/avatar_2.webp", name: "avatar2" },
-    { path: "/images/characters/avatar_3.webp", name: "avatar3" },
-    { path: "/images/characters/avatar_4.webp", name: "avatar4" },
-    { path: "/images/characters/avatar_5.webp", name: "avatar5" },
-    { path: "/images/characters/avatar_6.webp", name: "avatar6" },
-    { path: "/images/characters/avatar_7.webp", name: "avatar7" },
-    { path: "/images/characters/avatar_8.webp", name: "avatar8" }
+    { webp: "/images/characters/avatar_1.webp", png: "/images/characters/avatar_1.png", name: "avatar1" },
+    { webp: "/images/characters/avatar_2.webp", png: "/images/characters/avatar_2.png", name: "avatar2" },
+    { webp: "/images/characters/avatar_3.webp", png: "/images/characters/avatar_3.png", name: "avatar3" },
+    { webp: "/images/characters/avatar_4.webp", png: "/images/characters/avatar_4.png", name: "avatar4" },
+    { webp: "/images/characters/avatar_5.webp", png: "/images/characters/avatar_5.png", name: "avatar5" },
+    { webp: "/images/characters/avatar_6.webp", png: "/images/characters/avatar_6.png", name: "avatar6" },
+    { webp: "/images/characters/avatar_7.webp", png: "/images/characters/avatar_7.png", name: "avatar7" },
+    { webp: "/images/characters/avatar_8.webp", png: "/images/characters/avatar_8.png", name: "avatar8" }
   ];
 
   const handleAvatarSelect = (avatarPath) => {
@@ -671,20 +678,37 @@ const Onboarding = () => {
               <div className="onboarding-section">
                 <h2 className="onboarding-section-title">{uiText.chooseAvatar}</h2>
               <div className="onboarding-avatar-grid">
-                {avatarOptions.map((avatar, index) => (
+                {avatarOptions.map((avatar, index) => {
+                  const selectedPath = preferPngAvatars ? avatar.png : avatar.webp;
+                  return (
                   <div
                     key={index}
-                    className={`onboarding-avatar-option ${selectedAvatar === avatar.path ? 'selected' : ''}`}
-                    onClick={() => handleAvatarSelect(avatar.path)}
+                    className={`onboarding-avatar-option ${selectedAvatar === selectedPath ? 'selected' : ''}`}
+                    onClick={() => handleAvatarSelect(selectedPath)}
                   >
-                    <img
-                      src={avatar.path}
-                      alt={uiText[avatar.name]}
-                      title={uiText[avatar.name]}
-                      className="onboarding-avatar-image"
-                    />
+                    {preferPngAvatars ? (
+                      <img
+                        src={avatar.png}
+                        alt={uiText[avatar.name]}
+                        title={uiText[avatar.name]}
+                        className="onboarding-avatar-image"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <picture>
+                        <source srcSet={avatar.webp} type="image/webp" />
+                        <img
+                          src={avatar.png}
+                          alt={uiText[avatar.name]}
+                          title={uiText[avatar.name]}
+                          className="onboarding-avatar-image"
+                          loading="lazy"
+                        />
+                      </picture>
+                    )}
                   </div>
-                ))}
+                );
+                })}
               </div>
             </div>
           </div>

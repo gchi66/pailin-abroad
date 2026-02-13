@@ -12,6 +12,7 @@ import { t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 import { API_BASE_URL } from "../config/api";
+import { resolveAvatarUrl } from "../lib/resolveAvatarUrl";
 
 const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const { user } = useAuth();
@@ -172,14 +173,14 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
         setUserProfileInfo({
           name: name || "",
           email,
-          avatar: avatar || "/images/characters/avatar_1.webp",
+          avatar: resolveAvatarUrl(avatar) || "/images/characters/avatar_1.png",
         });
       } catch (err) {
         console.error("Error fetching profile info:", err);
         setUserProfileInfo((prev) => ({
           ...prev,
           email: user.email || prev.email,
-          avatar: prev.avatar || "/images/characters/avatar_1.webp",
+          avatar: resolveAvatarUrl(prev.avatar) || "/images/characters/avatar_1.png",
         }));
       }
     };
@@ -418,7 +419,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
               <>
                 <div className="mobile-user-card">
                   <img
-                    src={userProfileInfo.avatar || "/images/characters/avatar_1.webp"}
+                    src={userProfileInfo.avatar || "/images/characters/avatar_1.png"}
                     alt={userProfileInfo.name || user?.email || "User avatar"}
                     className="mobile-user-avatar"
                   />

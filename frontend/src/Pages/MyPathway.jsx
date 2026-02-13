@@ -6,6 +6,7 @@ import { t } from "../ui-lang/i18n";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
 import PlanNotice from "../Components/PlanNotice";
+import { resolveAvatarUrl } from "../lib/resolveAvatarUrl";
 import "../Styles/MyPathway.css";
 
 const MyPathway = () => {
@@ -543,10 +544,12 @@ const MyPathway = () => {
               <Link to="/profile" className="pathway-avatar-link">
                 <img
                   src={
-                    userProfile?.avatar_image ||
-                    userProfile?.avatar ||
-                    userProfile?.avatar_url ||
-                    "/images/characters/pailin_blue_circle_right.webp"
+                    resolveAvatarUrl(
+                      userProfile?.avatar_image ||
+                      userProfile?.avatar ||
+                      userProfile?.avatar_url ||
+                      ""
+                    ) || "/images/characters/pailin_blue_circle_right.webp"
                   }
                   alt={uiText.profileAvatar}
                   className="pathway-avatar"

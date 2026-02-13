@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
+import { resolveAvatarUrl } from "../lib/resolveAvatarUrl";
 import "../Styles/DiscussionBoard.css";
 
 function formatDateLabel(createdAt) {
@@ -199,9 +200,12 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
         comment?.users?.avatar_url ? (
           <img
             src={
-              comment.users.avatar_image ||
-              comment.users.avatar ||
-              comment.users.avatar_url
+              resolveAvatarUrl(
+                comment.users.avatar_image ||
+                comment.users.avatar ||
+                comment.users.avatar_url ||
+                ""
+              )
             }
             alt={userDisplay}
             className="comment-avatar-image"
