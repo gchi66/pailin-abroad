@@ -5,7 +5,7 @@ import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
 import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
-import { FACEBOOK_URL } from "../config/social";
+import { FACEBOOK_URL, INSTAGRAM_URL } from "../config/social";
 
 const Footer = () => {
   const { ui } = useUiLang();
@@ -117,12 +117,18 @@ const Footer = () => {
           <div className="footer-column follow-us">
             <h3 className="footer-title">{pick(footerCopy.followUsTitle, ui)}</h3>
             <div className="social-icons">
-              <button className="social-icon-link">
+              <a
+                className="social-icon-link"
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
                 <img
                   src={`${process.env.PUBLIC_URL}/images/instagram-icon-black.png`}
                   alt="Instagram"
                 />
-              </button>
+              </a>
               <a
                 className="social-icon-link"
                 href={FACEBOOK_URL}

@@ -3,7 +3,7 @@ import "../Styles/Contact.css";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
-import { FACEBOOK_URL, LINE_URL } from "../config/social";
+import { FACEBOOK_URL, INSTAGRAM_URL, LINE_URL } from "../config/social";
 
 const Contact = () => {
   const [status, setStatus] = useState("idle");
@@ -83,9 +83,11 @@ const Contact = () => {
             <img src="/images/facebook_icon.png" alt="Facebook" />
           </a>
           <a
-            href="#"
+            href={INSTAGRAM_URL}
             className="contact-social-link"
             aria-label="Instagram"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <img src="/images/instagram_icon.png" alt="Instagram" />
           </a>
