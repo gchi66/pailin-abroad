@@ -34,6 +34,7 @@ import SignUpModal from "./Components/SignUpModal";
 import ScrollToTop from "./Components/ScrollToTop";
 import Analytics from "./Components/Analytics";
 import OnboardingGate from "./Components/OnboardingGate";
+import DebugOverlay from "./Components/DebugOverlay";
 import { AuthProvider } from "./AuthContext";
 
 // ⬇️ import the provider
@@ -123,6 +124,7 @@ function App() {
               </OnboardingGate>
             } />
           </Routes>
+          <DebugOverlay />
           </StickyLessonToggleProvider>
         </UiLangProvider>
       </Router>
