@@ -119,7 +119,7 @@ const Onboarding = () => {
         // Fetch user profile from database
         const { data: profile, error: profileError } = await supabaseClient
           .from("users")
-          .select("is_paid, is_verified, is_active, username, avatar_image")
+          .select("is_paid, is_verified, onboarding_completed, username, avatar_image")
           .eq("id", session.user.id)
           .single();
 
@@ -132,8 +132,8 @@ const Onboarding = () => {
           return;
         }
 
-        // Edge case 1: If user is already active, redirect to My Pathway
-        if (profile?.is_active) {
+        // Edge case 1: If user already completed onboarding, redirect to My Pathway
+        if (profile?.onboarding_completed) {
           console.log("User already active, redirecting to My Pathway");
           navigate("/pathway");
           return;
@@ -262,7 +262,7 @@ const Onboarding = () => {
       // From benefits, go to confirmation (step 4)
       setStep(4);
     } else if (step === 4) {
-      // Complete button clicked - set is_active and redirect
+      // Complete button clicked - mark onboarding completed and redirect
       handleFinishOnboarding();
     }
   };
@@ -290,7 +290,7 @@ const Onboarding = () => {
     threshold: 70,
   });
 
-  // Finish onboarding - set is_active = true for all users
+  // Finish onboarding - mark onboarding_completed for all users
   const handleFinishOnboarding = async () => {
     if (isDevPreview) {
       setError("");
@@ -308,10 +308,10 @@ const Onboarding = () => {
         throw new Error("User not found");
       }
 
-      // Update is_active and is_verified to true
+      // Update onboarding_completed to true
       const { error: updateError } = await supabaseClient
         .from("users")
-        .update({ is_active: true })
+        .update({ onboarding_completed: true })
         .eq("id", user.id);
 
       if (updateError) {
@@ -730,7 +730,7 @@ const Onboarding = () => {
               {uiText.confirmationCta}
             </p>
             <button
-              onClick={handleFinishOnboarding}  // ✅ Call the function that sets is_active
+              onClick={handleFinishOnboarding}  // ✅ Call the function that completes onboarding
               className="submit-btn onboarding-confirmation-button"
               disabled={isLoading}
             >

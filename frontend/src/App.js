@@ -33,6 +33,7 @@ import LoginModal from "./Components/LoginModal";
 import SignUpModal from "./Components/SignUpModal";
 import ScrollToTop from "./Components/ScrollToTop";
 import Analytics from "./Components/Analytics";
+import OnboardingGate from "./Components/OnboardingGate";
 import { AuthProvider } from "./AuthContext";
 
 // ⬇️ import the provider
@@ -70,54 +71,56 @@ function App() {
 
             {/* Main app routes with navbar and footer */}
             <Route path="/*" element={
-              <>
-                <Navbar
-                  toggleLoginModal={toggleLoginModal}
-                  toggleSignupModal={toggleSignupModal}
-                />
-                <LoginModal isOpen={isLoginModalOpen} onClose={toggleLoginModal} toggleSignupModal={toggleSignupModal} />
-                <SignUpModal isOpen={isSignupModalOpen} onClose={toggleSignupModal} toggleLoginModal={toggleLoginModal} />
-                <Modal
-                  isOpen={modalContent.isOpen}
-                  title={modalContent.title}
-                  message={modalContent.message}
-                  onClose={closeModal}
-                />
-                <Routes>
-                  <Route path="/" element={<Home toggleSignupModal={toggleSignupModal} />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/lessons" element={<LessonsIndex />} />
-                  <Route path="/free-lessons" element={<FreeLessonsIndex />} />
-                  <Route path="/try-lessons" element={<TryLessons />} />
-                  <Route
-                    path="/lesson/:id"
-                    element={<Lesson toggleLoginModal={toggleLoginModal} toggleSignupModal={toggleSignupModal} />}
+              <OnboardingGate>
+                <>
+                  <Navbar
+                    toggleLoginModal={toggleLoginModal}
+                    toggleSignupModal={toggleSignupModal}
                   />
-                  <Route path="/pathway" element={<MyPathway />} />
-                  <Route path="/resources" element={<Resources />} />
-                  <Route path="/topic-library" element={<TopicLibrary toggleSignupModal={toggleSignupModal} />} />
-                  <Route path="/topic-library/:slug" element={<TopicDetail />} />
-                  <Route path="/exercise-bank" element={<ExerciseBank />} />
-                  <Route path="/exercise-bank/:categorySlug/:sectionSlug" element={<ExerciseSection />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/faq" element={<FAQPage />} />
-                  <Route path="/membership" element={<Membership />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/payment-success" element={<PaymentSuccess />} />
-                  <Route path="/signup" element={<SignUpPage />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route
-                    path="/profile"
-                    element={
-                      <ProtectedRoute openModal={openModal}>
-                        <AccountSettings />
-                      </ProtectedRoute>
-                    }
+                  <LoginModal isOpen={isLoginModalOpen} onClose={toggleLoginModal} toggleSignupModal={toggleSignupModal} />
+                  <SignUpModal isOpen={isSignupModalOpen} onClose={toggleSignupModal} toggleLoginModal={toggleLoginModal} />
+                  <Modal
+                    isOpen={modalContent.isOpen}
+                    title={modalContent.title}
+                    message={modalContent.message}
+                    onClose={closeModal}
                   />
-                </Routes>
-                <Footer />
-              </>
+                  <Routes>
+                    <Route path="/" element={<Home toggleSignupModal={toggleSignupModal} />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/lessons" element={<LessonsIndex />} />
+                    <Route path="/free-lessons" element={<FreeLessonsIndex />} />
+                    <Route path="/try-lessons" element={<TryLessons />} />
+                    <Route
+                      path="/lesson/:id"
+                      element={<Lesson toggleLoginModal={toggleLoginModal} toggleSignupModal={toggleSignupModal} />}
+                    />
+                    <Route path="/pathway" element={<MyPathway />} />
+                    <Route path="/resources" element={<Resources />} />
+                    <Route path="/topic-library" element={<TopicLibrary toggleSignupModal={toggleSignupModal} />} />
+                    <Route path="/topic-library/:slug" element={<TopicDetail />} />
+                    <Route path="/exercise-bank" element={<ExerciseBank />} />
+                    <Route path="/exercise-bank/:categorySlug/:sectionSlug" element={<ExerciseSection />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/faq" element={<FAQPage />} />
+                    <Route path="/membership" element={<Membership />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/payment-success" element={<PaymentSuccess />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route
+                      path="/profile"
+                      element={
+                        <ProtectedRoute openModal={openModal}>
+                          <AccountSettings />
+                        </ProtectedRoute>
+                      }
+                    />
+                  </Routes>
+                  <Footer />
+                </>
+              </OnboardingGate>
             } />
           </Routes>
           </StickyLessonToggleProvider>

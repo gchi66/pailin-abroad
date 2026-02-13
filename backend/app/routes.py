@@ -407,6 +407,7 @@ def update_user_profile():
         data = request.json
         username = data.get('username')
         avatar_image = data.get('avatar_image')
+        onboarding_completed = data.get('onboarding_completed')
 
         # Validate required fields
         if not username:
@@ -420,6 +421,10 @@ def update_user_profile():
         # Only update avatar_image if provided
         if avatar_image:
             update_data["avatar_image"] = avatar_image
+
+        # Allow marking onboarding as complete (one-way)
+        if onboarding_completed is True:
+            update_data["onboarding_completed"] = True
 
         result = supabase.table('users').update(update_data).eq('id', user_id).execute()
 
@@ -954,12 +959,12 @@ def complete_signup():
             print(f"Password update error: {password_error}")
             return jsonify({"error": "Failed to set password. Please try again."}), 400
 
-        # Update user record in users table to mark as complete
+        # Update user record in users table to mark onboarding as complete
         update_result = supabase.table('users').update({
             'username': username,
             'avatar_image': avatar_image,
             'password_hash': 'set_during_onboarding',
-            'is_active': True  # Now the account is active
+            'onboarding_completed': True
         }).eq('id', user_id).execute()
 
         if not update_result.data:
