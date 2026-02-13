@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import supabaseClient from "../supabaseClient";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
@@ -14,6 +14,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { ui } = useUiLang();
+  const shouldForceContinue = success;
   const passwordValue = formData.password;
   const confirmPasswordValue = formData.confirmPassword;
   const meetsLength = passwordValue.length >= 8;
@@ -103,14 +104,34 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess }) => {
     }
   };
 
+  useEffect(() => {
+    if (!isOpen || !shouldForceContinue) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
+  }, [isOpen, shouldForceContinue]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="quick-signup-overlay">
+    <div className="quick-signup-overlay" onClick={(event) => {
+      if (shouldForceContinue) {
+        event.stopPropagation();
+      }
+    }}>
       <div
         className="quick-signup-modal"
       >
-        <button className="close-btn" onClick={onClose}>×</button>
+        {!success && (
+          <button className="close-btn" onClick={onClose}>×</button>
+        )}
 
         {!success ? (
           <>
