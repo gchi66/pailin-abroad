@@ -104,7 +104,6 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
     setLoading(false);
     setMagicLinkLoading(false);
 
-    console.log("Back to login clicked");
     if (onBackToLogin) {
       onBackToLogin();
     }

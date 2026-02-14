@@ -24,7 +24,6 @@ const LoginPage = () => {
         }
       );
 
-      console.log("Login Success:", response.data);
 
     // Extract session data from the backend response
     const { access_token, refresh_token } = response.data.session;
@@ -38,7 +37,6 @@ const LoginPage = () => {
     if (error) {
       console.error("Error setting session:", error.message);
     } else {
-      console.log("Session updated in Supabase:", session);
     }
 
       // Redirect to profile page

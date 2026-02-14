@@ -23,7 +23,6 @@ def get_current_period_end(subscription):
             if hasattr(items, 'data') and items.data and len(items.data) > 0:
                 first_item = items.data[0]
                 if hasattr(first_item, 'current_period_end'):
-                    print(f"📅 Found current_period_end in items.data[0]: {first_item.current_period_end}")
                     return first_item.current_period_end
 
         # If subscription is a dict (from webhook event object)
@@ -36,7 +35,6 @@ def get_current_period_end(subscription):
             if data and len(data) > 0:
                 first_item = data[0]
                 if 'current_period_end' in first_item:
-                    print(f"📅 Found current_period_end in items.data[0]: {first_item['current_period_end']}")
                     return first_item['current_period_end']
 
         print(f"⚠️ Could not find current_period_end anywhere in subscription")
@@ -54,7 +52,6 @@ def to_iso_date(unix_ts):
     try:
         dt = datetime.fromtimestamp(int(unix_ts), tz=timezone.utc)
         iso_string = dt.isoformat()
-        print(f"🕒 Converted {unix_ts} → {iso_string}")
         return iso_string
     except Exception as e:
         print(f"⚠️ Error converting timestamp {unix_ts}: {e}")
@@ -68,13 +65,10 @@ def stripe_webhook_handler():
     payload = request.data
     sig_header = request.headers.get('Stripe-Signature')
 
-    print(f"🔔 Webhook received!")
-
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, STRIPE_WEBHOOK_SECRET
         )
-        print(f"✅ Webhook signature verified! Event type: {event['type']}")
     except Exception as e:
         print(f"❌ Webhook error: {e}")
         return jsonify({'error': str(e)}), 400
@@ -87,8 +81,6 @@ def stripe_webhook_handler():
         customer_id = session.get('customer')
         subscription_id = session.get('subscription')
 
-        print(f"💳 Checkout completed for: {customer_email}")
-
         if not customer_email:
             print("⚠️ No customer email found")
             return jsonify({'error': 'No customer email'}), 400
@@ -97,16 +89,10 @@ def stripe_webhook_handler():
             # Get subscription details
             subscription = stripe.Subscription.retrieve(subscription_id)
 
-            print(f"📊 Subscription object type: {type(subscription)}")
-            print(f"📊 Has current_period_end: {hasattr(subscription, 'current_period_end')}")
-            print(f"📊 current_period_end value: {getattr(subscription, 'current_period_end', 'NOT FOUND')}")
-
             current_period_end_value = get_current_period_end(subscription)
-            print(f"📊 Extracted current_period_end: {current_period_end_value} (type: {type(current_period_end_value)})")
 
             # Get the payment method from the subscription and set as customer default
             payment_method_id = getattr(subscription, 'default_payment_method', None)
-            print(f"💳 Payment method from subscription: {payment_method_id}")
 
             # Set this as the customer's default payment method for invoices
             if payment_method_id:
@@ -117,7 +103,6 @@ def stripe_webhook_handler():
                             'default_payment_method': payment_method_id
                         }
                     )
-                    print(f"✅ Set default payment method: {payment_method_id} for customer: {customer_id}")
                 except Exception as pm_error:
                     print(f"⚠️ Error setting default payment method: {pm_error}")
 
@@ -131,9 +116,7 @@ def stripe_webhook_handler():
                 'cancel_at': to_iso_date(getattr(subscription, 'cancel_at', None))
             }).eq('email', customer_email).execute()
 
-            if result.data:
-                print(f"✅ Successfully updated subscription for: {customer_email}")
-            else:
+            if not result.data:
                 print(f"⚠️ No user found with email: {customer_email}")
 
         except Exception as e:
@@ -148,20 +131,13 @@ def stripe_webhook_handler():
         customer_id = invoice.get('customer')
         subscription_id = invoice.get('subscription')
 
-        print(f"💰 Invoice paid for customer: {customer_id}")
-
         if subscription_id:
             try:
                 subscription = stripe.Subscription.retrieve(subscription_id)
-
-                print(f"📊 Invoice renewal - subscription type: {type(subscription)}")
                 current_period_end_value = get_current_period_end(subscription)
-                print(f"📊 Invoice renewal - current_period_end: {current_period_end_value}")
 
                 # Get the payment method from the subscription and set as default
                 payment_method_id = subscription.default_payment_method
-
-                print(f"💳 Payment method from subscription: {payment_method_id}")
 
                 # Set this as the customer's default payment method
                 if payment_method_id:
@@ -172,7 +148,6 @@ def stripe_webhook_handler():
                                 'default_payment_method': payment_method_id
                             }
                         )
-                        print(f"✅ Set default payment method: {payment_method_id} for customer: {customer_id}")
                     except Exception as pm_error:
                         print(f"⚠️ Error setting default payment method: {pm_error}")
 
@@ -184,8 +159,6 @@ def stripe_webhook_handler():
                     'cancel_at': to_iso_date(getattr(subscription, 'cancel_at', None))
                 }).eq('stripe_customer_id', customer_id).execute()
 
-                print(f"✅ Renewed subscription for customer: {customer_id}")
-
             except Exception as e:
                 print(f"❌ Error updating renewal: {e}")
                 import traceback
@@ -196,8 +169,6 @@ def stripe_webhook_handler():
         subscription = event['data']['object']
         customer_id = subscription.get('customer')
         status = subscription.get('status')
-
-        print(f"🔄 Subscription updated for customer: {customer_id}, status: {status}")
 
         try:
             current_period_end_value = get_current_period_end(subscription)
@@ -217,8 +188,6 @@ def stripe_webhook_handler():
     elif event['type'] == 'customer.subscription.deleted':
         subscription = event['data']['object']
         customer_id = subscription.get('customer')
-
-        print(f"❌ Subscription cancelled for customer: {customer_id}")
 
         try:
             supabase.table('users').update({

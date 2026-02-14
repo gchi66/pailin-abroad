@@ -134,21 +134,14 @@ export default function AudioButton({
   }, [snip, audioRef, setIsPlaying, fetchSignedUrl]);
 
   async function togglePlayback() {
-    console.log("🎵 Universal Audio button clicked!");
-    console.log("lookupMethod:", lookupMethod);
-    console.log("audioKey prop:", audioKey, "node.audio_key:", node?.audio_key, "effectiveAudioKey:", effectiveAudioKey);
-    console.log("phraseId:", phraseId, "node.audio_section:", node?.audio_section, "node.audio_seq:", node?.audio_seq);
-    console.log("snip found:", snip);
 
     if (!snip) {
       console.error("❌ No snip found for audioKey:", audioKey);
       return;
     }
 
-    console.log("snip.storage_path:", snip.storage_path);
 
     if (audioRef.current && lastPathRef.current && lastPathRef.current !== snip.storage_path) {
-      console.log("🔄 Storage path changed, recreating audio element");
       const audio = audioRef.current;
       const listeners = listenersRef.current;
       if (listeners) {
@@ -168,19 +161,16 @@ export default function AudioButton({
     if (!audio) return;
 
     if (!audio.paused && !audio.ended) {
-      console.log("⏸️ Pausing audio");
       audio.pause();
       return;
     }
 
     if (audio.ended) {
-      console.log("🔁 Restarting audio from beginning");
       audio.currentTime = 0;
     }
 
     try {
       await audio.play();
-      console.log("✅ Audio.play() completed successfully");
     } catch (playError) {
       console.error("❌ Audio.play() failed:", playError);
     }

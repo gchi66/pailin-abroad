@@ -820,7 +820,6 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
         // 1) fetch resolved payload from backend
         const payload = await fetchResolvedLesson(id, contentLang);
         setIsLocked(payload.locked || false);
-        console.log("Phrases payload:", payload.phrases);
 
         // derive safe title/subtitle variants for UI (fall back if resolver doesn’t expose *_en/_th)
         const title_en = payload.title_en ?? payload.title ?? null;
@@ -886,7 +885,6 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
         const normalizedExercises = (payload.practice_exercises || []).map(
           (ex) => normalizeExercise(ex, contentLang)
         );
-        console.log("Normalized Exercises:", normalizedExercises);
 
         setLesson(lsn);
         setSections(payload.sections || []);
@@ -899,7 +897,6 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
         const otherLang = contentLang === "th" ? "en" : "th";
         prefetchResolvedLesson(id, otherLang);
 
-  // console.log("Practice exercises:", normalizedExercises);
         // 2) initial active section: only set if not already chosen
         setActiveId(prev => {
           if (prev) return prev;
@@ -1241,7 +1238,6 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
             currentLesson={lesson}
             contentLang={contentLang}
             onMarkComplete={(isCompleted) => {
-              console.log(`Lesson ${lesson.lesson_external_id} marked as ${isCompleted ? 'completed' : 'incomplete'}`);
               // TODO: Add actual completion tracking logic here
             }}
           />

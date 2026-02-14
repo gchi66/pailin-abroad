@@ -61,12 +61,6 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess, selectedPlan }) => {
     }
 
     try {
-      console.debug("[QuickSignup] submit", {
-        emailProvided: Boolean(formData.email),
-        emailValue: formData.email,
-        passwordLength: formData.password.length,
-        confirmPasswordLength: formData.confirmPassword.length
-      });
 
       // Supabase signup with email confirmation
       const { error: signupError } = await supabaseClient.auth.signUp({
@@ -91,7 +85,6 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess, selectedPlan }) => {
         return;
       }
 
-      console.info("[QuickSignup] signup success", { email: formData.email });
 
       // User is now logged in (but not verified)
       // Show success message and allow them to continue
@@ -287,7 +280,6 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess, selectedPlan }) => {
                 {t("quickSignup.alreadyHaveAccount", ui)}{" "}
                 <button type="button" className="login-link" onClick={() => {
                   // TODO: Toggle to login modal
-                  console.log("Switch to login");
                 }}>
                   {t("quickSignup.loginLink", ui)}
                 </button>

@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
 
     // Listen for session changes
     const { data: authListener } = supabaseClient.auth.onAuthStateChange((event, session) => {
-      console.log("Auth state changed:", event, session);
       setUser(session?.user || null); // Update user state
     });
 

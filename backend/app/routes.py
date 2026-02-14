@@ -705,14 +705,11 @@ def get_pathway_lessons():
 @handle_options
 def signup_email():
     """Send magic link for account creation - no real account until onboarding complete"""
-    print("Email signup endpoint hit!")
     data = request.json
-    print("Received data:", data)
 
     email = data.get('email')
 
     if not email:
-        print("Missing email")
         return jsonify({"error": "Email is required"}), 400
 
     try:
@@ -736,9 +733,6 @@ def signup_email():
         if hasattr(response, "error") and response.error:
             print("Error from Supabase:", response.error)
             return jsonify({"error": str(response.error)}), 400
-        print("Supabase response:", response)
-        print(f"Confirmation email sent to {email}")
-
         return jsonify({
             "message": "Confirmation email sent! Please check your email to verify your account.",
             "email": email,
@@ -755,9 +749,7 @@ def signup_email():
 @handle_options
 def confirm_email():
     """Handle email confirmation and create user record in database"""
-    print("Email confirmation endpoint hit!")
     data = request.json
-    print("Received data:", data)
 
     # Get the access token from the confirmed user session
     access_token = data.get('access_token')
@@ -788,9 +780,7 @@ def confirm_email():
                 'is_verified': True
             }).execute()
 
-            if user_insert_result.data:
-                print(f"User record created successfully for {user_email} and marked verified")
-            else:
+            if not user_insert_result.data:
                 print(f"Warning: User record creation may have failed for {user_email}")
         else:
             # Ensure existing user is marked verified
@@ -798,7 +788,6 @@ def confirm_email():
                 supabase.table('users').update({
                     'is_verified': True
                 }).eq('id', user_id).execute()
-                print(f"User record already exists for {user_email}, updated is_verified")
             except Exception as upd_e:
                 print(f"Warning: failed to update existing user's is_verified: {upd_e}")
 
@@ -816,9 +805,7 @@ def confirm_email():
 @handle_options
 def set_password():
     """Set password for user during onboarding (after email confirmation)"""
-    print("Set password endpoint hit!")
     data = request.json
-    print("Received data:", data)
 
     # Get authorization header with access token
     auth_header = request.headers.get('Authorization')
@@ -889,8 +876,6 @@ def set_password():
                 }), 200
 
             # Return the fresh session data for the frontend to use
-            print(f"Password set and fresh session created for user {user_email}")
-
             return jsonify({
                 "message": "Password set successfully!",
                 "password_updated": True,
@@ -920,9 +905,7 @@ def set_password():
 @handle_options
 def complete_signup():
     """Complete the signup process - this creates the real account after onboarding"""
-    print("Complete signup endpoint hit!")
     data = request.json
-    print("Received data:", data)
 
     email = data.get('email')
     password = data.get('password')
@@ -971,8 +954,6 @@ def complete_signup():
 
         if not update_result.data:
             print(f"Warning: User record update may have failed for {email}")
-
-        print(f"Account setup completed for user {email}")
 
         # Now sign them in to get a proper session
         signin_response = supabase.auth.sign_in_with_password({
@@ -1036,7 +1017,6 @@ def delete_account():
         # if delete_response is None or delete_response.error:
         #     return jsonify({"error": "Failed to delete the user."}), 400
 
-        print("User deleted successfully:", user_id)
         # Return a success message immediately
         return jsonify({"message": "Account deleted successfully."}), 200
 
@@ -1099,12 +1079,8 @@ def contact():
         "X-Postmark-Server-Token": Config.POSTMARK_SERVER_TOKEN
     }
 
-    print(f"[contact] Sending Postmark email from {Config.POSTMARK_FROM} to {Config.POSTMARK_TO}.")
-    print(f"[contact] Reply-To set to {email}.")
-
     try:
         response = requests.post("https://api.postmarkapp.com/email", json=payload, headers=headers, timeout=10)
-        print(f"[contact] Postmark response status: {response.status_code}")
         if response.ok:
             try:
                 forwarded_for = request.headers.get("X-Forwarded-For", "")
@@ -1119,7 +1095,6 @@ def contact():
             except Exception as e:
                 print("[contact] Failed to log contact message:", e)
             return jsonify({"message": "Email sent successfully!"}), 200
-        print(f"[contact] Postmark response body: {response.text}")
         return jsonify({"message": "Failed to send email."}), 500
     except Exception as e:
         print("Error sending email:", e)
@@ -1164,7 +1139,6 @@ def get_lesson_resolved(lesson_id):
                     lesson_row = lesson_result.data
                     if lesson_row:
                         lesson = lesson_row
-                        print(f"Checking lesson {lesson_id}: stage={lesson['stage']}, level={lesson['level']}, lesson_order={lesson['lesson_order']}")
 
                         # Get all lessons for this stage-level combination, ordered by lesson_order
                         level_lessons = supabase.table('lessons').select('id, lesson_order').eq('stage', lesson['stage']).eq('level', lesson['level']).order('lesson_order', desc=False).execute()
@@ -1173,14 +1147,8 @@ def get_lesson_resolved(lesson_id):
                             # Check if this is the first lesson (lowest lesson_order)
                             first_lesson = level_lessons.data[0]
                             first_lesson_id = first_lesson['id']
-                            print(f"First lesson of {lesson['stage']} Level {lesson['level']}: id={first_lesson_id}, lesson_order={first_lesson['lesson_order']}")
-                            print(f"Current lesson_id: {lesson_id}, First lesson_id: {first_lesson_id}, Match: {lesson_id == first_lesson_id}")
-
                             if lesson_id == first_lesson_id:
                                 is_locked = False
-                                print(f"✓ Unlocking lesson {lesson_id} (first lesson of level)")
-                            else:
-                                print(f"✗ Keeping lesson {lesson_id} locked (not first lesson)")
         except Exception as e:
             print(f"Auth check error: {e}")
             # If auth fails, keep is_locked = True
@@ -1430,9 +1398,7 @@ def get_user_comments():
 @handle_options
 def send_magic_link():
     """Send a magic link for passwordless login"""
-    print("Magic link endpoint hit!")
     data = request.json
-    print("Received data:", data)
 
     email = data.get('email')
 
@@ -1464,7 +1430,6 @@ def send_magic_link():
             print("Error sending magic link:", response.error)
             return jsonify({"error": "Failed to send magic link"}), 400
 
-        print(f"Magic link sent to {email}")
         return jsonify({
             "message": "Magic link sent! Check your email and click the link to sign in.",
             "email": email
@@ -1479,9 +1444,7 @@ def send_magic_link():
 @handle_options
 def reset_password():
     """Send password reset email"""
-    print("Password reset endpoint hit!")
     data = request.json
-    print("Received data:", data)
 
     email = data.get('email')
 
@@ -1510,7 +1473,6 @@ def reset_password():
             print("Error sending reset email:", response.error)
             return jsonify({"error": "Failed to send reset email"}), 400
 
-        print(f"Password reset email sent to {email}")
         return jsonify({
             "message": "Password reset email sent! Check your email and follow the instructions to reset your password.",
             "email": email

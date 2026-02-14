@@ -135,7 +135,6 @@ const Onboarding = () => {
 
         // Edge case 1: If user already completed onboarding, redirect to My Pathway
         if (profile?.onboarding_completed) {
-          console.log("User already active, redirecting to My Pathway");
           navigate("/pathway");
           return;
         }
@@ -144,14 +143,12 @@ const Onboarding = () => {
         const isEmailVerified = session.user.email_confirmed_at !== null;
 
         if (!isEmailVerified) {
-          console.log("User email not verified, redirecting to verify email");
           navigate("/verify-email");
           return;
         }
 
         // Update is_verified in database if email is verified but DB field is false
         if (isEmailVerified && !profile?.is_verified) {
-          console.log("Syncing email verification to database...");
           await supabaseClient
             .from("users")
             .update({ is_verified: true })
@@ -165,7 +162,6 @@ const Onboarding = () => {
 
         // Set starting step based on user status
         setStep(0);
-        console.log(shouldSkipPassword ? "Skipping password step but showing welcome" : "Regular user - starting at welcome step");
 
         setLoadingProfile(false);
       } catch (err) {
@@ -281,7 +277,6 @@ const Onboarding = () => {
       setStep(0);
     } else if (step > 0) {
       setStep(step - 1);
-      console.log(`Moving back to step ${step - 1}`);
     }
   };
 
@@ -325,7 +320,6 @@ const Onboarding = () => {
         throw new Error(updateError.message);
       }
 
-      console.log("Onboarding completed, user is now active");
       navigate("/pathway");
     } catch (err) {
       console.error("Error completing onboarding:", err);

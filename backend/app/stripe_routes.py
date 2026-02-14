@@ -40,24 +40,18 @@ def get_current_period_end(subscription):
     For Flexible Billing mode, it's in items.data[0].
     For standard mode, it's at subscription level.
     """
-    print(f"🔍 Extracting current_period_end from subscription type: {type(subscription)}")
-
     # Try Flexible Billing first
     items = getattr(subscription, 'items', None)
-    print(f"🔍 items: {items}, type: {type(items)}")
 
     if items and hasattr(items, 'data'):
-        print(f"🔍 items.data length: {len(items.data) if items.data else 0}")
         if len(items.data) > 0:
             first_item = items.data[0]
             cpe = getattr(first_item, 'current_period_end', None)
-            print(f"🔍 Found current_period_end in items.data[0]: {cpe}")
             if cpe:
                 return cpe
 
     # Fallback to standard location
     cpe = getattr(subscription, 'current_period_end', None)
-    print(f"🔍 current_period_end at subscription level: {cpe}")
     return cpe
 
 
@@ -201,8 +195,6 @@ def get_payment_method():
 
         stripe_customer_id = result.data['stripe_customer_id']
 
-        print(f"🔍 Fetching payment method for customer: {stripe_customer_id}")
-
         # Retrieve customer from Stripe
         customer = stripe.Customer.retrieve(stripe_customer_id)
 
@@ -211,7 +203,6 @@ def get_payment_method():
         # First try customer's invoice_settings
         if customer.invoice_settings.default_payment_method:
             payment_method_id = customer.invoice_settings.default_payment_method
-            print(f"💳 Found payment method in customer.invoice_settings: {payment_method_id}")
         else:
             # Fallback: get from subscription
             print("⚠️ No payment method in customer.invoice_settings, checking subscription...")
@@ -221,7 +212,6 @@ def get_payment_method():
                 subscription_id = user_sub_result.data['stripe_subscription_id']
                 subscription = stripe.Subscription.retrieve(subscription_id)
                 payment_method_id = getattr(subscription, 'default_payment_method', None)
-                print(f"💳 Found payment method in subscription: {payment_method_id}")
 
         if not payment_method_id:
             print("⚠️ No payment method found in customer OR subscription")
@@ -485,16 +475,11 @@ def cancel_subscription():
 
         stripe_subscription_id = result.data['stripe_subscription_id']
 
-        print(f"📋 Cancelling subscription: {stripe_subscription_id}")
-
         # Cancel subscription at period end (not immediately)
         subscription = stripe.Subscription.modify(
             stripe_subscription_id,
             cancel_at_period_end=True
         )
-
-        print(f"✅ Subscription modified. cancel_at_period_end: {subscription.cancel_at_period_end}")
-        print(f"📅 cancel_at from modified subscription: {getattr(subscription, 'cancel_at', 'N/A')}")
 
         # Retrieve full subscription with items expanded to get current_period_end
         full_subscription = stripe.Subscription.retrieve(
@@ -508,17 +493,12 @@ def cancel_subscription():
         cancel_at_iso = to_iso_date(cancel_at)
         current_period_end_iso = to_iso_date(current_period_end)
 
-        print(f"📅 current_period_end extracted: {current_period_end}")
-        print(f"📅 cancel_at extracted: {cancel_at}")
-
         # Update database with cancellation info
         supabase.table('users').update({
             'subscription_status': 'cancelled',
             'cancel_at_period_end': True,
             'cancel_at': cancel_at_iso
         }).eq('id', user_id).execute()
-
-        print(f"✅ Subscription {stripe_subscription_id} scheduled for cancellation for user {user_id}")
 
         return jsonify({
             "message": "Subscription cancelled. You'll retain access until the end of your billing period.",

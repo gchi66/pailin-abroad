@@ -27,7 +27,6 @@ export default function ApplySection({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Apply input →", text);   // placeholder for future logic
     setShowResponse(true);
   };
 

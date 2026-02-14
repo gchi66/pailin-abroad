@@ -173,7 +173,6 @@ const MyPathway = () => {
 
         if (lessonsResponse.ok) {
           const lessonsData = await lessonsResponse.json();
-          console.log('Completed lessons data:', lessonsData.completed_lessons);
           setCompletedLessons(lessonsData.completed_lessons || []);
         }
 

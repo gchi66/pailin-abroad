@@ -52,7 +52,6 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
       if (sessionError) {
         throw new Error("Failed to establish session");
       } else {
-        console.log("Login successful!");
         onClose(); // Close modal on success
         navigate("/pathway"); // Navigate to pathway instead of profile
       }

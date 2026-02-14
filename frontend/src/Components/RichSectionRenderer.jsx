@@ -66,12 +66,6 @@ export default function RichSectionRenderer({
     setPreloadBySection({});
   }, [accordionResetKey]);
 
-  console.log("RichSectionRenderer input nodes:", nodesList.map((n, i) => ({
-  index: i,
-  kind: n.kind,
-  text: n.inlines?.[0]?.text?.substring(0, 30),
-  audio_seq: n.audio_seq
-})));
 
   const isSubheaderNode = (node) => {
     if (node?.kind !== "paragraph") return false;
@@ -750,12 +744,6 @@ const listTextStartRem = (indentLevel) => {
   }
 
   if (node.kind === "paragraph"){
-    console.log("Processing paragraph node:", {
-      kind: node.kind,
-      audio_key: node.audio_key,
-      audio_seq: node.audio_seq,
-        text: node.inlines?.[0]?.text?.substring(0, 50)
-      });
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
@@ -833,12 +821,6 @@ const listTextStartRem = (indentLevel) => {
     }
 
     if (node.kind === "list_item") {
-      console.log("Processing list_item node:", {
-        kind: node.kind,
-        audio_key: node.audio_key,
-        audio_seq: node.audio_seq,
-        text: node.inlines?.[0]?.text?.substring(0, 50)
-      });
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
@@ -896,12 +878,6 @@ const listTextStartRem = (indentLevel) => {
       );
     }
     if (node.kind === "misc_item") {
-      console.log("Processing misc_item node:", {
-        kind: node.kind,
-        audio_key: node.audio_key,
-        audio_seq: node.audio_seq,
-        text: node.inlines?.[0]?.text?.substring(0, 50)
-      });
 
       // Check for audio_key first, then fallback to audio_seq
       const hasAudio = node.audio_key || node.audio_seq;
@@ -1244,7 +1220,6 @@ const listTextStartRem = (indentLevel) => {
         {sections.map((sec, i) => {
           // If section has no heading, render content directly
           if (!sec.heading) {
-            console.log("Rendering no-heading section:", sec.key, "with", sec.body.length, "items");
             const nextSection = sections[i + 1];
             const shouldHideSpacer = isLessonFocusHeading(nextSection?.heading);
             const trimTrailingSpacers = (nodes) => {
@@ -1274,7 +1249,6 @@ const listTextStartRem = (indentLevel) => {
           // Clean the heading text for display
           const cleanHeadingText = getCleanHeadingText(sec.heading);
 
-          console.log("Rendering accordion section:", cleanHeadingText);
           const isLessonFocus = isLessonFocusHeading(sec.heading);
           const sectionBody = sec.body?.[0]?.kind === "spacer" ? sec.body.slice(1) : sec.body;
 

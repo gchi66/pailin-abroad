@@ -54,7 +54,6 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
       setSuccess(true);
       setError("");
-      console.log("Email signup successful:", data);
 
       // Redirect to email confirmation page with email parameter
       setTimeout(() => {

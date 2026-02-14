@@ -8,7 +8,6 @@ const LanguageToggle = ({
   showLabel = false,
 }) => {
   const handleLanguageChange = (newLanguage) => {
-    console.log("Language toggle clicked:", newLanguage, "current:", language);
     setLanguage(newLanguage);
   };
 

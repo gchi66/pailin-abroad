@@ -27,7 +27,6 @@ const SignUpPage = () => {
       });
       setSuccess(true);
       setError("");
-      console.log("Sign Up Success:", response.data);
       alert("Sign-up successful! Please verify your email.");
     } catch (error) {
       console.error("Sign Up Error:", error);

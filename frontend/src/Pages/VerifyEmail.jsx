@@ -11,7 +11,6 @@ const VerifyEmail = () => {
   useEffect(() => {
     const updateVerificationStatus = async () => {
       if (user && user.email_confirmed_at) {
-        console.log("Email verified, calling backend confirm-email...");
 
         try {
           // Call backend to confirm email and create/sync user record
@@ -26,7 +25,6 @@ const VerifyEmail = () => {
           const data = await resp.json();
 
           if (resp.ok) {
-            console.log('Backend confirm-email succeeded:', data);
             navigate('/onboarding');
             return;
           } else {
@@ -46,7 +44,6 @@ const VerifyEmail = () => {
           if (error) {
             console.error('Error updating is_verified locally:', error);
           } else {
-            console.log('is_verified set to true (fallback), redirecting to onboarding');
           }
         } catch (err) {
           console.error('Fallback DB update failed:', err);

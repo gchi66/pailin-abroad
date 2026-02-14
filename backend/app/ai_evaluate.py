@@ -394,11 +394,6 @@ def evaluate_answer():
             "feedback_th": parsed.get("feedback_th") or "",
         }
 
-    print(
-        f"Evaluation path: contains={used_contains}, "
-        f"contractions={used_contractions}, gpt_called={used_gpt}"
-    )
-
     correct_flag = bool(result_payload.get("correct"))
     score = result_payload.get("score")
     try:
