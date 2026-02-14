@@ -315,10 +315,10 @@ const Onboarding = () => {
         throw new Error("User not found");
       }
 
-      // Update onboarding_completed to true
+      // Update onboarding_completed and unlock paid access for testing
       const { error: updateError } = await supabaseClient
         .from("users")
-        .update({ onboarding_completed: true })
+        .update({ onboarding_completed: true, is_paid: true })
         .eq("id", user.id);
 
       if (updateError) {

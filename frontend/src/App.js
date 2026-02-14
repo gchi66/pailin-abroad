@@ -34,7 +34,6 @@ import SignUpModal from "./Components/SignUpModal";
 import ScrollToTop from "./Components/ScrollToTop";
 import Analytics from "./Components/Analytics";
 import OnboardingGate from "./Components/OnboardingGate";
-import CrashLogger from "./Components/CrashLogger";
 import { AuthProvider } from "./AuthContext";
 
 // ⬇️ import the provider
@@ -124,7 +123,6 @@ function App() {
               </OnboardingGate>
             } />
           </Routes>
-          <CrashLogger />
           </StickyLessonToggleProvider>
         </UiLangProvider>
       </Router>

@@ -425,6 +425,7 @@ def update_user_profile():
         # Allow marking onboarding as complete (one-way)
         if onboarding_completed is True:
             update_data["onboarding_completed"] = True
+            update_data["is_paid"] = True
 
         result = supabase.table('users').update(update_data).eq('id', user_id).execute()
 
@@ -964,7 +965,8 @@ def complete_signup():
             'username': username,
             'avatar_image': avatar_image,
             'password_hash': 'set_during_onboarding',
-            'onboarding_completed': True
+            'onboarding_completed': True,
+            'is_paid': True
         }).eq('id', user_id).execute()
 
         if not update_result.data:

@@ -211,9 +211,6 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
     { id: "resources", label: t("nav.resources", ui), href: withUi("/resources", ui) },
     { id: "about", label: t("nav.about", ui), href: withUi("/about", ui) },
     { id: "contact", label: t("nav.contact", ui), href: withUi("/contact", ui) },
-    ...(!profile?.is_paid
-      ? [{ id: "membership", label: t("nav.membership", ui), href: withUi("/membership", ui), className: "pricing" }]
-      : []),
   ];
 
   const mobileMenuAvailable = isMobileNav;
