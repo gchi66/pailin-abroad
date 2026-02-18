@@ -406,6 +406,26 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     setActiveId(null);
     setShowStickyPlayer(false);
     setShouldAutoPlay(false);
+    setIsLoading(true);
+    setLoadError(null);
+    setLesson(null);
+    setSections([]);
+    setTranscript([]);
+    setQuestions([]);
+    setPracticeExercises([]);
+    setLessonPhrases([]);
+    setImages({});
+    setIsLocked(false);
+    setAudioUrl(null);
+    setAudioUrlNoBg(null);
+    setAudioUrlBg(null);
+    setSnipIdx({});
+    setPhrasesSnipIdx({});
+    setLessonList([]);
+    setIsSidebarStuck(false);
+    setSidebarHeight(0);
+    setShowStickyToggle(false);
+    audioFetchKeyRef.current = null;
   }, [id]);
 
   useEffect(() => {
@@ -426,6 +446,8 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const [lessonPhrases, setLessonPhrases] = useState([]);
   const [images, setImages] = useState({});
   const [isLocked, setIsLocked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
 
   // Audio + snippets
@@ -815,10 +837,13 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
 
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       try {
+        setLoadError(null);
         // 1) fetch resolved payload from backend
         const payload = await fetchResolvedLesson(id, contentLang);
+        if (cancelled) return;
         setIsLocked(payload.locked || false);
 
         // derive safe title/subtitle variants for UI (fall back if resolver doesn’t expose *_en/_th)
@@ -949,17 +974,25 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
             setLessonList(normalLessons);
           }
         }
+        if (cancelled) return;
+        setIsLoading(false);
       } catch (err) {
         console.error("Failed to fetch resolved lesson:", err);
         // clear to avoid stale UI
+        if (cancelled) return;
         setLesson(null);
         setSections([]);
         setTranscript([]);
         setQuestions([]);
         setPracticeExercises([]);
         setLessonPhrases([]);
+        setLoadError(true);
+        setIsLoading(false);
       }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [id, contentLang]); // refetch when lesson id or content language changes
 
   useEffect(() => {
@@ -1096,8 +1129,28 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     };
   }, [id, lesson, lesson?.id, lesson?.lesson_external_id, lesson?.conversation_audio_url]);
 
-  if (!lesson) {
-    return <div style={{ padding: "10vh", textAlign: "center" }}>Loading…</div>;
+  if (isLoading || !lesson) {
+    return (
+      <main className="lesson-loading-page">
+        <div className={`lesson-loading-inner${loadError ? " is-error" : ""}`}>
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={t("lessonPage.loadingImageAlt", uiLang)}
+            className="lesson-loading-image"
+          />
+          {loadError && (
+            <>
+              <div className="lesson-loading-error-title">
+                {t("lessonPage.loadingErrorTitle", uiLang)}
+              </div>
+              <div className="lesson-loading-error-body">
+                {t("lessonPage.loadingErrorBody", uiLang)}
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+    );
   }
 
   // Prev/Next

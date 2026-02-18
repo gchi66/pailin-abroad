@@ -1503,6 +1503,12 @@ export const copy = {
       applyResponse: { en: "Type your response here…", th: "พิมพ์คำตอบของคุณที่นี่…" },
       answer: { en: "Type your answer here", th: "พิมพ์คำตอบของคุณที่นี่…" },
     },
+    loadingImageAlt: { en: "Loading lesson", th: "กำลังโหลดบทเรียน" },
+    loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
+    loadingErrorBody: {
+      en: "We couldn't load this lesson. Please try refreshing the page.",
+      th: "เราไม่สามารถโหลดบทเรียนนี้ได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
+    },
   },
   lessonToggle: {
     toThai: { en: "Translate to Thai", th: "แปลเป็นภาษาไทย" },
