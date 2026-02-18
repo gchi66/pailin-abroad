@@ -322,6 +322,40 @@ const ExerciseBank = () => {
 
   const isLoading = loadingSections;
 
+  if (isLoading) {
+    return (
+      <main className="page-loading-page">
+        <div className="page-loading-inner">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={translate(exerciseBankCopy.loadingImageAlt)}
+            className="page-loading-image"
+          />
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="page-loading-page">
+        <div className="page-loading-inner is-error">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={translate(exerciseBankCopy.loadingImageAlt)}
+            className="page-loading-image"
+          />
+          <div className="page-loading-error-title">
+            {translate(exerciseBankCopy.loadingErrorTitle)}
+          </div>
+          <div className="page-loading-error-body">
+            {translate(exerciseBankCopy.loadingErrorBody)}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   const handleCategorySelect = (slug) => {
     setSelectedCategory(slug);
     setActiveView("categories");
@@ -523,18 +557,6 @@ const ExerciseBank = () => {
         </div>
 
         <div className="exercise-bank-main">
-          {isLoading && (
-            <div className="exercise-bank-placeholder">
-              <p>{translate(exerciseBankCopy.loading)}</p>
-            </div>
-          )}
-
-          {!isLoading && error && (
-            <div className="exercise-bank-placeholder">
-              <p>{error}</p>
-            </div>
-          )}
-
           {!isLoading && !error && activeView === "featured" && (
             <>
               {loadingFeatured && (

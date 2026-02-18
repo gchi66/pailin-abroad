@@ -202,41 +202,35 @@ const TopicLibrary = ({ toggleSignupModal }) => {
 
   if (loading) {
     return (
-      <div className="topic-library-page-container">
-        <header className="topic-library-page-header">
-          <div className="topic-library-header-content">
-            <h1 className="topic-library-page-header-text">
-              {t("topicLibraryPage.title", uiLang)}
-            </h1>
-            <p className="topic-library-page-subtitle">
-              {t("topicLibraryPage.subtitle", uiLang)}
-            </p>
-          </div>
-        </header>
-        <div className="topic-library-content">
-          <p>{t("topicLibraryPage.loading", uiLang)}</p>
+      <main className="page-loading-page">
+        <div className="page-loading-inner">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={t("topicLibraryPage.loadingImageAlt", uiLang)}
+            className="page-loading-image"
+          />
         </div>
-      </div>
+      </main>
     );
   }
 
   if (error) {
     return (
-      <div className="topic-library-page-container">
-        <header className="topic-library-page-header">
-          <div className="topic-library-header-content">
-            <h1 className="topic-library-page-header-text">
-              {t("topicLibraryPage.title", uiLang)}
-            </h1>
-            <p className="topic-library-page-subtitle">
-              {t("topicLibraryPage.subtitle", uiLang)}
-            </p>
+      <main className="page-loading-page">
+        <div className="page-loading-inner is-error">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={t("topicLibraryPage.loadingImageAlt", uiLang)}
+            className="page-loading-image"
+          />
+          <div className="page-loading-error-title">
+            {t("topicLibraryPage.loadingErrorTitle", uiLang)}
           </div>
-        </header>
-        <div className="topic-library-content">
-          <p>{`${t("topicLibraryPage.errorTitle", uiLang)}: ${error}`}</p>
+          <div className="page-loading-error-body">
+            {t("topicLibraryPage.loadingErrorBody", uiLang)}
+          </div>
         </div>
-      </div>
+      </main>
     );
   }
 

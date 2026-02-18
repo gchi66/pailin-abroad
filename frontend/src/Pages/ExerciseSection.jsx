@@ -179,49 +179,35 @@ const ExerciseSection = () => {
 
   if (loading) {
     return (
-      <div className="exercise-section-page-container">
-        <header className="exercise-bank-page-header">
-          <div className="exercise-bank-header-content">
-            <h1 className="exercise-bank-page-header-text">{t("exerciseSection.title", uiLang)}</h1>
-            <p className="exercise-bank-page-subtitle">
-              {t("exerciseSection.subtitle", uiLang)}
-            </p>
-          </div>
-        </header>
-        <div className="exercise-section-content">
-          <div className="exercise-bank-placeholder">
-            <p>{t("exerciseSection.loadingSection", uiLang)}</p>
-          </div>
+      <main className="page-loading-page">
+        <div className="page-loading-inner">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={t("exerciseSection.loadingImageAlt", uiLang)}
+            className="page-loading-image"
+          />
         </div>
-      </div>
+      </main>
     );
   }
 
   if (error || !section) {
     return (
-      <div className="exercise-section-page-container">
-        <header className="exercise-bank-page-header">
-          <div className="exercise-bank-header-content">
-            <h1 className="exercise-bank-page-header-text">{t("exerciseSection.title", uiLang)}</h1>
-            <p className="exercise-bank-page-subtitle">
-              {t("exerciseSection.subtitle", uiLang)}
-            </p>
+      <main className="page-loading-page">
+        <div className="page-loading-inner is-error">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={t("exerciseSection.loadingImageAlt", uiLang)}
+            className="page-loading-image"
+          />
+          <div className="page-loading-error-title">
+            {t("exerciseSection.loadingErrorTitle", uiLang)}
           </div>
-        </header>
-        <div className="exercise-section-content">
-          <div className="exercise-bank-placeholder">
-            <p>{error || t("exerciseSection.notFound", uiLang)}</p>
-            <Breadcrumbs
-              className="exercise-section-breadcrumbs"
-              items={[
-                { label: t("exerciseSection.resourcesLabel", uiLang), to: "/resources" },
-                { label: t("exerciseSection.title", uiLang), to: "/exercise-bank" },
-                { label: section?.section || t("exerciseSection.sectionLabel", uiLang) },
-              ]}
-            />
+          <div className="page-loading-error-body">
+            {t("exerciseSection.loadingErrorBody", uiLang)}
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 

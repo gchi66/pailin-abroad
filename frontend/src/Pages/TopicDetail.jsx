@@ -290,16 +290,35 @@ const TopicDetail = () => {
 
   if (loading) {
     return (
-      <div className="topic-detail-page-container">
-        <div className="topic-detail-header">
-          <h1 className="topic-detail-header-text">
-            {t("topicDetailPage.loadingTitle", uiLang)}
-          </h1>
+      <main className="page-loading-page">
+        <div className="page-loading-inner">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={t("topicDetailPage.loadingImageAlt", uiLang)}
+            className="page-loading-image"
+          />
         </div>
-        <div className="topic-detail-content">
-          <p>{t("topicDetailPage.loadingBody", uiLang)}</p>
+      </main>
+    );
+  }
+
+  if (error && !topic) {
+    return (
+      <main className="page-loading-page">
+        <div className="page-loading-inner is-error">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={t("topicDetailPage.loadingImageAlt", uiLang)}
+            className="page-loading-image"
+          />
+          <div className="page-loading-error-title">
+            {t("topicDetailPage.loadingErrorTitle", uiLang)}
+          </div>
+          <div className="page-loading-error-body">
+            {t("topicDetailPage.loadingErrorBody", uiLang)}
+          </div>
         </div>
-      </div>
+      </main>
     );
   }
 

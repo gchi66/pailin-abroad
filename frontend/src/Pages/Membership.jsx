@@ -27,6 +27,7 @@ const Membership = () => {
   const { user } = useAuth();
   const { ui } = useUiLang();
   const membershipCopy = copy.membershipPage;
+  const translate = (node) => pick(node, ui);
 
   // Always start the membership page at the top when navigated to
   useEffect(() => {
@@ -128,6 +129,40 @@ const Membership = () => {
     originalPrice: lifetimeOriginalPrice,
     currency: pricingState.currency
   };
+
+  if (pricingState.loading) {
+    return (
+      <main className="page-loading-page">
+        <div className="page-loading-inner">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={translate(membershipCopy.loadingImageAlt)}
+            className="page-loading-image"
+          />
+        </div>
+      </main>
+    );
+  }
+
+  if (pricingState.error) {
+    return (
+      <main className="page-loading-page">
+        <div className="page-loading-inner is-error">
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={translate(membershipCopy.loadingImageAlt)}
+            className="page-loading-image"
+          />
+          <div className="page-loading-error-title">
+            {translate(membershipCopy.loadingErrorTitle)}
+          </div>
+          <div className="page-loading-error-body">
+            {translate(membershipCopy.loadingErrorBody)}
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const planDefinitions = [...pricingState.plans]
     .sort((a, b) => {
@@ -349,12 +384,6 @@ const Membership = () => {
           <div className="lifetime-followup">
             Not ready for lifetime access? Choose a monthly plan below
           </div>
-        )}
-        {pricingState.loading && (
-          <div className="pricing-loading">Loading pricing...</div>
-        )}
-        {!pricingState.loading && pricingState.error && (
-          <div className="pricing-loading">Pricing is unavailable right now.</div>
         )}
         {!pricingState.loading && !pricingState.error && plans.map((plan) => (
           <div

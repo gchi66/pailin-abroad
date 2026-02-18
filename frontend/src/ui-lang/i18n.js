@@ -258,6 +258,12 @@ export const copy = {
         th: "เพื่อเข้าถึงสื่อการเรียนแนะนำของเรา",
       },
     },
+    loadingImageAlt: { en: "Loading topic library", th: "กำลังโหลดคลังหัวข้อ" },
+    loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
+    loadingErrorBody: {
+      en: "We couldn't load the topic library. Please try refreshing the page.",
+      th: "เราไม่สามารถโหลดคลังหัวข้อได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
+    },
   },
   exerciseBankPage: {
     title: { en: "Exercise Bank", th: "สื่อการเรียน" },
@@ -321,6 +327,12 @@ export const copy = {
         cta: { en: "SIGN UP FOR FREE", th: "สมัครสมาชิกฟรี" },
       },
     },
+    loadingImageAlt: { en: "Loading exercise bank", th: "กำลังโหลดคลังแบบฝึกหัด" },
+    loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
+    loadingErrorBody: {
+      en: "We couldn't load the exercise bank. Please try refreshing the page.",
+      th: "เราไม่สามารถโหลดคลังแบบฝึกหัดได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
+    },
   },
   topicDetailPage: {
     loadingTitle: { en: "Loading...", th: "กำลังโหลด..." },
@@ -329,6 +341,12 @@ export const copy = {
     notFoundBody: { en: "Topic not found", th: "ไม่พบหัวข้อ" },
     backToLibrary: { en: "← Back to Topic Library", th: "กลับไปที่คลังหัวข้อการเรียนรู้" },
     emptyContent: { en: "No content available for this topic yet.", th: "ยังไม่มีเนื้อหาสำหรับหัวข้อนี้" },
+    loadingImageAlt: { en: "Loading topic", th: "กำลังโหลดหัวข้อ" },
+    loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
+    loadingErrorBody: {
+      en: "We couldn't load this topic. Please try refreshing the page.",
+      th: "เราไม่สามารถโหลดหัวข้อนี้ได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
+    },
   },
   exerciseSection: {
     title: { en: "Exercise Bank", th: "สื่อการเรียน" },
@@ -343,6 +361,12 @@ export const copy = {
     exercisesCount: {
       singular: { en: "exercise in this section", th: "แบบฝึกหัดในหัวข้อนี้" },
       plural: { en: "exercises in this section", th: "แบบฝึกหัดในหัวข้อนี้" },
+    },
+    loadingImageAlt: { en: "Loading section", th: "กำลังโหลดหัวข้อ" },
+    loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
+    loadingErrorBody: {
+      en: "We couldn't load this section. Please try refreshing the page.",
+      th: "เราไม่สามารถโหลดหัวข้อนี้ได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
     },
   },
   lessonsIndexPage: {
@@ -601,6 +625,12 @@ export const copy = {
         },
       ],
       bestValue: { en: "Best value!", th: "คุ้มที่สุด!" },
+    },
+    loadingImageAlt: { en: "Loading membership", th: "กำลังโหลดข้อมูลสมาชิก" },
+    loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
+    loadingErrorBody: {
+      en: "We couldn't load membership pricing. Please try refreshing the page.",
+      th: "เราไม่สามารถโหลดราคาสมาชิกได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
     },
     plans: {
       sixMonth: {
