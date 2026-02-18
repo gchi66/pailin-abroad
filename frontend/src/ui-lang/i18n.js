@@ -811,6 +811,12 @@ export const copy = {
     locked: { en: "Locked", th: "ถูกล็อก" },
     lessonTitle: { en: "Lesson Title", th: "ชื่อบทเรียน" },
     viewLabel: { en: "View", th: "ดู" },
+    loadingImageAlt: { en: "Loading pathway", th: "กำลังโหลดเส้นทางการเรียน" },
+    loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
+    loadingErrorBody: {
+      en: "We couldn't load your pathway. Please try refreshing the page.",
+      th: "เราไม่สามารถโหลดเส้นทางการเรียนของคุณได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
+    },
   },
   accountSettings: {
     title: { en: "Account Settings", th: "การตั้งค่าบัญชี" },

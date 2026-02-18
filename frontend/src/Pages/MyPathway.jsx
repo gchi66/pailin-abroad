@@ -81,6 +81,9 @@ const MyPathway = () => {
     loadingPathway: t("pathway.loadingPathway", uiLang),
     errorPrefix: t("pathway.errorPrefix", uiLang),
     noAuthToken: t("pathway.noAuthToken", uiLang),
+    loadingImageAlt: t("pathway.loadingImageAlt", uiLang),
+    loadingErrorTitle: t("pathway.loadingErrorTitle", uiLang),
+    loadingErrorBody: t("pathway.loadingErrorBody", uiLang),
 
     // Header section
     welcomeBack: t("pathway.welcomeBack", uiLang),
@@ -517,27 +520,29 @@ const MyPathway = () => {
     }
   };
 
+  if (loading || error) {
+    return (
+      <main className="pathway-loading-page">
+        <div className={`pathway-loading-inner${error ? " is-error" : ""}`}>
+          <img
+            src="/images/characters/pailin_blue_circle_right.webp"
+            alt={uiText.loadingImageAlt}
+            className="pathway-loading-image"
+          />
+          {error && (
+            <>
+              <div className="pathway-loading-error-title">{uiText.loadingErrorTitle}</div>
+              <div className="pathway-loading-error-body">{uiText.loadingErrorBody}</div>
+            </>
+          )}
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="pathway-main">
       <div className="pathway-container">
-
-        {/* Loading State */}
-        {loading && (
-          <div className="pathway-loading">
-            <p>{uiText.loadingPathway}</p>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-        <div className="pathway-error">
-          <p>{uiText.errorPrefix} {error}</p>
-        </div>
-      )}
-
-      {/* Main Content - Show only when not loading and no error */}
-      {!loading && !error && (
-        <>
           <div className="pathway-header">
             <div className="pathway-header-left">
               <Link to="/profile" className="pathway-avatar-link">
@@ -690,9 +695,6 @@ const MyPathway = () => {
                 <Link to="/resources" className="pathway-featured-link">{uiText.featuredResourcesCta}</Link>
               </div>
             </div>
-          </>
-        )}
-
       </div>
     </main>
   );
