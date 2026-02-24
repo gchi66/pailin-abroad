@@ -13,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 from app.config import Config
 from app.pricing_utils import resolve_region_key
+import requests
 
 routes = Blueprint("routes", __name__)
 
@@ -1099,6 +1100,120 @@ def contact():
     except Exception as e:
         print("Error sending email:", e)
         return jsonify({"message": "Failed to send email."}), 500
+
+
+@routes.route("/api/notify-comment", methods=["POST"])
+@handle_options
+def notify_comment():
+    data = request.get_json() or {}
+    comment_id = (data.get("comment_id") or "").strip()
+
+    if not comment_id:
+        return jsonify({"error": "comment_id is required"}), 400
+
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return jsonify({"error": "Authorization token required"}), 401
+
+    access_token = auth_header.split(" ")[1]
+    user_response = supabase.auth.get_user(access_token)
+    if not user_response.user:
+        return jsonify({"error": "Invalid token"}), 401
+
+    if not Config.POSTMARK_SERVER_TOKEN or not Config.POSTMARK_FROM:
+        print("[notify-comment] Missing Postmark config values.")
+        return jsonify({"error": "Email service not configured."}), 500
+
+    try:
+        comment_result = (
+            supabase_admin.table("comments")
+            .select(
+                "id, body, body_th, created_at, lesson_id, user_id,"
+                " lessons(title, level, lesson_order, stage),"
+                " users(username, email, is_admin)"
+            )
+            .eq("id", comment_id)
+            .single()
+            .execute()
+        )
+    except Exception as e:
+        print("[notify-comment] Failed to fetch comment:", e)
+        return jsonify({"error": "Failed to fetch comment"}), 500
+
+    comment = comment_result.data if comment_result else None
+    if not comment:
+        return jsonify({"error": "Comment not found"}), 404
+
+    if comment.get("user_id") != user_response.user.id:
+        return jsonify({"error": "Not authorized to notify this comment"}), 403
+
+    commenter = comment.get("users") or {}
+    if commenter.get("is_admin"):
+        return jsonify({"message": "Skipped admin comment"}), 200
+
+    lesson = comment.get("lessons") or {}
+    lesson_title = lesson.get("title") or "Lesson"
+    lesson_level = lesson.get("level")
+    lesson_order = lesson.get("lesson_order")
+    lesson_stage = lesson.get("stage")
+    lesson_label_parts = [lesson_title]
+    if lesson_stage or lesson_level or lesson_order:
+        label_bits = []
+        if lesson_stage:
+            label_bits.append(str(lesson_stage))
+        if lesson_level:
+            label_bits.append(f"Level {lesson_level}")
+        if lesson_order:
+            label_bits.append(f"Lesson {lesson_order}")
+        lesson_label_parts.append(f"({', '.join(label_bits)})")
+    lesson_label = " ".join(lesson_label_parts)
+
+    lesson_url = f"{Config.FRONTEND_URL.rstrip('/')}/lesson/{comment.get('lesson_id')}"
+    commenter_name = commenter.get("username") or commenter.get("email") or "Anonymous"
+    comment_body = comment.get("body") or ""
+    comment_body_th = comment.get("body_th") or ""
+    body_parts = [
+        "New comment posted:",
+        "",
+        f"From: {commenter_name}",
+        f"Email: {commenter.get('email') or 'Unknown'}",
+        f"Lesson: {lesson_label}",
+        f"Link: {lesson_url}",
+        "",
+        "Comment:",
+        comment_body,
+    ]
+    if comment_body_th:
+        body_parts += ["", "Comment (TH):", comment_body_th]
+
+    payload = {
+        "From": Config.POSTMARK_FROM,
+        "To": Config.POSTMARK_TO or Config.RECIPIENT_EMAIL,
+        "Subject": f"New comment on {lesson_title}",
+        "TextBody": "\n".join(body_parts),
+        "ReplyTo": commenter.get("email") or None,
+    }
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "X-Postmark-Server-Token": Config.POSTMARK_SERVER_TOKEN,
+    }
+
+    try:
+        response = requests.post(
+            "https://api.postmarkapp.com/email",
+            json=payload,
+            headers=headers,
+            timeout=10,
+        )
+        if response.ok:
+            return jsonify({"message": "Notification sent"}), 200
+        print("[notify-comment] Postmark failed:", response.text)
+        return jsonify({"error": "Failed to send email"}), 500
+    except Exception as e:
+        print("[notify-comment] Error sending email:", e)
+        return jsonify({"error": "Failed to send email"}), 500
 
 
 @routes.route("/api/lessons/<lesson_id>/resolved", methods=["GET"])

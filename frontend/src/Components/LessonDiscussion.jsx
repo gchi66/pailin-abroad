@@ -5,6 +5,7 @@ import "../Styles/DiscussionBoard.css";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
+import { API_BASE_URL } from "../config/api";
 
 // Utility to nest comments by parent_comment_id
 function nestComments(comments) {
@@ -92,6 +93,10 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
     }
     if (data) {
       setComments((prev) => [...prev, ...data]);
+      const isAdminUser = Boolean(isAdmin) || adminStatus;
+      if (!isAdminUser && data[0]?.id) {
+        notifyComment(data[0].id);
+      }
     }
   }
 
@@ -131,6 +136,32 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
       .delete()
       .eq("id", commentId);
     setComments((prev) => removeCommentAndReplies(prev, commentId));
+  }
+
+  async function notifyComment(commentId) {
+    try {
+      const {
+        data: { session },
+      } = await supabaseClient.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/notify-comment`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment_id: commentId }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        console.error("Error notifying comment:", payload?.error || response.status);
+      }
+    } catch (error) {
+      console.error("Error notifying comment:", error);
+    }
   }
 
   // Nest comments for rendering
