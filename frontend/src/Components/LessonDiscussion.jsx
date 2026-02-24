@@ -24,8 +24,39 @@ function nestComments(comments) {
 export default function LessonDiscussion({ lessonId, isAdmin }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [adminStatus, setAdminStatus] = useState(false);
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
+
+  useEffect(() => {
+    const fetchAdminStatus = async () => {
+      if (!user) {
+        setAdminStatus(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("is_admin")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching admin status:", error.message);
+          setAdminStatus(false);
+          return;
+        }
+
+        setAdminStatus(Boolean(data?.is_admin));
+      } catch (error) {
+        console.error("Error fetching admin status:", error);
+        setAdminStatus(false);
+      }
+    };
+
+    fetchAdminStatus();
+  }, [user]);
 
   // Fetch comments for this lesson
   useEffect(() => {
@@ -49,7 +80,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
     const { data } = await supabaseClient
       .from("comments")
       .insert({ lesson_id: lessonId, user_id: user.id, body })
-      .select();
+      .select("*, users(username, email, avatar_image, avatar, avatar_url)");
     if (data) {
       setComments((prev) => [...prev, ...data]);
     }
@@ -69,28 +100,64 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
     if (!user) return;
     const { data } = await supabaseClient
       .from("comments")
-      .insert({ lesson_id: lessonId, user_id: user.id, body: replyBody, parent_comment_id: parentComment.id })
-      .select();
+      .insert({
+        lesson_id: lessonId,
+        user_id: user.id,
+        body: replyBody,
+        parent_comment_id: parentComment.id,
+      })
+      .select("*, users(username, email, avatar_image, avatar, avatar_url)");
     if (data) {
       setComments(prev => [...prev, ...data]);
     }
   }
 
+  async function handleDelete(commentId) {
+    await supabaseClient
+      .from("comments")
+      .delete()
+      .eq("id", commentId);
+    setComments((prev) => removeCommentAndReplies(prev, commentId));
+  }
+
   // Nest comments for rendering
   const nested = nestComments(comments);
   const canPost = Boolean(user);
+  const canAdminReply = Boolean(isAdmin) || adminStatus;
 
   return (
     <section className="lesson-discussion">
       <DiscussionBoard
         comments={nested}
         onNewComment={canPost ? handleNewComment : undefined}
-        onReply={canPost ? handleReply : undefined}
-        onPin={isAdmin ? handlePin : undefined}
+        onReply={canAdminReply ? handleReply : undefined}
+        onPin={canAdminReply ? handlePin : undefined}
+        onDelete={canAdminReply ? handleDelete : undefined}
         canPost={canPost}
         loginPrompt={t("lessonDiscussion.loginPrompt", uiLang)}
         isLoading={loading}
       />
     </section>
   );
+}
+
+function removeCommentAndReplies(comments, targetId) {
+  if (!Array.isArray(comments) || !targetId) return comments;
+
+  const toRemove = new Set([targetId]);
+  let added = true;
+
+  while (added) {
+    added = false;
+    comments.forEach((comment) => {
+      if (comment.parent_comment_id && toRemove.has(comment.parent_comment_id)) {
+        if (!toRemove.has(comment.id)) {
+          toRemove.add(comment.id);
+          added = true;
+        }
+      }
+    });
+  }
+
+  return comments.filter((comment) => !toRemove.has(comment.id));
 }

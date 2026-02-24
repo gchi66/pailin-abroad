@@ -79,6 +79,7 @@ export default function DiscussionBoard({
   onNewComment,
   onReply,
   onPin,
+  onDelete,
   canPost = false,
   loginPrompt,
   isLoading = false,
@@ -103,8 +104,11 @@ export default function DiscussionBoard({
     }
   }
 
-  const commentCount = Array.isArray(comments) ? comments.length : 0;
+  const commentCount = Array.isArray(comments)
+    ? countComments(comments)
+    : 0;
   const canReply = typeof onReply === "function" && canPost;
+  const canDelete = typeof onDelete === "function";
 
   return (
     <div className="discussion-container">
@@ -161,7 +165,9 @@ export default function DiscussionBoard({
                     comment={comment}
                     onReply={onReply}
                     onPin={onPin}
+                    onDelete={onDelete}
                     canReply={canReply}
+                    canDelete={canDelete}
                     depth={0}
                   />
                 ))}
@@ -174,8 +180,19 @@ export default function DiscussionBoard({
   );
 }
 
-function CommentItem({ comment, onReply, onPin, canReply, depth }) {
+function countComments(list = []) {
+  return list.reduce((total, comment) => {
+    const replies = Array.isArray(comment?.replies)
+      ? countComments(comment.replies)
+      : 0;
+    return total + 1 + replies;
+  }, 0);
+}
+
+function CommentItem({ comment, onReply, onPin, onDelete, canReply, canDelete, depth }) {
   const [replyBody, setReplyBody] = useState("");
+  const [replying, setReplying] = useState(false);
+  const [submittingReply, setSubmittingReply] = useState(false);
   const { ui: uiLang } = useUiLang();
 
   const isPinned = Boolean(comment?.pinned);
@@ -188,77 +205,157 @@ function CommentItem({ comment, onReply, onPin, canReply, depth }) {
     "Anonymous";
 
   const metaDetails = buildCommentMeta(comment);
+  const hasReplies = Array.isArray(comment?.replies) && comment.replies.length > 0;
 
   return (
-    <div
-      className={`comment-card${isPinned ? " comment-card--pinned" : ""}`}
-      style={{ "--comment-depth": depth }}
-    >
-      <div className="comment-avatar">
-        {comment?.users?.avatar_image ||
-        comment?.users?.avatar ||
-        comment?.users?.avatar_url ? (
-          <img
-            src={
-              resolveAvatarUrl(
-                comment.users.avatar_image ||
-                comment.users.avatar ||
-                comment.users.avatar_url ||
-                ""
-              )
-            }
-            alt={userDisplay}
-            className="comment-avatar-image"
-          />
-        ) : (
-          <span className="comment-avatar-letter">
-            {userDisplay.charAt(0).toUpperCase()}
-          </span>
-        )}
-      </div>
-      <div className="comment-main">
-        <div className="comment-top-row">
-          <div className="comment-author-group">
-            <span className="comment-author">{userDisplay?.toUpperCase()}</span>
-            {metaDetails && (
-              <span className="comment-meta">{metaDetails}</span>
+    <>
+      <div
+        className={`comment-card${isPinned ? " comment-card--pinned" : ""}`}
+        style={{ "--comment-depth": depth }}
+      >
+        <div className="comment-avatar">
+          {comment?.users?.avatar_image ||
+          comment?.users?.avatar ||
+          comment?.users?.avatar_url ? (
+            <img
+              src={
+                resolveAvatarUrl(
+                  comment.users.avatar_image ||
+                  comment.users.avatar ||
+                  comment.users.avatar_url ||
+                  ""
+                )
+              }
+              alt={userDisplay}
+              className="comment-avatar-image"
+            />
+          ) : (
+            <span className="comment-avatar-letter">
+              {userDisplay.charAt(0).toUpperCase()}
+            </span>
+          )}
+        </div>
+        <div className="comment-main">
+          <div className="comment-top-row">
+            <div className="comment-author-group">
+              <span className="comment-author">{userDisplay?.toUpperCase()}</span>
+              {metaDetails && (
+                <span className="comment-meta">{metaDetails}</span>
+              )}
+            </div>
+            <div className="comment-top-actions">
+              {isPinned && (
+                <img
+                  src="/images/pinned_comment_pin.png"
+                  alt={t("lessonDiscussion.pinnedAlt", uiLang)}
+                  className="comment-pin-icon"
+                />
+              )}
+              {typeof onPin === "function" && (
+                <button
+                  type="button"
+                  className="comment-pin-toggle"
+                  onClick={() => onPin(comment.id, !isPinned)}
+                >
+                  {isPinned
+                    ? t("lessonDiscussion.unpin", uiLang)
+                    : t("lessonDiscussion.pin", uiLang)}
+                </button>
+              )}
+              {canDelete && (
+                <button
+                  type="button"
+                  className="comment-delete-toggle"
+                  onClick={() => {
+                    if (!onDelete) return;
+                    const confirmed = window.confirm(
+                      t("lessonDiscussion.deleteConfirm", uiLang)
+                    );
+                    if (confirmed) onDelete(comment.id);
+                  }}
+                >
+                  {t("lessonDiscussion.delete", uiLang)}
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="comment-body">
+            {comment?.body && (
+              <p className="comment-message">{comment.body}</p>
+            )}
+            {comment?.body_th && (
+              <p className="comment-message comment-message--secondary">
+                {comment.body_th}
+              </p>
             )}
           </div>
-          <div className="comment-top-actions">
-            {isPinned && (
-              <img
-                src="/images/pinned_comment_pin.png"
-                alt={t("lessonDiscussion.pinnedAlt", uiLang)}
-                className="comment-pin-icon"
-              />
-            )}
-            {typeof onPin === "function" && (
+
+          {canReply && (
+            <div className="comment-footer">
               <button
                 type="button"
-                className="comment-pin-toggle"
-                onClick={() => onPin(comment.id, !isPinned)}
+                className="comment-reply-toggle"
+                onClick={() => setReplying((prev) => !prev)}
               >
-                {isPinned
-                  ? t("lessonDiscussion.unpin", uiLang)
-                  : t("lessonDiscussion.pin", uiLang)}
+                {t("lessonDiscussion.reply", uiLang)}
               </button>
-            )}
-          </div>
-        </div>
-
-        <div className="comment-body">
-          {comment?.body && (
-            <p className="comment-message">{comment.body}</p>
+            </div>
           )}
-          {comment?.body_th && (
-            <p className="comment-message comment-message--secondary">
-              {comment.body_th}
-            </p>
+
+          {canReply && replying && (
+            <form
+              className="comment-reply-form"
+              onSubmit={async (event) => {
+                event.preventDefault();
+                if (!replyBody.trim() || !onReply) return;
+                setSubmittingReply(true);
+                try {
+                  await onReply(comment, replyBody.trim());
+                  setReplyBody("");
+                  setReplying(false);
+                } finally {
+                  setSubmittingReply(false);
+                }
+              }}
+            >
+              <textarea
+                className="comment-reply-textarea"
+                rows={3}
+                value={replyBody}
+                onChange={(event) => setReplyBody(event.target.value)}
+                placeholder={t("lessonDiscussion.placeholder", uiLang)}
+                required
+              />
+              <button
+                type="submit"
+                className="comment-reply-submit"
+                disabled={submittingReply || !replyBody.trim()}
+              >
+                {submittingReply
+                  ? t("lessonDiscussion.submitting", uiLang)
+                  : t("lessonDiscussion.submit", uiLang)}
+              </button>
+            </form>
           )}
         </div>
-
-        {/* Reply functionality removed per request */}
       </div>
-    </div>
+      {hasReplies && (
+        <div className="comment-children">
+          {comment.replies.map((reply) => (
+            <CommentItem
+              key={reply.id}
+              comment={reply}
+              onReply={onReply}
+              onPin={onPin}
+              onDelete={onDelete}
+              canReply={canReply}
+              canDelete={canDelete}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
+    </>
   );
 }

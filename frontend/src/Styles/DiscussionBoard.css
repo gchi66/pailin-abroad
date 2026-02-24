@@ -259,6 +259,25 @@
   color: #c54b4e;
 }
 
+.comment-delete-toggle {
+  border: none;
+  background: none;
+  color: #1e1e1e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.comment-delete-toggle:hover {
+  background-color: rgba(197, 75, 78, 0.12);
+  color: #c54b4e;
+}
+
 .comment-body {
   display: flex;
   flex-direction: column;

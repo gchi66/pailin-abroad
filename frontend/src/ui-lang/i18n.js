@@ -1588,6 +1588,11 @@ export const copy = {
     pin: { en: "Pin", th: "ปักหมุด" },
     unpin: { en: "Unpin", th: "ยกเลิกปักหมุด" },
     reply: { en: "Reply", th: "ตอบกลับ" },
+    delete: { en: "Delete", th: "ลบ" },
+    deleteConfirm: {
+      en: "Delete this comment?",
+      th: "ลบความคิดเห็นนี้หรือไม่?",
+    },
   },
 };
 
