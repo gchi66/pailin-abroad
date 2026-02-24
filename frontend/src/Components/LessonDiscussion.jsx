@@ -158,6 +158,8 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
         console.error("Error notifying comment:", payload?.error || response.status);
+      } else {
+        console.log("Comment notification sent");
       }
     } catch (error) {
       console.error("Error notifying comment:", error);

@@ -1115,10 +1115,14 @@ def notify_comment():
     if not auth_header or not auth_header.startswith("Bearer "):
         return jsonify({"error": "Authorization token required"}), 401
 
+    print(f"[notify-comment] Request for comment_id={comment_id}")
+
     access_token = auth_header.split(" ")[1]
     user_response = supabase.auth.get_user(access_token)
     if not user_response.user:
         return jsonify({"error": "Invalid token"}), 401
+
+    print(f"[notify-comment] Auth user={user_response.user.id}")
 
     if not Config.POSTMARK_SERVER_TOKEN or not Config.POSTMARK_FROM:
         print("[notify-comment] Missing Postmark config values.")
@@ -1149,6 +1153,7 @@ def notify_comment():
 
     commenter = comment.get("users") or {}
     if commenter.get("is_admin"):
+        print("[notify-comment] Skipped admin comment")
         return jsonify({"message": "Skipped admin comment"}), 200
 
     lesson = comment.get("lessons") or {}
@@ -1208,8 +1213,9 @@ def notify_comment():
             timeout=10,
         )
         if response.ok:
+            print("[notify-comment] Postmark ok")
             return jsonify({"message": "Notification sent"}), 200
-        print("[notify-comment] Postmark failed:", response.text)
+        print("[notify-comment] Postmark failed:", response.status_code, response.text)
         return jsonify({"error": "Failed to send email"}), 500
     except Exception as e:
         print("[notify-comment] Error sending email:", e)
