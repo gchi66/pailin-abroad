@@ -62,12 +62,17 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   useEffect(() => {
     async function fetchComments() {
       setLoading(true);
-      const { data } = await supabaseClient
+      const { data, error } = await supabaseClient
         .from("comments")
         .select("*, users(username, email, avatar_image)")
         .eq("lesson_id", lessonId)
         .order("pinned", { ascending: false })
         .order("created_at", { ascending: true });
+      if (error) {
+        console.error("Error fetching comments:", error.message);
+        setLoading(false);
+        return;
+      }
       setComments(data || []);
       setLoading(false);
     }
@@ -77,10 +82,14 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   // Add new comment (requires login)
   async function handleNewComment(body) {
     if (!user) return;
-    const { data } = await supabaseClient
+    const { data, error } = await supabaseClient
       .from("comments")
       .insert({ lesson_id: lessonId, user_id: user.id, body })
-      .select("*, users(username, email, avatar_image, avatar, avatar_url)");
+      .select("*, users(username, email, avatar_image)");
+    if (error) {
+      console.error("Error creating comment:", error.message);
+      return;
+    }
     if (data) {
       setComments((prev) => [...prev, ...data]);
     }
@@ -98,7 +107,7 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
   // Reply handler
   async function handleReply(parentComment, replyBody) {
     if (!user) return;
-    const { data } = await supabaseClient
+    const { data, error } = await supabaseClient
       .from("comments")
       .insert({
         lesson_id: lessonId,
@@ -106,7 +115,11 @@ export default function LessonDiscussion({ lessonId, isAdmin }) {
         body: replyBody,
         parent_comment_id: parentComment.id,
       })
-      .select("*, users(username, email, avatar_image, avatar, avatar_url)");
+      .select("*, users(username, email, avatar_image)");
+    if (error) {
+      console.error("Error creating reply:", error.message);
+      return;
+    }
     if (data) {
       setComments(prev => [...prev, ...data]);
     }
