@@ -106,6 +106,7 @@ def create_checkout_session():
                 'price': price_id,
                 'quantity': 1,
             }],
+            allow_promotion_codes=True,
             success_url=success_url,
             cancel_url=cancel_url,
             metadata={
