@@ -27,6 +27,7 @@ import VerifyEmail from "./Pages/VerifyEmail";
 import SignUpPage from "./Pages/SignUpPage";
 import Terms from "./Pages/Terms";
 import Privacy from "./Pages/Privacy";
+import SurveyRedirect from "./Pages/SurveyRedirect";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
@@ -63,6 +64,7 @@ function App() {
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/email-confirmation" element={<EmailConfirmationPage />} />
+            <Route path="/survey" element={<SurveyRedirect />} />
             <Route path="/reset-password" element={<div style={{ padding: '2rem', textAlign: 'center' }}>
               <h2>Password Reset</h2>
               <p>This page will handle password reset functionality.</p>

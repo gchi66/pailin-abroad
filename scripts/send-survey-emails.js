@@ -7,13 +7,12 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_KEY;
 const POSTMARK_SERVER_TOKEN = process.env.POSTMARK_SERVER_TOKEN;
 const POSTMARK_FROM = process.env.POSTMARK_FROM;
-const TEST_EMAILS_RAW = "gchichester@gmail.com, cari.emika@yahoo.com";
+const TEST_EMAILS_RAW = "gchichester@gmail.com, cari.emika@yahoo.com, cwemika@gmail.com";
 const TEST_EMAILS = TEST_EMAILS_RAW.split(",").map((email) => email.trim()).filter(Boolean);
 
 const EXCLUDED_EMAILS = [
   "pailinabroad@gmail.com",
-  "cwemika@gmail.com",
-  "schafferjustin24@gmail.com",
+  "schafferjustin24@gmail.com"
 ];
 
 function parseBool(value, defaultValue) {
