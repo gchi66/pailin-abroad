@@ -15,6 +15,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [socialLoading, setSocialLoading] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { ui } = useUiLang();
 
@@ -131,15 +132,30 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
           </div>
           <div className="login-form-group">
             <label className="login-form-label">{t("authModals.signIn.passwordLabel", ui)}</label>
-            <input
-              type="password"
-              className="login-form-input"
-              placeholder={t("authModals.signIn.passwordPlaceholder", ui)}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-            />
+            <div className="login-password-input-wrap">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="login-form-input login-password-input"
+                placeholder={t("authModals.signIn.passwordPlaceholder", ui)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className="login-password-toggle"
+                onClick={() => setShowPassword((current) => !current)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+              >
+                <img
+                  src={showPassword ? "/images/hide-password.webp" : "/images/show-password.webp"}
+                  alt=""
+                  className="login-password-toggle-icon"
+                />
+              </button>
+            </div>
           </div>
           <div className="login-form-footer">
             <label className="login-remember-label">

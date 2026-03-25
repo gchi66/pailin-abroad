@@ -84,6 +84,10 @@
   margin-bottom: 1.2rem;
 }
 
+.login-password-input-wrap {
+  position: relative;
+}
+
 /* Input labels */
 .login-form-label {
   display: block;
@@ -113,6 +117,37 @@
 
 .login-form-input::placeholder {
   color: #999;
+}
+
+.login-password-input {
+  padding-right: 48px;
+}
+
+.login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.login-password-toggle:focus-visible {
+  outline: 2px solid #1e1e1e;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.login-password-toggle-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  filter: brightness(0);
 }
 
 /* Form footer (remember me + forgot password) */
