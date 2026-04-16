@@ -730,9 +730,25 @@ def signup_email():
             }
         })
 
+        print("SIGNUP RESULT:", response)
+
         if hasattr(response, "error") and response.error:
             print("Error from Supabase:", response.error)
             return jsonify({"error": str(response.error)}), 400
+
+        if not getattr(response, "user", None):
+            print(f"Signup blocked with no user returned for {email}")
+            return jsonify({
+                "error": "This email is already registered. Try logging in or resetting your password."
+            }), 409
+
+        identities = getattr(response.user, "identities", None)
+        if identities is not None and len(identities) == 0:
+            print(f"Signup blocked because auth user already exists for {email}")
+            return jsonify({
+                "error": "This email is already registered. Try logging in or resetting your password."
+            }), 409
+
         return jsonify({
             "message": "Confirmation email sent! Please check your email to verify your account.",
             "email": email,
@@ -1007,10 +1023,10 @@ def delete_account():
         user_id = user_response.user.id
 
         # Delete the user from auth.users
-        supabase.auth.admin.delete_user(user_id)
+        supabase_admin.auth.admin.delete_user(user_id)
 
         # Delete the user from the public.users table
-        supabase.table("users").delete().eq("id", user_id).execute()
+        supabase_admin.table("users").delete().eq("id", user_id).execute()
 
         # # Check if the delete action was successful
         # if delete_response is None or delete_response.error:

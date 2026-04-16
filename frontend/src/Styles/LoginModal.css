@@ -131,10 +131,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: 0;
+  border-radius: 6px;
   background: transparent;
+  box-shadow: none;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login-password-toggle:hover {
+  background-color: rgba(30, 30, 30, 0.06);
+  box-shadow: none;
+  transform: translateY(-50%);
+}
+
+.login-password-toggle:active {
+  background-color: rgba(30, 30, 30, 0.1);
+  box-shadow: none;
+  transform: translateY(-50%);
 }
 
 .login-password-toggle:focus-visible {
