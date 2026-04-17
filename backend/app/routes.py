@@ -17,6 +17,9 @@ import requests
 
 routes = Blueprint("routes", __name__)
 
+STAGE_ORDER = ["Beginner", "Intermediate", "Advanced", "Expert"]
+STAGE_RANK = {stage: index for index, stage in enumerate(STAGE_ORDER)}
+
 CATEGORY_LABELS = {
     "verbs_and_tenses": "Verbs and Tenses",
     "nouns_and_articles": "Nouns and Articles",
@@ -105,6 +108,14 @@ def _category_slug(key: str) -> str:
 
 def _section_slug(section: str) -> str:
     return _slugify(section or "section")
+
+
+def _lesson_sort_key(lesson):
+    return (
+        STAGE_RANK.get(lesson.get("stage"), len(STAGE_ORDER)),
+        lesson.get("level") or 0,
+        lesson.get("lesson_order") or 0,
+    )
 
 
 def handle_options(f):
@@ -619,75 +630,43 @@ def get_pathway_lessons():
 
         # Find the highest completed lesson to determine starting point
         try:
-            completed_result = supabase.table('user_lesson_progress').select('*, lessons(level, lesson_order, stage)').eq('user_id', user_id).eq('is_completed', True).execute()
+            completed_result = (
+                supabase.table('user_lesson_progress')
+                .select('lesson_id, lessons(level, lesson_order, stage)')
+                .eq('user_id', user_id)
+                .eq('is_completed', True)
+                .execute()
+            )
             completed_lessons = completed_result.data if completed_result.data else []
 
-            # Determine starting lesson
-            start_level = 1
-            start_lesson_order = 1
-            start_stage = "Beginner"
+            lessons_result = supabase.table('lessons').select('*').execute()
+            ordered_lessons = sorted(lessons_result.data or [], key=_lesson_sort_key)
 
+            start_index = 0
             if completed_lessons:
-                # Find the highest completed lesson
-                highest_level = 0
-                highest_lesson_order = 0
-                highest_stage = "Beginner"
+                completed_positions = {
+                    (
+                        progress.get('lessons', {}).get('stage'),
+                        progress.get('lessons', {}).get('level'),
+                        progress.get('lessons', {}).get('lesson_order'),
+                    )
+                    for progress in completed_lessons
+                    if progress.get('lessons')
+                }
 
-                for progress in completed_lessons:
-                    lesson = progress.get('lessons', {})
-                    level = lesson.get('level', 0)
-                    lesson_order = lesson.get('lesson_order', 0)
-                    stage = lesson.get('stage', 'Beginner')
+                highest_completed_index = -1
+                for index, lesson in enumerate(ordered_lessons):
+                    lesson_position = (
+                        lesson.get('stage'),
+                        lesson.get('level'),
+                        lesson.get('lesson_order'),
+                    )
+                    if lesson_position in completed_positions:
+                        highest_completed_index = index
 
-                    if level > highest_level or (level == highest_level and lesson_order > highest_lesson_order):
-                        highest_level = level
-                        highest_lesson_order = lesson_order
-                        highest_stage = stage
+                start_index = highest_completed_index + 1
 
-                # Set starting point to the next lesson after highest completed
-                start_level = highest_level
-                start_lesson_order = highest_lesson_order + 1
-                start_stage = highest_stage
-
-            # Fetch the next 5 lessons starting from the determined point
-            pathway_lessons = []
-            lessons_found = 0
-            current_level = start_level
-            current_stage = start_stage
-
-            while lessons_found < 5:
-                # Try to get lessons from current level starting from start_lesson_order
-                lesson_order_filter = start_lesson_order if current_level == start_level else 1
-
-                lessons_result = supabase.table('lessons').select('*').eq('stage', current_stage).eq('level', current_level).gte('lesson_order', lesson_order_filter).order('lesson_order').execute()
-
-                current_lessons = lessons_result.data if lessons_result.data else []
-
-                for lesson in current_lessons:
-                    if lessons_found < 5:
-                        pathway_lessons.append(lesson)
-                        lessons_found += 1
-                    else:
-                        break
-
-                if lessons_found < 5:
-                    # Move to next level in same stage
-                    current_level += 1
-
-                    # Check if this level exists in current stage
-                    level_check = supabase.table('lessons').select('level').eq('stage', current_stage).eq('level', current_level).limit(1).execute()
-
-                    if not level_check.data:
-                        # No more levels in current stage, move to next stage
-                        stage_order = ['Beginner', 'Intermediate', 'Advanced', 'Expert']
-                        current_stage_index = stage_order.index(current_stage) if current_stage in stage_order else 0
-
-                        if current_stage_index < len(stage_order) - 1:
-                            current_stage = stage_order[current_stage_index + 1]
-                            current_level = 1
-                        else:
-                            # No more stages, break
-                            break
+            pathway_lessons = ordered_lessons[start_index:start_index + 5]
 
             return jsonify({"pathway_lessons": pathway_lessons}), 200
 
