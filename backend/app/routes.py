@@ -19,6 +19,11 @@ routes = Blueprint("routes", __name__)
 
 STAGE_ORDER = ["Beginner", "Intermediate", "Advanced", "Expert"]
 STAGE_RANK = {stage: index for index, stage in enumerate(STAGE_ORDER)}
+PATHWAY_LESSON_SELECT = (
+    "id, stage, level, lesson_order, lesson_external_id, "
+    "title, title_th, subtitle, subtitle_th, "
+    "focus, focus_th, image_url, header_img, conversation_audio_url"
+)
 
 CATEGORY_LABELS = {
     "verbs_and_tenses": "Verbs and Tenses",
@@ -116,6 +121,10 @@ def _lesson_sort_key(lesson):
         lesson.get("level") or 0,
         lesson.get("lesson_order") or 0,
     )
+
+
+def _elapsed_ms(start):
+    return int((time.perf_counter() - start) * 1000)
 
 
 def handle_options(f):
@@ -612,6 +621,9 @@ def get_next_lesson():
 @routes.route('/api/user/pathway-lessons', methods=['GET'])
 @handle_options
 def get_pathway_lessons():
+    request_start = time.perf_counter()
+    request_id = f"{int(time.time() * 1000) % 1000000}"
+
     try:
         # Get authorization header
         auth_header = request.headers.get('Authorization')
@@ -621,15 +633,22 @@ def get_pathway_lessons():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
+        auth_start = time.perf_counter()
         user_response = supabase.auth.get_user(access_token)
+        auth_ms = _elapsed_ms(auth_start)
 
         if not user_response.user:
+            print(
+                f"[pathway-lessons] request_id={request_id} auth_ms={auth_ms} invalid_token=true total_ms={_elapsed_ms(request_start)}",
+                flush=True,
+            )
             return jsonify({"error": "Invalid token"}), 401
 
         user_id = user_response.user.id
 
         # Find the highest completed lesson to determine starting point
         try:
+            completed_start = time.perf_counter()
             completed_result = (
                 supabase.table('user_lesson_progress')
                 .select('lesson_id, lessons(level, lesson_order, stage)')
@@ -637,9 +656,14 @@ def get_pathway_lessons():
                 .eq('is_completed', True)
                 .execute()
             )
+            completed_query_ms = _elapsed_ms(completed_start)
             completed_lessons = completed_result.data if completed_result.data else []
 
-            lessons_result = supabase.table('lessons').select('*').execute()
+            lessons_start = time.perf_counter()
+            lessons_result = supabase.table('lessons').select(PATHWAY_LESSON_SELECT).execute()
+            lessons_query_ms = _elapsed_ms(lessons_start)
+
+            compute_start = time.perf_counter()
             ordered_lessons = sorted(lessons_result.data or [], key=_lesson_sort_key)
 
             start_index = 0
@@ -667,15 +691,36 @@ def get_pathway_lessons():
                 start_index = highest_completed_index + 1
 
             pathway_lessons = ordered_lessons[start_index:start_index + 5]
+            compute_ms = _elapsed_ms(compute_start)
+
+            print(
+                "[pathway-lessons] "
+                f"request_id={request_id} "
+                f"auth_ms={auth_ms} "
+                f"completed_query_ms={completed_query_ms} "
+                f"completed_count={len(completed_lessons)} "
+                f"lessons_query_ms={lessons_query_ms} "
+                f"lesson_count={len(ordered_lessons)} "
+                f"compute_ms={compute_ms} "
+                f"pathway_count={len(pathway_lessons)} "
+                f"total_ms={_elapsed_ms(request_start)}",
+                flush=True,
+            )
 
             return jsonify({"pathway_lessons": pathway_lessons}), 200
 
         except Exception as e:
-            print(f"Warning: Could not fetch pathway lessons: {e}")
+            print(
+                f"Warning: Could not fetch pathway lessons request_id={request_id} total_ms={_elapsed_ms(request_start)}: {e}",
+                flush=True,
+            )
             return jsonify({"pathway_lessons": []}), 200
 
     except Exception as e:
-        print(f"Error fetching pathway lessons: {e}")
+        print(
+            f"Error fetching pathway lessons request_id={request_id} total_ms={_elapsed_ms(request_start)}: {e}",
+            flush=True,
+        )
         return jsonify({"error": "Internal server error"}), 500
 
 
