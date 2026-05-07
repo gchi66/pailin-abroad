@@ -20,6 +20,17 @@ def _exec(q):
     return res.data
 
 
+def _exec_logged(label: str, q):
+    try:
+      data = _exec(q)
+      size = len(data) if isinstance(data, list) else (1 if data else 0)
+      print(f"[resolver] {label} ok count={size}", flush=True)
+      return data
+    except Exception as exc:
+      print(f"[resolver] {label} failed: {exc}", flush=True)
+      raise
+
+
 def _pick_lang(en: Optional[Any], th: Optional[Any], lang: Lang) -> Optional[str]:
     def clean(v):
         if v is None:
@@ -111,7 +122,10 @@ def _inject_audio_metadata(nodes: List[Dict[str, Any]], fallback_section: Option
 
 
 def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
-    lesson = _exec(
+    print(f"[resolver] fetch_lesson_bundle start lesson_id={lesson_id}", flush=True)
+
+    lesson = _exec_logged(
+        "lessons",
         supabase.table("lessons")
         .select(
             "id, stage, level, lesson_order, image_url, conversation_audio_url, "
@@ -123,35 +137,40 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         .single()
     )
 
-    sections = _exec(
+    sections = _exec_logged(
+        "lesson_sections",
         supabase.table("lesson_sections")
         .select("*")
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    transcript = _exec(
+    transcript = _exec_logged(
+        "transcript_lines",
         supabase.table("transcript_lines")
         .select("*")
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    questions = _exec(
+    questions = _exec_logged(
+        "comprehension_questions",
         supabase.table("comprehension_questions")
         .select("*")
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    exercises = _exec(
+    exercises = _exec_logged(
+        "practice_exercises",
         supabase.table("practice_exercises")
         .select("*")
         .eq("lesson_id", lesson_id)
         .order("sort_order", desc=False)
     )
 
-    phrase_links = _exec(
+    phrase_links = _exec_logged(
+        "lesson_phrases_with_phrases",
         supabase.table("lesson_phrases")
         .select(
             "lesson_id, phrase_id, sort_order, phrases(*)"
@@ -160,17 +179,21 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         .order("sort_order", desc=False)
     )
 
-    images = _exec(
+    images = _exec_logged(
+        "lesson_images",
         supabase.table("lesson_images")
         .select("image_key, url")
         .eq("lesson_id", lesson_id)
     )
 
-    global_images = _exec(
+    global_images = _exec_logged(
+        "lesson_images_global",
         supabase.table("lesson_images")
         .select("image_key, url")
         .is_("lesson_id", None)
     )
+
+    print(f"[resolver] fetch_lesson_bundle done lesson_id={lesson_id}", flush=True)
 
     return {
         "lesson": lesson,

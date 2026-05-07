@@ -1,12 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import "../Styles/ComprehensionQuiz.css";
 import { copy, pick } from "../ui-lang/i18n";
+import { buildComprehensionUnitKey } from "../lib/lessonAnswerState";
 
-export default function ComprehensionQuiz({ questions = [], contentLang = "en", images = {} }) {
+export default function ComprehensionQuiz({
+  questions = [],
+  contentLang = "en",
+  images = {},
+  savedAnswerState = null,
+  onSaveAnswerState,
+  onClearAnswerState,
+  lessonId,
+}) {
   const [selected, setSelected] = useState({}); // { [qId]: ["A","C"] }
   const [checked, setChecked] = useState(false);
+  const hasHydratedRef = useRef(false);
+  const hasInteractedRef = useRef(false);
   const quizCopy = copy.lessonPage.quiz;
+
+  useEffect(() => {
+    hasHydratedRef.current = false;
+    hasInteractedRef.current = false;
+    setSelected({});
+    setChecked(false);
+  }, [lessonId]);
+
+  useEffect(() => {
+    if (hasHydratedRef.current || hasInteractedRef.current) {
+      return;
+    }
+
+    if (!savedAnswerState || typeof savedAnswerState !== "object") {
+      return;
+    }
+
+    const nextSelected =
+      savedAnswerState.selected && typeof savedAnswerState.selected === "object"
+        ? savedAnswerState.selected
+        : {};
+
+    setSelected(nextSelected);
+    setChecked(true);
+    hasHydratedRef.current = true;
+  }, [savedAnswerState]);
 
   const allCorrect =
     questions.length > 0 &&
@@ -30,6 +67,7 @@ export default function ComprehensionQuiz({ questions = [], contentLang = "en", 
 
   const toggle = (qId, letter, isMulti) =>
     setSelected((prev) => {
+      hasInteractedRef.current = true;
       const prevList = prev[qId] || [];
       const nextList = isMulti
         ? prevList.includes(letter)
@@ -125,7 +163,25 @@ const parseOptions = (q) => {
 
   const checkAnswers = () => {
     setChecked(true);
+    if (typeof onSaveAnswerState === "function") {
+      onSaveAnswerState({
+        unitKey: buildComprehensionUnitKey(),
+        sectionKey: "section:comprehension",
+        answerPayload: { selected },
+      });
+    }
   };
+
+  const clearAnswers = () => {
+    hasInteractedRef.current = true;
+    setSelected({});
+    setChecked(false);
+    if (typeof onClearAnswerState === "function") {
+      onClearAnswerState({ unitKey: buildComprehensionUnitKey() });
+    }
+  };
+
+  const hasSelections = Object.keys(selected).length > 0;
 
   return (
     <>
@@ -226,6 +282,15 @@ const parseOptions = (q) => {
         >
           {checkLabel}
         </button>
+        {savedAnswerState || hasSelections ? (
+          <button
+            type="button"
+            className="apply-submit cq-check-btn"
+            onClick={clearAnswers}
+          >
+            CLEAR ANSWERS
+          </button>
+        ) : null}
       </div>
     </>
   );

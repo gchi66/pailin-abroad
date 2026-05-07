@@ -16,6 +16,50 @@ const stageClassMap = {
   Expert: "level-buttons-Expert",
 };
 
+function ProgressCircle({ percent, size = 32, strokeWidth = 5.2 }) {
+  const clampedPercent = Math.max(0, Math.min(100, percent));
+  const r = 36;
+  const angle = (clampedPercent / 100) * 360;
+  const rad = (angle - 90) * (Math.PI / 180);
+  const x = r * Math.cos(rad);
+  const y = r * Math.sin(rad);
+  const largeArc = angle > 180 ? 1 : 0;
+
+  const piePath =
+    clampedPercent <= 0
+      ? null
+      : clampedPercent >= 100
+        ? null
+        : `M0,0 L0,-${r} A${r},${r} 0 ${largeArc},1 ${x.toFixed(2)},${y.toFixed(2)} Z`;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="-34 -34 72 72"
+      className="lesson-progress-circle"
+      aria-hidden="true"
+      shapeRendering="geometricPrecision"
+    >
+      <circle
+        r={r}
+        fill={clampedPercent >= 100 ? "#91caff" : "#ffffff"}
+        stroke="#1e1e1e"
+        strokeWidth={strokeWidth}
+      />
+      {piePath && <path d={piePath} fill="#91caff" />}
+      {clampedPercent > 0 && clampedPercent < 100 && (
+        <circle
+          r={r}
+          fill="none"
+          stroke="#1e1e1e"
+          strokeWidth={strokeWidth}
+        />
+      )}
+    </svg>
+  );
+}
+
 const LessonsIndex = () => {
   const [isBackstoryOpen, setIsBackstoryOpen] = useState(false);
   const [lessons, setLessons] = useState([]);
@@ -33,6 +77,7 @@ const LessonsIndex = () => {
     return Number.isFinite(stored) && stored > 0 ? stored : 1;
   });
   const [completedLessons, setCompletedLessons] = useState([]);
+  const [progressByLesson, setProgressByLesson] = useState({});
   const [levelCompletionStatus, setLevelCompletionStatus] = useState(null);
   const [profile, setProfile] = useState(null);
   const [allLessons, setAllLessons] = useState([]); // Store all lessons for first lesson calculation
@@ -216,8 +261,10 @@ const LessonsIndex = () => {
     localStorage.setItem("lessonLibraryLevel", String(selectedLevel));
   }, [selectedStage, selectedLevel]);
 
-  // Fetch completed lessons for the authenticated user
+  // Fetch completed lessons for global completion state
   useEffect(() => {
+    let cancelled = false;
+
     const fetchCompletedLessons = async () => {
       if (!user) {
         setCompletedLessons([]);
@@ -225,7 +272,6 @@ const LessonsIndex = () => {
       }
 
       try {
-        // Get the current session to access the access token
         const { data: { session } } = await supabaseClient.auth.getSession();
 
         if (!session?.access_token) {
@@ -233,7 +279,6 @@ const LessonsIndex = () => {
           return;
         }
 
-        // Make API call to backend for completed lessons
         const response = await fetch(`${API_BASE_URL}/api/user/completed-lessons`, {
           method: 'GET',
           headers: {
@@ -244,16 +289,71 @@ const LessonsIndex = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setCompletedLessons(data.completed_lessons || []);
+          if (!cancelled) {
+            setCompletedLessons(data.completed_lessons || []);
+          }
         }
       } catch (error) {
         console.error('Error fetching completed lessons:', error);
-        setCompletedLessons([]);
+        if (!cancelled) {
+          setCompletedLessons([]);
+        }
       }
     };
 
-    fetchCompletedLessons();
+    const timer = window.setTimeout(() => {
+      fetchCompletedLessons();
+    }, 250);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [user]);
+
+  // Fetch lesson progress summaries for the currently visible lessons
+  useEffect(() => {
+    const fetchLessonProgress = async () => {
+      if (!user || !lessons.length) {
+        setProgressByLesson({});
+        return;
+      }
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        if (!session?.access_token) {
+          setProgressByLesson({});
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/user/lesson-progress-summaries`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lesson_ids: lessons.map((lesson) => lesson.id).filter(Boolean),
+          }),
+        });
+
+        if (!response.ok) {
+          console.error("Lesson progress summary request failed:", response.status);
+          setProgressByLesson({});
+          return;
+        }
+
+        const data = await response.json();
+        setProgressByLesson(data.progress_by_lesson || {});
+      } catch (error) {
+        console.error('Error fetching lesson progress summaries:', error);
+        setProgressByLesson({});
+      }
+    };
+
+    fetchLessonProgress();
+  }, [lessons, location.key, user]);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 480px)");
@@ -265,6 +365,8 @@ const LessonsIndex = () => {
 
   // Fetch level completion status for the current stage and level
   useEffect(() => {
+    let cancelled = false;
+
     const fetchLevelCompletionStatus = async () => {
       if (!user || !selectedStage || !selectedLevel) {
         setLevelCompletionStatus(null);
@@ -291,17 +393,30 @@ const LessonsIndex = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setLevelCompletionStatus(data);
+          if (!cancelled) {
+            setLevelCompletionStatus(data);
+          }
         } else {
-          setLevelCompletionStatus(null);
+          if (!cancelled) {
+            setLevelCompletionStatus(null);
+          }
         }
       } catch (error) {
         console.error('Error fetching level completion status:', error);
-        setLevelCompletionStatus(null);
+        if (!cancelled) {
+          setLevelCompletionStatus(null);
+        }
       }
     };
 
-    fetchLevelCompletionStatus();
+    const timer = window.setTimeout(() => {
+      fetchLevelCompletionStatus();
+    }, 400);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [user, selectedStage, selectedLevel]);
 
   // Fetch lessons for the selected stage and level
@@ -345,6 +460,9 @@ const LessonsIndex = () => {
 
   // Helper function to check if a lesson is completed
   const isLessonCompleted = (lessonId) => {
+    if (progressByLesson[lessonId]?.is_completed) {
+      return true;
+    }
     return completedLessons.some(completed => completed.lesson_id === lessonId);
   };
 
@@ -366,11 +484,16 @@ const LessonsIndex = () => {
   const stages = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
   const { levelCompletionMap, stageCompletionMap } = useMemo(() => {
-    const completionIds = new Set(
+    const completedIds = new Set(
       (completedLessons || [])
         .map((entry) => entry.lesson_id || entry.lessons?.id)
         .filter(Boolean)
     );
+    Object.entries(progressByLesson || {}).forEach(([lessonId, summary]) => {
+      if (summary?.is_completed) {
+        completedIds.add(lessonId);
+      }
+    });
 
     const levelAggregates = {};
     const stageAggregates = {};
@@ -387,7 +510,7 @@ const LessonsIndex = () => {
         levelAggregates[levelKey] = { total: 0, completed: 0 };
       }
       levelAggregates[levelKey].total += 1;
-      if (id && completionIds.has(id)) {
+      if (id && completedIds.has(id)) {
         levelAggregates[levelKey].completed += 1;
       }
 
@@ -395,7 +518,7 @@ const LessonsIndex = () => {
         stageAggregates[stage] = { total: 0, completed: 0 };
       }
       stageAggregates[stage].total += 1;
-      if (id && completionIds.has(id)) {
+      if (id && completedIds.has(id)) {
         stageAggregates[stage].completed += 1;
       }
     });
@@ -414,7 +537,7 @@ const LessonsIndex = () => {
       levelCompletionMap: levelCompletion,
       stageCompletionMap: stageCompletion,
     };
-  }, [allLessons, completedLessons]);
+  }, [allLessons, completedLessons, progressByLesson]);
 
   const handleLessonClick = (event) => {
     if (selectedStage === "Expert") {
@@ -617,6 +740,9 @@ const LessonsIndex = () => {
               <div className="lesson-list">
                 {sortedLessons.map((lesson) => {
                   const lessonCompleted = isLessonCompleted(lesson.id);
+                  const lessonProgress = progressByLesson[lesson.id];
+                  const progressPercent = lessonProgress?.percent_complete ?? 0;
+                  const hasStarted = Boolean(lessonProgress?.has_started);
                   return (
                     <Link
                       to={`/lesson/${lesson.id}`}
@@ -656,6 +782,11 @@ const LessonsIndex = () => {
                               alt={t("lessonsIndexPage.completed", uiLang)}
                             className="checkmark-img checkmark-completed"
                           />
+                        ) : hasStarted ? (
+                          <div className="lesson-progress-indicator" aria-label={`${progressPercent}% complete`}>
+                            <span className="lesson-progress-label">{progressPercent}%</span>
+                            <ProgressCircle percent={progressPercent} />
+                          </div>
                         ) : null}
                       </div>
                     </Link>

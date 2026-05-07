@@ -38,6 +38,10 @@ const hasCorrectTag = (item) => {
 
 export default function SentenceTransformExercise({
   exercise = {},
+  lessonId,
+  unitKey,
+  sectionKey,
+  savedAnswerState = null,
   images = {},
   audioIndex = {},
   sourceType = "practice",
@@ -45,6 +49,8 @@ export default function SentenceTransformExercise({
   userId: userIdProp,
   showTitle = true,
   contentLang = "en",
+  onSaveAnswerState,
+  onClearAnswerState,
 }) {
   const { title = "", prompt = "", items = [] } = exercise || {};
   const { user } = useAuth();
@@ -79,6 +85,8 @@ export default function SentenceTransformExercise({
   const [isChecking, setIsChecking] = useState(false);
   const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
+  const [hasHydrated, setHasHydrated] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const checkLabel = pick(copy.lessonContent.checkAnswers, contentLang);
   const checkingLabel = pick(copy.lessonContent.checking, contentLang);
   const rewritePlaceholder =
@@ -91,7 +99,52 @@ export default function SentenceTransformExercise({
     setIsChecking(false);
     setHasChecked(false);
     setError("");
-  }, [initialQuestions]);
+    setHasHydrated(false);
+    setHasInteracted(false);
+  }, [initialQuestions, lessonId]);
+
+  useEffect(() => {
+    if (hasHydrated || hasInteracted) {
+      return;
+    }
+    if (!savedAnswerState || typeof savedAnswerState !== "object") {
+      return;
+    }
+
+    const savedQuestions = Array.isArray(savedAnswerState.questions)
+      ? savedAnswerState.questions
+      : [];
+
+    setQuestions(
+      initialQuestions.map((question, idx) => {
+        const savedQuestion = savedQuestions[idx];
+        if (!savedQuestion || typeof savedQuestion !== "object") {
+          return question;
+        }
+
+        return {
+          ...question,
+          answer: typeof savedQuestion.answer === "string" ? savedQuestion.answer : question.answer,
+          markedAsCorrect:
+            typeof savedQuestion.markedAsCorrect === "boolean"
+              ? savedQuestion.markedAsCorrect
+              : question.markedAsCorrect,
+          correct:
+            typeof savedQuestion.correct === "boolean"
+              ? savedQuestion.correct
+              : question.correct,
+          score:
+            typeof savedQuestion.score === "number"
+              ? savedQuestion.score
+              : question.score,
+          feedback: null,
+          loading: false,
+        };
+      })
+    );
+    setHasChecked(savedQuestions.some((question) => typeof question?.correct === "boolean"));
+    setHasHydrated(true);
+  }, [hasHydrated, hasInteracted, initialQuestions, savedAnswerState]);
 
   const pendingIndexes = useMemo(
     () =>
@@ -121,6 +174,7 @@ export default function SentenceTransformExercise({
   const hasIncorrect = questions.some((question) => question.correct === false);
 
   const handleChange = (idx, value) => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question, questionIdx) => {
         if (questionIdx !== idx || question.correct === true || question.loading)
@@ -134,6 +188,7 @@ export default function SentenceTransformExercise({
   };
 
   const handleMarkCorrect = (idx, isCorrect) => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question, questionIdx) => {
         if (questionIdx !== idx || question.correct === true || question.loading)
@@ -150,6 +205,18 @@ export default function SentenceTransformExercise({
       setError("");
     }
   };
+
+  const buildAnswerPayload = (questionStates) => ({
+    questions: questionStates.map((question) => ({
+      answer: question.answer || "",
+      markedAsCorrect:
+        typeof question.markedAsCorrect === "boolean"
+          ? question.markedAsCorrect
+          : null,
+      correct: typeof question.correct === "boolean" ? question.correct : null,
+      score: typeof question.score === "number" ? question.score : null,
+    })),
+  });
 
   const handleCheckAnswers = async () => {
     if (!userId) {
@@ -175,6 +242,8 @@ export default function SentenceTransformExercise({
           : question
       )
     );
+
+    const finalQuestions = questions.map((question) => ({ ...question }));
 
     await Promise.all(
       pendingIndexes.map(async (idx) => {
@@ -209,49 +278,47 @@ export default function SentenceTransformExercise({
           const normalizedCorrect = normalizeAiCorrect(result.correct);
           const scoreValue =
             typeof result.score === "number" ? result.score : null;
-
-          setQuestions((prev) =>
-            prev.map((question, questionIdx) => {
-              if (questionIdx !== idx) return question;
-              return {
-                ...question,
-                loading: false,
-                correct: normalizedCorrect,
-                score: scoreValue,
-                feedback: {
-                  en: result.feedback_en || "",
-                  th: result.feedback_th || "",
-                },
-              };
-            })
-          );
+          finalQuestions[idx] = {
+            ...finalQuestions[idx],
+            loading: false,
+            correct: normalizedCorrect,
+            score: scoreValue,
+            feedback: {
+              en: result.feedback_en || "",
+              th: result.feedback_th || "",
+            },
+          };
         } catch (err) {
-          setQuestions((prev) =>
-            prev.map((question, questionIdx) => {
-              if (questionIdx !== idx) return question;
-              return {
-                ...question,
-                loading: false,
-                correct: false,
-                score: null,
-                feedback: {
-                  en:
-                    err?.message ||
-                    "Unable to check this answer right now. Please try again.",
-                  th: "",
-                },
-              };
-            })
-          );
+          finalQuestions[idx] = {
+            ...finalQuestions[idx],
+            loading: false,
+            correct: false,
+            score: null,
+            feedback: {
+              en:
+                err?.message ||
+                "Unable to check this answer right now. Please try again.",
+              th: "",
+            },
+          };
         }
       })
     );
 
+    setQuestions(finalQuestions);
     setIsChecking(false);
     setHasChecked(true);
+    if (typeof onSaveAnswerState === "function" && unitKey) {
+      onSaveAnswerState({
+        unitKey,
+        sectionKey,
+        answerPayload: buildAnswerPayload(finalQuestions),
+      });
+    }
   };
 
   const handleTryAgain = () => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question) => {
         if (question.correct === false) {
@@ -264,6 +331,27 @@ export default function SentenceTransformExercise({
     setHasChecked(false);
     setError("");
   };
+
+  const clearSavedAnswers = () => {
+    setHasInteracted(true);
+    setQuestions(initialQuestions);
+    setIsChecking(false);
+    setHasChecked(false);
+    setError("");
+    if (typeof onClearAnswerState === "function" && unitKey) {
+      onClearAnswerState({ unitKey });
+    }
+  };
+
+  const hasSavedAnswers =
+    Boolean(savedAnswerState) ||
+    questions.some((question, idx) => {
+      if (isExampleItem(items[idx])) return false;
+      return (
+        (question.answer || "").trim() ||
+        typeof question.markedAsCorrect === "boolean"
+      );
+    });
 
   return (
     <div className="fb-wrap st-wrap">
@@ -483,16 +571,18 @@ export default function SentenceTransformExercise({
       {error && <p className="ai-error-message">{error}</p>}
 
       <div className="fb-button-container">
-        <CheckAnswersButton
-          onClick={handleCheckAnswers}
-          disabled={!canCheck}
-          isChecking={isChecking}
-          label={checkLabel}
-          checkingLabel={checkingLabel}
-          hasIncompleteAnswers={hasIncompleteAnswers}
-          contentLang={contentLang}
-        />
-        {hasChecked && hasIncorrect && (
+        {!hasChecked ? (
+          <CheckAnswersButton
+            onClick={handleCheckAnswers}
+            disabled={!canCheck}
+            isChecking={isChecking}
+            label={checkLabel}
+            checkingLabel={checkingLabel}
+            hasIncompleteAnswers={hasIncompleteAnswers}
+            contentLang={contentLang}
+          />
+        ) : null}
+        {hasChecked && hasIncorrect ? (
           <button
             onClick={handleTryAgain}
             className="apply-submit st-try-again"
@@ -500,7 +590,16 @@ export default function SentenceTransformExercise({
           >
             TRY AGAIN
           </button>
-        )}
+        ) : null}
+        {hasChecked && hasSavedAnswers ? (
+          <button
+            onClick={clearSavedAnswers}
+            className="apply-submit st-try-again"
+            type="button"
+          >
+            CLEAR ANSWERS
+          </button>
+        ) : null}
       </div>
     </div>
   );

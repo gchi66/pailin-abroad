@@ -91,13 +91,21 @@ const createInitialChoices = (list = []) => list.map(() => []);
 
 export default function MultipleChoiceExercise({
   exercise,
+  lessonId,
+  unitKey,
+  sectionKey,
+  savedAnswerState = null,
   images = {},
   audioIndex = {},
   contentLang = "en",
+  onSaveAnswerState,
+  onClearAnswerState,
 }) {
   const { prompt, items = [] } = exercise;
   const [choices, setChoices] = useState(() => createInitialChoices(items));
   const [checked, setChecked] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const normalizedItems = useMemo(
     () =>
@@ -124,11 +132,34 @@ export default function MultipleChoiceExercise({
   useEffect(() => {
     setChoices(createInitialChoices(items));
     setChecked(false);
-  }, [items]);
+    setHasHydrated(false);
+    setHasInteracted(false);
+  }, [items, lessonId]);
+
+  useEffect(() => {
+    if (hasHydrated || hasInteracted) {
+      return;
+    }
+    if (!savedAnswerState || typeof savedAnswerState !== "object") {
+      return;
+    }
+
+    const rawChoices = Array.isArray(savedAnswerState.choices)
+      ? savedAnswerState.choices
+      : [];
+    const restoredChoices = createInitialChoices(items).map((_, idx) =>
+      normalizeArray(rawChoices[idx])
+    );
+
+    setChoices(restoredChoices);
+    setChecked(true);
+    setHasHydrated(true);
+  }, [hasHydrated, hasInteracted, items, savedAnswerState]);
 
   const toggleChoice = (questionIdx, letter, allowMultiple) => {
     const normalizedLetter = normalizeArray([letter])[0];
     if (!normalizedLetter) return;
+    setHasInteracted(true);
 
     setChoices((prev) =>
       prev.map((selection, idx) => {
@@ -174,9 +205,37 @@ export default function MultipleChoiceExercise({
     normalizedItems.length > 0 && !allAnswered;
 
   const resetExercise = () => {
+    setHasInteracted(true);
     setChoices(createInitialChoices(items));
     setChecked(false);
   };
+
+  const saveCurrentAnswers = () => {
+    if (typeof onSaveAnswerState !== "function" || !unitKey) {
+      return;
+    }
+
+    onSaveAnswerState({
+      unitKey,
+      sectionKey,
+      answerPayload: {
+        choices: choices.map((choice) => normalizeArray(choice)),
+      },
+    });
+  };
+
+  const clearSavedAnswers = () => {
+    setHasInteracted(true);
+    setChoices(createInitialChoices(items));
+    setChecked(false);
+    if (typeof onClearAnswerState === "function" && unitKey) {
+      onClearAnswerState({ unitKey });
+    }
+  };
+
+  const hasSavedAnswers =
+    Boolean(savedAnswerState) ||
+    choices.some((choice) => normalizeArray(choice).length > 0);
 
   return (
     <div className="fb-wrap mc-wrap">
@@ -320,7 +379,10 @@ export default function MultipleChoiceExercise({
       <div className="fb-button-container">
         {!checked ? (
           <CheckAnswersButton
-            onClick={() => setChecked(true)}
+            onClick={() => {
+              setChecked(true);
+              saveCurrentAnswers();
+            }}
             disabled={!allAnswered}
             label={checkLabel}
             hasIncompleteAnswers={hasIncompleteAnswers}
@@ -331,6 +393,15 @@ export default function MultipleChoiceExercise({
             <button className="apply-submit mc-try-again" type="button" onClick={resetExercise}>
               TRY AGAIN
             </button>
+            {hasSavedAnswers ? (
+              <button
+                className="apply-submit mc-try-again"
+                type="button"
+                onClick={clearSavedAnswers}
+              >
+                CLEAR ANSWERS
+              </button>
+            ) : null}
             <p className="mc-score">You got {score} / {items.length} correct.</p>
           </>
         )}

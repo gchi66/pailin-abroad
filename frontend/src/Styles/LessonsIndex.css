@@ -492,6 +492,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 4.8rem;
 }
 
 .lesson-item:last-of-type {
@@ -508,6 +509,30 @@
 .checkmark-img.checkmark-completed {
   height: 2.5vh;
   width: auto;
+}
+
+.lesson-progress-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+}
+
+.lesson-progress-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  line-height: 1;
+}
+
+.lesson-progress-circle {
+  width: 2.2vh;
+  height: 2.2vh;
+  min-width: 2.2vh;
+  min-height: 2.2vh;
+  display: block;
+  overflow: visible;
 }
 
 .level-checkmark {

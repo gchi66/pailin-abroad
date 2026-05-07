@@ -102,6 +102,10 @@ const isExampleItem = (item) => {
 
 export default function OpenEndedExercise({
   exercise,
+  lessonId,
+  unitKey,
+  sectionKey,
+  savedAnswerState = null,
   images = {},
   audioIndex = {},
   sourceType = "practice",
@@ -109,6 +113,8 @@ export default function OpenEndedExercise({
   userId: userIdProp,
   showTitle = true,
   contentLang = "en",
+  onSaveAnswerState,
+  onClearAnswerState,
 }) {
   const { title, prompt, items = [] } = exercise || {};
   const displayTitle =
@@ -165,6 +171,8 @@ export default function OpenEndedExercise({
   const [isChecking, setIsChecking] = useState(false);
   const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
+  const [hasHydrated, setHasHydrated] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const checkLabel = pick(copy.lessonContent.checkAnswers, contentLang);
   const checkingLabel = pick(copy.lessonContent.checking, contentLang);
 
@@ -173,7 +181,61 @@ export default function OpenEndedExercise({
     setIsChecking(false);
     setHasChecked(false);
     setError("");
-  }, [initialQuestions]);
+    setHasHydrated(false);
+    setHasInteracted(false);
+  }, [initialQuestions, lessonId]);
+
+  useEffect(() => {
+    if (hasHydrated || hasInteracted) {
+      return;
+    }
+    if (!savedAnswerState || typeof savedAnswerState !== "object") {
+      return;
+    }
+
+    const savedQuestions = Array.isArray(savedAnswerState.questions)
+      ? savedAnswerState.questions
+      : [];
+
+    setQuestions(
+      initialQuestions.map((question, idx) => {
+        const savedQuestion = savedQuestions[idx];
+        if (!savedQuestion || typeof savedQuestion !== "object") {
+          return question;
+        }
+
+        const inputCount = getInputCount(items[idx]);
+        const answerParts = Array(inputCount).fill("");
+        if (Array.isArray(savedQuestion.answerParts)) {
+          savedQuestion.answerParts.forEach((part, partIdx) => {
+            if (partIdx < inputCount) {
+              answerParts[partIdx] = typeof part === "string" ? part : "";
+            }
+          });
+        } else if (typeof savedQuestion.answer === "string" && inputCount > 0) {
+          answerParts[0] = savedQuestion.answer;
+        }
+
+        return {
+          ...question,
+          answer: typeof savedQuestion.answer === "string" ? savedQuestion.answer : question.answer,
+          answerParts,
+          correct:
+            typeof savedQuestion.correct === "boolean"
+              ? savedQuestion.correct
+              : question.correct,
+          score:
+            typeof savedQuestion.score === "number"
+              ? savedQuestion.score
+              : question.score,
+          feedback: null,
+          loading: false,
+        };
+      })
+    );
+    setHasChecked(savedQuestions.some((question) => typeof question?.correct === "boolean"));
+    setHasHydrated(true);
+  }, [hasHydrated, hasInteracted, initialQuestions, items, savedAnswerState]);
 
   const questionHasResponse = (question, idx) => {
     if (Array.isArray(question.answerParts) && question.answerParts.length) {
@@ -201,6 +263,7 @@ export default function OpenEndedExercise({
   const hasIncorrect = questions.some((question) => question.correct === false);
 
   const handleAnswerChange = (qIdx, inputIdx, value) => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question, idx) => {
         if (idx !== qIdx || question.correct === true || question.loading)
@@ -227,6 +290,15 @@ export default function OpenEndedExercise({
     }
   };
 
+  const buildAnswerPayload = (questionStates) => ({
+    questions: questionStates.map((question) => ({
+      answer: question.answer || "",
+      answerParts: Array.isArray(question.answerParts) ? question.answerParts : [],
+      correct: typeof question.correct === "boolean" ? question.correct : null,
+      score: typeof question.score === "number" ? question.score : null,
+    })),
+  });
+
   const handleCheckAnswers = async () => {
     if (!userId) {
       setError("Please log in to check your answers.");
@@ -251,6 +323,8 @@ export default function OpenEndedExercise({
           : { ...question, loading: true }
       )
     );
+
+    const finalQuestions = questions.map((question) => ({ ...question }));
 
     await Promise.all(
       pendingIndexes.map(async ({ idx }) => {
@@ -283,49 +357,47 @@ export default function OpenEndedExercise({
           const normalizedCorrect = normalizeAiCorrect(result.correct);
           const scoreValue =
             typeof result.score === "number" ? result.score : null;
-
-          setQuestions((prev) =>
-            prev.map((question, questionIdx) => {
-              if (questionIdx !== idx) return question;
-              return {
-                ...question,
-                loading: false,
-                correct: normalizedCorrect,
-                score: scoreValue,
-                feedback: {
-                  en: result.feedback_en || "",
-                  th: result.feedback_th || "",
-                },
-              };
-            })
-          );
+          finalQuestions[idx] = {
+            ...finalQuestions[idx],
+            loading: false,
+            correct: normalizedCorrect,
+            score: scoreValue,
+            feedback: {
+              en: result.feedback_en || "",
+              th: result.feedback_th || "",
+            },
+          };
         } catch (err) {
-          setQuestions((prev) =>
-            prev.map((question, questionIdx) => {
-              if (questionIdx !== idx) return question;
-              return {
-                ...question,
-                loading: false,
-                correct: false,
-                score: null,
-                feedback: {
-                  en:
-                    err?.message ||
-                    "Unable to check this answer right now. Please try again.",
-                  th: "",
-                },
-              };
-            })
-          );
+          finalQuestions[idx] = {
+            ...finalQuestions[idx],
+            loading: false,
+            correct: false,
+            score: null,
+            feedback: {
+              en:
+                err?.message ||
+                "Unable to check this answer right now. Please try again.",
+              th: "",
+            },
+          };
         }
       })
     );
 
+    setQuestions(finalQuestions);
     setIsChecking(false);
     setHasChecked(true);
+    if (typeof onSaveAnswerState === "function" && unitKey) {
+      onSaveAnswerState({
+        unitKey,
+        sectionKey,
+        answerPayload: buildAnswerPayload(finalQuestions),
+      });
+    }
   };
 
   const handleTryAgain = () => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question, idx) => {
         if (question.correct === false) {
@@ -341,6 +413,26 @@ export default function OpenEndedExercise({
     setHasChecked(false);
     setError("");
   };
+
+  const clearSavedAnswers = () => {
+    setHasInteracted(true);
+    setQuestions(initialQuestions);
+    setIsChecking(false);
+    setHasChecked(false);
+    setError("");
+    if (typeof onClearAnswerState === "function" && unitKey) {
+      onClearAnswerState({ unitKey });
+    }
+  };
+
+  const hasSavedAnswers =
+    Boolean(savedAnswerState) ||
+    questions.some((question, idx) => {
+      if (isExampleItem(items[idx])) return false;
+      if ((question.answer || "").trim()) return true;
+      return Array.isArray(question.answerParts)
+        && question.answerParts.some((part) => String(part || "").trim());
+    });
 
   const firstQuestionEn = resolveQuestionText(items[0], "en");
   const firstQuestionTh = resolveQuestionText(items[0], "th");
@@ -591,22 +683,35 @@ export default function OpenEndedExercise({
       {error && <p className="ai-error-message">{error}</p>}
 
       <div className="fb-button-container">
-        <button
-          className="apply-submit"
-          onClick={handleCheckAnswers}
-          disabled={!canCheck}
-        >
-          {isChecking ? checkingLabel : checkLabel}
-        </button>
-
-        {hasChecked && hasIncorrect && (
+        {!hasChecked ? (
           <button
-            className="apply-submit oe-try-again"
-            onClick={handleTryAgain}
-            type="button"
+            className="apply-submit"
+            onClick={handleCheckAnswers}
+            disabled={!canCheck}
           >
-            TRY AGAIN
+            {isChecking ? checkingLabel : checkLabel}
           </button>
+        ) : (
+          <>
+            {hasIncorrect && (
+              <button
+                className="apply-submit oe-try-again"
+                onClick={handleTryAgain}
+                type="button"
+              >
+                TRY AGAIN
+              </button>
+            )}
+            {hasSavedAnswers && (
+              <button
+                className="apply-submit oe-try-again"
+                onClick={clearSavedAnswers}
+                type="button"
+              >
+                CLEAR ANSWERS
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>

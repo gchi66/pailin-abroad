@@ -19,6 +19,18 @@ routes = Blueprint("routes", __name__)
 
 STAGE_ORDER = ["Beginner", "Intermediate", "Advanced", "Expert"]
 STAGE_RANK = {stage: index for index, stage in enumerate(STAGE_ORDER)}
+WEB_SECTION_ORDER = [
+    "prepare",
+    "comprehension",
+    "transcript",
+    "apply",
+    "understand",
+    "extra_tip",
+    "common_mistake",
+    "phrases_verbs",
+    "culture_note",
+    "practice",
+]
 PATHWAY_LESSON_SELECT = (
     "id, stage, level, lesson_order, lesson_external_id, "
     "title, title_th, subtitle, subtitle_th, "
@@ -125,6 +137,269 @@ def _lesson_sort_key(lesson):
 
 def _elapsed_ms(start):
     return int((time.perf_counter() - start) * 1000)
+
+
+def _is_retryable_supabase_error(exc):
+    message = str(exc or "")
+    retry_markers = (
+        "ConnectionTerminated",
+        "PROTOCOL_ERROR",
+        "COMPRESSION_ERROR",
+    )
+    return any(marker in message for marker in retry_markers)
+
+
+def _execute_with_retry(build_query, label, retries=2, base_delay=0.2):
+    last_error = None
+    for attempt in range(retries + 1):
+        try:
+            return build_query().execute()
+        except Exception as exc:
+            last_error = exc
+            is_retryable = _is_retryable_supabase_error(exc)
+            if attempt >= retries or not is_retryable:
+                raise
+            delay = base_delay * (attempt + 1)
+            print(
+                f"Retrying {label} after transient Supabase error "
+                f"(attempt {attempt + 1}/{retries + 1}): {exc}",
+                flush=True,
+            )
+            time.sleep(delay)
+    raise last_error
+
+
+def _build_section_unit_key(raw_id):
+    return f"section:{raw_id}"
+
+
+def _build_exercise_unit_key(raw_id):
+    return f"exercise:{raw_id}"
+
+
+def _build_web_lesson_expectations(lesson_ids):
+    lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
+    if not lesson_ids:
+        return {}
+
+    sections_result = _execute_with_retry(
+        lambda: (
+            supabase.table("lesson_sections")
+            .select("lesson_id, id, type, sort_order")
+            .in_("lesson_id", lesson_ids)
+            .order("sort_order", desc=False)
+        ),
+        "lesson_sections progress expectations",
+    )
+    transcript_result = _execute_with_retry(
+        lambda: (
+            supabase.table("transcript_lines")
+            .select("lesson_id")
+            .in_("lesson_id", lesson_ids)
+        ),
+        "transcript_lines progress expectations",
+    )
+    comprehension_result = _execute_with_retry(
+        lambda: (
+            supabase.table("comprehension_questions")
+            .select("lesson_id, id")
+            .in_("lesson_id", lesson_ids)
+        ),
+        "comprehension_questions progress expectations",
+    )
+    exercises_result = _execute_with_retry(
+        lambda: (
+            supabase.table("practice_exercises")
+            .select("lesson_id, id, title, title_th, sort_order")
+            .in_("lesson_id", lesson_ids)
+            .order("sort_order", desc=False)
+        ),
+        "practice_exercises progress expectations",
+    )
+    lesson_phrases_result = _execute_with_retry(
+        lambda: (
+            supabase.table("lesson_phrases")
+            .select("lesson_id, phrase_id")
+            .in_("lesson_id", lesson_ids)
+        ),
+        "lesson_phrases progress expectations",
+    )
+
+    lesson_phrase_links = lesson_phrases_result.data or []
+    phrase_ids = sorted({
+        row.get("phrase_id")
+        for row in lesson_phrase_links
+        if row.get("phrase_id")
+    })
+    phrases_by_id = {}
+    if phrase_ids:
+        phrases_result = _execute_with_retry(
+            lambda: (
+                supabase.table("phrases")
+                .select("id, content, content_th, content_jsonb, content_jsonb_th")
+                .in_("id", phrase_ids)
+            ),
+            "phrases progress expectations",
+        )
+        phrases_by_id = {
+            phrase.get("id"): phrase
+            for phrase in (phrases_result.data or [])
+            if phrase.get("id")
+        }
+
+    sections_by_lesson = defaultdict(list)
+    for row in sections_result.data or []:
+        sections_by_lesson[row.get("lesson_id")].append(row)
+
+    transcript_counts = defaultdict(int)
+    for row in transcript_result.data or []:
+        transcript_counts[row.get("lesson_id")] += 1
+
+    comprehension_counts = defaultdict(int)
+    for row in comprehension_result.data or []:
+        comprehension_counts[row.get("lesson_id")] += 1
+
+    exercises_by_lesson = defaultdict(list)
+    for row in exercises_result.data or []:
+        exercises_by_lesson[row.get("lesson_id")].append(row)
+
+    has_phrase_content = defaultdict(bool)
+    for link in lesson_phrase_links:
+        lesson_id = link.get("lesson_id")
+        phrase = phrases_by_id.get(link.get("phrase_id")) or {}
+        content = (phrase.get("content") or "").strip()
+        content_th = (phrase.get("content_th") or "").strip()
+        content_jsonb = phrase.get("content_jsonb")
+        content_jsonb_th = phrase.get("content_jsonb_th")
+        if content or content_th or content_jsonb or content_jsonb_th:
+            has_phrase_content[lesson_id] = True
+
+    expectations = {}
+    for lesson_id in lesson_ids:
+        lesson_sections = sections_by_lesson.get(lesson_id, [])
+        section_by_type = {}
+        allow_inline_quick = False
+        for section in lesson_sections:
+            section_type = (section.get("type") or "").lower()
+            if section_type and section_type not in section_by_type:
+                section_by_type[section_type] = section
+            if section_type in {"understand", "extra_tip"}:
+                allow_inline_quick = True
+
+        exercise_rows = exercises_by_lesson.get(lesson_id, [])
+        visible_exercise_keys = []
+        practice_exercise_keys = []
+        for exercise in exercise_rows:
+            title = (exercise.get("title") or "").strip().lower()
+            title_th = (exercise.get("title_th") or "").strip()
+            is_quick = title.startswith("quick practice") or "แบบฝึกหัด" in title_th
+            if is_quick and not allow_inline_quick:
+                continue
+            unit_key = _build_exercise_unit_key(exercise.get("id"))
+            visible_exercise_keys.append(unit_key)
+            practice_exercise_keys.append(unit_key)
+
+        visible_section_keys = []
+        for section_type in WEB_SECTION_ORDER:
+            if section_type == "prepare":
+                if section_by_type.get("prepare"):
+                    visible_section_keys.append(_build_section_unit_key("prepare"))
+                continue
+            if section_type == "comprehension":
+                if comprehension_counts.get(lesson_id, 0) > 0:
+                    visible_section_keys.append(_build_section_unit_key("comprehension"))
+                continue
+            if section_type == "transcript":
+                if transcript_counts.get(lesson_id, 0) > 0:
+                    visible_section_keys.append(_build_section_unit_key("transcript"))
+                continue
+            if section_type == "practice":
+                if visible_exercise_keys:
+                    visible_section_keys.append(_build_section_unit_key("practice"))
+                continue
+            if section_type == "phrases_verbs":
+                if has_phrase_content.get(lesson_id):
+                    visible_section_keys.append(_build_section_unit_key("phrases_verbs"))
+                continue
+            section = section_by_type.get(section_type)
+            if section and section.get("id"):
+                visible_section_keys.append(_build_section_unit_key(section.get("id")))
+
+        comprehension_unit_keys = []
+        if comprehension_counts.get(lesson_id, 0) > 0:
+            comprehension_unit_keys.append(_build_exercise_unit_key("comprehension_quiz"))
+
+        all_visible_unit_keys = [
+            *visible_section_keys,
+            *visible_exercise_keys,
+            *comprehension_unit_keys,
+        ]
+
+        expectations[lesson_id] = {
+            "section_unit_keys": visible_section_keys,
+            "exercise_unit_keys": visible_exercise_keys,
+            "comprehension_unit_keys": comprehension_unit_keys,
+            "all_visible_unit_keys": all_visible_unit_keys,
+        }
+
+    return expectations
+
+
+def _summarize_web_lesson_progress(lesson_ids, progress_rows, unit_rows):
+    expectations = _build_web_lesson_expectations(lesson_ids)
+    progress_by_lesson = {
+        row.get("lesson_id"): row
+        for row in (progress_rows or [])
+        if row.get("lesson_id")
+    }
+    seen_units_by_lesson = defaultdict(set)
+    completed_units_by_lesson = defaultdict(set)
+    for row in unit_rows or []:
+        lesson_id = row.get("lesson_id")
+        unit_key = row.get("unit_key")
+        if lesson_id and unit_key:
+            seen_units_by_lesson[lesson_id].add(unit_key)
+        if row.get("is_completed") and lesson_id and unit_key:
+            completed_units_by_lesson[lesson_id].add(unit_key)
+
+    summaries = {}
+    for lesson_id in lesson_ids:
+        progress_row = progress_by_lesson.get(lesson_id) or {}
+        expected = expectations.get(lesson_id) or {
+            "section_unit_keys": [],
+            "exercise_unit_keys": [],
+            "comprehension_unit_keys": [],
+            "all_visible_unit_keys": [],
+        }
+        completed_units = completed_units_by_lesson.get(lesson_id, set())
+        visible_units = expected["all_visible_unit_keys"]
+        total_units = len(visible_units)
+        completed_count = sum(1 for key in visible_units if key in completed_units)
+
+        practice_exercise_keys = expected["exercise_unit_keys"]
+        all_practice_exercises_completed = (
+            len(practice_exercise_keys) > 0
+            and all(key in completed_units for key in practice_exercise_keys)
+        )
+        manually_completed = bool(progress_row.get("is_completed"))
+        is_completed = manually_completed or all_practice_exercises_completed
+        has_started = bool(progress_row) or bool(seen_units_by_lesson.get(lesson_id)) or completed_count > 0
+        percent_complete = 100 if is_completed else (
+            round((completed_count / total_units) * 100) if total_units > 0 else 0
+        )
+
+        summaries[lesson_id] = {
+            "lesson_id": lesson_id,
+            "has_started": has_started,
+            "percent_complete": percent_complete,
+            "is_completed": is_completed,
+            "manually_completed": manually_completed,
+            "all_practice_exercises_completed": all_practice_exercises_completed,
+            "completed_units": completed_count,
+            "total_units": total_units,
+        }
+
+    return summaries
 
 
 def handle_options(f):
@@ -1423,7 +1698,10 @@ def get_level_completion_status(stage, level):
         user_id = user_response.user.id
 
         # Get all lessons for this stage and level
-        lessons_result = supabase.table('lessons').select('id').eq('stage', stage).eq('level', level).execute()
+        lessons_result = _execute_with_retry(
+            lambda: supabase.table('lessons').select('id').eq('stage', stage).eq('level', level),
+            "level completion lessons",
+        )
         all_lessons = lessons_result.data if lessons_result.data else []
 
         if not all_lessons:
@@ -1431,12 +1709,34 @@ def get_level_completion_status(stage, level):
 
         lesson_ids = [lesson['id'] for lesson in all_lessons]
 
-        # Get completed lessons for this user in this stage/level
-        completed_result = supabase.table('user_lesson_progress').select('lesson_id').eq('user_id', user_id).eq('is_completed', True).in_('lesson_id', lesson_ids).execute()
-        completed_lessons = completed_result.data if completed_result.data else []
-
         total_lessons = len(all_lessons)
-        completed_count = len(completed_lessons)
+        progress_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_progress')
+                .select('lesson_id, is_completed')
+                .eq('user_id', user_id)
+                .in_('lesson_id', lesson_ids)
+            ),
+            "level completion lesson progress",
+        )
+        unit_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_unit_progress')
+                .select('lesson_id, unit_key, is_completed')
+                .eq('user_id', user_id)
+                .in_('lesson_id', lesson_ids)
+            ),
+            "level completion unit progress",
+        )
+        summaries = _summarize_web_lesson_progress(
+            lesson_ids,
+            progress_result.data or [],
+            unit_result.data or [],
+        )
+        completed_count = sum(
+            1 for lesson_id in lesson_ids
+            if (summaries.get(lesson_id) or {}).get("is_completed")
+        )
         is_completed = completed_count == total_lessons and total_lessons > 0
 
         return jsonify({
@@ -1447,6 +1747,61 @@ def get_level_completion_status(stage, level):
 
     except Exception as e:
         print(f"Error checking level completion status: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/user/lesson-progress-summaries', methods=['POST'])
+@handle_options
+def get_lesson_progress_summaries():
+    try:
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+        data = request.get_json(silent=True) or {}
+        lesson_ids = data.get("lesson_ids") or []
+        if not isinstance(lesson_ids, list):
+            return jsonify({"error": "lesson_ids must be an array"}), 400
+
+        lesson_ids = [lesson_id for lesson_id in lesson_ids if isinstance(lesson_id, str) and lesson_id]
+        if not lesson_ids:
+            return jsonify({"progress_by_lesson": {}}), 200
+
+        progress_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_progress')
+                .select('lesson_id, is_completed')
+                .eq('user_id', user_id)
+                .in_('lesson_id', lesson_ids)
+            ),
+            "lesson progress summaries lesson progress",
+        )
+        unit_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_unit_progress')
+                .select('lesson_id, unit_key, is_completed')
+                .eq('user_id', user_id)
+                .in_('lesson_id', lesson_ids)
+            ),
+            "lesson progress summaries unit progress",
+        )
+
+        summaries = _summarize_web_lesson_progress(
+            lesson_ids,
+            progress_result.data or [],
+            unit_result.data or [],
+        )
+
+        return jsonify({"progress_by_lesson": summaries}), 200
+    except Exception as e:
+        print(f"Error fetching lesson progress summaries: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
 

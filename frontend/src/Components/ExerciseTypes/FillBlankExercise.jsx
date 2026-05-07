@@ -390,6 +390,10 @@ const buildAnswersByBlank = (item) => {
 
 export default function FillBlankExercise({
   exercise,
+  lessonId,
+  unitKey,
+  sectionKey,
+  savedAnswerState = null,
   images = {},
   audioIndex = {},
   sourceType = "practice",
@@ -397,6 +401,8 @@ export default function FillBlankExercise({
   userId: userIdProp,
   showTitle = true,
   contentLang = "en",
+  onSaveAnswerState,
+  onClearAnswerState,
 }) {
   const {
     title,
@@ -453,6 +459,8 @@ export default function FillBlankExercise({
   const [isChecking, setIsChecking] = useState(false);
   const [hasChecked, setHasChecked] = useState(false);
   const [error, setError] = useState("");
+  const [hasHydrated, setHasHydrated] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const rowTextRefs = useRef([]);
   const [wrappedRows, setWrappedRows] = useState([]);
 
@@ -461,7 +469,52 @@ export default function FillBlankExercise({
     setIsChecking(false);
     setHasChecked(false);
     setError("");
-  }, [initialQuestions]);
+    setHasHydrated(false);
+    setHasInteracted(false);
+  }, [initialQuestions, lessonId]);
+
+  useEffect(() => {
+    if (hasHydrated || hasInteracted) {
+      return;
+    }
+    if (!savedAnswerState || typeof savedAnswerState !== "object") {
+      return;
+    }
+
+    const savedQuestions = Array.isArray(savedAnswerState.questions)
+      ? savedAnswerState.questions
+      : [];
+
+    setQuestions(
+      initialQuestions.map((question, idx) => {
+        const savedQuestion = savedQuestions[idx];
+        if (!savedQuestion || typeof savedQuestion !== "object") {
+          return question;
+        }
+
+        return {
+          ...question,
+          answer: typeof savedQuestion.answer === "string" ? savedQuestion.answer : question.answer,
+          answersByBlank:
+            savedQuestion.answersByBlank && typeof savedQuestion.answersByBlank === "object"
+              ? savedQuestion.answersByBlank
+              : question.answersByBlank,
+          correct:
+            typeof savedQuestion.correct === "boolean"
+              ? savedQuestion.correct
+              : question.correct,
+          score:
+            typeof savedQuestion.score === "number"
+              ? savedQuestion.score
+              : question.score,
+          feedback: null,
+          loading: false,
+        };
+      })
+    );
+    setHasChecked(savedQuestions.some((question) => typeof question?.correct === "boolean"));
+    setHasHydrated(true);
+  }, [hasHydrated, hasInteracted, initialQuestions, savedAnswerState]);
 
   useLayoutEffect(() => {
     const elements = rowTextRefs.current;
@@ -539,6 +592,7 @@ export default function FillBlankExercise({
   const checkingLabel = pick(copy.lessonContent.checking, contentLang);
 
   const handleAnswerChange = (idx, value) => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question, questionIdx) => {
         if (questionIdx !== idx || question.correct === true || question.loading)
@@ -552,6 +606,7 @@ export default function FillBlankExercise({
   };
 
   const handleBlankAnswerChange = (idx, blankId, value, item) => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question, questionIdx) => {
         if (questionIdx !== idx || question.correct === true || question.loading)
@@ -575,6 +630,18 @@ export default function FillBlankExercise({
       setError("");
     }
   };
+
+  const buildAnswerPayload = (questionStates) => ({
+    questions: questionStates.map((question) => ({
+      answer: question.answer || "",
+      answersByBlank:
+        question.answersByBlank && typeof question.answersByBlank === "object"
+          ? question.answersByBlank
+          : {},
+      correct: typeof question.correct === "boolean" ? question.correct : null,
+      score: typeof question.score === "number" ? question.score : null,
+    })),
+  });
 
   const handleCheckAnswers = async () => {
     if (!userId) {
@@ -602,6 +669,8 @@ export default function FillBlankExercise({
       )
     );
 
+    const finalQuestions = questions.map((question) => ({ ...question }));
+
     await Promise.all(
       pendingIndexes.map(async (idx) => {
         const item = items[idx] || {};
@@ -627,49 +696,47 @@ export default function FillBlankExercise({
           const normalizedCorrect = normalizeAiCorrect(result.correct);
           const scoreValue =
             typeof result.score === "number" ? result.score : null;
-
-          setQuestions((prev) =>
-            prev.map((question, questionIdx) => {
-              if (questionIdx !== idx) return question;
-              return {
-                ...question,
-                loading: false,
-                correct: normalizedCorrect,
-                score: scoreValue,
-                feedback: {
-                  en: result.feedback_en || "",
-                  th: result.feedback_th || "",
-                },
-              };
-            })
-          );
+          finalQuestions[idx] = {
+            ...finalQuestions[idx],
+            loading: false,
+            correct: normalizedCorrect,
+            score: scoreValue,
+            feedback: {
+              en: result.feedback_en || "",
+              th: result.feedback_th || "",
+            },
+          };
         } catch (err) {
-          setQuestions((prev) =>
-            prev.map((question, questionIdx) => {
-              if (questionIdx !== idx) return question;
-              return {
-                ...question,
-                loading: false,
-                correct: false,
-                score: null,
-                feedback: {
-                  en:
-                    err?.message ||
-                    "Unable to check this answer right now. Please try again.",
-                  th: "",
-                },
-              };
-            })
-          );
+          finalQuestions[idx] = {
+            ...finalQuestions[idx],
+            loading: false,
+            correct: false,
+            score: null,
+            feedback: {
+              en:
+                err?.message ||
+                "Unable to check this answer right now. Please try again.",
+              th: "",
+            },
+          };
         }
       })
     );
 
+    setQuestions(finalQuestions);
     setIsChecking(false);
     setHasChecked(true);
+    if (typeof onSaveAnswerState === "function" && unitKey) {
+      onSaveAnswerState({
+        unitKey,
+        sectionKey,
+        answerPayload: buildAnswerPayload(finalQuestions),
+      });
+    }
   };
 
   const handleTryAgain = () => {
+    setHasInteracted(true);
     setQuestions((prev) =>
       prev.map((question) => {
         if (question.correct === false) {
@@ -682,6 +749,26 @@ export default function FillBlankExercise({
     setHasChecked(false);
     setError("");
   };
+
+  const clearSavedAnswers = () => {
+    setHasInteracted(true);
+    setQuestions(initialQuestions);
+    setIsChecking(false);
+    setHasChecked(false);
+    setError("");
+    if (typeof onClearAnswerState === "function" && unitKey) {
+      onClearAnswerState({ unitKey });
+    }
+  };
+
+  const hasSavedAnswers =
+    Boolean(savedAnswerState) ||
+    questions.some((question, idx) => {
+      if (isExampleItem(items[idx])) return false;
+      if ((question.answer || "").trim()) return true;
+      return question.answersByBlank
+        && Object.values(question.answersByBlank).some((value) => String(value || "").trim());
+    });
 
   const renderPromptBlocks = () => {
     if (!promptBlocks?.length) {
@@ -1742,17 +1829,19 @@ export default function FillBlankExercise({
       {error && <p className="ai-error-message">{error}</p>}
 
       <div className="fb-button-container">
-        <CheckAnswersButton
-          onClick={handleCheckAnswers}
-          disabled={!canCheck}
-          isChecking={isChecking}
-          label={checkLabel}
-          checkingLabel={checkingLabel}
-          hasIncompleteAnswers={hasIncompleteAnswers}
-          contentLang={contentLang}
-        />
+        {!hasChecked ? (
+          <CheckAnswersButton
+            onClick={handleCheckAnswers}
+            disabled={!canCheck}
+            isChecking={isChecking}
+            label={checkLabel}
+            checkingLabel={checkingLabel}
+            hasIncompleteAnswers={hasIncompleteAnswers}
+            contentLang={contentLang}
+          />
+        ) : null}
 
-        {hasChecked && hasIncorrect && (
+        {hasChecked && hasIncorrect ? (
           <button
             className="apply-submit fb-try-again"
             type="button"
@@ -1760,7 +1849,16 @@ export default function FillBlankExercise({
           >
             TRY AGAIN
           </button>
-        )}
+        ) : null}
+        {hasChecked && hasSavedAnswers ? (
+          <button
+            className="apply-submit fb-try-again"
+            type="button"
+            onClick={clearSavedAnswers}
+          >
+            CLEAR ANSWERS
+          </button>
+        ) : null}
       </div>
     </div>
   );

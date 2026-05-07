@@ -9,7 +9,7 @@ const STATUS_ICONS = {
 const DEFAULT_MESSAGES = {
   correct: "Great job!",
   partial: "Almost there—review the suggestion.",
-  incorrect: "Keep practicing! Check the feedback below.",
+  incorrect: "Incorrect.",
 };
 
 export function deriveStatus(correct, score) {

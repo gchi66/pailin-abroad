@@ -4,6 +4,18 @@ import { useParams } from "react-router-dom";
 import supabaseClient from "../supabaseClient";
 import { fetchResolvedLesson, prefetchResolvedLesson } from "../lib/fetchResolvedLesson";
 import { fetchSnippets, fetchPhrasesSnippets } from "../lib/fetchSnippets";
+import {
+  buildExerciseUnitKey,
+  clearLessonAnswerState,
+  fetchLessonAnswerStates,
+  saveLessonAnswerState,
+} from "../lib/lessonAnswerState";
+import {
+  buildSectionUnitKey,
+  fetchLessonResumeActiveId,
+  saveExerciseCompletionProgress,
+  saveSectionVisitProgress,
+} from "../lib/lessonProgressState";
 import { API_BASE_URL } from "../config/api";
 
 import LessonHeader from "../Components/LessonHeader";
@@ -16,6 +28,7 @@ import LessonNavigationBanner from "../Components/LessonNavigationBanner";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
+import { useAuth } from "../AuthContext";
 import PrepareCard from "../Components/PrepareCard";
 
 import "../Styles/Lesson.css";
@@ -393,6 +406,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const lastActiveRef = useRef(null);
   useEffect(() => { lastActiveRef.current = activeId; }, [activeId]);
   const { id } = useParams();
+  const { user } = useAuth();
 
   // Content language persists via localStorage (shared with exercise/topic sections)
   const [contentLang, setContentLangState] = useState(() => {
@@ -425,6 +439,8 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     setIsSidebarStuck(false);
     setSidebarHeight(0);
     setShowStickyToggle(false);
+    setSavedAnswerStateByUnit({});
+    trackedSectionKeysRef.current = new Set();
     audioFetchKeyRef.current = null;
   }, [id]);
 
@@ -433,6 +449,44 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
       localStorage.setItem("contentLang", contentLang);
     }
   }, [contentLang]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+        const userId = session?.user?.id;
+
+        if (!userId || !id) {
+          if (!cancelled) {
+            setSavedAnswerStateByUnit({});
+          }
+          return;
+        }
+
+        const answerStateMap = await fetchLessonAnswerStates({
+          userId,
+          lessonId: id,
+        });
+
+        if (!cancelled) {
+          setSavedAnswerStateByUnit(answerStateMap);
+        }
+      } catch (error) {
+        console.error("Error fetching lesson answer state:", error);
+        if (!cancelled) {
+          setSavedAnswerStateByUnit({});
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
 
   // UI language for site-wide labels + header
   const { ui: uiLang } = useUiLang();
@@ -448,6 +502,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const [isLocked, setIsLocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
+  const [savedAnswerStateByUnit, setSavedAnswerStateByUnit] = useState({});
 
 
   // Audio + snippets
@@ -461,6 +516,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const [isSidebarStuck, setIsSidebarStuck] = useState(false);
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [isMobileView, setIsMobileView] = useState(false);
+  const trackedSectionKeysRef = useRef(new Set());
   const handleSelectSection = useCallback((id) => {
     shouldAutoScrollRef.current = true;
     setActiveId(id);
@@ -476,6 +532,140 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     const normalized = lang === "th" ? "th" : "en";
     setContentLangState(normalized);
   }, []);
+
+  const visiblePracticeExerciseUnitKeys = React.useMemo(() => {
+    const hasInlineQuickSections = sections.some((section) => {
+      const type = (section?.type || "").toLowerCase();
+      return type === "understand" || type === "extra_tip";
+    });
+
+    return practiceExercises
+      .filter((exercise) => {
+        const title = (exercise?.title_en || exercise?.title || "").trim().toLowerCase();
+        const titleTh = (exercise?.title_th || "").trim();
+        const isQuick = title.startsWith("quick practice") || titleTh.includes("แบบฝึกหัด");
+        if (isQuick && !hasInlineQuickSections) {
+          return false;
+        }
+        return Boolean(exercise?.id);
+      })
+      .map((exercise) => buildExerciseUnitKey(exercise.id));
+  }, [practiceExercises, sections]);
+
+  const onSaveAnswerState = useCallback(async ({ unitKey, answerPayload, sectionKey }) => {
+    try {
+      const {
+        data: { session },
+      } = await supabaseClient.auth.getSession();
+      const userId = session?.user?.id;
+
+      if (!userId || !id || !unitKey) {
+        return;
+      }
+
+      await saveLessonAnswerState({
+        userId,
+        lessonId: id,
+        unitKey,
+        answerPayload,
+      });
+
+      const nextAnswerStateByUnit = {
+        ...savedAnswerStateByUnit,
+        [unitKey]: answerPayload,
+      };
+      const shouldMarkLessonComplete =
+        visiblePracticeExerciseUnitKeys.length > 0 &&
+        visiblePracticeExerciseUnitKeys.every((exerciseUnitKey) =>
+          exerciseUnitKey === unitKey || Object.prototype.hasOwnProperty.call(nextAnswerStateByUnit, exerciseUnitKey)
+        );
+
+      await saveExerciseCompletionProgress({
+        userId,
+        lessonId: id,
+        unitKey,
+        sectionKey,
+        isCompleted: shouldMarkLessonComplete,
+      });
+
+      setSavedAnswerStateByUnit((prev) => ({
+        ...prev,
+        [unitKey]: answerPayload,
+      }));
+    } catch (error) {
+      console.error("Error saving lesson answer state:", error);
+    }
+  }, [id, savedAnswerStateByUnit, visiblePracticeExerciseUnitKeys]);
+
+  const onClearAnswerState = useCallback(async ({ unitKey }) => {
+    try {
+      const {
+        data: { session },
+      } = await supabaseClient.auth.getSession();
+      const userId = session?.user?.id;
+
+      if (!userId || !id || !unitKey) {
+        return;
+      }
+
+      await clearLessonAnswerState({
+        userId,
+        lessonId: id,
+        unitKey,
+      });
+
+      setSavedAnswerStateByUnit((prev) => {
+        const next = { ...prev };
+        delete next[unitKey];
+        return next;
+      });
+    } catch (error) {
+      console.error("Error clearing lesson answer state:", error);
+    }
+  }, [id]);
+
+  const persistSectionVisit = useCallback(async (sectionKey) => {
+    try {
+      if (!user?.id || !lesson?.id || !sectionKey) {
+        return;
+      }
+
+      const trackedKey = `${lesson.id}:${sectionKey}`;
+      if (trackedSectionKeysRef.current.has(trackedKey)) {
+        return;
+      }
+
+      await saveSectionVisitProgress({
+        userId: user.id,
+        lessonId: lesson.id,
+        sectionKey,
+      });
+      trackedSectionKeysRef.current.add(trackedKey);
+    } catch (error) {
+      console.error("Error saving lesson section progress:", error);
+    }
+  }, [lesson?.id, user?.id]);
+
+  useEffect(() => {
+    if (!activeId || !lesson?.id || !user?.id) {
+      return;
+    }
+
+    persistSectionVisit(buildSectionUnitKey(activeId));
+  }, [activeId, lesson?.id, persistSectionVisit, user?.id]);
+
+  useEffect(() => {
+    if (!lesson?.id || !user?.id) {
+      return;
+    }
+
+    const hasPrepareSection = sections.some((section) => section?.type === "prepare");
+    if (!hasPrepareSection) {
+      return;
+    }
+
+    persistSectionVisit(buildSectionUnitKey("prepare"));
+  }, [lesson?.id, persistSectionVisit, sections, user?.id]);
 
   const {
     registerLessonToggle,
@@ -841,8 +1031,18 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     (async () => {
       try {
         setLoadError(null);
-        // 1) fetch resolved payload from backend
-        const payload = await fetchResolvedLesson(id, contentLang);
+        const [payload, resumeActiveId] = await Promise.all([
+          fetchResolvedLesson(id, contentLang),
+          user?.id
+            ? fetchLessonResumeActiveId({
+                userId: user.id,
+                lessonId: id,
+              }).catch((error) => {
+                console.error("Error fetching lesson resume state:", error);
+                return null;
+              })
+            : Promise.resolve(null),
+        ]);
         if (cancelled) return;
         setIsLocked(payload.locked || false);
 
@@ -925,13 +1125,22 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
         // 2) initial active section: only set if not already chosen
         setActiveId(prev => {
           if (prev) return prev;
-          return computeDefaultActiveId({
+          const defaultActiveId = computeDefaultActiveId({
             sections: payload.sections || [],
             questions: normalizedQuestions,
             transcript: payload.transcript || [],
             practiceExercises: normalizedExercises,
             lessonPhrases: payload.phrases || [],
           });
+          const canResume = resumeActiveId && tabExists({
+            id: resumeActiveId,
+            sections: payload.sections || [],
+            questions: normalizedQuestions,
+            transcript: payload.transcript || [],
+            practiceExercises: normalizedExercises,
+            lessonPhrases: payload.phrases || [],
+          });
+          return canResume ? resumeActiveId : defaultActiveId;
         });
 
         // Restore tab after all state is set
@@ -993,7 +1202,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
     return () => {
       cancelled = true;
     };
-  }, [id, contentLang]); // refetch when lesson id or content language changes
+  }, [id, contentLang, user?.id]); // refetch when lesson id, content language, or auth state changes
 
   useEffect(() => {
     if (!lesson) return;
@@ -1270,6 +1479,8 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
               uiLang={uiLang}
               snipIdx={snipIdx}
               phrasesSnipIdx={phrasesSnipIdx}
+              lessonId={lesson?.id ?? id}
+              savedAnswerStateByUnit={savedAnswerStateByUnit}
               contentLang={contentLang}
               setContentLang={setContentLang}
               images={images}
@@ -1279,6 +1490,8 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
               toggleLoginModal={toggleLoginModal}
               toggleSignupModal={toggleSignupModal}
               onSelectSection={handleSelectSection}
+              onSaveAnswerState={onSaveAnswerState}
+              onClearAnswerState={onClearAnswerState}
             />
           </div>
         </div>

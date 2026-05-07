@@ -4,6 +4,7 @@ import MultipleChoiceExercise from "./ExerciseTypes/MultipleChoiceExercise";
 import OpenEndedExercise from "./ExerciseTypes/OpenEndedExercise";
 import SentenceTransformExercise from "./ExerciseTypes/SentenceTransformExercise";
 import { copy, pick } from "../ui-lang/i18n";
+import { buildExerciseUnitKey } from "../lib/lessonAnswerState";
 
 import "../Styles/PracticeSection.css";
 
@@ -85,9 +86,14 @@ export default function PracticeSection({
   uiLang = "en",
   hideQuick = true,
   wrapInDetails = true,
+  lessonId,
+  sectionKey,
+  savedAnswerStateByUnit = {},
   images = {},
   audioIndex = {},
   contentLang = "en",
+  onSaveAnswerState,
+  onClearAnswerState,
 }) {
   const normalizedCacheRef = useRef(new WeakMap());
 
@@ -139,12 +145,18 @@ export default function PracticeSection({
         const rendererProps = {
           exercise: ex,
           uiLang,
+          lessonId,
+          unitKey: buildExerciseUnitKey(ex.id),
+          sectionKey,
+          savedAnswerState: savedAnswerStateByUnit[buildExerciseUnitKey(ex.id)] ?? null,
           images,
           audioIndex,
           sourceType: "practice",
           exerciseId: ex.id,
           showTitle: !wrapInDetails && !ex.isQuickPractice,
           contentLang,
+          onSaveAnswerState,
+          onClearAnswerState,
         };
 
         if (!wrapInDetails) {

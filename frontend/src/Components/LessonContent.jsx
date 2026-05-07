@@ -23,6 +23,8 @@ export default function LessonContent({
   uiLang = "en",
   snipIdx = {},
   phrasesSnipIdx = {},
+  lessonId,
+  savedAnswerStateByUnit = {},
   contentLang = "en",
   setContentLang,
   images = {},
@@ -31,6 +33,8 @@ export default function LessonContent({
   toggleLoginModal,
   toggleSignupModal,
   onSelectSection,
+  onSaveAnswerState,
+  onClearAnswerState,
 }) {
   const navigate = useNavigate();
   const { showStickyToggle } = useStickyLessonToggle();
@@ -305,7 +309,15 @@ export default function LessonContent({
           </div>
         </header>
 
-        <ComprehensionQuiz questions={questions} contentLang={contentLang} images={images} />
+        <ComprehensionQuiz
+          questions={questions}
+          contentLang={contentLang}
+          images={images}
+          lessonId={lessonId}
+          savedAnswerState={savedAnswerStateByUnit["exercise:comprehension_quiz"] ?? null}
+          onSaveAnswerState={onSaveAnswerState}
+          onClearAnswerState={onClearAnswerState}
+        />
       </article>
     );
   }
@@ -396,9 +408,14 @@ export default function LessonContent({
         <PracticeSection
           exercises={practiceExercises.filter((ex) => !ex?.isQuickPractice)}
           uiLang={uiLang}
+          lessonId={lessonId}
+          sectionKey="section:practice"
+          savedAnswerStateByUnit={savedAnswerStateByUnit}
           images={images}
           audioIndex={snipIdx}
           contentLang={contentLang}
+          onSaveAnswerState={onSaveAnswerState}
+          onClearAnswerState={onClearAnswerState}
         />
       </article>
     );
@@ -760,9 +777,14 @@ export default function LessonContent({
               uiLang={uiLang}
               hideQuick={false}
               wrapInDetails={false}
+              lessonId={lessonId}
+              sectionKey={`section:${section.id}`}
+              savedAnswerStateByUnit={savedAnswerStateByUnit}
               images={images}
               audioIndex={snipIdx}
               contentLang={contentLang}
+              onSaveAnswerState={onSaveAnswerState}
+              onClearAnswerState={onClearAnswerState}
             />
           )}
         />
