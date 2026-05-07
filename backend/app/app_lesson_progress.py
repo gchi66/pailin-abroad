@@ -579,8 +579,10 @@ def summarize_app_lesson_progress(lesson_ids, progress_rows, unit_rows, expectat
         completed_units = completed_units_by_lesson.get(lesson_id, set())
         completed_count = sum(1 for unit_key in expected_unit_keys if unit_key in completed_units)
         total_units = len(expected_unit_keys)
-        is_completed = total_units > 0 and completed_count >= total_units
         progress_row = progress_by_lesson.get(lesson_id) or {}
+        manually_completed = bool(progress_row.get("is_completed"))
+        organically_completed = total_units > 0 and completed_count >= total_units
+        is_completed = manually_completed or organically_completed
         has_started = bool(seen_units_by_lesson.get(lesson_id)) or bool(
             is_app_unit_key(progress_row.get("last_unit_key"))
         )
@@ -592,8 +594,11 @@ def summarize_app_lesson_progress(lesson_ids, progress_rows, unit_rows, expectat
         summaries[lesson_id] = {
             "lesson_id": lesson_id,
             "has_started": has_started,
-            "percent_complete": round((completed_count / total_units) * 100) if total_units > 0 else 0,
+            "percent_complete": 100 if is_completed else (
+                round((completed_count / total_units) * 100) if total_units > 0 else 0
+            ),
             "is_completed": is_completed,
+            "manually_completed": manually_completed,
             "completed_units": completed_count,
             "total_units": total_units,
             "resume": resume,
