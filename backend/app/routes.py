@@ -2,6 +2,11 @@ from flask import Blueprint, request, jsonify
 from functools import wraps
 from app.supabase_client import supabase, supabase_admin
 from app.resolver import resolve_lesson
+from app.app_lesson_progress import (
+    build_app_lesson_expectations,
+    build_app_lesson_expectations_for_many,
+    summarize_app_lesson_progress,
+)
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
@@ -1802,6 +1807,138 @@ def get_lesson_progress_summaries():
         return jsonify({"progress_by_lesson": summaries}), 200
     except Exception as e:
         print(f"Error fetching lesson progress summaries: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/app/user/lesson-progress-summaries', methods=['POST'])
+@handle_options
+def get_app_lesson_progress_summaries():
+    try:
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+        data = request.get_json(silent=True) or {}
+        lesson_ids = data.get("lesson_ids") or []
+        if not isinstance(lesson_ids, list):
+            return jsonify({"error": "lesson_ids must be an array"}), 400
+
+        lesson_ids = [lesson_id for lesson_id in lesson_ids if isinstance(lesson_id, str) and lesson_id]
+        if not lesson_ids:
+            return jsonify({"progress_by_lesson": {}}), 200
+
+        progress_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_progress')
+                .select('lesson_id, is_completed, last_unit_type, last_unit_key')
+                .eq('user_id', user_id)
+                .in_('lesson_id', lesson_ids)
+            ),
+            "app lesson progress summaries lesson progress",
+        )
+        unit_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_unit_progress')
+                .select('lesson_id, unit_key, unit_type, section_key, is_completed')
+                .eq('user_id', user_id)
+                .in_('lesson_id', lesson_ids)
+            ),
+            "app lesson progress summaries unit progress",
+        )
+        expectations_by_lesson = build_app_lesson_expectations_for_many(lesson_ids)
+        summaries = summarize_app_lesson_progress(
+            lesson_ids,
+            progress_result.data or [],
+            unit_result.data or [],
+            expectations_by_lesson,
+        )
+
+        progress_by_lesson = {
+            lesson_id: {
+                "lesson_id": summary.get("lesson_id"),
+                "has_started": summary.get("has_started"),
+                "percent_complete": summary.get("percent_complete"),
+                "is_completed": summary.get("is_completed"),
+                "completed_units": summary.get("completed_units"),
+                "total_units": summary.get("total_units"),
+                "resume": summary.get("resume"),
+            }
+            for lesson_id, summary in summaries.items()
+        }
+
+        return jsonify({"progress_by_lesson": progress_by_lesson}), 200
+    except KeyError:
+        return jsonify({"error": "Lesson not found"}), 404
+    except Exception as e:
+        print(f"Error fetching app lesson progress summaries: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/app/user/lesson-progress/<lesson_id>', methods=['GET'])
+@handle_options
+def get_app_lesson_progress_detail(lesson_id):
+    try:
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Authorization token required"}), 401
+
+        access_token = auth_header.split(' ')[1]
+        user_response = supabase.auth.get_user(access_token)
+
+        if not user_response.user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        user_id = user_response.user.id
+        progress_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_progress')
+                .select('lesson_id, is_completed, last_unit_type, last_unit_key')
+                .eq('user_id', user_id)
+                .eq('lesson_id', lesson_id)
+            ),
+            "app lesson progress detail lesson progress",
+        )
+        unit_result = _execute_with_retry(
+            lambda: (
+                supabase.table('user_lesson_unit_progress')
+                .select('lesson_id, unit_key, unit_type, section_key, is_completed')
+                .eq('user_id', user_id)
+                .eq('lesson_id', lesson_id)
+            ),
+            "app lesson progress detail unit progress",
+        )
+
+        expectations = build_app_lesson_expectations(lesson_id)
+        summaries = summarize_app_lesson_progress(
+            [lesson_id],
+            progress_result.data or [],
+            unit_result.data or [],
+            {lesson_id: expectations},
+        )
+        detail = summaries.get(lesson_id) or {
+            "lesson_id": lesson_id,
+            "has_started": False,
+            "percent_complete": 0,
+            "is_completed": False,
+            "completed_units": 0,
+            "total_units": 0,
+            "resume": None,
+            "completed_unit_keys": [],
+            "expected_units": [],
+        }
+
+        return jsonify(detail), 200
+    except KeyError:
+        return jsonify({"error": "Lesson not found"}), 404
+    except Exception as e:
+        print(f"Error fetching app lesson progress detail: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
 
