@@ -1,9 +1,10 @@
 import copy
+import json
 import re
+import time
 from collections import defaultdict
-from functools import lru_cache
 
-from app.resolver import resolve_lesson
+from app.supabase_client import supabase
 
 APP_PAGE_ORDER = [
     "prepare",
@@ -109,6 +110,49 @@ def _is_quick_practice_heading(text):
     return "quick practice" in normalized or "แบบฝึกหัด" in text or "ฝึกหัด" in text
 
 
+def _is_retryable_supabase_error(exc):
+    message = str(exc or "")
+    retry_markers = (
+        "ConnectionTerminated",
+        "PROTOCOL_ERROR",
+        "COMPRESSION_ERROR",
+    )
+    return any(marker in message for marker in retry_markers)
+
+
+def _execute_with_retry(build_query, label, retries=2, base_delay=0.2):
+    last_error = None
+    for attempt in range(retries + 1):
+        try:
+            return build_query().execute()
+        except Exception as exc:
+            last_error = exc
+            if attempt >= retries or not _is_retryable_supabase_error(exc):
+                raise
+            delay = base_delay * (attempt + 1)
+            print(
+                f"Retrying {label} after transient Supabase error "
+                f"(attempt {attempt + 1}/{retries + 1}): {exc}",
+                flush=True,
+            )
+            time.sleep(delay)
+    raise last_error
+
+
+def _coerce_jsonish(value):
+    if isinstance(value, (list, dict)):
+        return value
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return None
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            return None
+    return None
+
+
 def _build_card_units(section_type, nodes, parent_page_key, base_sort_order):
     if section_type not in CARD_SECTION_TYPES or not isinstance(nodes, list):
         return []
@@ -144,194 +188,305 @@ def _build_card_units(section_type, nodes, parent_page_key, base_sort_order):
     return units
 
 
-@lru_cache(maxsize=256)
-def _build_app_lesson_expectations_cached(lesson_id):
-    resolved = resolve_lesson(lesson_id, "en")
-    sections = resolved.get("sections") or []
-    questions = resolved.get("questions") or []
-    transcript = resolved.get("transcript") or []
-    practice_exercises = resolved.get("practice_exercises") or []
-    phrases = resolved.get("phrases") or []
+def _fetch_app_progress_source_rows(lesson_ids):
+    lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
+    if not lesson_ids:
+        return {
+            "sections": [],
+            "transcript": [],
+            "questions": [],
+            "exercises": [],
+            "lesson_phrases": [],
+            "phrases": [],
+        }
 
-    section_by_type = {}
-    for section in sections:
-        section_type = _clean_text(section.get("type")).lower()
-        if section_type and section_type not in section_by_type:
-            section_by_type[section_type] = section
-
-    has_phrase_content = any(
-        _clean_text(item.get("content"))
-        or _clean_text(item.get("content_th"))
-        or bool(item.get("content_jsonb"))
-        or bool(item.get("content_jsonb_th"))
-        for item in phrases
+    sections_result = _execute_with_retry(
+        lambda: (
+            supabase.table("lesson_sections")
+            .select("lesson_id, id, type, sort_order, content_jsonb, content_jsonb_th")
+            .in_("lesson_id", lesson_ids)
+            .order("sort_order", desc=False)
+        ),
+        "app lesson progress lesson_sections",
+    )
+    transcript_result = _execute_with_retry(
+        lambda: (
+            supabase.table("transcript_lines")
+            .select("lesson_id")
+            .in_("lesson_id", lesson_ids)
+        ),
+        "app lesson progress transcript_lines",
+    )
+    questions_result = _execute_with_retry(
+        lambda: (
+            supabase.table("comprehension_questions")
+            .select("lesson_id, id")
+            .in_("lesson_id", lesson_ids)
+        ),
+        "app lesson progress comprehension_questions",
+    )
+    exercises_result = _execute_with_retry(
+        lambda: (
+            supabase.table("practice_exercises")
+            .select("lesson_id, id, title, sort_order")
+            .in_("lesson_id", lesson_ids)
+            .order("sort_order", desc=False)
+        ),
+        "app lesson progress practice_exercises",
+    )
+    lesson_phrases_result = _execute_with_retry(
+        lambda: (
+            supabase.table("lesson_phrases")
+            .select("lesson_id, phrase_id")
+            .in_("lesson_id", lesson_ids)
+        ),
+        "app lesson progress lesson_phrases",
     )
 
-    units = []
-    for page_index, page_name in enumerate(APP_PAGE_ORDER, start=1):
-        page_key = build_app_page_key(page_name)
-        page_sort_order = page_index * 100
-
-        if page_name == "prepare":
-            if page_name in section_by_type:
-                units.append(
-                    {
-                        "unit_type": "page",
-                        "unit_key": page_key,
-                        "parent_unit_key": None,
-                        "section_key": None,
-                        "sort_order": page_sort_order,
-                        "label": "Prepare",
-                    }
-                )
-            continue
-
-        if page_name == "comprehension":
-            if questions:
-                units.append(
-                    {
-                        "unit_type": "page",
-                        "unit_key": page_key,
-                        "parent_unit_key": None,
-                        "section_key": None,
-                        "sort_order": page_sort_order,
-                        "label": "Comprehension",
-                    }
-                )
-                units.append(
-                    {
-                        "unit_type": "exercise",
-                        "unit_key": build_app_comprehension_exercise_key(),
-                        "parent_unit_key": page_key,
-                        "section_key": page_key,
-                        "sort_order": page_sort_order + 1,
-                        "label": "Comprehension Quiz",
-                    }
-                )
-            continue
-
-        if page_name == "transcript":
-            if transcript:
-                units.append(
-                    {
-                        "unit_type": "page",
-                        "unit_key": page_key,
-                        "parent_unit_key": None,
-                        "section_key": None,
-                        "sort_order": page_sort_order,
-                        "label": "Transcript",
-                    }
-                )
-            continue
-
-        if page_name == "practice":
-            if practice_exercises:
-                units.append(
-                    {
-                        "unit_type": "page",
-                        "unit_key": page_key,
-                        "parent_unit_key": None,
-                        "section_key": None,
-                        "sort_order": page_sort_order,
-                        "label": "Practice",
-                    }
-                )
-                for exercise_index, exercise in enumerate(
-                    sorted(practice_exercises, key=lambda row: row.get("sort_order") or 0),
-                    start=1,
-                ):
-                    exercise_id = exercise.get("id")
-                    if not exercise_id:
-                        continue
-                    units.append(
-                        {
-                            "unit_type": "exercise",
-                            "unit_key": build_app_exercise_key(exercise_id),
-                            "parent_unit_key": page_key,
-                            "section_key": page_key,
-                            "sort_order": page_sort_order + exercise_index,
-                            "label": _clean_text(exercise.get("title")) or f"Exercise {exercise_index}",
-                        }
-                    )
-            continue
-
-        if page_name == "phrases_verbs":
-            if has_phrase_content:
-                units.append(
-                    {
-                        "unit_type": "page",
-                        "unit_key": page_key,
-                        "parent_unit_key": None,
-                        "section_key": None,
-                        "sort_order": page_sort_order,
-                        "label": "Phrases & Verbs",
-                    }
-                )
-            continue
-
-        section = section_by_type.get(page_name)
-        if not section:
-            continue
-
-        units.append(
-            {
-                "unit_type": "page",
-                "unit_key": page_key,
-                "parent_unit_key": None,
-                "section_key": None,
-                "sort_order": page_sort_order,
-                "label": page_name.replace("_", " ").title(),
-            }
+    phrase_ids = sorted({
+        row.get("phrase_id")
+        for row in (lesson_phrases_result.data or [])
+        if row.get("phrase_id")
+    })
+    phrases = []
+    if phrase_ids:
+        phrases_result = _execute_with_retry(
+            lambda: (
+                supabase.table("phrases")
+                .select("id, content, content_th, content_jsonb, content_jsonb_th")
+                .in_("id", phrase_ids)
+            ),
+            "app lesson progress phrases",
         )
+        phrases = phrases_result.data or []
 
-        if page_name == "apply":
-            content_jsonb = section.get("content_jsonb")
-            has_response = False
-            if isinstance(content_jsonb, dict):
-                has_response = bool(
-                    _clean_text(content_jsonb.get("response"))
-                    or (isinstance(content_jsonb.get("response_nodes"), list) and content_jsonb.get("response_nodes"))
-                )
-            if has_response:
-                units.append(
-                    {
-                        "unit_type": "example_reveal",
-                        "unit_key": build_app_example_reveal_key("apply"),
-                        "parent_unit_key": page_key,
-                        "section_key": page_key,
-                        "sort_order": page_sort_order + 1,
-                        "label": "See Example Answer",
-                    }
-                )
-            continue
-
-        card_units = _build_card_units(
-            page_name,
-            section.get("content_jsonb") or [],
-            page_key,
-            page_sort_order,
-        )
-        units.extend(card_units)
-
-    units.sort(key=lambda unit: unit["sort_order"])
     return {
-        "lesson_id": lesson_id,
-        "units": units,
-        "unit_keys": [unit["unit_key"] for unit in units],
+        "sections": sections_result.data or [],
+        "transcript": transcript_result.data or [],
+        "questions": questions_result.data or [],
+        "exercises": exercises_result.data or [],
+        "lesson_phrases": lesson_phrases_result.data or [],
+        "phrases": phrases,
     }
 
 
+def _build_app_lesson_expectations_from_rows(lesson_ids, source_rows):
+    sections_by_lesson = defaultdict(list)
+    for row in source_rows.get("sections") or []:
+        sections_by_lesson[row.get("lesson_id")].append(row)
+
+    transcript_counts = defaultdict(int)
+    for row in source_rows.get("transcript") or []:
+        transcript_counts[row.get("lesson_id")] += 1
+
+    question_counts = defaultdict(int)
+    for row in source_rows.get("questions") or []:
+        question_counts[row.get("lesson_id")] += 1
+
+    exercises_by_lesson = defaultdict(list)
+    for row in source_rows.get("exercises") or []:
+        exercises_by_lesson[row.get("lesson_id")].append(row)
+
+    phrases_by_id = {
+        row.get("id"): row
+        for row in source_rows.get("phrases") or []
+        if row.get("id")
+    }
+    has_phrase_content = defaultdict(bool)
+    for link in source_rows.get("lesson_phrases") or []:
+        lesson_id = link.get("lesson_id")
+        phrase = phrases_by_id.get(link.get("phrase_id")) or {}
+        if (
+            _clean_text(phrase.get("content"))
+            or _clean_text(phrase.get("content_th"))
+            or _coerce_jsonish(phrase.get("content_jsonb"))
+            or _coerce_jsonish(phrase.get("content_jsonb_th"))
+        ):
+            has_phrase_content[lesson_id] = True
+
+    expectations = {}
+    for lesson_id in lesson_ids:
+        section_by_type = {}
+        for section in sections_by_lesson.get(lesson_id, []):
+            section_type = _clean_text(section.get("type")).lower()
+            if section_type and section_type not in section_by_type:
+                section_by_type[section_type] = section
+
+        units = []
+        for page_index, page_name in enumerate(APP_PAGE_ORDER, start=1):
+            page_key = build_app_page_key(page_name)
+            page_sort_order = page_index * 100
+
+            if page_name == "prepare":
+                if page_name in section_by_type:
+                    units.append(
+                        {
+                            "unit_type": "page",
+                            "unit_key": page_key,
+                            "parent_unit_key": None,
+                            "section_key": None,
+                            "sort_order": page_sort_order,
+                            "label": "Prepare",
+                        }
+                    )
+                continue
+
+            if page_name == "comprehension":
+                if question_counts.get(lesson_id, 0) > 0:
+                    units.append(
+                        {
+                            "unit_type": "page",
+                            "unit_key": page_key,
+                            "parent_unit_key": None,
+                            "section_key": None,
+                            "sort_order": page_sort_order,
+                            "label": "Comprehension",
+                        }
+                    )
+                    units.append(
+                        {
+                            "unit_type": "exercise",
+                            "unit_key": build_app_comprehension_exercise_key(),
+                            "parent_unit_key": page_key,
+                            "section_key": page_key,
+                            "sort_order": page_sort_order + 1,
+                            "label": "Comprehension Quiz",
+                        }
+                    )
+                continue
+
+            if page_name == "transcript":
+                if transcript_counts.get(lesson_id, 0) > 0:
+                    units.append(
+                        {
+                            "unit_type": "page",
+                            "unit_key": page_key,
+                            "parent_unit_key": None,
+                            "section_key": None,
+                            "sort_order": page_sort_order,
+                            "label": "Transcript",
+                        }
+                    )
+                continue
+
+            if page_name == "practice":
+                practice_exercises = exercises_by_lesson.get(lesson_id, [])
+                if practice_exercises:
+                    units.append(
+                        {
+                            "unit_type": "page",
+                            "unit_key": page_key,
+                            "parent_unit_key": None,
+                            "section_key": None,
+                            "sort_order": page_sort_order,
+                            "label": "Practice",
+                        }
+                    )
+                    for exercise_index, exercise in enumerate(
+                        sorted(practice_exercises, key=lambda row: row.get("sort_order") or 0),
+                        start=1,
+                    ):
+                        exercise_id = exercise.get("id")
+                        if not exercise_id:
+                            continue
+                        units.append(
+                            {
+                                "unit_type": "exercise",
+                                "unit_key": build_app_exercise_key(exercise_id),
+                                "parent_unit_key": page_key,
+                                "section_key": page_key,
+                                "sort_order": page_sort_order + exercise_index,
+                                "label": _clean_text(exercise.get("title")) or f"Exercise {exercise_index}",
+                            }
+                        )
+                continue
+
+            if page_name == "phrases_verbs":
+                if has_phrase_content.get(lesson_id):
+                    units.append(
+                        {
+                            "unit_type": "page",
+                            "unit_key": page_key,
+                            "parent_unit_key": None,
+                            "section_key": None,
+                            "sort_order": page_sort_order,
+                            "label": "Phrases & Verbs",
+                        }
+                    )
+                continue
+
+            section = section_by_type.get(page_name)
+            if not section:
+                continue
+
+            units.append(
+                {
+                    "unit_type": "page",
+                    "unit_key": page_key,
+                    "parent_unit_key": None,
+                    "section_key": None,
+                    "sort_order": page_sort_order,
+                    "label": page_name.replace("_", " ").title(),
+                }
+            )
+
+            if page_name == "apply":
+                content_jsonb = _coerce_jsonish(section.get("content_jsonb"))
+                has_response = False
+                if isinstance(content_jsonb, dict):
+                    has_response = bool(
+                        _clean_text(content_jsonb.get("response"))
+                        or (
+                            isinstance(content_jsonb.get("response_nodes"), list)
+                            and content_jsonb.get("response_nodes")
+                        )
+                    )
+                if has_response:
+                    units.append(
+                        {
+                            "unit_type": "example_reveal",
+                            "unit_key": build_app_example_reveal_key("apply"),
+                            "parent_unit_key": page_key,
+                            "section_key": page_key,
+                            "sort_order": page_sort_order + 1,
+                            "label": "See Example Answer",
+                        }
+                    )
+                continue
+
+            card_units = _build_card_units(
+                page_name,
+                _coerce_jsonish(section.get("content_jsonb")) or [],
+                page_key,
+                page_sort_order,
+            )
+            units.extend(card_units)
+
+        units.sort(key=lambda unit: unit["sort_order"])
+        expectations[lesson_id] = {
+            "lesson_id": lesson_id,
+            "units": units,
+            "unit_keys": [unit["unit_key"] for unit in units],
+        }
+
+    return expectations
+
+
 def build_app_lesson_expectations(lesson_id):
-    return copy.deepcopy(_build_app_lesson_expectations_cached(lesson_id))
+    expectations = build_app_lesson_expectations_for_many([lesson_id])
+    return copy.deepcopy(
+        expectations.get(lesson_id)
+        or {"lesson_id": lesson_id, "units": [], "unit_keys": []}
+    )
 
 
 def build_app_lesson_expectations_for_many(lesson_ids):
-    expectations = {}
-    for lesson_id in lesson_ids:
-        if not lesson_id:
-            continue
-        expectations[lesson_id] = build_app_lesson_expectations(lesson_id)
-    return expectations
+    lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
+    if not lesson_ids:
+        return {}
+    source_rows = _fetch_app_progress_source_rows(lesson_ids)
+    expectations = _build_app_lesson_expectations_from_rows(lesson_ids, source_rows)
+    return copy.deepcopy(expectations)
 
 
 def derive_app_resume(progress_row, unit_rows_by_key):
@@ -370,7 +525,6 @@ def summarize_app_lesson_progress(lesson_ids, progress_rows, unit_rows, expectat
         if row.get("lesson_id")
     }
 
-    unit_rows_by_lesson = defaultdict(list)
     seen_units_by_lesson = defaultdict(set)
     completed_units_by_lesson = defaultdict(set)
     unit_rows_by_lesson_key = defaultdict(dict)
@@ -380,7 +534,6 @@ def summarize_app_lesson_progress(lesson_ids, progress_rows, unit_rows, expectat
         unit_key = row.get("unit_key")
         if not lesson_id or not is_app_unit_key(unit_key):
             continue
-        unit_rows_by_lesson[lesson_id].append(row)
         unit_rows_by_lesson_key[lesson_id][unit_key] = row
         seen_units_by_lesson[lesson_id].add(unit_key)
         if row.get("is_completed"):
@@ -390,7 +543,6 @@ def summarize_app_lesson_progress(lesson_ids, progress_rows, unit_rows, expectat
     for lesson_id in lesson_ids:
         expected = expectations_by_lesson.get(lesson_id) or {"units": [], "unit_keys": []}
         expected_unit_keys = expected.get("unit_keys") or []
-        expected_units_set = set(expected_unit_keys)
         completed_units = completed_units_by_lesson.get(lesson_id, set())
         completed_count = sum(1 for unit_key in expected_unit_keys if unit_key in completed_units)
         total_units = len(expected_unit_keys)
@@ -415,9 +567,7 @@ def summarize_app_lesson_progress(lesson_ids, progress_rows, unit_rows, expectat
             "completed_unit_keys": [
                 unit_key for unit_key in expected_unit_keys if unit_key in completed_units
             ],
-            "expected_units": [
-                unit for unit in (expected.get("units") or []) if unit.get("unit_key") in expected_units_set
-            ],
+            "expected_units": list(expected.get("units") or []),
         }
 
     return summaries
