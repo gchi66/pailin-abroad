@@ -16,6 +16,8 @@ const stageClassMap = {
   Expert: "level-buttons-Expert",
 };
 
+const PRIORITY_LESSON_PROGRESS_COUNT = 6;
+
 function ProgressCircle({ percent, size = 32, strokeWidth = 5.2 }) {
   const clampedPercent = Math.max(0, Math.min(100, percent));
   const r = 36;
@@ -313,6 +315,30 @@ const LessonsIndex = () => {
 
   // Fetch lesson progress summaries for the currently visible lessons
   useEffect(() => {
+    let cancelled = false;
+
+    const fetchProgressChunk = async (session, lessonIds) => {
+      if (!lessonIds.length) return {};
+
+      const response = await fetch(`${API_BASE_URL}/api/user/lesson-progress-summaries`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lesson_ids: lessonIds,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Lesson progress summary request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.progress_by_lesson || {};
+    };
+
     const fetchLessonProgress = async () => {
       if (!user || !lessons.length) {
         setProgressByLesson({});
@@ -327,32 +353,48 @@ const LessonsIndex = () => {
           return;
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/user/lesson-progress-summaries`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            lesson_ids: lessons.map((lesson) => lesson.id).filter(Boolean),
-          }),
-        });
+        const orderedLessons = [
+          ...lessons.filter((lesson) => !((lesson.title || "").toLowerCase().includes("checkpoint"))),
+          ...lessons.filter((lesson) => (lesson.title || "").toLowerCase().includes("checkpoint")),
+        ];
+        const orderedLessonIds = orderedLessons
+          .map((lesson) => lesson.id)
+          .filter(Boolean);
+        const priorityLessonIds = orderedLessonIds.slice(0, PRIORITY_LESSON_PROGRESS_COUNT);
+        const deferredLessonIds = orderedLessonIds.slice(PRIORITY_LESSON_PROGRESS_COUNT);
 
-        if (!response.ok) {
-          console.error("Lesson progress summary request failed:", response.status);
-          setProgressByLesson({});
+        const priorityProgress = await fetchProgressChunk(session, priorityLessonIds);
+        if (cancelled) {
+          return;
+        }
+        setProgressByLesson(priorityProgress);
+
+        if (!deferredLessonIds.length) {
           return;
         }
 
-        const data = await response.json();
-        setProgressByLesson(data.progress_by_lesson || {});
+        const deferredProgress = await fetchProgressChunk(session, deferredLessonIds);
+        if (cancelled) {
+          return;
+        }
+
+        setProgressByLesson((prev) => ({
+          ...prev,
+          ...deferredProgress,
+        }));
       } catch (error) {
         console.error('Error fetching lesson progress summaries:', error);
-        setProgressByLesson({});
+        if (!cancelled) {
+          setProgressByLesson({});
+        }
       }
     };
 
     fetchLessonProgress();
+
+    return () => {
+      cancelled = true;
+    };
   }, [lessons, location.key, user]);
 
   useEffect(() => {

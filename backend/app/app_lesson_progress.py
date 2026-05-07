@@ -27,6 +27,8 @@ CARD_SECTION_TYPES = {
 }
 
 APP_KEY_PREFIX = "app:"
+APP_EXPECTATIONS_TTL_SECONDS = 900
+_app_expectations_cache = {}
 
 
 def build_app_page_key(page_name):
@@ -270,6 +272,23 @@ def _fetch_app_progress_source_rows(lesson_ids):
     }
 
 
+def _get_cached_app_expectation(lesson_id):
+    cached = _app_expectations_cache.get(lesson_id)
+    if not cached:
+        return None
+    if time.time() - cached["ts"] > APP_EXPECTATIONS_TTL_SECONDS:
+        _app_expectations_cache.pop(lesson_id, None)
+        return None
+    return copy.deepcopy(cached["value"])
+
+
+def _set_cached_app_expectation(lesson_id, expectation):
+    _app_expectations_cache[lesson_id] = {
+        "ts": time.time(),
+        "value": copy.deepcopy(expectation),
+    }
+
+
 def _build_app_lesson_expectations_from_rows(lesson_ids, source_rows):
     sections_by_lesson = defaultdict(list)
     for row in source_rows.get("sections") or []:
@@ -484,9 +503,23 @@ def build_app_lesson_expectations_for_many(lesson_ids):
     lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
     if not lesson_ids:
         return {}
-    source_rows = _fetch_app_progress_source_rows(lesson_ids)
-    expectations = _build_app_lesson_expectations_from_rows(lesson_ids, source_rows)
-    return copy.deepcopy(expectations)
+    expectations = {}
+    uncached_lesson_ids = []
+    for lesson_id in lesson_ids:
+        cached = _get_cached_app_expectation(lesson_id)
+        if cached is not None:
+            expectations[lesson_id] = cached
+        else:
+            uncached_lesson_ids.append(lesson_id)
+
+    if uncached_lesson_ids:
+        source_rows = _fetch_app_progress_source_rows(uncached_lesson_ids)
+        fresh_expectations = _build_app_lesson_expectations_from_rows(uncached_lesson_ids, source_rows)
+        for lesson_id, expectation in fresh_expectations.items():
+            _set_cached_app_expectation(lesson_id, expectation)
+            expectations[lesson_id] = copy.deepcopy(expectation)
+
+    return expectations
 
 
 def derive_app_resume(progress_row, unit_rows_by_key):

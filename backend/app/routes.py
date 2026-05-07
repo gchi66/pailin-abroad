@@ -16,6 +16,7 @@ from datetime import datetime, timedelta, timezone
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
+import copy
 from app.config import Config
 from app.pricing_utils import resolve_region_key
 import requests
@@ -36,6 +37,8 @@ WEB_SECTION_ORDER = [
     "culture_note",
     "practice",
 ]
+WEB_EXPECTATIONS_TTL_SECONDS = 900
+_web_expectations_cache = {}
 PATHWAY_LESSON_SELECT = (
     "id, stage, level, lesson_order, lesson_external_id, "
     "title, title_th, subtitle, subtitle_th, "
@@ -182,16 +185,45 @@ def _build_exercise_unit_key(raw_id):
     return f"exercise:{raw_id}"
 
 
+def _get_cached_web_expectation(lesson_id):
+    cached = _web_expectations_cache.get(lesson_id)
+    if not cached:
+        return None
+    if time.time() - cached["ts"] > WEB_EXPECTATIONS_TTL_SECONDS:
+        _web_expectations_cache.pop(lesson_id, None)
+        return None
+    return copy.deepcopy(cached["value"])
+
+
+def _set_cached_web_expectation(lesson_id, expectation):
+    _web_expectations_cache[lesson_id] = {
+        "ts": time.time(),
+        "value": copy.deepcopy(expectation),
+    }
+
+
 def _build_web_lesson_expectations(lesson_ids):
     lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
     if not lesson_ids:
         return {}
 
+    expectations = {}
+    uncached_lesson_ids = []
+    for lesson_id in lesson_ids:
+        cached = _get_cached_web_expectation(lesson_id)
+        if cached is not None:
+            expectations[lesson_id] = cached
+        else:
+            uncached_lesson_ids.append(lesson_id)
+
+    if not uncached_lesson_ids:
+        return expectations
+
     sections_result = _execute_with_retry(
         lambda: (
             supabase.table("lesson_sections")
             .select("lesson_id, id, type, sort_order")
-            .in_("lesson_id", lesson_ids)
+            .in_("lesson_id", uncached_lesson_ids)
             .order("sort_order", desc=False)
         ),
         "lesson_sections progress expectations",
@@ -200,7 +232,7 @@ def _build_web_lesson_expectations(lesson_ids):
         lambda: (
             supabase.table("transcript_lines")
             .select("lesson_id")
-            .in_("lesson_id", lesson_ids)
+            .in_("lesson_id", uncached_lesson_ids)
         ),
         "transcript_lines progress expectations",
     )
@@ -208,7 +240,7 @@ def _build_web_lesson_expectations(lesson_ids):
         lambda: (
             supabase.table("comprehension_questions")
             .select("lesson_id, id")
-            .in_("lesson_id", lesson_ids)
+            .in_("lesson_id", uncached_lesson_ids)
         ),
         "comprehension_questions progress expectations",
     )
@@ -216,7 +248,7 @@ def _build_web_lesson_expectations(lesson_ids):
         lambda: (
             supabase.table("practice_exercises")
             .select("lesson_id, id, title, title_th, sort_order")
-            .in_("lesson_id", lesson_ids)
+            .in_("lesson_id", uncached_lesson_ids)
             .order("sort_order", desc=False)
         ),
         "practice_exercises progress expectations",
@@ -225,7 +257,7 @@ def _build_web_lesson_expectations(lesson_ids):
         lambda: (
             supabase.table("lesson_phrases")
             .select("lesson_id, phrase_id")
-            .in_("lesson_id", lesson_ids)
+            .in_("lesson_id", uncached_lesson_ids)
         ),
         "lesson_phrases progress expectations",
     )
@@ -280,7 +312,7 @@ def _build_web_lesson_expectations(lesson_ids):
             has_phrase_content[lesson_id] = True
 
     expectations = {}
-    for lesson_id in lesson_ids:
+    for lesson_id in uncached_lesson_ids:
         lesson_sections = sections_by_lesson.get(lesson_id, [])
         section_by_type = {}
         allow_inline_quick = False
@@ -340,12 +372,14 @@ def _build_web_lesson_expectations(lesson_ids):
             *comprehension_unit_keys,
         ]
 
-        expectations[lesson_id] = {
+        expectation = {
             "section_unit_keys": visible_section_keys,
             "exercise_unit_keys": visible_exercise_keys,
             "comprehension_unit_keys": comprehension_unit_keys,
             "all_visible_unit_keys": all_visible_unit_keys,
         }
+        _set_cached_web_expectation(lesson_id, expectation)
+        expectations[lesson_id] = expectation
 
     return expectations
 
@@ -1758,6 +1792,7 @@ def get_level_completion_status(stage, level):
 @routes.route('/api/user/lesson-progress-summaries', methods=['POST'])
 @handle_options
 def get_lesson_progress_summaries():
+    route_start = time.perf_counter()
     try:
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
@@ -1779,6 +1814,7 @@ def get_lesson_progress_summaries():
         if not lesson_ids:
             return jsonify({"progress_by_lesson": {}}), 200
 
+        db_start = time.perf_counter()
         progress_result = _execute_with_retry(
             lambda: (
                 supabase.table('user_lesson_progress')
@@ -1797,11 +1833,20 @@ def get_lesson_progress_summaries():
             ),
             "lesson progress summaries unit progress",
         )
+        db_ms = _elapsed_ms(db_start)
 
+        expectations_start = time.perf_counter()
         summaries = _summarize_web_lesson_progress(
             lesson_ids,
             progress_result.data or [],
             unit_result.data or [],
+        )
+        expectations_ms = _elapsed_ms(expectations_start)
+        total_ms = _elapsed_ms(route_start)
+        print(
+            f"[progress:web-summary] lessons={len(lesson_ids)} db_ms={db_ms} "
+            f"summarize_ms={expectations_ms} total_ms={total_ms}",
+            flush=True,
         )
 
         return jsonify({"progress_by_lesson": summaries}), 200
@@ -1813,6 +1858,7 @@ def get_lesson_progress_summaries():
 @routes.route('/api/app/user/lesson-progress-summaries', methods=['POST'])
 @handle_options
 def get_app_lesson_progress_summaries():
+    route_start = time.perf_counter()
     try:
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
@@ -1834,6 +1880,7 @@ def get_app_lesson_progress_summaries():
         if not lesson_ids:
             return jsonify({"progress_by_lesson": {}}), 200
 
+        db_start = time.perf_counter()
         progress_result = _execute_with_retry(
             lambda: (
                 supabase.table('user_lesson_progress')
@@ -1852,12 +1899,21 @@ def get_app_lesson_progress_summaries():
             ),
             "app lesson progress summaries unit progress",
         )
+        db_ms = _elapsed_ms(db_start)
+        expectations_start = time.perf_counter()
         expectations_by_lesson = build_app_lesson_expectations_for_many(lesson_ids)
         summaries = summarize_app_lesson_progress(
             lesson_ids,
             progress_result.data or [],
             unit_result.data or [],
             expectations_by_lesson,
+        )
+        expectations_ms = _elapsed_ms(expectations_start)
+        total_ms = _elapsed_ms(route_start)
+        print(
+            f"[progress:app-summary] lessons={len(lesson_ids)} db_ms={db_ms} "
+            f"summarize_ms={expectations_ms} total_ms={total_ms}",
+            flush=True,
         )
 
         progress_by_lesson = {
@@ -1884,6 +1940,7 @@ def get_app_lesson_progress_summaries():
 @routes.route('/api/app/user/lesson-progress/<lesson_id>', methods=['GET'])
 @handle_options
 def get_app_lesson_progress_detail(lesson_id):
+    route_start = time.perf_counter()
     try:
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
@@ -1896,6 +1953,7 @@ def get_app_lesson_progress_detail(lesson_id):
             return jsonify({"error": "Invalid token"}), 401
 
         user_id = user_response.user.id
+        db_start = time.perf_counter()
         progress_result = _execute_with_retry(
             lambda: (
                 supabase.table('user_lesson_progress')
@@ -1914,7 +1972,9 @@ def get_app_lesson_progress_detail(lesson_id):
             ),
             "app lesson progress detail unit progress",
         )
+        db_ms = _elapsed_ms(db_start)
 
+        expectations_start = time.perf_counter()
         expectations = build_app_lesson_expectations(lesson_id)
         summaries = summarize_app_lesson_progress(
             [lesson_id],
@@ -1922,6 +1982,8 @@ def get_app_lesson_progress_detail(lesson_id):
             unit_result.data or [],
             {lesson_id: expectations},
         )
+        expectations_ms = _elapsed_ms(expectations_start)
+        total_ms = _elapsed_ms(route_start)
         detail = summaries.get(lesson_id) or {
             "lesson_id": lesson_id,
             "has_started": False,
@@ -1933,6 +1995,11 @@ def get_app_lesson_progress_detail(lesson_id):
             "completed_unit_keys": [],
             "expected_units": [],
         }
+        print(
+            f"[progress:app-detail] lesson_id={lesson_id} db_ms={db_ms} "
+            f"summarize_ms={expectations_ms} total_ms={total_ms}",
+            flush=True,
+        )
 
         return jsonify(detail), 200
     except KeyError:
