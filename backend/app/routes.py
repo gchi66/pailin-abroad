@@ -12,11 +12,12 @@ from email.mime.text import MIMEText
 import smtplib
 import re
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 import copy
+from zoneinfo import ZoneInfo
 from app.config import Config
 from app.pricing_utils import resolve_region_key
 import requests
@@ -145,6 +146,85 @@ def _lesson_sort_key(lesson):
 
 def _elapsed_ms(start):
     return int((time.perf_counter() - start) * 1000)
+
+
+def _get_authenticated_user_id():
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return None, (jsonify({"error": "Authorization token required"}), 401)
+
+    access_token = auth_header.split(" ")[1]
+    user_response = supabase.auth.get_user(access_token)
+
+    if not user_response.user:
+        return None, (jsonify({"error": "Invalid token"}), 401)
+
+    return user_response.user.id, None
+
+
+def _resolve_streak_timezone(payload=None):
+    timezone_name = request.headers.get("X-Timezone")
+    if not timezone_name and isinstance(payload, dict):
+        timezone_name = payload.get("timezone")
+    if not timezone_name:
+        timezone_name = request.args.get("timezone")
+
+    timezone_name = str(timezone_name or "").strip()
+    if not timezone_name:
+        return timezone.utc, "UTC"
+
+    try:
+        return ZoneInfo(timezone_name), timezone_name
+    except Exception:
+        print(
+            f"Warning: invalid streak timezone {timezone_name!r}, falling back to UTC",
+            flush=True,
+        )
+        return timezone.utc, "UTC"
+
+
+def _calculate_daily_app_streak(user_id, local_today):
+    result = _execute_with_retry(
+        lambda: (
+            supabase_admin.table("daily_app_open_checkins")
+            .select("opened_on")
+            .eq("user_id", user_id)
+            .order("opened_on", desc=True)
+        ),
+        "daily app streak rows",
+    )
+
+    opened_dates = set()
+    for row in result.data or []:
+        opened_on = row.get("opened_on")
+        if not opened_on:
+            continue
+        try:
+            opened_dates.add(date.fromisoformat(opened_on))
+        except ValueError:
+            print(
+                f"Warning: invalid opened_on value for user {user_id}: {opened_on}",
+                flush=True,
+            )
+
+    streak = 0
+    cursor = local_today
+    while cursor in opened_dates:
+        streak += 1
+        cursor -= timedelta(days=1)
+
+    return streak, local_today in opened_dates
+
+
+def _build_daily_streak_status(user_id, tzinfo, timezone_name):
+    local_today = datetime.now(tzinfo).date()
+    streak, checked_in_today = _calculate_daily_app_streak(user_id, local_today)
+    return {
+        "daily_streak": streak,
+        "checked_in_today": checked_in_today,
+        "opened_on": local_today.isoformat(),
+        "timezone": timezone_name,
+    }
 
 
 def _is_retryable_supabase_error(exc):
@@ -2009,24 +2089,63 @@ def get_app_lesson_progress_detail(lesson_id):
         return jsonify({"error": "Internal server error"}), 500
 
 
+@routes.route('/api/app/user/daily-streak/check-in', methods=['POST'])
+@handle_options
+def record_daily_streak_check_in():
+    try:
+        user_id, auth_error = _get_authenticated_user_id()
+        if auth_error:
+            return auth_error
+
+        payload = request.get_json(silent=True) or {}
+        tzinfo, timezone_name = _resolve_streak_timezone(payload)
+        local_today = datetime.now(tzinfo).date()
+
+        _execute_with_retry(
+            lambda: (
+                supabase_admin.table("daily_app_open_checkins")
+                .upsert(
+                    {
+                        "user_id": user_id,
+                        "opened_on": local_today.isoformat(),
+                        "timezone": timezone_name,
+                    },
+                    on_conflict="user_id,opened_on",
+                )
+            ),
+            "daily streak check in",
+        )
+
+        streak_status = _build_daily_streak_status(user_id, tzinfo, timezone_name)
+        return jsonify(streak_status), 200
+    except Exception as e:
+        print(f"Error recording daily streak check-in: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/app/user/daily-streak', methods=['GET'])
+@handle_options
+def get_daily_streak():
+    try:
+        user_id, auth_error = _get_authenticated_user_id()
+        if auth_error:
+            return auth_error
+
+        tzinfo, timezone_name = _resolve_streak_timezone()
+        streak_status = _build_daily_streak_status(user_id, tzinfo, timezone_name)
+        return jsonify(streak_status), 200
+    except Exception as e:
+        print(f"Error fetching daily streak: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
 @routes.route('/api/user/stats', methods=['GET'])
 @handle_options
 def get_user_stats():
     try:
-        # Get authorization header
-        auth_header = request.headers.get('Authorization')
-        if not auth_header or not auth_header.startswith('Bearer '):
-            return jsonify({"error": "Authorization token required"}), 401
-
-        access_token = auth_header.split(' ')[1]
-
-        # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
-
-        if not user_response.user:
-            return jsonify({"error": "Invalid token"}), 401
-
-        user_id = user_response.user.id
+        user_id, auth_error = _get_authenticated_user_id()
+        if auth_error:
+            return auth_error
 
         # Get total completed lessons count (simple query first)
         try:
@@ -2072,9 +2191,25 @@ def get_user_stats():
             print(f"Error calculating levels completed: {e}")
             # Fallback to 0 if level calculation fails
 
+        try:
+            tzinfo, timezone_name = _resolve_streak_timezone()
+            streak_status = _build_daily_streak_status(user_id, tzinfo, timezone_name)
+        except Exception as e:
+            print(f"Error calculating daily streak: {e}")
+            streak_status = {
+                "daily_streak": 0,
+                "checked_in_today": False,
+                "opened_on": datetime.now(timezone.utc).date().isoformat(),
+                "timezone": "UTC",
+            }
+
         return jsonify({
             "lessons_completed": lessons_completed,
-            "levels_completed": levels_completed
+            "levels_completed": levels_completed,
+            "daily_streak": streak_status["daily_streak"],
+            "daily_streak_checked_in_today": streak_status["checked_in_today"],
+            "daily_streak_opened_on": streak_status["opened_on"],
+            "daily_streak_timezone": streak_status["timezone"],
         }), 200
 
     except Exception as e:
