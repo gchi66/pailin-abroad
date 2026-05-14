@@ -10,6 +10,35 @@ function cleanAudioTags(text) {
     .replace(/\s*\n\s*/g, "\n");
 }
 
+function renderTextWithBlankLines(text, keyPrefix = "blank") {
+  if (!text) return null;
+
+  const segments = String(text).split(/(_{2,})/g);
+  return segments.map((segment, idx) => {
+    if (!segment) return null;
+    if (/^_{2,}$/.test(segment)) {
+      const blankLength = Math.min(segment.length, 4);
+      const widthCh = Math.max(2.5, blankLength * 0.95);
+      return (
+        <span
+          key={`${keyPrefix}-${idx}`}
+          aria-hidden="true"
+          style={{
+            display: "inline-block",
+            verticalAlign: "baseline",
+            width: `${widthCh}ch`,
+            minWidth: "2.5ch",
+            borderBottom: "0.08em solid currentColor",
+            lineHeight: 1,
+            transform: "translateY(0.2em)",
+          }}
+        />
+      );
+    }
+    return <React.Fragment key={`${keyPrefix}-${idx}`}>{segment}</React.Fragment>;
+  });
+}
+
 export function renderInlines(inlines = []) {
   return inlines.map((span, idx) => {
     const text = cleanAudioTags(span?.text || "");
@@ -22,7 +51,7 @@ export function renderInlines(inlines = []) {
     return (
       <React.Fragment key={idx}>
         {idx > 0 && !/^[\s.,!?;:'"()[\]\-]/.test(text) ? " " : ""}
-        <span style={style}>{text}</span>
+        <span style={style}>{renderTextWithBlankLines(text, `inline-${idx}`)}</span>
       </React.Fragment>
     );
   });
@@ -34,7 +63,11 @@ export default function InlineText({ inlines, text, as = "span", className }) {
     return <Tag className={className}>{renderInlines(inlines)}</Tag>;
   }
   if (text) {
-    return <Tag className={className}>{text}</Tag>;
+    return (
+      <Tag className={className} style={{ whiteSpace: "pre-line" }}>
+        {renderTextWithBlankLines(text, "plain")}
+      </Tag>
+    );
   }
   return null;
 }
