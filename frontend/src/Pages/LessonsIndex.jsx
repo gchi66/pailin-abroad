@@ -581,12 +581,6 @@ const LessonsIndex = () => {
     };
   }, [allLessons, completedLessons, progressByLesson]);
 
-  const handleLessonClick = (event) => {
-    if (selectedStage === "Expert") {
-      event.preventDefault();
-    }
-  };
-
   return (
     <div className="lessons-index-page-container">
       <header className="lessons-index-page-header">
@@ -790,7 +784,6 @@ const LessonsIndex = () => {
                       to={`/lesson/${lesson.id}`}
                       key={lesson.id}
                       className="lesson-item"
-                      onClick={handleLessonClick}
                     >
                       <div className="lesson-item-left">
                         <div className="lesson-index-slot">

@@ -2717,6 +2717,95 @@ class GoogleDocsParser:
                     "highlight": None,
                 })
 
+        def _append_inlines_with_fallback(
+            target: dict,
+            text_key: str,
+            inlines_key: str,
+            joiner: str,
+            new_text: str,
+        ) -> None:
+            if not new_text:
+                return
+            full_text = target.get(text_key)
+            combined_inlines = _pop_inlines_for_text(full_text)
+            if combined_inlines:
+                target[inlines_key] = combined_inlines
+                return
+            existing = target.get(inlines_key)
+            new_inlines = _pop_inlines_for_text(new_text)
+            if existing is None and new_inlines and full_text:
+                merged_inlines = _merge_inlines_into_text(full_text, new_inlines)
+                if merged_inlines:
+                    target[inlines_key] = merged_inlines
+                    return
+            if existing is None:
+                existing = []
+                target[inlines_key] = existing
+            if joiner and existing:
+                existing.append({
+                    "text": joiner,
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                    "highlight": None,
+                })
+            if new_inlines:
+                existing.extend([dict(span) for span in new_inlines if span])
+            else:
+                existing.append({
+                    "text": new_text,
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                    "highlight": None,
+                })
+
+        def _append_inlines_incremental(
+            target: dict,
+            inlines_key: str,
+            previous_text: str,
+            joiner: str,
+            new_text: str,
+        ) -> None:
+            if not new_text:
+                return
+            existing = target.get(inlines_key)
+            if existing is None:
+                existing = []
+                target[inlines_key] = existing
+                if previous_text:
+                    existing.append({
+                        "text": previous_text,
+                        "bold": False,
+                        "italic": False,
+                        "underline": False,
+                        "link": None,
+                        "highlight": None,
+                    })
+            new_inlines = _pop_inlines_for_text(new_text)
+            if joiner and existing:
+                existing.append({
+                    "text": joiner,
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                    "highlight": None,
+                })
+            if new_inlines:
+                existing.extend([dict(span) for span in new_inlines if span])
+            else:
+                existing.append({
+                    "text": new_text,
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                    "highlight": None,
+                })
+
         def _style_payload(span: dict) -> dict | None:
             if not span:
                 return None
@@ -2792,17 +2881,31 @@ class GoogleDocsParser:
             combined = "".join(span.get("text", "") for span in inlines if span)
             if not combined:
                 return None
-            idx = full_text.find(combined)
+            candidates = [combined]
+            trimmed = combined.rstrip("\n\u000b")
+            if trimmed and trimmed != combined:
+                candidates.append(trimmed)
+            idx = -1
+            matched = None
+            for candidate in candidates:
+                idx = full_text.find(candidate)
+                if idx >= 0:
+                    matched = candidate
+                    break
             if idx < 0:
                 return None
             merged: list[dict] = []
             before = full_text[:idx]
-            after = full_text[idx + len(combined):]
+            after = full_text[idx + len(matched):]
             if before:
                 merged.append({"text": before})
             for span in inlines:
                 if span and span.get("text"):
-                    merged.append(dict(span))
+                    new_span = dict(span)
+                    if matched != combined and isinstance(new_span.get("text"), str):
+                        new_span["text"] = new_span["text"].rstrip("\n\u000b")
+                    if new_span.get("text"):
+                        merged.append(new_span)
             if after:
                 merged.append({"text": after})
             return merged
@@ -3433,11 +3536,20 @@ class GoogleDocsParser:
                                 joiner = "\n" if (is_speaker_turn or prev_text.endswith("?") or (prev_text.endswith((".", "!", "?")) and has_blank)) else " "
                             else:
                                 joiner = "\n" if is_speaker_turn else " "
+                            prev_text = cur_items[-1].get("text") or ""
                             cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
                             if cur_ex and cur_ex.get("kind") == "fill_blank":
                                 _append_inlines_for_fill_blank(
                                     cur_items[-1],
                                     "text_jsonb",
+                                        joiner,
+                                        stripped,
+                                    )
+                            elif cur_ex and cur_ex.get("kind") == "multiple_choice":
+                                _append_inlines_incremental(
+                                    cur_items[-1],
+                                    "text_jsonb",
+                                    prev_text,
                                     joiner,
                                     stripped,
                                 )
@@ -3557,11 +3669,20 @@ class GoogleDocsParser:
                                     joiner = "\n"
                                 else:
                                     joiner = " "
+                                prev_text = cur_items[-1].get("text") or ""
                                 cur_items[-1]["text"] = cur_items[-1]["text"] + joiner + stripped
                                 if cur_ex and cur_ex.get("kind") == "fill_blank":
                                     _append_inlines_for_fill_blank(
                                         cur_items[-1],
                                         "text_jsonb",
+                                        joiner,
+                                        stripped,
+                                    )
+                                elif cur_ex and cur_ex.get("kind") == "multiple_choice":
+                                    _append_inlines_incremental(
+                                        cur_items[-1],
+                                        "text_jsonb",
+                                        prev_text,
                                         joiner,
                                         stripped,
                                     )
@@ -3573,6 +3694,14 @@ class GoogleDocsParser:
                                 if cur_ex and cur_ex.get("kind") == "fill_blank":
                                     _append_inlines_for_fill_blank(
                                         cur_items[-1],
+                                        "text_jsonb",
+                                        "",
+                                        stripped,
+                                    )
+                                elif cur_ex and cur_ex.get("kind") == "multiple_choice":
+                                    _append_inlines_with_fallback(
+                                        cur_items[-1],
+                                        "text",
                                         "text_jsonb",
                                         "",
                                         stripped,
