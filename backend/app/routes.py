@@ -4,8 +4,9 @@ from app.supabase_client import supabase, supabase_admin
 from app.resolver import resolve_lesson
 from app.app_lesson_progress import (
     build_app_lesson_expectations,
-    build_app_lesson_expectations_for_many,
+    fetch_app_total_units_for_many,
     summarize_app_lesson_progress,
+    summarize_app_lesson_progress_from_totals,
 )
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -134,6 +135,14 @@ def _category_slug(key: str) -> str:
 
 def _section_slug(section: str) -> str:
     return _slugify(section or "section")
+
+
+def _category_order_index(key: str) -> int:
+    ordered_keys = list(CATEGORY_LABELS.keys())
+    try:
+        return ordered_keys.index(key)
+    except ValueError:
+        return len(ordered_keys)
 
 
 def _lesson_sort_key(lesson):
@@ -287,6 +296,7 @@ def _build_web_lesson_expectations(lesson_ids):
     if not lesson_ids:
         return {}
 
+    build_start = time.perf_counter()
     expectations = {}
     uncached_lesson_ids = []
     for lesson_id in lesson_ids:
@@ -299,6 +309,7 @@ def _build_web_lesson_expectations(lesson_ids):
     if not uncached_lesson_ids:
         return expectations
 
+    query_start = time.perf_counter()
     sections_result = _execute_with_retry(
         lambda: (
             supabase.table("lesson_sections")
@@ -363,6 +374,7 @@ def _build_web_lesson_expectations(lesson_ids):
             for phrase in (phrases_result.data or [])
             if phrase.get("id")
         }
+    query_ms = _elapsed_ms(query_start)
 
     sections_by_lesson = defaultdict(list)
     for row in sections_result.data or []:
@@ -460,6 +472,13 @@ def _build_web_lesson_expectations(lesson_ids):
         }
         _set_cached_web_expectation(lesson_id, expectation)
         expectations[lesson_id] = expectation
+
+    total_ms = _elapsed_ms(build_start)
+    print(
+        f"[progress:web-expectations] requested={len(lesson_ids)} uncached={len(uncached_lesson_ids)} "
+        f"cached={len(lesson_ids) - len(uncached_lesson_ids)} query_ms={query_ms} total_ms={total_ms}",
+        flush=True,
+    )
 
     return expectations
 
@@ -1801,6 +1820,8 @@ def get_lesson_resolved(lesson_id):
 @handle_options
 def get_level_completion_status(stage, level):
     try:
+        route_start = time.perf_counter()
+        auth_start = time.perf_counter()
         # Get authorization header
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
@@ -1815,12 +1836,15 @@ def get_level_completion_status(stage, level):
             return jsonify({"error": "Invalid token"}), 401
 
         user_id = user_response.user.id
+        auth_ms = _elapsed_ms(auth_start)
 
         # Get all lessons for this stage and level
+        lessons_query_start = time.perf_counter()
         lessons_result = _execute_with_retry(
             lambda: supabase.table('lessons').select('id').eq('stage', stage).eq('level', level),
             "level completion lessons",
         )
+        lessons_query_ms = _elapsed_ms(lessons_query_start)
         all_lessons = lessons_result.data if lessons_result.data else []
 
         if not all_lessons:
@@ -1829,6 +1853,7 @@ def get_level_completion_status(stage, level):
         lesson_ids = [lesson['id'] for lesson in all_lessons]
 
         total_lessons = len(all_lessons)
+        progress_query_start = time.perf_counter()
         progress_result = _execute_with_retry(
             lambda: (
                 supabase.table('user_lesson_progress')
@@ -1838,6 +1863,8 @@ def get_level_completion_status(stage, level):
             ),
             "level completion lesson progress",
         )
+        progress_query_ms = _elapsed_ms(progress_query_start)
+        unit_query_start = time.perf_counter()
         unit_result = _execute_with_retry(
             lambda: (
                 supabase.table('user_lesson_unit_progress')
@@ -1847,16 +1874,28 @@ def get_level_completion_status(stage, level):
             ),
             "level completion unit progress",
         )
+        unit_query_ms = _elapsed_ms(unit_query_start)
+        summarize_start = time.perf_counter()
         summaries = _summarize_web_lesson_progress(
             lesson_ids,
             progress_result.data or [],
             unit_result.data or [],
         )
+        summarize_ms = _elapsed_ms(summarize_start)
         completed_count = sum(
             1 for lesson_id in lesson_ids
             if (summaries.get(lesson_id) or {}).get("is_completed")
         )
         is_completed = completed_count == total_lessons and total_lessons > 0
+
+        total_ms = _elapsed_ms(route_start)
+        print(
+            f"[progress:level-completion] stage={stage} level={level} lessons={len(lesson_ids)} "
+            f"auth_ms={auth_ms} lessons_query_ms={lessons_query_ms} "
+            f"progress_query_ms={progress_query_ms} unit_query_ms={unit_query_ms} "
+            f"summarize_ms={summarize_ms} total_ms={total_ms}",
+            flush=True,
+        )
 
         return jsonify({
             "is_completed": is_completed,
@@ -1874,6 +1913,7 @@ def get_level_completion_status(stage, level):
 def get_lesson_progress_summaries():
     route_start = time.perf_counter()
     try:
+        auth_start = time.perf_counter()
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
             return jsonify({"error": "Authorization token required"}), 401
@@ -1885,6 +1925,7 @@ def get_lesson_progress_summaries():
             return jsonify({"error": "Invalid token"}), 401
 
         user_id = user_response.user.id
+        auth_ms = _elapsed_ms(auth_start)
         data = request.get_json(silent=True) or {}
         lesson_ids = data.get("lesson_ids") or []
         if not isinstance(lesson_ids, list):
@@ -1894,7 +1935,7 @@ def get_lesson_progress_summaries():
         if not lesson_ids:
             return jsonify({"progress_by_lesson": {}}), 200
 
-        db_start = time.perf_counter()
+        progress_query_start = time.perf_counter()
         progress_result = _execute_with_retry(
             lambda: (
                 supabase.table('user_lesson_progress')
@@ -1904,6 +1945,8 @@ def get_lesson_progress_summaries():
             ),
             "lesson progress summaries lesson progress",
         )
+        progress_query_ms = _elapsed_ms(progress_query_start)
+        unit_query_start = time.perf_counter()
         unit_result = _execute_with_retry(
             lambda: (
                 supabase.table('user_lesson_unit_progress')
@@ -1913,7 +1956,8 @@ def get_lesson_progress_summaries():
             ),
             "lesson progress summaries unit progress",
         )
-        db_ms = _elapsed_ms(db_start)
+        unit_query_ms = _elapsed_ms(unit_query_start)
+        db_ms = progress_query_ms + unit_query_ms
 
         expectations_start = time.perf_counter()
         summaries = _summarize_web_lesson_progress(
@@ -1924,8 +1968,11 @@ def get_lesson_progress_summaries():
         expectations_ms = _elapsed_ms(expectations_start)
         total_ms = _elapsed_ms(route_start)
         print(
-            f"[progress:web-summary] lessons={len(lesson_ids)} db_ms={db_ms} "
-            f"summarize_ms={expectations_ms} total_ms={total_ms}",
+            f"[progress:web-summary] lessons={len(lesson_ids)} auth_ms={auth_ms} "
+            f"progress_query_ms={progress_query_ms} unit_query_ms={unit_query_ms} "
+            f"db_ms={db_ms} summarize_ms={expectations_ms} "
+            f"progress_rows={len(progress_result.data or [])} unit_rows={len(unit_result.data or [])} "
+            f"total_ms={total_ms}",
             flush=True,
         )
 
@@ -1981,12 +2028,16 @@ def get_app_lesson_progress_summaries():
         )
         db_ms = _elapsed_ms(db_start)
         expectations_start = time.perf_counter()
-        expectations_by_lesson = build_app_lesson_expectations_for_many(lesson_ids)
-        summaries = summarize_app_lesson_progress(
+        total_units_by_lesson = fetch_app_total_units_for_many(
+            lesson_ids,
+            fallback=True,
+            persist_fallback=False,
+        )
+        summaries = summarize_app_lesson_progress_from_totals(
             lesson_ids,
             progress_result.data or [],
             unit_result.data or [],
-            expectations_by_lesson,
+            total_units_by_lesson,
         )
         expectations_ms = _elapsed_ms(expectations_start)
         total_ms = _elapsed_ms(route_start)
@@ -2356,6 +2407,7 @@ def get_exercise_sections():
         result = (
             supabase.table("exercise_bank")
             .select("id, category, section, section_th")
+            .order("id", desc=False)
             .execute()
         )
 
@@ -2377,6 +2429,7 @@ def get_exercise_sections():
                     "section": section,
                     "section_th": section_th,
                     "section_slug": _section_slug(section),
+                    "section_order": row.get("id"),
                     "exercise_count": 0,
                     "featured_count": 1 if is_featured else 0,
                     "is_featured": is_featured,
@@ -2393,7 +2446,13 @@ def get_exercise_sections():
                 or section["category"].lower() == category_filter
             ]
 
-        sections.sort(key=lambda item: (item["category_label"], item["section"]))
+        sections.sort(
+            key=lambda item: (
+                _category_order_index(item["category"]),
+                item.get("section_order") or 0,
+                item["section"],
+            )
+        )
 
         # Build the category list with aggregated data
         categories = defaultdict(
@@ -2488,8 +2547,9 @@ def get_exercise_section(category_slug, section_slug):
             supabase.table("exercise_bank")
             .select(
                 "id, category, section, section_th, title, title_th, prompt, prompt_th, "
-                "exercise_type, items, items_th, is_featured"
+                "exercise_type, items, items_th, sort_order, is_featured"
             )
+            .order("sort_order", desc=False)
             .execute()
         )
 
@@ -2504,7 +2564,7 @@ def get_exercise_section(category_slug, section_slug):
         if not filtered:
             return jsonify({"error": "Section not found"}), 404
 
-        filtered.sort(key=lambda row: (row.get("sort_order") or 0, row.get("title") or ""))
+        filtered.sort(key=lambda row: ((row.get("sort_order") is None), row.get("sort_order") or 0, row.get("title") or ""))
         sample = filtered[0]
 
         exercises = [

@@ -136,6 +136,7 @@ def _prepare_rows_en(sections: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any
                 "category": section["category"],
                 "section": section_key,
                 "section_th": section.get("section_title_th") or None,
+                "sort_order": exercise.get("sort_order"),
                 "exercise_type": kind,
                 "title": title_en or None,
                 "title_th": title_th or None,

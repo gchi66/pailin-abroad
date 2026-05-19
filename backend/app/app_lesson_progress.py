@@ -522,6 +522,66 @@ def build_app_lesson_expectations_for_many(lesson_ids):
     return expectations
 
 
+def refresh_app_total_units_for_lessons(lesson_ids, persist=False):
+    lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
+    if not lesson_ids:
+        return {}
+
+    expectations_by_lesson = build_app_lesson_expectations_for_many(lesson_ids)
+    totals_by_lesson = {
+        lesson_id: len((expectations_by_lesson.get(lesson_id) or {}).get("unit_keys") or [])
+        for lesson_id in lesson_ids
+    }
+
+    if persist:
+        for lesson_id, total_units in totals_by_lesson.items():
+            _execute_with_retry(
+                lambda lesson_id=lesson_id, total_units=total_units: (
+                    supabase.table("lessons")
+                    .update({"app_total_units": total_units})
+                    .eq("id", lesson_id)
+                ),
+                f"persist app_total_units for lesson {lesson_id}",
+            )
+
+    return totals_by_lesson
+
+
+def fetch_app_total_units_for_many(lesson_ids, fallback=False, persist_fallback=False):
+    lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
+    if not lesson_ids:
+        return {}
+
+    result = _execute_with_retry(
+        lambda: (
+            supabase.table("lessons")
+            .select("id, app_total_units")
+            .in_("id", lesson_ids)
+        ),
+        "fetch lessons app_total_units",
+    )
+    rows = result.data or []
+    totals_by_lesson = {
+        row.get("id"): row.get("app_total_units")
+        for row in rows
+        if row.get("id")
+    }
+
+    missing_lesson_ids = [
+        lesson_id for lesson_id in lesson_ids
+        if totals_by_lesson.get(lesson_id) is None
+    ]
+    if missing_lesson_ids and fallback:
+        totals_by_lesson.update(
+            refresh_app_total_units_for_lessons(
+                missing_lesson_ids,
+                persist=persist_fallback,
+            )
+        )
+
+    return totals_by_lesson
+
+
 def derive_app_resume(progress_row, unit_rows_by_key):
     if not progress_row:
         return None
@@ -606,6 +666,63 @@ def summarize_app_lesson_progress(lesson_ids, progress_rows, unit_rows, expectat
                 unit_key for unit_key in expected_unit_keys if unit_key in completed_units
             ],
             "expected_units": list(expected.get("units") or []),
+        }
+
+    return summaries
+
+
+def summarize_app_lesson_progress_from_totals(lesson_ids, progress_rows, unit_rows, total_units_by_lesson):
+    lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
+    progress_by_lesson = {
+        row.get("lesson_id"): row
+        for row in (progress_rows or [])
+        if row.get("lesson_id")
+    }
+
+    seen_units_by_lesson = defaultdict(set)
+    completed_units_by_lesson = defaultdict(set)
+    unit_rows_by_lesson_key = defaultdict(dict)
+
+    for row in unit_rows or []:
+        lesson_id = row.get("lesson_id")
+        unit_key = row.get("unit_key")
+        if not lesson_id or not is_app_unit_key(unit_key):
+            continue
+        unit_rows_by_lesson_key[lesson_id][unit_key] = row
+        seen_units_by_lesson[lesson_id].add(unit_key)
+        if row.get("is_completed"):
+            completed_units_by_lesson[lesson_id].add(unit_key)
+
+    summaries = {}
+    for lesson_id in lesson_ids:
+        completed_units = completed_units_by_lesson.get(lesson_id, set())
+        completed_count = len(completed_units)
+        total_units = int(total_units_by_lesson.get(lesson_id) or 0)
+        progress_row = progress_by_lesson.get(lesson_id) or {}
+        manually_completed = bool(progress_row.get("is_completed"))
+        organically_completed = total_units > 0 and completed_count >= total_units
+        is_completed = manually_completed or organically_completed
+        has_started = bool(seen_units_by_lesson.get(lesson_id)) or bool(
+            is_app_unit_key(progress_row.get("last_unit_key"))
+        )
+        resume = derive_app_resume(
+            progress_row,
+            unit_rows_by_lesson_key.get(lesson_id, {}),
+        )
+
+        summaries[lesson_id] = {
+            "lesson_id": lesson_id,
+            "has_started": has_started,
+            "percent_complete": 100 if is_completed else (
+                round((completed_count / total_units) * 100) if total_units > 0 else 0
+            ),
+            "is_completed": is_completed,
+            "manually_completed": manually_completed,
+            "completed_units": completed_count,
+            "total_units": total_units,
+            "resume": resume,
+            "completed_unit_keys": [],
+            "expected_units": [],
         }
 
     return summaries

@@ -17,6 +17,15 @@ const stageClassMap = {
 };
 
 const PRIORITY_LESSON_PROGRESS_COUNT = 6;
+const DEBUG_LESSON_LIBRARY_TIMING = true;
+
+function logLessonLibraryTiming(label, startedAt, extra = {}) {
+  if (!DEBUG_LESSON_LIBRARY_TIMING || typeof performance === "undefined") return;
+  console.log(`[lesson-library] ${label}`, {
+    durationMs: Math.round(performance.now() - startedAt),
+    ...extra,
+  });
+}
 
 function ProgressCircle({ percent, size = 32, strokeWidth = 5.2 }) {
   const clampedPercent = Math.max(0, Math.min(100, percent));
@@ -210,6 +219,7 @@ const LessonsIndex = () => {
   // Fetch levels for the selected stage
   useEffect(() => {
     const fetchLevels = async () => {
+      const startedAt = typeof performance !== "undefined" ? performance.now() : 0;
       try {
         const { data, error } = await supabaseClient
           .from("lessons")
@@ -232,8 +242,16 @@ const LessonsIndex = () => {
         if (uniqueLevels.length > 0 && !uniqueLevels.includes(selectedLevel)) {
           setSelectedLevel(uniqueLevels[0]);
         }
+        logLessonLibraryTiming("fetchLevels", startedAt, {
+          stage: selectedStage,
+          levels: uniqueLevels.length,
+        });
       } catch (error) {
         console.error("Error fetching levels:", error.message);
+        logLessonLibraryTiming("fetchLevels:error", startedAt, {
+          stage: selectedStage,
+          message: error.message,
+        });
       }
     };
 
@@ -268,6 +286,7 @@ const LessonsIndex = () => {
     let cancelled = false;
 
     const fetchCompletedLessons = async () => {
+      const startedAt = typeof performance !== "undefined" ? performance.now() : 0;
       if (!user) {
         setCompletedLessons([]);
         return;
@@ -294,12 +313,18 @@ const LessonsIndex = () => {
           if (!cancelled) {
             setCompletedLessons(data.completed_lessons || []);
           }
+          logLessonLibraryTiming("fetchCompletedLessons", startedAt, {
+            count: (data.completed_lessons || []).length,
+          });
         }
       } catch (error) {
         console.error('Error fetching completed lessons:', error);
         if (!cancelled) {
           setCompletedLessons([]);
         }
+        logLessonLibraryTiming("fetchCompletedLessons:error", startedAt, {
+          message: error.message,
+        });
       }
     };
 
@@ -320,6 +345,7 @@ const LessonsIndex = () => {
     const fetchProgressChunk = async (session, lessonIds) => {
       if (!lessonIds.length) return {};
 
+      const startedAt = typeof performance !== "undefined" ? performance.now() : 0;
       const response = await fetch(`${API_BASE_URL}/api/user/lesson-progress-summaries`, {
         method: 'POST',
         headers: {
@@ -336,10 +362,15 @@ const LessonsIndex = () => {
       }
 
       const data = await response.json();
+      logLessonLibraryTiming("fetchProgressChunk", startedAt, {
+        lessonCount: lessonIds.length,
+        firstLessonId: lessonIds[0],
+      });
       return data.progress_by_lesson || {};
     };
 
     const fetchLessonProgress = async () => {
+      const startedAt = typeof performance !== "undefined" ? performance.now() : 0;
       if (!user || !lessons.length) {
         setProgressByLesson({});
         return;
@@ -370,6 +401,11 @@ const LessonsIndex = () => {
         setProgressByLesson(priorityProgress);
 
         if (!deferredLessonIds.length) {
+          logLessonLibraryTiming("fetchLessonProgress", startedAt, {
+            lessonCount: orderedLessonIds.length,
+            priorityCount: priorityLessonIds.length,
+            deferredCount: 0,
+          });
           return;
         }
 
@@ -382,11 +418,21 @@ const LessonsIndex = () => {
           ...prev,
           ...deferredProgress,
         }));
+        logLessonLibraryTiming("fetchLessonProgress", startedAt, {
+          lessonCount: orderedLessonIds.length,
+          priorityCount: priorityLessonIds.length,
+          deferredCount: deferredLessonIds.length,
+        });
       } catch (error) {
         console.error('Error fetching lesson progress summaries:', error);
         if (!cancelled) {
           setProgressByLesson({});
         }
+        logLessonLibraryTiming("fetchLessonProgress:error", startedAt, {
+          stage: selectedStage,
+          level: selectedLevel,
+          message: error.message,
+        });
       }
     };
 
@@ -410,6 +456,7 @@ const LessonsIndex = () => {
     let cancelled = false;
 
     const fetchLevelCompletionStatus = async () => {
+      const startedAt = typeof performance !== "undefined" ? performance.now() : 0;
       if (!user || !selectedStage || !selectedLevel) {
         setLevelCompletionStatus(null);
         return;
@@ -438,16 +485,31 @@ const LessonsIndex = () => {
           if (!cancelled) {
             setLevelCompletionStatus(data);
           }
+          logLessonLibraryTiming("fetchLevelCompletionStatus", startedAt, {
+            stage: selectedStage,
+            level: selectedLevel,
+            isCompleted: data.is_completed,
+          });
         } else {
           if (!cancelled) {
             setLevelCompletionStatus(null);
           }
+          logLessonLibraryTiming("fetchLevelCompletionStatus:error", startedAt, {
+            stage: selectedStage,
+            level: selectedLevel,
+            status: response.status,
+          });
         }
       } catch (error) {
         console.error('Error fetching level completion status:', error);
         if (!cancelled) {
           setLevelCompletionStatus(null);
         }
+        logLessonLibraryTiming("fetchLevelCompletionStatus:error", startedAt, {
+          stage: selectedStage,
+          level: selectedLevel,
+          message: error.message,
+        });
       }
     };
 
@@ -464,6 +526,7 @@ const LessonsIndex = () => {
   // Fetch lessons for the selected stage and level
   useEffect(() => {
     const fetchLessons = async () => {
+      const startedAt = typeof performance !== "undefined" ? performance.now() : 0;
       if (!selectedLevel) return; // Don't fetch if no level is selected
 
       try {
@@ -476,8 +539,18 @@ const LessonsIndex = () => {
 
         if (error) throw error;
         setLessons(data || []);
+        logLessonLibraryTiming("fetchLessons", startedAt, {
+          stage: selectedStage,
+          level: selectedLevel,
+          lessonCount: (data || []).length,
+        });
       } catch (error) {
         console.error("Error fetching lessons:", error.message);
+        logLessonLibraryTiming("fetchLessons:error", startedAt, {
+          stage: selectedStage,
+          level: selectedLevel,
+          message: error.message,
+        });
       }
     };
 

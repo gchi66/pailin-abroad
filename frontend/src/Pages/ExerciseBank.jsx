@@ -299,6 +299,9 @@ const ExerciseBank = () => {
       const orderA = CATEGORY_ORDER_INDEX[a.category_slug] ?? 999;
       const orderB = CATEGORY_ORDER_INDEX[b.category_slug] ?? 999;
       if (orderA !== orderB) return orderA - orderB;
+      const sectionOrderA = a.section_order ?? Number.MAX_SAFE_INTEGER;
+      const sectionOrderB = b.section_order ?? Number.MAX_SAFE_INTEGER;
+      if (sectionOrderA !== sectionOrderB) return sectionOrderA - sectionOrderB;
       return (a.section || "").localeCompare(b.section || "");
     });
     return sorted;

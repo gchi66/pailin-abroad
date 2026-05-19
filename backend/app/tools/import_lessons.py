@@ -19,6 +19,7 @@ import unicodedata
 import time
 import httpx
 from postgrest.exceptions import APIError
+from app.app_lesson_progress import refresh_app_total_units_for_lessons
 from app.supabase_client import supabase
 
 
@@ -931,6 +932,8 @@ def process_lesson(data, lang="en", dry_run=False):
     pinned_comment = data.get("pinned_comment")
     if pinned_comment:
         upsert_pinned_comment(lesson_id, pinned_comment, lang=lang, dry_run=dry_run)
+    if lang == "en" and not dry_run:
+        refresh_app_total_units_for_lessons([lesson_id], persist=True)
 
 
 def import_lessons_from_folder(folder_path, lang="en", dry_run=False):
