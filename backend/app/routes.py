@@ -225,15 +225,46 @@ def _calculate_daily_app_streak(user_id, local_today):
     return streak, local_today in opened_dates
 
 
-def _build_daily_streak_status(user_id, tzinfo, timezone_name):
-    local_today = datetime.now(tzinfo).date()
-    streak, checked_in_today = _calculate_daily_app_streak(user_id, local_today)
+def _parse_iso_date(value):
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(str(value))
+    except ValueError:
+        return None
+
+
+def _fetch_user_streak_cache(user_id):
+    result = _execute_with_retry(
+        lambda: (
+            supabase_admin.table("users")
+            .select("daily_streak, last_checkin_date, daily_streak_timezone")
+            .eq("id", user_id)
+            .single()
+        ),
+        "user streak cache",
+    )
+    return result.data or {}
+
+
+def _build_cached_daily_streak_status(user_id, local_today, timezone_name):
+    user_row = _fetch_user_streak_cache(user_id)
+    cached_streak = max(int(user_row.get("daily_streak") or 0), 0)
+    last_checkin_date = _parse_iso_date(user_row.get("last_checkin_date"))
+    checked_in_today = last_checkin_date == local_today
+
     return {
-        "daily_streak": streak,
+        "daily_streak": cached_streak if checked_in_today else 0,
         "checked_in_today": checked_in_today,
         "opened_on": local_today.isoformat(),
         "timezone": timezone_name,
+        "last_checkin_date": last_checkin_date.isoformat() if last_checkin_date else None,
     }
+
+
+def _build_daily_streak_status(user_id, tzinfo, timezone_name):
+    local_today = datetime.now(tzinfo).date()
+    return _build_cached_daily_streak_status(user_id, local_today, timezone_name)
 
 
 def _is_retryable_supabase_error(exc):
@@ -2151,6 +2182,18 @@ def record_daily_streak_check_in():
         payload = request.get_json(silent=True) or {}
         tzinfo, timezone_name = _resolve_streak_timezone(payload)
         local_today = datetime.now(tzinfo).date()
+        local_yesterday = local_today - timedelta(days=1)
+        user_row = _fetch_user_streak_cache(user_id)
+        current_streak = max(int(user_row.get("daily_streak") or 0), 0)
+        last_checkin_date = _parse_iso_date(user_row.get("last_checkin_date"))
+
+        already_checked_in_today = last_checkin_date == local_today
+        if already_checked_in_today:
+            next_streak = current_streak
+        elif last_checkin_date == local_yesterday:
+            next_streak = current_streak + 1 if current_streak > 0 else 1
+        else:
+            next_streak = 1
 
         _execute_with_retry(
             lambda: (
@@ -2167,7 +2210,29 @@ def record_daily_streak_check_in():
             "daily streak check in",
         )
 
-        streak_status = _build_daily_streak_status(user_id, tzinfo, timezone_name)
+        _execute_with_retry(
+            lambda: (
+                supabase_admin.table("users")
+                .update(
+                    {
+                        "daily_streak": next_streak,
+                        "last_checkin_date": local_today.isoformat(),
+                        "daily_streak_timezone": timezone_name,
+                    }
+                )
+                .eq("id", user_id)
+            ),
+            "daily streak cache update",
+        )
+
+        streak_status = {
+            "daily_streak": next_streak,
+            "checked_in_today": True,
+            "opened_on": local_today.isoformat(),
+            "timezone": timezone_name,
+            "last_checkin_date": local_today.isoformat(),
+            "should_celebrate": not already_checked_in_today,
+        }
         return jsonify(streak_status), 200
     except Exception as e:
         print(f"Error recording daily streak check-in: {e}")
@@ -2252,6 +2317,7 @@ def get_user_stats():
                 "checked_in_today": False,
                 "opened_on": datetime.now(timezone.utc).date().isoformat(),
                 "timezone": "UTC",
+                "last_checkin_date": None,
             }
 
         return jsonify({
@@ -2261,6 +2327,7 @@ def get_user_stats():
             "daily_streak_checked_in_today": streak_status["checked_in_today"],
             "daily_streak_opened_on": streak_status["opened_on"],
             "daily_streak_timezone": streak_status["timezone"],
+            "daily_streak_last_checkin_date": streak_status.get("last_checkin_date"),
         }), 200
 
     except Exception as e:
