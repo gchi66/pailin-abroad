@@ -46,6 +46,12 @@ PATHWAY_LESSON_SELECT = (
     "title, title_th, subtitle, subtitle_th, "
     "focus, focus_th, image_url, header_img, conversation_audio_url"
 )
+PATHWAY_LESSONS_CACHE_TTL_SECONDS = 5 * 60
+_pathway_lessons_cache = {
+    "ordered_lessons": None,
+    "lesson_index_by_id": None,
+    "timestamp": 0.0,
+}
 
 CATEGORY_LABELS = {
     "verbs_and_tenses": "Verbs and Tenses",
@@ -155,6 +161,43 @@ def _lesson_sort_key(lesson):
 
 def _elapsed_ms(start):
     return int((time.perf_counter() - start) * 1000)
+
+
+def _get_cached_pathway_lessons():
+    cache_entry = _pathway_lessons_cache
+    cache_age_seconds = time.time() - cache_entry["timestamp"]
+    if (
+        cache_entry["ordered_lessons"] is not None
+        and cache_entry["lesson_index_by_id"] is not None
+        and cache_age_seconds < PATHWAY_LESSONS_CACHE_TTL_SECONDS
+    ):
+        return {
+            "ordered_lessons": cache_entry["ordered_lessons"],
+            "lesson_index_by_id": cache_entry["lesson_index_by_id"],
+            "cache_hit": True,
+            "query_ms": 0,
+        }
+
+    lessons_start = time.perf_counter()
+    lessons_result = supabase.table("lessons").select(PATHWAY_LESSON_SELECT).execute()
+    lessons_query_ms = _elapsed_ms(lessons_start)
+    ordered_lessons = sorted(lessons_result.data or [], key=_lesson_sort_key)
+    lesson_index_by_id = {
+        lesson.get("id"): index
+        for index, lesson in enumerate(ordered_lessons)
+        if lesson.get("id")
+    }
+
+    _pathway_lessons_cache["ordered_lessons"] = ordered_lessons
+    _pathway_lessons_cache["lesson_index_by_id"] = lesson_index_by_id
+    _pathway_lessons_cache["timestamp"] = time.time()
+
+    return {
+        "ordered_lessons": ordered_lessons,
+        "lesson_index_by_id": lesson_index_by_id,
+        "cache_hit": False,
+        "query_ms": lessons_query_ms,
+    }
 
 
 def _get_authenticated_user_id():
@@ -1095,7 +1138,7 @@ def get_pathway_lessons():
             completed_start = time.perf_counter()
             completed_result = (
                 supabase.table('user_lesson_progress')
-                .select('lesson_id, lessons(level, lesson_order, stage)')
+                .select('lesson_id')
                 .eq('user_id', user_id)
                 .eq('is_completed', True)
                 .execute()
@@ -1103,35 +1146,23 @@ def get_pathway_lessons():
             completed_query_ms = _elapsed_ms(completed_start)
             completed_lessons = completed_result.data if completed_result.data else []
 
-            lessons_start = time.perf_counter()
-            lessons_result = supabase.table('lessons').select(PATHWAY_LESSON_SELECT).execute()
-            lessons_query_ms = _elapsed_ms(lessons_start)
-
             compute_start = time.perf_counter()
-            ordered_lessons = sorted(lessons_result.data or [], key=_lesson_sort_key)
+            cached_lessons = _get_cached_pathway_lessons()
+            ordered_lessons = cached_lessons["ordered_lessons"]
+            lesson_index_by_id = cached_lessons["lesson_index_by_id"]
+            lessons_query_ms = cached_lessons["query_ms"]
+            lessons_cache_hit = cached_lessons["cache_hit"]
 
             start_index = 0
             if completed_lessons:
-                completed_positions = {
+                highest_completed_index = max(
                     (
-                        progress.get('lessons', {}).get('stage'),
-                        progress.get('lessons', {}).get('level'),
-                        progress.get('lessons', {}).get('lesson_order'),
-                    )
-                    for progress in completed_lessons
-                    if progress.get('lessons')
-                }
-
-                highest_completed_index = -1
-                for index, lesson in enumerate(ordered_lessons):
-                    lesson_position = (
-                        lesson.get('stage'),
-                        lesson.get('level'),
-                        lesson.get('lesson_order'),
-                    )
-                    if lesson_position in completed_positions:
-                        highest_completed_index = index
-
+                        lesson_index_by_id.get(progress.get('lesson_id'), -1)
+                        for progress in completed_lessons
+                        if progress.get('lesson_id')
+                    ),
+                    default=-1,
+                )
                 start_index = highest_completed_index + 1
 
             pathway_lessons = ordered_lessons[start_index:start_index + 5]
@@ -1144,6 +1175,7 @@ def get_pathway_lessons():
                 f"completed_query_ms={completed_query_ms} "
                 f"completed_count={len(completed_lessons)} "
                 f"lessons_query_ms={lessons_query_ms} "
+                f"lessons_cache_hit={lessons_cache_hit} "
                 f"lesson_count={len(ordered_lessons)} "
                 f"compute_ms={compute_ms} "
                 f"pathway_count={len(pathway_lessons)} "
