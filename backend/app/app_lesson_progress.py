@@ -571,6 +571,12 @@ def fetch_app_total_units_for_many(lesson_ids, fallback=False, persist_fallback=
         lesson_id for lesson_id in lesson_ids
         if totals_by_lesson.get(lesson_id) is None
     ]
+    print(
+        f"[progress:app-total-units] requested={len(lesson_ids)} "
+        f"stored={len(rows) - len(missing_lesson_ids)} missing={len(missing_lesson_ids)} "
+        f"fallback={fallback} persist_fallback={persist_fallback}",
+        flush=True,
+    )
     if missing_lesson_ids and fallback:
         totals_by_lesson.update(
             refresh_app_total_units_for_lessons(

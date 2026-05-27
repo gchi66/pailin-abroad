@@ -2113,7 +2113,7 @@ def get_app_lesson_progress_summaries():
         total_units_by_lesson = fetch_app_total_units_for_many(
             lesson_ids,
             fallback=True,
-            persist_fallback=False,
+            persist_fallback=True,
         )
         summaries = summarize_app_lesson_progress_from_totals(
             lesson_ids,
