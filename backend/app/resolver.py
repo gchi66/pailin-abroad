@@ -1,7 +1,10 @@
 # app/resolver.py
+import copy
 import os
 import re
 import json
+import time
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
 from app.supabase_client import supabase
 from app.merge_jsonb import merge_content_nodes
@@ -10,6 +13,25 @@ from app.config import Config
 Lang = str  # "en" | "th"
 TEXT_KINDS = {"heading", "paragraph", "list_item", "misc_item"}
 AUDIO_TAG_RE = re.compile(r"\[audio:([^\]\s]+)\]", re.I)
+RESOLVED_LESSON_CACHE_TTL_SECONDS = 5 * 60
+GLOBAL_LESSON_IMAGES_CACHE_TTL_SECONDS = 10 * 60
+AUDIO_SNIPPETS_CACHE_TTL_SECONDS = 10 * 60
+
+_resolved_lesson_cache = {}
+_global_images_cache = {"data": None, "timestamp": 0.0}
+_audio_snippets_cache = {}
+
+
+def _now():
+    return time.perf_counter()
+
+
+def _elapsed_ms(start):
+    return max(0, round((time.perf_counter() - start) * 1000))
+
+
+def _cache_fresh(timestamp: float, ttl_seconds: int) -> bool:
+    return (time.time() - timestamp) < ttl_seconds
 
 
 def _exec(q):
@@ -29,6 +51,47 @@ def _exec_logged(label: str, q):
     except Exception as exc:
       print(f"[resolver] {label} failed: {exc}", flush=True)
       raise
+
+
+def _get_cached_global_images():
+    if (
+        _global_images_cache["data"] is not None
+        and _cache_fresh(
+            _global_images_cache["timestamp"],
+            GLOBAL_LESSON_IMAGES_CACHE_TTL_SECONDS,
+        )
+    ):
+        return _global_images_cache["data"], True
+
+    data = _exec_logged(
+        "lesson_images_global",
+        supabase.table("lesson_images")
+        .select("image_key, url")
+        .is_("lesson_id", None)
+    )
+    _global_images_cache["data"] = data
+    _global_images_cache["timestamp"] = time.time()
+    return data, False
+
+
+def _get_cached_audio_snippets(lesson_external_id: str):
+    if not lesson_external_id:
+        return [], False
+
+    entry = _audio_snippets_cache.get(lesson_external_id)
+    if entry and _cache_fresh(entry["timestamp"], AUDIO_SNIPPETS_CACHE_TTL_SECONDS):
+        return entry["data"], True
+
+    data = _exec(
+        supabase.table("audio_snippets")
+        .select("audio_key, section, seq")
+        .eq("lesson_external_id", lesson_external_id)
+    )
+    _audio_snippets_cache[lesson_external_id] = {
+        "data": data,
+        "timestamp": time.time(),
+    }
+    return data, False
 
 
 def _pick_lang(en: Optional[Any], th: Optional[Any], lang: Lang) -> Optional[str]:
@@ -122,8 +185,10 @@ def _inject_audio_metadata(nodes: List[Dict[str, Any]], fallback_section: Option
 
 
 def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
-    print(f"[resolver] fetch_lesson_bundle start lesson_id={lesson_id}", flush=True)
+    bundle_start = _now()
+    print(f"[lesson-resolver] bundle_start lesson_id={lesson_id}", flush=True)
 
+    lesson_start = _now()
     lesson = _exec_logged(
         "lessons",
         supabase.table("lessons")
@@ -136,64 +201,88 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         .eq("id", lesson_id)
         .single()
     )
+    lesson_ms = _elapsed_ms(lesson_start)
 
-    sections = _exec_logged(
-        "lesson_sections",
-        supabase.table("lesson_sections")
-        .select("*")
-        .eq("lesson_id", lesson_id)
-        .order("sort_order", desc=False)
-    )
-
-    transcript = _exec_logged(
-        "transcript_lines",
-        supabase.table("transcript_lines")
-        .select("*")
-        .eq("lesson_id", lesson_id)
-        .order("sort_order", desc=False)
-    )
-
-    questions = _exec_logged(
-        "comprehension_questions",
-        supabase.table("comprehension_questions")
-        .select("*")
-        .eq("lesson_id", lesson_id)
-        .order("sort_order", desc=False)
-    )
-
-    exercises = _exec_logged(
-        "practice_exercises",
-        supabase.table("practice_exercises")
-        .select("*")
-        .eq("lesson_id", lesson_id)
-        .order("sort_order", desc=False)
-    )
-
-    phrase_links = _exec_logged(
-        "lesson_phrases_with_phrases",
-        supabase.table("lesson_phrases")
-        .select(
-            "lesson_id, phrase_id, sort_order, phrases(*)"
+    def load_sections():
+        start = _now()
+        data = _exec_logged(
+            "lesson_sections",
+            supabase.table("lesson_sections").select("*").eq("lesson_id", lesson_id).order("sort_order", desc=False)
         )
-        .eq("lesson_id", lesson_id)
-        .order("sort_order", desc=False)
-    )
+        return data, _elapsed_ms(start)
 
-    images = _exec_logged(
-        "lesson_images",
-        supabase.table("lesson_images")
-        .select("image_key, url")
-        .eq("lesson_id", lesson_id)
-    )
+    def load_transcript():
+        start = _now()
+        data = _exec_logged(
+            "transcript_lines",
+            supabase.table("transcript_lines").select("*").eq("lesson_id", lesson_id).order("sort_order", desc=False)
+        )
+        return data, _elapsed_ms(start)
 
-    global_images = _exec_logged(
-        "lesson_images_global",
-        supabase.table("lesson_images")
-        .select("image_key, url")
-        .is_("lesson_id", None)
-    )
+    def load_questions():
+        start = _now()
+        data = _exec_logged(
+            "comprehension_questions",
+            supabase.table("comprehension_questions").select("*").eq("lesson_id", lesson_id).order("sort_order", desc=False)
+        )
+        return data, _elapsed_ms(start)
 
-    print(f"[resolver] fetch_lesson_bundle done lesson_id={lesson_id}", flush=True)
+    def load_exercises():
+        start = _now()
+        data = _exec_logged(
+            "practice_exercises",
+            supabase.table("practice_exercises").select("*").eq("lesson_id", lesson_id).order("sort_order", desc=False)
+        )
+        return data, _elapsed_ms(start)
+
+    def load_phrase_links():
+        start = _now()
+        data = _exec_logged(
+            "lesson_phrases_with_phrases",
+            supabase.table("lesson_phrases")
+            .select("lesson_id, phrase_id, sort_order, phrases(*)")
+            .eq("lesson_id", lesson_id)
+            .order("sort_order", desc=False)
+        )
+        return data, _elapsed_ms(start)
+
+    def load_images():
+        start = _now()
+        data = _exec_logged(
+            "lesson_images",
+            supabase.table("lesson_images").select("image_key, url").eq("lesson_id", lesson_id)
+        )
+        return data, _elapsed_ms(start)
+
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        futures = {
+            "sections": executor.submit(load_sections),
+            "transcript": executor.submit(load_transcript),
+            "questions": executor.submit(load_questions),
+            "exercises": executor.submit(load_exercises),
+            "phrase_links": executor.submit(load_phrase_links),
+            "images": executor.submit(load_images),
+        }
+
+        sections, sections_ms = futures["sections"].result()
+        transcript, transcript_ms = futures["transcript"].result()
+        questions, questions_ms = futures["questions"].result()
+        exercises, exercises_ms = futures["exercises"].result()
+        phrase_links, phrase_links_ms = futures["phrase_links"].result()
+        images, images_ms = futures["images"].result()
+
+    global_images_start = _now()
+    global_images, global_images_cache_hit = _get_cached_global_images()
+    global_images_ms = _elapsed_ms(global_images_start)
+
+    print(
+        f"[lesson-resolver] bundle_done lesson_id={lesson_id} "
+        f"lesson_ms={lesson_ms} sections_ms={sections_ms} transcript_ms={transcript_ms} "
+        f"questions_ms={questions_ms} exercises_ms={exercises_ms} phrase_links_ms={phrase_links_ms} "
+        f"images_ms={images_ms} global_images_ms={global_images_ms} "
+        f"global_images_cache_hit={global_images_cache_hit} total_ms={_elapsed_ms(bundle_start)}",
+        flush=True,
+    )
 
     return {
         "lesson": lesson,
@@ -208,7 +297,24 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
 
 
 def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
+    route_start = _now()
+    cache_key = f"{lesson_id}:{lang}"
+    cached_entry = _resolved_lesson_cache.get(cache_key)
+    if cached_entry and _cache_fresh(
+        cached_entry["timestamp"], RESOLVED_LESSON_CACHE_TTL_SECONDS
+    ):
+        print(
+            f"[lesson-resolver] cache_hit lesson_id={lesson_id} lang={lang} "
+            f"elapsed_ms={_elapsed_ms(route_start)}",
+            flush=True,
+        )
+        return copy.deepcopy(cached_entry["data"])
+
+    fetch_start = _now()
     raw = _fetch_lesson_bundle(lesson_id)
+    fetch_ms = _elapsed_ms(fetch_start)
+
+    transform_start = _now()
     L = raw["lesson"]
     images_lookup: Dict[str, str] = {}
     for img in raw.get("global_images", []) or []:
@@ -276,12 +382,9 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
     resolved_sections: List[Dict[str, Any]] = []
     lesson_external_id = L.get("lesson_external_id")
     audio_lookup: Dict[tuple, str] = {}
+    audio_cache_hit = False
     if lesson_external_id:
-        audio_snippets = _exec(
-            supabase.table("audio_snippets")
-            .select("audio_key, section, seq")
-            .eq("lesson_external_id", lesson_external_id)
-        )
+        audio_snippets, audio_cache_hit = _get_cached_audio_snippets(lesson_external_id)
         audio_lookup = {
             (a["section"], a["seq"]): a["audio_key"]
             for a in audio_snippets
@@ -516,4 +619,19 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         }
     )
 
-    return resolved
+    transform_ms = _elapsed_ms(transform_start)
+    total_ms = _elapsed_ms(route_start)
+    print(
+        f"[lesson-resolver] resolved lesson_id={lesson_id} lang={lang} "
+        f"fetch_ms={fetch_ms} transform_ms={transform_ms} total_ms={total_ms} "
+        f"audio_cache_hit={audio_cache_hit} "
+        f"sections={len(resolved_sections)} transcript={len(resolved_transcript)} "
+        f"questions={len(rq)} exercises={len(rexs)} phrases={len(rphr)}",
+        flush=True,
+    )
+
+    _resolved_lesson_cache[cache_key] = {
+        "data": copy.deepcopy(resolved),
+        "timestamp": time.time(),
+    }
+    return copy.deepcopy(resolved)

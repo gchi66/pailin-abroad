@@ -1739,6 +1739,7 @@ def notify_comment():
 @routes.route("/api/lessons/<lesson_id>/resolved", methods=["GET"])
 @handle_options
 def get_lesson_resolved(lesson_id):
+    route_start = time.perf_counter()
     lang = (request.args.get("lang") or "en").lower()
     if lang not in ("en", "th"):
         return jsonify({"error": "lang must be 'en' or 'th'"}), 400
@@ -1750,8 +1751,10 @@ def get_lesson_resolved(lesson_id):
     lesson_row = None
 
     auth_header = request.headers.get('Authorization')
+    auth_ms = 0
     if auth_header and auth_header.startswith('Bearer '):
         try:
+            auth_start = time.perf_counter()
             access_token = auth_header.split(' ')[1]
             user_response = supabase.auth.get_user(access_token)
 
@@ -1784,6 +1787,7 @@ def get_lesson_resolved(lesson_id):
                             first_lesson_id = first_lesson['id']
                             if lesson_id == first_lesson_id:
                                 is_locked = False
+            auth_ms = max(0, round((time.perf_counter() - auth_start) * 1000))
         except Exception as e:
             print(f"Auth check error: {e}")
             # If auth fails, keep is_locked = True
@@ -1861,10 +1865,18 @@ def get_lesson_resolved(lesson_id):
         resp = jsonify(safe_payload)
         resp.headers["Cache-Control"] = "public, max-age=60"
         resp.headers["Vary"] = "Accept-Encoding, lang"
+        print(
+            f"[lesson-route] lesson_id={lesson_id} lang={lang} "
+            f"locked={is_locked} auth_ms={auth_ms} resolve_ms=0 "
+            f"total_ms={max(0, round((time.perf_counter() - route_start) * 1000))}",
+            flush=True,
+        )
         return resp, 200
 
     try:
-        payload = resolve_lesson(lesson_id, lang)
+        resolve_start = time.perf_counter()
+        payload = copy.deepcopy(resolve_lesson(lesson_id, lang))
+        resolve_ms = max(0, round((time.perf_counter() - resolve_start) * 1000))
     except KeyError:
         return jsonify({"error": "Lesson not found"}), 404
     except Exception as e:
@@ -1872,6 +1884,13 @@ def get_lesson_resolved(lesson_id):
 
     # Add locked status to payload
     payload['locked'] = is_locked
+
+    print(
+        f"[lesson-route] lesson_id={lesson_id} lang={lang} "
+        f"locked={is_locked} auth_ms={auth_ms} resolve_ms={resolve_ms} "
+        f"total_ms={max(0, round((time.perf_counter() - route_start) * 1000))}",
+        flush=True,
+    )
 
     resp = jsonify(payload)
     resp.headers["Cache-Control"] = "public, max-age=60"
