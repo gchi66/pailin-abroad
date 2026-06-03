@@ -1,0 +1,224 @@
+.app-nudge-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  transition: background-color 300ms ease-out;
+  z-index: 11000;
+  font-family: "Poppins", "Anuphan", sans-serif;
+}
+
+.app-nudge-overlay.is-open {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.app-nudge-sheet {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #ffffff;
+  border-top: 1.5px solid #1e1e1e;
+  border-right: 1.5px solid #1e1e1e;
+  border-left: 1.5px solid #1e1e1e;
+  border-bottom: 0;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -0.2rem 0 #1e1e1e;
+  padding: 0 14px calc(18px + env(safe-area-inset-bottom, 0px));
+  transition: transform 300ms ease-out;
+  touch-action: pan-y;
+}
+
+.app-nudge-sheet.is-dragging {
+  transition: none;
+}
+
+.app-nudge-overlay:not(.is-open) .app-nudge-sheet {
+  transition-duration: 250ms;
+  transition-timing-function: ease-in;
+}
+
+.app-nudge-handle-wrap {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.app-nudge-handle {
+  width: 28px;
+  height: 3px;
+  background: #d0d0d0;
+  border-radius: 2px;
+}
+
+.app-nudge-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #1e1e1e;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1e1e1e;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+}
+
+.app-nudge-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px 12px 4px;
+}
+
+.app-nudge-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 0;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.app-nudge-header-copy {
+  min-width: 0;
+}
+
+.app-nudge-title {
+  margin: 0;
+  color: #1e1e1e;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.app-nudge-app-name {
+  margin: 4px 0 0;
+  color: #3d3d3d;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.app-nudge-divider {
+  height: 1px;
+  background: #dceeff;
+  margin: 0 0 12px;
+}
+
+.app-nudge-features {
+  display: grid;
+  gap: 12px;
+}
+
+.app-nudge-feature-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.app-nudge-feature-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dceeff;
+  border: 1.5px solid #1e1e1e;
+  border-radius: 8px;
+}
+
+.app-nudge-feature-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #1e1e1e;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.app-nudge-feature-copy {
+  min-width: 0;
+}
+
+.app-nudge-feature-title {
+  margin: 0;
+  color: #1e1e1e;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.app-nudge-feature-body {
+  margin: 3px 0 0;
+  color: #3d3d3d;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.app-nudge-cta {
+  width: 100%;
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1.5px solid #1e1e1e;
+  border-radius: 25px;
+  background: #1e1e1e;
+  color: #ffffff;
+  box-shadow: 0.2rem 0.2rem 0 #1e1e1e;
+  padding: 12px 18px;
+  font-family: "Poppins", "Anuphan", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  -webkit-text-fill-color: #ffffff;
+}
+
+.app-nudge-cta-logo {
+  width: 15px;
+  height: 18px;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 480px) {
+  .app-nudge-cta {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff;
+  }
+}
+
+.app-nudge-dismiss {
+  width: 100%;
+  margin-top: 10px;
+  border: 0;
+  background: transparent;
+  color: #888888;
+  font-family: "Poppins", "Anuphan", sans-serif;
+  font-size: 11px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 8px 12px 0;
+}
+
+.app-nudge-close:focus-visible,
+.app-nudge-cta:focus-visible,
+.app-nudge-dismiss:focus-visible {
+  outline: 2px solid #1e1e1e;
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .app-nudge-overlay {
+    display: none;
+  }
+}
