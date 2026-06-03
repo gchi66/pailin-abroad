@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import "../Styles/GetAppBottomSheet.css";
 
-const APP_NUDGE_STORAGE_KEY = "app_nudge_shown";
 const APP_NUDGE_DELAY_MS = 1500;
 const DISMISS_ANIMATION_MS = 250;
 const SWIPE_DISMISS_THRESHOLD = 60;
@@ -67,25 +66,9 @@ export default function GetAppBottomSheet() {
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
 
-    const shouldSkip = (() => {
-      if (!isEligibleMobileBrowser()) return true;
-
-      try {
-        return localStorage.getItem(APP_NUDGE_STORAGE_KEY) !== null;
-      } catch (error) {
-        return true;
-      }
-    })();
-
-    if (shouldSkip) return undefined;
+    if (!isEligibleMobileBrowser()) return undefined;
 
     showTimeoutRef.current = window.setTimeout(() => {
-      try {
-        localStorage.setItem(APP_NUDGE_STORAGE_KEY, "true");
-      } catch (error) {
-        // If storage is unavailable, still show the prompt for this visit.
-      }
-
       setIsRendered(true);
       animationFrameRef.current = window.requestAnimationFrame(() => {
         setIsOpen(true);
