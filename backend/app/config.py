@@ -8,6 +8,7 @@ class Config:
     SUPABASE_URL = os.getenv("SUPABASE_URL")
     SUPABASE_KEY = os.getenv("SUPABASE_KEY")
     SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    REVENUECAT_WEBHOOK_AUTH_SECRET = os.getenv("REVENUECAT_WEBHOOK_AUTH_SECRET")
     FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
     EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
     EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
