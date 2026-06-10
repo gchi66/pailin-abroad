@@ -1,42 +1,11 @@
-from datetime import datetime, timezone
-
 from flask import Blueprint, jsonify, request
 
 from app.config import Config
+from app.revenuecat_membership import build_membership_updates_from_webhook_event
 from app.supabase_client import supabase_admin
 
 
 revenuecat_webhook = Blueprint("revenuecat_webhook", __name__)
-
-ACTIVE_EVENT_TYPES = {
-    "INITIAL_PURCHASE",
-    "RENEWAL",
-    "NON_RENEWING_PURCHASE",
-    "PRODUCT_CHANGE",
-    "UNCANCELLATION",
-    "SUBSCRIPTION_EXTENDED",
-    "TEMPORARY_ENTITLEMENT_GRANT",
-}
-
-
-def _ms_to_iso8601(value):
-    if value in (None, ""):
-        return None
-    try:
-        dt = datetime.fromtimestamp(int(value) / 1000, tz=timezone.utc)
-        return dt.isoformat()
-    except Exception:
-        return None
-
-
-def _ms_in_future(value):
-    if value in (None, ""):
-        return False
-    try:
-        return int(value) > int(datetime.now(tz=timezone.utc).timestamp() * 1000)
-    except Exception:
-        return False
-
 
 def _candidate_user_ids(event):
     candidates = [
@@ -53,57 +22,6 @@ def _candidate_user_ids(event):
         seen.add(candidate)
         unique_candidates.append(candidate)
     return unique_candidates
-
-
-def _normalized_status(event_type, period_type, has_access):
-    if event_type == "EXPIRATION":
-        return "expired"
-    if event_type == "BILLING_ISSUE":
-        return "billing_issue"
-    if event_type == "SUBSCRIPTION_PAUSED":
-        return "paused"
-    if event_type == "CANCELLATION":
-        return "cancelled"
-    if has_access and period_type in {"TRIAL", "INTRO"}:
-        return "trialing"
-    if event_type in ACTIVE_EVENT_TYPES and has_access:
-        return "active"
-    return (event_type or "unknown").lower()
-
-
-def _build_user_updates(event):
-    event_type = event.get("type")
-    expiration_at_ms = event.get("expiration_at_ms")
-    cancel_reason = event.get("cancel_reason")
-    has_access = _ms_in_future(expiration_at_ms)
-    expiration_iso = _ms_to_iso8601(expiration_at_ms)
-
-    cancel_at_period_end = False
-    cancel_at = None
-
-    if event_type == "CANCELLATION" and cancel_reason == "UNSUBSCRIBE" and has_access:
-        cancel_at_period_end = True
-        cancel_at = expiration_iso
-    elif event_type == "SUBSCRIPTION_PAUSED" and has_access:
-        cancel_at_period_end = True
-        cancel_at = expiration_iso
-
-    if event_type == "UNCANCELLATION":
-        cancel_at_period_end = False
-        cancel_at = None
-    elif event_type == "EXPIRATION":
-        cancel_at_period_end = False
-        cancel_at = expiration_iso
-
-    return {
-        "is_paid": has_access,
-        "subscription_status": _normalized_status(
-            event_type, event.get("period_type"), has_access
-        ),
-        "current_period_end": expiration_iso,
-        "cancel_at_period_end": cancel_at_period_end,
-        "cancel_at": cancel_at,
-    }
 
 
 @revenuecat_webhook.route("/api/revenuecat/webhook", methods=["POST"])
@@ -134,7 +52,7 @@ def revenuecat_webhook_handler():
     if not user_candidates:
         return jsonify({"status": "ignored", "reason": "no_app_user_id"}), 200
 
-    updates = _build_user_updates(event)
+    updates = build_membership_updates_from_webhook_event(event)
 
     updated_user_id = None
     for candidate_user_id in user_candidates:

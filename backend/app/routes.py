@@ -21,6 +21,12 @@ import copy
 from zoneinfo import ZoneInfo
 from app.config import Config
 from app.pricing_utils import resolve_region_key
+from app.revenuecat_membership import (
+    RevenueCatAPIError,
+    derive_membership_state_from_subscriber,
+    fetch_revenuecat_subscriber,
+    update_user_membership,
+)
 import requests
 
 routes = Blueprint("routes", __name__)
@@ -212,7 +218,6 @@ def _get_authenticated_user_id():
         return None, (jsonify({"error": "Invalid token"}), 401)
 
     return user_response.user.id, None
-
 
 def _resolve_streak_timezone(payload=None):
     timezone_name = request.headers.get("X-Timezone")
@@ -621,6 +626,73 @@ def handle_options(f):
             return '', 204
         return f(*args, **kwargs)
     return decorated_function
+
+
+@routes.route("/api/sync-app-store-membership", methods=["POST"])
+@handle_options
+def sync_app_store_membership():
+    user_id, error_response = _get_authenticated_user_id()
+    if error_response:
+        return error_response
+
+    payload = request.get_json(silent=True)
+    source = payload.get("source") if isinstance(payload, dict) else None
+
+    print(
+        f"RevenueCat membership sync requested for user_id={user_id} source={source}",
+        flush=True,
+    )
+
+    try:
+        subscriber_response = fetch_revenuecat_subscriber(user_id)
+        membership_state = derive_membership_state_from_subscriber(subscriber_response)
+
+        print(
+            f"RevenueCat lookup for user_id={user_id} membership_state={membership_state}",
+            flush=True,
+        )
+
+        updates, update_result = update_user_membership(user_id, membership_state)
+        if update_result.data == []:
+            print(
+                f"RevenueCat membership sync failed: user row not found for user_id={user_id}",
+                flush=True,
+            )
+            return jsonify({"error": "User row not found"}), 500
+
+        print(
+            f"RevenueCat membership sync DB update succeeded for user_id={user_id} updates={updates}",
+            flush=True,
+        )
+
+        response_body = {
+            "success": True,
+            "user_id": user_id,
+            "has_access": membership_state["has_access"],
+            "subscription_status": membership_state["subscription_status"],
+            "billing_provider": membership_state["billing_provider"],
+            "current_period_end": membership_state["current_period_end"],
+            "cancel_at_period_end": membership_state["cancel_at_period_end"],
+            "cancel_at": membership_state["cancel_at"],
+        }
+        if not membership_state["has_revenuecat_history"]:
+            response_body["message"] = (
+                "No RevenueCat subscriber data found for this user."
+            )
+
+        return jsonify(response_body), 200
+    except RevenueCatAPIError as exc:
+        print(
+            f"RevenueCat membership sync API error for user_id={user_id}: {exc}",
+            flush=True,
+        )
+        return jsonify({"error": "RevenueCat API request failed"}), 502
+    except Exception as exc:
+        print(
+            f"RevenueCat membership sync failed for user_id={user_id}: {exc}",
+            flush=True,
+        )
+        return jsonify({"error": "Internal server error"}), 500
 
 
 @routes.route("/", methods=["GET"])
