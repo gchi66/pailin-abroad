@@ -10,6 +10,15 @@ from app.supabase_client import supabase_admin
 REVENUECAT_API_BASE_URL = "https://api.revenuecat.com/v1"
 FULL_ACCESS_ENTITLEMENT_ID = "full_access"
 APP_STORE_STORES = {"app_store", "mac_app_store"}
+ACTIVE_EVENT_TYPES = {
+    "INITIAL_PURCHASE",
+    "RENEWAL",
+    "NON_RENEWING_PURCHASE",
+    "PRODUCT_CHANGE",
+    "UNCANCELLATION",
+    "SUBSCRIPTION_EXTENDED",
+    "TEMPORARY_ENTITLEMENT_GRANT",
+}
 
 
 class RevenueCatAPIError(Exception):
@@ -98,6 +107,28 @@ def _has_revenuecat_history(subscriber):
     )
 
 
+def _normalized_status(has_access, is_lifetime, period_type, cancellation_detected, billing_issue, paused, has_history):
+    normalized_period_type = str(period_type or "").lower()
+
+    if is_lifetime and has_access:
+        return "lifetime"
+    if paused and has_access:
+        return "paused"
+    if has_access and normalized_period_type in {"trial", "intro"}:
+        return "trialing"
+    if has_access:
+        return "active"
+    if billing_issue:
+        return "billing_issue"
+    if paused:
+        return "paused"
+    if cancellation_detected and not has_access:
+        return "cancelled"
+    if has_history:
+        return "expired"
+    return None
+
+
 def fetch_revenuecat_subscriber(app_user_id):
     api_key = Config.REVENUECAT_SECRET_API_KEY
     if not api_key:
@@ -145,20 +176,16 @@ def derive_membership_state_from_subscriber(subscriber_response):
     refunded_at = (matched_subscription or {}).get("refunded_at")
     auto_resume_date = (matched_subscription or {}).get("auto_resume_date")
 
-    if is_lifetime and has_access:
-        subscription_status = "lifetime"
-    elif has_access and period_type in {"trial", "intro"}:
-        subscription_status = "trialing"
-    elif has_access:
-        subscription_status = "active"
-    elif billing_issues_detected_at:
-        subscription_status = "billing_issue"
-    elif auto_resume_date:
-        subscription_status = "paused"
-    elif full_access or matched_subscription:
-        subscription_status = "expired"
-    else:
-        subscription_status = None
+    has_history = _has_revenuecat_history(subscriber)
+    subscription_status = _normalized_status(
+        has_access=has_access,
+        is_lifetime=is_lifetime,
+        period_type=period_type,
+        cancellation_detected=bool(unsubscribe_detected_at or refunded_at),
+        billing_issue=bool(billing_issues_detected_at),
+        paused=bool(auto_resume_date),
+        has_history=has_history,
+    )
 
     cancel_at_period_end = bool(has_access and unsubscribe_detected_at)
     cancel_at = None
@@ -177,7 +204,7 @@ def derive_membership_state_from_subscriber(subscriber_response):
         "cancel_at_period_end": cancel_at_period_end,
         "cancel_at": cancel_at,
         "billing_provider": billing_provider,
-        "has_revenuecat_history": _has_revenuecat_history(subscriber),
+        "has_revenuecat_history": has_history,
     }
 
 
@@ -213,28 +240,18 @@ def build_membership_updates_from_webhook_event(event):
         cancel_at_period_end = False
         cancel_at = expiration_iso
 
-    if event_type == "EXPIRATION":
-        subscription_status = "expired"
-    elif event_type == "BILLING_ISSUE":
-        subscription_status = "billing_issue"
-    elif event_type == "SUBSCRIPTION_PAUSED":
-        subscription_status = "paused"
-    elif event_type == "CANCELLATION":
-        subscription_status = "cancelled"
-    elif has_access and event.get("period_type") in {"TRIAL", "INTRO"}:
-        subscription_status = "trialing"
-    elif event_type in {
-        "INITIAL_PURCHASE",
-        "RENEWAL",
-        "NON_RENEWING_PURCHASE",
-        "PRODUCT_CHANGE",
-        "UNCANCELLATION",
-        "SUBSCRIPTION_EXTENDED",
-        "TEMPORARY_ENTITLEMENT_GRANT",
-    } and has_access:
-        subscription_status = "active"
-    else:
-        subscription_status = (event_type or "unknown").lower()
+    has_history = event_type != "TEST"
+    subscription_status = _normalized_status(
+        has_access=has_access,
+        is_lifetime=False,
+        period_type=event.get("period_type"),
+        cancellation_detected=event_type == "CANCELLATION",
+        billing_issue=event_type == "BILLING_ISSUE",
+        paused=event_type == "SUBSCRIPTION_PAUSED",
+        has_history=has_history,
+    )
+
+    billing_provider = "app_store" if event.get("store") in APP_STORE_STORES else None
 
     return {
         "is_paid": has_access,
@@ -242,10 +259,11 @@ def build_membership_updates_from_webhook_event(event):
         "current_period_end": expiration_iso,
         "cancel_at_period_end": cancel_at_period_end,
         "cancel_at": cancel_at,
+        "billing_provider": billing_provider,
     }
 
 
-def update_user_membership(user_id, membership_state):
+def update_user_membership(user_id, membership_state, clear_missing_app_store_provider=False):
     updates = {
         "is_paid": membership_state["has_access"],
         "subscription_status": membership_state["subscription_status"],
@@ -256,6 +274,17 @@ def update_user_membership(user_id, membership_state):
 
     if membership_state.get("billing_provider"):
         updates["billing_provider"] = membership_state["billing_provider"]
+    elif clear_missing_app_store_provider:
+        existing_user = (
+            supabase_admin.table("users")
+            .select("billing_provider")
+            .eq("id", user_id)
+            .single()
+            .execute()
+        )
+        existing_provider = (existing_user.data or {}).get("billing_provider")
+        if existing_provider == "app_store":
+            updates["billing_provider"] = None
 
     result = supabase_admin.table("users").update(updates).eq("id", user_id).execute()
     return updates, result

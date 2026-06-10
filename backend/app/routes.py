@@ -652,7 +652,11 @@ def sync_app_store_membership():
             flush=True,
         )
 
-        updates, update_result = update_user_membership(user_id, membership_state)
+        updates, update_result = update_user_membership(
+            user_id,
+            membership_state,
+            clear_missing_app_store_provider=True,
+        )
         if update_result.data == []:
             print(
                 f"RevenueCat membership sync failed: user row not found for user_id={user_id}",
