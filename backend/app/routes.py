@@ -25,6 +25,7 @@ from app.revenuecat_membership import (
     RevenueCatAPIError,
     derive_membership_state_from_subscriber,
     fetch_revenuecat_subscriber,
+    is_guest_revenuecat_app_user_id,
     update_user_membership,
 )
 import requests
@@ -218,6 +219,19 @@ def _get_authenticated_user_id():
         return None, (jsonify({"error": "Invalid token"}), 401)
 
     return user_response.user.id, None
+
+
+def _get_guest_revenuecat_user_id():
+    candidate = (request.headers.get("X-Guest-RevenueCat-User-Id") or "").strip()
+    if not candidate:
+        return None
+    if not is_guest_revenuecat_app_user_id(candidate):
+        print(
+            f"Ignoring invalid guest RevenueCat user id header value={candidate!r}",
+            flush=True,
+        )
+        return None
+    return candidate
 
 def _resolve_streak_timezone(payload=None):
     timezone_name = request.headers.get("X-Timezone")
@@ -1825,6 +1839,7 @@ def get_lesson_resolved(lesson_id):
     is_locked = not is_public_try_lesson
     user_id = None
     lesson_row = None
+    guest_revenuecat_user_id = _get_guest_revenuecat_user_id()
 
     auth_header = request.headers.get('Authorization')
     auth_ms = 0
@@ -1867,6 +1882,24 @@ def get_lesson_resolved(lesson_id):
         except Exception as e:
             print(f"Auth check error: {e}")
             # If auth fails, keep is_locked = True
+
+    if is_locked and not user_id and guest_revenuecat_user_id:
+        try:
+            auth_start = time.perf_counter()
+            subscriber_response = fetch_revenuecat_subscriber(guest_revenuecat_user_id)
+            membership_state = derive_membership_state_from_subscriber(subscriber_response)
+            if membership_state["has_access"]:
+                is_locked = False
+            auth_ms = max(0, round((time.perf_counter() - auth_start) * 1000))
+            print(
+                f"[lesson-route] guest access check guest_user_id={guest_revenuecat_user_id} "
+                f"has_access={membership_state['has_access']} status={membership_state['subscription_status']}",
+                flush=True,
+            )
+        except RevenueCatAPIError as e:
+            print(f"Guest RevenueCat auth error for lesson {lesson_id}: {e}", flush=True)
+        except Exception as e:
+            print(f"Guest access check error for lesson {lesson_id}: {e}", flush=True)
 
     if is_locked:
         if not lesson_row:
@@ -1939,8 +1972,8 @@ def get_lesson_resolved(lesson_id):
             'phrases': [],
         }
         resp = jsonify(safe_payload)
-        resp.headers["Cache-Control"] = "public, max-age=60"
-        resp.headers["Vary"] = "Accept-Encoding, lang"
+        resp.headers["Cache-Control"] = "private, max-age=60"
+        resp.headers["Vary"] = "Accept-Encoding, lang, Authorization, X-Guest-RevenueCat-User-Id"
         print(
             f"[lesson-route] lesson_id={lesson_id} lang={lang} "
             f"locked={is_locked} auth_ms={auth_ms} resolve_ms=0 "
@@ -1969,8 +2002,8 @@ def get_lesson_resolved(lesson_id):
     )
 
     resp = jsonify(payload)
-    resp.headers["Cache-Control"] = "public, max-age=60"
-    resp.headers["Vary"] = "Accept-Encoding, lang"
+    resp.headers["Cache-Control"] = "private, max-age=60"
+    resp.headers["Vary"] = "Accept-Encoding, lang, Authorization, X-Guest-RevenueCat-User-Id"
     return resp, 200
 
 

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from urllib.parse import quote
+from uuid import UUID
 
 import requests
 
@@ -23,6 +24,23 @@ ACTIVE_EVENT_TYPES = {
 
 class RevenueCatAPIError(Exception):
     pass
+
+
+def is_uuid(value):
+    if not value:
+        return False
+
+    try:
+        UUID(str(value))
+        return True
+    except (ValueError, TypeError, AttributeError):
+        return False
+
+
+def is_guest_revenuecat_app_user_id(value):
+    if not isinstance(value, str) or not value.startswith("guest:"):
+        return False
+    return is_uuid(value.split("guest:", 1)[1])
 
 
 def _parse_iso8601(value):

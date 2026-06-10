@@ -1,7 +1,10 @@
 from flask import Blueprint, jsonify, request
 
 from app.config import Config
-from app.revenuecat_membership import build_membership_updates_from_webhook_event
+from app.revenuecat_membership import (
+    build_membership_updates_from_webhook_event,
+    is_uuid,
+)
 from app.supabase_client import supabase_admin
 
 
@@ -56,6 +59,13 @@ def revenuecat_webhook_handler():
 
     updated_user_id = None
     for candidate_user_id in user_candidates:
+        if not is_uuid(candidate_user_id):
+            print(
+                f"RevenueCat webhook skipping non-UUID candidate={candidate_user_id} type={event_type}",
+                flush=True,
+            )
+            continue
+
         result = (
             supabase_admin.table("users")
             .update(updates)
