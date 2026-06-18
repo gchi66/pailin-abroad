@@ -20,6 +20,7 @@ const FreeLessonCards = ({ showHeader = true }) => {
     0: "/lesson/a34f5a4b-0729-430e-9b92-900dcad2f977",
     1: "/lesson/5f9d09b4-ed35-40ac-b89f-50dbd7e96c0c",
     2: "/lesson/27e50504-7021-4a7b-b30d-0cae34a094bf",
+    3: "/lesson/d93a5298-b462-4d4e-b900-b23fd3e33613",
   };
 
   const renderText = (node) => pick(node, ui);
@@ -45,24 +46,20 @@ const FreeLessonCards = ({ showHeader = true }) => {
 
       <section className="free-lesson-cards">
         {cards.map((card, idx) => {
-          const isDisabled = idx === 3;
           const linkTarget = lessonLinks[idx] || "/try-lessons";
 
           return (
             <Link
               key={idx}
               to={linkTarget}
-              className={`fl-card-link${isDisabled ? " fl-card-link-disabled" : ""}`}
+              className="fl-card-link"
               onClick={(event) => {
-                if (isDisabled || !lessonLinks[idx]) {
+                if (!lessonLinks[idx]) {
                   event.preventDefault();
                 }
               }}
             >
-              <div className={`fl-card${isDisabled ? " fl-card-disabled" : ""}`}>
-                {idx === 3 && (
-                  <span className="fl-card-comingsoon">{renderText(freeCopy.comingSoon)}</span>
-                )}
+              <div className="fl-card">
                 <span className="fl-card-level">{renderText(card.level)}</span>
                 <h3 className="fl-card-title">{renderText(card.title)}</h3>
                 <img

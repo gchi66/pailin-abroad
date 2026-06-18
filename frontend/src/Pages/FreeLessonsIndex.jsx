@@ -14,6 +14,7 @@ const FreeLessonsIndex = () => {
     Beginner: [],
     Intermediate: [],
     Advanced: [],
+    Expert: [],
   });
   const [completedLessons, setCompletedLessons] = useState([]);
   const [sessionUser, setSessionUser] = useState(null);
@@ -26,7 +27,7 @@ const FreeLessonsIndex = () => {
         const { data, error } = await supabaseClient
           .from("lessons")
           .select("*")
-          .in("stage", ["Beginner", "Intermediate", "Advanced"])
+          .in("stage", ["Beginner", "Intermediate", "Advanced", "Expert"])
           .order("stage", { ascending: true })
           .order("level", { ascending: true })
           .order("lesson_order", { ascending: true });
@@ -38,6 +39,7 @@ const FreeLessonsIndex = () => {
           Beginner: [],
           Intermediate: [],
           Advanced: [],
+          Expert: [],
         };
 
         // Group by stage first
@@ -45,6 +47,7 @@ const FreeLessonsIndex = () => {
           Beginner: [],
           Intermediate: [],
           Advanced: [],
+          Expert: [],
         };
 
         data.forEach((lesson) => {
@@ -214,20 +217,7 @@ const FreeLessonsIndex = () => {
   };
 
   // Component for a stage block
-  const StageBlock = ({ title, lessons, comingSoon = false }) => {
-    if (comingSoon) {
-      return (
-        <div className="free-stage-block coming-soon">
-        <div className="free-stage-header">
-          <span className="free-stage-title">{title}</span>
-          <span className="coming-soon-badge">
-            {t("freeLessonsIndexPage.comingSoon", uiLang)}
-          </span>
-        </div>
-      </div>
-      );
-    }
-
+  const StageBlock = ({ title, lessons }) => {
     return (
       <div className="free-stage-block">
         <div className="free-stage-header">
@@ -308,7 +298,10 @@ const FreeLessonsIndex = () => {
             title={t("freeLessonsIndexPage.stages.advanced", uiLang)}
             lessons={lessonsByStage.Advanced}
           />
-          <StageBlock title={t("freeLessonsIndexPage.stages.expert", uiLang)} comingSoon />
+          <StageBlock
+            title={t("freeLessonsIndexPage.stages.expert", uiLang)}
+            lessons={lessonsByStage.Expert}
+          />
         </section>
       </div>
     </div>
