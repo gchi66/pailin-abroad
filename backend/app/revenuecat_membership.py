@@ -20,6 +20,7 @@ ACTIVE_EVENT_TYPES = {
     "SUBSCRIPTION_EXTENDED",
     "TEMPORARY_ENTITLEMENT_GRANT",
 }
+STRIPE_ACTIVE_STATUSES = {"active", "trialing"}
 
 
 class RevenueCatAPIError(Exception):
@@ -69,6 +70,25 @@ def _is_future(date_value):
     if not dt:
         return False
     return dt > datetime.now(timezone.utc)
+
+
+def _is_stripe_active(user_row):
+    if not isinstance(user_row, dict):
+        return False
+
+    has_stripe_identity = bool(
+        user_row.get("stripe_subscription_id") or user_row.get("stripe_customer_id")
+    )
+    if not has_stripe_identity:
+        return False
+
+    subscription_status = str(user_row.get("subscription_status") or "").lower()
+    if subscription_status in STRIPE_ACTIVE_STATUSES:
+        return True
+
+    return bool(
+        user_row.get("cancel_at_period_end") and _is_future(user_row.get("current_period_end"))
+    )
 
 
 def _pick_latest_subscription(subscriptions, preferred_product_id=None):
@@ -272,7 +292,7 @@ def build_membership_updates_from_webhook_event(event):
     billing_provider = "app_store" if event.get("store") in APP_STORE_STORES else None
 
     return {
-        "is_paid": has_access,
+        "has_access": has_access,
         "subscription_status": subscription_status,
         "current_period_end": expiration_iso,
         "cancel_at_period_end": cancel_at_period_end,
@@ -282,8 +302,25 @@ def build_membership_updates_from_webhook_event(event):
 
 
 def update_user_membership(user_id, membership_state, clear_missing_app_store_provider=False):
+    existing_user = (
+        supabase_admin.table("users")
+        .select(
+            "manual_membership, billing_provider, stripe_customer_id, stripe_subscription_id, "
+            "subscription_status, current_period_end, cancel_at_period_end"
+        )
+        .eq("id", user_id)
+        .single()
+        .execute()
+    )
+    existing_user_row = existing_user.data or {}
+
+    manual_active = bool(existing_user_row.get("manual_membership"))
+    stripe_active = _is_stripe_active(existing_user_row)
+    revenuecat_active = bool(membership_state["has_access"])
+    effective_paid = manual_active or stripe_active or revenuecat_active
+
     updates = {
-        "is_paid": membership_state["has_access"],
+        "is_paid": effective_paid,
         "subscription_status": membership_state["subscription_status"],
         "current_period_end": membership_state["current_period_end"],
         "cancel_at_period_end": membership_state["cancel_at_period_end"],
@@ -293,16 +330,15 @@ def update_user_membership(user_id, membership_state, clear_missing_app_store_pr
     if membership_state.get("billing_provider"):
         updates["billing_provider"] = membership_state["billing_provider"]
     elif clear_missing_app_store_provider:
-        existing_user = (
-            supabase_admin.table("users")
-            .select("billing_provider")
-            .eq("id", user_id)
-            .single()
-            .execute()
-        )
-        existing_provider = (existing_user.data or {}).get("billing_provider")
+        existing_provider = existing_user_row.get("billing_provider")
         if existing_provider == "app_store":
             updates["billing_provider"] = None
 
     result = supabase_admin.table("users").update(updates).eq("id", user_id).execute()
-    return updates, result
+    access_sources = {
+        "manual_active": manual_active,
+        "stripe_active": stripe_active,
+        "revenuecat_active": revenuecat_active,
+        "effective_paid": effective_paid,
+    }
+    return updates, result, access_sources

@@ -4,8 +4,8 @@ from app.config import Config
 from app.revenuecat_membership import (
     build_membership_updates_from_webhook_event,
     is_uuid,
+    update_user_membership,
 )
-from app.supabase_client import supabase_admin
 
 
 revenuecat_webhook = Blueprint("revenuecat_webhook", __name__)
@@ -55,9 +55,11 @@ def revenuecat_webhook_handler():
     if not user_candidates:
         return jsonify({"status": "ignored", "reason": "no_app_user_id"}), 200
 
-    updates = build_membership_updates_from_webhook_event(event)
+    membership_state = build_membership_updates_from_webhook_event(event)
 
     updated_user_id = None
+    applied_updates = None
+    access_sources = None
     for candidate_user_id in user_candidates:
         if not is_uuid(candidate_user_id):
             print(
@@ -66,14 +68,14 @@ def revenuecat_webhook_handler():
             )
             continue
 
-        result = (
-            supabase_admin.table("users")
-            .update(updates)
-            .eq("id", candidate_user_id)
-            .execute()
+        updates, result, sources = update_user_membership(
+            candidate_user_id,
+            membership_state,
         )
         if result.data:
             updated_user_id = candidate_user_id
+            applied_updates = updates
+            access_sources = sources
             break
 
     if not updated_user_id:
@@ -82,6 +84,13 @@ def revenuecat_webhook_handler():
             flush=True,
         )
         return jsonify({"status": "ignored", "reason": "user_not_found"}), 200
+
+    print(
+        "RevenueCat webhook membership update succeeded "
+        f"for user_id={updated_user_id} type={event_type} "
+        f"updates={applied_updates} access_sources={access_sources}",
+        flush=True,
+    )
 
     return (
         jsonify(

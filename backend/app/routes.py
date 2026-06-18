@@ -666,7 +666,7 @@ def sync_app_store_membership():
             flush=True,
         )
 
-        updates, update_result = update_user_membership(
+        updates, update_result, access_sources = update_user_membership(
             user_id,
             membership_state,
             clear_missing_app_store_provider=True,
@@ -679,7 +679,8 @@ def sync_app_store_membership():
             return jsonify({"error": "User row not found"}), 500
 
         print(
-            f"RevenueCat membership sync DB update succeeded for user_id={user_id} updates={updates}",
+            "RevenueCat membership sync DB update succeeded "
+            f"for user_id={user_id} updates={updates} access_sources={access_sources}",
             flush=True,
         )
 
