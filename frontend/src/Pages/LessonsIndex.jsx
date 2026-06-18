@@ -739,9 +739,6 @@ const LessonsIndex = () => {
                             ✓
                           </span>
                         )}
-                        {stage === "Expert" && (
-                          <span className="stage-coming-soon-inline">{t("lessonsIndexPage.comingSoon", uiLang)}</span>
-                        )}
                       </button>
                     ))}
                   </div>
@@ -781,9 +778,6 @@ const LessonsIndex = () => {
                         </span>
                       )}
                     </button>
-                    {stage === "Expert" && (
-                      <span className="stage-coming-soon-badge">{t("lessonsIndexPage.comingSoon", uiLang)}</span>
-                    )}
                   </div>
                 ))}
               </div>
