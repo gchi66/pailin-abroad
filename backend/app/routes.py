@@ -72,6 +72,7 @@ PUBLIC_TRY_LESSON_IDS = [
     "a34f5a4b-0729-430e-9b92-900dcad2f977",
     "5f9d09b4-ed35-40ac-b89f-50dbd7e96c0c",
     "27e50504-7021-4a7b-b30d-0cae34a094bf",
+    "d93a5298-b462-4d4e-b900-b23fd3e33613",
 ]
 
 LESSON_AUDIO_BUCKET = "lesson-audio"
