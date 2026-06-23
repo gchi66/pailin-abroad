@@ -30,6 +30,7 @@ export default function RichSectionRenderer({
   suppressBaseOffset = false,
   accordionResetKey,
   sectionType,
+  lessonExternalId,
 }) {
   const nodesList = Array.isArray(nodes) ? nodes : [];
   const [preloadBySection, setPreloadBySection] = useState({});
@@ -70,6 +71,11 @@ export default function RichSectionRenderer({
   const isSubheaderNode = (node) => {
     if (node?.kind !== "paragraph") return false;
     if (node?.audio_key || node?.audio_seq) return false;
+    const plainText = (node.inlines || [])
+      .map((span) => (typeof span?.text === "string" ? span.text : ""))
+      .join("")
+      .trim();
+    if (lessonExternalId === "15.3" && plainText === "-Y") return true;
     const textSpans = (node.inlines || []).filter(
       (span) => typeof span?.text === "string" && span.text.trim() !== ""
     );
@@ -755,7 +761,7 @@ const listTextStartRem = (indentLevel) => {
         (span) => typeof span?.text === "string" && span.text.trim() !== ""
       );
       const allTextBold = textSpans.length > 0 && textSpans.every((span) => !!span.bold);
-      const isSubheader = !hasAudio && allTextBold;
+      const isSubheader = !hasAudio && (allTextBold || isSubheaderNode(node));
       if (hasAudio) {
         const multiline = hasLineBreak(node);
         return (

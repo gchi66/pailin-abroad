@@ -1481,6 +1481,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
               snipIdx={snipIdx}
               phrasesSnipIdx={phrasesSnipIdx}
               lessonId={lesson?.id ?? id}
+              lessonExternalId={lesson?.lesson_external_id ?? null}
               savedAnswerStateByUnit={savedAnswerStateByUnit}
               contentLang={contentLang}
               setContentLang={setContentLang}

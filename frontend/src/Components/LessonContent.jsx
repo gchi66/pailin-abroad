@@ -24,6 +24,7 @@ export default function LessonContent({
   snipIdx = {},
   phrasesSnipIdx = {},
   lessonId,
+  lessonExternalId,
   savedAnswerStateByUnit = {},
   contentLang = "en",
   setContentLang,
@@ -769,6 +770,7 @@ export default function LessonContent({
           snipIdx={snipIdx}
           uiLang={uiLang}
           images={images}
+          lessonExternalId={lessonExternalId}
           accordionResetKey={section.id}
           sectionType={section.type}
           renderQuickPractice={(exercise) => (
