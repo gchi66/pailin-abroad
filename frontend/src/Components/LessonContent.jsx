@@ -552,6 +552,89 @@ export default function LessonContent({
       ? section.content_th
       : section.content;
 
+  if (section?.type === "common_mistake" && Array.isArray(section.items) && section.items.length > 0) {
+    const headerText = getSectionHeader(
+      section,
+      getFallbackHeader("common_mistake", "COMMON MISTAKES")
+    );
+
+    const items = section.items.filter((item) => {
+      const hasRichEN = Array.isArray(item?.content_jsonb) && item.content_jsonb.length > 0;
+      const hasRichTH = Array.isArray(item?.content_jsonb_th) && item.content_jsonb_th.length > 0;
+      const hasBody = typeof item?.content === "string" && item.content.trim() !== "";
+      return hasRichEN || hasRichTH || hasBody;
+    });
+
+    return renderWithBackToTop(
+      <article className="lc-card">
+        <header className="lc-head">
+          <div className="lc-head-left">
+            <span className="lc-head-title">{headerText}</span>
+          </div>
+          <div className="lc-head-right">
+            {showInlineToggle && (
+              <LessonLanguageToggle contentLang={contentLang} setContentLang={setContentLang} />
+            )}
+          </div>
+        </header>
+
+        <div className="markdown-section common-mistakes-section">
+          {items.map((item, idx) => {
+            const hasRichEN = Array.isArray(item.content_jsonb) && item.content_jsonb.length > 0;
+            const hasRichTH = Array.isArray(item.content_jsonb_th) && item.content_jsonb_th.length > 0;
+            const nodesToRender =
+              contentLang === "th" && hasRichTH
+                ? item.content_jsonb_th
+                : hasRichEN
+                ? item.content_jsonb
+                : hasRichTH
+                ? item.content_jsonb_th
+                : [];
+            const bodyText = item.content?.trim?.() || "";
+
+            return (
+              <section
+                key={item.mistake_code || `${item.title}-${idx}`}
+                className={`markdown-item common-mistake-item${item.scm ? " common-mistake-item-scm" : ""}`}
+              >
+                <div className="common-mistake-item-head">
+                  <h3 className="common-mistake-item-title">{item.title || "Common mistake"}</h3>
+                </div>
+
+                {item.scm && (
+                  <div className="common-mistake-scm-banner" aria-label="Super common mistake">
+                    <img
+                      src="/images/super-common-mistake.webp"
+                      alt="Super common mistake"
+                      className="common-mistake-scm-image"
+                    />
+                  </div>
+                )}
+
+                {nodesToRender.length > 0 ? (
+                  <RichSectionRenderer
+                    nodes={nodesToRender}
+                    snipIdx={snipIdx}
+                    uiLang={uiLang}
+                    images={images}
+                    sectionType="common_mistake_item"
+                    lessonExternalId={lessonExternalId}
+                  />
+                ) : bodyText ? (
+                  <MarkdownSection
+                    markdown={bodyText}
+                    defaultOpenFirst={false}
+                    sectionType="common_mistake_item"
+                  />
+                ) : null}
+              </section>
+            );
+          })}
+        </div>
+      </article>
+    );
+  }
+
   /* ------------------ APPLY SECTION ------------------ */
   if (section.type === "apply") {
     const headerText = getSectionHeader(section, getFallbackHeader("apply", "APPLY"));

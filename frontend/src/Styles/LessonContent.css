@@ -175,6 +175,45 @@
   font-weight: 400;
 }
 
+.common-mistakes-section {
+  gap: 1.8rem;
+}
+
+.common-mistake-item {
+  padding: 2rem 2rem 2.2rem;
+}
+
+.common-mistake-item-scm {
+  border-left: 0.42rem solid #d93a2f;
+}
+
+.common-mistake-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.common-mistake-item-title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #141414;
+}
+
+.common-mistake-scm-banner {
+  margin: 0 0 1.25rem;
+}
+
+.common-mistake-scm-image {
+  display: block;
+  width: min(100%, 18rem);
+  height: auto;
+}
+
 
 /* body that scrolls if overflow */
 .lc-body {

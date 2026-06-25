@@ -857,6 +857,100 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                 print(f"[WARN] Could not prune stale phrases for lesson {lesson_id}: {e}")
 
 
+def upsert_common_mistakes(lesson_id, lesson_external_id, sections, lang="en", dry_run=False):
+    lang = (lang or "en").lower()
+    if lang not in ("en", "th"):
+        raise ValueError("lang must be 'en' or 'th'")
+
+    saw_tagged_common_mistakes = False
+    desired_codes = []
+
+    for sec in sections:
+        if sec.get("type") != "common_mistake":
+            continue
+
+        for item in sec.get("items", []) or []:
+            mistake_code = (item.get("mistake_code") or "").strip().lower()
+            title = (item.get("title") or "").strip()
+            if not mistake_code:
+                continue
+
+            saw_tagged_common_mistakes = True
+            desired_codes.append(mistake_code)
+            sort_order = int(item.get("sort_order") or 0)
+            scm = bool(item.get("scm"))
+
+            if lang == "th":
+                nodes_payload = item.get("content_jsonb_th")
+                if nodes_payload:
+                    nodes_payload = _resolve_sentinel_links(nodes_payload, supabase)
+                updates = {}
+                if nodes_payload not in (None, "", "''", '""'):
+                    updates["content_jsonb_th"] = nodes_payload
+                if dry_run:
+                    print(f"[DRY RUN] common_mistakes TH UPDATE where mistake_code={mistake_code} set {updates}")
+                    continue
+                if not updates:
+                    continue
+                try:
+                    upd = (
+                        supabase.table("common_mistakes")
+                        .update(updates)
+                        .eq("mistake_code", mistake_code)
+                        .execute()
+                    )
+                    if not (upd.data or []):
+                        print(
+                            f"[WARN] TH skip (no EN row yet) for common_mistake "
+                            f"mistake_code={mistake_code}. Run EN import first."
+                        )
+                except Exception as e:
+                    print(f"[ERROR] common_mistakes TH update {mistake_code}: {e}")
+                continue
+
+            record = {
+                "mistake_code": mistake_code,
+                "title": title or mistake_code.upper(),
+                "lesson_id": lesson_id,
+                "lesson_external_id": lesson_external_id,
+                "sort_order": sort_order,
+                "scm": scm,
+            }
+            nodes_payload = item.get("content_jsonb")
+            if nodes_payload:
+                nodes_payload = _resolve_sentinel_links(nodes_payload, supabase)
+                record["content_jsonb"] = nodes_payload
+
+            if dry_run:
+                print(f"[DRY RUN] common_mistakes EN UPSERT: {record}")
+                continue
+
+            try:
+                supabase.table("common_mistakes").upsert(
+                    record,
+                    on_conflict="mistake_code",
+                    returning="minimal",
+                ).execute()
+            except Exception as e:
+                print(f"[ERROR] common_mistakes EN upsert {mistake_code}: {e}")
+
+    if lang == "en" and saw_tagged_common_mistakes:
+        keep_codes = sorted({code for code in desired_codes if code})
+        if dry_run:
+            print(
+                "[DRY RUN] Prune common_mistakes not in current JSON:",
+                {"lesson_id": lesson_id, "keep_mistake_codes": keep_codes},
+            )
+            return
+        try:
+            q = supabase.table("common_mistakes").delete().eq("lesson_id", lesson_id)
+            if keep_codes:
+                q = q.not_.in_("mistake_code", keep_codes)
+            q.execute()
+        except Exception as e:
+            print(f"[WARN] Could not prune stale common_mistakes for lesson {lesson_id}: {e}")
+
+
 def upsert_tags(lesson_id, tags, dry_run=False):
     for tag_name in tags:
         if dry_run:
@@ -923,9 +1017,17 @@ def process_lesson(data, lang="en", dry_run=False):
         print(f"[ERROR] Missing keys: {REQUIRED_KEYS - keys}")
         return
     lesson_id = upsert_lesson(data, lang=lang, dry_run=dry_run)
+    lesson_external_id = ((data.get("lesson") or {}).get("external_id") or "").strip() or None
     upsert_transcript(lesson_id, data.get("transcript", []), lang=lang, dry_run=dry_run)
     upsert_comprehension(lesson_id, data.get("comprehension_questions", []), lang=lang, dry_run=dry_run)
     upsert_sections(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
+    upsert_common_mistakes(
+        lesson_id,
+        lesson_external_id,
+        data.get("sections", []),
+        lang=lang,
+        dry_run=dry_run,
+    )
     upsert_phrases(lesson_id, data.get("sections", []), lang=lang, dry_run=dry_run)
     upsert_practice_exercises(lesson_id, data.get("practice_exercises", []), lang=lang, dry_run=dry_run)
     upsert_tags(lesson_id, data.get("tags", []), dry_run=dry_run)

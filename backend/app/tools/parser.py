@@ -1394,6 +1394,337 @@ class GoogleDocsParser:
         _flush()
         return items
 
+    def parse_common_mistakes(
+        self,
+        lines: List[Tuple[str, str] | Tuple[str, str, dict | None]],
+        doc_nodes: list[dict],
+        lesson_header_raw: str,
+        lang: str = "en",
+    ) -> List[dict]:
+        """
+        Parse COMMON MISTAKES into an items array.
+        Authoring format:
+        - Title line: HAVE A DOG OUTSIDE [cm_5.1_1]
+        - Metadata line: [SCM]
+        Body lines after the title belong to that item until the next title.
+        """
+        items: List[dict] = []
+        current_code: str | None = None
+        current_title: str | None = None
+        current_sort_order = 0
+        current_scm = False
+        node_buffer: list[dict] = []
+        text_buffer: list[str] = []
+        last_audio_node: dict | None = None
+
+        title_re = re.compile(r"^(.*?)\s*\[(cm_[^\]]+)\]\s*$", re.IGNORECASE)
+        scm_re = re.compile(r"^\[SCM\]\s*$", re.IGNORECASE)
+        tag_line_re = re.compile(r"^\[[A-Z0-9_:-]+\]\s*$")
+        TH_RX = re.compile(r"[\u0E00-\u0E7F]")
+
+        def _norm(s: str) -> str:
+            s = (s or "").replace("\u000b", " ").replace("\n", " ")
+            s = re.sub(r"\s+", " ", s).strip()
+            s = re.sub(r"^[–—\-*•●▪◦·・►»]\s*", "", s)
+            return s
+
+        def _flush():
+            nonlocal current_code, current_title, current_sort_order, current_scm, node_buffer, text_buffer, last_audio_node
+            if not current_code or not current_title:
+                return
+            item = {
+                "mistake_code": current_code,
+                "title": current_title,
+                "sort_order": current_sort_order,
+                "scm": current_scm,
+                "content": "\n".join(text_buffer).strip(),
+            }
+            if lang == "th":
+                item["content_jsonb_th"] = node_buffer
+            else:
+                item["content_jsonb"] = node_buffer
+            items.append(item)
+            current_code = None
+            current_title = None
+            current_scm = False
+            node_buffer = []
+            text_buffer = []
+            last_audio_node = None
+
+        scoped_nodes: dict[str, list[dict]] = {}
+        lesson_wide_nodes: dict[str, list[dict]] = {}
+
+        LKEY = _lesson_key(lesson_header_raw)
+        LCTXN = _norm_header_str(lesson_header_raw)
+
+        for n in doc_nodes:
+            if "inlines" not in n:
+                continue
+
+            nk = n.get("lesson_key") or _lesson_key(n.get("lesson_context"))
+            if LKEY and nk and nk != LKEY:
+                continue
+            if LKEY and not nk:
+                lc = n.get("lesson_context")
+                if lc and _norm_header_str(lc) != LCTXN:
+                    continue
+
+            plain = "".join(s.get("text", "") for s in n.get("inlines", []))
+            key = _norm(plain)
+            if not key:
+                continue
+
+            lesson_wide_nodes.setdefault(key, []).append(n)
+            if n.get("section_context") == "COMMON MISTAKES":
+                scoped_nodes.setdefault(key, []).append(n)
+
+        def _clone_node(n: dict) -> dict:
+            c = n.copy()
+            if "inlines" in c:
+                c["inlines"] = [i.copy() for i in c["inlines"]]
+            return c
+
+        def _trim_node_text(node: dict, desired_text: str) -> None:
+            text = (desired_text or "").strip()
+            inlines = node.get("inlines") or []
+            if not inlines:
+                node["inlines"] = [{
+                    "text": text,
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                }]
+                return
+            first = inlines[0].copy()
+            first["text"] = text
+            first.setdefault("bold", False)
+            first.setdefault("italic", False)
+            first.setdefault("underline", False)
+            node["inlines"] = [first]
+
+        def _pick_with_fallback(bucket_map: dict[str, list[dict]], key: str) -> tuple[dict | None, str | None]:
+            if bucket_map.get(key):
+                return bucket_map[key][0], key
+            for k, bucket in bucket_map.items():
+                if bucket and (key in k or k in key):
+                    return bucket[0], k
+            best = None
+            best_k = None
+            best_score = 0.0
+            a = set(key.split())
+            if not a:
+                return None, None
+            for k, bucket in bucket_map.items():
+                if not bucket:
+                    continue
+                b = set(k.split())
+                if not b:
+                    continue
+                score = len(a & b) / max(len(a), len(b))
+                if score > 0.45 and score > best_score:
+                    best, best_k, best_score = bucket[0], k, score
+            return best, best_k
+
+        def _is_bullet_node(node: dict) -> bool:
+            return bool(
+                node.get("kind") == "list_item"
+                or node.get("bullet")
+                or node.get("resolvedListGlyph", {}).get("glyphSymbol")
+            )
+
+        def _take_node(raw: str) -> dict | None:
+            def _remove_from_other_maps(node: dict) -> None:
+                norm_text = _norm("".join(span.get("text", "") for span in node.get("inlines", [])))
+                if norm_text in lesson_wide_nodes:
+                    bucket = lesson_wide_nodes[norm_text]
+                    for idx, candidate in enumerate(bucket):
+                        if candidate is node:
+                            bucket.pop(idx)
+                            if not bucket:
+                                lesson_wide_nodes.pop(norm_text, None)
+                            break
+                if norm_text in scoped_nodes:
+                    bucket = scoped_nodes[norm_text]
+                    for idx, candidate in enumerate(bucket):
+                        if candidate is node:
+                            bucket.pop(idx)
+                            if not bucket:
+                                scoped_nodes.pop(norm_text, None)
+                            break
+
+            def _try_maps(norm_key: str) -> dict | None:
+                chosen, k = _pick_with_fallback(scoped_nodes, norm_key)
+                if chosen:
+                    result = _clone_node(chosen)
+                    scoped_nodes[k].remove(chosen)
+                    if not scoped_nodes[k]:
+                        scoped_nodes.pop(k, None)
+                    _remove_from_other_maps(chosen)
+                    return result
+                chosen, k = _pick_with_fallback(lesson_wide_nodes, norm_key)
+                if chosen:
+                    result = _clone_node(chosen)
+                    lesson_wide_nodes[k].remove(chosen)
+                    if not lesson_wide_nodes[k]:
+                        lesson_wide_nodes.pop(k, None)
+                    _remove_from_other_maps(chosen)
+                    return result
+                return None
+
+            pieces = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
+            for part in pieces:
+                p = part.strip()
+                if not p:
+                    continue
+                hit = _try_maps(_norm(p))
+                if hit:
+                    _trim_node_text(hit, p)
+                    return hit
+
+            norm_key = _norm(raw)
+            hit = _try_maps(norm_key)
+            if hit:
+                _trim_node_text(hit, raw)
+                return hit
+
+            m = TH_RX.search(raw or "")
+            if m:
+                left = (raw[:m.start()] or "").strip()
+                right = (raw[m.start():] or "").strip()
+                for piece in (left, right):
+                    if piece:
+                        hit = _try_maps(_norm(piece))
+                        if hit:
+                            _trim_node_text(hit, piece)
+                            return hit
+            return None
+
+        def _synth_node(kind: str, text: str, is_bullet: bool = False, indent_from: dict | None = None) -> dict:
+            node = {
+                "kind": "list_item" if is_bullet else kind,
+                "level": None,
+                "inlines": [{"text": text, "bold": False, "italic": False, "underline": False}],
+                "indent": 0,
+                "detection_indent": 0,
+                "indent_level": 0,
+                "indent_start_pts": 0,
+                "indent_first_line_pts": 0,
+                "indent_first_line_level": 0,
+                "lesson_context": lesson_header_raw,
+                "section_context": "COMMON MISTAKES",
+            }
+            if indent_from:
+                for key in (
+                    "indent",
+                    "detection_indent",
+                    "indent_level",
+                    "indent_start_pts",
+                    "indent_first_line_pts",
+                    "indent_first_line_level",
+                ):
+                    if key in indent_from and indent_from[key] is not None:
+                        node[key] = indent_from[key]
+            return node
+
+        for line in lines:
+            raw_text, _style, _spacing = _line_parts(line)
+            if not raw_text:
+                continue
+
+            pieces = re.split(r"(?:\u000b|\n)+", raw_text)
+            line_list_node = None
+            for piece in pieces:
+                text = (piece or "").strip()
+                if not text:
+                    continue
+
+                title_match = title_re.match(text)
+                if title_match:
+                    _flush()
+                    current_title = title_match.group(1).strip()
+                    current_code = title_match.group(2).strip().lower()
+                    current_scm = False
+                    current_sort_order = len(items)
+                    node_buffer = []
+                    text_buffer = []
+                    last_audio_node = None
+                    continue
+
+                if not current_code:
+                    continue
+
+                if scm_re.match(text):
+                    current_scm = True
+                    continue
+
+                if tag_line_re.match(text):
+                    logger.warning("Unknown COMMON MISTAKES tag ignored: %s", text)
+                    continue
+
+                if line_list_node is not None:
+                    inlines = line_list_node.get("inlines", [])
+                    if inlines:
+                        inlines.append({"text": "\n", "bold": False, "italic": False, "underline": False})
+                    inlines.append({"text": text, "bold": False, "italic": False, "underline": False})
+                    line_list_node["inlines"] = inlines
+                    text_buffer.append(text)
+                    continue
+
+                text_buffer.append(text)
+                node = _take_node(text)
+                if node is not None:
+                    if node.get("kind") == "heading":
+                        node["kind"] = "paragraph"
+                    if _is_bullet_node(node):
+                        node["kind"] = "list_item"
+                    elif last_audio_node:
+                        for key in (
+                            "indent",
+                            "detection_indent",
+                            "indent_level",
+                            "indent_start_pts",
+                            "indent_first_line_pts",
+                            "indent_first_line_level",
+                        ):
+                            if key in last_audio_node and last_audio_node[key] is not None:
+                                node[key] = last_audio_node[key]
+                    node_buffer.append(node)
+                    if len(pieces) > 1 and node.get("kind") == "list_item":
+                        line_list_node = node
+                    if node.get("kind") == "list_item" and (node.get("audio_key") or node.get("audio_seq")):
+                        last_audio_node = node
+                else:
+                    is_bullet = False
+                    norm_text = _norm(text)
+
+                    for node_list in scoped_nodes.values():
+                        for n in node_list:
+                            node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
+                            if _norm(node_text) == norm_text and _is_bullet_node(n):
+                                is_bullet = True
+                                break
+                        if is_bullet:
+                            break
+
+                    if not is_bullet:
+                        for node_list in lesson_wide_nodes.values():
+                            for n in node_list:
+                                node_text = "".join(s.get("text", "") for s in n.get("inlines", []))
+                                if _norm(node_text) == norm_text and _is_bullet_node(n):
+                                    is_bullet = True
+                                    break
+                            if is_bullet:
+                                break
+
+                    indent_from = node_buffer[-1] if node_buffer else None
+                    if not indent_from and last_audio_node:
+                        indent_from = last_audio_node
+                    node_buffer.append(_synth_node("paragraph", text, is_bullet, indent_from=indent_from))
+
+        _flush()
+        return items
+
 
 
 
@@ -1525,6 +1856,7 @@ class GoogleDocsParser:
         for header, lines in lesson_sections[1:]:
             norm_header = header.strip().upper().rstrip(":")
             texts_only  = [_line_parts(line)[0] for line in lines]
+            common_mistake_items = None
 
             # ---- simple text buckets ---------------------------------------
             if   norm_header == "FOCUS":
@@ -1559,6 +1891,13 @@ class GoogleDocsParser:
                     "items":      items,
                 })
                 continue
+            elif norm_header == "COMMON MISTAKES":
+                common_mistake_items = self.parse_common_mistakes(
+                    lines,
+                    tagged_nodes,
+                    lesson_header_raw,
+                    lang=lang,
+                )
             elif norm_header == "PINNED COMMENT":
                 pinned_comment_lines += texts_only
                 continue
@@ -1759,6 +2098,40 @@ class GoogleDocsParser:
                         line_idx += 1
                         continue
 
+                    if norm_header == "COMMON MISTAKES":
+                        title_match = re.match(r"^(.*?)\s*\[(cm_[^\]]+)\]\s*$", text_line, re.IGNORECASE)
+                        if title_match:
+                            title_text = title_match.group(1).strip()
+                            norm_key = _norm2(text_line)
+                            matching_nodes = text_to_nodes.get(norm_key, [])
+                            if matching_nodes:
+                                chosen_node = matching_nodes[0]
+                                node_copy = chosen_node.copy()
+                                node_copy["kind"] = "heading"
+                                node_copy["level"] = node_copy.get("level") or 3
+                                if "inlines" in node_copy:
+                                    node_copy["inlines"] = [inline.copy() for inline in node_copy["inlines"]]
+                                    if node_copy["inlines"]:
+                                        node_copy["inlines"][0]["text"] = title_text
+                                        node_copy["inlines"] = node_copy["inlines"][:1]
+                                _append_node_with_spacing(node_copy, spacing)
+                                matching_nodes.remove(chosen_node)
+                            else:
+                                _append_node_with_spacing({
+                                    "kind": "heading",
+                                    "level": None,
+                                    "inlines": [{"text": title_text, "bold": False, "italic": False, "underline": False}],
+                                    "indent": 0,
+                                    "lesson_context": lesson_header_raw,
+                                    "section_context": norm_header
+                                }, spacing)
+                            line_idx += 1
+                            continue
+
+                        if re.match(r"^\[SCM\]\s*$", text_line, re.IGNORECASE):
+                            line_idx += 1
+                            continue
+
                     # ── Handle table placeholders in their correct position ──
                     if text_line.upper().startswith("TABLE-") and text_line.endswith(":"):
                         table_label = text_line.strip()
@@ -1934,6 +2307,13 @@ class GoogleDocsParser:
                     if not stripped:
                         body_parts.append(t)
                         continue
+                    if norm_header == "COMMON MISTAKES":
+                        title_match = re.match(r"^(.*?)\s*\[(cm_[^\]]+)\]\s*$", stripped, re.IGNORECASE)
+                        if title_match:
+                            body_parts.append(f"## {title_match.group(1).strip()}")
+                            continue
+                        if re.match(r"^\[SCM\]\s*$", stripped, re.IGNORECASE):
+                            continue
                     if IMG_TAG_RE.search(stripped):
                         continue
                     if ALT_TEXT_RE.match(stripped):
@@ -1947,6 +2327,7 @@ class GoogleDocsParser:
                     "sort_order":    len(other_sections) + 1,
                     "content_jsonb": node_list,
                     "content":       "\n".join(body_parts).strip(),
+                    **({"items": common_mistake_items} if common_mistake_items is not None else {}),
                 })
             elif norm_header == "APPLY":
                 section_key = SECTION_TYPE_MAP.get(norm_header, norm_header.lower())
