@@ -99,6 +99,7 @@ export default function RichSectionRenderer({
   };
 
 const TH_RE = /[\u0E00-\u0E7F]/;
+const HEX_COLOR_RE = /^#[0-9a-f]{6}$/;
 const TH_PUNCT_ONLY_RE = /^[.,!?;:'"(){}[\]<>\/\\\-–—…]+$/;
 const SPEAKER_PREFIX_RE = /^\s*((?:[A-Za-z][^:[\n]{0,40}|[\u0E00-\u0E7F][^:[\n]{0,40}):\s*)/;
 const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\])/g;
@@ -373,11 +374,15 @@ const speakerLineIsThai = (line) => {
         ? (typeof span?.highlight === "string" ? span.highlight.trim().toLowerCase() : "")
         : "";
       const shouldApplyHighlight = highlightColor && ALLOWED_HIGHLIGHTS.has(highlightColor);
+      const normalizedColor =
+        typeof span?.color === "string" ? span.color.trim().toLowerCase() : "";
+      const colorStyle = HEX_COLOR_RE.test(normalizedColor) ? normalizedColor : undefined;
 
       const commonStyle = {
         fontWeight: span.speakerWeight || (span.bold ? "bold" : undefined),
         fontStyle: span.italic ? "italic" : undefined,
         textDecoration: span.underline ? "underline" : undefined,
+        color: colorStyle,
         whiteSpace: "pre-line",
         backgroundColor: shouldApplyHighlight ? highlightColor : undefined,
         WebkitBoxDecorationBreak: shouldApplyHighlight ? "clone" : undefined,
@@ -458,6 +463,7 @@ const speakerLineIsThai = (line) => {
                 ...commonStyle,
                 color:
                   span.speakerColor ||
+                  colorStyle ||
                   (partHasThai && thaiColor
                     ? thaiColor
                     : (englishColor || undefined)),
@@ -810,7 +816,7 @@ const listTextStartRem = (indentLevel) => {
       return (
         <p
           key={nodeKey}
-          className={`${isSubheader ? "rich-subheader" : ""}${hasAccent ? " rich-accent" : ""}`}
+          className={`${isSubheader ? "rich-subheader" : ""}${hasAccent ? " rich-accent" : ""}${node?.scm_label ? " rich-scm-label" : ""}`}
           style={{
             marginLeft: hasAudio
               ? (visualIndentRem ? `${visualIndentRem}rem` : undefined)

@@ -184,6 +184,69 @@ def _inject_audio_metadata(nodes: List[Dict[str, Any]], fallback_section: Option
             node["audio_section"] = fallback_section
 
 
+def _inline_text(node: Dict[str, Any]) -> str:
+    return "".join(str(span.get("text", "")) for span in (node.get("inlines") or []) if isinstance(span, dict)).strip()
+
+
+def _normalize_title_key(value: str) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip()).casefold()
+
+
+def _build_scm_label_node(label_text: str) -> Dict[str, Any]:
+    return {
+        "kind": "paragraph",
+        "level": None,
+        "scm_label": True,
+        "inlines": [
+            {
+                "text": label_text,
+                "bold": True,
+                "italic": False,
+                "underline": False,
+                "color": "#FF4545",
+            }
+        ],
+        "indent": 0,
+        "detection_indent": 0,
+        "indent_level": 0,
+        "indent_start_pts": 0,
+        "indent_first_line_pts": 0,
+        "indent_first_line_level": 0,
+    }
+
+
+def _inject_scm_labels_into_section_nodes(
+    nodes: List[Dict[str, Any]],
+    common_mistake_items: List[Dict[str, Any]],
+    lang: Lang,
+) -> List[Dict[str, Any]]:
+    if not isinstance(nodes, list) or not nodes:
+        return nodes
+
+    scm_titles = {
+        _normalize_title_key(item.get("title")): item
+        for item in (common_mistake_items or [])
+        if item.get("scm") and item.get("title")
+    }
+    if not scm_titles:
+        return nodes
+
+    label_text = "SUPER COMMON MISTAKE! 🚨" if lang != "th" else "ข้อผิดพลาดที่พบบ่อยมาก! 🚨"
+    out: List[Dict[str, Any]] = []
+    inserted_titles = set()
+
+    for node in nodes:
+        out.append(node)
+        if node.get("kind") != "heading":
+            continue
+        heading_key = _normalize_title_key(_inline_text(node))
+        if heading_key in scm_titles and heading_key not in inserted_titles:
+            out.append(_build_scm_label_node(label_text))
+            inserted_titles.add(heading_key)
+
+    return out
+
+
 def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
     bundle_start = _now()
     print(f"[lesson-resolver] bundle_start lesson_id={lesson_id}", flush=True)
@@ -254,7 +317,18 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         )
         return data, _elapsed_ms(start)
 
-    with ThreadPoolExecutor(max_workers=6) as executor:
+    def load_common_mistakes():
+        start = _now()
+        data = _exec_logged(
+            "common_mistakes",
+            supabase.table("common_mistakes")
+            .select("id, lesson_id, mistake_code, title, title_th, sort_order, scm, content_jsonb, content_jsonb_th")
+            .eq("lesson_id", lesson_id)
+            .order("sort_order", desc=False)
+        )
+        return data, _elapsed_ms(start)
+
+    with ThreadPoolExecutor(max_workers=7) as executor:
         futures = {
             "sections": executor.submit(load_sections),
             "transcript": executor.submit(load_transcript),
@@ -262,6 +336,7 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
             "exercises": executor.submit(load_exercises),
             "phrase_links": executor.submit(load_phrase_links),
             "images": executor.submit(load_images),
+            "common_mistakes": executor.submit(load_common_mistakes),
         }
 
         sections, sections_ms = futures["sections"].result()
@@ -270,6 +345,7 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         exercises, exercises_ms = futures["exercises"].result()
         phrase_links, phrase_links_ms = futures["phrase_links"].result()
         images, images_ms = futures["images"].result()
+        common_mistakes, common_mistakes_ms = futures["common_mistakes"].result()
 
     global_images_start = _now()
     global_images, global_images_cache_hit = _get_cached_global_images()
@@ -279,7 +355,7 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         f"[lesson-resolver] bundle_done lesson_id={lesson_id} "
         f"lesson_ms={lesson_ms} sections_ms={sections_ms} transcript_ms={transcript_ms} "
         f"questions_ms={questions_ms} exercises_ms={exercises_ms} phrase_links_ms={phrase_links_ms} "
-        f"images_ms={images_ms} global_images_ms={global_images_ms} "
+        f"images_ms={images_ms} common_mistakes_ms={common_mistakes_ms} global_images_ms={global_images_ms} "
         f"global_images_cache_hit={global_images_cache_hit} total_ms={_elapsed_ms(bundle_start)}",
         flush=True,
     )
@@ -292,6 +368,7 @@ def _fetch_lesson_bundle(lesson_id: str) -> Dict[str, Any]:
         "exercises": exercises,
         "phrase_links": phrase_links,
         "images": images,
+        "common_mistakes": common_mistakes,
         "global_images": global_images,
     }
 
@@ -391,6 +468,57 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
             if a.get("audio_key")
         }
 
+    common_mistake_items = []
+    for item in raw.get("common_mistakes", []) or []:
+        item_en_nodes = _normalize_rich_nodes(item.get("content_jsonb") or [], lang)
+        _enrich_image_nodes(item_en_nodes, images_lookup)
+        if lesson_external_id:
+            for node in item_en_nodes:
+                if (
+                    node.get("audio_section")
+                    and node.get("audio_seq")
+                    and not node.get("audio_key")
+                ):
+                    lookup_key = (node["audio_section"], node["audio_seq"])
+                    if lookup_key in audio_lookup:
+                        node["audio_key"] = audio_lookup[lookup_key]
+                if not node.get("audio_key"):
+                    _inject_audio_metadata([node], "common_mistake")
+
+        item_th_nodes = (
+            _normalize_rich_nodes(item.get("content_jsonb_th") or [], lang)
+            if item.get("content_jsonb_th")
+            else None
+        )
+        if item_th_nodes:
+            _enrich_image_nodes(item_th_nodes, images_lookup)
+            if lesson_external_id:
+                for node in item_th_nodes:
+                    if (
+                        node.get("audio_section")
+                        and node.get("audio_seq")
+                        and not node.get("audio_key")
+                    ):
+                        lookup_key = (node["audio_section"], node["audio_seq"])
+                        if lookup_key in audio_lookup:
+                            node["audio_key"] = audio_lookup[lookup_key]
+                    if not node.get("audio_key"):
+                        _inject_audio_metadata([node], "common_mistake")
+
+        common_mistake_items.append(
+            {
+                "id": item.get("id"),
+                "lesson_id": item.get("lesson_id"),
+                "mistake_code": item.get("mistake_code"),
+                "title": item.get("title"),
+                "title_th": item.get("title_th"),
+                "sort_order": item.get("sort_order"),
+                "scm": bool(item.get("scm")),
+                "content_jsonb": item_en_nodes,
+                "content_jsonb_th": item_th_nodes,
+            }
+        )
+
     for s in raw["sections"]:
         section_type = (s.get("type") or "").lower()
 
@@ -464,6 +592,19 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
         if normalized_th_nodes:
             _enrich_image_nodes(normalized_th_nodes, images_lookup)
 
+        if section_type == "common_mistake" and common_mistake_items:
+            merged_nodes = _inject_scm_labels_into_section_nodes(
+                merged_nodes,
+                common_mistake_items,
+                lang,
+            )
+            if normalized_th_nodes:
+                normalized_th_nodes = _inject_scm_labels_into_section_nodes(
+                    normalized_th_nodes,
+                    common_mistake_items,
+                    "th",
+                )
+
         resolved_sections.append(
             {
                 "id": s["id"],
@@ -475,6 +616,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
                 "content": _pick_lang(s.get("content"), s.get("content_th"), lang),
                 "content_jsonb": merged_nodes,
                 "content_jsonb_th": normalized_th_nodes,
+                **({"items": common_mistake_items} if section_type == "common_mistake" else {}),
             }
         )
 

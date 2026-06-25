@@ -1496,6 +1496,9 @@ class GoogleDocsParser:
                     "link": None,
                 }]
                 return
+            original_text = "".join(span.get("text", "") for span in inlines).strip()
+            if original_text == text:
+                return
             first = inlines[0].copy()
             first["text"] = text
             first.setdefault("bold", False)
