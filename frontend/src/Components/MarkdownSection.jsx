@@ -62,7 +62,13 @@ function applyInlineMarkerStyles(markdown) {
     text.replace(/\[(?:X|✓|-|check)\]/g, (match) => {
       const color = INLINE_MARKER_MAP[match];
       if (!color) return match;
-      return `<span style="color:${color};font-weight:600;">${match}</span>`;
+      const label =
+        match === "[X]" ? "X" :
+        match === "[✓]" ? "✓" :
+        match === "[-]" ? "-" :
+        match === "[check]" ? "✓" :
+        match;
+      return `<span style="color:${color};font-weight:600;">${label}</span>`;
     });
 
   // Avoid replacing inside fenced code blocks and inline code.

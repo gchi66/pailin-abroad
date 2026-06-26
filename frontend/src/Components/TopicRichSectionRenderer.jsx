@@ -44,11 +44,12 @@ export default function TopicRichSectionRenderer({
   if (nodesList.length === 0) return null;
 
   const TH_RE = /[\u0E00-\u0E7F]/;
-  const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\])/g;
+  const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\]|\[check\])/g;
   const INLINE_MARKER_COLORS = {
     "[X]": "#FD6969",
     "[✓]": "#3CA0FE",
     "[-]": "#28A265",
+    "[check]": "#3CA0FE",
   };
   const HEX_COLOR_RE = /^#[0-9a-f]{6}$/;
 
@@ -150,6 +151,12 @@ export default function TopicRichSectionRenderer({
         const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
         return segments.map((segment, segIdx) => {
           const markerColor = INLINE_MARKER_COLORS[segment];
+          const markerLabel =
+            segment === "[X]" ? "X" :
+            segment === "[✓]" ? "✓" :
+            segment === "[-]" ? "-" :
+            segment === "[check]" ? "✓" :
+            segment;
           const style = markerColor
             ? { ...commonStyle, color: markerColor, fontWeight: 600 }
             : commonStyle;
@@ -176,14 +183,14 @@ export default function TopicRichSectionRenderer({
                 rel="noopener noreferrer"
                 style={linkStyle}
               >
-                {segment}
+                {markerLabel}
               </a>
             );
           }
 
           return (
             <span key={`${keyPrefix}-${segIdx}`} style={style}>
-              {segment}
+              {markerLabel}
             </span>
           );
         });
