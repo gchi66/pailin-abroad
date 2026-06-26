@@ -12,6 +12,13 @@ export default function LessonTable({
   enableCellHighlights = false
 }) {
   const thaiRegex = /[\u0E00-\u0E7F]/;
+  const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\]|\[check\])/g;
+  const INLINE_MARKER_COLORS = {
+    "[X]": "#FD6969",
+    "[✓]": "#3CA0FE",
+    "[-]": "#28A265",
+    "[check]": "#3CA0FE",
+  };
 
   // Helper function to extract audio tags and return cleaned text + audio keys
   const parseAudioInText = (text) => {
@@ -27,71 +34,138 @@ export default function LessonTable({
     }
 
     // Remove audio tags from display text
-    const cleanText = text.replace(audioRegex, '').trim();
+    const cleanText = text.replace(audioRegex, '');
 
     return { cleanText, audioKeys };
   };
 
-  const renderCellContent = (cellText, rowIdx, colIdx) => {
-    if (!cellText) return null;
+  const normalizeHref = (hrefRaw) => {
+    let href = (hrefRaw || "").trim();
+    if (href.startsWith("https://pa.invalid/lesson/")) {
+      href = href.replace("https://pa.invalid", "");
+    }
+    if (href.startsWith("https://pa.invalid/topic-library/")) {
+      href = href.replace("https://pa.invalid", "");
+    }
+    return href;
+  };
 
-    const renderTextWithLinks = (text, keyPrefix) => {
-      const linkRe = /\[link:([^\]]+)\]([\s\S]*?)\[\/link\]/g;
-      const out = [];
-      let lastIndex = 0;
-      let match;
-      let linkIdx = 0;
+  const markerLabelFor = (segment) => (
+    segment === "[X]" ? "X" :
+    segment === "[✓]" ? "✓" :
+    segment === "[-]" ? "-" :
+    segment === "[check]" ? "✓" :
+    segment
+  );
 
-      while ((match = linkRe.exec(text)) !== null) {
-        const [raw, hrefRaw, linkText] = match;
-        const start = match.index;
-        const end = start + raw.length;
-        if (start > lastIndex) {
-          out.push(<React.Fragment key={`${keyPrefix}-text-${linkIdx}`}>{text.slice(lastIndex, start)}</React.Fragment>);
-        }
-        let href = (hrefRaw || "").trim();
-        if (href.startsWith("https://pa.invalid/lesson/")) {
-          href = href.replace("https://pa.invalid", "");
-        }
-        if (href.startsWith("https://pa.invalid/topic-library/")) {
-          href = href.replace("https://pa.invalid", "");
-        }
-        out.push(
-          <a
-            key={`${keyPrefix}-link-${linkIdx}`}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ textDecoration: "underline", color: "#676769" }}
-          >
-            {linkText || href}
-          </a>
-        );
-        lastIndex = end;
-        linkIdx += 1;
-      }
+  const renderSegmentsWithMarkers = (text, baseStyle, keyPrefix) => {
+    const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
+    return segments.map((segment, segIdx) => {
+      const markerColor = INLINE_MARKER_COLORS[segment];
+      const style = markerColor
+        ? { ...baseStyle, color: markerColor, fontWeight: 600 }
+        : baseStyle;
+      return (
+        <span key={`${keyPrefix}-segment-${segIdx}`} style={style}>
+          {markerColor ? markerLabelFor(segment) : segment}
+        </span>
+      );
+    });
+  };
 
-      if (lastIndex < text.length) {
-        out.push(<React.Fragment key={`${keyPrefix}-tail`}>{text.slice(lastIndex)}</React.Fragment>);
-      }
+  const buildTableLines = (cell) => {
+    const sourceInlines = Array.isArray(cell?.inlines) && cell.inlines.length > 0
+      ? cell.inlines
+      : [{ text: cell?.text || "", bold: false, italic: false, underline: false, link: null }];
 
-      return out.length ? out : text;
+    const lines = [];
+    let currentLine = { inlines: [], audioKeys: [] };
+
+    const pushCurrentLine = () => {
+      lines.push(currentLine);
+      currentLine = { inlines: [], audioKeys: [] };
     };
 
-    const lines = cellText.split("\n");
+    sourceInlines.forEach((span) => {
+      const rawText = typeof span?.text === "string" ? span.text : "";
+      const parts = rawText.split("\n");
+
+      parts.forEach((part, idx) => {
+        const { cleanText, audioKeys } = parseAudioInText(part);
+        if (audioKeys.length > 0) {
+          currentLine.audioKeys.push(...audioKeys);
+        }
+        if (cleanText) {
+          currentLine.inlines.push({
+            ...span,
+            text: cleanText,
+          });
+        }
+        if (idx < parts.length - 1) {
+          pushCurrentLine();
+        }
+      });
+    });
+
+    const trimLineInlines = (line) => {
+      if (!line.inlines.length) return line;
+      const nextInlines = line.inlines.map((span) => ({ ...span }));
+      nextInlines[0].text = (nextInlines[0].text || "").replace(/^\s+/, "");
+      nextInlines[nextInlines.length - 1].text = (nextInlines[nextInlines.length - 1].text || "").replace(/\s+$/, "");
+      return {
+        ...line,
+        inlines: nextInlines.filter((span) => span.text !== ""),
+      };
+    };
+
+    if (currentLine.inlines.length > 0 || currentLine.audioKeys.length > 0 || lines.length === 0) {
+      lines.push(currentLine);
+    }
+
+    return lines.map(trimLineInlines);
+  };
+
+  const renderStyledInline = (span, keyPrefix) => {
+    const baseStyle = {
+      fontWeight: span?.bold ? "bold" : undefined,
+      fontStyle: span?.italic ? "italic" : undefined,
+      textDecoration: span?.underline ? "underline" : undefined,
+      whiteSpace: "pre-wrap",
+    };
+
+    if (span?.link) {
+      return (
+        <a
+          key={`${keyPrefix}-link`}
+          href={normalizeHref(span.link)}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ ...baseStyle, color: "#676769" }}
+        >
+          {renderSegmentsWithMarkers(span.text || "", { ...baseStyle, color: "#676769" }, keyPrefix)}
+        </a>
+      );
+    }
+
+    return renderSegmentsWithMarkers(span?.text || "", baseStyle, keyPrefix);
+  };
+
+  const renderCellContent = (cell, rowIdx, colIdx) => {
+    const lines = buildTableLines(cell);
 
     return lines.map((line, lineIdx) => {
-      const { cleanText, audioKeys } = parseAudioInText(line);
-      const isThaiLine = thaiRegex.test(cleanText) && !/[A-Za-z]/.test(cleanText);
+      const joinedText = line.inlines.map((span) => span?.text || "").join("");
+      const isThaiLine = thaiRegex.test(joinedText) && !/[A-Za-z]/.test(joinedText);
       const lineSpanClassName = isThaiLine ? "lesson-table-thai" : undefined;
-      const content = renderTextWithLinks(cleanText, `cell-${rowIdx}-${colIdx}-${lineIdx}`);
+      const content = line.inlines.flatMap((span, spanIdx) =>
+        renderStyledInline(span, `cell-${rowIdx}-${colIdx}-${lineIdx}-${spanIdx}`)
+      );
 
-      // If line has audio, render with audio button
-      if (audioKeys.length > 0) {
+      if (line.audioKeys.length > 0) {
         return (
           <div key={lineIdx} className="table-line-with-audio" style={{ display: "flex", alignItems: "center", marginBottom: "4px" }}>
             <AudioButton
-              audioKey={audioKeys[0]} // Use first audio key found
+              audioKey={line.audioKeys[0]}
               audioIndex={snipIdx}
               phrasesSnipIdx={phrasesSnipIdx}
               phraseId={phraseId}
@@ -103,7 +177,6 @@ export default function LessonTable({
         );
       }
 
-      // Regular line without audio
       return (
         <div key={lineIdx} className={lineSpanClassName}>
           {content}
@@ -116,13 +189,14 @@ export default function LessonTable({
     if (cell && typeof cell === "object") {
       return {
         text: cell.text || "",
+        inlines: Array.isArray(cell.inlines) ? cell.inlines : null,
         colspan: cell.colspan,
         rowspan: cell.rowspan,
         background: cell.background
       };
     }
 
-    return { text: cell || "" };
+    return { text: cell || "", inlines: null };
   };
 
   return (
@@ -167,7 +241,8 @@ export default function LessonTable({
                     return null;
                   }
                   if (cell == null) return null;
-                  const { text, colspan, rowspan, background } = normalizeCell(cell);
+                  const normalizedCell = normalizeCell(cell);
+                  const { colspan, rowspan, background } = normalizedCell;
                   const colSpan = typeof colspan === "number" && colspan > 1 ? colspan : undefined;
                   const rowSpan = typeof rowspan === "number" && rowspan > 1 ? rowspan : undefined;
                   const cellStyle = enableCellHighlights && background
@@ -176,7 +251,7 @@ export default function LessonTable({
 
                   return (
                     <td key={cIdx} colSpan={colSpan} rowSpan={rowSpan} style={cellStyle}>
-                      {renderCellContent(text, rIdx, cIdx)}
+                      {renderCellContent(normalizedCell, rIdx, cIdx)}
                     </td>
                   );
                 })}

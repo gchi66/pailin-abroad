@@ -307,6 +307,51 @@ def normalize_soft_breaks(doc_json: dict) -> None:
 
 def _table_block(elem: dict, tbl_id: int) -> dict:
     """Convert a Google-Docs table element to a minimal table node."""
+    def _elements_to_inlines(elements: list[dict]) -> list[dict]:
+        inlines = []
+        for entry in elements or []:
+            text_run = entry.get("textRun") or {}
+            text = text_run.get("content", "")
+            if not text:
+                continue
+            style = text_run.get("textStyle", {}) or {}
+            link = (style.get("link") or {}).get("url")
+            inlines.append({
+                "text": text.replace("\u000b", "\n"),
+                "bold": bool(style.get("bold")),
+                "italic": bool(style.get("italic")),
+                "underline": bool(style.get("underline")),
+                "link": link,
+                "highlight": None,
+            })
+        return inlines
+
+    def _cell_payload_from_content(content: list[dict]) -> dict:
+        cell_inlines = []
+        for para in content or []:
+            paragraph = para.get("paragraph")
+            if not paragraph:
+                continue
+            para_inlines = _elements_to_inlines(paragraph.get("elements", []))
+            if not para_inlines:
+                continue
+            if cell_inlines:
+                cell_inlines.append({
+                    "text": "\n",
+                    "bold": False,
+                    "italic": False,
+                    "underline": False,
+                    "link": None,
+                    "highlight": None,
+                })
+            cell_inlines.extend(para_inlines)
+
+        cell_text = "".join(span.get("text", "") for span in cell_inlines).strip()
+        payload = {"text": cell_text}
+        if cell_inlines:
+            payload["inlines"] = cell_inlines
+        return payload
+
     rows = []
     max_cols = 0
     active_rowspans: dict[int, int] = {}
@@ -322,11 +367,7 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
         for cell in row["tableCells"]:
             while col_idx in active_rowspans:
                 col_idx += 1
-            cell_lines = []
-            for para in cell.get("content", []):
-                if "paragraph" in para:
-                    cell_lines.append(_plain_text(para["paragraph"]["elements"]))
-            cell_text = "\n".join(cell_lines)
+            cell_payload = _cell_payload_from_content(cell.get("content", []))
             cell_style = cell.get("tableCellStyle", {})
             bg_hex = None
             bg = cell_style.get("backgroundColor")
@@ -345,7 +386,6 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
                 for c in range(col_idx, col_idx + (colspan or 1)):
                     active_rowspans[c] = max(active_rowspans.get(c, 0), rowspan - 1)
             if (colspan and colspan > 1) or (rowspan and rowspan > 1):
-                cell_payload = {"text": cell_text}
                 if colspan and colspan > 1:
                     cell_payload["colspan"] = colspan
                 if rowspan and rowspan > 1:
@@ -355,9 +395,10 @@ def _table_block(elem: dict, tbl_id: int) -> dict:
                 row_cells.append(cell_payload)
             else:
                 if bg_hex:
-                    row_cells.append({"text": cell_text, "background": bg_hex})
+                    cell_payload["background"] = bg_hex
+                    row_cells.append(cell_payload)
                 else:
-                    row_cells.append(cell_text)
+                    row_cells.append(cell_payload)
             col_idx += colspan or 1
         rows.append(row_cells)
         if active_rowspans:
