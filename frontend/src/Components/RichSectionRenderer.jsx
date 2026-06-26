@@ -983,6 +983,7 @@ const listTextStartRem = (indentLevel) => {
           phraseVariant={phraseVariant}
           enableCellHighlights={shouldShowHighlights}
           tableVisibility={tableVisibility}
+          uiLang={uiLang}
         />
     );
   }

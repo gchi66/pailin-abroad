@@ -1,5 +1,6 @@
 import React from "react";
 import AudioButton from "./AudioButton";
+import renderStyledInlines from "../lib/renderStyledInlines";
 import "../Styles/LessonTable.css";
 
 export default function LessonTable({
@@ -9,16 +10,10 @@ export default function LessonTable({
   phraseId,
   phraseVariant = 0,
   tableVisibility = null,
-  enableCellHighlights = false
+  enableCellHighlights = false,
+  uiLang = "en",
 }) {
   const thaiRegex = /[\u0E00-\u0E7F]/;
-  const INLINE_MARKER_RE = /(\[X\]|\[✓\]|\[-\]|\[check\])/g;
-  const INLINE_MARKER_COLORS = {
-    "[X]": "#FD6969",
-    "[✓]": "#3CA0FE",
-    "[-]": "#28A265",
-    "[check]": "#3CA0FE",
-  };
 
   // Helper function to extract audio tags and return cleaned text + audio keys
   const parseAudioInText = (text) => {
@@ -37,40 +32,6 @@ export default function LessonTable({
     const cleanText = text.replace(audioRegex, '');
 
     return { cleanText, audioKeys };
-  };
-
-  const normalizeHref = (hrefRaw) => {
-    let href = (hrefRaw || "").trim();
-    if (href.startsWith("https://pa.invalid/lesson/")) {
-      href = href.replace("https://pa.invalid", "");
-    }
-    if (href.startsWith("https://pa.invalid/topic-library/")) {
-      href = href.replace("https://pa.invalid", "");
-    }
-    return href;
-  };
-
-  const markerLabelFor = (segment) => (
-    segment === "[X]" ? "X" :
-    segment === "[✓]" ? "✓" :
-    segment === "[-]" ? "-" :
-    segment === "[check]" ? "✓" :
-    segment
-  );
-
-  const renderSegmentsWithMarkers = (text, baseStyle, keyPrefix) => {
-    const segments = String(text).split(INLINE_MARKER_RE).filter((part) => part !== "");
-    return segments.map((segment, segIdx) => {
-      const markerColor = INLINE_MARKER_COLORS[segment];
-      const style = markerColor
-        ? { ...baseStyle, color: markerColor, fontWeight: 600 }
-        : baseStyle;
-      return (
-        <span key={`${keyPrefix}-segment-${segIdx}`} style={style}>
-          {markerColor ? markerLabelFor(segment) : segment}
-        </span>
-      );
-    });
   };
 
   const buildTableLines = (cell) => {
@@ -125,31 +86,6 @@ export default function LessonTable({
     return lines.map(trimLineInlines);
   };
 
-  const renderStyledInline = (span, keyPrefix) => {
-    const baseStyle = {
-      fontWeight: span?.bold ? "bold" : undefined,
-      fontStyle: span?.italic ? "italic" : undefined,
-      textDecoration: span?.underline ? "underline" : undefined,
-      whiteSpace: "pre-wrap",
-    };
-
-    if (span?.link) {
-      return (
-        <a
-          key={`${keyPrefix}-link`}
-          href={normalizeHref(span.link)}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ ...baseStyle, color: "#676769" }}
-        >
-          {renderSegmentsWithMarkers(span.text || "", { ...baseStyle, color: "#676769" }, keyPrefix)}
-        </a>
-      );
-    }
-
-    return renderSegmentsWithMarkers(span?.text || "", baseStyle, keyPrefix);
-  };
-
   const renderCellContent = (cell, rowIdx, colIdx) => {
     const lines = buildTableLines(cell);
 
@@ -157,9 +93,25 @@ export default function LessonTable({
       const joinedText = line.inlines.map((span) => span?.text || "").join("");
       const isThaiLine = thaiRegex.test(joinedText) && !/[A-Za-z]/.test(joinedText);
       const lineSpanClassName = isThaiLine ? "lesson-table-thai" : undefined;
-      const content = line.inlines.flatMap((span, spanIdx) =>
-        renderStyledInline(span, `cell-${rowIdx}-${colIdx}-${lineIdx}-${spanIdx}`)
-      );
+      const previousLine = lineIdx > 0 ? lines[lineIdx - 1] : null;
+      const isThaiTranslationUnderAudio =
+        isThaiLine &&
+        line.audioKeys.length === 0 &&
+        previousLine &&
+        previousLine.audioKeys.length > 0;
+
+      const inlineRenderOpts = isThaiTranslationUnderAudio
+        ? {
+            thaiColor: "#8C8D93",
+            englishColor: "#1e1e1e",
+            strictThaiSplit: true,
+            lineIsThaiOverride: true,
+            keyPrefix: `cell-${rowIdx}-${colIdx}-${lineIdx}`,
+          }
+        : {
+            keyPrefix: `cell-${rowIdx}-${colIdx}-${lineIdx}`,
+          };
+      const content = renderStyledInlines(line.inlines, inlineRenderOpts);
 
       if (line.audioKeys.length > 0) {
         return (

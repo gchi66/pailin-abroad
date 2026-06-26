@@ -400,6 +400,7 @@ const renderNode = (node, key) => {
             indent: node.indent,
           }}
           tableVisibility={tableVisibility}
+          uiLang={uiLang}
         />
       );
     }
