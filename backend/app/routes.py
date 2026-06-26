@@ -234,6 +234,15 @@ def _get_guest_revenuecat_user_id():
         return None
     return candidate
 
+
+def _get_platform_hint():
+    candidate = (
+        request.headers.get("platform")
+        or request.headers.get("X-Platform")
+        or ""
+    ).strip().lower()
+    return candidate or None
+
 def _resolve_streak_timezone(payload=None):
     timezone_name = request.headers.get("X-Timezone")
     if not timezone_name and isinstance(payload, dict):
@@ -660,6 +669,7 @@ def sync_app_store_membership():
 
     try:
         subscriber_response = fetch_revenuecat_subscriber(user_id)
+        subscriber_response["platform_hint"] = _get_platform_hint()
         membership_state = derive_membership_state_from_subscriber(subscriber_response)
 
         print(

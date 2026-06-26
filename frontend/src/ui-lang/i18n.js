@@ -463,6 +463,22 @@ export const copy = {
         en: "As Pailin's relationship with Tyler becomes more serious, she learns of her host brother Luke’s dating mishaps. She is also looking forward to Thanksgiving and Black Friday!",
         th: "เมื่อความสัมพันธ์ของไพลินและไทเลอร์เริ่มมีความจริงจังมากขึ้น เธอก็รู้เรื่องปัญหาความรักของลูค พี่ชายโฮสต์ของเธอ และเธอยังตั้งตารอเทศกาลขอบคุณพระเจ้า และช่วงเทศกาลของลดราคา Black Friday",
       },
+      13: {
+        en: "The start of the new year is approaching, which means lots of holidays! Christmas, New Year’s, Valentine’s Day, spring break... Pailin and Tyler have just made things official - they’re now in a relationship! Pailin continues to work part-time at Skylight Books and study for her classes.",
+        th: "ช่วงเริ่มต้นปีใหม่กำลังใกล้เข้ามา ซึ่งหมายถึงเทศกาลวันหยุดมากมาย! ทั้งคริสต์มาส ปีใหม่ วาเลนไทน์ และปิดเทอมฤดูใบไม้ผลิ... ไพลินและไทเลอร์เพิ่งตกลงคบกันอย่างเป็นทางการ ตอนนี้ทั้งคู่เป็นแฟนกันแล้ว! ไพลินยังคงทำงานพาร์ตไทม์ที่ร้านหนังสือ Skylight Books ควบคู่ไปกับการเรียนในคลาสของเธอ",
+      },
+      14: {
+        en: "Pailin has just been let go from her job at Skylight Books and needs to find a new job. She looks forward to a trip with friends in the desert, continues to date her boyfriend Tyler, and starts thinking about graduation with just a few more months of school left.",
+        th: "ไพลินเพิ่งถูกเลิกจ้างจากงานที่ร้านหนังสือ Skylight Books และจำเป็นต้องหางานใหม่ เธอตั้งตารอทริปไปเที่ยวทะเลทรายกับเพื่อนๆ ยังคบกับไทเลอร์แฟนของเธอต่อไป และเริ่มคิดถึงเรื่องเรียนจบ เพราะเหลือเวลาในมหาวิทยาลัยอีกเพียงไม่กี่เดือน",
+      },
+      15: {
+        en: "Pailin has just started working as a receptionist at The Broad art museum in downtown Los Angeles. Finals are approaching at school and Pailin and her friends begin thinking of their next steps after graduation. She also starts thinking of where her relationship with Tyler is headed.",
+        th: "ไพลินเพิ่งเริ่มงานใหม่ในตำแหน่งพนักงานต้อนรับที่พิพิธภัณฑ์ศิลปะ The Broad ในดาวน์ทาวน์ลอสแอนเจลิส ช่วงสอบไฟนอลที่มหาวิทยาลัยกำลังใกล้เข้ามา และไพลินกับเพื่อนๆ ก็เริ่มคิดถึงก้าวต่อไปหลังเรียนจบ เธอยังเริ่มคิดด้วยว่าความสัมพันธ์ของเธอกับไทเลอร์กำลังจะไปในทิศทางไหน",
+      },
+      16: {
+        en: "Pailin just learned that her boyfriend Tyler was offered a job in New York, and they’re not sure if they should continue their relationship. Her UCLA graduation ceremony is in a few days and she starts planning out her next steps - move back to Thailand or stay in LA? What’s in store for Pailin and her friends after finishing university?",
+        th: "ไพลินเพิ่งรู้ว่าไทเลอร์แฟนของเธอได้รับข้อเสนองานที่นิวยอร์ก และทั้งคู่ก็ยังไม่แน่ใจว่าควรไปต่อกับความสัมพันธ์นี้หรือไม่ พิธีรับปริญญาของเธอที่ UCLA กำลังจะมาถึงในอีกไม่กี่วัน และเธอก็เริ่มวางแผนก้าวต่อไปของชีวิต จะย้ายกลับประเทศไทยหรืออยู่ต่อที่ลอสแอนเจลิส? อะไรกำลังรอไพลินและเพื่อนๆ ของเธออยู่หลังเรียนจบมหาวิทยาลัย?",
+      },
     },
   },
   freeLessonsIndexPage: {

@@ -11,6 +11,8 @@ from app.supabase_client import supabase_admin
 REVENUECAT_API_BASE_URL = "https://api.revenuecat.com/v1"
 FULL_ACCESS_ENTITLEMENT_ID = "full_access"
 APP_STORE_STORES = {"app_store", "mac_app_store"}
+PLAY_STORE_STORES = {"play_store"}
+STRIPE_STORES = {"stripe"}
 ACTIVE_EVENT_TYPES = {
     "INITIAL_PURCHASE",
     "RENEWAL",
@@ -138,6 +140,35 @@ def _has_app_store_history(subscriber):
     return False
 
 
+def _normalize_platform_hint(value):
+    normalized = str(value or "").strip().lower()
+    if normalized in {"ios", "iphone", "ipad"}:
+        return "ios"
+    if normalized in {"android"}:
+        return "android"
+    return None
+
+
+def _normalize_billing_provider(store_value):
+    normalized = str(store_value or "").strip().lower()
+    if normalized in APP_STORE_STORES:
+        return "app_store"
+    if normalized in PLAY_STORE_STORES:
+        return "play_store"
+    if normalized in STRIPE_STORES:
+        return "stripe"
+    return None
+
+
+def _normalize_revenuecat_environment(value):
+    if value is None:
+        return None
+    normalized = str(value).strip().lower()
+    if normalized in {"production", "sandbox", "unknown"}:
+        return normalized
+    return "unknown"
+
+
 def _has_revenuecat_history(subscriber):
     return any(
         bool(subscriber.get(field))
@@ -232,7 +263,20 @@ def derive_membership_state_from_subscriber(subscriber_response):
     elif refunded_at:
         cancel_at = _to_iso8601(refunded_at)
 
-    billing_provider = "app_store" if _has_app_store_history(subscriber) else None
+    matched_store = _normalize_billing_provider((matched_subscription or {}).get("store"))
+    billing_provider = matched_store
+    platform_hint = _normalize_platform_hint((subscriber_response or {}).get("platform_hint"))
+    if not billing_provider and _has_app_store_history(subscriber):
+        billing_provider = "app_store"
+    elif not billing_provider and has_access and platform_hint == "ios":
+        billing_provider = "app_store"
+
+    revenuecat_environment = _normalize_revenuecat_environment(
+        (subscriber_response or {}).get("environment")
+        or subscriber.get("environment")
+        or full_access.get("environment")
+        or (matched_subscription or {}).get("environment")
+    )
     current_period_end = None if is_lifetime else _to_iso8601(expires_at)
 
     return {
@@ -242,6 +286,8 @@ def derive_membership_state_from_subscriber(subscriber_response):
         "cancel_at_period_end": cancel_at_period_end,
         "cancel_at": cancel_at,
         "billing_provider": billing_provider,
+        "membership_source": "revenuecat",
+        "revenuecat_environment": revenuecat_environment,
         "has_revenuecat_history": has_history,
     }
 
@@ -289,7 +335,8 @@ def build_membership_updates_from_webhook_event(event):
         has_history=has_history,
     )
 
-    billing_provider = "app_store" if event.get("store") in APP_STORE_STORES else None
+    billing_provider = _normalize_billing_provider(event.get("store"))
+    revenuecat_environment = _normalize_revenuecat_environment(event.get("environment"))
 
     return {
         "has_access": has_access,
@@ -298,6 +345,8 @@ def build_membership_updates_from_webhook_event(event):
         "cancel_at_period_end": cancel_at_period_end,
         "cancel_at": cancel_at,
         "billing_provider": billing_provider,
+        "membership_source": "revenuecat",
+        "revenuecat_environment": revenuecat_environment,
     }
 
 
@@ -306,7 +355,8 @@ def update_user_membership(user_id, membership_state, clear_missing_app_store_pr
         supabase_admin.table("users")
         .select(
             "manual_membership, billing_provider, stripe_customer_id, stripe_subscription_id, "
-            "subscription_status, current_period_end, cancel_at_period_end"
+            "subscription_status, current_period_end, cancel_at_period_end, "
+            "membership_source, revenuecat_environment"
         )
         .eq("id", user_id)
         .single()
@@ -318,21 +368,36 @@ def update_user_membership(user_id, membership_state, clear_missing_app_store_pr
     stripe_active = _is_stripe_active(existing_user_row)
     revenuecat_active = bool(membership_state["has_access"])
     effective_paid = manual_active or stripe_active or revenuecat_active
+    existing_provider = existing_user_row.get("billing_provider")
+    preserve_stripe_fields = existing_provider == "stripe" and stripe_active
 
     updates = {
         "is_paid": effective_paid,
-        "subscription_status": membership_state["subscription_status"],
-        "current_period_end": membership_state["current_period_end"],
-        "cancel_at_period_end": membership_state["cancel_at_period_end"],
-        "cancel_at": membership_state["cancel_at"],
     }
+    if not preserve_stripe_fields:
+        updates["subscription_status"] = membership_state["subscription_status"]
+        updates["current_period_end"] = membership_state["current_period_end"]
+        updates["cancel_at_period_end"] = membership_state["cancel_at_period_end"]
+        updates["cancel_at"] = membership_state["cancel_at"]
 
-    if membership_state.get("billing_provider"):
-        updates["billing_provider"] = membership_state["billing_provider"]
-    elif clear_missing_app_store_provider:
-        existing_provider = existing_user_row.get("billing_provider")
-        if existing_provider == "app_store":
-            updates["billing_provider"] = None
+    incoming_provider = membership_state.get("billing_provider")
+    if incoming_provider:
+        updates["billing_provider"] = incoming_provider
+
+    incoming_membership_source = membership_state.get("membership_source")
+    if incoming_membership_source:
+        updates["membership_source"] = incoming_membership_source
+
+    incoming_environment = membership_state.get("revenuecat_environment")
+    existing_environment = existing_user_row.get("revenuecat_environment")
+    if incoming_environment == "production":
+        updates["revenuecat_environment"] = incoming_environment
+    elif incoming_environment == "sandbox":
+        if existing_environment != "production":
+            updates["revenuecat_environment"] = incoming_environment
+    elif incoming_environment == "unknown":
+        if existing_environment not in {"production", "sandbox"}:
+            updates["revenuecat_environment"] = incoming_environment
 
     result = supabase_admin.table("users").update(updates).eq("id", user_id).execute()
     access_sources = {

@@ -108,6 +108,8 @@ def stripe_webhook_handler():
 
             result = supabase.table('users').update({
                 'is_paid': True,
+                'membership_source': 'stripe',
+                'billing_provider': 'stripe',
                 'stripe_customer_id': customer_id,
                 'stripe_subscription_id': subscription_id,
                 'subscription_status': subscription.status,
@@ -153,6 +155,8 @@ def stripe_webhook_handler():
 
                 supabase.table('users').update({
                     'is_paid': True,
+                    'membership_source': 'stripe',
+                    'billing_provider': 'stripe',
                     'subscription_status': subscription.status,
                     'current_period_end': to_iso_date(current_period_end_value),
                     'cancel_at_period_end': getattr(subscription, 'cancel_at_period_end', False),
@@ -174,6 +178,8 @@ def stripe_webhook_handler():
             current_period_end_value = get_current_period_end(subscription)
 
             supabase.table('users').update({
+                'membership_source': 'stripe',
+                'billing_provider': 'stripe',
                 'subscription_status': status,
                 'current_period_end': to_iso_date(current_period_end_value),
                 'is_paid': status in ['active', 'trialing'],  # Only paid if active or trialing
@@ -192,6 +198,8 @@ def stripe_webhook_handler():
         try:
             supabase.table('users').update({
                 'is_paid': False,
+                'membership_source': 'stripe',
+                'billing_provider': 'stripe',
                 'subscription_status': 'cancelled'
             }).eq('stripe_customer_id', customer_id).execute()
 

@@ -496,6 +496,8 @@ def cancel_subscription():
 
         # Update database with cancellation info
         supabase.table('users').update({
+            'membership_source': 'stripe',
+            'billing_provider': 'stripe',
             'subscription_status': 'cancelled',
             'cancel_at_period_end': True,
             'cancel_at': cancel_at_iso
