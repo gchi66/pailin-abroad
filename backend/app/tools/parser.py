@@ -4458,7 +4458,20 @@ class GoogleDocsParser:
             if prompt_lines is None:
                 prompt_text = exercise.get("prompt") or ""
                 prompt_lines = [prompt_text] if prompt_text else []
-            exercise["prompt_blocks"] = build_prompt_blocks(prompt_lines, lang)
+            blank_characters = None
+            cleaned_prompt_lines: list[str] = []
+            for raw_line in prompt_lines:
+                line = (raw_line or "").strip()
+                match = re.match(r"^CHARACTERS:\s*(\d+)\s*$", line, re.I)
+                if match:
+                    blank_characters = max(1, int(match.group(1)))
+                    continue
+                cleaned_prompt_lines.append(raw_line)
+            cleaned_prompt = "\n".join(
+                line for line in cleaned_prompt_lines if isinstance(line, str)
+            ).strip()
+            exercise["prompt"] = cleaned_prompt
+            exercise["prompt_blocks"] = build_prompt_blocks(cleaned_prompt_lines, lang)
             for item in exercise.get("items", []):
                 text_value = item.get("text") or ""
                 tokens = blanks = None
@@ -4468,6 +4481,9 @@ class GoogleDocsParser:
                         tokens, blanks = tokenize_fill_blank_inlines(item["text_jsonb"])
                 if tokens is None:
                     tokens, blanks = tokenize_fill_blank_text(text_value)
+                if blank_characters is not None:
+                    for blank in blanks:
+                        blank["min_len"] = blank_characters + 1
                 item["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
                 item["blanks"] = blanks
                 answers_v2 = build_answers_v2(item.get("answer"), len(blanks))
@@ -4505,6 +4521,9 @@ class GoogleDocsParser:
                             tokens, blanks = tokenize_fill_blank_inlines(merged_inlines)
                     if tokens is None:
                         tokens, blanks = tokenize_fill_blank_text_th(text_value)
+                    if blank_characters is not None:
+                        for blank in blanks:
+                            blank["min_len"] = blank_characters + 1
                     item_th["stem"] = {"blocks": [{"type": "inline", "tokens": tokens}]}
                     item_th["blanks"] = blanks
                     answers_v2 = build_answers_v2(item_th.get("answer"), len(blanks))

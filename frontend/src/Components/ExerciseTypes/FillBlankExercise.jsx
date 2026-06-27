@@ -252,6 +252,23 @@ const renderTokenWithStyles = (text, cursor, keyPrefix) => {
 const normalizeWhitespace = (value) =>
   (value || "").toString().replace(/\s+/g, " ").trim();
 
+const getBlankMetrics = (blankLength, maxAnswerLen) => {
+  const safeBlankLength = Math.max(1, Number(blankLength) || 1);
+  const isShortBlank =
+    (maxAnswerLen > 0 && maxAnswerLen <= 10) ||
+    (maxAnswerLen === 0 && safeBlankLength <= 4);
+  const fallbackWidthCh = isShortBlank
+    ? 8
+    : Math.max(12, 3 + safeBlankLength * 2);
+  const directWidthCh = Math.max(4, Math.min(safeBlankLength + 1, 24));
+  const widthCh = safeBlankLength > 1 ? directWidthCh : fallbackWidthCh;
+
+  return {
+    isShortBlank,
+    widthCh,
+  };
+};
+
 const renderStemBlocks = ({
   item,
   questionState,
@@ -317,17 +334,17 @@ const renderStemBlocks = ({
           (maxLen, answer) => Math.max(maxLen, normalizeWhitespace(answer).length),
           0
         );
-        const isShortBlank =
-          (maxAnswerLen > 0 && maxAnswerLen <= 10) ||
-          (maxAnswerLen === 0 && blankLength <= 4);
-        const minWidthCh = isShortBlank ? 8 : Math.max(12, 3 + blankLength * 2);
+        const { isShortBlank, widthCh } = getBlankMetrics(
+          blankLength,
+          maxAnswerLen
+        );
 
         if (readOnly) {
           nodes.push(
             <span
               key={`stem-blank-${questionIndex}-${blockIdx}-${tokenIdx}`}
               className="fb-example-blank"
-              style={{ minWidth: `${minWidthCh}ch` }}
+              style={{ minWidth: `${widthCh}ch`, width: `${widthCh}ch` }}
             />
           );
           return;
@@ -348,7 +365,8 @@ const renderStemBlocks = ({
               disabled={disabled}
               placeholder=""
               style={{
-                minWidth: `${minWidthCh}ch`,
+                minWidth: `${widthCh}ch`,
+                width: `${widthCh}ch`,
               }}
             />
             <InlineStatus state={questionState} />
@@ -1492,12 +1510,10 @@ export default function FillBlankExercise({
                               Math.max(maxLen, normalizeWhitespace(answer).length),
                             0
                           );
-                          const isShortBlank =
-                            (maxAnswerLen > 0 && maxAnswerLen <= 10) ||
-                            (maxAnswerLen === 0 && blankLength <= 4);
-                          const minWidthCh = isShortBlank
-                            ? 8
-                            : Math.max(12, 3 + blankLength * 2);
+                          const { isShortBlank, widthCh } = getBlankMetrics(
+                            blankLength,
+                            maxAnswerLen
+                          );
                           pushThaiLine();
                           nodes.push(
                             <span
@@ -1514,7 +1530,8 @@ export default function FillBlankExercise({
                                 disabled={disabled}
                                 placeholder=""
                                 style={{
-                                  minWidth: `${minWidthCh}ch`,
+                                  minWidth: `${widthCh}ch`,
+                                  width: `${widthCh}ch`,
                                 }}
                               />
                               <InlineStatus state={questionState} />
