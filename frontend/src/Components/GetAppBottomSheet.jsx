@@ -5,6 +5,7 @@ import "../Styles/GetAppBottomSheet.css";
 const APP_NUDGE_DELAY_MS = 1500;
 const DISMISS_ANIMATION_MS = 250;
 const SWIPE_DISMISS_THRESHOLD = 60;
+const APP_STORE_URL = "https://apps.apple.com/us/app/pailin-abroad/id6762322535";
 const MOBILE_UA_PATTERN =
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i;
 
@@ -19,7 +20,7 @@ const copy = {
     cta: "Download on the App Store",
     dismiss: "Continue on web",
     closeLabel: "Close app download prompt",
-    ctaLabel: "App Store download coming soon",
+    ctaLabel: "Download Pailin Abroad on the App Store",
   },
   th: {
     headline: "ดีกว่าบนแอป",
@@ -31,7 +32,7 @@ const copy = {
     cta: "ดาวน์โหลดบน App Store",
     dismiss: "ใช้งานบนเว็บต่อ",
     closeLabel: "ปิดหน้าต่างแนะนำแอป",
-    ctaLabel: "ลิงก์ App Store จะมาเร็ว ๆ นี้",
+    ctaLabel: "ดาวน์โหลด Pailin Abroad บน App Store",
   },
 };
 
@@ -168,10 +169,6 @@ export default function GetAppBottomSheet() {
     setDragOffset(0);
   };
 
-  const handleCtaClick = (event) => {
-    event.preventDefault();
-  };
-
   if (!isRendered) return null;
 
   const closedOffset = "100%";
@@ -253,10 +250,10 @@ export default function GetAppBottomSheet() {
           </div>
         </div>
 
-        <button
-          type="button"
+        <a
           className="app-nudge-cta"
-          onClick={handleCtaClick}
+          href={APP_STORE_URL}
+          onClick={dismissSheet}
           aria-label={activeCopy.ctaLabel}
         >
           <svg
@@ -268,7 +265,7 @@ export default function GetAppBottomSheet() {
             <path d="M16.365 12.853c-.03-3.086 2.522-4.571 2.638-4.642-1.442-2.108-3.682-2.398-4.468-2.431-1.902-.192-3.711 1.118-4.678 1.118-.969 0-2.457-1.09-4.038-1.06-2.078.03-3.993 1.209-5.062 3.068-2.157 3.74-.549 9.269 1.55 12.303 1.025 1.483 2.247 3.146 3.853 3.086 1.548-.062 2.132-.999 4.004-.999 1.874 0 2.397.999 4.034.968 1.665-.03 2.719-1.514 3.737-3.002 1.18-1.724 1.665-3.39 1.695-3.476-.037-.011-3.245-1.246-3.277-4.933Zm-3.114-8.98c.853-1.032 1.429-2.468 1.272-3.873-1.23.049-2.719.82-3.602 1.851-.792.919-1.49 2.38-1.302 3.783 1.369.107 2.76-.699 3.632-1.761Z" />
           </svg>
           <span>{activeCopy.cta}</span>
-        </button>
+        </a>
 
         <button
           type="button"

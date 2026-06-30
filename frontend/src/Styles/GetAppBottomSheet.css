@@ -74,7 +74,6 @@
 .app-nudge-close span {
   display: block;
   line-height: 1;
-  transform: translateY(-1px);
 }
 
 .app-nudge-header {
@@ -172,7 +171,7 @@
 .app-nudge-cta {
   width: 100%;
   margin-top: 20px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -186,7 +185,9 @@
   font-size: 15px;
   font-weight: 700;
   line-height: 1.2;
+  text-decoration: none;
   -webkit-text-fill-color: #ffffff;
+  box-sizing: border-box;
 }
 
 .app-nudge-cta-logo {

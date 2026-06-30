@@ -1987,7 +1987,7 @@ class GoogleDocsParser:
                 else:
                     # Add directive regex for quick practice harvesting
                     directive_re = re.compile(
-                        r"^(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:|INPUTS:)",
+                        r"^(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:|INPUTS:|CHARACTERS:)",
                         re.I
                     )
                     qp_chunk, keep_lines = [], []
@@ -2111,6 +2111,9 @@ class GoogleDocsParser:
                     if not text_line:
                         # Preserve blank lines as spacer nodes to control vertical gaps in the renderer
                         _append_spacer()
+                        line_idx += 1
+                        continue
+                    if re.match(r"^CHARACTERS:\s*\d+\s*$", text_line, re.I):
                         line_idx += 1
                         continue
 
@@ -2350,6 +2353,8 @@ class GoogleDocsParser:
                     stripped = (t or "").strip()
                     if not stripped:
                         body_parts.append(t)
+                        continue
+                    if re.match(r"^CHARACTERS:\s*\d+\s*$", stripped, re.I):
                         continue
                     if norm_header == "COMMON MISTAKES":
                         title_match = re.match(r"^(.*?)\s*\[(cm_[^\]]+)\]\s*$", stripped, re.IGNORECASE)
