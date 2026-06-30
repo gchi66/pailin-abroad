@@ -799,6 +799,12 @@ export const copy = {
     yourNextLesson: { en: "Your next lesson:", th: "บทเรียนถัดไปของคุณ:" },
     checkpoint: { en: "Checkpoint", th: "จุดตรวจสอบ" },
     loading: { en: "Loading...", th: "กำลังโหลด..." },
+    continueLearning: { en: "Continue Learning", th: "เรียนต่อ" },
+    upNext: { en: "Up Next", th: "ต่อไป" },
+    openLesson: { en: "Open lesson →", th: "เปิดบทเรียน →" },
+    viewMyStats: { en: "View my stats →", th: "ดูสถิติของฉัน →" },
+    statsPlaceholder: { en: "Stats panel coming soon", th: "หน้าสถิติจะมาเร็ว ๆ นี้" },
+    allCaughtUp: { en: "You're caught up for now. More lessons are coming next.", th: "ตอนนี้คุณเรียนทันแล้ว บทเรียนถัดไปกำลังมา" },
     completedLessons: { en: "Completed Lessons", th: "บทเรียนที่เรียนจบแล้ว" },
     noCompletedLessons: {
       en: "No completed lessons yet. Start learning to see your progress here!",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
@@ -10,7 +10,11 @@ import { resolveAvatarUrl } from "../lib/resolveAvatarUrl";
 import "../Styles/MyPathway.css";
 
 const MyPathway = () => {
-  const [activeTab, setActiveTab] = useState("pathway");
+  const [searchParams] = useSearchParams();
+  const initialView = searchParams.get("view");
+  const [activeTab, setActiveTab] = useState(
+    ["pathway", "completed", "liked", "comments"].includes(initialView) ? initialView : "pathway"
+  );
   const [userProfile, setUserProfile] = useState(null);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [pathwayLessons, setPathwayLessons] = useState([]);
@@ -26,12 +30,23 @@ const MyPathway = () => {
   const isFreePlanUser = Boolean(user) && isPaidMember === false;
   const isPaidUser = Boolean(user) && isPaidMember === true;
   const lessonsCompletedCount = userStats?.lessons_completed ?? userProfile?.lessons_complete ?? 0;
+  const nextLesson = pathwayLessons[0] || null;
+  const upcomingLessons = pathwayLessons.slice(1);
   const hasPreviousSignIn = Boolean(
     user?.last_sign_in_at &&
       user?.created_at &&
       user.last_sign_in_at !== user.created_at
   );
   const isFirstVisit = lessonsCompletedCount <= 0 && !hasPreviousSignIn;
+
+  useEffect(() => {
+    const nextView = searchParams.get("view");
+    if (["pathway", "completed", "liked", "comments"].includes(nextView)) {
+      setActiveTab(nextView);
+      return;
+    }
+    setActiveTab("pathway");
+  }, [searchParams]);
 
   // Helper function to pick the right language content
   const pickLang = (en, th) => {
@@ -62,6 +77,12 @@ const MyPathway = () => {
     yourNextLesson: t("pathway.yourNextLesson", uiLang),
     checkpoint: t("pathway.checkpoint", uiLang),
     loading: t("pathway.loading", uiLang),
+    continueLearning: t("pathway.continueLearning", uiLang),
+    upNext: t("pathway.upNext", uiLang),
+    openLesson: t("pathway.openLesson", uiLang),
+    viewMyStats: t("pathway.viewMyStats", uiLang),
+    statsPlaceholder: t("pathway.statsPlaceholder", uiLang),
+    allCaughtUp: t("pathway.allCaughtUp", uiLang),
 
     // Tab content
     completedLessons: t("pathway.completedLessons", uiLang),
@@ -305,29 +326,64 @@ const MyPathway = () => {
       case "pathway":
         return (
           <>
-            {isFreePlanUser && (
-              <div className="pathway-plan-notice-wrapper">
-                <PlanNotice
-                  heading={uiText.freePlanNoticeHeading}
-                  subtext={uiText.freePlanNoticeCopy}
-                  cta={{
-                    label: uiText.ctaBecomeMember,
-                    to: "/membership",
-                  }}
-                />
+            <div className="pathway-continue-section">
+              <div className="pathway-section-heading-row">
+                <div className="pathway-section-kicker">{uiText.continueLearning}</div>
+                <Link
+                  to="/stats"
+                  className="pathway-stats-button pathway-stats-button--section"
+                >
+                  {uiText.viewMyStats}
+                </Link>
               </div>
-            )}
 
-            {/* Lessons List */}
-            <div className="pathway-lessons-section">
-              <div className="pathway-lesson-list pathway-lesson-list--pathway">
-                {pathwayLessons.map((lesson, index) => {
+              {nextLesson ? (
+                <div className="pathway-continue-card">
+                  <div className="pathway-continue-copy">
+                    <div className="pathway-lesson-header pathway-lesson-header--feature">
+                      {(nextLesson.title || "").toLowerCase().includes("checkpoint") ? (
+                        <img src="/images/black-checkmark-level-checkpoint.webp" alt={uiText.lessonCheckpoint} className="pathway-lesson-checkpoint" />
+                      ) : (
+                        <span className="pathway-lesson-number">
+                          {nextLesson.level}.{nextLesson.lesson_order}
+                        </span>
+                      )}
+                      <div className="pathway-lesson-text">
+                        <span className="pathway-lesson-title pathway-lesson-title--feature">
+                          {pickLang(nextLesson.title, nextLesson.title_th)}
+                        </span>
+                        {(nextLesson.focus || nextLesson.focus_th) && (
+                          <div className="pathway-lesson-focus pathway-lesson-focus--feature">
+                            {pickLang(nextLesson.focus, nextLesson.focus_th)}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <Link to={`/lesson/${nextLesson.id}`} className="pathway-open-lesson-button plan-notice-cta">
+                    {uiText.openLesson}
+                  </Link>
+                </div>
+              ) : (
+                <div className="pathway-empty-state-card">
+                  <p>{uiText.loading}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="pathway-up-next-section">
+              <div className="pathway-section-heading-row">
+                <div className="pathway-section-kicker">{uiText.upNext}</div>
+              </div>
+
+              <div className="pathway-lesson-list pathway-lesson-list--up-next">
+                {upcomingLessons.map((lesson) => {
                   const lessonCompleted = isLessonCompleted(lesson.id);
                   return (
                     <Link
                       to={`/lesson/${lesson.id}`}
                       key={lesson.id}
-                      className={`pathway-lesson-item ${index === 0 ? 'next-lesson' : ''}`}
+                      className="pathway-lesson-item pathway-lesson-item--up-next"
                     >
                       <div className="pathway-lesson-content">
                         <div className="pathway-lesson-header">
@@ -368,6 +424,11 @@ const MyPathway = () => {
                     </Link>
                   );
                 })}
+                {!upcomingLessons.length && nextLesson && (
+                  <div className="pathway-empty-state-card">
+                    <p>{uiText.allCaughtUp}</p>
+                  </div>
+                )}
               </div>
             </div>
           </>
@@ -542,7 +603,7 @@ const MyPathway = () => {
 
   return (
     <main className="pathway-main">
-      <div className="pathway-container">
+        <div className="pathway-container">
           <div className="pathway-header">
             <div className="pathway-header-left">
               <Link to="/profile" className="pathway-avatar-link">
@@ -561,33 +622,34 @@ const MyPathway = () => {
               </Link>
               <div className="pathway-user-info">
                 <h2 className="pathway-welcome">
-                  {isFirstVisit ? uiText.welcome : uiText.welcomeBack} {userProfile?.name || uiText.user}
+                  {isFirstVisit ? uiText.welcome : uiText.welcomeBack}
+                  <span className="pathway-welcome-name">{userProfile?.name || uiText.user}</span>
                 </h2>
-                <div className="pathway-account-info">
-                  <div className="pathway-plan">
-                    <span className="pathway-plan-text">
-                      {uiText.plan} {isFreePlanUser ? uiText.freeAccess : uiText.fullAccess}
-                    </span>
-                    {isFreePlanUser && (
-                      <Link to="/membership" className="pathway-plan-upgrade-link">
-                        {uiText.upgrade}
-                      </Link>
-                    )}
-                  </div>
-                  <Link to="/profile" className="pathway-settings-link">{uiText.accountSettings}</Link>
-                </div>
               </div>
             </div>
+          </div>
 
-            <div className="pathway-header-right">
-              <div className="pathway-counter">
-                <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.lessonsComplete)}</span>
-                <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
-              </div>
-              <div className="pathway-counter">
-                <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.levelsComplete)}</span>
-                <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
-              </div>
+          {isFreePlanUser && activeTab === "pathway" && (
+            <div className="pathway-plan-notice-wrapper">
+              <PlanNotice
+                heading={uiText.freePlanNoticeHeading}
+                subtext={uiText.freePlanNoticeCopy}
+                cta={{
+                  label: uiText.ctaBecomeMember,
+                  to: "/membership",
+                }}
+              />
+            </div>
+          )}
+
+          <div className="pathway-stats-grid">
+            <div className="pathway-counter">
+              <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.lessonsComplete)}</span>
+              <span className="pathway-counter-number">{userStats?.lessons_completed || 0}</span>
+            </div>
+            <div className="pathway-counter">
+              <span className="pathway-counter-label">{withLineBreakAfterFirstWord(uiText.levelsComplete)}</span>
+              <span className="pathway-counter-number">{userStats?.levels_completed || 0}</span>
             </div>
           </div>
 
@@ -620,33 +682,6 @@ const MyPathway = () => {
               </button>
             </div>
           </nav>
-
-          {/* Mobile topbar (progress + tab selector) */}
-          <div className="pathway-mobile-topbar">
-            <div className="pathway-progress-section">
-              <h3 className="pathway-section-title">
-                <span className="pathway-next-lesson-label">{uiText.yourNextLesson}</span>
-              </h3>
-            </div>
-
-            <div className="pathway-mobile-nav">
-              <label className="pathway-mobile-nav-label" htmlFor="pathway-mobile-nav-select">
-                {uiText.viewLabel}
-              </label>
-              <select
-                id="pathway-mobile-nav-select"
-                className="pathway-mobile-nav-select"
-                value={activeTab}
-                onChange={(e) => setActiveTab(e.target.value)}
-                aria-label="Select pathway view"
-              >
-                <option value="pathway">{uiText.myPathway}</option>
-                <option value="completed">{uiText.completed}</option>
-                <option value="liked">{uiText.myLikedLessonsTab}</option>
-                <option value="comments">{uiText.commentHistoryTab}</option>
-              </select>
-            </div>
-          </div>
 
           {/* Tab Content */}
           <div className="pathway-content">

@@ -25,6 +25,7 @@ import Checkout from "./Pages/Checkout";
 import PaymentSuccess from "./Pages/PaymentSuccess";
 import VerifyEmail from "./Pages/VerifyEmail";
 import SignUpPage from "./Pages/SignUpPage";
+import StatsPage from "./Pages/StatsPage";
 import Terms from "./Pages/Terms";
 import Privacy from "./Pages/Privacy";
 import SurveyRedirect from "./Pages/SurveyRedirect";
@@ -99,6 +100,7 @@ function App() {
                       element={<Lesson toggleLoginModal={toggleLoginModal} toggleSignupModal={toggleSignupModal} />}
                     />
                     <Route path="/pathway" element={<MyPathway />} />
+                    <Route path="/stats" element={<StatsPage />} />
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/topic-library" element={<TopicLibrary toggleSignupModal={toggleSignupModal} />} />
                     <Route path="/topic-library/:slug" element={<TopicDetail />} />

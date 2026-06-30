@@ -434,6 +434,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.1rem;
+  min-width: 0;
 }
 
 .mobile-user-name {
@@ -443,9 +444,14 @@
 }
 
 .mobile-user-email {
+  display: block;
+  max-width: 100%;
   font-weight: 500;
   font-size: 0.9rem;
   color: #434343;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mobile-user-dropdown .dropdown-link--secondary {

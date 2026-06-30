@@ -1,6 +1,5 @@
 /* MyPathway Page Styles */
 
-/* Loading and Error States */
 .pathway-loading,
 .pathway-error {
   text-align: center;
@@ -48,12 +47,12 @@
 .pathway-loading-error-title {
   font-size: 1.35rem;
   font-weight: 700;
-  color: #1E1E1E;
+  color: #1e1e1e;
 }
 
 .pathway-loading-error-body {
   font-size: 1.05rem;
-  color: #3D3D3D;
+  color: #3d3d3d;
   max-width: 28rem;
 }
 
@@ -77,233 +76,556 @@
   font-family: "Poppins", "Anuphan", sans-serif;
 }
 
-.pathway-container {
-  width: 75%;
-  background: #FFFFFF;
-  border-radius: 3.6rem;
-  padding: 4vh 4vw 6vh;
-  border: var(--border-thin) solid #1e1e1e;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin: 14vh auto 4vh auto;
+.pathway-main,
+.pathway-container,
+.pathway-stats-grid,
+.pathway-counter,
+.pathway-content,
+.pathway-continue-section,
+.pathway-up-next-section,
+.pathway-continue-card,
+.pathway-open-lesson-button,
+.pathway-lesson-list,
+.pathway-lesson-item,
+.pathway-footer,
+.pathway-library-link {
+  box-sizing: border-box;
 }
 
-/* Header Section */
+.pathway-main {
+  background:
+    radial-gradient(circle at top left, rgba(70, 170, 255, 0.14), transparent 28%),
+    linear-gradient(180deg, #eff5fb 0%, #f8fbff 42%, #ffffff 100%);
+  min-height: 100vh;
+  padding: calc(var(--navbar-height, 80px) + 2rem) 0 4rem;
+  overflow-x: clip;
+}
+
+.pathway-container {
+  width: min(960px, calc(100% - 2rem));
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+  padding: 2rem;
+  border: 1px solid rgba(30, 30, 30, 0.12);
+  box-shadow: 0 28px 80px rgba(25, 50, 80, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 0 auto;
+}
+
 .pathway-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  width: 100%;
+  gap: 1rem;
 }
 
 .pathway-header-left {
   display: flex;
   align-items: center;
-  gap: 2rem;
-}
-
-.pathway-avatar {
-  width: 10rem;
-  height: 10rem;
-  border-radius: 50%;
-  object-fit: cover;
+  gap: 1.2rem;
+  min-width: 0;
 }
 
 .pathway-avatar-link {
-  display: inline-block;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.pathway-avatar {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #7ebdff;
+  background: #dceeff;
 }
 
 .pathway-user-info {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.15rem;
+  min-width: 0;
 }
 
 .pathway-welcome {
-  font-size: 1.8rem;
-  color: #1E1E1E;
-  font-weight: 600;
   margin: 0;
-}
-
-.pathway-account-info {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.95;
+  font-weight: 700;
+  color: #1e1e1e;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.3rem;
-  font-size: 1rem;
 }
 
-.pathway-level,
-.pathway-plan {
-  color: #1E1E1E;
-  font-weight: 500;
-}
-
-.pathway-plan {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.pathway-plan-upgrade-link {
-  color: #FF4545;
-  text-decoration: underline;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.pathway-settings-link {
-  color: #999;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.pathway-settings-link:hover {
-  text-decoration: underline;
-}
-
-.pathway-settings-link::after {
-  content: " →";
-  margin-left: 0.25rem;
+.pathway-welcome-name {
+  display: block;
 }
 
 .pathway-header-right {
-  display: flex;
-  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.pathway-stats-button {
+  border: none;
+  background: none;
+  color: #3ca0fe;
+  font-size: 0.98rem;
+  font-weight: 600;
+  padding: 0.3rem 0;
+  cursor: default;
+  opacity: 1;
+  text-decoration: none;
+}
+
+.pathway-stats-button--section {
+  flex-shrink: 0;
+}
+
+.pathway-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
 }
 
 .pathway-counter {
+  background: linear-gradient(180deg, #ffffff 0%, #f3f8ff 100%);
+  border: 1px solid rgba(126, 189, 255, 0.6);
+  border-radius: 1.4rem;
+  padding: 1rem 1.15rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  gap: 0.45rem;
+  min-height: 7rem;
+  min-width: 0;
 }
 
 .pathway-counter-label {
-  font-size: 1rem;
-  color: #1e1e1e;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #57606a;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .pathway-counter-number {
-  font-size: 2.7rem;
-  color: #1E1E1E;
-  font-weight: 600;
+  font-size: 2.3rem;
+  line-height: 1;
+  color: #1e1e1e;
+  font-weight: 700;
 }
 
-/* Navigation Tabs */
 .pathway-nav {
-  width: calc(100%);
-  margin-left: -4vw;
-  margin-right: -4vw;
-  border-top: var(--border-thin) solid #1E1E1E;
-  border-bottom: var(--border-thin) solid #1E1E1E;
-  padding: 1.5rem 4vw;
+  border-top: 1px solid rgba(30, 30, 30, 0.1);
+  border-bottom: 1px solid rgba(30, 30, 30, 0.1);
+  padding: 0.85rem 0;
 }
 
 .pathway-tabs {
   display: flex;
-  gap: 4rem;
+  gap: 1.5rem;
   overflow-x: auto;
-  justify-content: center;
+  scrollbar-width: none;
+}
+
+.pathway-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .pathway-tab {
   font-family: "Poppins", "Anuphan", sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #666;
+  color: #6b7280;
   background: none;
   border: none;
   padding: 0.5rem 0;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-bottom: 0.2rem solid transparent;
+  border-bottom: 2px solid transparent;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.pathway-tab:hover {
-  color: #1E1E1E;
-}
-
 .pathway-tab.active {
-  color: #1E1E1E;
-  font-weight: 700;
-  border-bottom-color: #1E1E1E;
+  color: #1e1e1e;
+  border-bottom-color: #1e1e1e;
 }
 
-/* Content Section */
-.pathway-content {
-  min-height: 30vh;
-}
-
-.pathway-plan-notice-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.pathway-plan-notice-wrapper .plan-notice {
-  margin: 0;
-  padding-bottom: 2.5rem; /* reduce overall padding-bottom for this context */
-}
-
-.pathway-plan-notice-wrapper .plan-notice-cta-group {
-  padding-top: 0;
-  padding-bottom: 0;
+.pathway-mobile-topbar {
+  display: none;
 }
 
 .pathway-mobile-nav {
   display: none;
 }
 
-.pathway-mobile-topbar {
-  display: block;
+.pathway-content {
+  min-height: 24vh;
 }
 
-.pathway-lock-icon {
-  width: 3rem;
-  height: 3rem;
-  margin-left: 1.5rem;
-  margin-right: -.5rem;
+.pathway-plan-notice-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-/* Progress Section */
-.pathway-progress-section {
+.pathway-plan-notice-wrapper .plan-notice {
+  margin: 0  !important;
+  padding: .75rem 1.5rem !important;
+  gap: 0 !important;
+}
+
+.pathway-section-heading-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
 }
 
-.pathway-section-title {
-  font-size: 1.2rem;
-  color: #1E1E1E;
+.pathway-section-kicker {
+  font-size: 0.82rem;
   font-weight: 700;
-  margin: 0;
-  flex-shrink: 0;
-  font-family: "Poppins", "Anuphan", sans-serif;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #6b7280;
 }
 
-.pathway-featured-resources {
-  width: 98%;
+.pathway-continue-section,
+.pathway-up-next-section,
+.pathway-lessons-section,
+.pathway-completed-section,
+.pathway-comments-section {
+  width: 100%;
+}
+
+.pathway-continue-section {
+  margin-bottom: 0.85rem;
+}
+
+.pathway-continue-card {
+  background: #ffffff;
+  border: 1.25px solid #1e1e1e;
+  border-radius: 1.55rem;
+  box-shadow: 0.18rem 0.18rem 0 #1e1e1e;
+  padding: 1.1rem 1rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.25rem .5rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.pathway-continue-copy {
+  min-width: 0;
+}
+
+.pathway-open-lesson-button.plan-notice-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: calc(100% - 0.2rem);
+  max-width: calc(100% - 0.2rem);
+  min-width: 0;
+  min-height: 0;
+  margin-top: 0;
+  padding: 0.7rem 1rem;
+  border-radius: 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pathway-lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.pathway-lesson-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.2rem;
+  border: 1.5px solid #b9dcff;
+  border-radius: 1.3rem;
+  background: #ffffff;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  width: 100%;
+  min-width: 0;
+}
+
+.pathway-lesson-item:hover {
+  transform: translateY(-1px);
+  border-color: #7ebdff;
+  box-shadow: 0 16px 28px rgba(41, 100, 168, 0.08);
+}
+
+.pathway-lesson-item.completed {
+  opacity: 0.86;
+}
+
+.pathway-lesson-item--up-next {
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+}
+
+.pathway-lesson-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pathway-lesson-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pathway-lesson-header--feature {
+  align-items: flex-start;
+}
+
+.pathway-lesson-number {
+  min-width: 2.8rem;
+  font-size: 1.6rem;
+  line-height: 1;
+  font-weight: 500;
+  color: #7a7a7a;
+  flex-shrink: 0;
+}
+
+.pathway-lesson-checkpoint {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.pathway-lesson-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+.pathway-lesson-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  line-height: 1.2;
+}
+
+.pathway-lesson-title--feature {
+  font-size: clamp(1.55rem, 3vw, 2rem);
+}
+
+.pathway-lesson-focus {
+  font-size: 0.98rem;
+  color: #6b7280;
+  line-height: 1.35;
+}
+
+.pathway-lesson-focus--feature {
+  font-size: 1.05rem;
+}
+
+.pathway-lesson-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.pathway-lock-icon {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.pathway-checkmark {
+  width: 1.45rem;
+  height: 1.45rem;
+  object-fit: contain;
+}
+
+.pathway-empty-state-card {
+  border: 1.5px dashed rgba(30, 30, 30, 0.18);
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.pathway-empty-state-card p,
+.pathway-completed-section p {
+  margin: 0;
+  color: #57606a;
+}
+
+.pathway-see-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.pathway-see-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #2686ff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+}
+
+.pathway-arrow-icon {
+  transition: transform 0.2s ease;
+}
+
+.pathway-arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.pathway-placeholder {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #57606a;
+}
+
+.pathway-placeholder h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+  color: #1e1e1e;
+}
+
+.pathway-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pathway-comment-item {
+  padding: 1.25rem;
+  border: 1px solid rgba(30, 30, 30, 0.12);
+  border-radius: 1rem;
+  background: #ffffff;
+}
+
+.pathway-comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.85rem;
+  gap: 1rem;
+}
+
+.pathway-comment-lesson-info {
+  flex: 1;
+}
+
+.pathway-comment-lesson-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: #1e1e1e;
+}
+
+.pathway-comment-lesson-number {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  min-width: 2.5rem;
+}
+
+.pathway-comment-lesson-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e1e1e;
+}
+
+.pathway-comment-lesson-deleted {
+  font-size: 0.92rem;
+  color: #8a8f98;
+  font-style: italic;
+}
+
+.pathway-comment-date {
+  font-size: 0.85rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.pathway-comment-body {
+  font-size: 1rem;
+  color: #1e1e1e;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.pathway-comment-pinned {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem 0.8rem;
+  background: #fff4cf;
+  border: 1px solid #ffe08c;
+  border-radius: 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #7b5b00;
+}
+
+.pathway-comment-pin-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.pathway-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.pathway-library-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.85rem 1.2rem;
+  border: 2px solid #1e1e1e;
+  border-radius: 1.2rem;
+  background: #ffffff;
+  color: #1e1e1e;
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pathway-featured-resources {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.25rem;
 }
 
 .pathway-featured-header {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
-  padding: 0 .5rem;
+  gap: 0.45rem;
 }
 
 .pathway-featured-title {
@@ -314,39 +636,28 @@
 }
 
 .pathway-featured-subtitle {
-  margin: 0 0 1rem;
+  margin: 0;
   font-size: 0.95rem;
-  color: #3a3a3a;
+  color: #57606a;
   line-height: 1.4;
 }
 
-.pathway-featured-upgrade {
-  color: #FF4545;
-  font-weight: 700;
-}
-
 .pathway-featured-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 0 0 0 .5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
 }
 
 .resource-card-compact {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1.1rem 1.25rem;
-  border: var(--border-thin) solid #1e1e1e;
+  padding: 1rem;
+  border: 1px solid rgba(30, 30, 30, 0.12);
   border-radius: 1rem;
   background: #fff;
   text-decoration: none;
   color: inherit;
-}
-
-.resource-card-compact-disabled {
-  pointer-events: none;
-  opacity: 0.75;
 }
 
 .resource-card-compact-media {
@@ -370,530 +681,159 @@
 
 .resource-card-compact-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .resource-card-compact-desc {
   margin: 0;
-  font-size: 0.95rem;
-  color: #1e1e1e;
+  font-size: 0.92rem;
+  color: #57606a;
   line-height: 1.35;
 }
 
 .pathway-featured-cta {
   display: flex;
   justify-content: center;
-  margin-top: 0.25rem;
 }
 
 .pathway-featured-link {
-  font-weight: 500;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1rem;
   text-decoration: none;
   color: #1e1e1e;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
 }
 
-.pathway-featured-link:hover {
-  text-decoration: underline;
-}
-
-.pathway-next-lesson-label {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 1rem;
-  font-weight: 600;
-}
-
-.pathway-progress-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1;
-  max-width: 300px;
-}
-
-.pathway-progress-bar {
-  flex: 1;
-  height: 0.6rem;
-  background-color: white;
-  border: var(--border-thin) solid #1E1E1E;
-  border-radius: 0.3rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.pathway-progress-fill {
-  height: 100%;
-  background-color: #3CA0FE;
-  border-radius: 0.15rem;
-  transition: width 0.3s ease;
-}
-
-.pathway-progress-text {
-  font-size: 0.9rem;
-  color: #1E1E1E;
-  font-weight: 500;
-  min-width: 80px;
-  white-space: nowrap;
-}
-
-/* Lessons Section */
-.pathway-lessons-section {
-  width: 100%;
-}
-
-.pathway-lesson-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.pathway-lesson-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem 2rem;
-  border: var(--border-thin) solid #1e1e1e;
-  border-radius: 1rem;
-  text-decoration: none;
-  transition: background 0.3s ease;
-  background: white;
-}
-
-.pathway-lesson-item:hover {
-  background: #e9f4ff;
-}
-
-.pathway-lesson-item.next-lesson {
-  background-color: white;
-  border-color: #3CA0FE;
-}
-
-.pathway-lesson-item.next-lesson:hover {
-  background: white;
-}
-
-.pathway-lesson-item.completed {
-  opacity: 0.8;
-}
-
-.pathway-lesson-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.pathway-lesson-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.pathway-lesson-number {
-  font-size: 2rem;
-  font-weight: 500;
-  color: #1E1E1E;
-  min-width: 4rem;
-  text-align: left;
-  flex-shrink: 0;
-  line-height: 2rem;
-}
-
-.pathway-lesson-checkpoint {
-  width: 3rem;
-  height: 3rem;
-  object-fit: contain;
-  min-width: 4rem;
-  flex-shrink: 0;
-}
-
-.pathway-lesson-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  flex: 1;
-}
-
-
-.pathway-lesson-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #1E1E1E;
-  line-height: 1.2;
-  font-family: "Poppins", "Anuphan", sans-serif;
-}
-
-.pathway-lesson-focus {
-  font-size: 1rem;
-  color: #666;
-  font-weight: 600;
-  line-height: 1.3;
-  font-family: "Poppins", "Anuphan", sans-serif;
-}
-
-.pathway-lesson-right {
-  display: flex;
-  align-items: center;
-}
-
-.pathway-checkmark {
-  width: 1.5rem;
-  height: 1.5rem;
-  object-fit: contain;
-}
-
-/* Comments Section */
-.pathway-comments-section {
-  width: 100%;
-}
-
-.pathway-comments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.pathway-comment-item {
-  padding: 1.5rem;
-  border: var(--border-thin) solid #1e1e1e;
-  border-radius: 1rem;
-  background: white;
-}
-
-.pathway-comment-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-  gap: 1rem;
-}
-
-.pathway-comment-lesson-info {
-  flex: 1;
-}
-
-.pathway-comment-lesson-link {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-  color: #1E1E1E;
-  transition: all 0.3s ease;
-}
-
-.pathway-comment-lesson-link:hover {
-  color: #3CA0FE;
-}
-
-.pathway-comment-lesson-number {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1E1E1E;
-  min-width: 2.5rem;
-}
-
-.pathway-comment-lesson-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1E1E1E;
-}
-
-.pathway-comment-lesson-deleted {
-  font-size: 0.9rem;
-  color: #999;
-  font-style: italic;
-}
-
-.pathway-comment-date {
-  font-size: 0.85rem;
-  color: #666;
-  white-space: nowrap;
-}
-
-.pathway-comment-body {
-  font-size: 1rem;
-  color: #1E1E1E;
-  line-height: 1.5;
-  word-wrap: break-word;
-}
-
-.pathway-comment-pinned {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background: #FFF3CD;
-  border: 0.1rem solid #FFECB5;
-  border-radius: 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #856404;
-}
-
-.pathway-comment-pin-icon {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-/* See More Button Styles */
-.pathway-see-more-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.pathway-see-more-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.pathway-see-more-btn:hover {
-  background-color: #f8f9fa;
-  color: #0056b3;
-}
-
-.pathway-arrow-icon {
-  transition: transform 0.2s ease;
-}
-
-.pathway-arrow-icon.rotated {
-  transform: rotate(180deg);
-}
-
-/* Placeholder Content */
-.pathway-placeholder {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: #666;
-}
-
-.pathway-placeholder h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #1E1E1E;
-}
-
-.pathway-placeholder p {
-  font-size: 1rem;
-}
-
-/* Footer Link */
-.pathway-footer {
-  text-align: center;
-}
-
-.pathway-library-link {
-  font-size: 1.1rem;
-  color: #1E1E1E;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-}
-
-.pathway-library-link:hover {
-  color: #333;
-  text-decoration: underline;
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
+  .pathway-main {
+    padding-top: calc(var(--navbar-height, 80px) + 1rem);
+  }
+
   .pathway-container {
-    width: 90%;
-    padding: 3vh 4vw;
+    width: calc(100% - 1rem);
+    padding: 1.25rem 1rem 1.5rem;
+    border-radius: 1.6rem;
+    gap: 1.25rem;
   }
 
   .pathway-header {
     flex-direction: column;
-    gap: 2rem;
-    align-items: flex-start;
-  }
-
-  .pathway-header-left {
-    width: 100%;
-    padding: 0 1rem;
     gap: 1rem;
   }
 
   .pathway-header-right {
-    width: 100%;
-    justify-content: space-around;
-  }
-
-  .pathway-welcome {
-    font-size: 1.5rem;
-  }
-
-  .pathway-counter {
-    flex: 1;
-  }
-
-  .pathway-tabs {
-    gap: 1rem;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .pathway-tabs::-webkit-scrollbar {
     display: none;
   }
 
-  .pathway-tab {
-    font-size: .8rem;
-  }
-
-  .pathway-lesson-title {
-    font-size: 1rem;
-  }
-
-  .pathway-comment-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .pathway-comment-lesson-link {
-    gap: 0.5rem;
-  }
-
-  .pathway-comment-lesson-number {
-    font-size: 0.9rem;
-    min-width: 2rem;
-  }
-
-  .pathway-comment-lesson-title {
-    font-size: 0.9rem;
-  }
-
-  .pathway-comment-date {
-    font-size: 0.8rem;
+  .pathway-featured-cards {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .pathway-container {
-    width: 98%;
-    padding: 10vh 0 0;
-    border: none;
-    background: transparent;
-    margin: 0;
+  .pathway-main {
+    background: #f5f8fc;
+    padding: calc(var(--navbar-height, 80px) + 0.5rem) 0 2rem;
   }
 
-  .pathway-content {
-    padding: 0 .5rem;
+  .pathway-container {
+    width: 100%;
+    max-width: 100%;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 0;
+    padding: 0.75rem 0.65rem 1.5rem;
+    gap: 1rem;
+    overflow-x: clip;
+  }
+
+  .pathway-header {
+    gap: 0.75rem;
+    margin-top: 0rem;
+  }
+
+  .pathway-header-left {
+    gap: 0.85rem;
+    align-items: center;
   }
 
   .pathway-avatar {
-    width: 4rem;
-    height: 4rem;
+    width: 3.35rem;
+    height: 3.35rem;
   }
 
   .pathway-welcome {
-    font-size: 1.8rem;
-    font-weight: 700;
-    line-height: 2.1rem;
+    font-size: 1.5rem;
+    line-height: 0.98;
   }
 
-  .pathway-account-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+  .pathway-stats-button {
+    font-size: 0.78rem;
+    padding: 0;
   }
 
-  .pathway-plan,
-  .pathway-plan-text,
-  .pathway-settings-link,
-  .pathway-header-right {
+  .pathway-stats-button--section {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .pathway-stats-grid {
     display: none;
   }
 
-  .pathway-plan-notice-wrapper .plan-notice {
-    padding-top: 0;
+  .pathway-counter {
+    min-height: 5.4rem;
+    padding: 0.75rem 0.8rem;
+    border-radius: 1.1rem;
+  }
+
+  .pathway-counter-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
   }
 
   .pathway-counter-number {
-    font-size: 1.5rem;
-  }
-
-  .pathway-lesson-item {
-    padding: 1rem 2rem;
-  }
-
-  .pathway-lesson-item.next-lesson {
-    background-color: white;
-    border-color: #3CA0FE;
-  }
-
-  .pathway-section-title {
-    font-size: 1rem;
-  }
-
-  .pathway-lesson-header {
-    gap: 2rem;
-  }
-
-  .pathway-lesson-focus {
-    font-size: .8rem;
-  }
-
-  .pathway-lesson-number {
-    font-size: 1.5rem;
-    min-width: 0;
-  }
-
-  .pathway-next-lesson-detail {
-    display: none;
-  }
-
-  .pathway-library-link {
-    font-weight: 500;
-    font-size: 1.1rem;
-    text-decoration: none;
-    color: #1e1e1e;
-    text-transform: uppercase;
-  }
-
-  .pathway-footer {
-    padding-top: 0 !important;
+    font-size: 1.55rem;
   }
 
   .pathway-nav {
     display: none;
   }
 
-  .pathway-progress-section {
-    width: 100%;
-    padding: 0 .5rem;
+  .pathway-mobile-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
+    margin-top: 0.1rem;
+    width: 100%;
+  }
+
+  .pathway-progress-section {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .pathway-section-title {
     margin: 0;
-    flex: 1;
+    min-width: 0;
+  }
+
+  .pathway-next-lesson-label {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.1;
   }
 
   .pathway-mobile-nav {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0;
-    margin: 0;
-    flex-shrink: 0;
+    min-width: 0;
+    max-width: 38%;
   }
 
   .pathway-mobile-nav-label {
@@ -906,15 +846,15 @@
   }
 
   .pathway-mobile-nav-select {
-    padding: 0.25rem 0.95rem 0.25rem 0.05rem;
-    min-width: auto;
+    padding: 0.2rem 0.9rem 0.2rem 0.05rem;
     border: none;
     background: transparent;
-    font-size: 0.9rem;
+    width: 100%;
+    min-width: 0;
+    font-size: 0.82rem;
     font-weight: 600;
     font-family: "Poppins", "Anuphan", sans-serif;
-    letter-spacing: 0.02em;
-    color: #1E1E1E;
+    color: #1e1e1e;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -922,29 +862,74 @@
     background-repeat: no-repeat;
     background-position: right 0.05rem center;
     text-align: right;
-    line-height: 1.1;
   }
 
-  .pathway-lesson-list--pathway .pathway-lesson-item:nth-child(n+4) {
-    display: none;
+  .pathway-continue-card {
+    padding: 0.9rem 0.8rem 0.8rem;
+    border-radius: 1.2rem;
+    box-shadow: 0.14rem 0.14rem 0 #1e1e1e;
   }
 
-  .pathway-mobile-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0 .5rem;
-    margin: 0 0 -.8rem;
+  .pathway-open-lesson-button.plan-notice-cta {
+    width: calc(100% - 0.16rem);
+    max-width: calc(100% - 0.16rem);
+    min-height: 0;
+    padding: 0.52rem 0.75rem;
+    font-size: 0.78rem;
+    letter-spacing: 0;
+    box-shadow: 0.11rem 0.11rem 0 #1e1e1e;
+    border-radius: 1rem;
   }
 
-  .pathway-featured-resources {
-    padding: 1rem 0;
+  .pathway-lesson-item {
+    padding: 0.9rem 0.8rem;
+    border-radius: 1.05rem;
+  }
+
+  .pathway-lesson-header {
+    gap: 0.7rem;
+  }
+
+  .pathway-lesson-number {
+    min-width: 2rem;
+    font-size: 1.15rem;
+  }
+
+  .pathway-lesson-title {
+    font-size: 0.9rem;
+  }
+
+  .pathway-lesson-title--feature {
+    font-size: 0.95rem;
+  }
+
+  .pathway-lesson-focus,
+  .pathway-lesson-focus--feature {
+    font-size: 0.78rem;
+    line-height: 1.25;
+  }
+
+  .pathway-section-kicker {
+    font-size: 0.72rem;
+    margin-bottom: 0;
+  }
+
+  .pathway-lock-icon {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+
+  .pathway-checkmark {
+    width: 1.2rem;
+    height: 1.2rem;
   }
 
   .resource-card-compact {
-    padding: 1rem 1.1rem;
+    padding: 0.9rem;
   }
 
-
+  .resource-card-compact-media {
+    flex-basis: 4rem;
+    height: 4rem;
+  }
 }
