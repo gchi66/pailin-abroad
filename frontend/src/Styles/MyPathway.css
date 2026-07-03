@@ -375,6 +375,8 @@
 
 .pathway-lesson-item--up-next {
   background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  border-color: #1e1e1e;
+  box-shadow: 0.15rem 0.15rem 0 #1e1e1e;
 }
 
 .pathway-lesson-content {
@@ -605,14 +607,16 @@
   width: 100%;
   min-height: 3.25rem;
   padding: 0.85rem 1.2rem;
-  border: 2px solid #1e1e1e;
+  border: 1.5px solid #1e1e1e;
   border-radius: 1.2rem;
   background: #ffffff;
   color: #1e1e1e;
   text-decoration: none;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  box-shadow: 0.18rem 0.18rem 0 #1e1e1e;
 }
 
 .pathway-featured-resources {
@@ -629,10 +633,12 @@
 }
 
 .pathway-featured-title {
-  font-size: 1.2rem;
+  font-size: 0.82rem;
   font-weight: 700;
+  letter-spacing: 0.09em;
   margin: 0;
-  color: #1e1e1e;
+  text-transform: uppercase;
+  color: #6b7280;
 }
 
 .pathway-featured-subtitle {
@@ -653,9 +659,10 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  border: 1px solid rgba(30, 30, 30, 0.12);
+  border: 1px solid #1e1e1e;
   border-radius: 1rem;
   background: #fff;
+  box-shadow: 0.18rem 0.18rem 0 #1e1e1e;
   text-decoration: none;
   color: inherit;
 }
@@ -698,10 +705,7 @@
 }
 
 .pathway-featured-link {
-  font-weight: 600;
-  font-size: 1rem;
-  text-decoration: none;
-  color: #1e1e1e;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -881,6 +885,13 @@
     border-radius: 1rem;
   }
 
+  .pathway-lesson-checkpoint {
+  width: 1.8rem;
+  height: 1.8rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
   .pathway-lesson-item {
     padding: 0.9rem 0.8rem;
     border-radius: 1.05rem;
@@ -922,6 +933,13 @@
   .pathway-checkmark {
     width: 1.2rem;
     height: 1.2rem;
+  }
+
+  .pathway-featured-subtitle {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #57606a;
+    line-height: 1.4;
   }
 
   .resource-card-compact {

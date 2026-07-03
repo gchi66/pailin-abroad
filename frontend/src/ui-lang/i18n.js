@@ -855,7 +855,7 @@ export const copy = {
       en: "Your membership gets you full access to our Resource pages! Have you checked them out yet? Here are some we think you’d like!",
       th: "แพ็คเกจสมาชิกของคุณสามารถเข้าถึงหน้าแหล่งเรียนรู้ทั้งหมดแล้ว! ลองเข้าไปดูแล้วหรือยังคะ? นี่คือบางส่วนที่เราคิดว่าคุณน่าจะชอบนะ!",
     },
-    featuredResourcesCta: { en: "See all resource pages", th: "ดูหน้าแหล่งเรียนรู้ทั้งหมด" },
+    featuredResourcesCta: { en: "SEE ALL RESOURCES", th: "ดูหน้าแหล่งเรียนรู้ทั้งหมด" },
     profileAvatar: { en: "Profile Avatar", th: "รูปโปรไฟล์" },
     lessonCheckpoint: { en: "Lesson Checkpoint", th: "จุดตรวจสอบบทเรียน" },
     notCompleted: { en: "Not completed", th: "ยังไม่เสร็จสิ้น" },

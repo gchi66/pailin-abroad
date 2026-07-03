@@ -415,7 +415,7 @@ const MyPathway = () => {
                           />
                         ) : lessonCompleted ? (
                           <img
-                            src="/images/filled-checkmark-lesson-complete.webp"
+                            src="/images/check_circle_blue.webp"
                             alt={uiText.completedAlt}
                             className="pathway-checkmark"
                           />
@@ -475,7 +475,7 @@ const MyPathway = () => {
                       </div>
                       <div className="pathway-lesson-right">
                         <img
-                          src="/images/filled-checkmark-lesson-complete.webp"
+                          src="/images/check_circle_blue.webp"
                           alt={uiText.completedAlt}
                           className="pathway-checkmark"
                         />
@@ -727,7 +727,9 @@ const MyPathway = () => {
                 </Link>
               </div>
               <div className="pathway-featured-cta">
-                <Link to="/resources" className="pathway-featured-link">{uiText.featuredResourcesCta}</Link>
+                <Link to="/resources" className="pathway-library-link pathway-featured-link">
+                  {uiText.featuredResourcesCta}
+                </Link>
               </div>
             </div>
       </div>

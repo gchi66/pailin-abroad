@@ -146,32 +146,53 @@ const StatsPage = () => {
   const displayedCompletedLessons = showAllCompleted
     ? sortedCompletedLessons
     : sortedCompletedLessons.slice(0, 2);
+  const viewOptions = [
+    { value: "completed", label: t("pathway.completed", uiLang) },
+    { value: "liked", label: t("pathway.myLikedLessonsTab", uiLang) },
+    { value: "comments", label: t("pathway.commentHistoryTab", uiLang) },
+  ];
+  const activeViewLabel = viewOptions.find((option) => option.value === activeView)?.label || viewOptions[0].label;
   const handleViewChange = (event) => {
     setActiveView(event.target.value);
   };
+  const renderViewSelect = () => (
+    <div className="pathway-mobile-topbar stats-page-view-switcher">
+      <div className="pathway-mobile-nav">
+        <label className="pathway-mobile-nav-label" htmlFor="stats-page-view-select">
+          {t("pathway.viewLabel", uiLang)}
+        </label>
+        <div className="stats-page-view-select-shell">
+          <span className="stats-page-view-select-label" aria-hidden="true">
+            {activeViewLabel}
+          </span>
+          <span className="stats-page-view-select-arrow" aria-hidden="true">
+            <svg viewBox="0 0 12 8" focusable="false">
+              <path d="M1 1.5L6 6.5L11 1.5" />
+            </svg>
+          </span>
+          <select
+            id="stats-page-view-select"
+            className="pathway-mobile-nav-select stats-page-view-select"
+            value={activeView}
+            onChange={handleViewChange}
+            aria-label="Select stats view"
+          >
+            {viewOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderSelectedView = () => {
     if (activeView === "liked") {
       return (
         <section className="stats-completed-section">
-          <div className="pathway-mobile-topbar stats-page-view-switcher">
-            <div className="pathway-mobile-nav">
-              <label className="pathway-mobile-nav-label" htmlFor="stats-page-view-select">
-                {t("pathway.viewLabel", uiLang)}
-              </label>
-              <select
-                id="stats-page-view-select"
-                className="pathway-mobile-nav-select stats-page-view-select"
-                value={activeView}
-                onChange={handleViewChange}
-                aria-label="Select stats view"
-              >
-                <option value="completed">{t("pathway.completed", uiLang)}</option>
-                <option value="liked">{t("pathway.myLikedLessonsTab", uiLang)}</option>
-                <option value="comments">{t("pathway.commentHistoryTab", uiLang)}</option>
-              </select>
-            </div>
-          </div>
+          {renderViewSelect()}
 
           <div className="stats-placeholder">
             <h3 className="stats-placeholder-title">{t("pathway.myLikedLessons", uiLang)}</h3>
@@ -184,24 +205,7 @@ const StatsPage = () => {
     if (activeView === "comments") {
       return (
         <section className="stats-completed-section">
-          <div className="pathway-mobile-topbar stats-page-view-switcher">
-            <div className="pathway-mobile-nav">
-              <label className="pathway-mobile-nav-label" htmlFor="stats-page-view-select">
-                {t("pathway.viewLabel", uiLang)}
-              </label>
-              <select
-                id="stats-page-view-select"
-                className="pathway-mobile-nav-select stats-page-view-select"
-                value={activeView}
-                onChange={handleViewChange}
-                aria-label="Select stats view"
-              >
-                <option value="completed">{t("pathway.completed", uiLang)}</option>
-                <option value="liked">{t("pathway.myLikedLessonsTab", uiLang)}</option>
-                <option value="comments">{t("pathway.commentHistoryTab", uiLang)}</option>
-              </select>
-            </div>
-          </div>
+          {renderViewSelect()}
 
           {userComments.length > 0 ? (
             <div className="stats-comments-list">
@@ -214,8 +218,15 @@ const StatsPage = () => {
                           <span className="stats-comment-lesson-number">
                             {comment.lessons.level}.{comment.lessons.lesson_order}
                           </span>
-                          <span className="stats-comment-lesson-title">
-                            {pickLang(comment.lessons.title, comment.lessons.title_th)}
+                          <span className="stats-comment-lesson-copy">
+                            <span className="stats-comment-lesson-title">
+                              {pickLang(comment.lessons.title, comment.lessons.title_th)}
+                            </span>
+                            {(comment.lessons.focus || comment.lessons.focus_th) && (
+                              <span className="stats-comment-lesson-focus">
+                                {pickLang(comment.lessons.focus, comment.lessons.focus_th)}
+                              </span>
+                            )}
                           </span>
                         </Link>
                       ) : (
@@ -223,15 +234,15 @@ const StatsPage = () => {
                           {t("pathway.lessonNoLongerAvailable", uiLang)}
                         </span>
                       )}
-                    </div>
-                    <div className="stats-comment-date">
-                      {new Date(comment.created_at).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      <div className="stats-comment-date">
+                        {new Date(comment.created_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
                     </div>
                   </div>
                   <div className="stats-comment-body">{comment.body}</div>
@@ -260,24 +271,7 @@ const StatsPage = () => {
 
     return (
       <section className="stats-completed-section">
-        <div className="pathway-mobile-topbar stats-page-view-switcher">
-          <div className="pathway-mobile-nav">
-            <label className="pathway-mobile-nav-label" htmlFor="stats-page-view-select">
-              {t("pathway.viewLabel", uiLang)}
-            </label>
-            <select
-              id="stats-page-view-select"
-              className="pathway-mobile-nav-select stats-page-view-select"
-              value={activeView}
-              onChange={handleViewChange}
-              aria-label="Select stats view"
-            >
-              <option value="completed">{t("pathway.completed", uiLang)}</option>
-              <option value="liked">{t("pathway.myLikedLessonsTab", uiLang)}</option>
-              <option value="comments">{t("pathway.commentHistoryTab", uiLang)}</option>
-            </select>
-          </div>
-        </div>
+        {renderViewSelect()}
 
         <div className="stats-completed-list">
           {displayedCompletedLessons.map((progress) => (
@@ -305,9 +299,12 @@ const StatsPage = () => {
                 </div>
               </div>
 
-              <div className="stats-completed-check" aria-hidden="true">
-                ✓
-              </div>
+              <img
+                src="/images/check_circle_blue.webp"
+                alt=""
+                aria-hidden="true"
+                className="stats-completed-check"
+              />
             </Link>
           ))}
         </div>

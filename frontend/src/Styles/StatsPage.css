@@ -21,7 +21,7 @@
   align-self: flex-start;
   color: #3ca0fe;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 500;
 }
 
@@ -135,29 +135,74 @@
 .stats-page-view-switcher .pathway-mobile-topbar,
 .stats-page-view-switcher .pathway-mobile-nav {
   width: auto;
-  max-width: 100%;
+  max-width: none;
+}
+
+.stats-page-view-switcher .pathway-mobile-nav {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.stats-page-view-select-shell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  width: max-content;
+  color: #6b7280;
+}
+
+.stats-page-view-select-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.stats-page-view-select-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.65rem;
+  height: 0.45rem;
+  flex: 0 0 auto;
+}
+
+.stats-page-view-select-arrow svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .stats-page-view-select {
-  width: auto;
-  min-width: 13.5rem;
-  max-width: 100%;
-  padding: 0.1rem 1.15rem 0.1rem 0;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
   border: none;
   border-radius: 0;
   background-color: transparent;
   box-shadow: none;
-  font-size: 0.95rem;
-  font-weight: 600;
+  opacity: 0;
+  cursor: pointer;
   text-align: left;
-  white-space: nowrap;
-  color: #6b7280;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.1rem center;
+  text-align-last: left;
+  direction: ltr;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+.stats-page-view-select option {
+  text-align: left;
+  direction: ltr;
 }
 
 .stats-completed-header {
@@ -230,17 +275,10 @@
 }
 
 .stats-completed-check {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 2rem;
   height: 2rem;
-  border: 2px solid #1e1e1e;
-  border-radius: 50%;
-  background: #8ec6f5;
-  color: #1e1e1e;
-  font-size: 1.1rem;
-  line-height: 1;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
@@ -293,24 +331,26 @@
 }
 
 .stats-comment-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  display: block;
   margin-bottom: 0.85rem;
 }
 
 .stats-comment-lesson-info {
-  flex: 1;
   min-width: 0;
 }
 
 .stats-comment-lesson-link {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   text-decoration: none;
   color: #1e1e1e;
+}
+
+.stats-comment-lesson-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .stats-comment-lesson-number {
@@ -324,6 +364,13 @@
   font-weight: 600;
 }
 
+.stats-comment-lesson-focus {
+  margin-top: 0.2rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: #4b6385;
+}
+
 .stats-comment-lesson-deleted {
   font-size: 0.92rem;
   color: #8a8f98;
@@ -331,9 +378,11 @@
 }
 
 .stats-comment-date {
+  margin-top: 0.45rem;
+  padding-left: 3.25rem;
   font-size: 0.85rem;
   color: #6b7280;
-  white-space: nowrap;
+  line-height: 1.3;
 }
 
 .stats-comment-body {
@@ -404,9 +453,11 @@
   }
 
   .stats-page-view-select {
+    inset: -0.1rem 0;
+  }
+
+  .stats-page-view-select-label {
     font-size: 0.82rem;
-    padding: 0.05rem 1rem 0.05rem 0;
-    min-width: 12.5rem;
   }
 
   .stats-stage-card {
@@ -488,8 +539,8 @@
   }
 
   .stats-completed-number {
-    min-width: 2.6rem;
-    font-size: 1.45rem;
+    min-width: 2rem;
+    font-size: 1.1rem;
   }
 
   .stats-completed-title {
@@ -501,8 +552,8 @@
   }
 
   .stats-completed-check {
-    width: 1.7rem;
-    height: 1.7rem;
+    width: 1.1rem;
+    height: 1.1rem;
     font-size: 0.95rem;
   }
 
