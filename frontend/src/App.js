@@ -28,6 +28,7 @@ import SignUpPage from "./Pages/SignUpPage";
 import StatsPage from "./Pages/StatsPage";
 import Terms from "./Pages/Terms";
 import Privacy from "./Pages/Privacy";
+import DeleteAccount from "./Pages/DeleteAccount";
 import SurveyRedirect from "./Pages/SurveyRedirect";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
@@ -114,6 +115,7 @@ function App() {
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/terms" element={<Terms />} />
                     <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/delete-account" element={<DeleteAccount />} />
                     <Route
                       path="/profile"
                       element={

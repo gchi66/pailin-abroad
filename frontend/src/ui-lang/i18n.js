@@ -1506,6 +1506,7 @@ export const copy = {
         title: { en: "HELP CENTER", th: "ศูนย์ช่วยเหลือ" },
         items: [
           { text: { en: "Contact Us", th: "ติดต่อเรา" }, link: "/contact" },
+          { text: { en: "Delete Account", th: "ลบบัญชีผู้ใช้" }, link: "/delete-account" },
           { text: { en: "Privacy Policy", th: "นโยบายความเป็นส่วนตัว" }, link: "/privacy" },
           { text: { en: "Terms & Conditions", th: "ข้อกำหนดและเงื่อนไข" }, link: "/terms" },
         ],
@@ -1520,6 +1521,7 @@ export const copy = {
   legal: {
     privacyTitle: { en: "Privacy Policy", th: "นโยบายความเป็นส่วนตัว" },
     termsTitle: { en: "Terms & Conditions", th: "ข้อกำหนดและเงื่อนไข" },
+    deleteAccountTitle: { en: "Delete Account", th: "ลบบัญชีผู้ใช้" },
     loading: { en: "Loading document...", th: "กำลังโหลดเอกสาร..." },
     missing: {
       en: "We could not load this document yet. Please check back soon.",
