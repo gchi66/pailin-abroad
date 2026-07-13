@@ -5,5 +5,9 @@
 # Ignore Python byte-code
 **/__pycache__
 **/*.pyc
-**/backend/data/*.json
+
+# Parser/import source and generated lesson data are not needed at runtime.
+data/
+full_doc.json
+
 fly.toml
