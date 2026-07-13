@@ -2,7 +2,8 @@
 from typing import Any, Dict, List, Optional, Tuple
 import hashlib
 
-TEXT_KINDS = {"heading", "paragraph", "list_item", "misc_item"}
+LIST_KINDS = {"list_item", "numbered_item"}
+TEXT_KINDS = {"heading", "paragraph", *LIST_KINDS, "misc_item"}
 
 def _clean(s):
     if isinstance(s, str):
@@ -32,6 +33,17 @@ def _first_text_hash(node: Dict[str, Any]) -> str:
 
 def _soft_key(node: Dict[str, Any]) -> Tuple[Any, Any, str]:
     return (node.get("kind"), node.get("indent"), _first_text_hash(node))
+
+def _list_text_key(node: Dict[str, Any]) -> str:
+    text = "".join(_clean(inline.get("text")) for inline in node.get("inlines") or [])
+    if not text:
+        text = _clean(node.get("text"))
+    return "".join(char for char in text.casefold() if char.isalnum())
+
+def _positionally_compatible(en: Dict[str, Any], th: Dict[str, Any]) -> bool:
+    en_is_list = en.get("kind") in LIST_KINDS
+    th_is_list = th.get("kind") in LIST_KINDS
+    return en_is_list == th_is_list
 
 def _merge_inlines(en, th):
     en, th = en or [], th or []
@@ -89,19 +101,32 @@ def merge_content_nodes(en_nodes: List[Dict], th_nodes: Optional[List[Dict]]) ->
     th_by_audio = {(n.get("audio_seq"), n.get("audio_section")): n
                    for n in th_nodes if n.get("audio_seq") is not None and n.get("audio_section") is not None}
     th_by_soft = {_soft_key(n): n for n in th_nodes}
+    th_by_list_text = {}
+    for node in th_nodes:
+        if node.get("kind") in LIST_KINDS:
+            key = _list_text_key(node)
+            if key:
+                th_by_list_text.setdefault(key, []).append(node)
     used = set()
     out = []
 
-    # Keep all the existing matching logic exactly the same
+    # Prefer durable IDs and list text before falling back to positional matching.
     for idx, en in enumerate(en_nodes):
         th = None
         if en.get("id") and en["id"] in th_by_id:
             th = th_by_id[en["id"]]
+        elif en.get("kind") in LIST_KINDS:
+            candidates = th_by_list_text.get(_list_text_key(en), [])
+            th = next((node for node in candidates if id(node) not in used), None)
         elif (en.get("audio_seq"), en.get("audio_section")) in th_by_audio:
             th = th_by_audio[(en.get("audio_seq"), en.get("audio_section"))]
         elif _soft_key(en) in th_by_soft:
             th = th_by_soft[_soft_key(en)]
-        elif idx < len(th_nodes):
+        elif (
+            idx < len(th_nodes)
+            and id(th_nodes[idx]) not in used
+            and _positionally_compatible(en, th_nodes[idx])
+        ):
             th = th_nodes[idx]
         if th:
             used.add(id(th))
