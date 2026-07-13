@@ -92,6 +92,13 @@ def _is_native_bullet(doc_json: dict, bullet_info: dict, paragraph: dict) -> boo
         if glyph_type in _numbered_glyphs:
             return False
 
+        # Google can preserve an ordered list in the editor while returning an
+        # unspecified ordered glyph through the API. The presence of glyphType
+        # (rather than glyphSymbol) still identifies the ordered side of the
+        # glyph-kind union.
+        if glyph_type == "GLYPH_TYPE_UNSPECIFIED" and not glyph_sym:
+            return False
+
         # If we have a clear bullet symbol, it's a bullet
         if glyph_sym and glyph_sym in _bullet_symbol:
             return True
@@ -111,6 +118,8 @@ def _is_native_bullet(doc_json: dict, bullet_info: dict, paragraph: dict) -> boo
     if glyph_sym and glyph_sym in _bullet_symbol:
         return True
     if glyph_type in _numbered_glyphs:
+        return False
+    if glyph_type == "GLYPH_TYPE_UNSPECIFIED" and not glyph_sym:
         return False
     return True
 
