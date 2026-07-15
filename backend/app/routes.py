@@ -927,6 +927,12 @@ def login():
 @routes.route('/api/user/profile', methods=['GET'])
 @handle_options
 def get_user_profile():
+    request_start = time.perf_counter()
+    request_id = f"{int(time.time() * 1000) % 1000000}"
+    auth_ms = 0
+    user_query_ms = 0
+    progress_query_ms = 0
+
     try:
         # Get authorization header
         auth_header = request.headers.get('Authorization')
@@ -936,17 +942,39 @@ def get_user_profile():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
+        auth_start = time.perf_counter()
         user_response = supabase.auth.get_user(access_token)
+        auth_ms = _elapsed_ms(auth_start)
 
         if not user_response.user:
+            print(
+                f"[user-profile] request_id={request_id} auth_ms={auth_ms} "
+                f"invalid_token=true total_ms={_elapsed_ms(request_start)}",
+                flush=True,
+            )
             return jsonify({"error": "Invalid token"}), 401
 
         user_id = user_response.user.id
 
         # Fetch user data from users table
-        result = supabase.table('users').select('*').eq('id', user_id).execute()
+        user_query_start = time.perf_counter()
+        result = (
+            supabase.table('users')
+            .select(
+                'id, username, email, avatar_image, is_admin, created_at'
+            )
+            .eq('id', user_id)
+            .execute()
+        )
+        user_query_ms = _elapsed_ms(user_query_start)
 
         if not result.data:
+            print(
+                f"[user-profile] request_id={request_id} auth_ms={auth_ms} "
+                f"user_query_ms={user_query_ms} not_found=true "
+                f"total_ms={_elapsed_ms(request_start)}",
+                flush=True,
+            )
             return jsonify({"error": "User not found"}), 404
 
         user_data = result.data[0]
@@ -954,9 +982,18 @@ def get_user_profile():
         # Count completed lessons from user_lesson_progress table
         lessons_complete = 0
         try:
-            progress_result = supabase.table('user_lesson_progress').select('*', count='exact').eq('user_id', user_id).eq('is_completed', True).execute()
+            progress_query_start = time.perf_counter()
+            progress_result = (
+                supabase.table('user_lesson_progress')
+                .select('id', count='exact')
+                .eq('user_id', user_id)
+                .eq('is_completed', True)
+                .execute()
+            )
+            progress_query_ms = _elapsed_ms(progress_query_start)
             lessons_complete = progress_result.count if progress_result.count is not None else 0
         except Exception as e:
+            progress_query_ms = _elapsed_ms(progress_query_start)
             print(f"Warning: Could not fetch lesson progress: {e}")
             # Use fallback value of 0 if query fails
 
@@ -972,10 +1009,22 @@ def get_user_profile():
             "lessons_complete": lessons_complete
         }
 
+        print(
+            f"[user-profile] request_id={request_id} auth_ms={auth_ms} "
+            f"user_query_ms={user_query_ms} progress_query_ms={progress_query_ms} "
+            f"total_ms={_elapsed_ms(request_start)}",
+            flush=True,
+        )
         return jsonify({"profile": profile}), 200
 
     except Exception as e:
-        print(f"Error fetching user profile: {e}")
+        print(
+            f"Error fetching user profile request_id={request_id} "
+            f"auth_ms={auth_ms} user_query_ms={user_query_ms} "
+            f"progress_query_ms={progress_query_ms} "
+            f"total_ms={_elapsed_ms(request_start)}: {e}",
+            flush=True,
+        )
         return jsonify({"error": "Internal server error"}), 500
 
 
@@ -1057,6 +1106,11 @@ def update_user_profile():
 @routes.route('/api/user/completed-lessons', methods=['GET'])
 @handle_options
 def get_completed_lessons():
+    request_start = time.perf_counter()
+    request_id = f"{int(time.time() * 1000) % 1000000}"
+    auth_ms = 0
+    progress_query_ms = 0
+
     try:
         # Get authorization header
         auth_header = request.headers.get('Authorization')
@@ -1066,9 +1120,16 @@ def get_completed_lessons():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
+        auth_start = time.perf_counter()
         user_response = supabase.auth.get_user(access_token)
+        auth_ms = _elapsed_ms(auth_start)
 
         if not user_response.user:
+            print(
+                f"[completed-lessons] request_id={request_id} auth_ms={auth_ms} "
+                f"invalid_token=true total_ms={_elapsed_ms(request_start)}",
+                flush=True,
+            )
             return jsonify({"error": "Invalid token"}), 401
 
         user_id = user_response.user.id
@@ -1076,16 +1137,34 @@ def get_completed_lessons():
         # Fetch completed lessons from user_lesson_progress table
         completed_lessons = []
         try:
+            progress_query_start = time.perf_counter()
             progress_result = supabase.table('user_lesson_progress').select('*, lessons(*)').eq('user_id', user_id).eq('is_completed', True).execute()
+            progress_query_ms = _elapsed_ms(progress_query_start)
             completed_lessons = progress_result.data if progress_result.data else []
         except Exception as e:
-            print(f"Warning: Could not fetch completed lessons: {e}")
+            progress_query_ms = _elapsed_ms(progress_query_start)
+            print(
+                f"Warning: Could not fetch completed lessons request_id={request_id} "
+                f"progress_query_ms={progress_query_ms}: {e}",
+                flush=True,
+            )
             # Return empty list if query fails
 
+        print(
+            f"[completed-lessons] request_id={request_id} auth_ms={auth_ms} "
+            f"progress_query_ms={progress_query_ms} completed_count={len(completed_lessons)} "
+            f"total_ms={_elapsed_ms(request_start)}",
+            flush=True,
+        )
         return jsonify({"completed_lessons": completed_lessons}), 200
 
     except Exception as e:
-        print(f"Error fetching completed lessons: {e}")
+        print(
+            f"Error fetching completed lessons request_id={request_id} "
+            f"auth_ms={auth_ms} progress_query_ms={progress_query_ms} "
+            f"total_ms={_elapsed_ms(request_start)}: {e}",
+            flush=True,
+        )
         return jsonify({"error": "Internal server error"}), 500
 
 
@@ -2414,16 +2493,40 @@ def record_daily_streak_check_in():
 @routes.route('/api/app/user/daily-streak', methods=['GET'])
 @handle_options
 def get_daily_streak():
+    request_start = time.perf_counter()
+    request_id = f"{int(time.time() * 1000) % 1000000}"
+    auth_ms = 0
+    streak_query_ms = 0
+
     try:
+        auth_start = time.perf_counter()
         user_id, auth_error = _get_authenticated_user_id()
+        auth_ms = _elapsed_ms(auth_start)
         if auth_error:
+            print(
+                f"[daily-streak] request_id={request_id} auth_ms={auth_ms} "
+                f"auth_error=true total_ms={_elapsed_ms(request_start)}",
+                flush=True,
+            )
             return auth_error
 
         tzinfo, timezone_name = _resolve_streak_timezone()
+        streak_query_start = time.perf_counter()
         streak_status = _build_daily_streak_status(user_id, tzinfo, timezone_name)
+        streak_query_ms = _elapsed_ms(streak_query_start)
+        print(
+            f"[daily-streak] request_id={request_id} auth_ms={auth_ms} "
+            f"streak_query_ms={streak_query_ms} total_ms={_elapsed_ms(request_start)}",
+            flush=True,
+        )
         return jsonify(streak_status), 200
     except Exception as e:
-        print(f"Error fetching daily streak: {e}")
+        print(
+            f"Error fetching daily streak request_id={request_id} "
+            f"auth_ms={auth_ms} streak_query_ms={streak_query_ms} "
+            f"total_ms={_elapsed_ms(request_start)}: {e}",
+            flush=True,
+        )
         return jsonify({"error": "Internal server error"}), 500
 
 

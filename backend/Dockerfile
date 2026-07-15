@@ -17,4 +17,4 @@ EXPOSE 8080
 
 ENV FLASK_APP=app
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:create_app()"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--worker-class", "gthread", "--workers", "2", "--threads", "2", "--timeout", "60", "--keep-alive", "5", "app:create_app()"]
