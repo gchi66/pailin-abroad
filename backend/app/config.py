@@ -11,6 +11,10 @@ class Config:
     REVENUECAT_WEBHOOK_AUTH_SECRET = os.getenv("REVENUECAT_WEBHOOK_AUTH_SECRET")
     REVENUECAT_SECRET_API_KEY = os.getenv("REVENUECAT_SECRET_API_KEY")
     FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    AUTH_CALLBACK_URL = os.getenv(
+        "AUTH_CALLBACK_URL",
+        "https://pailinabroad.com/auth/callback",
+    )
     EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
     EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
     RECIPIENT_EMAIL = "pailinabroad@gmail.com"

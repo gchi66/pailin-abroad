@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import supabaseClient from "../supabaseClient";
+import { API_BASE_URL } from "../config/api";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
 import "../Styles/EmailConfirmation.css";
@@ -27,16 +27,19 @@ const EmailConfirmationPage = ({ userEmail = "your email" }) => {
     setResendMessage("");
 
     try {
-      const { error } = await supabaseClient.auth.resend({
-        type: "signup",
-        email: effectiveEmail,
-        options: {
-          emailRedirectTo: `${window.location.origin}/onboarding`
-        }
+      const response = await fetch(`${API_BASE_URL}/api/signup-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: effectiveEmail }),
       });
+      const data = await response.json().catch(() => ({}));
 
-      if (error) {
-        setResendMessage(`Error: ${error.message}`);
+      if (!response.ok) {
+        setResendMessage(
+          `Error: ${data.error || data.message || "Please try again later."}`
+        );
       } else {
         setResendMessage(t("authModals.emailConfirmation.resendSuccess", ui));
       }

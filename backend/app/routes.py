@@ -18,6 +18,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 import copy
+import hashlib
 from zoneinfo import ZoneInfo
 from app.config import Config
 from app.pricing_utils import resolve_region_key
@@ -31,6 +32,13 @@ from app.revenuecat_membership import (
 import requests
 
 routes = Blueprint("routes", __name__)
+
+SIGNUP_EMAIL_RESPONSE = (
+    "If this email can be used, we've sent a confirmation link."
+)
+SIGNUP_RATE_LIMIT_WINDOW_SECONDS = 15 * 60
+SIGNUP_RATE_LIMIT_PER_EMAIL = 3
+SIGNUP_RATE_LIMIT_PER_IP = 10
 
 STAGE_ORDER = ["Beginner", "Intermediate", "Advanced", "Expert"]
 STAGE_RANK = {stage: index for index, stage in enumerate(STAGE_ORDER)}
@@ -135,6 +143,40 @@ def _slugify(value: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", value)
     value = re.sub(r"-+", "-", value)
     return value.strip("-") or "section"
+
+
+def _normalize_email(value):
+    if not isinstance(value, str):
+        return ""
+    return value.strip().lower()
+
+
+def _signup_rate_limit_key(kind, value):
+    digest = hashlib.sha256(value.encode("utf-8")).hexdigest()
+    return f"signup:{kind}:{digest}"
+
+
+def _request_client_ip():
+    # Fly sets Fly-Client-IP to the original client address. Do not trust an
+    # arbitrary X-Forwarded-For header when the app is reached outside Fly.
+    return (
+        request.headers.get("Fly-Client-IP")
+        or request.headers.get("CF-Connecting-IP")
+        or request.remote_addr
+        or "unknown"
+    ).strip()
+
+
+def _consume_signup_rate_limit(key, request_limit):
+    result = supabase_admin.rpc(
+        "consume_auth_signup_rate_limit",
+        {
+            "p_key": key,
+            "p_limit": request_limit,
+            "p_window_seconds": SIGNUP_RATE_LIMIT_WINDOW_SECONDS,
+        },
+    ).execute()
+    return bool(result.data)
 
 
 def _category_label(key: str) -> str:
@@ -1385,60 +1427,67 @@ def get_pathway_lessons():
 @routes.route('/api/signup-email', methods=['POST'])
 @handle_options
 def signup_email():
-    """Send magic link for account creation - no real account until onboarding complete"""
-    data = request.json
-
-    email = data.get('email')
+    """Send a generic, rate-limited magic link response for signup or sign-in."""
+    data = request.get_json(silent=True) or {}
+    email = _normalize_email(data.get("email"))
 
     if not email:
         return jsonify({"error": "Email is required"}), 400
 
+    email_regex = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
+    if not re.match(email_regex, email):
+        return jsonify({"error": "Please enter a valid email address"}), 400
+
     try:
-        # Check if user already has a completed account
-        existing_user = supabase.table('users').select('*').eq('email', email).neq('password_hash', 'pending_onboarding').execute()
+        client_ip = _request_client_ip()
+        email_allowed = _consume_signup_rate_limit(
+            _signup_rate_limit_key("email", email),
+            SIGNUP_RATE_LIMIT_PER_EMAIL,
+        )
+        ip_allowed = _consume_signup_rate_limit(
+            _signup_rate_limit_key("ip", client_ip),
+            SIGNUP_RATE_LIMIT_PER_IP,
+        )
+    except Exception as rate_limit_error:
+        # Fail closed if the shared limiter is unavailable; otherwise a database
+        # outage could silently remove abuse protection.
+        print(f"Signup rate limiter unavailable: {rate_limit_error}")
+        return jsonify({
+            "error": "Signup is temporarily unavailable. Please try again later."
+        }), 503
 
-        if existing_user.data:
-            return jsonify({"error": "An account with this email already exists. Please use the login form."}), 400
+    if not email_allowed or not ip_allowed:
+        return jsonify({
+            "message": SIGNUP_EMAIL_RESPONSE,
+            "email_sent": False,
+        }), 429
 
-        # Use sign_up with a temporary password that meets requirements
-        # This creates the auth user but they'll set real password in onboarding
-        from app.config import Config
-        response = supabase.auth.sign_up({
+    try:
+        response = supabase.auth.sign_in_with_otp({
             "email": email,
-            "password": "TempPass123!",  # Meets Supabase requirements, will be changed in onboarding
             "options": {
-                "email_redirect_to": f"{Config.FRONTEND_URL}/onboarding"
-            }
+                "email_redirect_to": Config.AUTH_CALLBACK_URL,
+                "should_create_user": True,
+            },
         })
 
-        print("SIGNUP RESULT:", response)
-
         if hasattr(response, "error") and response.error:
-            print("Error from Supabase:", response.error)
-            return jsonify({"error": str(response.error)}), 400
-
-        if not getattr(response, "user", None):
-            print(f"Signup blocked with no user returned for {email}")
-            return jsonify({
-                "error": "This email is already registered. Try logging in or resetting your password."
-            }), 409
-
-        identities = getattr(response.user, "identities", None)
-        if identities is not None and len(identities) == 0:
-            print(f"Signup blocked because auth user already exists for {email}")
-            return jsonify({
-                "error": "This email is already registered. Try logging in or resetting your password."
-            }), 409
+            # Keep the public response generic so auth state cannot be inferred.
+            print(f"Supabase magic-link request failed: {response.error}")
 
         return jsonify({
-            "message": "Confirmation email sent! Please check your email to verify your account.",
-            "email": email,
-            "email_sent": True
+            "message": SIGNUP_EMAIL_RESPONSE,
+            "email_sent": True,
         }), 200
 
     except Exception as e:
-        print(f"Error in email signup: {e}")
-        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+        # Supabase may raise for an existing user, SMTP failure, or its own rate
+        # limit. None of those details should disclose account state publicly.
+        print(f"Error requesting signup magic link: {e}")
+        return jsonify({
+            "message": SIGNUP_EMAIL_RESPONSE,
+            "email_sent": True,
+        }), 200
 
 
 
@@ -1446,10 +1495,16 @@ def signup_email():
 @handle_options
 def confirm_email():
     """Handle email confirmation and create user record in database"""
-    data = request.json
-
-    # Get the access token from the confirmed user session
-    access_token = data.get('access_token')
+    data = request.get_json(silent=True) or {}
+    auth_header = request.headers.get("Authorization", "")
+    bearer_token = (
+        auth_header.split(" ", 1)[1]
+        if auth_header.startswith("Bearer ")
+        else None
+    )
+    # Keep accepting the JSON token for the currently deployed web/mobile
+    # clients while new clients use the Authorization header.
+    access_token = bearer_token or data.get("access_token")
 
     if not access_token:
         return jsonify({"error": "Access token is required"}), 400
@@ -1515,8 +1570,17 @@ def set_password():
     if not password:
         return jsonify({"error": "Password is required"}), 400
 
-    if len(password) < 8:
-        return jsonify({"error": "Password must be at least 8 characters long"}), 400
+    if (
+        len(password) < 8
+        or not re.search(r"[A-Z]", password)
+        or not re.search(r'[\d!@#$%^&*(),.?":{}|<>_\-+=/\\[\]~`]', password)
+    ):
+        return jsonify({
+            "error": (
+                "Password must be at least 8 characters and include an "
+                "uppercase letter and a number or symbol"
+            )
+        }), 400
 
     try:
         # Get the authenticated user
@@ -1530,7 +1594,7 @@ def set_password():
 
         # Update the user's password using Supabase admin API
         try:
-            password_update_response = supabase.auth.admin.update_user_by_id(
+            password_update_response = supabase_admin.auth.admin.update_user_by_id(
                 user_id,
                 {"password": password}
             )

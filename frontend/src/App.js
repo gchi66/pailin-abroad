@@ -24,6 +24,7 @@ import Onboarding from "./Pages/Onboarding";
 import Checkout from "./Pages/Checkout";
 import PaymentSuccess from "./Pages/PaymentSuccess";
 import VerifyEmail from "./Pages/VerifyEmail";
+import AuthCallback from "./Pages/AuthCallback";
 import SignUpPage from "./Pages/SignUpPage";
 import StatsPage from "./Pages/StatsPage";
 import Terms from "./Pages/Terms";
@@ -64,6 +65,7 @@ function App() {
             <Analytics />
             <Routes>
             {/* Full-screen onboarding route - isolated from main app structure */}
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/email-confirmation" element={<EmailConfirmationPage />} />

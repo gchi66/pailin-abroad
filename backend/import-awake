@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -lt 1 ]]; then
+    echo "Usage: ./import-awake START_LEVEL [END_LEVEL] [-SkipParse] [-SkipImport] [-SkipThai] [-SkipEnglish]"
+    echo "Example: ./import-awake 2 4"
+    exit 2
+fi
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+launcher_path="$(wslpath -w "$script_dir/../scripts/run-pailin-import-awake.ps1")"
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$launcher_path" "$@"
