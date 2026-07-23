@@ -1573,12 +1573,14 @@ def set_password():
     if (
         len(password) < 8
         or not re.search(r"[A-Z]", password)
-        or not re.search(r'[\d!@#$%^&*(),.?":{}|<>_\-+=/\\[\]~`]', password)
+        or not re.search(r"[a-z]", password)
+        or not re.search(r"\d", password)
+        or not re.search(r'[!@#$%^&*(),.?":{}|<>_;\'\-+=/\\[\]~`]', password)
     ):
         return jsonify({
             "error": (
-                "Password must be at least 8 characters and include an "
-                "uppercase letter and a number or symbol"
+                "Password must be at least 8 characters and include uppercase "
+                "and lowercase letters, a number, and a special character"
             )
         }), 400
 

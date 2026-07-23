@@ -19,8 +19,10 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess, selectedPlan }) => {
   const passwordValue = formData.password;
   const confirmPasswordValue = formData.confirmPassword;
   const meetsLength = passwordValue.length >= 8;
-  const meetsNumberOrSymbol = /[\d!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
-  const meetsUppercase = /[A-Z]/.test(passwordValue);
+  const meetsNumber = /\d/.test(passwordValue);
+  const meetsSymbol = /[!@#$%^&*(),.?":{}|<>_;'\-+=/\\[\]~`]/.test(passwordValue);
+  const meetsNumberAndSymbol = meetsNumber && meetsSymbol;
+  const meetsLetterCases = /[A-Z]/.test(passwordValue) && /[a-z]/.test(passwordValue);
   const shouldShowMismatch =
     confirmPasswordValue.length > 0 &&
     passwordValue.length > 0 &&
@@ -48,7 +50,7 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess, selectedPlan }) => {
       return;
     }
 
-    if (!meetsNumberOrSymbol || !meetsUppercase) {
+    if (!meetsNumberAndSymbol || !meetsLetterCases) {
       setError(t("quickSignup.passwordRequirements", ui));
       setLoading(false);
       return;
@@ -242,21 +244,21 @@ const QuickSignupModal = ({ isOpen, onClose, onSuccess, selectedPlan }) => {
                 </div>
                 <div className="onboarding-password-rule">
                   <img
-                    src={meetsNumberOrSymbol ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
-                    alt={meetsNumberOrSymbol ? "✓ Number or symbol requirement met" : "Number or symbol requirement not met"}
-                    className={`onboarding-rule-icon ${meetsNumberOrSymbol ? "met" : ""}`}
+                    src={meetsNumberAndSymbol ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsNumberAndSymbol ? "✓ Number and symbol requirement met" : "Number and symbol requirement not met"}
+                    className={`onboarding-rule-icon ${meetsNumberAndSymbol ? "met" : ""}`}
                   />
-                  <span className={`onboarding-rule-text ${meetsNumberOrSymbol ? "met" : ""}`}>
+                  <span className={`onboarding-rule-text ${meetsNumberAndSymbol ? "met" : ""}`}>
                     {t("quickSignup.passwordRule2", ui)}
                   </span>
                 </div>
                 <div className="onboarding-password-rule">
                   <img
-                    src={meetsUppercase ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
-                    alt={meetsUppercase ? "✓ Uppercase letter requirement met" : "Uppercase letter requirement not met"}
-                    className={`onboarding-rule-icon ${meetsUppercase ? "met" : ""}`}
+                    src={meetsLetterCases ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsLetterCases ? "✓ Uppercase and lowercase requirements met" : "Uppercase and lowercase requirements not met"}
+                    className={`onboarding-rule-icon ${meetsLetterCases ? "met" : ""}`}
                   />
-                  <span className={`onboarding-rule-text ${meetsUppercase ? "met" : ""}`}>
+                  <span className={`onboarding-rule-text ${meetsLetterCases ? "met" : ""}`}>
                     {t("quickSignup.passwordRule3", ui)}
                   </span>
                 </div>

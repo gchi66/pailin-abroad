@@ -37,9 +37,14 @@ const Onboarding = () => {
   const passwordValue = passwords.newPassword;
   const confirmPasswordValue = passwords.confirmPassword;
   const meetsLength = passwordValue.length >= 8;
-  const meetsNumberOrSymbol = /[\d!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
+  const meetsNumber = /\d/.test(passwordValue);
+  const meetsSymbol = /[!@#$%^&*(),.?":{}|<>_;'\-+=/\\[\]~`]/.test(passwordValue);
+  const meetsNumberAndSymbol = meetsNumber && meetsSymbol;
   const meetsUppercase = /[A-Z]/.test(passwordValue);
-  const allPasswordRequirementsMet = meetsLength && meetsNumberOrSymbol && meetsUppercase;
+  const meetsLowercase = /[a-z]/.test(passwordValue);
+  const meetsLetterCases = meetsUppercase && meetsLowercase;
+  const allPasswordRequirementsMet =
+    meetsLength && meetsNumberAndSymbol && meetsLetterCases;
   const passwordsMatch =
     passwordValue.length > 0 &&
     confirmPasswordValue.length > 0 &&
@@ -617,21 +622,21 @@ const Onboarding = () => {
                 </div>
                 <div className="onboarding-password-rule">
                   <img
-                    src={meetsNumberOrSymbol ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
-                    alt={meetsNumberOrSymbol ? "✓ Number or symbol requirement met" : "Number or symbol requirement not met"}
-                    className={`onboarding-rule-icon ${meetsNumberOrSymbol ? "met" : ""}`}
+                    src={meetsNumberAndSymbol ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsNumberAndSymbol ? "✓ Number and symbol requirement met" : "Number and symbol requirement not met"}
+                    className={`onboarding-rule-icon ${meetsNumberAndSymbol ? "met" : ""}`}
                   />
-                  <span className={`onboarding-rule-text ${meetsNumberOrSymbol ? "met" : ""}`}>
+                  <span className={`onboarding-rule-text ${meetsNumberAndSymbol ? "met" : ""}`}>
                     {uiText.passwordRule2}
                   </span>
                 </div>
                 <div className="onboarding-password-rule">
                   <img
-                    src={meetsUppercase ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
-                    alt={meetsUppercase ? "✓ Uppercase letter requirement met" : "Uppercase letter requirement not met"}
-                    className={`onboarding-rule-icon ${meetsUppercase ? "met" : ""}`}
+                    src={meetsLetterCases ? "/images/blue-password-checkmark.webp" : "/images/grey-password-checkmark.webp"}
+                    alt={meetsLetterCases ? "✓ Uppercase and lowercase requirements met" : "Uppercase and lowercase requirements not met"}
+                    className={`onboarding-rule-icon ${meetsLetterCases ? "met" : ""}`}
                   />
-                  <span className={`onboarding-rule-text ${meetsUppercase ? "met" : ""}`}>
+                  <span className={`onboarding-rule-text ${meetsLetterCases ? "met" : ""}`}>
                     {uiText.passwordRule3}
                   </span>
                 </div>

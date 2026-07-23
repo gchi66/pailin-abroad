@@ -742,10 +742,13 @@ export const copy = {
     confirmPassword: { en: "Confirm password", th: "ยืนยันรหัสผ่าน" },
     passwordRule1: { en: "At least 8 characters", th: "อย่างน้อย 8 ตัวอักษร" },
     passwordRule2: {
-      en: "At least 1 number or special character",
-      th: "มีตัวเลขหรือตัวอักษรพิเศษอย่างน้อย 1 ตัว",
+      en: "At least 1 number and 1 special character",
+      th: "มีตัวเลขและอักขระพิเศษอย่างน้อยอย่างละ 1 ตัว",
     },
-    passwordRule3: { en: "At least 1 uppercase letter", th: "มีตัวอักษรพิมพ์ใหญ่อย่างน้อย 1 ตัว" },
+    passwordRule3: {
+      en: "At least 1 uppercase and 1 lowercase letter",
+      th: "มีตัวอักษรพิมพ์ใหญ่และพิมพ์เล็กอย่างน้อยอย่างละ 1 ตัว",
+    },
     passwordMismatch: { en: "Passwords don't match", th: "รหัสผ่านไม่ตรงกัน" },
     setPassword: { en: "CREATE ACCOUNT", th: "สร้างบัญชี" },
     whatToCallYou: { en: "What should we call you?", th: "อยากให้เราเรียกคุณว่าอะไรดีล่ะ?" },
@@ -991,10 +994,19 @@ export const copy = {
     loginLink: { en: "Log in", th: "เข้าสู่ระบบ" },
     passwordMismatch: { en: "Passwords do not match", th: "รหัสผ่านไม่ตรงกัน" },
     passwordTooShort: { en: "Password must be at least 8 characters", th: "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร" },
-    passwordRequirements: { en: "Password must include an uppercase letter and a number or symbol", th: "รหัสผ่านต้องมีอักษรพิมพ์ใหญ่ และตัวเลขหรือสัญลักษณ์" },
+    passwordRequirements: {
+      en: "Password must include uppercase and lowercase letters, a number, and a symbol",
+      th: "รหัสผ่านต้องมีตัวอักษรพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลข และสัญลักษณ์",
+    },
     passwordRule1: { en: "At least 8 characters", th: "อย่างน้อย 8 ตัวอักษร" },
-    passwordRule2: { en: "At least one number or symbol", th: "มีอย่างน้อย 1 ตัวเลขหรือสัญลักษณ์" },
-    passwordRule3: { en: "At least one uppercase letter", th: "มีอย่างน้อย 1 ตัวอักษรพิมพ์ใหญ่" },
+    passwordRule2: {
+      en: "At least 1 number and 1 special character",
+      th: "มีตัวเลขและอักขระพิเศษอย่างน้อยอย่างละ 1 ตัว",
+    },
+    passwordRule3: {
+      en: "At least 1 uppercase and 1 lowercase letter",
+      th: "มีตัวอักษรพิมพ์ใหญ่และพิมพ์เล็กอย่างน้อยอย่างละ 1 ตัว",
+    },
     signupError: { en: "An error occurred during signup. Please try again.", th: "เกิดข้อผิดพลาดระหว่างสมัครสมาชิก กรุณาลองใหม่อีกครั้ง" },
     successTitle: { en: "Account Created!", th: "สร้างบัญชีสำเร็จ!" },
     successMessage: {
