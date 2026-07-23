@@ -13,7 +13,7 @@ class Config:
     FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
     AUTH_CALLBACK_URL = os.getenv(
         "AUTH_CALLBACK_URL",
-        "https://pailinabroad.com/auth/callback",
+        "https://www.pailinabroad.com/auth/callback",
     )
     EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
     EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")

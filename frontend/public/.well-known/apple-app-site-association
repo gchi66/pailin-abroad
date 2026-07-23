@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "H7W3TQ8F6S.com.pailinabroad.app"
+        ],
+        "components": [
+          {
+            "/": "/auth/callback",
+            "comment": "Open Supabase authentication callbacks in the Pailin Abroad app."
+          }
+        ]
+      }
+    ]
+  }
+}
