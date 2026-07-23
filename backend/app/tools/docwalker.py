@@ -37,6 +37,11 @@ class Node:
     indent_first_line_level: int = 0
     style: str = ""               # named style (e.g. HEADING_3, NORMAL_TEXT)
     is_indented: bool = False     # flag true for manually-indented paragraphs
+    # Native Google Docs list metadata. These stay unset for manually-authored
+    # lists so consumers can retain their legacy inference behavior.
+    list_id: str | None = None
+    list_nesting_level: int | None = None
+    list_start_number: int | None = None
 
 
 # ────────────────────────────────────────────────────────────
@@ -346,6 +351,9 @@ def paragraph_nodes(doc_json: dict, *, include_text_color: bool = False):
                     indent_first_line_pts=first_line_indent_pts,
                     indent_first_line_level=indent_first_line_level,
                     style=style_name,
+                    list_id=list_id,
+                    list_nesting_level=nesting_level,
+                    list_start_number=list_level_def.get("startNumber", 1),
                 )
             else:
                 yield Node(
@@ -358,6 +366,9 @@ def paragraph_nodes(doc_json: dict, *, include_text_color: bool = False):
                     indent_first_line_pts=first_line_indent_pts,
                     indent_first_line_level=indent_first_line_level,
                     style=style_name,
+                    list_id=list_id,
+                    list_nesting_level=nesting_level,
+                    list_start_number=list_level_def.get("startNumber", 1),
                 )
             continue
 

@@ -44,6 +44,8 @@ ALT_TEXT_RE = re.compile(r'ALT[\s-]*TEXT\s*:\s*(.+)', re.IGNORECASE | re.DOTALL)
 LESSON_ID_RE = re.compile(r'^\s*(?:LESSON|Lesson)\s+(\d+)\.(\d+)', re.I)
 SPEAKER_RE = re.compile(r"^([^:]{1,50}):\s+(.+)")
 SPEAKER_RE_TH = re.compile(r'^([\u0E00-\u0E7F][^:]{0,50}):\s*(.+)$')
+STANDALONE_TRANSCRIPT_STAGE_RE = re.compile(r"^\*[^*\n]+\*$")
+STANDALONE_TRANSCRIPT_ELLIPSIS_RE = re.compile(r"^(?:\.{3}|…+)$")
 TH = re.compile(r'[\u0E00-\u0E7F]')
 EN = re.compile(r'[A-Za-z]')
 PRACTICE_DIRECTIVE_RE = re.compile(
@@ -100,6 +102,14 @@ def _has_en(s: str | None) -> bool:
 
 def _has_th(s: str | None) -> bool:
     return bool(s and TH.search(s))
+
+def _is_standalone_transcript_line(line: str | None) -> bool:
+    """Return True for whole-line stage directions and pause markers."""
+    text = (line or "").strip()
+    return bool(
+        STANDALONE_TRANSCRIPT_STAGE_RE.fullmatch(text)
+        or STANDALONE_TRANSCRIPT_ELLIPSIS_RE.fullmatch(text)
+    )
 
 def _plain_text(elems: list[dict]) -> str:
     """Concatenate all textRun content inside a list of Google-Docs elements."""
@@ -683,6 +693,41 @@ def pair_transcript_bilingual(entries: list[dict]) -> list[dict]:
         # Look ahead
         b = entries[i + 1] if i + 1 < len(entries) else None
         lb = _lang_of_entry(b) if b else None
+
+        # Standalone cues (for example, "*knock knock*" / "*ก็อก ก็อก*"
+        # or an ellipsis between turns) must not consume the next speaker row.
+        # Pair adjacent EN/TH cues when both are authored; otherwise keep a
+        # translated or language-neutral cue as a TH-only row. This preserves
+        # sort-order alignment with the corresponding standalone EN row.
+        if a.get("_standalone"):
+            if b and b.get("_standalone") and {la, lb} == {"EN", "TH"}:
+                en_entry = a if la == "EN" else dict(b)
+                th_entry = b if lb == "TH" else a
+                merged = dict(en_entry)
+                merged["speaker_th"] = ""
+                merged["line_text_th"] = th_entry.get("line_text", "")
+                merged["sort_order"] = order
+                out.append(merged)
+                i += 2
+                order += 1
+                continue
+
+            if la == "TH" or la == "MIXED":
+                out.append({
+                    "sort_order": order,
+                    "speaker": "",
+                    "line_text": "",
+                    "indent": a.get("indent", 0),
+                    "speaker_th": "",
+                    "line_text_th": a.get("line_text", ""),
+                    "_standalone": True,
+                })
+            else:
+                a["sort_order"] = order
+                out.append(a)
+            i += 1
+            order += 1
+            continue
 
         # ── Case C: inline mixed EN+TH in the same entry (only when speaker isn't clearly TH)
         # e.g., "Good morning (สวัสดีตอนเช้า)" or "EN … TH" in one line
@@ -2627,6 +2672,8 @@ class GoogleDocsParser:
             for sec in other_sections:
                 if "content_jsonb" in sec and isinstance(sec["content_jsonb"], list):
                     sec["content_jsonb"] = bilingualize_headers_th(sec["content_jsonb"])
+        for entry in parsed_transcript:
+            entry.pop("_standalone", None)
 
         # --------------------------------------------------------------------
         lesson_obj = {
@@ -2888,7 +2935,9 @@ class GoogleDocsParser:
         Extract transcript entries from conversation lines.
         For each line starting with a speaker followed by a colon,
         it extracts the speaker and removes it from the line_text.
-        Lines that do not start with a speaker are appended to the previous entry.
+        Whole-line stage directions and ellipses become standalone entries.
+        Other lines that do not start with a speaker are appended to the
+        previous entry.
         """
         transcript = []
         current_entry = None
@@ -2897,6 +2946,17 @@ class GoogleDocsParser:
         for raw in lines:
             line = raw.strip()
             if not line:
+                continue
+
+            if _is_standalone_transcript_line(line):
+                transcript.append({
+                    "sort_order": len(transcript) + 1,
+                    "speaker": "",
+                    "line_text": line,
+                    "indent": 0,
+                    "_standalone": True,
+                })
+                current_entry = None
                 continue
 
             m = SPEAKER_RE.match(line)
