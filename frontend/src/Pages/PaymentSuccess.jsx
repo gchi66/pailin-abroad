@@ -4,6 +4,7 @@ import { useAuth } from "../AuthContext";
 import supabaseClient from "../supabaseClient";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
+import { usePostHog } from "@posthog/react";
 import "../Styles/PaymentSuccess.css";
 
 const PaymentSuccess = () => {
@@ -12,6 +13,14 @@ const PaymentSuccess = () => {
   const [resendMessage, setResendMessage] = useState("");
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
+  const posthog = usePostHog();
+
+  useEffect(() => {
+    // This records the redirect page view, not authoritative payment completion.
+    // Payment completion should be captured from the verified Stripe webhook.
+    posthog?.capture("payment_success_page_viewed");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Check if user email is verified
   const isVerified = user?.user_metadata?.is_verified || user?.email_confirmed_at;

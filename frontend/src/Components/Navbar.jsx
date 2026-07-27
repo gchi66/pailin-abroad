@@ -13,11 +13,13 @@ import supabaseClient from "../supabaseClient";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 import { API_BASE_URL } from "../config/api";
 import { resolveAvatarUrl } from "../lib/resolveAvatarUrl";
+import { usePostHog } from "@posthog/react";
 
 const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
   const { user } = useAuth();
   const { ui, setUi } = useUiLang();
   const withUi = useWithUi();
+  const posthog = usePostHog();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const navRef = useRef(null);
@@ -530,6 +532,7 @@ const Navbar = ({ toggleLoginModal, toggleSignupModal }) => {
                     type="button"
                     className="dropdown-link dropdown-link--secondary"
                     onClick={() => {
+                      posthog?.capture("user_logged_out");
                       supabaseClient.auth.signOut();
                       setIsMobileUserMenuOpen(false);
                       navigate("/");

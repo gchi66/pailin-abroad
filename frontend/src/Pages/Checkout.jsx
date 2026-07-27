@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../Styles/Checkout.css";
 import supabaseClient from "../supabaseClient";
 import { API_BASE_URL } from "../config/api";
+import { usePostHog } from "@posthog/react";
 
 
 const Checkout = () => {
@@ -11,6 +12,7 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [userEmail, setUserEmail] = useState("");
+  const posthog = usePostHog();
   const [emailInput, setEmailInput] = useState("");
 
   const [selectedPlan, setSelectedPlan] = useState(() => {
@@ -96,6 +98,12 @@ const Checkout = () => {
         setLoading(false);
         return;
       }
+
+      posthog?.capture("checkout_started", {
+        billing_period: selectedPlan.billingPeriod,
+        currency: selectedPlan.currency,
+        total_price: selectedPlan.totalPrice,
+      });
 
       // ✅ Redirect to Stripe Checkout (Clover-compliant)
       window.location.href = data.url;

@@ -4,6 +4,7 @@ import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { useWithUi } from "../ui-lang/withUi";
 import { t } from "../ui-lang/i18n";
+import { usePostHog } from "@posthog/react";
 import "../Styles/ProfileDropdown.css";
 import supabaseClient from "../supabaseClient";
 import LanguageToggle from "./LanguageToggle";
@@ -16,6 +17,7 @@ const ProfileDropdown = ({ extraLinks = null, avatarSrc = "", avatarAlt = "User 
   const withUi = useWithUi();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const posthog = usePostHog();
 
   const openDropdown = () => {
     setIsOpen(true);
@@ -27,6 +29,7 @@ const ProfileDropdown = ({ extraLinks = null, avatarSrc = "", avatarAlt = "User 
 
   const handleLogout = async () => {
     try {
+      posthog?.capture("user_logged_out");
       await supabaseClient.auth.signOut();
       navigate("/");
       setIsOpen(false);

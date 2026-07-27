@@ -1,12 +1,13 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import AudioButton from "../AudioButton";
-import InlineText from "../InlineText";
+import InlineText, { renderDecoratedText } from "../InlineText";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
 import { copy, pick } from "../../ui-lang/i18n";
 import CheckAnswersButton from "./CheckAnswersButton";
+import { usePostHog } from "@posthog/react";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -156,7 +157,7 @@ const renderMultiline = (text = "") => {
 
   return (
     <span className={`fb-text-block${hasThai(text) ? " fb-text-th" : ""}`}>
-      {text}
+      {renderDecoratedText(text, "fb-multiline")}
     </span>
   );
 };
@@ -171,7 +172,7 @@ const renderStyledText = (content, style) => {
   const thaiClass = hasThai(content) ? " fb-text-th" : "";
   return (
     <span style={textStyle} className={`fb-text-block${thaiClass}`}>
-      {content}
+      {renderDecoratedText(content, "fb-styled")}
     </span>
   );
 };
@@ -431,6 +432,7 @@ export default function FillBlankExercise({
   } = exercise || {};
   const { user } = useAuth();
   const userId = userIdProp || user?.id || null;
+  const posthog = usePostHog();
   const evaluationSourceType = ["bank", "practice"].includes(
     (sourceType || "").toLowerCase()
   )
@@ -744,6 +746,14 @@ export default function FillBlankExercise({
     setQuestions(finalQuestions);
     setIsChecking(false);
     setHasChecked(true);
+    const correctCount = finalQuestions.filter((q) => q.correct === true).length;
+    posthog?.capture("exercise_checked", {
+      exercise_type: "fill_blank",
+      exercise_id: resolvedExerciseId,
+      correct_count: correctCount,
+      total_count: finalQuestions.length,
+      source_type: evaluationSourceType,
+    });
     if (typeof onSaveAnswerState === "function" && unitKey) {
       onSaveAnswerState({
         unitKey,
@@ -790,7 +800,7 @@ export default function FillBlankExercise({
 
   const renderPromptBlocks = () => {
     if (!promptBlocks?.length) {
-      return prompt ? <p className="fb-prompt">{prompt}</p> : null;
+      return prompt ? <InlineText as="p" className="fb-prompt" text={prompt} /> : null;
     }
     return (
       <div className="fb-prompt">
@@ -799,9 +809,11 @@ export default function FillBlankExercise({
           if (block.type === "text") {
             return (
               <div key={`prompt-text-${blockIdx}`} className="fb-prompt-block">
-                {block.text && <p className="fb-prompt-text">{block.text}</p>}
+                {block.text && (
+                  <InlineText as="p" className="fb-prompt-text" text={block.text} />
+                )}
                 {block.text_th && (
-                  <p className="fb-prompt-th">{block.text_th}</p>
+                  <InlineText as="p" className="fb-prompt-th" text={block.text_th} />
                 )}
               </div>
             );
@@ -811,7 +823,9 @@ export default function FillBlankExercise({
             return (
               <ul key={`prompt-list-${blockIdx}`} className="fb-prompt-list">
                 {itemsList.map((itemText, itemIdx) => (
-                  <li key={`prompt-list-${blockIdx}-${itemIdx}`}>{itemText}</li>
+                  <li key={`prompt-list-${blockIdx}-${itemIdx}`}>
+                    {renderDecoratedText(itemText, `prompt-list-${blockIdx}-${itemIdx}`)}
+                  </li>
                 ))}
               </ul>
             );
@@ -859,7 +873,7 @@ export default function FillBlankExercise({
         part.match(/\*\*(\d+)\*\*/) || part.match(/_{2,3}(\d+)_{2,3}/);
 
       if (!numberMatch) {
-        return <span key={`text-${index}`}>{part}</span>;
+        return <span key={`text-${index}`}>{renderDecoratedText(part, `paragraph-${index}`)}</span>;
       }
 
       const numberValue = numberMatch[1];

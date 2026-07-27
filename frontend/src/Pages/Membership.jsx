@@ -6,6 +6,7 @@ import { useAuth } from "../AuthContext";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { copy, pick } from "../ui-lang/i18n";
 import { API_BASE_URL } from "../config/api";
+import { usePostHog } from "@posthog/react";
 import "../Styles/Membership.css";
 
 const Membership = () => {
@@ -26,6 +27,7 @@ const Membership = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { ui } = useUiLang();
+  const posthog = usePostHog();
   const membershipCopy = copy.membershipPage;
   const translate = (node) => pick(node, ui);
 
@@ -456,6 +458,13 @@ const Membership = () => {
             setTimeout(() => setShowPlanWarning(false), 3000);
             return;
           }
+
+          posthog?.capture("membership_plan_selected", {
+            plan_id: selectedPlan.id,
+            billing_period: selectedPlan.billingPeriod,
+            currency: selectedPlan.currency,
+            total_price: selectedPlan.totalPrice,
+          });
 
           // Check if user is authenticated
           if (!user) {

@@ -7,6 +7,7 @@ import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
 import { copy, pick } from "../../ui-lang/i18n";
 import CheckAnswersButton from "./CheckAnswersButton";
+import { usePostHog } from "@posthog/react";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -55,6 +56,7 @@ export default function SentenceTransformExercise({
   const { title = "", prompt = "", items = [] } = exercise || {};
   const { user } = useAuth();
   const userId = userIdProp || user?.id || null;
+  const posthog = usePostHog();
   const evaluationSourceType = ["bank", "practice"].includes(
     (sourceType || "").toLowerCase()
   )
@@ -308,6 +310,14 @@ export default function SentenceTransformExercise({
     setQuestions(finalQuestions);
     setIsChecking(false);
     setHasChecked(true);
+    const correctCount = finalQuestions.filter((q) => q.correct === true).length;
+    posthog?.capture("exercise_checked", {
+      exercise_type: "sentence_transform",
+      exercise_id: resolvedExerciseId,
+      correct_count: correctCount,
+      total_count: finalQuestions.length,
+      source_type: evaluationSourceType,
+    });
     if (typeof onSaveAnswerState === "function" && unitKey) {
       onSaveAnswerState({
         unitKey,
@@ -356,7 +366,7 @@ export default function SentenceTransformExercise({
   return (
     <div className="fb-wrap st-wrap">
       {title && showTitle && <h3 className="st-title">{title}</h3>}
-      {prompt && <p className="st-prompt">{prompt}</p>}
+      {prompt && <InlineText as="p" className="st-prompt" text={prompt} />}
 
       {items.map((item, idx) => {
         const hasAudio = Boolean(item?.audio_key);

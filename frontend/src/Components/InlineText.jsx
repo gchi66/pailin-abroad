@@ -10,7 +10,27 @@ function cleanAudioTags(text) {
     .replace(/\s*\n\s*/g, "\n");
 }
 
-function renderTextWithBlankLines(text, keyPrefix = "blank") {
+function renderBracketedText(text, keyPrefix = "bracket") {
+  if (!text) return null;
+
+  const parts = String(text).split(/(\[[^\]\r\n]+\])/g);
+  return parts.map((part, idx) => {
+    if (!part) return null;
+    if (/^\[[^\]\r\n]+\]$/.test(part)) {
+      return (
+        <span
+          key={`${keyPrefix}-${idx}`}
+          className="inline-bracketed-text"
+        >
+          {part}
+        </span>
+      );
+    }
+    return <React.Fragment key={`${keyPrefix}-${idx}`}>{part}</React.Fragment>;
+  });
+}
+
+export function renderDecoratedText(text, keyPrefix = "blank") {
   if (!text) return null;
 
   const segments = String(text).split(/(_{2,})/g);
@@ -35,7 +55,11 @@ function renderTextWithBlankLines(text, keyPrefix = "blank") {
         />
       );
     }
-    return <React.Fragment key={`${keyPrefix}-${idx}`}>{segment}</React.Fragment>;
+    return (
+      <React.Fragment key={`${keyPrefix}-${idx}`}>
+        {renderBracketedText(segment, `${keyPrefix}-bracket-${idx}`)}
+      </React.Fragment>
+    );
   });
 }
 
@@ -51,7 +75,7 @@ export function renderInlines(inlines = []) {
     return (
       <React.Fragment key={idx}>
         {idx > 0 && !/^[\s.,!?;:'"()[\]\-]/.test(text) ? " " : ""}
-        <span style={style}>{renderTextWithBlankLines(text, `inline-${idx}`)}</span>
+        <span style={style}>{renderDecoratedText(text, `inline-${idx}`)}</span>
       </React.Fragment>
     );
   });
@@ -65,7 +89,7 @@ export default function InlineText({ inlines, text, as = "span", className }) {
   if (text) {
     return (
       <Tag className={className} style={{ whiteSpace: "pre-line" }}>
-        {renderTextWithBlankLines(text, "plain")}
+        {renderDecoratedText(text, "plain")}
       </Tag>
     );
   }

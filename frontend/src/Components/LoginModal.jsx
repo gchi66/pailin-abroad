@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../config/api";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
+import { usePostHog } from "@posthog/react";
 import "../Styles/LoginModal.css";
 
 const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
@@ -18,6 +19,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { ui } = useUiLang();
+  const posthog = usePostHog();
 
   if (!isOpen) return null;
 
@@ -53,6 +55,7 @@ const LoginModal = ({ isOpen, onClose, toggleSignupModal }) => {
       if (sessionError) {
         throw new Error("Failed to establish session");
       } else {
+        posthog?.capture("user_logged_in");
         onClose(); // Close modal on success
         navigate("/pathway"); // Navigate to pathway instead of profile
       }

@@ -6,6 +6,7 @@ import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
 import { InlineStatus, QuestionFeedback } from "./aiFeedback";
 import { copy, pick } from "../../ui-lang/i18n";
+import { usePostHog } from "@posthog/react";
 import "./evaluateAnswer.css";
 
 const DEFAULT_QUESTION_STATE = {
@@ -134,6 +135,7 @@ export default function OpenEndedExercise({
   const displayPrompt = contentLang === "th" ? promptTh : promptEn;
   const { user } = useAuth();
   const userId = userIdProp || user?.id || null;
+  const posthog = usePostHog();
   const evaluationSourceType = ["bank", "practice"].includes(
     (sourceType || "").toLowerCase()
   )
@@ -387,6 +389,14 @@ export default function OpenEndedExercise({
     setQuestions(finalQuestions);
     setIsChecking(false);
     setHasChecked(true);
+    const correctCount = finalQuestions.filter((q) => q.correct === true).length;
+    posthog?.capture("exercise_checked", {
+      exercise_type: "open_ended",
+      exercise_id: resolvedExerciseId,
+      correct_count: correctCount,
+      total_count: finalQuestions.length,
+      source_type: evaluationSourceType,
+    });
     if (typeof onSaveAnswerState === "function" && unitKey) {
       onSaveAnswerState({
         unitKey,
@@ -456,7 +466,9 @@ export default function OpenEndedExercise({
       {displayTitle && showTitle && (
         <h3 className="oe-title">{displayTitle}</h3>
       )}
-      {shouldRenderPrompt && <p className="oe-prompt">{displayPrompt}</p>}
+      {shouldRenderPrompt && (
+        <InlineText as="p" className="oe-prompt" text={displayPrompt} />
+      )}
 
       {items.map((item, qIdx) => {
         const hasAudio = Boolean(item.audio_key);

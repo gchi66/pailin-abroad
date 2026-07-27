@@ -3,6 +3,7 @@ import { API_BASE_URL } from "../config/api";
 import supabaseClient from "../supabaseClient";
 import { useUiLang } from "../ui-lang/UiLangContext";
 import { t } from "../ui-lang/i18n";
+import { usePostHog } from "@posthog/react";
 import "../Styles/Modal.css";
 
 const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
@@ -13,6 +14,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [socialLoading, setSocialLoading] = useState("");
   const { ui } = useUiLang();
+  const posthog = usePostHog();
   if (!isOpen) return null;
 
   // Handle signup form submission
@@ -54,6 +56,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
 
       setSuccess(true);
       setError("");
+      posthog?.capture("user_signed_up", { method: "email" });
 
       // Redirect to email confirmation page with email parameter
       setTimeout(() => {
@@ -86,6 +89,7 @@ const SignupModal = ({ isOpen, onClose, toggleLoginModal}) => {
     setSocialLoading(provider);
 
     try {
+      posthog?.capture("oauth_signup_started", { provider });
       const { error: oauthError } = await supabaseClient.auth.signInWithOAuth({
         provider,
         options: {

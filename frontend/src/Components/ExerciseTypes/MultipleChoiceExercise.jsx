@@ -3,6 +3,7 @@ import AudioButton from "../AudioButton";
 import InlineText from "../InlineText";
 import { copy, pick } from "../../ui-lang/i18n";
 import CheckAnswersButton from "./CheckAnswersButton";
+import { usePostHog } from "@posthog/react";
 
 const stripOptionPrefix = (label, value) => {
   if (!label || typeof value !== "string") return value;
@@ -106,6 +107,7 @@ export default function MultipleChoiceExercise({
   const [checked, setChecked] = useState(false);
   const [hasHydrated, setHasHydrated] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const posthog = usePostHog();
 
   const normalizedItems = useMemo(
     () =>
@@ -239,7 +241,7 @@ export default function MultipleChoiceExercise({
 
   return (
     <div className="fb-wrap mc-wrap">
-      {prompt && <p className="mc-prompt">{prompt}</p>}
+      {prompt && <InlineText as="p" className="mc-prompt" text={prompt} />}
 
       {normalizedItems.map((q, qIdx) => {
         const imageUrl = q.image_key ? images[q.image_key] : null;
@@ -380,6 +382,18 @@ export default function MultipleChoiceExercise({
         {!checked ? (
           <CheckAnswersButton
             onClick={() => {
+              const correctCount = choices.filter((choice, idx) =>
+                arraysMatch(
+                  normalizeArray(choice),
+                  normalizedItems[idx]?.answerLetters || []
+                )
+              ).length;
+              posthog?.capture("exercise_checked", {
+                exercise_type: "multiple_choice",
+                exercise_id: exercise?.id,
+                correct_count: correctCount,
+                total_count: items.length,
+              });
               setChecked(true);
               saveCurrentAnswers();
             }}

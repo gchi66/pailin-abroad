@@ -184,6 +184,10 @@ details[open] > .markdown-summary {
    margin: .2rem 0;
 }
 
+.inline-bracketed-text {
+  color: #8a8a8a;
+}
+
 
 @media (max-width: 30rem) {
   .markdown-summary {

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import supabaseClient from "./supabaseClient";
+import posthog from "posthog-js";
 
 const AuthContext = createContext();
 
@@ -11,14 +12,24 @@ export const AuthProvider = ({ children }) => {
     // Fetch initial session
     const fetchSession = async () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
-      setUser(session?.user || null);
+      const sessionUser = session?.user || null;
+      setUser(sessionUser);
+      if (sessionUser) {
+        posthog.identify(sessionUser.id);
+      }
       setLoading(false);
     };
     fetchSession();
 
     // Listen for session changes
     const { data: authListener } = supabaseClient.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null); // Update user state
+      const nextUser = session?.user || null;
+      setUser(nextUser);
+      if (nextUser) {
+        posthog.identify(nextUser.id);
+      } else if (event === "SIGNED_OUT") {
+        posthog.reset();
+      }
     });
 
     return () => authListener.subscription.unsubscribe(); // Cleanup listener

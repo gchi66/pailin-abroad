@@ -30,6 +30,7 @@ import { t } from "../ui-lang/i18n";
 import { useStickyLessonToggle } from "../StickyLessonToggleContext";
 import { useAuth } from "../AuthContext";
 import PrepareCard from "../Components/PrepareCard";
+import { usePostHog } from "@posthog/react";
 
 import "../Styles/Lesson.css";
 
@@ -408,6 +409,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   useEffect(() => { lastActiveRef.current = activeId; }, [activeId]);
   const { id } = useParams();
   const { user } = useAuth();
+  const posthog = usePostHog();
 
   // Content language persists via localStorage (shared with exercise/topic sections)
   const [contentLang, setContentLangState] = useState(() => {
@@ -518,10 +520,11 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [isMobileView, setIsMobileView] = useState(false);
   const trackedSectionKeysRef = useRef(new Set());
-  const handleSelectSection = useCallback((id) => {
+  const handleSelectSection = useCallback((sectionId) => {
     shouldAutoScrollRef.current = true;
-    setActiveId(id);
-  }, []);
+    setActiveId(sectionId);
+    posthog?.capture("lesson_section_switched", { section_id: sectionId, lesson_id: id });
+  }, [id, posthog]);
 
   // Lesson list for prev/next
   const [lessonList, setLessonList] = useState([]);
@@ -1435,6 +1438,7 @@ export default function Lesson({ toggleLoginModal, toggleSignupModal }) {
                   } else {
                     setShowStickyPlayer(true);
                     setShouldAutoPlay(true);
+                    posthog?.capture("lesson_audio_played", { lesson_id: lesson?.id });
                   }
                 }}
                 disabled={isLocked}
