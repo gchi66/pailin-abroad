@@ -143,10 +143,15 @@ def main():
     ap.add_argument("--slice-out", default="phrases_verbs_all.json", help="Write PHRASES & VERBS slice here")
     ap.add_argument("--section-title", default=SECTION_TITLE_DEFAULT, help="Section heading to slice")
     ap.add_argument("--no-full", action="store_true", help="Skip writing the full document JSON")
+    ap.add_argument(
+        "--all-tabs",
+        action="store_true",
+        help="Fetch content from all Google Docs tabs",
+    )
     args = ap.parse_args()
 
     # fetch full doc JSON using your existing helper
-    doc_json = fetch_doc(args.doc)
+    doc_json = fetch_doc(args.doc, include_tabs_content=args.all_tabs)
 
     if not args.no_full:
         with open(args.out, "w", encoding="utf-8") as f:
