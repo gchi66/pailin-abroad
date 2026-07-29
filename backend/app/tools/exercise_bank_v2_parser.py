@@ -35,6 +35,7 @@ REQUIRED_TOPIC_FIELDS = {"topic", "display_title", "category", "lesson"}
 REQUIRED_EXERCISE_FIELDS = {"exercise_type", "display_type", "prompt"}
 LABEL_RE = re.compile(r"^\s*([A-Z][A-Z_]*):(?:\s*(.*))?$", re.DOTALL)
 OPTION_RE = re.compile(r"^\s*([A-Z])\.\s*(.+?)\s*$", re.DOTALL)
+BLANK_RE = re.compile(r"_+")
 
 
 @dataclass
@@ -495,7 +496,26 @@ class ExerciseBankParser:
                         )
                     continue
 
-                if label in {"DISPLAY_TYPE", "PROMPT", "KEYWORDS"}:
+                if label in {"DISPLAY_TYPE", "PROMPT", "KEYWORDS", "CHARACTERS"}:
+                    if label == "CHARACTERS":
+                        try:
+                            characters = int(value)
+                        except (TypeError, ValueError):
+                            characters = 0
+                        if characters < 1:
+                            self._issue(
+                                "error",
+                                "invalid_characters",
+                                "CHARACTERS must be a positive integer.",
+                                tab=tab,
+                                exercise_order=current_exercise["source"]["exercise_order"],
+                                paragraph_index=paragraph.paragraph_index,
+                            )
+                            current_exercise["characters"] = None
+                        else:
+                            current_exercise["characters"] = characters
+                        pending_field = None
+                        continue
                     key = {
                         "DISPLAY_TYPE": "display_type",
                         "PROMPT": "prompt",
@@ -634,6 +654,7 @@ class ExerciseBankParser:
             "display_type": None,
             "prompt": None,
             "keywords": None,
+            "characters": None,
             "source": {
                 "document_id": self.document_id or None,
                 "tab_id": tab.tab_id,
@@ -696,6 +717,10 @@ class ExerciseBankParser:
             content["text_runs"] = self._runs_for(question, "text")
             content["raw_answers"] = raw_answers
             content["accepted_answers"] = accepted_answers
+            content["blanks"] = self._fill_blank_definitions(
+                fields.get("text") or "",
+                exercise.get("characters"),
+            )
         elif exercise_type == "multiple_choice":
             content["text"] = fields.get("text")
             content["text_runs"] = self._runs_for(question, "text")
@@ -736,6 +761,24 @@ class ExerciseBankParser:
         return result
 
     @staticmethod
+    def _fill_blank_definitions(
+        text: str,
+        authored_min_len: Optional[int],
+    ) -> List[Dict[str, Any]]:
+        """Create renderer metadata for every authored underscore blank.
+
+        CHARACTERS is a visual-width hint, not an answer-length constraint. When it
+        is absent, the underscore run length remains a useful rendering fallback.
+        """
+        return [
+            {
+                "id": f"b{index}",
+                "min_len": authored_min_len or len(match.group(0)),
+            }
+            for index, match in enumerate(BLANK_RE.finditer(text), start=1)
+        ]
+
+    @staticmethod
     def _runs_for(question: Dict[str, Any], field_name: str) -> List[Dict[str, Any]]:
         rich = question["rich_fields"].get(field_name)
         return rich.runs if rich else []
@@ -769,6 +812,17 @@ class ExerciseBankParser:
                 "error",
                 "unsupported_exercise_type",
                 f"Unsupported exercise type: {exercise['exercise_type'] or '<empty>'}.",
+                tab=tab,
+                exercise_order=order,
+            )
+        if (
+            exercise.get("characters") is not None
+            and exercise["exercise_type"] != "fill_blank"
+        ):
+            self._issue(
+                "error",
+                "characters_on_non_fill_blank",
+                "CHARACTERS is only supported for fill_blank exercises.",
                 tab=tab,
                 exercise_order=order,
             )

@@ -3,7 +3,7 @@ import stripe
 from datetime import datetime, timezone
 import time
 from flask import Blueprint, request, jsonify, send_file
-from app.supabase_client import supabase
+from app.supabase_client import create_auth_client, supabase
 from app.config import Config
 from app.pricing_utils import resolve_region_key
 import io
@@ -137,7 +137,7 @@ def create_portal_session():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
 
@@ -182,7 +182,7 @@ def get_payment_method():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
 
@@ -251,7 +251,7 @@ def get_invoices():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
 
@@ -306,7 +306,7 @@ def get_subscription_summary():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
 
@@ -414,7 +414,7 @@ def download_invoice(invoice_id):
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
 
@@ -462,7 +462,7 @@ def cancel_subscription():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
 

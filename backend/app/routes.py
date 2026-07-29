@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from functools import wraps
-from app.supabase_client import supabase, supabase_admin
+from app.supabase_client import create_auth_client, supabase, supabase_admin
 from app.resolver import resolve_lesson
 from app.app_lesson_progress import (
     build_app_lesson_expectations,
@@ -256,7 +256,7 @@ def _get_authenticated_user_id():
         return None, (jsonify({"error": "Authorization token required"}), 401)
 
     access_token = auth_header.split(" ")[1]
-    user_response = supabase.auth.get_user(access_token)
+    user_response = create_auth_client().auth.get_user(access_token)
 
     if not user_response.user:
         return None, (jsonify({"error": "Invalid token"}), 401)
@@ -930,7 +930,7 @@ def login():
                 "message": "Email and password are required."
             }), 400
 
-        response = supabase.auth.sign_in_with_password({
+        response = create_auth_client().auth.sign_in_with_password({
             "email": email,
             "password": password
         })
@@ -985,7 +985,7 @@ def get_user_profile():
 
         # Get the authenticated user
         auth_start = time.perf_counter()
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         auth_ms = _elapsed_ms(auth_start)
 
         if not user_response.user:
@@ -1083,7 +1083,7 @@ def update_user_profile():
 
         # Get the authenticated user - handle potential session issues from OTP flow
         try:
-            user_response = supabase.auth.get_user(access_token)
+            user_response = create_auth_client().auth.get_user(access_token)
 
             if not user_response.user:
                 return jsonify({"error": "Invalid token"}), 401
@@ -1163,7 +1163,7 @@ def get_completed_lessons():
 
         # Get the authenticated user
         auth_start = time.perf_counter()
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         auth_ms = _elapsed_ms(auth_start)
 
         if not user_response.user:
@@ -1222,7 +1222,7 @@ def get_next_lesson():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
@@ -1344,7 +1344,7 @@ def get_pathway_lessons():
 
         # Get the authenticated user
         auth_start = time.perf_counter()
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
         auth_ms = _elapsed_ms(auth_start)
 
         if not user_response.user:
@@ -1463,7 +1463,7 @@ def signup_email():
         }), 429
 
     try:
-        response = supabase.auth.sign_in_with_otp({
+        response = create_auth_client().auth.sign_in_with_otp({
             "email": email,
             "options": {
                 "email_redirect_to": Config.AUTH_CALLBACK_URL,
@@ -1511,7 +1511,7 @@ def confirm_email():
 
     try:
         # Get user info from Supabase using the access token
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid access token"}), 400
@@ -1586,7 +1586,7 @@ def set_password():
 
     try:
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid access token"}), 401
@@ -1625,7 +1625,7 @@ def set_password():
 
         # Now sign in the user with their new password to get a fresh, valid session
         try:
-            login_response = supabase.auth.sign_in_with_password({
+            login_response = create_auth_client().auth.sign_in_with_password({
                 "email": user_email,
                 "password": password
             })
@@ -1693,7 +1693,7 @@ def complete_signup():
 
         # Update the user's password in Supabase auth using admin API
         try:
-            admin_response = supabase.auth.admin.update_user_by_id(
+            admin_response = supabase_admin.auth.admin.update_user_by_id(
                 user_id,
                 {"password": password}
             )
@@ -1718,7 +1718,7 @@ def complete_signup():
             print(f"Warning: User record update may have failed for {email}")
 
         # Now sign them in to get a proper session
-        signin_response = supabase.auth.sign_in_with_password({
+        signin_response = create_auth_client().auth.sign_in_with_password({
             "email": email,
             "password": password
         })
@@ -1762,7 +1762,7 @@ def delete_account():
             return jsonify({"error": "Access token is required"}), 400
 
         # Fetch the user's details using the access token
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if user_response.user is None:
             return jsonify({"error": "Unable to retrieve user details. User may not exist."}), 401
@@ -1879,7 +1879,7 @@ def notify_comment():
     print(f"[notify-comment] Request for comment_id={comment_id}")
 
     access_token = auth_header.split(" ")[1]
-    user_response = supabase.auth.get_user(access_token)
+    user_response = create_auth_client().auth.get_user(access_token)
     if not user_response.user:
         return jsonify({"error": "Invalid token"}), 401
 
@@ -2004,7 +2004,7 @@ def get_lesson_resolved(lesson_id):
         try:
             auth_start = time.perf_counter()
             access_token = auth_header.split(' ')[1]
-            user_response = supabase.auth.get_user(access_token)
+            user_response = create_auth_client().auth.get_user(access_token)
 
             if user_response.user:
                 user_id = user_response.user.id
@@ -2178,7 +2178,7 @@ def get_level_completion_status(stage, level):
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
@@ -2267,7 +2267,7 @@ def get_lesson_progress_summaries():
             return jsonify({"error": "Authorization token required"}), 401
 
         access_token = auth_header.split(' ')[1]
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
@@ -2340,7 +2340,7 @@ def get_app_lesson_progress_summaries():
             return jsonify({"error": "Authorization token required"}), 401
 
         access_token = auth_header.split(' ')[1]
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
@@ -2426,7 +2426,7 @@ def get_app_lesson_progress_detail(lesson_id):
             return jsonify({"error": "Authorization token required"}), 401
 
         access_token = auth_header.split(' ')[1]
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
@@ -2688,7 +2688,7 @@ def get_user_comments():
         access_token = auth_header.split(' ')[1]
 
         # Get the authenticated user
-        user_response = supabase.auth.get_user(access_token)
+        user_response = create_auth_client().auth.get_user(access_token)
 
         if not user_response.user:
             return jsonify({"error": "Invalid token"}), 401
@@ -2731,7 +2731,7 @@ def send_magic_link():
             return jsonify({"error": "No account found with this email address"}), 404
 
         # Send magic link using Supabase OTP
-        response = supabase.auth.sign_in_with_otp({
+        response = create_auth_client().auth.sign_in_with_otp({
             "email": email,
             "options": {
                 "email_redirect_to": f"{Config.FRONTEND_URL}/pathway"
@@ -2777,7 +2777,7 @@ def reset_password():
             return jsonify({"error": "No account found with this email address"}), 404
 
         # Send password reset email using Supabase
-        response = supabase.auth.reset_password_email(email, {
+        response = create_auth_client().auth.reset_password_email(email, {
             "redirect_to": f"{Config.FRONTEND_URL}/reset-password"
         })
 

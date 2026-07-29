@@ -45,6 +45,32 @@ class FakeSupabase:
         return query
 
 
+class FailingSharedAuth:
+    def __getattr__(self, name):
+        raise AssertionError(f"shared database auth must not call {name}")
+
+
+class FakeSharedDatabase:
+    auth = FailingSharedAuth()
+
+
+class FakeAuthClient:
+    def __init__(self, response):
+        self.auth = SimpleNamespace(
+            sign_in_with_password=lambda _credentials: response
+        )
+
+
+def auth_response(user_id, email, access_token, refresh_token):
+    return SimpleNamespace(
+        user=SimpleNamespace(id=user_id, email=email),
+        session=SimpleNamespace(
+            access_token=access_token,
+            refresh_token=refresh_token,
+        ),
+    )
+
+
 def make_client():
     app = Flask(__name__)
     app.register_blueprint(routes_module.routes)
@@ -70,6 +96,9 @@ def test_user_profile_keeps_response_contract_and_uses_narrow_select(monkeypatch
         }
     )
     monkeypatch.setattr(routes_module, "supabase", fake_supabase)
+    monkeypatch.setattr(
+        routes_module, "create_auth_client", lambda: fake_supabase
+    )
 
     response = make_client().get(
         "/api/user/profile",
@@ -112,6 +141,9 @@ def test_completed_lessons_keeps_nested_lesson_payload(monkeypatch, capsys):
         {"user_lesson_progress": SimpleNamespace(data=completed_rows)}
     )
     monkeypatch.setattr(routes_module, "supabase", fake_supabase)
+    monkeypatch.setattr(
+        routes_module, "create_auth_client", lambda: fake_supabase
+    )
 
     response = make_client().get(
         "/api/user/completed-lessons",
@@ -142,6 +174,9 @@ def test_daily_streak_keeps_response_contract(monkeypatch, capsys):
     )
     monkeypatch.setattr(routes_module, "supabase", fake_supabase)
     monkeypatch.setattr(routes_module, "supabase_admin", fake_admin)
+    monkeypatch.setattr(
+        routes_module, "create_auth_client", lambda: fake_supabase
+    )
 
     response = make_client().get(
         "/api/app/user/daily-streak",
@@ -160,3 +195,67 @@ def test_daily_streak_keeps_response_contract(monkeypatch, capsys):
         "timezone": "Asia/Bangkok",
     }
     assert "[daily-streak]" in capsys.readouterr().out
+
+
+def test_login_uses_fresh_auth_client_not_shared_database(monkeypatch):
+    response = auth_response(
+        "user-a",
+        "a@example.com",
+        "access-a",
+        "refresh-a",
+    )
+    created_clients = []
+
+    def create_client():
+        client = FakeAuthClient(response)
+        created_clients.append(client)
+        return client
+
+    monkeypatch.setattr(routes_module, "supabase", FakeSharedDatabase())
+    monkeypatch.setattr(routes_module, "create_auth_client", create_client)
+
+    result = make_client().post(
+        "/api/login",
+        json={"email": "a@example.com", "password": "password"},
+    )
+
+    assert result.status_code == 200
+    assert result.get_json()["session"]["access_token"] == "access-a"
+    assert len(created_clients) == 1
+
+
+def test_sequential_logins_do_not_reuse_auth_clients(monkeypatch):
+    responses = iter(
+        [
+            auth_response(
+                "user-a", "a@example.com", "access-a", "refresh-a"
+            ),
+            auth_response(
+                "user-b", "b@example.com", "access-b", "refresh-b"
+            ),
+        ]
+    )
+    created_clients = []
+
+    def create_client():
+        client = FakeAuthClient(next(responses))
+        created_clients.append(client)
+        return client
+
+    monkeypatch.setattr(routes_module, "supabase", FakeSharedDatabase())
+    monkeypatch.setattr(routes_module, "create_auth_client", create_client)
+    client = make_client()
+
+    first = client.post(
+        "/api/login",
+        json={"email": "a@example.com", "password": "password-a"},
+    )
+    second = client.post(
+        "/api/login",
+        json={"email": "b@example.com", "password": "password-b"},
+    )
+
+    assert first.get_json()["session"]["access_token"] == "access-a"
+    assert second.get_json()["session"]["access_token"] == "access-b"
+    assert len(created_clients) == 2
+    assert created_clients[0] is not created_clients[1]
