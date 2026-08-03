@@ -767,13 +767,18 @@ class ExerciseBankParser:
     ) -> List[Dict[str, Any]]:
         """Create renderer metadata for every authored underscore blank.
 
-        CHARACTERS is a visual-width hint, not an answer-length constraint. When it
-        is absent, the underscore run length remains a useful rendering fallback.
+        CHARACTERS is a visual-width hint, not an answer-length constraint. Match
+        the legacy parser by adding one character of display space. When it is
+        absent, the underscore run length remains a useful rendering fallback.
         """
         return [
             {
                 "id": f"b{index}",
-                "min_len": authored_min_len or len(match.group(0)),
+                "min_len": (
+                    authored_min_len + 1
+                    if authored_min_len is not None
+                    else len(match.group(0))
+                ),
             }
             for index, match in enumerate(BLANK_RE.finditer(text), start=1)
         ]

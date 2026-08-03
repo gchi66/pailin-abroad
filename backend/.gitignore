@@ -6,4 +6,5 @@ __pycache__/
 *.pyc
 backend/data/*.json
 data/
-tests/
+tests/*
+!tests/test_exercise_bank_v2_routes.py
