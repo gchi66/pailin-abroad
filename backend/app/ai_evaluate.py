@@ -154,26 +154,63 @@ def contractions_equivalent(user_answer: str, correct_answer: str) -> bool:
 
 
 def get_prompt_for_type(
-    exercise_type: str, question: str, user_answer: str, correct_answer: str
+    exercise_type: str,
+    question: str,
+    user_answer: str,
+    correct_answer: str,
+    *,
+    instruction: str = "",
+    review_answer: str = "",
 ) -> Tuple[str, str]:
     base_prompt = SYSTEM_PROMPTS[exercise_type]
-    question_block = f"Question: {question}\n" if question else ""
-    expected_line = f"Expected answer: {correct_answer}\n" if correct_answer else ""
+    instruction_block = (
+        f"Exercise instruction: {instruction}\n" if instruction else ""
+    )
+    question_block = f"Question or sentence: {question}\n" if question else ""
+    accepted_line = (
+        f"Accepted answer forms (internal reference): {correct_answer}\n"
+        if correct_answer
+        else ""
+    )
+    review_line = (
+        f"Complete model answer (internal reference): {review_answer}\n"
+        if review_answer
+        else ""
+    )
     user_prompt = (
+        f"{instruction_block}"
         f"{question_block}"
-        f"{expected_line}"
+        f"{accepted_line}"
+        f"{review_line}"
         f"Learner answer: {user_answer}\n"
-        "Compare the learner answer to the expected answer following the instructions. "
+        "Evaluate the learner's answer against every relevant requirement in the exercise "
+        "instruction and question context, not merely whether it resembles an accepted form. "
+        "Check meaning and required grammar, including polarity, tense, aspect, verb form, "
+        "word order, and sentence completeness when applicable. If it is incorrect, identify "
+        "the most important unmet requirement first and briefly mention other material errors. "
+        "Use the accepted forms and complete model answer only as private grading references. "
+        "Do not quote, reveal, or reconstruct the answer in the feedback. "
         "Respond with JSON only."
     )
     return base_prompt, user_prompt
 
 
 def evaluate_with_gpt(
-    exercise_type: str, question: str, user_answer: str, correct_answer: str
+    exercise_type: str,
+    question: str,
+    user_answer: str,
+    correct_answer: str,
+    *,
+    instruction: str = "",
+    review_answer: str = "",
 ) -> Dict[str, Any]:
     system_prompt, user_prompt = get_prompt_for_type(
-        exercise_type, question, user_answer, correct_answer
+        exercise_type,
+        question,
+        user_answer,
+        correct_answer,
+        instruction=instruction,
+        review_answer=review_answer,
     )
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -272,7 +309,10 @@ def _remove_correct_answer(text: str, correct_answer_raw: str) -> str:
     for phrase in phrases:
         if not phrase:
             continue
-        pattern = re.escape(phrase)
+        word_tokens = re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ']+", phrase)
+        if len(word_tokens) == 1 and len(word_tokens[0].strip("'")) < 4:
+            continue
+        pattern = rf"(?<!\w){re.escape(phrase)}(?!\w)"
         sanitized = re.sub(pattern, "", sanitized, flags=re.IGNORECASE)
     sanitized = re.sub(r"\s+['\"`]{2,}\s*", " ", sanitized)
     sanitized = re.sub(r"\s+", " ", sanitized).strip()

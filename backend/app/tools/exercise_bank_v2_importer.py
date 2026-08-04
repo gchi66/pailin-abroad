@@ -5,6 +5,9 @@ Usage:
     python -m app.tools.exercise_bank_v2_importer data/exercise_bank.json --dry-run
     python -m app.tools.exercise_bank_v2_importer data/exercise_bank.json
 
+Normal imports generate polished learner-facing review answers. Use
+``--skip-review-answer-generation`` only for parser/import diagnostics.
+
 The importer is idempotent: all three tables are upserted by ``source_key``.
 Records absent from an import are left alone unless ``--deactivate-missing`` is used.
 """
@@ -19,9 +22,11 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Sequence
 
 import httpx
+from openai import OpenAI
 from postgrest.exceptions import APIError
 
 from app.supabase_client import supabase_admin
+from app.tools.exercise_bank_v2_review_answers import enrich_question_content
 
 
 TOPICS_TABLE = "exercise_bank_topics"
@@ -275,6 +280,52 @@ def _fetch_id_map(
     return result
 
 
+def _fetch_existing_question_content(
+    client: Any, source_keys: Sequence[str], batch_size: int
+) -> Dict[str, Mapping[str, Any]]:
+    result: Dict[str, Mapping[str, Any]] = {}
+    for batch in _chunks(list(source_keys), batch_size):
+        response = _execute_with_retry(
+            client.table(QUESTIONS_TABLE).select("source_key,content").in_("source_key", batch),
+            f"load existing review answers from {QUESTIONS_TABLE}",
+        )
+        for row in getattr(response, "data", None) or []:
+            if isinstance(row.get("content"), dict):
+                result[row["source_key"]] = row["content"]
+    return result
+
+
+def _enrich_review_answers(
+    data: ImportData, *, client: Any, batch_size: int, ai_client: OpenAI | None = None
+) -> tuple[int, int]:
+    exercises = {row["source_key"]: row for row in data.exercises}
+    eligible = [row for row in data.questions if not row.get("is_example")]
+    existing = _fetch_existing_question_content(
+        client, [row["source_key"] for row in eligible], batch_size
+    )
+    shared_ai_client = ai_client or OpenAI()
+    generated = 0
+    reused = 0
+    for index, question in enumerate(eligible, start=1):
+        exercise = exercises[question["_exercise_source_key"]]
+        enriched, was_generated = enrich_question_content(
+            exercise_type=exercise["exercise_type"],
+            display_type=exercise["display_type"],
+            prompt=exercise["prompt"],
+            content=question["content"],
+            existing_content=existing.get(question["source_key"]),
+            client=shared_ai_client,
+        )
+        question["content"] = enriched
+        generated += int(was_generated)
+        reused += int(not was_generated)
+        print(
+            f"[INFO] review answers: {index}/{len(eligible)} "
+            f"({'generated' if was_generated else 'reused'})"
+        )
+    return generated, reused
+
+
 def _deactivate_missing(
     client: Any, table: str, document_id: str, active_keys: Sequence[str]
 ) -> tuple[int, List[Any]]:
@@ -339,6 +390,7 @@ def import_data(
     client: Any = supabase_admin,
     dry_run: bool = False,
     deactivate_missing: bool = False,
+    generate_review_answers: bool = False,
     batch_size: int = DEFAULT_BATCH_SIZE,
 ) -> Dict[str, int]:
     if batch_size < 1:
@@ -352,6 +404,12 @@ def import_data(
     }
     if dry_run:
         return summary
+
+    if generate_review_answers:
+        generated, reused = _enrich_review_answers(
+            data, client=client, batch_size=batch_size
+        )
+        print(f"[INFO] review answers: generated {generated}, reused {reused}")
 
     _upsert_rows(client, TOPICS_TABLE, data.topics, batch_size)
     topic_ids = _fetch_id_map(
@@ -434,6 +492,11 @@ def main() -> None:
         help="Mark records missing from this document import inactive.",
     )
     parser.add_argument("--batch-size", type=int, default=DEFAULT_BATCH_SIZE)
+    parser.add_argument(
+        "--skip-review-answer-generation",
+        action="store_true",
+        help="Import without generating polished learner-facing review answers.",
+    )
     args = parser.parse_args()
 
     data, errors = load_and_prepare(args.file)
@@ -452,6 +515,7 @@ def main() -> None:
         data,
         dry_run=args.dry_run,
         deactivate_missing=args.deactivate_missing,
+        generate_review_answers=not args.skip_review_answer_generation,
         batch_size=args.batch_size,
     )
     label = "DRY RUN" if args.dry_run else "SUCCESS"

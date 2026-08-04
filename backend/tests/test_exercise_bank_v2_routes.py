@@ -4,6 +4,99 @@ from importlib import import_module
 from flask import Flask
 
 module = import_module("app.exercise_bank_v2")
+review_module = import_module("app.tools.exercise_bank_v2_review_answers")
+
+
+class FakeOpenAI:
+    def __init__(self, payload='{"review_answer":"My parents aren\'t home."}'):
+        self.calls = []
+        self.payload = payload
+        self.chat = SimpleNamespace(completions=SimpleNamespace(create=self._create))
+
+    def _create(self, **kwargs):
+        self.calls.append(kwargs)
+        return SimpleNamespace(
+            choices=[SimpleNamespace(message=SimpleNamespace(content=self.payload))]
+        )
+
+
+def test_short_grammar_answer_is_not_removed_from_feedback():
+    feedback = "Remember that 'everyone' is a singular subject."
+    assert module._remove_correct_answer(feedback, '["is"]') == feedback
+
+
+def test_long_answer_is_removed_without_touching_part_of_other_words():
+    feedback = "Use driving here because the sentence describes an ongoing action."
+    assert module._remove_correct_answer(feedback, '["driving"]') == (
+        "Use here because the sentence describes an ongoing action."
+    )
+
+
+def test_generates_complete_structured_review_answer():
+    client = FakeOpenAI()
+    answer = review_module.generate_review_answer(
+        exercise_type="sentence_transform",
+        display_type="Correct or incorrect?",
+        prompt="Correct the sentence if needed.",
+        content={
+            "text": "My parent's aren't home.",
+            "is_correct": False,
+            "accepted_answers": ["parents arent"],
+        },
+        client=client,
+    )
+    assert answer == "My parents aren't home."
+    assert client.calls[0]["temperature"] == 0
+    assert client.calls[0]["response_format"] == {"type": "json_object"}
+
+
+def test_reuses_review_answer_when_source_hash_is_unchanged():
+    content = {
+        "text": "My parent's aren't home.",
+        "is_correct": False,
+        "accepted_answers": ["parents arent"],
+    }
+    source_hash = review_module.review_answer_source_hash(
+        exercise_type="sentence_transform",
+        display_type="Correct or incorrect?",
+        prompt="Correct the sentence if needed.",
+        content=content,
+    )
+    existing = {
+        **content,
+        "review_answer": "My parents aren't home.",
+        "review_answer_meta": {
+            "model": "gpt-4o-mini",
+            "prompt_version": review_module.REVIEW_ANSWER_PROMPT_VERSION,
+            "source_hash": source_hash,
+        },
+    }
+    enriched, generated = review_module.enrich_question_content(
+        exercise_type="sentence_transform",
+        display_type="Correct or incorrect?",
+        prompt="Correct the sentence if needed.",
+        content=content,
+        existing_content=existing,
+        client=FakeOpenAI(payload="not used"),
+    )
+    assert generated is False
+    assert enriched["review_answer"] == "My parents aren't home."
+
+
+def test_multiple_choice_review_answer_is_deterministic_without_ai():
+    answer = review_module.generate_review_answer(
+        exercise_type="multiple_choice",
+        display_type="Choose one",
+        prompt="Choose the answer.",
+        content={
+            "correct_option": "B",
+            "options": [
+                {"label": "A", "text": "Wrong"},
+                {"label": "B", "text": "Right"},
+            ],
+        },
+    )
+    assert answer == "B. Right"
 
 
 class FakeQuery:
@@ -114,6 +207,13 @@ def _tables():
                 }
             ],
         }
+        if number == 1:
+            content["review_answer"] = "Question 1 secret."
+            content["review_answer_meta"] = {
+                "model": "gpt-4o-mini",
+                "prompt_version": "exercise-bank-review-answer-v1",
+                "source_hash": "hash",
+            }
         if number == 2:
             content = {
                 "text": "Choose one",
@@ -169,6 +269,11 @@ def _tables():
             "set_position": ((number - 1) % 5) + 1,
             "attempt_count": 1,
             "has_answered_correctly": number <= 5,
+            "latest_user_answer": "secret" if number <= 5 else None,
+            "latest_is_correct": True if number <= 5 else None,
+            "latest_ai_score": 1 if number <= 5 else None,
+            "latest_ai_feedback_en": "Great job! Your answer is correct." if number <= 5 else None,
+            "latest_ai_feedback_th": "ถูกต้อง" if number <= 5 else None,
             "last_attempted_at": "2026-08-01T00:00:00Z",
             "assigned_content_version": 1 if number <= 5 else 2,
             "user_id": "user-123",
@@ -337,6 +442,9 @@ def test_set_returns_five_sanitized_questions(monkeypatch):
             },
         }
     ]
+    assert questions[0]["progress"]["latest_user_answer"] == "secret"
+    assert questions[0]["progress"]["latest_is_correct"] is True
+    assert questions[0]["progress"]["review_answer"] == "Question 1 secret."
     serialized = response.get_data(as_text=True).lower()
     for secret_key in (
         "accepted_answers",
@@ -344,6 +452,7 @@ def test_set_returns_five_sanitized_questions(monkeypatch):
         "correct_option",
         "is_correct",
         "nested secret",
+        "review_answer_meta",
     ):
         assert secret_key not in serialized
 
@@ -372,6 +481,7 @@ def test_exact_fill_blank_is_graded_deterministically_and_persisted(monkeypatch)
     payload = response.get_json()
     assert payload["correct"] is True
     assert payload["grading_method"] == "deterministic"
+    assert payload["review_answer"] == "Question 1 secret."
     assert payload["progress"]["attempt_count"] == 1
     assert fake_supabase.rpc_calls == [
         (
@@ -412,15 +522,21 @@ def test_multiple_choice_is_graded_without_ai(monkeypatch):
 
 def test_non_exact_fill_blank_uses_ai_and_hides_expected_answer(monkeypatch):
     client, fake_supabase = _client(monkeypatch)
-    monkeypatch.setattr(
-        module,
-        "evaluate_with_gpt",
-        lambda **_kwargs: {
+    captured = {}
+
+    def fake_evaluate(**kwargs):
+        captured.update(kwargs)
+        return {
             "correct": False,
             "score": 0.25,
             "feedback_en": "The learner should use secret here.",
             "feedback_th": "ควรใช้ secret",
-        },
+        }
+
+    monkeypatch.setattr(
+        module,
+        "evaluate_with_gpt",
+        fake_evaluate,
     )
 
     response = client.post(
@@ -438,6 +554,9 @@ def test_non_exact_fill_blank_uses_ai_and_hides_expected_answer(monkeypatch):
     assert rpc_params["p_grading_method"] == "ai"
     assert rpc_params["p_ai_score"] == 0.25
     assert rpc_params["p_ai_model"] == "gpt-4o-mini"
+    assert captured["instruction"] == "Complete the sentence"
+    assert captured["question"] == "Question 1 _____"
+    assert captured["review_answer"] == "Question 1 secret."
 
 
 def test_correct_or_incorrect_question_requires_correct_judgment(monkeypatch):

@@ -34,7 +34,8 @@ QUESTION_SELECT = (
 EXAMPLE_SELECT = "id,exercise_id,source_number,content,sort_order"
 STATE_SELECT = (
     "topic_id,question_id,set_number,set_position,attempt_count,"
-    "has_answered_correctly,last_attempted_at,assigned_content_version"
+    "has_answered_correctly,latest_user_answer,latest_is_correct,latest_ai_score,"
+    "latest_ai_feedback_en,latest_ai_feedback_th,last_attempted_at,assigned_content_version"
 )
 TOPIC_PROGRESS_SELECT = (
     "topic_id,first_completed_at,completed_content_version,version_completed_at"
@@ -61,6 +62,8 @@ REDACTED_CONTENT_KEYS = frozenset(
         "is_correct",
         "raw_answer",
         "raw_answers",
+        "review_answer",
+        "review_answer_meta",
         "solution",
         "solutions",
     }
@@ -168,6 +171,54 @@ def _serialize_answer(value: Any) -> str:
     return str(value).strip()
 
 
+def _deserialize_answer(value: Any) -> Any:
+    if not isinstance(value, str) or not value:
+        return value
+    try:
+        decoded = json.loads(value)
+    except (TypeError, ValueError):
+        return value
+    return decoded if isinstance(decoded, (dict, list)) else value
+
+
+def _review_answer(exercise: dict[str, Any], question: dict[str, Any]) -> str:
+    content = question.get("content") or {}
+    if isinstance(content, str):
+        try:
+            content = json.loads(content)
+        except (TypeError, ValueError):
+            return ""
+    if not isinstance(content, dict):
+        return ""
+
+    polished_answer = _serialize_answer(content.get("review_answer"))
+    if polished_answer:
+        return polished_answer
+
+    if exercise.get("exercise_type") == "multiple_choice":
+        correct_label = _serialize_answer(content.get("correct_option"))
+        correct_option = next(
+            (
+                option for option in content.get("options") or []
+                if isinstance(option, dict)
+                and _normalized_answer(option.get("label")) == _normalized_answer(correct_label)
+            ),
+            None,
+        )
+        if correct_option:
+            option_text = _serialize_answer(correct_option.get("text"))
+            return f"{correct_label}. {option_text}" if option_text else correct_label
+        return correct_label
+
+    if exercise.get("exercise_type") == "sentence_transform" and content.get("is_correct") is True:
+        return "The sentence is correct."
+
+    accepted_answers = content.get("accepted_answers") or []
+    if isinstance(accepted_answers, list) and accepted_answers:
+        return _serialize_answer(accepted_answers[0])
+    return _serialize_answer(accepted_answers)
+
+
 def _normalized_answer(value: Any) -> str:
     text = _serialize_answer(value).lower().replace("’", "'")
     text = re.sub(r"[^\w\s']", " ", text, flags=re.UNICODE)
@@ -245,9 +296,11 @@ def _deterministic_result(correct: bool, *, kind: str = "answer") -> dict[str, A
 def _ai_result(
     *,
     exercise_type: str,
+    instruction: str,
     question_text: str,
     user_answer: Any,
     accepted_answers: Any,
+    review_answer: str,
 ) -> dict[str, Any]:
     user_answer_raw = _serialize_answer(user_answer)
     accepted_raw = _serialize_answer(accepted_answers)
@@ -256,6 +309,8 @@ def _ai_result(
         question=question_text,
         user_answer=user_answer_raw,
         correct_answer=accepted_raw,
+        instruction=instruction,
+        review_answer=review_answer,
     )
     correct = bool(parsed.get("correct"))
     try:
@@ -263,12 +318,11 @@ def _ai_result(
     except (TypeError, ValueError):
         score = 1.0 if correct else 0.0
     score = max(0.0, min(1.0, score))
-    feedback_en = _remove_correct_answer(
-        _personalize_feedback(parsed.get("feedback_en") or ""), accepted_raw
-    )
-    feedback_th = _remove_correct_answer(
-        parsed.get("feedback_th") or "", accepted_raw
-    )
+    feedback_en = _personalize_feedback(parsed.get("feedback_en") or "")
+    feedback_th = parsed.get("feedback_th") or ""
+    for private_answer in (accepted_raw, review_answer):
+        feedback_en = _remove_correct_answer(feedback_en, private_answer)
+        feedback_th = _remove_correct_answer(feedback_th, private_answer)
     return {
         "correct": correct,
         "score": score,
@@ -310,10 +364,11 @@ def _grade_question(
         )
 
     accepted_answers = content.get("accepted_answers") or []
+    instruction = _serialize_answer(exercise.get("prompt"))
+    review_answer = _serialize_answer(content.get("review_answer"))
     question_text = (
         content.get("stem")
         or content.get("text")
-        or exercise.get("prompt")
         or ""
     )
 
@@ -345,9 +400,11 @@ def _grade_question(
             return _deterministic_result(True)
         return _ai_result(
             exercise_type="sentence_transform",
+            instruction=instruction,
             question_text=question_text,
             user_answer=rewrite,
             accepted_answers=accepted_answers,
+            review_answer=review_answer,
         )
 
     if exercise_type == "fill_blank":
@@ -357,9 +414,11 @@ def _grade_question(
             raise ValueError("Question has no accepted answers")
         return _ai_result(
             exercise_type="fill_blank",
+            instruction=instruction,
             question_text=question_text,
             user_answer=user_answer,
             accepted_answers=accepted_answers,
+            review_answer=review_answer,
         )
 
     if exercise_type == "sentence_transform":
@@ -369,17 +428,21 @@ def _grade_question(
             raise ValueError("Question has no accepted answers")
         return _ai_result(
             exercise_type="sentence_transform",
+            instruction=instruction,
             question_text=question_text,
             user_answer=user_answer,
             accepted_answers=accepted_answers,
+            review_answer=review_answer,
         )
 
     if exercise_type in {"open", "open_ended"}:
         return _ai_result(
             exercise_type="open",
+            instruction=instruction,
             question_text=question_text,
             user_answer=user_answer,
             accepted_answers=accepted_answers,
+            review_answer=review_answer,
         )
 
     raise ValueError(f"Unsupported exercise type: {exercise_type}")
@@ -795,6 +858,13 @@ def get_topic_set(topic_id: int, set_number: int):
                     "progress": {
                         "attempt_count": int(state.get("attempt_count") or 0),
                         "has_answered_correctly": bool(state.get("has_answered_correctly")),
+                        "latest_user_answer": _deserialize_answer(state.get("latest_user_answer")),
+                        "latest_is_correct": state.get("latest_is_correct"),
+                        "latest_score": float(state.get("latest_ai_score") or 0),
+                        "latest_feedback_en": state.get("latest_ai_feedback_en") or "",
+                        "latest_feedback_th": state.get("latest_ai_feedback_th") or "",
+                        "review_answer": _review_answer(exercise, question)
+                        if int(state.get("attempt_count") or 0) > 0 else "",
                         "last_attempted_at": state.get("last_attempted_at"),
                     },
                 }
@@ -878,6 +948,7 @@ def submit_question_answer(question_id: int):
                 "score": result.get("score"),
                 "feedback_en": result.get("feedback_en") or "",
                 "feedback_th": result.get("feedback_th") or "",
+                "review_answer": _review_answer(exercise, question),
                 "grading_method": result.get("grading_method"),
                 "progress": progress,
             }
