@@ -972,7 +972,7 @@ def tag_nodes_with_sections(doc_json):
             para_nodes = list(paragraph_nodes({
                 "body":  {"content": [elem]},
                 "lists": doc_json.get("lists", {}),   # <-- critical
-            }))
+            }, include_text_color=True))
             if not para_nodes:
                 continue
             n = para_nodes[0]
@@ -1907,6 +1907,33 @@ class GoogleDocsParser:
                     new_span["text"] = text
                     stripped.append(new_span)
             return stripped
+
+        def _register_inline_line_aliases(bucket_map: dict, node: dict) -> None:
+            """Index soft-broken paragraph lines without discarding run styles."""
+            line_inlines: list[dict] = []
+
+            def flush_line() -> None:
+                nonlocal line_inlines
+                plain_line = "".join(span.get("text", "") for span in line_inlines)
+                line_key = _norm2(plain_line)
+                if line_key:
+                    line_node = node.copy()
+                    line_node["inlines"] = [dict(span) for span in line_inlines if span]
+                    bucket_map.setdefault(line_key, []).append(line_node)
+                line_inlines = []
+
+            for span in node.get("inlines", []):
+                if not span:
+                    continue
+                parts = re.split(r"(\n|\u000b)", span.get("text", ""))
+                for part in parts:
+                    if part in ("\n", "\u000b"):
+                        flush_line()
+                    elif part:
+                        line_span = dict(span)
+                        line_span["text"] = part
+                        line_inlines.append(line_span)
+            flush_line()
         for n in tagged_nodes:
             if not _same_lesson(n):
                 continue
@@ -1928,6 +1955,7 @@ class GoogleDocsParser:
                         prefix_match.end(),
                     )
                     practice_fallback_nodes.setdefault(stripped_key, []).append(stripped_node)
+                    _register_inline_line_aliases(practice_fallback_nodes, stripped_node)
             if n.get("section_context") == "PRACTICE":
                 practice_nodes.setdefault(key, []).append(n)
                 if prefix_match:
@@ -1940,6 +1968,7 @@ class GoogleDocsParser:
                             prefix_match.end(),
                         )
                         practice_nodes.setdefault(stripped_key, []).append(stripped_node)
+                        _register_inline_line_aliases(practice_nodes, stripped_node)
 
         # --------------------------------------------------------------------
         for header, lines in lesson_sections[1:]:
@@ -3305,8 +3334,16 @@ class GoogleDocsParser:
                 "underline": bool(span.get("underline")),
                 "link": span.get("link"),
                 "highlight": span.get("highlight"),
+                "color": span.get("color"),
             }
-            if not any([style["bold"], style["italic"], style["underline"], style["link"], style["highlight"]]):
+            if not any([
+                style["bold"],
+                style["italic"],
+                style["underline"],
+                style["link"],
+                style["highlight"],
+                style["color"],
+            ]):
                 return None
             return style
 
@@ -4474,6 +4511,198 @@ class GoogleDocsParser:
                 blanks.append({"id": blank_id, "min_len": 1})
             return tokens, blanks
 
+        def build_ordered_document_content(
+            text: str,
+            inlines: list[dict] | None = None,
+            *,
+            interactive_blanks: bool = False,
+        ) -> dict:
+            """Build the lossless, renderer-facing content stream for Thai practice.
+
+            Unlike the legacy fill-blank tokenizers, this function never invents a
+            blank. Underscores become interactive blanks only for fill_blank items;
+            for every other exercise kind they remain literal authored text.
+            """
+            source_text = text or ""
+            source_inlines = _merge_inlines_into_text(source_text, inlines or [])
+            if not source_inlines:
+                source_inlines = [{"text": source_text}]
+
+            tokens: list[dict] = []
+            blank_idx = 1
+
+            def append_text(value: str, style: dict | None) -> None:
+                if not value:
+                    return
+                token = {"type": "text", "text": value}
+                if style:
+                    token["style"] = style
+                previous = tokens[-1] if tokens else None
+                if (
+                    previous
+                    and previous.get("type") == "text"
+                    and previous.get("style") == token.get("style")
+                ):
+                    previous["text"] += value
+                else:
+                    tokens.append(token)
+
+            for span in source_inlines:
+                span_text = span.get("text", "") if isinstance(span, dict) else ""
+                style = _style_payload(span) if isinstance(span, dict) else None
+                index = 0
+                buffer = ""
+
+                def flush_buffer() -> None:
+                    nonlocal buffer
+                    if buffer:
+                        append_text(buffer, style)
+                        buffer = ""
+
+                while index < len(span_text):
+                    char = span_text[index]
+                    if char in ("\n", "\u000b"):
+                        flush_buffer()
+                        tokens.append({"type": "line_break"})
+                        index += 1
+                        continue
+                    if interactive_blanks and char == "_":
+                        flush_buffer()
+                        underscore_count = 0
+                        while (
+                            index + underscore_count < len(span_text)
+                            and span_text[index + underscore_count] == "_"
+                        ):
+                            underscore_count += 1
+                        blank_id = f"b{blank_idx}"
+                        tokens.append({
+                            "type": "blank",
+                            "id": blank_id,
+                            "min_len": max(1, underscore_count),
+                        })
+                        blank_idx += 1
+                        index += underscore_count
+                        continue
+                    buffer += char
+                    index += 1
+                flush_buffer()
+
+            return {
+                "version": 1,
+                "blocks": [{"type": "paragraph", "tokens": tokens}],
+            }
+
+        def combine_ordered_item_text(item: dict) -> tuple[str, list[dict]]:
+            """Return the authored EN/TH stream before items_th drops EN text."""
+            text = item.get("text") or ""
+            text_th = item.get("text_th") or ""
+            inlines = [dict(span) for span in item.get("text_jsonb") or [] if span]
+            inlines_th = [dict(span) for span in item.get("text_jsonb_th") or [] if span]
+
+            if text and text_th and text.strip() != text_th.strip():
+                full_text = f"{text}\n{text_th}"
+                full_inlines = inlines or [{"text": text}]
+                full_inlines.append({"text": "\n"})
+                full_inlines.extend(inlines_th or [{"text": text_th}])
+                return full_text, full_inlines
+            if text:
+                return text, inlines
+            return text_th, inlines_th
+
+        def exercise_has_media(exercise: dict) -> bool:
+            media_tag_re = re.compile(r"\[(?:img|image|audio)\s*:[^\]]+\]", re.I)
+
+            def value_has_media(value) -> bool:
+                if isinstance(value, str):
+                    return bool(media_tag_re.search(value))
+                if isinstance(value, list):
+                    return any(value_has_media(entry) for entry in value)
+                if not isinstance(value, dict):
+                    return False
+                if value.get("image_key") or value.get("audio_key"):
+                    return True
+                if value.get("type") in {"image", "audio"}:
+                    return True
+                return any(value_has_media(entry) for entry in value.values())
+
+            return value_has_media(exercise)
+
+        def is_quick_practice(exercise: dict) -> bool:
+            if exercise.get("is_quick_practice") is True:
+                return True
+            title = " ".join(
+                str(exercise.get(key) or "")
+                for key in ("title", "title_th")
+            )
+            return bool(re.search(r"\bQUICK\s+PRACTICE\b", title, re.I))
+
+        def attach_ordered_thai_content(exercise: dict) -> None:
+            """Add the v1 Thai document contract without changing legacy fields."""
+            if lang != "th" or is_quick_practice(exercise) or exercise_has_media(exercise):
+                return
+
+            source_items = exercise.get("items") or []
+            existing_items_th = exercise.get("items_th") or []
+            rebuilt_items_th: list[dict] = []
+
+            for index, source_item in enumerate(source_items):
+                existing = (
+                    dict(existing_items_th[index])
+                    if index < len(existing_items_th)
+                    and isinstance(existing_items_th[index], dict)
+                    else {}
+                )
+                if "number" in source_item:
+                    existing["number"] = source_item["number"]
+                if "text" not in existing:
+                    existing["text"] = source_item.get("text_th") or source_item.get("text") or ""
+                if source_item.get("text_jsonb_th") and not existing.get("text_jsonb"):
+                    existing["text_jsonb"] = source_item["text_jsonb_th"]
+                for key in (
+                    "answer", "keywords", "inputs", "correct", "image_key",
+                    "audio_key", "alt_text",
+                ):
+                    if key in source_item and key not in existing:
+                        existing[key] = source_item[key]
+
+                full_text, full_inlines = combine_ordered_item_text(source_item)
+                if exercise.get("kind") == "fill_blank" and existing.get("text"):
+                    # Thai fill_blank already stores the entire authored bilingual stream.
+                    full_text = existing["text"]
+                    full_inlines = existing.get("text_jsonb") or full_inlines
+                existing["content"] = build_ordered_document_content(
+                    full_text,
+                    full_inlines,
+                    interactive_blanks=exercise.get("kind") == "fill_blank",
+                )
+
+                source_options = source_item.get("options") or []
+                if source_options:
+                    existing_options = existing.get("options") or []
+                    ordered_options = []
+                    for option_index, source_option in enumerate(source_options):
+                        option = (
+                            dict(existing_options[option_index])
+                            if option_index < len(existing_options)
+                            and isinstance(existing_options[option_index], dict)
+                            else {}
+                        )
+                        option["label"] = source_option.get("label") or option.get("label") or ""
+                        if "text" not in option:
+                            option["text"] = source_option.get("text_th") or source_option.get("text") or ""
+                        option_text, option_inlines = combine_ordered_item_text(source_option)
+                        option["content"] = build_ordered_document_content(
+                            option_text,
+                            option_inlines,
+                        )
+                        ordered_options.append(option)
+                    existing["options"] = ordered_options
+
+                rebuilt_items_th.append(existing)
+
+            exercise["items_th"] = rebuilt_items_th
+            exercise["thai_document_content_version"] = 1
+
         def build_answers_v2(raw_answer: str | None, blank_count: int) -> list[list[str]]:
             if not raw_answer or not isinstance(raw_answer, str):
                 return []
@@ -4693,6 +4922,12 @@ class GoogleDocsParser:
 
                 if items_th:
                     ex["items_th"] = items_th
+
+        # Add the document-authoritative Thai representation last, after all
+        # legacy items/items_th normalization has completed. Quick practices
+        # and media-bearing exercises intentionally remain unchanged.
+        for ex in exercises:
+            attach_ordered_thai_content(ex)
 
         return exercises
 

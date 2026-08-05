@@ -244,6 +244,14 @@ function normalizeExercise(ex, contentLang) {
     : false;
 
   const mergeItemsWithThai = (enItems, thItems) => {
+    const hasOrderedThaiItems =
+      contentLang === "th" &&
+      Array.isArray(thItems) &&
+      thItems.length > 0 &&
+      thItems.every((item) => item?.content?.version === 1 && Array.isArray(item.content.blocks));
+    if (hasOrderedThaiItems) {
+      return thItems.map((item) => ({ ...(item || {}) }));
+    }
     const base = Array.isArray(enItems) && enItems.length
       ? enItems.map((item) => ({ ...(item || {}) }))
       : Array.isArray(thItems)

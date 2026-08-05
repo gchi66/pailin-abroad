@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
 import InlineText from "../InlineText";
+import OrderedPracticeContent, { hasOrderedPracticeContent } from "../OrderedPracticeContent";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
@@ -416,12 +417,14 @@ export default function SentenceTransformExercise({
                       </div>
                     )}
                     <div className="st-stem-row">
-                      <InlineText
-                        as="p"
-                        className="st-stem"
-                        inlines={stemInlines}
-                        text={item?.text}
-                      />
+                      {hasOrderedPracticeContent(item.content) ? (
+                        <OrderedPracticeContent as="p" className="st-stem" content={item.content} />
+                      ) : <InlineText
+                          as="p"
+                          className="st-stem"
+                          inlines={stemInlines}
+                          text={item?.text}
+                        />}
                       {showMarkButtons && (
                         <div className="st-mark-buttons">
                           <button
@@ -451,7 +454,7 @@ export default function SentenceTransformExercise({
                         </div>
                       )}
                     </div>
-                    {thaiStem && (
+                    {!hasOrderedPracticeContent(item.content) && thaiStem && (
                       <InlineText
                         as="p"
                         className="st-stem-th"
@@ -510,12 +513,14 @@ export default function SentenceTransformExercise({
                   </div>
                 )}
                 <div className="st-stem-row">
-                  <InlineText
-                    as="p"
-                    className="st-stem"
-                    inlines={stemInlines}
-                    text={item.text}
-                  />
+                  {hasOrderedPracticeContent(item.content) ? (
+                    <OrderedPracticeContent as="p" className="st-stem" content={item.content} />
+                  ) : <InlineText
+                      as="p"
+                      className="st-stem"
+                      inlines={stemInlines}
+                      text={item.text}
+                    />}
                   {showMarkButtons && (
                     <div className="st-mark-buttons">
                       <button
@@ -547,7 +552,7 @@ export default function SentenceTransformExercise({
                     </div>
                   )}
                 </div>
-                {thaiStem && (
+                {!hasOrderedPracticeContent(item.content) && thaiStem && (
                   <InlineText
                     as="p"
                     className="st-stem-th"

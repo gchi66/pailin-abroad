@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
 import InlineText from "../InlineText";
+import OrderedPracticeContent, { hasOrderedPracticeContent } from "../OrderedPracticeContent";
 import { useAuth } from "../../AuthContext";
 import evaluateAnswer from "./evaluateAnswer";
 import { normalizeAiCorrect } from "./normalizeAiCorrect";
@@ -522,13 +523,15 @@ export default function OpenEndedExercise({
                         />
                       </div>
                     )}
-                    <InlineText
+                    {hasOrderedPracticeContent(item.content) ? (
+                      <OrderedPracticeContent as="p" className="oe-question-text" content={item.content} />
+                    ) : <InlineText
                       as="p"
                       className="oe-question-text"
                       inlines={questionInlines}
                       text={displayQuestion}
-                    />
-                    {contentLang === "th" &&
+                    />}
+                    {!hasOrderedPracticeContent(item.content) && contentLang === "th" &&
                       questionTh &&
                       questionEn &&
                       normalizeText(questionTh) !== normalizeText(questionEn) && (
@@ -636,13 +639,15 @@ export default function OpenEndedExercise({
                   </div>
                 )}
 
-                <InlineText
+                {hasOrderedPracticeContent(item.content) ? (
+                  <OrderedPracticeContent as="p" className="oe-question-text" content={item.content} />
+                ) : <InlineText
                   as="p"
                   className="oe-question-text"
                   inlines={questionInlines}
                   text={displayQuestion}
-                />
-                {contentLang === "th" &&
+                />}
+                {!hasOrderedPracticeContent(item.content) && contentLang === "th" &&
                   questionTh &&
                   questionEn &&
                   normalizeText(questionTh) !== normalizeText(questionEn) && (

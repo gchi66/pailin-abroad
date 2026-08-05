@@ -460,6 +460,61 @@
   text-decoration: underline;
 }
 
+.exercise-bank-topic-technical-title {
+  margin: 0.35rem 0 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.exercise-bank-new-badge {
+  border: var(--border-thin) solid #1e1e1e;
+  border-radius: 999px;
+  background: #ffd66b;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.exercise-bank-topic-progress-copy {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.exercise-bank-topic-progress {
+  width: 100%;
+  height: 0.65rem;
+  overflow: hidden;
+  border: var(--border-thin) solid #1e1e1e;
+  border-radius: 999px;
+  background: #eee;
+}
+
+.exercise-bank-topic-progress span {
+  display: block;
+  height: 100%;
+  background: #8ec5ff;
+}
+
+.exercise-bank-signed-out-action {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.exercise-bank-signed-out-action a {
+  border: var(--border-thin) solid #1e1e1e;
+  border-radius: 999px;
+  background: #ff6f61;
+  color: #fff;
+  padding: 0.8rem 1.4rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
 .exercise-bank-featured-list {
   list-style: none;
   padding: 0;

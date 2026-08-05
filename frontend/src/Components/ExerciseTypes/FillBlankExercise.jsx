@@ -167,14 +167,17 @@ const renderStyledText = (content, style) => {
     fontWeight: style?.bold ? "700" : undefined,
     fontStyle: style?.italic ? "italic" : undefined,
     textDecoration: style?.underline ? "underline" : undefined,
+    backgroundColor: style?.highlight || undefined,
+    color: style?.color || undefined,
     whiteSpace: "pre-line",
   };
   const thaiClass = hasThai(content) ? " fb-text-th" : "";
-  return (
+  const node = (
     <span style={textStyle} className={`fb-text-block${thaiClass}`}>
       {renderDecoratedText(content, "fb-styled")}
     </span>
   );
+  return style?.link ? <a href={style.link}>{node}</a> : node;
 };
 
 const renderTokenWithStyles = (text, cursor, keyPrefix) => {
@@ -278,7 +281,9 @@ const renderStemBlocks = ({
   onBlankChange,
   readOnly = false,
 }) => {
-  const blocks = Array.isArray(item?.stem?.blocks) ? item.stem.blocks : [];
+  const blocks = item?.content?.version === 1 && Array.isArray(item.content.blocks)
+    ? item.content.blocks
+    : Array.isArray(item?.stem?.blocks) ? item.stem.blocks : [];
   const blanks = Array.isArray(item?.blanks) ? item.blanks : [];
   const nodes = [];
 
@@ -292,7 +297,7 @@ const renderStemBlocks = ({
   };
 
   blocks.forEach((block, blockIdx) => {
-    if (block?.type !== "inline" || !Array.isArray(block.tokens)) return;
+    if (!["inline", "paragraph"].includes(block?.type) || !Array.isArray(block.tokens)) return;
     block.tokens.forEach((token, tokenIdx) => {
       if (token.type === "text") {
         if (token.style) {
@@ -329,7 +334,7 @@ const renderStemBlocks = ({
       if (token.type === "blank") {
         const blankId = token.id;
         const blankMeta = getBlankMeta(blankId);
-        const blankLength = blankMeta?.min_len || 1;
+        const blankLength = token.min_len || blankMeta?.min_len || 1;
         const blankAnswers = getBlankAnswers(blankId);
         const maxAnswerLen = blankAnswers.reduce(
           (maxLen, answer) => Math.max(maxLen, normalizeWhitespace(answer).length),
@@ -381,11 +386,13 @@ const renderStemBlocks = ({
 };
 
 const getStemStats = (item) => {
-  const blocks = Array.isArray(item?.stem?.blocks) ? item.stem.blocks : [];
+  const blocks = item?.content?.version === 1 && Array.isArray(item.content.blocks)
+    ? item.content.blocks
+    : Array.isArray(item?.stem?.blocks) ? item.stem.blocks : [];
   let hasLineBreak = false;
   let blankCount = 0;
   blocks.forEach((block) => {
-    if (block?.type !== "inline" || !Array.isArray(block.tokens)) return;
+    if (!["inline", "paragraph"].includes(block?.type) || !Array.isArray(block.tokens)) return;
     block.tokens.forEach((token) => {
       if (token.type === "line_break") hasLineBreak = true;
       if (token.type === "blank") blankCount += 1;
@@ -932,8 +939,8 @@ export default function FillBlankExercise({
         questionState.correct === true || questionState.loading === true;
       const shouldUseThaiStem =
         contentLang === "th" &&
-        Array.isArray(item?.stem?.blocks) &&
-        item.stem.blocks.length > 0;
+        ((item?.content?.version === 1 && Array.isArray(item.content.blocks) && item.content.blocks.length > 0) ||
+          (Array.isArray(item?.stem?.blocks) && item.stem.blocks.length > 0));
 
       if (example) {
         if (shouldUseThaiStem) {

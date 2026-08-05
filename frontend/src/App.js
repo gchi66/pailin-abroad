@@ -13,6 +13,7 @@ import TopicLibrary from "./Pages/TopicLibrary";
 import TopicDetail from "./Pages/TopicDetail";
 import ExerciseBank from "./Pages/ExerciseBank";
 import ExerciseSection from "./Pages/ExerciseSection";
+import ExerciseBankSession from "./Pages/ExerciseBankSession";
 import Contact from "./Pages/Contact";
 import FAQPage from "./Pages/FAQPage";
 import Modal from "./Components/Modal";
@@ -108,6 +109,8 @@ function App() {
                     <Route path="/topic-library" element={<TopicLibrary toggleSignupModal={toggleSignupModal} />} />
                     <Route path="/topic-library/:slug" element={<TopicDetail />} />
                     <Route path="/exercise-bank" element={<ExerciseBank />} />
+                    <Route path="/exercise-bank/topics/:topicId" element={<ExerciseBankSession />} />
+                    <Route path="/exercise-bank/topics/:topicId/sets/:setNumber" element={<ExerciseBankSession />} />
                     <Route path="/exercise-bank/:categorySlug/:sectionSlug" element={<ExerciseSection />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/faq" element={<FAQPage />} />

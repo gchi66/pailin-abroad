@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import AudioButton from "../AudioButton";
 import InlineText from "../InlineText";
+import OrderedPracticeContent, { hasOrderedPracticeContent } from "../OrderedPracticeContent";
 import { copy, pick } from "../../ui-lang/i18n";
 import CheckAnswersButton from "./CheckAnswersButton";
 import { usePostHog } from "@posthog/react";
@@ -50,6 +51,7 @@ const normalizeOption = (option) => {
     text_jsonb_th,
     image_key: option.image_key || null,
     alt_text,
+    content: option.content || null,
   };
 };
 
@@ -284,13 +286,15 @@ export default function MultipleChoiceExercise({
                   </div>
                 )}
 
-                <InlineText
-                  as="p"
-                  className={`mc-question-text${hasThaiQuestion ? "" : " no-thai"}`}
-                  inlines={questionInlines}
-                  text={questionText}
-                />
-                {hasThaiQuestion && (
+                {hasOrderedPracticeContent(q.content) ? (
+                  <OrderedPracticeContent as="p" className="mc-question-text" content={q.content} />
+                ) : <InlineText
+                    as="p"
+                    className={`mc-question-text${hasThaiQuestion ? "" : " no-thai"}`}
+                    inlines={questionInlines}
+                    text={questionText}
+                  />}
+                {!hasOrderedPracticeContent(q.content) && hasThaiQuestion && (
                   <InlineText
                     as="p"
                     className="mc-question-text th"
@@ -301,7 +305,7 @@ export default function MultipleChoiceExercise({
                 
 
                 <div className="mc-options">
-                  {q.options.map(({ label, text, text_jsonb, text_th, text_jsonb_th, image_key, alt_text }) => {
+                  {q.options.map(({ label, text, text_jsonb, text_th, text_jsonb_th, image_key, alt_text, content }) => {
                     const normalizedLabel = normalizeArray([label])[0];
                     const isSelected = normalizedLabel
                       ? selectedSet.has(normalizedLabel)
@@ -330,7 +334,9 @@ export default function MultipleChoiceExercise({
                               className="mc-option-image"
                             />
                           )}
-                          {(text || text_th) && (
+                          {hasOrderedPracticeContent(content) ? (
+                            <OrderedPracticeContent as="span" className="mc-option-text-lines" content={content} />
+                          ) : (text || text_th) && (
                             <span className="mc-option-text-lines">
                               {text && (
                                 <InlineText

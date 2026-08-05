@@ -70,12 +70,15 @@ export function renderInlines(inlines = []) {
       fontWeight: span?.bold ? "700" : undefined,
       fontStyle: span?.italic ? "italic" : undefined,
       textDecoration: span?.underline ? "underline" : undefined,
+      backgroundColor: span?.highlight || undefined,
+      color: span?.color || undefined,
       whiteSpace: "pre-line",
     };
+    const decorated = <span style={style}>{renderDecoratedText(text, `inline-${idx}`)}</span>;
     return (
       <React.Fragment key={idx}>
         {idx > 0 && !/^[\s.,!?;:'"()[\]\-]/.test(text) ? " " : ""}
-        <span style={style}>{renderDecoratedText(text, `inline-${idx}`)}</span>
+        {span?.link ? <a href={span.link}>{decorated}</a> : decorated}
       </React.Fragment>
     );
   });

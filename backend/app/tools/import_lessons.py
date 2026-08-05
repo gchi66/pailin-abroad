@@ -15,6 +15,7 @@ import os
 import glob
 import json
 import argparse
+import copy
 import unicodedata
 import time
 import httpx
@@ -140,6 +141,125 @@ def _extract_th(val):
         return val.strip()
     return ""
 
+
+_ORDERED_CONTENT_TOKEN_TYPES = {"text", "line_break", "blank"}
+_ORDERED_CONTENT_STYLE_KEYS = {
+    "bold", "italic", "underline", "link", "highlight", "color"
+}
+
+
+def _validate_ordered_content(content, *, allow_blanks, path):
+    """Validate one parser-produced Thai document content object."""
+    errors = []
+    if not isinstance(content, dict):
+        return [f"{path} must be an object"]
+    if content.get("version") != 1:
+        errors.append(f"{path}.version must be 1")
+    blocks = content.get("blocks")
+    if not isinstance(blocks, list) or not blocks:
+        return errors + [f"{path}.blocks must be a non-empty list"]
+
+    blank_ids = set()
+    for block_index, block in enumerate(blocks):
+        block_path = f"{path}.blocks[{block_index}]"
+        if not isinstance(block, dict):
+            errors.append(f"{block_path} must be an object")
+            continue
+        if block.get("type") != "paragraph":
+            errors.append(f"{block_path}.type must be paragraph")
+        tokens = block.get("tokens")
+        if not isinstance(tokens, list):
+            errors.append(f"{block_path}.tokens must be a list")
+            continue
+        for token_index, token in enumerate(tokens):
+            token_path = f"{block_path}.tokens[{token_index}]"
+            if not isinstance(token, dict):
+                errors.append(f"{token_path} must be an object")
+                continue
+            token_type = token.get("type")
+            if token_type not in _ORDERED_CONTENT_TOKEN_TYPES:
+                errors.append(f"{token_path}.type is invalid: {token_type!r}")
+                continue
+            if token_type == "text":
+                if not isinstance(token.get("text"), str):
+                    errors.append(f"{token_path}.text must be a string")
+                style = token.get("style")
+                if style is not None:
+                    if not isinstance(style, dict):
+                        errors.append(f"{token_path}.style must be an object")
+                    else:
+                        unknown = set(style) - _ORDERED_CONTENT_STYLE_KEYS
+                        if unknown:
+                            errors.append(
+                                f"{token_path}.style has unknown keys: {sorted(unknown)}"
+                            )
+            elif token_type == "line_break":
+                unexpected = set(token) - {"type"}
+                if unexpected:
+                    errors.append(
+                        f"{token_path} line_break has unexpected keys: {sorted(unexpected)}"
+                    )
+            else:
+                if not allow_blanks:
+                    errors.append(f"{token_path} blank is not allowed for this exercise kind")
+                blank_id = token.get("id")
+                if not isinstance(blank_id, str) or not blank_id.strip():
+                    errors.append(f"{token_path}.id must be a non-empty string")
+                elif blank_id in blank_ids:
+                    errors.append(f"{token_path}.id is duplicated: {blank_id}")
+                else:
+                    blank_ids.add(blank_id)
+                min_len = token.get("min_len")
+                if not isinstance(min_len, int) or isinstance(min_len, bool) or min_len < 1:
+                    errors.append(f"{token_path}.min_len must be a positive integer")
+    return errors
+
+
+def _validate_thai_document_contract(exercise, items_th):
+    """Validate all-or-nothing ordered content for one Thai exercise."""
+    errors = []
+    source_items = exercise.get("items") or []
+    if len(source_items) != len(items_th):
+        errors.append(
+            f"item count differs from parser source ({len(source_items)} != {len(items_th)})"
+        )
+
+    allow_blanks = exercise.get("kind") == "fill_blank"
+    for item_index, item in enumerate(items_th):
+        item_path = f"items_th[{item_index}]"
+        if not isinstance(item, dict):
+            errors.append(f"{item_path} must be an object")
+            continue
+        errors.extend(_validate_ordered_content(
+            item.get("content"),
+            allow_blanks=allow_blanks,
+            path=f"{item_path}.content",
+        ))
+        for option_index, option in enumerate(item.get("options") or []):
+            option_path = f"{item_path}.options[{option_index}]"
+            if not isinstance(option, dict):
+                errors.append(f"{option_path} must be an object")
+                continue
+            errors.extend(_validate_ordered_content(
+                option.get("content"),
+                allow_blanks=False,
+                path=f"{option_path}.content",
+            ))
+    return errors
+
+
+def _strip_ordered_content(items_th):
+    """Return a deep legacy-only copy after ordered-contract validation fails."""
+    cleaned = copy.deepcopy(items_th or [])
+    for item in cleaned:
+        if not isinstance(item, dict):
+            continue
+        item.pop("content", None)
+        for option in item.get("options") or []:
+            if isinstance(option, dict):
+                option.pop("content", None)
+    return cleaned
+
 #______________________ RETRY HELPERS
 def _execute_with_retry(builder, label, retries=3, backoff_seconds=0.5):
     """
@@ -213,10 +333,45 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
             en_by_number = {str(it.get("number")): it for it in (en_items or []) if it.get("number") is not None}
 
             th_items_raw = ex.get("items_th", []) or []
+            has_ordered_content = any(
+                isinstance(item, dict) and (
+                    item.get("content") is not None
+                    or any(
+                        isinstance(option, dict) and option.get("content") is not None
+                        for option in (item.get("options") or [])
+                    )
+                )
+                for item in th_items_raw
+            )
+            contract_version = ex.get("thai_document_content_version")
+            if contract_version == 1:
+                contract_errors = _validate_thai_document_contract(ex, th_items_raw)
+                if contract_errors:
+                    print(
+                        f"[WARN] TH ordered practice content rejected for {key}; "
+                        "using legacy items_th instead: "
+                        + "; ".join(contract_errors)
+                    )
+                    th_items_raw = _strip_ordered_content(th_items_raw)
+                elif en_items and len(en_items) != len(th_items_raw):
+                    # The Thai document remains authoritative, but flag a likely
+                    # exercise-row alignment problem before the renderer phase.
+                    print(
+                        f"[WARN] TH ordered practice item count differs from stored EN "
+                        f"items for {key}: {len(th_items_raw)} != {len(en_items)}"
+                    )
+            elif has_ordered_content:
+                print(
+                    f"[WARN] TH practice contains ordered content without "
+                    f"thai_document_content_version=1 for {key}; using legacy items_th"
+                )
+                th_items_raw = _strip_ordered_content(th_items_raw)
+
             th_items_validated = []
             for th_item in th_items_raw:
-                # Copy as-is (do not mutate original reference)
-                item_copy = dict(th_item)
+                # Copy the complete JSON tree as-is, including validated ordered
+                # content and option content, without mutating parser output.
+                item_copy = copy.deepcopy(th_item)
                 num = str(item_copy.get("number")) if item_copy.get("number") is not None else None
                 if num and "image_key" in item_copy and num in en_by_number:
                     en_image_key = en_by_number[num].get("image_key")
