@@ -6,7 +6,11 @@ __pycache__/
 *.pyc
 backend/data/*.json
 data/
+!data/
+data/*
+!data/placement-test.json
 tests/*
 !tests/test_exercise_bank_v2_routes.py
 !tests/test_parser_practice_ordered_thai.py
 !tests/test_import_lessons_thai_ordered_content.py
+!tests/test_seed_placement_test.py

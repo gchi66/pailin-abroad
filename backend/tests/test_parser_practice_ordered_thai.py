@@ -49,6 +49,26 @@ def test_ordered_fill_blank_uses_underscores_but_does_not_treat_em_dash_as_blank
     assert any(token.get("text", "").endswith(": —") for token in tokens)
 
 
+def test_ordered_fill_blank_inherits_characters_width_with_historical_plus_one():
+    parser = GoogleDocsParser()
+    exercises = parser.parse_practice(
+        [
+            "TYPE: fill_blank",
+            "TITLE: I HEARD",
+            "CHARACTERS: 50",
+            "ITEM: 1",
+            "TEXT: You tell your coworker: ___________\u000bคุณบอกเพื่อนร่วมงานของคุณว่า: —",
+            "ANSWER: I heard the news.",
+        ],
+        lang="th",
+    )
+
+    [item] = exercises[0]["items_th"]
+    [blank_token] = [token for token in _tokens(item) if token["type"] == "blank"]
+    assert blank_token["min_len"] == 51
+    assert item["blanks"][0]["min_len"] == 51
+
+
 def test_ordered_content_is_not_added_to_quick_or_image_practices():
     parser = GoogleDocsParser()
     quick = parser.parse_practice(

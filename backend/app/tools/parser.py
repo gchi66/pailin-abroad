@@ -3709,7 +3709,7 @@ class GoogleDocsParser:
             if collecting_prompt and cur_ex:
                 directive_re_check = re.compile(
                     r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
-                    r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
+                    r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:|CHARACTERS:)',
                     re.I
                 )
                 if directive_re_check.match(upper_line):
@@ -3752,6 +3752,14 @@ class GoogleDocsParser:
                     if value:
                         cur_ex["_prompt_lines"].append(value)
                     collecting_prompt = True
+                continue
+            if upper_line.startswith("CHARACTERS:"):
+                match = re.match(r"^CHARACTERS:\s*(\d+)\s*$", line, re.I)
+                if match:
+                    cur_ex["_blank_characters"] = max(1, int(match.group(1)))
+                collecting_text = False
+                collecting_paragraph = False
+                collecting_prompt = False
                 continue
             if upper_line.startswith("PARAGRAPH:"):
                 # Get the content after the colon
@@ -4675,6 +4683,24 @@ class GoogleDocsParser:
                     full_inlines,
                     interactive_blanks=exercise.get("kind") == "fill_blank",
                 )
+                # normalize_fill_blank_exercise has already applied the authored
+                # CHARACTERS visual-width hint (including its historical +1) to
+                # the legacy blank metadata. Carry that width into the ordered
+                # Thai contract that the new renderers prefer.
+                if exercise.get("kind") == "fill_blank":
+                    ordered_blank_tokens = [
+                        token
+                        for block in existing["content"].get("blocks", [])
+                        for token in block.get("tokens", [])
+                        if token.get("type") == "blank"
+                    ]
+                    legacy_blanks = existing.get("blanks") or []
+                    for blank_index, token in enumerate(ordered_blank_tokens):
+                        if blank_index >= len(legacy_blanks):
+                            break
+                        legacy_min_len = legacy_blanks[blank_index].get("min_len")
+                        if isinstance(legacy_min_len, int) and legacy_min_len > 0:
+                            token["min_len"] = legacy_min_len
 
                 source_options = source_item.get("options") or []
                 if source_options:
@@ -4752,7 +4778,7 @@ class GoogleDocsParser:
             if prompt_lines is None:
                 prompt_text = exercise.get("prompt") or ""
                 prompt_lines = [prompt_text] if prompt_text else []
-            blank_characters = None
+            blank_characters = exercise.pop("_blank_characters", None)
             cleaned_prompt_lines: list[str] = []
             for raw_line in prompt_lines:
                 line = (raw_line or "").strip()

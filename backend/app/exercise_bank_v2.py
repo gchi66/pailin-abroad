@@ -38,7 +38,8 @@ STATE_SELECT = (
     "latest_ai_feedback_en,latest_ai_feedback_th,last_attempted_at,assigned_content_version"
 )
 TOPIC_PROGRESS_SELECT = (
-    "topic_id,first_completed_at,completed_content_version,version_completed_at"
+    "topic_id,first_completed_at,completed_content_version,version_completed_at,"
+    "active_set_number,active_set_position,active_view,last_advanced_set_number"
 )
 
 REDACTED_CONTENT_KEYS = frozenset(
@@ -462,40 +463,43 @@ def _progress_payload(
         if state_by_question.get(question.get("id"), {}).get("has_answered_correctly") is True
     }
 
-    completed_sets = 0
-    for set_number in range(1, total_sets + 1):
-        set_questions = [
-            question
-            for question in questions
-            if _set_number(question["practice_order"]) == set_number
-        ]
-        if set_questions and all(question["id"] in mastered_question_ids for question in set_questions):
-            completed_sets += 1
-
     progress = topic_progress or {}
+    completed_sets = min(
+        max(int(progress.get("last_advanced_set_number") or 0), 0),
+        total_sets,
+    )
     content_version = int(topic.get("content_version") or 1)
     completed_version = progress.get("completed_content_version")
-    all_current_questions_mastered = bool(total_questions) and len(mastered_question_ids) == total_questions
-    historically_completed = bool(progress.get("first_completed_at")) or all_current_questions_mastered
+    explicitly_completed = bool(total_sets) and completed_sets >= total_sets
+    active_set_number = min(
+        max(int(progress.get("active_set_number") or completed_sets + 1), 1),
+        max(total_sets, 1),
+    )
+    active_set_position = min(max(int(progress.get("active_set_position") or 1), 1), 5)
+    active_view = progress.get("active_view")
+    if active_view not in {"question", "results"}:
+        active_view = "question"
 
     return {
         "total_questions": total_questions,
         "total_sets": total_sets,
         "mastered_questions": len(mastered_question_ids),
         "completed_sets": completed_sets,
-        "is_completed": historically_completed,
+        "is_completed": explicitly_completed,
         "is_current_version_completed": (
-            all_current_questions_mastered
-            or (
-                isinstance(completed_version, int)
-                and completed_version >= content_version
-            )
+            explicitly_completed
+            and isinstance(completed_version, int)
+            and completed_version >= content_version
         ),
         "has_new_content": (
-            historically_completed
+            explicitly_completed
             and isinstance(completed_version, int)
             and completed_version < content_version
         ),
+        "active_set_number": active_set_number,
+        "active_set_position": active_set_position,
+        "active_view": active_view,
+        "last_advanced_set_number": completed_sets,
         "first_completed_at": progress.get("first_completed_at"),
         "completed_content_version": completed_version,
         "version_completed_at": progress.get("version_completed_at"),
@@ -786,16 +790,23 @@ def get_topic(topic_id: int):
                     "question_count": len(set_questions),
                     "attempted_questions": attempted,
                     "mastered_questions": mastered,
-                    "is_complete": bool(set_questions) and mastered == len(set_questions),
+                    "is_complete": set_number <= progress["last_advanced_set_number"],
                 }
             )
 
-        next_incomplete = next(
-            (row["set_number"] for row in sets if not row["is_complete"]), None
+        next_incomplete = (
+            progress["active_set_number"]
+            if progress["last_advanced_set_number"] < progress["total_sets"]
+            else None
         )
         response_topic = _topic_payload(topic, progress)
         response_topic["sets"] = sets
         response_topic["next_incomplete_set"] = next_incomplete
+        response_topic["resume"] = {
+            "set_number": progress["active_set_number"],
+            "set_position": progress["active_set_position"],
+            "view": progress["active_view"],
+        }
         return jsonify({"topic": response_topic}), 200
     except Exception as exc:
         print(f"Error fetching Exercise Bank v2 topic {topic_id}: {exc}", flush=True)
@@ -874,6 +885,8 @@ def get_topic_set(topic_id: int, set_number: int):
             question["progress"]["has_answered_correctly"]
             for question in response_questions
         )
+        topic_progress = context["progress_by_topic"].get(topic_id) or {}
+        last_advanced_set = int(topic_progress.get("last_advanced_set_number") or 0)
         return jsonify(
             {
                 "topic": {
@@ -887,7 +900,7 @@ def get_topic_set(topic_id: int, set_number: int):
                     "set_number": set_number,
                     "question_count": len(response_questions),
                     "mastered_questions": mastered,
-                    "is_complete": mastered == len(response_questions),
+                    "is_complete": set_number <= last_advanced_set,
                     "questions": response_questions,
                 },
             }
@@ -898,6 +911,78 @@ def get_topic_set(topic_id: int, set_number: int):
             flush=True,
         )
         return jsonify({"error": "Failed to fetch exercise set"}), 500
+
+
+def _rpc_object(name: str, params: dict[str, Any]) -> dict[str, Any]:
+    response = supabase_admin.rpc(name, params).execute()
+    data = getattr(response, "data", None)
+    if isinstance(data, list):
+        data = data[0] if data else None
+    if not isinstance(data, dict):
+        raise RuntimeError(f"{name} returned no result")
+    return data
+
+
+@exercise_bank_v2.route(
+    "/api/exercise-bank-v2/topics/<int:topic_id>/cursor",
+    methods=["POST"],
+)
+def save_topic_cursor(topic_id: int):
+    user_id, auth_error = _authenticated_user_id()
+    if auth_error:
+        return auth_error
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({"error": "Cursor payload is required"}), 400
+    set_number = payload.get("set_number")
+    set_position = payload.get("set_position")
+    view = payload.get("view")
+    if not isinstance(set_number, int) or set_number < 1:
+        return jsonify({"error": "Valid set_number is required"}), 400
+    if not isinstance(set_position, int) or not 1 <= set_position <= 5:
+        return jsonify({"error": "Valid set_position is required"}), 400
+    if view not in {"question", "results"}:
+        return jsonify({"error": "view must be question or results"}), 400
+    try:
+        progress = _rpc_object(
+            "save_exercise_bank_v2_cursor",
+            {
+                "p_user_id": user_id,
+                "p_topic_id": topic_id,
+                "p_set_number": set_number,
+                "p_set_position": set_position,
+                "p_view": view,
+            },
+        )
+        return jsonify({"progress": progress}), 200
+    except Exception as exc:
+        print(f"Error saving Exercise Bank cursor topic_id={topic_id}: {exc}", flush=True)
+        return jsonify({"error": "Failed to save exercise position"}), 500
+
+
+@exercise_bank_v2.route(
+    "/api/exercise-bank-v2/topics/<int:topic_id>/sets/<int:set_number>/advance",
+    methods=["POST"],
+)
+def advance_topic_set(topic_id: int, set_number: int):
+    user_id, auth_error = _authenticated_user_id()
+    if auth_error:
+        return auth_error
+    if set_number < 1:
+        return jsonify({"error": "Set number must be positive"}), 400
+    try:
+        progress = _rpc_object(
+            "advance_exercise_bank_v2_set",
+            {
+                "p_user_id": user_id,
+                "p_topic_id": topic_id,
+                "p_set_number": set_number,
+            },
+        )
+        return jsonify({"progress": progress}), 200
+    except Exception as exc:
+        print(f"Error advancing Exercise Bank set topic_id={topic_id}: {exc}", flush=True)
+        return jsonify({"error": "Failed to complete exercise set"}), 500
 
 
 @exercise_bank_v2.route(

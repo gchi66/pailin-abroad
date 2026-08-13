@@ -17,6 +17,7 @@ node_modules/
 
 # Ignore all JSON files in backend/data
 backend/data/*.json
+!backend/data/placement-test.json
 
 # Ignore lesson docs in the frontend
 frontend/lesson_docs/*

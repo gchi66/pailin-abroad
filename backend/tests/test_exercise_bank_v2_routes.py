@@ -316,6 +316,10 @@ def _tables():
                 "first_completed_at": "2026-07-20T00:00:00Z",
                 "completed_content_version": 1,
                 "version_completed_at": "2026-07-20T00:00:00Z",
+                "active_set_number": 2,
+                "active_set_position": 1,
+                "active_view": "question",
+                "last_advanced_set_number": 1,
             }
         ],
     }
@@ -371,12 +375,16 @@ def test_topic_summaries_include_sets_and_user_progress(monkeypatch):
     assert len(topics) == 1
     assert topics[0]["id"] == 9
     assert topics[0]["progress"] == {
+        "active_set_number": 2,
+        "active_set_position": 1,
+        "active_view": "question",
         "completed_content_version": 1,
         "completed_sets": 1,
         "first_completed_at": "2026-07-20T00:00:00Z",
-        "has_new_content": True,
-        "is_completed": True,
+        "has_new_content": False,
+        "is_completed": False,
         "is_current_version_completed": False,
+        "last_advanced_set_number": 1,
         "mastered_questions": 5,
         "total_questions": 6,
         "total_sets": 2,
@@ -392,6 +400,11 @@ def test_topic_detail_returns_set_summaries_and_resume_target(monkeypatch):
     assert response.status_code == 200
     topic = response.get_json()["topic"]
     assert topic["next_incomplete_set"] == 2
+    assert topic["resume"] == {
+        "set_number": 2,
+        "set_position": 1,
+        "view": "question",
+    }
     assert topic["sets"] == [
         {
             "attempted_questions": 5,
@@ -407,6 +420,77 @@ def test_topic_detail_returns_set_summaries_and_resume_target(monkeypatch):
             "question_count": 1,
             "set_number": 2,
         },
+    ]
+
+
+def test_mastery_does_not_complete_a_set_without_advance(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    progress = fake_supabase.table_rows["user_exercise_bank_topic_progress"][0]
+    progress.update(
+        {
+            "active_set_number": 1,
+            "active_set_position": 4,
+            "active_view": "question",
+            "last_advanced_set_number": 0,
+        }
+    )
+
+    response = client.get("/api/exercise-bank-v2/topics/9", headers=_headers())
+
+    assert response.status_code == 200
+    topic = response.get_json()["topic"]
+    assert topic["next_incomplete_set"] == 1
+    assert topic["resume"] == {
+        "set_number": 1,
+        "set_position": 4,
+        "view": "question",
+    }
+    assert topic["sets"][0]["mastered_questions"] == 5
+    assert topic["sets"][0]["is_complete"] is False
+
+
+def test_cursor_is_persisted_separately_from_answers(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+
+    response = client.post(
+        "/api/exercise-bank-v2/topics/9/cursor",
+        headers=_headers(),
+        json={"set_number": 2, "set_position": 1, "view": "results"},
+    )
+
+    assert response.status_code == 200
+    assert fake_supabase.rpc_calls == [
+        (
+            "save_exercise_bank_v2_cursor",
+            {
+                "p_user_id": "user-123",
+                "p_topic_id": 9,
+                "p_set_number": 2,
+                "p_set_position": 1,
+                "p_view": "results",
+            },
+        )
+    ]
+
+
+def test_set_is_completed_only_by_explicit_advance(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+
+    response = client.post(
+        "/api/exercise-bank-v2/topics/9/sets/2/advance",
+        headers=_headers(),
+    )
+
+    assert response.status_code == 200
+    assert fake_supabase.rpc_calls == [
+        (
+            "advance_exercise_bank_v2_set",
+            {
+                "p_user_id": "user-123",
+                "p_topic_id": 9,
+                "p_set_number": 2,
+            },
+        )
     ]
 
 
