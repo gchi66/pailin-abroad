@@ -2015,26 +2015,6 @@ def get_lesson_resolved(lesson_id):
 
                 if is_paid:
                     is_locked = False
-                elif is_locked:
-                    # For free users, check if this is a first lesson of any level
-                    lesson_result = supabase.table('lessons').select(
-                        'id, stage, level, lesson_order, lesson_external_id, '
-                        'title, title_th, subtitle, subtitle_th, focus, focus_th, backstory, backstory_th, '
-                        'image_url, conversation_audio_url, header_img'
-                    ).eq('id', lesson_id).single().execute()
-                    lesson_row = lesson_result.data
-                    if lesson_row:
-                        lesson = lesson_row
-
-                        # Get all lessons for this stage-level combination, ordered by lesson_order
-                        level_lessons = supabase.table('lessons').select('id, lesson_order').eq('stage', lesson['stage']).eq('level', lesson['level']).order('lesson_order', desc=False).execute()
-
-                        if level_lessons.data and len(level_lessons.data) > 0:
-                            # Check if this is the first lesson (lowest lesson_order)
-                            first_lesson = level_lessons.data[0]
-                            first_lesson_id = first_lesson['id']
-                            if lesson_id == first_lesson_id:
-                                is_locked = False
             auth_ms = max(0, round((time.perf_counter() - auth_start) * 1000))
         except Exception as e:
             print(f"Auth check error: {e}")
@@ -2057,6 +2037,28 @@ def get_lesson_resolved(lesson_id):
             print(f"Guest RevenueCat auth error for lesson {lesson_id}: {e}", flush=True)
         except Exception as e:
             print(f"Guest access check error for lesson {lesson_id}: {e}", flush=True)
+
+    # The first lesson in every level is free for everyone, including fully
+    # unauthenticated guests. Keep this outside the authenticated-user branch so
+    # guest placement and manual level selection receive the resolved sections.
+    if is_locked:
+        lesson_result = supabase.table('lessons').select(
+            'id, stage, level, lesson_order, lesson_external_id, '
+            'title, title_th, subtitle, subtitle_th, focus, focus_th, backstory, backstory_th, '
+            'image_url, conversation_audio_url, header_img'
+        ).eq('id', lesson_id).single().execute()
+        lesson_row = lesson_result.data
+        if lesson_row:
+            level_lessons = (
+                supabase.table('lessons')
+                .select('id, lesson_order')
+                .eq('stage', lesson_row['stage'])
+                .eq('level', lesson_row['level'])
+                .order('lesson_order', desc=False)
+                .execute()
+            )
+            if level_lessons.data and lesson_id == level_lessons.data[0]['id']:
+                is_locked = False
 
     if is_locked:
         if not lesson_row:
