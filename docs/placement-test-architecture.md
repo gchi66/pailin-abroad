@@ -7,7 +7,7 @@ The dedicated placement entry screen appears when a user:
 1. Continues into the app as a guest.
 2. Completes account onboarding.
 
-It plays up to three audio conversations, asks multiple-choice comprehension questions, and assigns the user to Level 1, 2, 5, 9, or 13. The placement result should affect My Pathway even when the user closes the completed-test popup instead of pressing the button that navigates directly to the assigned lesson.
+It plays up to three audio conversations, asks multiple-choice comprehension questions, and assigns the user to Level 1, 2, 5, or 9. The placement result should affect My Pathway even when the user closes the completed-test popup instead of pressing the button that navigates directly to the assigned lesson.
 
 ## Minimal architecture
 
@@ -22,7 +22,7 @@ Use Supabase Storage for the audio and Postgres for structured test content and 
 - [x] Added placement-level and placement-state constraints to `public.users`.
 - [x] Enabled row-level security on `placement_conversations`.
 - [x] Added read-only access for anonymous and authenticated clients.
-- [x] Added and validated the version-controlled JSON source containing all 10 questions.
+- [x] Added and validated the version-controlled JSON source containing all 9 questions.
 - [x] Added a repeatable validation and seed tool.
 - [x] Seeded the three conversation rows into Supabase.
 - [x] Added an admin-only Profile preview entry point in the mobile app.
@@ -131,11 +131,11 @@ The complete routing rules are:
 | 1 | 0-1 | Level 1 |
 | 1 | 2 | Level 2 |
 | 1 | 3 | Continue to conversation 2 |
-| 2 | 0-1 | Level 2 |
-| 2 | 2-3 | Level 5 |
-| 2 | 4 | Continue to conversation 3 |
-| 3 | 0-2 | Level 9 |
-| 3 | 3 | Level 13 |
+| 2 | 0 | Level 2 |
+| 2 | 1-2 | Level 5 |
+| 2 | 3 | Continue to conversation 3 |
+| 3 | 0-1 | Level 5 |
+| 3 | 2-3 | Level 9 |
 
 ## Persisted user result
 

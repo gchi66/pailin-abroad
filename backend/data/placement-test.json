@@ -5,12 +5,12 @@
     "questions": [
       {
         "id": "1.1",
-        "prompt": "What is the man and woman's relationship?",
+        "prompt": "What is the relationship between the man and the woman?",
         "promptTh": "ผู้ชายและผู้หญิงมีความสัมพันธ์กันอย่างไร?",
         "choices": [
           "They're good friends.",
           "They're classmates.",
-          "They're met once.",
+          "They met once.",
           "They're meeting for the first time.",
           "I don't know."
         ],
@@ -34,7 +34,13 @@
           "She's a hospital manager.",
           "I don't know."
         ],
-        "choicesTh": ["เธอเป็นพยาบาล", "เธอเป็นหมอ", "เธอเป็นนักเรียน", "เธอเป็นผู้จัดการโรงพยาบาล", "ไม่รู้"],
+        "choicesTh": [
+          "เธอเป็นพยาบาล",
+          "เธอเป็นหมอ",
+          "เธอเป็นนักเรียน",
+          "เธอเป็นผู้จัดการโรงพยาบาล",
+          "ไม่รู้"
+        ],
         "correctChoice": 0
       },
       {
@@ -58,20 +64,20 @@
     "questions": [
       {
         "id": "2.1",
-        "prompt": "What will the woman do after work?",
-        "promptTh": "ผู้หญิงจะทำอะไรหลังเลิกงาน?",
+        "prompt": "What was the woman supposed to do after work at first?",
+        "promptTh": "ตอนแรกผู้หญิงตั้งใจว่าจะทำอะไรหลังเลิกงาน?",
         "choices": [
-          "She'll have a job interview.",
-          "She'll pick up her sister from the airport.",
-          "She'll rent a car to pick up her sister from the airport.",
-          "She'll get dinner with the man.",
+          "She was supposed to get dinner with her sister.",
+          "She was supposed to stop by the bank.",
+          "She was supposed to have a job interview.",
+          "She was supposed to pick up her sister from the airport.",
           "I don't know."
         ],
         "choicesTh": [
-          "เธอจะไปสัมภาษณ์งาน",
-          "เธอจะไปรับน้องสาวที่สนามบิน",
-          "เธอจะเช่ารถไปรับน้องสาวที่สนามบิน",
-          "เธอจะไปกินอาหารเย็นกับผู้ชาย",
+          "เธอตั้งใจว่าจะไปกินอาหารเย็นกับน้องสาว",
+          "เธอตั้งใจว่าจะแวะไปที่ธนาคาร",
+          "เธอตั้งใจว่าจะไปสัมภาษณ์งาน",
+          "เธอตั้งใจว่าจะไปรับน้องสาวที่สนามบิน",
           "ไม่รู้"
         ],
         "correctChoice": 3
@@ -79,7 +85,7 @@
       {
         "id": "2.2",
         "prompt": "Why is the woman's sister coming to town?",
-        "promptTh": "ทำไมน้องสาวของผู้หญิงจึงเดินทางมาในเมือง?",
+        "promptTh": "ทำไมน้องสาวของผู้หญิงถึงเข้ามาในเมือง?",
         "choices": [
           "She's visiting her sister.",
           "She's looking for a new apartment.",
@@ -89,7 +95,7 @@
         ],
         "choicesTh": [
           "เธอมาเยี่ยมพี่สาว",
-          "เธอกำลังหาที่พักใหม่",
+          "เธอกำลังหาอพาร์ตเมนต์ใหม่",
           "เธอมีนัดสัมภาษณ์งาน",
           "เธอมาพบแฟนของเธอ",
           "ไม่รู้"
@@ -99,7 +105,7 @@
       {
         "id": "2.3",
         "prompt": "Why does the man want to go to the Thai restaurant near his house for dinner?",
-        "promptTh": "ทำไมผู้ชายจึงอยากไปกินอาหารเย็นที่ร้านอาหารไทยใกล้บ้าน?",
+        "promptTh": "ทำไมผู้ชายถึงอยากไปกินอาหารเย็นที่ร้านอาหารไทยใกล้บ้าน?",
         "choices": [
           "Because it has great reviews online.",
           "Because they always have a long line outside.",
@@ -108,27 +114,19 @@
           "I don't know."
         ],
         "choicesTh": [
-          "เพราะร้านนี้มีรีวิวดีมากในอินเทอร์เน็ต",
-          "เพราะหน้าร้านมีคนต่อแถวยาวเสมอ",
+          "เพราะร้านนี้มีรีวิวดีมากทางออนไลน์",
+          "เพราะหน้าร้านมีคนต่อแถวยาวอยู่เสมอ",
           "เพราะเพื่อนของเขาแนะนำร้านนี้",
-          "เพราะเป็นร้านเปิดใหม่",
+          "เพราะเป็นร้านอาหารเปิดใหม่",
           "ไม่รู้"
         ],
-        "correctChoice": 1
-      },
-      {
-        "id": "2.4",
-        "prompt": "What time will the man pick up the woman?",
-        "promptTh": "ผู้ชายจะไปรับผู้หญิงกี่โมง?",
-        "choices": ["4:00", "5:00", "6:00", "7:00", "I don't know."],
-        "choicesTh": ["4:00 น.", "5:00 น.", "6:00 น.", "7:00 น.", "ไม่รู้"],
         "correctChoice": 1
       }
     ],
     "scoring_rules": [
-      { "minCorrect": 0, "maxCorrect": 1, "level": 2 },
-      { "minCorrect": 2, "maxCorrect": 3, "level": 5 },
-      { "minCorrect": 4, "maxCorrect": 4, "nextConversation": 3 }
+      { "minCorrect": 0, "maxCorrect": 0, "level": 2 },
+      { "minCorrect": 1, "maxCorrect": 2, "level": 5 },
+      { "minCorrect": 3, "maxCorrect": 3, "nextConversation": 3 }
     ]
   },
   {
@@ -137,8 +135,8 @@
     "questions": [
       {
         "id": "3.1",
-        "prompt": "Why did George and his girlfriend have a huge argument?",
-        "promptTh": "ทำไมจอร์จกับแฟนจึงทะเลาะกันอย่างรุนแรง?",
+        "prompt": "Why did George and his girlfriend break up?",
+        "promptTh": "ทำไมจอร์จกับแฟนของเขาถึงเลิกกัน?",
         "choices": [
           "Because she planned to move to New York without telling him.",
           "Because she told him she didn't want to get married.",
@@ -147,7 +145,7 @@
           "I don't know."
         ],
         "choicesTh": [
-          "เพราะเธอวางแผนย้ายไปนิวยอร์กโดยไม่บอกเขา",
+          "เพราะเธอวางแผนจะย้ายไปนิวยอร์กโดยไม่บอกเขา",
           "เพราะเธอบอกเขาว่าไม่อยากแต่งงาน",
           "เพราะเขารู้ว่าเธอจะไปนิวยอร์กเพื่อเยี่ยมแฟนเก่า",
           "เพราะเธอทำงานมากเกินไป",
@@ -157,8 +155,28 @@
       },
       {
         "id": "3.2",
-        "prompt": "How did George find out that his girlfriend was planning to go to New York to see her ex?",
-        "promptTh": "จอร์จรู้ได้อย่างไรว่าแฟนของเขาวางแผนจะไปนิวยอร์กเพื่อพบแฟนเก่า?",
+        "prompt": "Why did George think his girlfriend was going to New York?",
+        "promptTh": "จอร์จคิดว่าแฟนของเขาไปนิวยอร์กเพราะอะไร?",
+        "choices": [
+          "To see a concert.",
+          "To visit family.",
+          "For work.",
+          "For a friend's baby shower.",
+          "I don't know."
+        ],
+        "choicesTh": [
+          "ไปดูคอนเสิร์ต",
+          "ไปเยี่ยมครอบครัว",
+          "ไปทำงาน",
+          "ไปร่วมงานเลี้ยงต้อนรับลูกของเพื่อน",
+          "ไม่รู้"
+        ],
+        "correctChoice": 2
+      },
+      {
+        "id": "3.3",
+        "prompt": "How did George find out that his girlfriend visited her ex in New York?",
+        "promptTh": "จอร์จรู้ได้อย่างไรว่าแฟนของเขาไปเยี่ยมแฟนเก่าที่นิวยอร์ก?",
         "choices": [
           "He heard her talking on the phone with a friend about it.",
           "He read her text messages with her ex.",
@@ -170,35 +188,15 @@
           "เขาได้ยินเธอคุยโทรศัพท์กับเพื่อนเรื่องนี้",
           "เขาอ่านข้อความที่เธอคุยกับแฟนเก่า",
           "เพื่อนของเขาเป็นคนบอก",
-          "เขาเห็นรูปของเธอกับแฟนเก่าในโทรศัพท์ของเธอ",
+          "เขาเห็นรูปของเธอกับแฟนเก่าอยู่ด้วยกันในโทรศัพท์ของเธอ",
           "ไม่รู้"
         ],
         "correctChoice": 0
-      },
-      {
-        "id": "3.3",
-        "prompt": "What did the man think about George and his girlfriend's relationship?",
-        "promptTh": "ผู้ชายคิดอย่างไรเกี่ยวกับความสัมพันธ์ของจอร์จกับแฟน?",
-        "choices": [
-          "He thought they would get married soon.",
-          "He thought the girlfriend loved George more than he loved her.",
-          "He thought they would break up eventually.",
-          "He thought they were a great couple.",
-          "I don't know."
-        ],
-        "choicesTh": [
-          "เขาคิดว่าทั้งคู่จะแต่งงานกันเร็ว ๆ นี้",
-          "เขาคิดว่าแฟนของจอร์จรักจอร์จมากกว่าที่จอร์จรักเธอ",
-          "เขาคิดว่าสุดท้ายแล้วทั้งคู่จะเลิกกัน",
-          "เขาคิดว่าทั้งคู่เป็นคู่รักที่ดีมาก",
-          "ไม่รู้"
-        ],
-        "correctChoice": 2
       }
     ],
     "scoring_rules": [
-      { "minCorrect": 0, "maxCorrect": 2, "level": 9 },
-      { "minCorrect": 3, "maxCorrect": 3, "level": 13 }
+      { "minCorrect": 0, "maxCorrect": 1, "level": 5 },
+      { "minCorrect": 2, "maxCorrect": 3, "level": 9 }
     ]
   }
 ]

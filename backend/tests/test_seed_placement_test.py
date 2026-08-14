@@ -11,7 +11,7 @@ def test_placement_test_seed_data_is_valid():
 
     assert validate_placement_test(conversations) == []
     assert [row["conversation_order"] for row in conversations] == [1, 2, 3]
-    assert sum(len(row["questions"]) for row in conversations) == 10
+    assert sum(len(row["questions"]) for row in conversations) == 9
     for conversation in conversations:
         for question in conversation["questions"]:
             assert question["choices"][-1] == "I don't know."
