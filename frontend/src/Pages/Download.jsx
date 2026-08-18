@@ -1,21 +1,11 @@
 import { useEffect, useMemo } from "react";
+import {
+  APP_STORE_URL,
+  PLAY_STORE_URL,
+  getStoreForCurrentDevice,
+  getStoreUrl,
+} from "../lib/appStores";
 import "../Styles/Download.css";
-
-export const APP_STORE_URL =
-  "https://apps.apple.com/th/app/pailin-abroad/id6762322535";
-export const PLAY_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.pailinabroad.app";
-
-export function getMobileStore(userAgent, platform, maxTouchPoints) {
-  const ua = userAgent || "";
-
-  if (/android/i.test(ua)) return "android";
-
-  // iPadOS can identify itself as macOS when desktop-class browsing is enabled.
-  const isAppleMobile = /iPad|iPhone|iPod/i.test(ua);
-  const isIPadDesktopMode = platform === "MacIntel" && maxTouchPoints > 1;
-  return isAppleMobile || isIPadDesktopMode ? "ios" : null;
-}
 
 function AppleLogo() {
   return (
@@ -46,17 +36,8 @@ function StoreButton({ href, store, children }) {
 }
 
 export default function Download() {
-  const store = useMemo(() => {
-    if (typeof navigator === "undefined") return null;
-    return getMobileStore(
-      navigator.userAgent,
-      navigator.platform,
-      navigator.maxTouchPoints
-    );
-  }, []);
-
-  const destination =
-    store === "ios" ? APP_STORE_URL : store === "android" ? PLAY_STORE_URL : null;
+  const store = useMemo(() => getStoreForCurrentDevice(), []);
+  const destination = getStoreUrl(store);
 
   useEffect(() => {
     const previousTitle = document.title;

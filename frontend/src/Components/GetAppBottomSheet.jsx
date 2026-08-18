@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useUiLang } from "../ui-lang/UiLangContext";
+import {
+  getStoreForCurrentDevice,
+  getStoreUrl,
+} from "../lib/appStores";
 import "../Styles/GetAppBottomSheet.css";
 
 const APP_NUDGE_DELAY_MS = 1500;
 const DISMISS_ANIMATION_MS = 250;
 const SWIPE_DISMISS_THRESHOLD = 60;
-const APP_STORE_URL = "https://apps.apple.com/us/app/pailin-abroad/id6762322535";
 const MOBILE_UA_PATTERN =
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i;
 
@@ -17,10 +20,14 @@ const copy = {
     featureAudioBody: "Lock your screen - the conversation keeps going.",
     featureScreenTitle: "Built for your screen",
     featureScreenBody: "Full-screen lesson flow, no browser chrome in the way.",
-    cta: "Download on the App Store",
+    iosCta: "Download on the App Store",
+    androidCta: "Get it on Google Play",
+    fallbackCta: "Download the app",
     dismiss: "Continue on web",
     closeLabel: "Close app download prompt",
-    ctaLabel: "Download Pailin Abroad on the App Store",
+    iosCtaLabel: "Download Pailin Abroad on the App Store",
+    androidCtaLabel: "Download Pailin Abroad on Google Play",
+    fallbackCtaLabel: "Choose where to download Pailin Abroad",
   },
   th: {
     headline: "ดีกว่าบนแอป",
@@ -29,10 +36,14 @@ const copy = {
     featureAudioBody: "ล็อกหน้าจอได้เลย แต่บทสนทนายังเล่นต่อ",
     featureScreenTitle: "ออกแบบมาสำหรับหน้าจอคุณ",
     featureScreenBody: "เรียนได้เต็มหน้าจอ ไม่มีแถบเบราว์เซอร์มาบัง",
-    cta: "ดาวน์โหลดบน App Store",
+    iosCta: "ดาวน์โหลดบน App Store",
+    androidCta: "ดาวน์โหลดบน Google Play",
+    fallbackCta: "ดาวน์โหลดแอป",
     dismiss: "ใช้งานบนเว็บต่อ",
     closeLabel: "ปิดหน้าต่างแนะนำแอป",
-    ctaLabel: "ดาวน์โหลด Pailin Abroad บน App Store",
+    iosCtaLabel: "ดาวน์โหลด Pailin Abroad บน App Store",
+    androidCtaLabel: "ดาวน์โหลด Pailin Abroad บน Google Play",
+    fallbackCtaLabel: "เลือกช่องทางดาวน์โหลด Pailin Abroad",
   },
 };
 
@@ -51,6 +62,20 @@ function isEligibleMobileBrowser() {
 export default function GetAppBottomSheet() {
   const { ui } = useUiLang();
   const activeCopy = copy[ui] || copy.en;
+  const store = getStoreForCurrentDevice();
+  const storeUrl = getStoreUrl(store) || "/download";
+  const cta =
+    store === "android"
+      ? activeCopy.androidCta
+      : store === "ios"
+        ? activeCopy.iosCta
+        : activeCopy.fallbackCta;
+  const ctaLabel =
+    store === "android"
+      ? activeCopy.androidCtaLabel
+      : store === "ios"
+        ? activeCopy.iosCtaLabel
+        : activeCopy.fallbackCtaLabel;
   const [isRendered, setIsRendered] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
@@ -252,19 +277,23 @@ export default function GetAppBottomSheet() {
 
         <a
           className="app-nudge-cta"
-          href={APP_STORE_URL}
+          href={storeUrl}
           onClick={dismissSheet}
-          aria-label={activeCopy.ctaLabel}
+          aria-label={ctaLabel}
         >
-          <svg
-            className="app-nudge-cta-logo"
-            viewBox="0 0 24 24"
-            focusable="false"
-            aria-hidden="true"
-          >
-            <path d="M16.365 12.853c-.03-3.086 2.522-4.571 2.638-4.642-1.442-2.108-3.682-2.398-4.468-2.431-1.902-.192-3.711 1.118-4.678 1.118-.969 0-2.457-1.09-4.038-1.06-2.078.03-3.993 1.209-5.062 3.068-2.157 3.74-.549 9.269 1.55 12.303 1.025 1.483 2.247 3.146 3.853 3.086 1.548-.062 2.132-.999 4.004-.999 1.874 0 2.397.999 4.034.968 1.665-.03 2.719-1.514 3.737-3.002 1.18-1.724 1.665-3.39 1.695-3.476-.037-.011-3.245-1.246-3.277-4.933Zm-3.114-8.98c.853-1.032 1.429-2.468 1.272-3.873-1.23.049-2.719.82-3.602 1.851-.792.919-1.49 2.38-1.302 3.783 1.369.107 2.76-.699 3.632-1.761Z" />
-          </svg>
-          <span>{activeCopy.cta}</span>
+          {store === "android" ? (
+            <svg className="app-nudge-cta-logo" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path fill="#00d6ff" d="M3.1 1.35a2.1 2.1 0 0 0-.35 1.18v18.94c0 .43.13.84.36 1.18L13.72 12 3.1 1.35Z" />
+              <path fill="#ffdf00" d="m13.72 12 3.18-3.19L5.65 2.42a2.16 2.16 0 0 0-1.54-.28L13.72 12Z" />
+              <path fill="#ff3a44" d="M4.1 21.86c.5.1 1.04.01 1.55-.28l11.26-6.4L13.72 12 4.1 21.86Z" />
+              <path fill="#00ef77" d="m20.11 10.64-3.21-1.83L13.72 12l3.19 3.18 3.21-1.82c1.12-.64 1.12-2.08-.01-2.72Z" />
+            </svg>
+          ) : (
+            <svg className="app-nudge-cta-logo" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M16.365 12.853c-.03-3.086 2.522-4.571 2.638-4.642-1.442-2.108-3.682-2.398-4.468-2.431-1.902-.192-3.711 1.118-4.678 1.118-.969 0-2.457-1.09-4.038-1.06-2.078.03-3.993 1.209-5.062 3.068-2.157 3.74-.549 9.269 1.55 12.303 1.025 1.483 2.247 3.146 3.853 3.086 1.548-.062 2.132-.999 4.004-.999 1.874 0 2.397.999 4.034.968 1.665-.03 2.719-1.514 3.737-3.002 1.18-1.724 1.665-3.39 1.695-3.476-.037-.011-3.245-1.246-3.277-4.933Zm-3.114-8.98c.853-1.032 1.429-2.468 1.272-3.873-1.23.049-2.719.82-3.602 1.851-.792.919-1.49 2.38-1.302 3.783 1.369.107 2.76-.699 3.632-1.761Z" />
+            </svg>
+          )}
+          <span>{cta}</span>
         </a>
 
         <button
