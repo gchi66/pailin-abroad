@@ -32,6 +32,7 @@ import Terms from "./Pages/Terms";
 import Privacy from "./Pages/Privacy";
 import DeleteAccount from "./Pages/DeleteAccount";
 import SurveyRedirect from "./Pages/SurveyRedirect";
+import Download from "./Pages/Download";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LoginModal from "./Components/LoginModal";
@@ -71,6 +72,8 @@ function App() {
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/email-confirmation" element={<EmailConfirmationPage />} />
             <Route path="/survey" element={<SurveyRedirect />} />
+            {/* Dedicated store handoff: intentionally bypasses the site shell and app prompt. */}
+            <Route path="/download" element={<Download />} />
             <Route path="/reset-password" element={<div style={{ padding: '2rem', textAlign: 'center' }}>
               <h2>Password Reset</h2>
               <p>This page will handle password reset functionality.</p>
