@@ -67,12 +67,42 @@ export default function Download() {
           alt=""
         />
 
-        <h1 id="download-title">เรียนภาษาอังกฤษกับ Pailin Abroad</h1>
+        <p className="download-eyebrow">ภาษาอังกฤษที่ใช้ได้จริง สำหรับคนไทย</p>
+        <h1 id="download-title">
+          ฟังภาษาอังกฤษให้ทัน
+          <span>พูดได้อย่างเป็นธรรมชาติ</span>
+        </h1>
         <p className="download-thai-copy">
-          ดาวน์โหลดแอป แล้วเริ่มเรียนภาษาอังกฤษที่ใช้ได้จริงกันเลย
+          เรียนผ่านเรื่องราวและบทสนทนา พร้อมคำแปลและคำอธิบายภาษาไทย
+          ที่สร้างมาเพื่อผู้เรียนชาวไทยโดยเฉพาะ
         </p>
-        <p className="download-english-copy">
-          Download the app and start learning real-world English today.
+
+        <ul className="download-benefits" aria-label="จุดเด่นของ Pailin Abroad">
+          <li>
+            <span className="download-benefit-icon" aria-hidden="true">💬</span>
+            <div>
+              <strong>บทสนทนาที่ใช้จริง</strong>
+              <p>ฝึกฟังประโยคและสำนวนที่เจ้าของภาษาใช้ในชีวิตประจำวัน</p>
+            </div>
+          </li>
+          <li>
+            <span className="download-benefit-icon" aria-hidden="true">🎧</span>
+            <div>
+              <strong>เรียนผ่านเรื่องราว</strong>
+              <p>เข้าใจคำศัพท์และไวยากรณ์จากบริบท ไม่ใช่แค่การท่องจำ</p>
+            </div>
+          </li>
+          <li>
+            <span className="download-benefit-icon" aria-hidden="true">🇹🇭</span>
+            <div>
+              <strong>สร้างมาเพื่อคนไทย</strong>
+              <p>มีคำแปลไทย พร้อมคำแนะนำเรื่องข้อผิดพลาดที่คนไทยมักใช้</p>
+            </div>
+          </li>
+        </ul>
+
+        <p className="download-trust-line">
+          เริ่มเรียนฟรี <span aria-hidden="true">•</span> Beginner–Expert <span aria-hidden="true">•</span> มีคำแปลภาษาไทย
         </p>
 
         {destination && (
@@ -89,6 +119,10 @@ export default function Download() {
             ดาวน์โหลดบน Google Play
           </StoreButton>
         </div>
+
+        <p className="download-english-copy">
+          Real-world English, made for Thai speakers.
+        </p>
       </section>
     </main>
   );
