@@ -56,6 +56,29 @@
   max-width: 28rem;
 }
 
+.pathway-loading-retry {
+  min-width: 10rem;
+  padding: 0.8rem 1.4rem;
+  color: #fff;
+  background: #111;
+  border: 2px solid #111;
+  border-radius: 0.75rem;
+  box-shadow: 3px 3px 0 #3ca0fe;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pathway-loading-retry:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 #3ca0fe;
+}
+
+.pathway-loading-retry:focus-visible {
+  outline: 3px solid rgba(60, 160, 254, 0.35);
+  outline-offset: 3px;
+}
+
 @keyframes pathway-pulse {
   0% {
     transform: scale(0.95);

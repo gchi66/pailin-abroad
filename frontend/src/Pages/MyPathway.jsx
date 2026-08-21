@@ -9,6 +9,8 @@ import PlanNotice from "../Components/PlanNotice";
 import { resolveAvatarUrl } from "../lib/resolveAvatarUrl";
 import "../Styles/MyPathway.css";
 
+const PATHWAY_REQUEST_TIMEOUT_MS = 15000;
+
 const MyPathway = () => {
   const [searchParams] = useSearchParams();
   const initialView = searchParams.get("view");
@@ -25,6 +27,7 @@ const MyPathway = () => {
   const [showAllCompleted, setShowAllCompleted] = useState(false);
   const [isPaidMember, setIsPaidMember] = useState(null);
   const [allLessons, setAllLessons] = useState([]);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const { user } = useAuth();
   const { ui: uiLang } = useUiLang();
   const isFreePlanUser = Boolean(user) && isPaidMember === false;
@@ -105,6 +108,7 @@ const MyPathway = () => {
     loadingImageAlt: t("pathway.loadingImageAlt", uiLang),
     loadingErrorTitle: t("pathway.loadingErrorTitle", uiLang),
     loadingErrorBody: t("pathway.loadingErrorBody", uiLang),
+    retry: t("pathway.retry", uiLang),
 
     // Header section
     welcomeBack: t("pathway.welcomeBack", uiLang),
@@ -150,12 +154,19 @@ const MyPathway = () => {
 
   // Fetch user profile data from backend
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      setIsPaidMember(null);
+      return undefined;
+    }
+
+    const controller = new AbortController();
+    let cancelled = false;
+    const timeoutId = window.setTimeout(() => controller.abort(), PATHWAY_REQUEST_TIMEOUT_MS);
+
     const fetchUserProfile = async () => {
-      if (!user) {
-        setLoading(false);
-        setIsPaidMember(null);
-        return;
-      }
+      setLoading(true);
+      setError(null);
 
       try {
         // Get the current session to access the access token
@@ -180,11 +191,11 @@ const MyPathway = () => {
           statsResponse,
           commentsResponse
         ] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/user/profile`, { method: 'GET', headers }),
-          fetch(`${API_BASE_URL}/api/user/completed-lessons`, { method: 'GET', headers }),
-          fetch(`${API_BASE_URL}/api/user/pathway-lessons`, { method: 'GET', headers }),
-          fetch(`${API_BASE_URL}/api/user/stats`, { method: 'GET', headers }),
-          fetch(`${API_BASE_URL}/api/user/comments`, { method: 'GET', headers })
+          fetch(`${API_BASE_URL}/api/user/profile`, { method: 'GET', headers, signal: controller.signal }),
+          fetch(`${API_BASE_URL}/api/user/completed-lessons`, { method: 'GET', headers, signal: controller.signal }),
+          fetch(`${API_BASE_URL}/api/user/pathway-lessons`, { method: 'GET', headers, signal: controller.signal }),
+          fetch(`${API_BASE_URL}/api/user/stats`, { method: 'GET', headers, signal: controller.signal }),
+          fetch(`${API_BASE_URL}/api/user/comments`, { method: 'GET', headers, signal: controller.signal })
         ]);
 
         // Process responses
@@ -216,15 +227,27 @@ const MyPathway = () => {
         }
 
       } catch (err) {
+        if (cancelled) return;
         console.error('Error fetching user data:', err);
-        setError(err.message);
+        setError(
+          err?.name === "AbortError"
+            ? "The pathway request timed out."
+            : err?.message || "Unable to load pathway."
+        );
       } finally {
-        setLoading(false);
+        window.clearTimeout(timeoutId);
+        if (!cancelled) setLoading(false);
       }
     };
 
-    fetchUserProfile();
-  }, [user]);
+    void fetchUserProfile();
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
+  }, [loadAttempt, user]);
 
   // Fetch paid status so we can surface free-plan UI
   useEffect(() => {
@@ -594,6 +617,13 @@ const MyPathway = () => {
             <>
               <div className="pathway-loading-error-title">{uiText.loadingErrorTitle}</div>
               <div className="pathway-loading-error-body">{uiText.loadingErrorBody}</div>
+              <button
+                type="button"
+                className="pathway-loading-retry"
+                onClick={() => setLoadAttempt((attempt) => attempt + 1)}
+              >
+                {uiText.retry}
+              </button>
             </>
           )}
         </div>

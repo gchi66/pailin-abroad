@@ -122,8 +122,8 @@ export const copy = {
       alreadyHave: { en: "Already have an account?", th: "มีบัญชีผู้ใช้อยู่แล้วใช่ไหม?" },
       loginLink: { en: "Log in", th: "เข้าสู่ระบบ" },
       success: {
-        en: "Account created successfully! Redirecting to complete your profile setup...",
-        th: "สร้างบัญชีสำเร็จ! กำลังพาไปตั้งค่าโปรไฟล์...",
+        en: "Check your email to continue. If you already have an account, the link will sign you in.",
+        th: "กรุณาตรวจสอบอีเมลเพื่อดำเนินการต่อ หากคุณมีบัญชีอยู่แล้ว ลิงก์นี้จะพาคุณเข้าสู่ระบบ",
       },
       errors: {
         missingEmail: { en: "Please enter your email address.", th: "กรุณากรอกที่อยู่อีเมล" },
@@ -143,8 +143,8 @@ export const copy = {
       heading: { en: "You've got mail!", th: "คุณได้รับอีเมลใหม่!" },
       messagePrefix: { en: "We just sent a message to you at ", th: "เราได้ส่งอีเมลไปให้คุณที่ " },
       messageSuffix: {
-        en: ". Click the link inside to verify your email and complete your sign-up.",
-        th: " แล้ว กรุณาคลิกที่ลิงค์ในอีเมลเพื่อยืนยันอีเมลของคุณและเพื่อดำเนินการสมัครของคุณให้เสร็จสมบูรณ์",
+        en: ". Click the link inside to continue. If this email already has an account, we'll sign you in instead of creating another one.",
+        th: " แล้ว กรุณาคลิกลิงก์ในอีเมลเพื่อดำเนินการต่อ หากอีเมลนี้มีบัญชีอยู่แล้ว เราจะพาคุณเข้าสู่ระบบโดยไม่สร้างบัญชีซ้ำ",
       },
       instructions: {
         en: "If you don't receive the email within a few minutes, please check your spam or junk folder. Or, you can click the button below to resend it.",
@@ -869,9 +869,10 @@ export const copy = {
     loadingImageAlt: { en: "Loading pathway", th: "กำลังโหลดเส้นทางการเรียน" },
     loadingErrorTitle: { en: "Something went wrong", th: "เกิดข้อผิดพลาด" },
     loadingErrorBody: {
-      en: "We couldn't load your pathway. Please try refreshing the page.",
-      th: "เราไม่สามารถโหลดเส้นทางการเรียนของคุณได้ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง",
+      en: "We couldn't load your pathway. Please try again.",
+      th: "เราไม่สามารถโหลดเส้นทางการเรียนของคุณได้ กรุณาลองอีกครั้ง",
     },
+    retry: { en: "TRY AGAIN", th: "ลองอีกครั้ง" },
   },
   accountSettings: {
     title: { en: "Account Settings", th: "การตั้งค่าบัญชี" },
