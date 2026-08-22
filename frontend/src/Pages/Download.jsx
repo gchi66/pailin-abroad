@@ -1,9 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import {
   APP_STORE_URL,
   PLAY_STORE_URL,
-  getStoreForCurrentDevice,
-  getStoreUrl,
 } from "../lib/appStores";
 import "../Styles/Download.css";
 
@@ -36,21 +34,14 @@ function StoreButton({ href, store, children }) {
 }
 
 export default function Download() {
-  const store = useMemo(() => getStoreForCurrentDevice(), []);
-  const destination = getStoreUrl(store);
-
   useEffect(() => {
     const previousTitle = document.title;
     document.title = "ดาวน์โหลด Pailin Abroad";
 
-    if (destination) {
-      window.location.replace(destination);
-    }
-
     return () => {
       document.title = previousTitle;
     };
-  }, [destination]);
+  }, []);
 
   return (
     <main className="download-page">
@@ -104,12 +95,6 @@ export default function Download() {
         <p className="download-trust-line">
           เริ่มเรียนฟรี <span aria-hidden="true">•</span> Beginner–Expert <span aria-hidden="true">•</span> มีคำแปลภาษาไทย
         </p>
-
-        {destination && (
-          <p className="download-redirecting" role="status">
-            กำลังพาไปดาวน์โหลดแอป…
-          </p>
-        )}
 
         <div className="download-store-buttons">
           <StoreButton href={APP_STORE_URL} store="ios">

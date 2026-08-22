@@ -2152,6 +2152,8 @@ def get_lesson_resolved(lesson_id):
 
     # Add locked status to payload
     payload['locked'] = is_locked
+    conversation_audio_path = (payload.get('conversation_audio_url') or '').strip()
+    payload['conversation_audio_signed_url'] = _sign_audio_path(conversation_audio_path)
 
     print(
         f"[lesson-route] lesson_id={lesson_id} lang={lang} "
