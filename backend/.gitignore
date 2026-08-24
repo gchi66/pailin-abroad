@@ -14,3 +14,4 @@ tests/*
 !tests/test_parser_practice_ordered_thai.py
 !tests/test_import_lessons_thai_ordered_content.py
 !tests/test_seed_placement_test.py
+!tests/test_speaking_coach_parser.py
