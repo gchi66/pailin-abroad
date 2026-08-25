@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from functools import wraps
 from app.supabase_client import create_auth_client, supabase, supabase_admin
+from app.speaking_coach_cleanup import delete_user_audio
 from app.resolver import resolve_lesson
 from app.app_lesson_progress import (
     build_app_lesson_expectations,
@@ -1768,6 +1769,10 @@ def delete_account():
             return jsonify({"error": "Unable to retrieve user details. User may not exist."}), 401
 
         user_id = user_response.user.id
+
+        # Storage objects are not removed by database cascades. Delete them
+        # while the attempt rows and their object paths are still available.
+        delete_user_audio(str(user_id), client=supabase_admin)
 
         # Delete the user from auth.users
         supabase_admin.auth.admin.delete_user(user_id)

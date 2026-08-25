@@ -6,6 +6,7 @@ from app.stripe_webhook import stripe_webhook
 from app.revenuecat_webhook import revenuecat_webhook
 from app.ai_evaluate import bp as ai_evaluate_bp
 from app.exercise_bank_v2 import exercise_bank_v2
+from app.speaking_coach import speaking_coach
 from app.config import Config
 
 def create_app():
@@ -49,4 +50,5 @@ def create_app():
     app.register_blueprint(revenuecat_webhook)  # Register RevenueCat webhook
     app.register_blueprint(ai_evaluate_bp)  # Register AI evaluation routes
     app.register_blueprint(exercise_bank_v2)
+    app.register_blueprint(speaking_coach)
     return app

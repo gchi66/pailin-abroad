@@ -15,3 +15,9 @@ tests/*
 !tests/test_import_lessons_thai_ordered_content.py
 !tests/test_seed_placement_test.py
 !tests/test_speaking_coach_parser.py
+!tests/test_speaking_coach_importer.py
+!tests/test_speaking_coach_routes.py
+!tests/test_speaking_coach_evaluator.py
+!tests/test_speaking_coach_audio.py
+!tests/test_speaking_coach_azure.py
+!tests/test_speaking_coach_cleanup.py

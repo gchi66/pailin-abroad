@@ -8,6 +8,10 @@ LABEL fly_launch_runtime="flask"
 
 WORKDIR /code
 
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
@@ -17,4 +21,4 @@ EXPOSE 8080
 
 ENV FLASK_APP=app
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--worker-class", "gthread", "--workers", "2", "--threads", "2", "--timeout", "60", "--keep-alive", "5", "app:create_app()"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--worker-class", "gthread", "--workers", "2", "--threads", "2", "--timeout", "120", "--keep-alive", "5", "app:create_app()"]
