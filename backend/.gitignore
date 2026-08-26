@@ -21,3 +21,4 @@ tests/*
 !tests/test_speaking_coach_audio.py
 !tests/test_speaking_coach_azure.py
 !tests/test_speaking_coach_cleanup.py
+!tests/test_speaking_coach_thai_patterns.py

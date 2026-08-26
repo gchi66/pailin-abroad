@@ -1,0 +1,127 @@
+{
+  "catalog_version": "thai-english-pronunciation-v1",
+  "purpose": "Background context for interpreting Azure evidence. Pattern prevalence is never evidence that an individual learner made an error.",
+  "learner_feedback_policy": "word_level_only",
+  "patterns": [
+    {
+      "id": "final_consonant_weakening",
+      "name": "Dropped or unreleased final consonants",
+      "category": "final_consonant",
+      "contexts": ["word_final", "word_final_cluster"],
+      "expected_phonemes": ["p", "t", "k", "b", "d", "g"],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["low final phoneme accuracy", "expected final phoneme not leading", "low word or syllable corroboration"],
+      "runtime_support": "partial",
+      "priority_weight": 8
+    },
+    {
+      "id": "cluster_epenthesis",
+      "name": "Consonant cluster breakup by vowel insertion",
+      "category": "cluster",
+      "contexts": ["word_initial_cluster"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": ["st", "sk", "dr", "sm", "cl", "cr"],
+      "azure_signals": ["spoken consonant-vowel-consonant sequence", "exercise context contains the expected cluster word", "phoneme timing supports a single word"],
+      "runtime_support": "partial",
+      "priority_weight": 10
+    },
+    {
+      "id": "r_l_confusion",
+      "name": "R and L confusion, including final N realization",
+      "category": "substitution",
+      "contexts": ["word_initial", "word_medial", "word_final"],
+      "expected_phonemes": ["r", "ɹ", "l"],
+      "likely_substitutions": {"r": ["l", "n"], "ɹ": ["l", "n"], "l": ["r", "ɹ", "n"]},
+      "grapheme_clusters": [],
+      "azure_signals": ["low expected phoneme accuracy", "likely substitute is leading spoken candidate"],
+      "runtime_support": "active",
+      "priority_weight": 8
+    },
+    {
+      "id": "th_substitution",
+      "name": "TH sound substitution",
+      "category": "substitution",
+      "contexts": ["any"],
+      "expected_phonemes": ["θ", "ð"],
+      "likely_substitutions": {"θ": ["t", "s", "f"], "ð": ["d", "t"]},
+      "grapheme_clusters": [],
+      "azure_signals": ["low expected phoneme accuracy", "likely substitute is leading spoken candidate"],
+      "runtime_support": "active",
+      "priority_weight": 8
+    },
+    {
+      "id": "ch_substitution",
+      "name": "CH replaced by SH or S",
+      "category": "substitution",
+      "contexts": ["any", "word_final"],
+      "expected_phonemes": ["tʃ"],
+      "likely_substitutions": {"tʃ": ["ʃ", "s"]},
+      "grapheme_clusters": [],
+      "azure_signals": ["low expected phoneme accuracy", "SH or S is leading spoken candidate"],
+      "runtime_support": "active",
+      "priority_weight": 8
+    },
+    {
+      "id": "v_w_substitution",
+      "name": "V replaced by W",
+      "category": "substitution",
+      "contexts": ["any"],
+      "expected_phonemes": ["v", "w"],
+      "likely_substitutions": {"v": ["w"], "w": ["v"]},
+      "grapheme_clusters": [],
+      "azure_signals": ["low expected phoneme accuracy", "paired sound is leading spoken candidate"],
+      "runtime_support": "active",
+      "priority_weight": 7
+    },
+    {
+      "id": "non_native_consonant_mapping",
+      "name": "Systematic mapping of G, Z, SH, and ZH",
+      "category": "substitution",
+      "contexts": ["any"],
+      "expected_phonemes": ["g", "z", "ʃ", "ʒ"],
+      "likely_substitutions": {"z": ["s"], "ʃ": ["s"], "ʒ": ["ʃ", "z"]},
+      "grapheme_clusters": [],
+      "azure_signals": ["severe expected phoneme score", "different leading spoken candidate", "word-level corroboration"],
+      "runtime_support": "partial",
+      "priority_weight": 7
+    },
+    {
+      "id": "vowel_length_quality",
+      "name": "Vowel length or quality mismatch",
+      "category": "vowel",
+      "contexts": ["any"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["vowel phoneme candidate mismatch", "duration normalized for word and local speech rate", "word or syllable corroboration"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 4
+    },
+    {
+      "id": "word_final_stress",
+      "name": "Default final-syllable word stress",
+      "category": "stress",
+      "contexts": ["multisyllabic_word"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["syllable duration and energy", "expected lexical stress", "prosody evidence"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 3
+    },
+    {
+      "id": "flat_sentence_stress",
+      "name": "Flat sentence stress or over-stressed function words",
+      "category": "prosody",
+      "contexts": ["connected_speech"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["prosody score", "word-level stress and break evidence", "utterance long enough for a reliable judgment"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 2
+    }
+  ]
+}

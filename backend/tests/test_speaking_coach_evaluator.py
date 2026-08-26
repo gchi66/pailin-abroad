@@ -226,9 +226,10 @@ def test_focus_phoneme_is_prioritized_before_severe_off_focus_word():
     assert evaluation.status == evaluator.EvaluationStatus.RETRY
     assert len(evaluation.displayed_issues) == 2
     assert evaluation.displayed_issues[0].category == "focus"
-    assert "/m/" in evaluation.displayed_issues[0].description_en
+    assert "i’m" in evaluation.displayed_issues[0].description_en
     assert "lunch" in evaluation.displayed_issues[1].description_en
-    assert "/tʃ/" in evaluation.displayed_issues[1].description_en
+    assert "/" not in evaluation.displayed_issues[0].description_en
+    assert "/" not in evaluation.displayed_issues[1].description_en
     assert evaluation.feedback_en == "Focus on these two parts, then try once more."
     problem_tokens = [
         token
@@ -293,9 +294,251 @@ def test_low_confidence_open_answer_is_unclear_without_gemini(monkeypatch):
     result = _evaluate(monkeypatch, practice_type="open", azure=azure)
 
     assert result.evaluation.status == evaluator.EvaluationStatus.UNCLEAR_AUDIO
+    assert result.evaluation.transcript is None
+    assert "confidently understand" in result.evaluation.feedback_en
     assert result.evaluation.detected_issues == []
     assert result.provider == "microsoft"
     assert gemini_called is False
+
+
+def test_low_confidence_open_answer_can_report_supported_r_to_l_transfer(monkeypatch):
+    azure = _azure_result(
+        transcript="I'm Satani History.",
+        confidence=0.102,
+        words=[
+            AzureWordAssessment(
+                word="history",
+                accuracy_score=48,
+                error_type="Mispronunciation",
+                phonemes=[
+                    {
+                        "Phoneme": "ɹ",
+                        "PronunciationAssessment": {
+                            "AccuracyScore": 28,
+                            "NBestPhonemes": [
+                                {"Phoneme": "l", "Score": 92},
+                                {"Phoneme": "ɹ", "Score": 25},
+                            ],
+                        },
+                    }
+                ],
+            )
+        ],
+    )
+    gemini_called = False
+
+    def unexpected_gemini(**_kwargs):
+        nonlocal gemini_called
+        gemini_called = True
+
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", unexpected_gemini)
+    result = _evaluate(monkeypatch, practice_type="open", azure=azure)
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.evaluation.transcript is None
+    assert result.evaluation.displayed_issues[0].category == "pronunciation"
+    assert "history" in result.evaluation.feedback_en
+    assert "/" not in result.evaluation.feedback_en
+    assert result.evaluation.pronunciation.issues
+    policy = result.provider_metadata["policy"]
+    assert policy["catalog_version"] == "thai-english-pronunciation-v1"
+    assert policy["matches"][0]["pattern_id"] == "r_l_confusion"
+    assert policy["matches"][0]["evidence_score"] >= 55
+    assert gemini_called is False
+
+
+def test_open_requests_unscripted_assessment_in_the_existing_azure_call(monkeypatch):
+    captured = {}
+    azure = _azure_result(pronunciation=True)
+    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+
+    monkeypatch.setattr(
+        evaluator,
+        "normalize_speaking_audio",
+        lambda *_args, **_kwargs: b"normalized wav",
+    )
+
+    def fake_azure(*_args, **kwargs):
+        captured.update(kwargs)
+        return azure
+
+    monkeypatch.setattr(evaluator, "assess_with_azure_speech", fake_azure)
+    monkeypatch.setattr(
+        evaluator,
+        "evaluate_language_with_gemini",
+        lambda **_kwargs: evaluator.GeminiLanguageResult(
+            evaluation=language,
+            model="gemini-3.5-flash-lite",
+            latency_ms=30,
+            usage={},
+            provider_metadata={},
+            provider_output_text=language.model_dump_json(),
+        ),
+    )
+
+    evaluator.evaluate_speaking_attempt(
+        audio_bytes=b"m4a bytes",
+        audio_mime_type="audio/mp4",
+        practice_type="open",
+        focus="Speak clearly.",
+        prompt_en="What are you studying?",
+        prompt_th=None,
+        target_answers=[],
+        examples=[],
+        instructional_attempt_number=1,
+    )
+
+    assert captured["reference_text"] is None
+    assert captured["enable_unscripted_assessment"] is True
+
+
+def test_high_confidence_open_answer_combines_language_and_acoustic_results():
+    azure = _azure_result(
+        transcript="I'm studying history.",
+        confidence=0.88,
+        words=[
+            AzureWordAssessment(
+                word="history",
+                accuracy_score=50,
+                error_type="Mispronunciation",
+                phonemes=[
+                    {
+                        "Phoneme": "r",
+                        "AccuracyScore": 31,
+                        "NBestPhonemes": [
+                            {"Phoneme": "l", "Score": 90},
+                            {"Phoneme": "r", "Score": 29},
+                        ],
+                    }
+                ],
+            )
+        ],
+    )
+    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+    candidates = evaluator._unscripted_pronunciation_candidates(
+        azure,
+        focus="Use clear /r/ and /l/ sounds.",
+        evaluation_context={
+            "prompt_en": "What are you studying?",
+            "focus": "Use clear /r/ and /l/ sounds.",
+            "target_answers": [],
+            "examples": [],
+        },
+    )
+
+    evaluation = evaluator._compose_language_evaluation(
+        azure, language, pronunciation_candidates=candidates
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert evaluation.transcript == "I'm studying history."
+    assert evaluation.content.meaning_correct is True
+    assert evaluation.displayed_issues[0].category == "focus"
+    assert "history" in evaluation.feedback_en
+    assert "/" not in evaluation.feedback_en
+
+
+def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
+    azure = _azure_result(
+        transcript="I said buddy English.",
+        confidence=0.668,
+        words=[
+            AzureWordAssessment(
+                word="said",
+                accuracy_score=97,
+                error_type="None",
+                phonemes=[
+                    {
+                        "Phoneme": "s",
+                        "AccuracyScore": 84,
+                        "NBestPhonemes": [{"Phoneme": "s", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "ɛ",
+                        "AccuracyScore": 80,
+                        "NBestPhonemes": [{"Phoneme": "æ", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "d",
+                        "AccuracyScore": 46,
+                        "NBestPhonemes": [{"Phoneme": "t", "Score": 100}],
+                    },
+                ],
+            ),
+            AzureWordAssessment(
+                word="buddy", accuracy_score=88, error_type="None"
+            ),
+            AzureWordAssessment(
+                word="english",
+                accuracy_score=60,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "ɪ", "AccuracyScore": 100},
+                    {
+                        "Phoneme": "ʃ",
+                        "AccuracyScore": 24,
+                        "NBestPhonemes": [
+                            {"Phoneme": "d", "Score": 97},
+                            {"Phoneme": "t", "Score": 92},
+                        ],
+                    },
+                ],
+            ),
+        ],
+    )
+    context = {
+        "prompt_en": "What are you studying?",
+        "focus": "Use present continuous tense in your answer.",
+        "target_answers": [],
+        "examples": [{"en": "I'm studying Thai."}],
+    }
+    pronunciation = evaluator._unscripted_pronunciation_candidates(
+        azure,
+        focus=context["focus"],
+        evaluation_context=context,
+    )
+    focus_issues = evaluator._focus_validation_issues(
+        azure, focus=context["focus"]
+    )
+    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+
+    evaluation = evaluator._compose_language_evaluation(
+        azure,
+        language,
+        pronunciation_candidates=pronunciation,
+        focus_issues=focus_issues,
+    )
+
+    descriptions = [issue.description_en for issue in evaluation.displayed_issues]
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert evaluation.content.target_usage_correct is False
+    assert any("am/is/are" in description for description in descriptions)
+    assert any("smoothly" in description for description in descriptions)
+    assert any(
+        "english" in description.lower() and "ending" in description
+        for description in descriptions
+    )
+    assert all("/" not in description for description in descriptions[1:])
+    diagnostics = evaluator._pronunciation_policy_metadata(
+        pronunciation, focus_issues=focus_issues
+    )
+    assert [match["pattern_id"] for match in diagnostics["matches"]] == [
+        "cluster_epenthesis",
+        "non_native_consonant_mapping",
+    ]
+    assert all(match["evidence_score"] >= 55 for match in diagnostics["matches"])
+
+
+def test_present_continuous_focus_accepts_recognized_be_plus_ing():
+    azure = _azure_result(
+        transcript="I'm studying English.", confidence=0.9, pronunciation=True
+    )
+
+    issues = evaluator._focus_validation_issues(
+        azure, focus="Use present continuous tense in your answer."
+    )
+
+    assert issues == []
 
 
 def test_open_answer_routes_azure_text_to_gemini_and_backend_derives_status(monkeypatch):
@@ -325,7 +568,7 @@ def test_open_answer_routes_azure_text_to_gemini_and_backend_derives_status(monk
     assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
     assert result.evaluation.pronunciation.issues == []
     assert result.provider == "microsoft+google"
-    assert set(result.provider_metadata) == {"azure", "gemini"}
+    assert set(result.provider_metadata) == {"azure", "gemini", "policy"}
     assert set(result.usage) == {"azure", "gemini"}
 
 

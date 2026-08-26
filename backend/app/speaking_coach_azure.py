@@ -210,9 +210,12 @@ def parse_azure_speech_response(
 
 
 def assess_with_azure_speech(
-    wav_bytes: bytes, *, reference_text: str | None = None
+    wav_bytes: bytes,
+    *,
+    reference_text: str | None = None,
+    enable_unscripted_assessment: bool = False,
 ) -> AzureSpeechResult:
-    """Recognize speech and optionally run scripted pronunciation assessment."""
+    """Recognize speech and optionally assess scripted or unscripted pronunciation."""
 
     api_key = (Config.AZURE_API_KEY or "").strip()
     region = (Config.AZURE_SPEECH_REGION or "").strip().lower()
@@ -231,16 +234,17 @@ def assess_with_azure_speech(
         "Content-Type": AZURE_WAV_CONTENT_TYPE,
         "Accept": "application/json",
     }
-    if reference_text:
+    if reference_text or enable_unscripted_assessment:
         assessment = {
-            "ReferenceText": reference_text,
             "GradingSystem": "HundredMark",
             "Granularity": "Phoneme",
             "Dimension": "Comprehensive",
-            "EnableMiscue": "True",
             "PhonemeAlphabet": "IPA",
             "NBestPhonemeCount": 5,
         }
+        if reference_text:
+            assessment["ReferenceText"] = reference_text
+            assessment["EnableMiscue"] = "True"
         serialized = json.dumps(
             assessment, ensure_ascii=False, separators=(",", ":")
         ).encode("utf-8")

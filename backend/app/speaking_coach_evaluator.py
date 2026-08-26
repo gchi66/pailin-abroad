@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import re
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Literal
 
@@ -20,13 +20,19 @@ from app.speaking_coach_azure import (
     AzureSpeechResult,
     assess_with_azure_speech,
 )
+from app.speaking_coach_thai_patterns import (
+    pattern_by_id,
+    substitution_pattern,
+    thai_pronunciation_catalog,
+)
 
 
-PROMPT_VERSION = "speaking-coach-hybrid-v1"
+PROMPT_VERSION = "speaking-coach-hybrid-v4"
 EVALUATOR_SCHEMA_VERSION = "speaking-evaluation-v1"
 GEMINI_INTERACTIONS_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
 MIN_RECOGNITION_CONFIDENCE = 0.35
 MAX_DISPLAYED_ISSUES = 2
+MAX_OPEN_DISPLAYED_ISSUES = 3
 FOCUS_WORD_ACCURACY_THRESHOLD = 70
 FOCUS_PHONEME_ACCURACY_THRESHOLD = 45
 FOCUS_SYLLABLE_ACCURACY_THRESHOLD = 50
@@ -35,8 +41,31 @@ SEVERE_WORD_ACCURACY_THRESHOLD = 45
 SEVERE_PHONEME_ACCURACY_THRESHOLD = 15
 LOW_COMPLETENESS_THRESHOLD = 70
 SEVERE_CANDIDATE_PRIORITY = 70
-
-
+UNSCRIPTED_TRANSFER_PHONEME_THRESHOLD = 45
+UNSCRIPTED_SEVERE_PHONEME_THRESHOLD = 30
+UNSCRIPTED_SEVERE_WORD_SUPPORT_THRESHOLD = 65
+UNSCRIPTED_MIN_EVIDENCE_SCORE = 55
+FOCUS_TEXT_VALIDATION_CONFIDENCE = 0.55
+IPA_VOWELS = {
+    "a",
+    "æ",
+    "ɑ",
+    "ɒ",
+    "ʌ",
+    "ə",
+    "ɛ",
+    "ɜ",
+    "ɪ",
+    "i",
+    "ɔ",
+    "ʊ",
+    "u",
+    "eɪ",
+    "aɪ",
+    "ɔɪ",
+    "aʊ",
+    "oʊ",
+}
 class EvaluationStatus(str, Enum):
     PASS = "pass"
     RETRY = "retry"
@@ -291,14 +320,16 @@ def _normalize_attempt_status(
     return SpeakingEvaluation.model_validate(evaluation.model_dump())
 
 
-def _unclear_audio_evaluation(transcript: str | None = None) -> SpeakingEvaluation:
+def _unclear_audio_evaluation(_transcript: str | None = None) -> SpeakingEvaluation:
     return SpeakingEvaluation(
         status=EvaluationStatus.UNCLEAR_AUDIO,
-        transcript=transcript,
+        transcript=None,
         content=ContentEvaluation(),
         pronunciation=PronunciationEvaluation(intelligible=None),
-        feedback_en="I couldn't hear that clearly. Please record it once more.",
-        feedback_th="ยังฟังไม่ชัดเจน กรุณาลองอัดเสียงอีกครั้ง",
+        feedback_en=(
+            "I couldn't confidently understand that. Please record it once more."
+        ),
+        feedback_th="ยังไม่สามารถเข้าใจได้อย่างมั่นใจ กรุณาลองอัดเสียงอีกครั้ง",
     )
 
 
@@ -318,6 +349,10 @@ class _PronunciationCandidate:
     severity: int
     status: AssessmentTokenStatus
     issue: EvaluationIssue
+    pattern_id: str | None = None
+    evidence_score: int = 0
+    priority_score: int = 0
+    evidence: dict[str, Any] = field(default_factory=dict)
 
 
 def _normalized_match_text(value: str) -> str:
@@ -391,6 +426,340 @@ def _expected_phoneme_is_not_leading(
     return False
 
 
+def _leading_spoken_phoneme(item: dict[str, Any]) -> str | None:
+    candidates = item.get("NBestPhonemes")
+    nested = item.get("PronunciationAssessment")
+    if not isinstance(candidates, list) and isinstance(nested, dict):
+        candidates = nested.get("NBestPhonemes")
+    if not isinstance(candidates, list) or not candidates:
+        return None
+    leading = candidates[0]
+    if not isinstance(leading, dict):
+        return None
+    phoneme = leading.get("Phoneme")
+    return phoneme.strip() if isinstance(phoneme, str) and phoneme.strip() else None
+
+
+def _phoneme_evidence_score(
+    *,
+    expected_accuracy: float,
+    word_accuracy: float | None,
+    candidate_mismatch: bool,
+    error_type: str,
+) -> int:
+    score = (100 - expected_accuracy) * 0.55
+    if candidate_mismatch:
+        score += 20
+    if word_accuracy is not None:
+        score += min(15, max(0, 100 - word_accuracy) * 0.3)
+    if error_type.lower() == "mispronunciation":
+        score += 10
+    return round(min(100, max(0, score)))
+
+
+def _priority_score(
+    evidence_score: int, *, focus_match: bool, pattern_weight: int
+) -> int:
+    return min(100, evidence_score + pattern_weight + (10 if focus_match else 0))
+
+
+def _display_phoneme(phoneme: str) -> str:
+    return "r" if phoneme == "ɹ" else phoneme
+
+
+def _focus_mentions_phoneme(focus: str, *phonemes: str) -> bool:
+    normalized = _normalized_match_text(focus)
+    labels = {_display_phoneme(phoneme).lower() for phoneme in phonemes}
+    return any(
+        marker in normalized
+        for label in labels
+        for marker in (f"/{label}/", f"'{label}'", f'"{label}"')
+    )
+
+
+def _english_context_text(evaluation_context: dict[str, Any]) -> str:
+    parts = [
+        str(evaluation_context.get("prompt_en") or ""),
+        str(evaluation_context.get("focus") or ""),
+    ]
+    parts.extend(
+        str(answer)
+        for answer in evaluation_context.get("target_answers") or []
+        if isinstance(answer, str)
+    )
+    for example in evaluation_context.get("examples") or []:
+        if isinstance(example, dict) and isinstance(example.get("en"), str):
+            parts.append(example["en"])
+    return " ".join(parts)
+
+
+def _st_cluster_target(evaluation_context: dict[str, Any]) -> str | None:
+    words = re.findall(r"\b[a-z]+\b", _english_context_text(evaluation_context).lower())
+    return next((word for word in words if word.startswith("st")), None)
+
+
+def _cluster_epenthesis_candidate(
+    azure: AzureSpeechResult,
+    *,
+    focus: str,
+    evaluation_context: dict[str, Any],
+) -> _PronunciationCandidate | None:
+    assessment = azure.pronunciation
+    target_word = _st_cluster_target(evaluation_context)
+    if not assessment or not target_word:
+        return None
+    stream: list[tuple[int, str]] = []
+    for word_index, word in enumerate(assessment.words):
+        for phoneme in word.phonemes:
+            spoken = _leading_spoken_phoneme(phoneme)
+            expected = phoneme.get("Phoneme")
+            sound = spoken or (expected if isinstance(expected, str) else None)
+            if sound:
+                stream.append((word_index, sound.strip().lower()))
+    for index in range(len(stream) - 2):
+        first, inserted, final = stream[index : index + 3]
+        if first[1] != "s" or inserted[1] not in IPA_VOWELS or final[1] != "t":
+            continue
+        pattern = pattern_by_id("cluster_epenthesis")
+        if not pattern:
+            return None
+        focus_match = _focus_matches_word(
+            target_word, focus
+        ) or "consonant cluster" in _normalized_match_text(focus)
+        evidence_score = 90
+        priority_score = _priority_score(
+            evidence_score,
+            focus_match=focus_match,
+            pattern_weight=pattern.priority_weight,
+        )
+        return _PronunciationCandidate(
+            word_index=first[0],
+            focus_match=focus_match,
+            severity=priority_score,
+            status=AssessmentTokenStatus.NEEDS_WORK,
+            pattern_id=pattern.id,
+            evidence_score=evidence_score,
+            priority_score=priority_score,
+            evidence={
+                "target_word": target_word,
+                "expected_cluster": ["s", "t"],
+                "spoken_sequence": [first[1], inserted[1], final[1]],
+                "context_aligned": True,
+            },
+            issue=EvaluationIssue(
+                category=(
+                    IssueCategory.FOCUS
+                    if focus_match
+                    else IssueCategory.PRONUNCIATION
+                ),
+                description_en=(
+                    f"Say '{target_word}' again smoothly without adding "
+                    "an extra sound."
+                ),
+                description_th=(
+                    f"ลองพูดคำว่า '{target_word}' อีกครั้งให้ต่อเนื่อง "
+                    "โดยไม่เพิ่มเสียงแทรก"
+                ),
+            ),
+        )
+    return None
+
+
+def _unscripted_pronunciation_candidates(
+    azure: AzureSpeechResult,
+    *,
+    focus: str,
+    evaluation_context: dict[str, Any],
+) -> list[_PronunciationCandidate]:
+    assessment = azure.pronunciation
+    if not assessment:
+        return []
+    candidates: list[_PronunciationCandidate] = []
+    for word_index, word in enumerate(assessment.words):
+        for phoneme in word.phonemes:
+            expected = phoneme.get("Phoneme")
+            score = _nested_accuracy_score(phoneme)
+            if (
+                not isinstance(expected, str)
+                or not expected.strip()
+                or score is None
+            ):
+                continue
+            expected = expected.strip().lower()
+            spoken = _leading_spoken_phoneme(phoneme)
+            if not spoken:
+                continue
+            spoken = spoken.lower()
+            matched_pattern = substitution_pattern(expected, spoken)
+            is_known_transfer = (
+                score <= UNSCRIPTED_TRANSFER_PHONEME_THRESHOLD
+                and matched_pattern is not None
+            )
+            is_severe_mismatch = (
+                score <= UNSCRIPTED_SEVERE_PHONEME_THRESHOLD
+                and spoken != expected
+                and (
+                    word.error_type.lower() == "mispronunciation"
+                    or (
+                        word.accuracy_score is not None
+                        and word.accuracy_score
+                        <= UNSCRIPTED_SEVERE_WORD_SUPPORT_THRESHOLD
+                    )
+                )
+            )
+            if not is_known_transfer and not is_severe_mismatch:
+                continue
+            evidence_score = _phoneme_evidence_score(
+                expected_accuracy=score,
+                word_accuracy=word.accuracy_score,
+                candidate_mismatch=spoken != expected,
+                error_type=word.error_type,
+            )
+            if evidence_score < UNSCRIPTED_MIN_EVIDENCE_SCORE:
+                continue
+            focus_match = _focus_matches_word(
+                word.word, focus
+            ) or _focus_mentions_phoneme(focus, expected, spoken)
+            final_phoneme = bool(
+                word.phonemes and word.phonemes[-1] is phoneme
+            )
+            catalog_pattern = matched_pattern
+            if not catalog_pattern and final_phoneme:
+                final_pattern = pattern_by_id("final_consonant_weakening")
+                if final_pattern and expected in final_pattern.expected_phonemes:
+                    catalog_pattern = final_pattern
+            if not catalog_pattern:
+                inventory_pattern = pattern_by_id("non_native_consonant_mapping")
+                if (
+                    inventory_pattern
+                    and expected in inventory_pattern.expected_phonemes
+                ):
+                    catalog_pattern = inventory_pattern
+            pattern_weight = catalog_pattern.priority_weight if catalog_pattern else 0
+            priority_score = _priority_score(
+                evidence_score,
+                focus_match=focus_match,
+                pattern_weight=pattern_weight,
+            )
+            if final_phoneme:
+                description_en = f"Say '{word.word}' again, focusing on the ending."
+                description_th = f"ลองพูดคำว่า '{word.word}' อีกครั้ง โดยเน้นเสียงท้ายคำ"
+            else:
+                description_en = f"Say '{word.word}' again clearly."
+                description_th = f"ลองพูดคำว่า '{word.word}' อีกครั้งให้ชัดเจน"
+            candidates.append(
+                _PronunciationCandidate(
+                    word_index=word_index,
+                    focus_match=focus_match,
+                    severity=priority_score,
+                    status=AssessmentTokenStatus.NEEDS_WORK,
+                    pattern_id=(catalog_pattern.id if catalog_pattern else None),
+                    evidence_score=evidence_score,
+                    priority_score=priority_score,
+                    evidence={
+                        "word": word.word,
+                        "expected_phoneme": expected,
+                        "leading_spoken_phoneme": spoken,
+                        "expected_accuracy": score,
+                        "word_accuracy": word.accuracy_score,
+                        "error_type": word.error_type,
+                    },
+                    issue=EvaluationIssue(
+                        category=(
+                            IssueCategory.FOCUS
+                            if focus_match
+                            else IssueCategory.PRONUNCIATION
+                        ),
+                        description_en=description_en,
+                        description_th=description_th,
+                    ),
+                )
+            )
+    cluster_candidate = _cluster_epenthesis_candidate(
+        azure,
+        focus=focus,
+        evaluation_context=evaluation_context,
+    )
+    if cluster_candidate:
+        candidates.append(cluster_candidate)
+    return _select_display_candidates(candidates)[:2]
+
+
+def _pronunciation_policy_metadata(
+    candidates: list[_PronunciationCandidate],
+    *,
+    focus_issues: list[EvaluationIssue],
+) -> dict[str, Any]:
+    catalog = thai_pronunciation_catalog()
+    return {
+        "catalog_version": catalog.catalog_version,
+        "learner_feedback_policy": catalog.learner_feedback_policy,
+        "matches": [
+            {
+                "pattern_id": candidate.pattern_id,
+                "evidence_score": candidate.evidence_score,
+                "priority_score": candidate.priority_score,
+                "focus_match": candidate.focus_match,
+                "evidence": candidate.evidence,
+            }
+            for candidate in candidates
+        ],
+        "focus_validation_issue_count": len(focus_issues),
+    }
+
+
+def _uses_present_continuous(transcript: str) -> bool:
+    normalized = _normalized_match_text(transcript)
+    be = r"(?:am|is|are|i'm|you're|we're|they're|he's|she's|it's)"
+    return bool(re.search(rf"\b{be}\s+[a-z]+ing\b", normalized))
+
+
+def _focus_validation_issues(
+    azure: AzureSpeechResult, *, focus: str
+) -> list[EvaluationIssue]:
+    normalized_focus = _normalized_match_text(focus)
+    if "present continuous" not in normalized_focus:
+        return []
+    if (
+        azure.confidence is None
+        or azure.confidence < FOCUS_TEXT_VALIDATION_CONFIDENCE
+        or not azure.transcript
+        or _uses_present_continuous(azure.transcript)
+    ):
+        return []
+    return [
+        EvaluationIssue(
+            category=IssueCategory.FOCUS,
+            description_en=(
+                "Use am/is/are plus a verb ending in -ing "
+                "(for example, 'I'm studying ...')."
+            ),
+            description_th=(
+                "ใช้ am/is/are ตามด้วยคำกริยาที่ลงท้ายด้วย -ing "
+                "เช่น 'I'm studying ...'"
+            ),
+        )
+    ]
+
+
+def _unscripted_pronunciation_retry(
+    azure: AzureSpeechResult, candidates: list[_PronunciationCandidate]
+) -> SpeakingEvaluation:
+    issues = [candidate.issue for candidate in candidates[:1]]
+    issue = issues[0]
+    return SpeakingEvaluation(
+        status=EvaluationStatus.RETRY,
+        transcript=None,
+        content=ContentEvaluation(),
+        pronunciation=PronunciationEvaluation(intelligible=None, issues=issues),
+        detected_issues=issues,
+        displayed_issues=issues,
+        feedback_en=issue.description_en,
+        feedback_th=issue.description_th,
+        retry_focus=[issue.description_en],
+    )
+
+
 def _focus_phoneme_candidate(
     items: list[dict[str, Any]],
 ) -> tuple[str, float] | None:
@@ -420,28 +789,16 @@ def _word_issue(
     final_phoneme: bool,
 ) -> EvaluationIssue:
     category = IssueCategory.FOCUS if focus_match else IssueCategory.PRONUNCIATION
-    if phoneme and focus_match:
-        return EvaluationIssue(
-            category=category,
-            description_en=f"Make the /{phoneme}/ sound in '{word}' clear.",
-            description_th=f"ออกเสียง /{phoneme}/ ในคำว่า '{word}' ให้ชัดเจน",
-        )
     if phoneme and final_phoneme:
         return EvaluationIssue(
             category=category,
-            description_en=f"Finish '{word}' with a clear /{phoneme}/ sound.",
-            description_th=f"ออกเสียงท้ายคำว่า '{word}' ด้วยเสียง /{phoneme}/ ให้ชัดเจน",
-        )
-    if phoneme:
-        return EvaluationIssue(
-            category=category,
-            description_en=f"Practice the /{phoneme}/ sound in '{word}'.",
-            description_th=f"ฝึกเสียง /{phoneme}/ ในคำว่า '{word}'",
+            description_en=f"Say '{word}' again, focusing on the ending.",
+            description_th=f"ลองพูดคำว่า '{word}' อีกครั้ง โดยเน้นเสียงท้ายคำ",
         )
     return EvaluationIssue(
         category=category,
-        description_en=f"Say '{word}' again slowly and clearly.",
-        description_th=f"ลองพูดคำว่า '{word}' อีกครั้งอย่างช้า ๆ และชัดเจน",
+        description_en=f"Say '{word}' again clearly.",
+        description_th=f"ลองพูดคำว่า '{word}' อีกครั้งให้ชัดเจน",
     )
 
 
@@ -843,28 +1200,82 @@ def evaluate_language_with_gemini(
 
 
 def _compose_language_evaluation(
-    azure: AzureSpeechResult, language: LanguageEvaluation
+    azure: AzureSpeechResult,
+    language: LanguageEvaluation,
+    pronunciation_candidates: list[_PronunciationCandidate] | None = None,
+    focus_issues: list[EvaluationIssue] | None = None,
 ) -> SpeakingEvaluation:
-    displayed = (language.displayed_issues or language.detected_issues)[
-        :MAX_DISPLAYED_ISSUES
+    pronunciation_issues = [
+        candidate.issue for candidate in (pronunciation_candidates or [])[:2]
     ]
+    deterministic_focus_issues = (focus_issues or [])[:1]
+    language_displayed = language.displayed_issues or language.detected_issues
+    displayed = (
+        deterministic_focus_issues + language_displayed + pronunciation_issues
+    )[:MAX_OPEN_DISPLAYED_ISSUES]
+    detected = (
+        deterministic_focus_issues
+        + language.detected_issues
+        + pronunciation_issues
+    )[:12]
+    has_material_issue = (
+        language.material_error
+        or bool(deterministic_focus_issues)
+        or bool(pronunciation_issues)
+    )
     retry_focus = language.retry_focus[:2]
-    if language.material_error and not retry_focus:
+    for issue in deterministic_focus_issues + pronunciation_issues:
+        if len(retry_focus) >= 3:
+            break
+        if issue.description_en not in retry_focus:
+            retry_focus.append(issue.description_en)
+    if has_material_issue and not retry_focus:
         retry_focus = [issue.description_en for issue in displayed]
+    if deterministic_focus_issues and pronunciation_issues:
+        feedback_en = "Fix the target structure and these pronunciation points."
+        feedback_th = "แก้โครงสร้างเป้าหมายและจุดออกเสียงเหล่านี้"
+    elif deterministic_focus_issues and not language.material_error:
+        feedback_en = deterministic_focus_issues[0].description_en
+        feedback_th = deterministic_focus_issues[0].description_th
+    elif pronunciation_issues and not language.material_error:
+        feedback_en = pronunciation_issues[0].description_en
+        feedback_th = pronunciation_issues[0].description_th
+    elif pronunciation_issues and language.material_error:
+        feedback_en = "Focus on these two parts, then try once more."
+        feedback_th = "เน้นสองจุดนี้ แล้วลองพูดอีกครั้ง"
+    else:
+        feedback_en = language.feedback_en
+        feedback_th = language.feedback_th
     return SpeakingEvaluation(
         status=(
             EvaluationStatus.RETRY
-            if language.material_error
+            if has_material_issue
             else EvaluationStatus.PASS
         ),
         transcript=azure.transcript,
-        content=language.content,
-        pronunciation=PronunciationEvaluation(intelligible=True),
-        detected_issues=language.detected_issues,
+        content=ContentEvaluation(
+            meaning_correct=language.content.meaning_correct,
+            relevant=language.content.relevant,
+            target_usage_correct=(
+                False
+                if deterministic_focus_issues
+                else language.content.target_usage_correct
+            ),
+            grammar_correct=(
+                False
+                if deterministic_focus_issues
+                else language.content.grammar_correct
+            ),
+        ),
+        pronunciation=PronunciationEvaluation(
+            intelligible=True,
+            issues=pronunciation_issues,
+        ),
+        detected_issues=detected,
         displayed_issues=displayed,
         corrected_answer=language.corrected_answer,
-        feedback_en=language.feedback_en,
-        feedback_th=language.feedback_th,
+        feedback_en=feedback_en,
+        feedback_th=feedback_th,
         retry_focus=retry_focus,
     )
 
@@ -916,6 +1327,7 @@ def evaluate_speaking_attempt(
         azure = assess_with_azure_speech(
             normalized_wav,
             reference_text=reference_text,
+            enable_unscripted_assessment=practice_type == "open",
         )
     except AzureSpeechError as exc:
         raise EvaluatorError(exc.code, exc.detail) from exc
@@ -946,15 +1358,44 @@ def evaluate_speaking_attempt(
             evaluation_context=context,
         )
 
+    pronunciation_candidates = (
+        _unscripted_pronunciation_candidates(
+            azure,
+            focus=focus,
+            evaluation_context=context,
+        )
+        if practice_type == "open"
+        else []
+    )
+    focus_issues = (
+        _focus_validation_issues(azure, focus=focus)
+        if practice_type == "open"
+        else []
+    )
+    policy_metadata = (
+        _pronunciation_policy_metadata(
+            pronunciation_candidates,
+            focus_issues=focus_issues,
+        )
+        if practice_type == "open"
+        else None
+    )
     if _azure_is_unclear(azure):
-        evaluation = _unclear_audio_evaluation(azure.transcript)
+        evaluation = (
+            _unscripted_pronunciation_retry(azure, pronunciation_candidates)
+            if pronunciation_candidates
+            else _unclear_audio_evaluation(azure.transcript)
+        )
         return EvaluatorResult(
             evaluation=evaluation,
             provider="microsoft",
             model=AZURE_SPEECH_MODEL,
             latency_ms=azure.latency_ms,
             usage={"azure": azure_usage},
-            provider_metadata={"azure": azure_metadata},
+            provider_metadata={
+                "azure": azure_metadata,
+                **({"policy": policy_metadata} if policy_metadata else {}),
+            },
             provider_output_text=json.dumps(
                 azure.raw_payload, ensure_ascii=False, separators=(",", ":")
             ),
@@ -966,7 +1407,12 @@ def evaluate_speaking_attempt(
         evaluation_context=context,
         instructional_attempt_number=instructional_attempt_number,
     )
-    evaluation = _compose_language_evaluation(azure, gemini.evaluation)
+    evaluation = _compose_language_evaluation(
+        azure,
+        gemini.evaluation,
+        pronunciation_candidates=pronunciation_candidates,
+        focus_issues=focus_issues,
+    )
     return EvaluatorResult(
         evaluation=evaluation,
         provider="microsoft+google",
@@ -976,6 +1422,7 @@ def evaluate_speaking_attempt(
         provider_metadata={
             "azure": azure_metadata,
             "gemini": gemini.provider_metadata,
+            **({"policy": policy_metadata} if policy_metadata else {}),
         },
         provider_output_text=gemini.provider_output_text,
         evaluation_context=context,
