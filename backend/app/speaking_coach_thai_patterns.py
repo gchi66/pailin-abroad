@@ -35,7 +35,7 @@ class ThaiPronunciationCatalog(BaseModel):
     catalog_version: str = Field(min_length=1, max_length=100)
     purpose: str = Field(min_length=1, max_length=500)
     learner_feedback_policy: Literal["word_level_only"]
-    patterns: list[ThaiPronunciationPattern] = Field(min_length=1, max_length=30)
+    patterns: list[ThaiPronunciationPattern] = Field(min_length=1, max_length=40)
 
     @model_validator(mode="after")
     def unique_pattern_ids(self) -> "ThaiPronunciationCatalog":

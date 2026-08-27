@@ -4,18 +4,42 @@ This document records background context for interpreting Azure Speech evidence 
 
 The catalog is a prior, not proof. A pattern being common among Thai speakers must never create a learner issue without supporting evidence from that learner's recording. It may identify which Azure signals to inspect and rank already-supported findings. Learner-facing feedback remains word-level; phoneme candidates and internal scores are diagnostic only.
 
-## Reference patterns
+## Merged reference catalog (v2)
 
-1. **Dropped or unreleased final consonants.** Thai syllable endings are generally unreleased, and final consonant clusters differ from English. English final consonants—especially `/p t k b d g/`—may therefore be dropped or barely audible.
-2. **Consonant-cluster breakup (epenthesis).** Learners may insert a short vowel into unfamiliar English clusters. For `/sk-/` and `/st-/`, the documented direction is after `/s/`, such as `scan` becoming approximately `sa-kan` and `study` becoming approximately `s-uh-tudy`.
-3. **R/L confusion and possible final N realization.** Initial `/r/` and `/l/` may be conflated, while syllable-final R or L may be realized closer to N.
-4. **TH substitutions.** `/θ/` and `/ð/` may be replaced with `/t d s f/`, depending on the word and speaker.
-5. **CH substitutions.** `/tʃ/` may be realized closer to `/ʃ/` or `/s/`, especially in difficult positions.
-6. **V/W substitution.** `/v/` may be realized closer to `/w/`.
-7. **Mapping of non-native consonants.** `/g z ʃ ʒ/` may be systematically mapped to more familiar sounds.
-8. **Vowel length and quality.** English vowel duration or quality contrasts may be flattened, shortened, or lengthened.
-9. **Final-syllable word stress.** Multisyllabic English words may receive too much stress on the final syllable.
-10. **Flat sentence stress or over-stressed function words.** Function and content words may receive overly equal weight, with reduced control of English sentence-level rhythm and intonation.
+The expanded engineering reference supplied on 2026-08-27 was compared with the original ten-pattern catalog. Overlapping rows were consolidated into their existing stable pattern IDs; distinct, independently useful checks received new IDs. This avoids counting closely related descriptions as separate evidence.
+
+| Catalog pattern | What it covers from the expanded reference |
+|---|---|
+| `final_consonant_weakening` | Dropped final consonants and consonants that are present but unreleased or under-articulated |
+| `grammatical_final_s_deletion` | Dropped lexical or grammatical final `-s/-es` |
+| `past_tense_ed_deletion` | Dropped past-tense `-ed`, including cluster-forming endings |
+| `final_cluster_simplification` | Loss of one or more consonants in endings such as *world*, *next*, *asked*, and *helped* |
+| `r_l_confusion` | Final L to N, final/post-vocalic R to N or deletion, and initial R/L confusion |
+| `r_cluster_reduction` | R deletion, replacement, or separation in clusters such as *brown*, *green*, *train*, and *drive* |
+| `cluster_epenthesis` | General cluster breakup, vowel insertion after S in `st/sk/sp`, and excess syllables in difficult cluster words |
+| `velar_nasal_cluster_simplification` | Retaining `/ŋ/` while dropping or weakening following consonants in *think*, *thanks*, *linked*, or *strength* |
+| `th_substitution` | Both voiceless `/θ/` and voiced `/ð/` substitutions |
+| `v_w_substitution` | `/v/` realized as `/w/` |
+| `ch_substitution` | `/tʃ/` realized as `/ʃ/` or `/s/` |
+| `non_native_consonant_mapping` | `/z/ → /s/`, `/ʒ/` substitutions, and other supported mappings of G, Z, SH, and ZH |
+| `final_sh_to_stop` | Final `/ʃ/` realized as a T-like stop, such as *fish* approaching *fit* |
+| `vowel_length_quality` | General vowel length and quality mismatch |
+| `diphthong_flattening` | General English diphthong flattening, including the specific `/aɪ/` pattern |
+| `high_front_vowel_confusion` | Insufficient distinction between `/ɪ/` and `/iː/`, such as *ship/sheep* |
+| `unstressed_vowel_reduction` | Insufficient schwa reduction and excessive prominence or duration in unstressed syllables |
+| `spelling_overpronunciation` | Pronouncing normally absent/reduced letters or introducing extra syllables based on spelling |
+| `word_final_stress` | Incorrect lexical stress, including systematic final-syllable over-stressing |
+| `flat_sentence_stress` | Function-word over-stress, equal stress on every word, and flat or Thai-influenced English intonation |
+| `connected_speech_linking` | Words kept overly separate instead of linked in connected speech |
+| `word_boundary_consonant_deletion` | Final consonants lost before a consonant at the next word boundary |
+| `word_boundary_cluster_difficulty` | Vowel insertion, pausing, or consonant deletion in cross-word clusters |
+| `contrast_collapse` | Multiple supported errors combining until words such as *fire/file/fine/find* lose necessary contrasts |
+
+The catalog deliberately consolidates the supplied subcases. For example, `/aɪ/` flattening belongs to `diphthong_flattening`; final-syllable over-stress belongs to `word_final_stress`; and the several sentence-rhythm rows belong to `flat_sentence_stress`.
+
+## Azure prosody evidence
+
+Pronunciation-assessment requests enable `EnableProsodyAssessment` for US English. Azure can therefore return `ProsodyScore` and evidence related to stress, intonation, speaking speed, rhythm, and break errors. The score is parsed and retained as provider evidence, but catalog prevalence or a low aggregate score alone does not create learner-facing criticism. Stress and connected-speech patterns remain diagnostic-only until exercise-specific benchmark thresholds are validated.
 
 ## Runtime validation and scoring
 

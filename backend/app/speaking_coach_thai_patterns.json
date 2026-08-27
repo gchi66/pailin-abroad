@@ -1,5 +1,5 @@
 {
-  "catalog_version": "thai-english-pronunciation-v1",
+  "catalog_version": "thai-english-pronunciation-v2",
   "purpose": "Background context for interpreting Azure evidence. Pattern prevalence is never evidence that an individual learner made an error.",
   "learner_feedback_policy": "word_level_only",
   "patterns": [
@@ -8,7 +8,7 @@
       "name": "Dropped or unreleased final consonants",
       "category": "final_consonant",
       "contexts": ["word_final", "word_final_cluster"],
-      "expected_phonemes": ["p", "t", "k", "b", "d", "g"],
+      "expected_phonemes": ["p", "t", "k", "b", "d", "g", "s", "z", "l", "r", "ɹ", "ŋ"],
       "likely_substitutions": {},
       "grapheme_clusters": [],
       "azure_signals": ["low final phoneme accuracy", "expected final phoneme not leading", "low word or syllable corroboration"],
@@ -22,7 +22,7 @@
       "contexts": ["word_initial_cluster"],
       "expected_phonemes": [],
       "likely_substitutions": {},
-      "grapheme_clusters": ["st", "sk", "dr", "sm", "cl", "cr"],
+      "grapheme_clusters": ["st", "sk", "sp", "dr", "sm", "cl", "cr", "gr", "tr", "br", "pr", "scr", "str", "spr"],
       "azure_signals": ["spoken consonant-vowel-consonant sequence", "exercise context contains the expected cluster word", "phoneme timing supports a single word"],
       "runtime_support": "partial",
       "priority_weight": 10
@@ -101,7 +101,7 @@
     },
     {
       "id": "word_final_stress",
-      "name": "Default final-syllable word stress",
+      "name": "Incorrect lexical stress, especially final-syllable over-stress",
       "category": "stress",
       "contexts": ["multisyllabic_word"],
       "expected_phonemes": [],
@@ -113,7 +113,7 @@
     },
     {
       "id": "flat_sentence_stress",
-      "name": "Flat sentence stress or over-stressed function words",
+      "name": "Flat sentence stress, intonation, or over-stressed function words",
       "category": "prosody",
       "contexts": ["connected_speech"],
       "expected_phonemes": [],
@@ -122,6 +122,174 @@
       "azure_signals": ["prosody score", "word-level stress and break evidence", "utterance long enough for a reliable judgment"],
       "runtime_support": "diagnostic_only",
       "priority_weight": 2
+    },
+    {
+      "id": "grammatical_final_s_deletion",
+      "name": "Dropped final -s or -es",
+      "category": "final_consonant",
+      "contexts": ["word_final", "grammatical_ending", "lexical_s_ending"],
+      "expected_phonemes": ["s", "z", "ɪz", "əz"],
+      "likely_substitutions": {},
+      "grapheme_clusters": ["s", "es"],
+      "azure_signals": ["expected ending absent or severely weak", "word-final phoneme evidence", "grammar or lexical context identifies required ending"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 8
+    },
+    {
+      "id": "past_tense_ed_deletion",
+      "name": "Dropped past-tense -ed",
+      "category": "final_consonant",
+      "contexts": ["word_final", "grammatical_ending", "word_final_cluster"],
+      "expected_phonemes": ["t", "d", "ɪd", "əd"],
+      "likely_substitutions": {},
+      "grapheme_clusters": ["ed"],
+      "azure_signals": ["expected past-tense ending absent or severely weak", "final cluster simplification", "grammar context identifies past tense"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 8
+    },
+    {
+      "id": "final_cluster_simplification",
+      "name": "Simplified final consonant clusters",
+      "category": "final_consonant",
+      "contexts": ["word_final_cluster"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": ["ld", "rld", "kst", "skt", "lpt", "nt", "nd"],
+      "azure_signals": ["one or more expected final consonants absent", "very low final-cluster phoneme scores", "word-level corroboration"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 9
+    },
+    {
+      "id": "r_cluster_reduction",
+      "name": "R deletion, replacement, or separation inside consonant clusters",
+      "category": "cluster",
+      "contexts": ["word_initial_cluster", "word_medial_cluster"],
+      "expected_phonemes": ["r", "ɹ"],
+      "likely_substitutions": {},
+      "grapheme_clusters": ["br", "gr", "pr", "tr", "dr", "cr"],
+      "azure_signals": ["expected R absent or severely weak", "vowel inserted before R", "cluster word aligned with exercise context"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 8
+    },
+    {
+      "id": "velar_nasal_cluster_simplification",
+      "name": "NG plus consonant cluster simplification",
+      "category": "cluster",
+      "contexts": ["word_medial_cluster", "word_final_cluster"],
+      "expected_phonemes": ["ŋ"],
+      "likely_substitutions": {},
+      "grapheme_clusters": ["nk", "nks", "ngth", "nked"],
+      "azure_signals": ["NG is present", "following expected consonant is absent or severely weak", "cluster-level word evidence"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 8
+    },
+    {
+      "id": "diphthong_flattening",
+      "name": "English diphthongs flattened into monophthongs",
+      "category": "vowel",
+      "contexts": ["any"],
+      "expected_phonemes": ["aɪ", "eɪ", "oʊ", "aʊ", "ɔɪ"],
+      "likely_substitutions": {"aɪ": ["a", "ɑ", "ɐ"], "eɪ": ["e", "eː"], "oʊ": ["o", "ɔ"]},
+      "grapheme_clusters": [],
+      "azure_signals": ["low expected diphthong accuracy", "monophthong is leading spoken candidate", "word-level corroboration"],
+      "runtime_support": "partial",
+      "priority_weight": 6
+    },
+    {
+      "id": "high_front_vowel_confusion",
+      "name": "Short I and long EE confusion",
+      "category": "vowel",
+      "contexts": ["any"],
+      "expected_phonemes": ["ɪ", "i", "iː"],
+      "likely_substitutions": {"ɪ": ["i", "iː"], "i": ["ɪ"], "iː": ["ɪ"]},
+      "grapheme_clusters": [],
+      "azure_signals": ["low expected vowel accuracy", "paired high-front vowel is leading spoken candidate", "word-level corroboration"],
+      "runtime_support": "partial",
+      "priority_weight": 7
+    },
+    {
+      "id": "unstressed_vowel_reduction",
+      "name": "Insufficient schwa and unstressed-syllable reduction",
+      "category": "stress",
+      "contexts": ["unstressed_syllable", "multisyllabic_word"],
+      "expected_phonemes": ["ə", "ɪ"],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["unstressed vowel pronounced too fully", "excess unstressed-syllable duration", "unexpected syllable prominence", "prosody evidence"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 5
+    },
+    {
+      "id": "spelling_overpronunciation",
+      "name": "Spelling-based overpronunciation or excess syllables",
+      "category": "cluster",
+      "contexts": ["multisyllabic_word", "word_initial_cluster", "word_medial_cluster"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": ["sch", "scr", "str", "spr"],
+      "azure_signals": ["unexpected phoneme or syllable insertion", "extra syllable duration", "known target word aligned with exercise context"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 6
+    },
+    {
+      "id": "connected_speech_linking",
+      "name": "Insufficient linking in connected speech",
+      "category": "prosody",
+      "contexts": ["connected_speech", "word_boundary"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["unexpected boundary breaks", "word timing shows excessive separation", "prosody evidence"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 3
+    },
+    {
+      "id": "word_boundary_consonant_deletion",
+      "name": "Consonant deletion at word boundaries",
+      "category": "final_consonant",
+      "contexts": ["connected_speech", "word_boundary"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["word-final consonant absent before a consonant", "adjacent words aligned with expected phrase", "boundary timing evidence"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 8
+    },
+    {
+      "id": "word_boundary_cluster_difficulty",
+      "name": "Cluster insertion, pausing, or deletion across word boundaries",
+      "category": "cluster",
+      "contexts": ["connected_speech", "word_boundary"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["unexpected vowel or pause at boundary", "expected boundary consonant absent", "adjacent words aligned with expected phrase"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 7
+    },
+    {
+      "id": "contrast_collapse",
+      "name": "Compound errors that collapse multiple word contrasts",
+      "category": "prosody",
+      "contexts": ["word_family", "intelligibility"],
+      "expected_phonemes": [],
+      "likely_substitutions": {},
+      "grapheme_clusters": [],
+      "azure_signals": ["multiple independently supported segmental errors", "resulting pronunciation overlaps a different word", "strong word and phoneme corroboration"],
+      "runtime_support": "diagnostic_only",
+      "priority_weight": 9
+    },
+    {
+      "id": "final_sh_to_stop",
+      "name": "Final SH replaced by a T-like stop",
+      "category": "substitution",
+      "contexts": ["word_final"],
+      "expected_phonemes": ["ʃ"],
+      "likely_substitutions": {"ʃ": ["t"]},
+      "grapheme_clusters": ["sh"],
+      "azure_signals": ["low final SH accuracy", "T is leading spoken candidate", "word-level corroboration"],
+      "runtime_support": "partial",
+      "priority_weight": 9
     }
   ]
 }

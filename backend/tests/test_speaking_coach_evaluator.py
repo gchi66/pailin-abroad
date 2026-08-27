@@ -341,7 +341,7 @@ def test_low_confidence_open_answer_can_report_supported_r_to_l_transfer(monkeyp
     assert "/" not in result.evaluation.feedback_en
     assert result.evaluation.pronunciation.issues
     policy = result.provider_metadata["policy"]
-    assert policy["catalog_version"] == "thai-english-pronunciation-v1"
+    assert policy["catalog_version"] == "thai-english-pronunciation-v2"
     assert policy["matches"][0]["pattern_id"] == "r_l_confusion"
     assert policy["matches"][0]["evidence_score"] >= 55
     assert gemini_called is False
@@ -350,6 +350,7 @@ def test_low_confidence_open_answer_can_report_supported_r_to_l_transfer(monkeyp
 def test_open_requests_unscripted_assessment_in_the_existing_azure_call(monkeypatch):
     captured = {}
     azure = _azure_result(pronunciation=True)
+    azure.pronunciation.prosody_score = 78
     language = evaluator.LanguageEvaluation.model_validate(_language_output())
 
     monkeypatch.setattr(
@@ -376,7 +377,7 @@ def test_open_requests_unscripted_assessment_in_the_existing_azure_call(monkeypa
         ),
     )
 
-    evaluator.evaluate_speaking_attempt(
+    result = evaluator.evaluate_speaking_attempt(
         audio_bytes=b"m4a bytes",
         audio_mime_type="audio/mp4",
         practice_type="open",
@@ -390,6 +391,22 @@ def test_open_requests_unscripted_assessment_in_the_existing_azure_call(monkeypa
 
     assert captured["reference_text"] is None
     assert captured["enable_unscripted_assessment"] is True
+    assert result.evaluation.transcript is None
+    assert result.provider_metadata["azure"]["response"] == azure.raw_payload
+    assert result.provider_metadata["policy"]["prosody"] == {
+        "enabled": True,
+        "score": 78,
+        "learner_feedback_enabled": False,
+    }
+
+
+def test_non_open_language_evaluation_retains_transcript():
+    azure = _azure_result(transcript="She is going to work.", pronunciation=False)
+    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+
+    evaluation = evaluator._compose_language_evaluation(azure, language)
+
+    assert evaluation.transcript == "She is going to work."
 
 
 def test_high_confidence_open_answer_combines_language_and_acoustic_results():
@@ -427,15 +444,60 @@ def test_high_confidence_open_answer_combines_language_and_acoustic_results():
     )
 
     evaluation = evaluator._compose_language_evaluation(
-        azure, language, pronunciation_candidates=candidates
+        azure,
+        language,
+        pronunciation_candidates=candidates,
+        include_transcript=False,
     )
 
     assert evaluation.status == evaluator.EvaluationStatus.RETRY
-    assert evaluation.transcript == "I'm studying history."
+    assert evaluation.transcript is None
     assert evaluation.content.meaning_correct is True
     assert evaluation.displayed_issues[0].category == "focus"
     assert "history" in evaluation.feedback_en
     assert "/" not in evaluation.feedback_en
+
+
+def test_open_detects_final_sh_replaced_by_t_like_stop():
+    azure = _azure_result(
+        transcript="I caught a fish.",
+        confidence=0.86,
+        words=[
+            AzureWordAssessment(
+                word="fish",
+                accuracy_score=51,
+                error_type="Mispronunciation",
+                phonemes=[
+                    {"Phoneme": "f", "AccuracyScore": 92},
+                    {"Phoneme": "ɪ", "AccuracyScore": 88},
+                    {
+                        "Phoneme": "ʃ",
+                        "AccuracyScore": 24,
+                        "NBestPhonemes": [
+                            {"Phoneme": "t", "Score": 96},
+                            {"Phoneme": "ʃ", "Score": 21},
+                        ],
+                    },
+                ],
+            )
+        ],
+    )
+
+    candidates = evaluator._unscripted_pronunciation_candidates(
+        azure,
+        focus="Answer in a complete sentence.",
+        evaluation_context={
+            "prompt_en": "What did you catch?",
+            "focus": "Answer in a complete sentence.",
+            "target_answers": [],
+            "examples": [],
+        },
+    )
+
+    assert candidates[0].pattern_id == "final_sh_to_stop"
+    assert candidates[0].evidence["expected_phoneme"] == "ʃ"
+    assert candidates[0].evidence["leading_spoken_phoneme"] == "t"
+    assert "ending" in candidates[0].issue.description_en
 
 
 def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
@@ -500,18 +562,31 @@ def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
     focus_issues = evaluator._focus_validation_issues(
         azure, focus=context["focus"]
     )
-    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+    language = evaluator.LanguageEvaluation.model_validate(
+        _language_output(material_error=True)
+    )
 
     evaluation = evaluator._compose_language_evaluation(
         azure,
         language,
         pronunciation_candidates=pronunciation,
         focus_issues=focus_issues,
+        include_transcript=False,
     )
 
     descriptions = [issue.description_en for issue in evaluation.displayed_issues]
     assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert evaluation.transcript is None
     assert evaluation.content.target_usage_correct is False
+    assert len(descriptions) == 3
+    assert sum(
+        "am/is/are" in description or "present continuous" in description.lower()
+        for description in descriptions
+    ) == 1
+    assert sum(
+        "present continuous" in retry.lower() or "am/is/are" in retry
+        for retry in evaluation.retry_focus
+    ) == 1
     assert any("am/is/are" in description for description in descriptions)
     assert any("smoothly" in description for description in descriptions)
     assert any(
@@ -526,6 +601,11 @@ def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
         "cluster_epenthesis",
         "non_native_consonant_mapping",
     ]
+    assert diagnostics["prosody"] == {
+        "enabled": True,
+        "score": None,
+        "learner_feedback_enabled": False,
+    }
     assert all(match["evidence_score"] >= 55 for match in diagnostics["matches"])
 
 

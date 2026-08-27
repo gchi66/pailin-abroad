@@ -21,6 +21,7 @@ def _flat_response():
                 "FluencyScore": 91,
                 "CompletenessScore": 100,
                 "PronScore": 89,
+                "ProsodyScore": 84,
                 "Words": [
                     {
                         "Word": "morning",
@@ -46,6 +47,7 @@ def test_parse_flat_rest_pronunciation_response():
     assert result.transcript == "Good morning."
     assert result.confidence == 0.94
     assert result.pronunciation.accuracy_score == 87
+    assert result.pronunciation.prosody_score == 84
     assert result.pronunciation.words[0].word == "morning"
     assert result.pronunciation.words[0].phonemes[0]["Phoneme"] == "m"
     assert result.pronunciation.words[0].syllables[0]["Syllable"] == "mɔrnɪŋ"
@@ -111,6 +113,7 @@ def test_azure_request_uses_pcm_wav_and_scripted_header(monkeypatch):
         "Granularity": "Phoneme",
         "Dimension": "Comprehensive",
         "EnableMiscue": "True",
+        "EnableProsodyAssessment": "True",
         "PhonemeAlphabet": "IPA",
         "NBestPhonemeCount": 5,
     }
@@ -165,6 +168,7 @@ def test_unscripted_request_uses_pronunciation_header_without_reference(monkeypa
         "GradingSystem": "HundredMark",
         "Granularity": "Phoneme",
         "Dimension": "Comprehensive",
+        "EnableProsodyAssessment": "True",
         "PhonemeAlphabet": "IPA",
         "NBestPhonemeCount": 5,
     }

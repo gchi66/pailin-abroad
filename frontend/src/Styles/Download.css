@@ -83,6 +83,48 @@
   font-size: 0.92rem;
 }
 
+.download-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 2px dashed #d7d7d7;
+}
+
+.download-qr p {
+  margin: 0;
+  color: var(--download-blue);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.download-qr a {
+  display: block;
+  padding: 8px;
+  line-height: 0;
+  border: 2px solid #111;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.download-qr a:focus-visible {
+  outline: 4px solid rgba(7, 89, 216, 0.3);
+  outline-offset: 4px;
+}
+
+.download-qr svg {
+  width: min(180px, 46vw);
+  height: auto;
+}
+
+.download-qr span {
+  color: #555;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 .download-benefits {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

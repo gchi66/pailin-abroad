@@ -1,9 +1,12 @@
 import { useEffect } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import {
   APP_STORE_URL,
   PLAY_STORE_URL,
 } from "../lib/appStores";
 import "../Styles/Download.css";
+
+const DOWNLOAD_URL = "https://www.pailinabroad.com/download";
 
 function AppleLogo() {
   return (
@@ -108,6 +111,20 @@ export default function Download() {
         <p className="download-english-copy">
           Real-world English, made for Thai speakers.
         </p>
+
+        <div className="download-qr">
+          <p>สแกนเพื่อเปิดหน้านี้บนมือถือ</p>
+          <a href={DOWNLOAD_URL} aria-label="เปิดหน้าดาวน์โหลด Pailin Abroad">
+            <QRCodeSVG
+              value={DOWNLOAD_URL}
+              size={180}
+              level="M"
+              marginSize={2}
+              title="QR code สำหรับหน้าดาวน์โหลด Pailin Abroad"
+            />
+          </a>
+          <span>pailinabroad.com/download</span>
+        </div>
       </section>
     </main>
   );

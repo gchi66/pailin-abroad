@@ -590,7 +590,16 @@ def _unscripted_pronunciation_candidates(
             if not spoken:
                 continue
             spoken = spoken.lower()
+            final_phoneme = bool(
+                word.phonemes and word.phonemes[-1] is phoneme
+            )
             matched_pattern = substitution_pattern(expected, spoken)
+            if (
+                matched_pattern
+                and matched_pattern.contexts == ["word_final"]
+                and not final_phoneme
+            ):
+                matched_pattern = None
             is_known_transfer = (
                 score <= UNSCRIPTED_TRANSFER_PHONEME_THRESHOLD
                 and matched_pattern is not None
@@ -620,9 +629,6 @@ def _unscripted_pronunciation_candidates(
             focus_match = _focus_matches_word(
                 word.word, focus
             ) or _focus_mentions_phoneme(focus, expected, spoken)
-            final_phoneme = bool(
-                word.phonemes and word.phonemes[-1] is phoneme
-            )
             catalog_pattern = matched_pattern
             if not catalog_pattern and final_phoneme:
                 final_pattern = pattern_by_id("final_consonant_weakening")
@@ -689,6 +695,7 @@ def _pronunciation_policy_metadata(
     candidates: list[_PronunciationCandidate],
     *,
     focus_issues: list[EvaluationIssue],
+    prosody_score: float | None = None,
 ) -> dict[str, Any]:
     catalog = thai_pronunciation_catalog()
     return {
@@ -705,6 +712,11 @@ def _pronunciation_policy_metadata(
             for candidate in candidates
         ],
         "focus_validation_issue_count": len(focus_issues),
+        "prosody": {
+            "enabled": True,
+            "score": prosody_score,
+            "learner_feedback_enabled": False,
+        },
     }
 
 
@@ -1204,16 +1216,17 @@ def _compose_language_evaluation(
     language: LanguageEvaluation,
     pronunciation_candidates: list[_PronunciationCandidate] | None = None,
     focus_issues: list[EvaluationIssue] | None = None,
+    include_transcript: bool = True,
 ) -> SpeakingEvaluation:
     pronunciation_issues = [
         candidate.issue for candidate in (pronunciation_candidates or [])[:2]
     ]
     deterministic_focus_issues = (focus_issues or [])[:1]
     language_displayed = language.displayed_issues or language.detected_issues
-    displayed = (
+    displayed = _dedupe_language_issues(
         deterministic_focus_issues + language_displayed + pronunciation_issues
     )[:MAX_OPEN_DISPLAYED_ISSUES]
-    detected = (
+    detected = _dedupe_language_issues(
         deterministic_focus_issues
         + language.detected_issues
         + pronunciation_issues
@@ -1223,12 +1236,21 @@ def _compose_language_evaluation(
         or bool(deterministic_focus_issues)
         or bool(pronunciation_issues)
     )
-    retry_focus = language.retry_focus[:2]
-    for issue in deterministic_focus_issues + pronunciation_issues:
+    retry_focus: list[str] = []
+    retry_concepts: set[str] = set()
+    retry_candidates = [
+        issue.description_en for issue in deterministic_focus_issues
+    ] + language.retry_focus[:2] + [
+        issue.description_en for issue in pronunciation_issues
+    ]
+    for retry_candidate in retry_candidates:
+        concept = _language_text_concept(retry_candidate)
+        if concept in retry_concepts:
+            continue
+        retry_concepts.add(concept)
+        retry_focus.append(retry_candidate)
         if len(retry_focus) >= 3:
             break
-        if issue.description_en not in retry_focus:
-            retry_focus.append(issue.description_en)
     if has_material_issue and not retry_focus:
         retry_focus = [issue.description_en for issue in displayed]
     if deterministic_focus_issues and pronunciation_issues:
@@ -1252,7 +1274,7 @@ def _compose_language_evaluation(
             if has_material_issue
             else EvaluationStatus.PASS
         ),
-        transcript=azure.transcript,
+        transcript=azure.transcript if include_transcript else None,
         content=ContentEvaluation(
             meaning_correct=language.content.meaning_correct,
             relevant=language.content.relevant,
@@ -1278,6 +1300,46 @@ def _compose_language_evaluation(
         feedback_th=feedback_th,
         retry_focus=retry_focus,
     )
+
+
+def _language_text_concept(value: str) -> str:
+    text = re.sub(r"\s+", " ", value.lower()).strip()
+    present_continuous_markers = (
+        "present continuous",
+        "am/is/are",
+        "be + -ing",
+        "be + ing",
+        "after 'is'",
+        'after "is"',
+    )
+    if any(marker in text for marker in present_continuous_markers):
+        return "language:present_continuous_structure"
+    normalized = re.sub(r"[^a-z0-9]+", " ", text).strip()
+    return normalized
+
+
+def _language_issue_concept(issue: EvaluationIssue) -> str:
+    concept = _language_text_concept(issue.description_en)
+    if (
+        concept == "language:present_continuous_structure"
+        and issue.category in {IssueCategory.FOCUS, IssueCategory.GRAMMAR}
+    ):
+        return concept
+    return f"{issue.category.value}:{concept}"
+
+
+def _dedupe_language_issues(
+    issues: list[EvaluationIssue],
+) -> list[EvaluationIssue]:
+    deduplicated: list[EvaluationIssue] = []
+    seen: set[str] = set()
+    for issue in issues:
+        concept = _language_issue_concept(issue)
+        if concept in seen:
+            continue
+        seen.add(concept)
+        deduplicated.append(issue)
+    return deduplicated
 
 
 def evaluate_speaking_attempt(
@@ -1376,6 +1438,11 @@ def evaluate_speaking_attempt(
         _pronunciation_policy_metadata(
             pronunciation_candidates,
             focus_issues=focus_issues,
+            prosody_score=(
+                azure.pronunciation.prosody_score
+                if azure.pronunciation
+                else None
+            ),
         )
         if practice_type == "open"
         else None
@@ -1386,6 +1453,8 @@ def evaluate_speaking_attempt(
             if pronunciation_candidates
             else _unclear_audio_evaluation(azure.transcript)
         )
+        if practice_type == "open":
+            evaluation = evaluation.model_copy(update={"transcript": None})
         return EvaluatorResult(
             evaluation=evaluation,
             provider="microsoft",
@@ -1412,6 +1481,7 @@ def evaluate_speaking_attempt(
         gemini.evaluation,
         pronunciation_candidates=pronunciation_candidates,
         focus_issues=focus_issues,
+        include_transcript=practice_type != "open",
     )
     return EvaluatorResult(
         evaluation=evaluation,

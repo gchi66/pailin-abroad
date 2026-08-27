@@ -55,6 +55,7 @@ class AzurePronunciationAssessment(BaseModel):
     fluency_score: float | None = Field(default=None, ge=0, le=100)
     completeness_score: float | None = Field(default=None, ge=0, le=100)
     pronunciation_score: float | None = Field(default=None, ge=0, le=100)
+    prosody_score: float | None = Field(default=None, ge=0, le=100)
     words: list[AzureWordAssessment] = Field(default_factory=list, max_length=200)
 
 
@@ -193,6 +194,7 @@ def parse_azure_speech_response(
             fluency_score=_assessment_value(primary, "FluencyScore"),
             completeness_score=_assessment_value(primary, "CompletenessScore"),
             pronunciation_score=_assessment_value(primary, "PronScore"),
+            prosody_score=_assessment_value(primary, "ProsodyScore"),
             words=words,
         )
 
@@ -239,6 +241,7 @@ def assess_with_azure_speech(
             "GradingSystem": "HundredMark",
             "Granularity": "Phoneme",
             "Dimension": "Comprehensive",
+            "EnableProsodyAssessment": "True",
             "PhonemeAlphabet": "IPA",
             "NBestPhonemeCount": 5,
         }
