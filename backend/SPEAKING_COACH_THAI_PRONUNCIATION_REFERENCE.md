@@ -4,7 +4,7 @@ This document records background context for interpreting Azure Speech evidence 
 
 The catalog is a prior, not proof. A pattern being common among Thai speakers must never create a learner issue without supporting evidence from that learner's recording. It may identify which Azure signals to inspect and rank already-supported findings. Learner-facing feedback remains word-level; phoneme candidates and internal scores are diagnostic only.
 
-## Merged reference catalog (v2)
+## Merged reference catalog (v3)
 
 The expanded engineering reference supplied on 2026-08-27 was compared with the original ten-pattern catalog. Overlapping rows were consolidated into their existing stable pattern IDs; distinct, independently useful checks received new IDs. This avoids counting closely related descriptions as separate evidence.
 
@@ -39,7 +39,9 @@ The catalog deliberately consolidates the supplied subcases. For example, `/aɪ/
 
 ## Azure prosody evidence
 
-Pronunciation-assessment requests enable `EnableProsodyAssessment` for US English. Azure can therefore return `ProsodyScore` and evidence related to stress, intonation, speaking speed, rhythm, and break errors. The score is parsed and retained as provider evidence, but catalog prevalence or a low aggregate score alone does not create learner-facing criticism. Stress and connected-speech patterns remain diagnostic-only until exercise-specific benchmark thresholds are validated.
+Pronunciation-assessment requests enable `EnableProsodyAssessment` for US English. Azure can therefore return `ProsodyScore` and evidence related to stress, intonation, speaking speed, rhythm, and break errors. The checker normalizes word-level `UnexpectedBreak` and `MissingBreak` confidence, break length, Azure's `Monotone` decision, and its syllable-pitch-delta confidence into admin policy diagnostics. Provider confidence values outside the application-level 0–1 range are clamped for policy use while the unmodified Azure response remains available in raw admin diagnostics; nonessential prosody metadata must never fail the pronunciation evaluation.
+
+The provisional diagnostic gate requires at least five assessed words and uses Azure's suggested break-confidence threshold of greater than `0.75`. It also records whether the authored `FOCUS` mentions prosody, stress, intonation, rhythm, linking, connected speech, or fluency. A `future_feedback_eligible` flag makes benchmark candidates easy to locate, but `learner_feedback_enabled` remains false. Neither this flag nor a low aggregate score changes learner status, issues, or feedback until false-positive testing establishes production thresholds.
 
 ## Runtime validation and scoring
 
@@ -51,6 +53,14 @@ Each candidate keeps two separate values:
 - **Priority score (0–100):** evidence score plus authored `FOCUS` and the catalog's pedagogical priority. This ranks supported findings; it does not make an unsupported pattern valid.
 
 Pattern prevalence never adds to the evidence score. Initial learner-facing eligibility remains threshold-based and conservative. Evidence and priority scores are stored in admin diagnostics, not shown as a learner pronunciation grade or native-likeness score.
+
+Scripted and unscripted assessment both inspect expected `/s/ + consonant/` clusters for supported vowel insertion. Eligibility normally requires a weak second consonant plus corroboration from word accuracy, syllable accuracy, or segment duration. A moderately scored consonant may also qualify when Azure reports an exceptionally strong second-ranked vowel candidate and at least two timing/word/syllable signals agree. A narrower exception accepts one duration signal when a central epenthetic vowel scores at least 90, sits within 10 points of the leading consonant candidate, and occupies a segment of at least 200 ms while the expected consonant scores no higher than 60. This supports cases such as *sleeping* pronounced approximately `s-uh-leeping` without broadly relaxing the normal consonant threshold or limiting detection to the earlier `st-` special case. Grammar-only `FOCUS` text does not turn every mentioned word into a pronunciation focus.
+
+The contextual `st-` detector scores an aligned inserted vowel by duration rather than assigning a fixed evidence score. Insertions below 80 ms remain visible only as admin alignment artifacts and do not create learner coaching; longer insertions receive progressively stronger evidence. If Azure converts a supported within-cluster sound into a spurious word immediately before the intended `st-` word (for example, recognizing *I'm sad studying* from intended *I'm studying*), the raw transcript remains unchanged in diagnostics while language validation receives the reconstructed text. This prevents a pronunciation alignment artifact from becoming a false grammar error.
+
+Accent findings are coaching issues rather than permanently blocking failures. Attempt one may request one retry and shows at most two findings, ranked by supported pronunciation focus and catalog evidence. On attempt two, resolving the prior issue or lowering its composite evidence score by at least five points produces a pass. If a coaching issue remains without measurable improvement, the learner receives a final correction and continues anyway. Content miscues, unclear audio, and other blocking failures retain their stricter handling.
+
+Catalog v3 supports post-vocalic rhotic-vowel deletion when Azure aligns a weak expected rhotic vowel such as `/ɑɹ/` to a leading non-rhotic vowel and at least two word, syllable, or candidate-list signals corroborate it. It also retains onset-cluster evidence when the inserted vowel is a strong second-ranked candidate, provided both timing and word/syllable evidence support the finding. A supported catalog-specific finding replaces a generic finding for the same word so learner feedback uses the more actionable description. Empty, zero-evidence, or identity-free findings are excluded from attempt-to-attempt improvement comparisons.
 
 ## Research notes supplied for this reference
 

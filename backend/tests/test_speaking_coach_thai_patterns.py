@@ -8,7 +8,7 @@ from app.speaking_coach_thai_patterns import (
 def test_catalog_loads_merged_reference_patterns():
     catalog = thai_pronunciation_catalog()
 
-    assert catalog.catalog_version == "thai-english-pronunciation-v2"
+    assert catalog.catalog_version == "thai-english-pronunciation-v3"
     assert catalog.learner_feedback_policy == "word_level_only"
     assert len(catalog.patterns) == 24
     assert len({pattern.id for pattern in catalog.patterns}) == 24

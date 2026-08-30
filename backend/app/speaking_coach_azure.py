@@ -46,6 +46,15 @@ class AzureWordAssessment(BaseModel):
     duration: int | None = None
     phonemes: list[dict[str, Any]] = Field(default_factory=list, max_length=40)
     syllables: list[dict[str, Any]] = Field(default_factory=list, max_length=20)
+    unexpected_break_confidence: float | None = Field(
+        default=None, ge=0, le=1
+    )
+    missing_break_confidence: float | None = Field(default=None, ge=0, le=1)
+    break_length: int | None = None
+    intonation_error_types: list[str] = Field(default_factory=list, max_length=8)
+    monotone_syllable_pitch_delta_confidence: float | None = Field(
+        default=None, ge=0, le=1
+    )
 
 
 class AzurePronunciationAssessment(BaseModel):
@@ -80,6 +89,11 @@ def _number(source: dict[str, Any], key: str) -> float | None:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         return None
     return float(value)
+
+
+def _confidence(source: dict[str, Any], key: str) -> float | None:
+    value = _number(source, key)
+    return min(1.0, max(0.0, value)) if value is not None else None
 
 
 def _integer(value: Any) -> int | None:
@@ -125,6 +139,32 @@ def _parse_word(raw_word: Any) -> AzureWordAssessment | None:
         else []
     )
     error_type = assessment.get("ErrorType")
+    feedback = assessment.get("Feedback")
+    feedback = feedback if isinstance(feedback, dict) else {}
+    prosody = feedback.get("Prosody")
+    prosody = prosody if isinstance(prosody, dict) else {}
+    break_feedback = prosody.get("Break")
+    break_feedback = break_feedback if isinstance(break_feedback, dict) else {}
+    unexpected_break = break_feedback.get("UnexpectedBreak")
+    unexpected_break = (
+        unexpected_break if isinstance(unexpected_break, dict) else {}
+    )
+    missing_break = break_feedback.get("MissingBreak")
+    missing_break = missing_break if isinstance(missing_break, dict) else {}
+    intonation = prosody.get("Intonation")
+    intonation = intonation if isinstance(intonation, dict) else {}
+    monotone = intonation.get("Monotone")
+    monotone = monotone if isinstance(monotone, dict) else {}
+    raw_intonation_errors = intonation.get("ErrorTypes")
+    intonation_error_types = (
+        [
+            item[:80]
+            for item in raw_intonation_errors
+            if isinstance(item, str) and item.strip()
+        ][:8]
+        if isinstance(raw_intonation_errors, list)
+        else []
+    )
     return AzureWordAssessment(
         word=word[:120],
         accuracy_score=_number(assessment, "AccuracyScore"),
@@ -133,6 +173,15 @@ def _parse_word(raw_word: Any) -> AzureWordAssessment | None:
         duration=_integer(raw_word.get("Duration")),
         phonemes=safe_phonemes,
         syllables=safe_syllables,
+        unexpected_break_confidence=_confidence(
+            unexpected_break, "Confidence"
+        ),
+        missing_break_confidence=_confidence(missing_break, "Confidence"),
+        break_length=_integer(break_feedback.get("BreakLength")),
+        intonation_error_types=intonation_error_types,
+        monotone_syllable_pitch_delta_confidence=_confidence(
+            monotone, "SyllablePitchDeltaConfidence"
+        ),
     )
 
 
@@ -162,7 +211,7 @@ def parse_azure_speech_response(
             AzureTranscriptAlternative(
                 transcript=transcript,
                 lexical=_text(candidate.get("Lexical")),
-                confidence=_number(candidate, "Confidence"),
+                confidence=_confidence(candidate, "Confidence"),
             )
         )
 
@@ -171,7 +220,7 @@ def parse_azure_speech_response(
         (alternatives[0].transcript if alternatives else None)
         or _text(payload.get("DisplayText"))
     )
-    confidence = _number(primary, "Confidence")
+    confidence = _confidence(primary, "Confidence")
 
     pronunciation = None
     has_assessment = any(

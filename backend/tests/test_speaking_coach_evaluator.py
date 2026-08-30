@@ -108,6 +108,160 @@ def _language_output(*, material_error=False):
     }
 
 
+def _sleeping_cluster_result(
+    *,
+    consonant_accuracy: float = 34,
+    word_accuracy: float = 73,
+    syllable_accuracy: float = 62,
+    segment_duration: int = 2_500_000,
+    vowel_leads: bool = True,
+    vowel_candidate_score: float = 93,
+    vowel_candidate_phoneme: str = "ɑ",
+    leading_consonant_score: float = 95,
+    rhotic_accuracy: float = 61,
+    rhotic_word_accuracy: float = 91,
+    rhotic_syllable_accuracy: float = 61,
+    rhotic_error_type: str = "None",
+):
+    return _azure_result(
+        transcript="Are they sleeping now?",
+        confidence=0.957,
+        words=[
+            AzureWordAssessment(
+                word="are",
+                accuracy_score=rhotic_word_accuracy,
+                error_type=rhotic_error_type,
+                phonemes=[
+                    {
+                        "Phoneme": "ɑɹ",
+                        "AccuracyScore": rhotic_accuracy,
+                        "NBestPhonemes": [
+                            {"Phoneme": "ɑ", "Score": 98},
+                            {"Phoneme": "oʊ", "Score": 57},
+                        ],
+                    }
+                ],
+                syllables=[
+                    {
+                        "Syllable": "ɑɹ",
+                        "AccuracyScore": rhotic_syllable_accuracy,
+                    }
+                ],
+            ),
+            AzureWordAssessment(word="they", accuracy_score=97),
+            AzureWordAssessment(
+                word="sleeping",
+                accuracy_score=word_accuracy,
+                phonemes=[
+                    {"Phoneme": "s", "AccuracyScore": 87},
+                    {
+                        "Phoneme": "l",
+                        "AccuracyScore": consonant_accuracy,
+                        "Duration": segment_duration,
+                        "NBestPhonemes": [
+                            *(
+                                [
+                                    {
+                                        "Phoneme": "æ",
+                                        "Score": vowel_candidate_score,
+                                    },
+                                    {"Phoneme": "l", "Score": 92},
+                                ]
+                                if vowel_leads
+                                else [
+                                    {
+                                        "Phoneme": "l",
+                                        "Score": leading_consonant_score,
+                                    },
+                                    {
+                                        "Phoneme": vowel_candidate_phoneme,
+                                        "Score": vowel_candidate_score,
+                                    },
+                                ]
+                            ),
+                            {"Phoneme": "ə", "Score": 46},
+                        ],
+                    },
+                    {"Phoneme": "i", "AccuracyScore": 100},
+                    {"Phoneme": "p", "AccuracyScore": 100},
+                    {"Phoneme": "ɪ", "AccuracyScore": 100},
+                    {"Phoneme": "ŋ", "AccuracyScore": 100},
+                ],
+                syllables=[
+                    {
+                        "Syllable": "sli",
+                        "AccuracyScore": syllable_accuracy,
+                    },
+                    {"Syllable": "pɪŋ", "AccuracyScore": 100},
+                ],
+            ),
+            AzureWordAssessment(word="now", accuracy_score=97),
+        ],
+    )
+
+
+def _studying_artifact_result(*, inserted_vowel_duration: int = 500_000):
+    return _azure_result(
+        transcript="I'm sad studying English.",
+        confidence=0.858,
+        words=[
+            AzureWordAssessment(word="i'm", accuracy_score=97),
+            AzureWordAssessment(
+                word="sad",
+                accuracy_score=94,
+                phonemes=[
+                    {
+                        "Phoneme": "s",
+                        "AccuracyScore": 100,
+                        "Duration": 1_100_000,
+                        "NBestPhonemes": [{"Phoneme": "s", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "æ",
+                        "AccuracyScore": 65,
+                        "Duration": inserted_vowel_duration,
+                        "NBestPhonemes": [{"Phoneme": "æ", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "d",
+                        "AccuracyScore": 45,
+                        "Duration": 400_000,
+                        "NBestPhonemes": [
+                            {"Phoneme": "t", "Score": 100},
+                            {"Phoneme": "d", "Score": 98},
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "sæd", "AccuracyScore": 79}],
+            ),
+            AzureWordAssessment(
+                word="studying",
+                accuracy_score=46,
+                error_type="Mispronunciation",
+                phonemes=[
+                    {
+                        "Phoneme": "s",
+                        "AccuracyScore": 0,
+                        "Duration": 200_000,
+                        "NBestPhonemes": [{"Phoneme": "t", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "t",
+                        "AccuracyScore": 25,
+                        "Duration": 700_000,
+                        "NBestPhonemes": [
+                            {"Phoneme": "t", "Score": 100},
+                            {"Phoneme": "ə", "Score": 53},
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "stʌd", "AccuracyScore": 55}],
+            ),
+            AzureWordAssessment(word="english", accuracy_score=97),
+        ],
+    )
+
+
 def test_pronunciation_is_azure_only_and_transcript_mismatch_cannot_fail(monkeypatch):
     # The transcript drops "not", but acoustic assessment reports no supported issue.
     azure = _azure_result(transcript="She is going to work.")
@@ -141,6 +295,336 @@ def test_pronunciation_reports_only_supported_word_issue(monkeypatch):
     assert len(result.evaluation.displayed_issues) == 1
     assert result.evaluation.displayed_issues[0].category == "focus"
     assert "isn't" in result.evaluation.feedback_en
+
+
+def test_scripted_s_cluster_epenthesis_uses_catalog_evidence():
+    azure = _sleeping_cluster_result()
+    grammar_focus = (
+        "Check that the response directly answers the question using the present "
+        "continuous tense (Subject + am/is/are + verb-ing)."
+    )
+    candidates = evaluator._s_cluster_epenthesis_candidates(
+        azure, focus=grammar_focus
+    )
+
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="Are they sleeping now?",
+        focus=grammar_focus,
+        catalog_candidates=candidates,
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].pattern_id == "cluster_epenthesis"
+    assert candidates[0].focus_match is False
+    assert candidates[0].evidence["word"] == "sleeping"
+    assert candidates[0].evidence["expected_cluster"] == ["s", "l"]
+    assert candidates[0].evidence["leading_spoken_phoneme"] == "æ"
+    assert candidates[0].evidence_score >= 80
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert len(evaluation.displayed_issues) == 1
+    assert "sleeping" in evaluation.displayed_issues[0].description_en
+    assert all(
+        "are" not in issue.description_en.lower()
+        for issue in evaluation.detected_issues
+    )
+
+
+def test_second_scripted_coaching_attempt_passes_after_meaningful_improvement():
+    first_azure = _sleeping_cluster_result()
+    first_candidates = evaluator._s_cluster_epenthesis_candidates(
+        first_azure, focus="Speak clearly."
+    )
+    first_policy = evaluator._pronunciation_policy_metadata(
+        first_candidates, focus_issues=[]
+    )
+    second_azure = _sleeping_cluster_result(
+        consonant_accuracy=42,
+        word_accuracy=78,
+        syllable_accuracy=63,
+        segment_duration=1_600_000,
+        vowel_leads=False,
+        vowel_candidate_score=69,
+    )
+    second_candidates = evaluator._s_cluster_epenthesis_candidates(
+        second_azure, focus="Speak clearly."
+    )
+
+    evaluation = evaluator._pronunciation_evaluation(
+        second_azure,
+        reference_text="Are they sleeping now?",
+        focus="Speak clearly.",
+        instructional_attempt_number=2,
+        previous_evaluation={"_provider_policy": first_policy},
+        catalog_candidates=second_candidates,
+    )
+
+    assert second_candidates[0].evidence_score <= (
+        first_candidates[0].evidence_score
+        - evaluator.COACHING_IMPROVEMENT_EVIDENCE_DELTA
+    )
+    assert evaluation.status == evaluator.EvaluationStatus.PASS
+    assert evaluation.displayed_issues == []
+    assert "improvement" in evaluation.feedback_en
+
+
+def test_second_scripted_coaching_attempt_moves_on_without_improvement():
+    azure = _sleeping_cluster_result()
+    first_candidates = evaluator._s_cluster_epenthesis_candidates(
+        azure, focus="Speak clearly."
+    )
+    first_policy = evaluator._pronunciation_policy_metadata(
+        first_candidates, focus_issues=[]
+    )
+    second_candidates = evaluator._s_cluster_epenthesis_candidates(
+        azure, focus="Speak clearly."
+    )
+
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="Are they sleeping now?",
+        focus="Speak clearly.",
+        instructional_attempt_number=2,
+        previous_evaluation={"_provider_policy": first_policy},
+        catalog_candidates=second_candidates,
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.CONTINUE_WITH_CORRECTION
+    assert evaluation.corrected_answer == "Are they sleeping now?"
+    assert "sleeping" in evaluation.displayed_issues[0].description_en
+    assert evaluation.retry_focus == []
+
+
+def test_strong_secondary_vowel_and_rhotic_deletion_are_both_detected():
+    azure = _sleeping_cluster_result(
+        consonant_accuracy=38,
+        word_accuracy=88,
+        syllable_accuracy=58,
+        segment_duration=2_100_000,
+        vowel_leads=False,
+        vowel_candidate_score=69,
+        rhotic_accuracy=32,
+        rhotic_word_accuracy=69,
+        rhotic_syllable_accuracy=32,
+    )
+    grammar_focus = (
+        "Check the present continuous tense (Subject + am/is/are + verb-ing) "
+        "and allow natural contractions."
+    )
+    candidates = evaluator._s_cluster_epenthesis_candidates(
+        azure, focus=grammar_focus
+    ) + evaluator._rhotic_vowel_deletion_candidates(
+        azure, focus=grammar_focus
+    )
+
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="Are they sleeping now?",
+        focus=grammar_focus,
+        catalog_candidates=candidates,
+    )
+
+    assert [candidate.pattern_id for candidate in candidates] == [
+        "cluster_epenthesis",
+        "r_l_confusion",
+    ]
+    assert all(candidate.focus_match is False for candidate in candidates)
+    assert candidates[0].evidence["vowel_is_leading"] is False
+    assert candidates[0].evidence["vowel_candidate_score"] == 69
+    assert candidates[1].evidence["transfer_type"] == (
+        "post_vocalic_r_deletion"
+    )
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert len(evaluation.displayed_issues) == 2
+    descriptions = [
+        issue.description_en.lower() for issue in evaluation.displayed_issues
+    ]
+    assert any("sleeping" in description for description in descriptions)
+    assert any("'are'" in description for description in descriptions)
+
+
+def test_very_strong_secondary_vowel_allows_moderate_cluster_consonant_score():
+    azure = _sleeping_cluster_result(
+        consonant_accuracy=50,
+        word_accuracy=88,
+        syllable_accuracy=65,
+        segment_duration=2_500_000,
+        vowel_leads=False,
+        vowel_candidate_score=92,
+        vowel_candidate_phoneme="ə",
+    )
+
+    candidates = evaluator._s_cluster_epenthesis_candidates(
+        azure, focus="Use present continuous tense."
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].pattern_id == "cluster_epenthesis"
+    assert candidates[0].evidence["expected_consonant_accuracy"] == 50
+    assert candidates[0].evidence["vowel_candidate_score"] == 92
+    assert candidates[0].evidence["vowel_candidate"] == "ə"
+    assert candidates[0].evidence["strong_secondary_vowel_exception"] is True
+    assert candidates[0].evidence["support"] == {
+        "word_accuracy": False,
+        "syllable_accuracy": True,
+        "segment_duration": True,
+    }
+
+
+def test_current_are_evidence_uses_specific_rhotic_catalog_finding():
+    azure = _sleeping_cluster_result(
+        rhotic_accuracy=34,
+        rhotic_word_accuracy=79,
+        rhotic_syllable_accuracy=34,
+    )
+
+    candidates = evaluator._rhotic_vowel_deletion_candidates(
+        azure, focus="Use present continuous tense."
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].pattern_id == "r_l_confusion"
+    assert candidates[0].evidence_score >= (
+        evaluator.RHOTIC_VOWEL_MIN_EVIDENCE_SCORE
+    )
+    assert "clear r sound" in candidates[0].issue.description_en
+
+
+def test_ultra_strong_schwa_catches_latest_sleeping_evidence_shape():
+    azure = _sleeping_cluster_result(
+        consonant_accuracy=60,
+        word_accuracy=91,
+        syllable_accuracy=72,
+        segment_duration=2_100_000,
+        vowel_leads=False,
+        vowel_candidate_score=93,
+        vowel_candidate_phoneme="ə",
+        leading_consonant_score=100,
+    )
+
+    candidates = evaluator._s_cluster_epenthesis_candidates(
+        azure, focus="Use present continuous tense."
+    )
+
+    assert len(candidates) == 1
+    evidence = candidates[0].evidence
+    assert evidence["support"] == {
+        "word_accuracy": False,
+        "syllable_accuracy": False,
+        "segment_duration": True,
+    }
+    assert evidence["leading_spoken_phoneme_score"] == 100
+    assert evidence["vowel_candidate"] == "ə"
+    assert evidence["vowel_candidate_score"] == 93
+    assert evidence["ultra_strong_central_vowel"] is True
+
+
+def test_ultra_strong_schwa_still_requires_long_segment():
+    azure = _sleeping_cluster_result(
+        consonant_accuracy=60,
+        word_accuracy=91,
+        syllable_accuracy=72,
+        segment_duration=1_900_000,
+        vowel_leads=False,
+        vowel_candidate_score=93,
+        vowel_candidate_phoneme="ə",
+        leading_consonant_score=100,
+    )
+
+    assert evaluator._s_cluster_epenthesis_candidates(
+        azure, focus="Use present continuous tense."
+    ) == []
+
+
+def test_moderate_cluster_consonant_score_still_requires_very_strong_vowel():
+    azure = _sleeping_cluster_result(
+        consonant_accuracy=50,
+        word_accuracy=88,
+        syllable_accuracy=65,
+        segment_duration=2_500_000,
+        vowel_leads=False,
+        vowel_candidate_score=79,
+    )
+
+    assert evaluator._s_cluster_epenthesis_candidates(
+        azure, focus="Use present continuous tense."
+    ) == []
+
+
+def test_catalog_specific_findings_replace_generic_findings_for_same_word():
+    azure = _sleeping_cluster_result(
+        consonant_accuracy=50,
+        word_accuracy=88,
+        syllable_accuracy=65,
+        segment_duration=2_500_000,
+        vowel_leads=False,
+        vowel_candidate_score=92,
+        rhotic_accuracy=29,
+        rhotic_word_accuracy=79,
+        rhotic_syllable_accuracy=34,
+        rhotic_error_type="Mispronunciation",
+    )
+
+    candidates = evaluator._unscripted_pronunciation_candidates(
+        azure,
+        focus="Use present continuous tense.",
+        evaluation_context={
+            "prompt_en": "Are they sleeping now?",
+            "focus": "Use present continuous tense.",
+            "target_answers": [],
+            "examples": [],
+        },
+    )
+
+    assert {candidate.pattern_id for candidate in candidates} == {
+        "cluster_epenthesis",
+        "r_l_confusion",
+    }
+    assert all(candidate.pattern_id is not None for candidate in candidates)
+
+
+def test_invalid_empty_previous_evidence_cannot_create_false_improvement():
+    azure = _sleeping_cluster_result(
+        consonant_accuracy=38,
+        word_accuracy=88,
+        syllable_accuracy=58,
+        segment_duration=2_100_000,
+        vowel_leads=False,
+        vowel_candidate_score=69,
+    )
+    candidates = evaluator._s_cluster_epenthesis_candidates(
+        azure, focus="Use present continuous tense."
+    )
+    invalid_previous = {
+        "_provider_policy": {
+            "matches": [
+                {
+                    "pattern_id": None,
+                    "evidence_score": 0,
+                    "evidence": {},
+                }
+            ]
+        }
+    }
+
+    policy = evaluator._coaching_attempt_policy(
+        candidates,
+        instructional_attempt_number=2,
+        previous_evaluation=invalid_previous,
+    )
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="Are they sleeping now?",
+        focus="Use present continuous tense.",
+        instructional_attempt_number=2,
+        previous_evaluation=invalid_previous,
+        catalog_candidates=candidates,
+    )
+
+    assert policy["previous_evidence"] == {}
+    assert policy["resolved_issue_keys"] == []
+    assert policy["meaningful_improvement"] is False
+    assert evaluation.status == evaluator.EvaluationStatus.CONTINUE_WITH_CORRECTION
 
 
 def test_pronunciation_preserves_azure_omission_meaning(monkeypatch):
@@ -341,7 +825,7 @@ def test_low_confidence_open_answer_can_report_supported_r_to_l_transfer(monkeyp
     assert "/" not in result.evaluation.feedback_en
     assert result.evaluation.pronunciation.issues
     policy = result.provider_metadata["policy"]
-    assert policy["catalog_version"] == "thai-english-pronunciation-v2"
+    assert policy["catalog_version"] == "thai-english-pronunciation-v3"
     assert policy["matches"][0]["pattern_id"] == "r_l_confusion"
     assert policy["matches"][0]["evidence_score"] >= 55
     assert gemini_called is False
@@ -393,11 +877,13 @@ def test_open_requests_unscripted_assessment_in_the_existing_azure_call(monkeypa
     assert captured["enable_unscripted_assessment"] is True
     assert result.evaluation.transcript is None
     assert result.provider_metadata["azure"]["response"] == azure.raw_payload
-    assert result.provider_metadata["policy"]["prosody"] == {
-        "enabled": True,
-        "score": 78,
-        "learner_feedback_enabled": False,
-    }
+    prosody = result.provider_metadata["policy"]["prosody"]
+    assert prosody["enabled"] is True
+    assert prosody["score"] == 78
+    assert prosody["word_count"] == 0
+    assert prosody["utterance_eligible"] is False
+    assert prosody["learner_feedback_enabled"] is False
+    assert prosody["benchmark_status"] == "collecting"
 
 
 def test_non_open_language_evaluation_retains_transcript():
@@ -407,6 +893,64 @@ def test_non_open_language_evaluation_retains_transcript():
     evaluation = evaluator._compose_language_evaluation(azure, language)
 
     assert evaluation.transcript == "She is going to work."
+
+
+def test_private_comparison_policy_is_not_sent_in_model_context():
+    context = evaluator._evaluation_context(
+        practice_type="open",
+        focus="Use present continuous tense.",
+        prompt_en="What are they doing?",
+        prompt_th=None,
+        target_answers=[],
+        examples=[],
+        instructional_attempt_number=2,
+        previous_evaluation={
+            "status": "retry",
+            "_provider_policy": {"matches": [{"evidence_score": 90}]},
+        },
+    )
+
+    assert context["previous_evaluation"] == {"status": "retry"}
+
+
+def test_prosody_diagnostics_gate_specific_signals_without_learner_feedback():
+    words = [
+        AzureWordAssessment(word=word, accuracy_score=90)
+        for word in ["I", "really", "want", "to", "study", "English"]
+    ]
+    words[2].unexpected_break_confidence = 0.88
+    words[2].break_length = 5_000_000
+    words[3].missing_break_confidence = 0.75
+    words[0].intonation_error_types = ["Monotone"]
+    words[0].monotone_syllable_pitch_delta_confidence = 0.92
+    azure = _azure_result(
+        transcript="I really want to study English.",
+        words=words,
+    )
+    azure.pronunciation.prosody_score = 54
+
+    diagnostics = evaluator._prosody_policy_metadata(
+        azure, focus="Use natural sentence stress and intonation."
+    )
+
+    assert diagnostics["score"] == 54
+    assert diagnostics["word_count"] == 6
+    assert diagnostics["utterance_eligible"] is True
+    assert diagnostics["break_confidence_threshold"] == 0.75
+    assert diagnostics["break_signals"] == [
+        {
+            "type": "unexpected_break",
+            "word": "want",
+            "word_index": 2,
+            "confidence": 0.88,
+            "break_length": 5_000_000,
+        }
+    ]
+    assert diagnostics["monotone_detected"] is True
+    assert diagnostics["monotone_syllable_pitch_delta_confidence"] == 0.92
+    assert diagnostics["focus_relevant"] is True
+    assert diagnostics["future_feedback_eligible"] is True
+    assert diagnostics["learner_feedback_enabled"] is False
 
 
 def test_high_confidence_open_answer_combines_language_and_acoustic_results():
@@ -456,6 +1000,191 @@ def test_high_confidence_open_answer_combines_language_and_acoustic_results():
     assert evaluation.displayed_issues[0].category == "focus"
     assert "history" in evaluation.feedback_en
     assert "/" not in evaluation.feedback_en
+
+
+def test_second_open_attempt_does_not_block_on_coaching_only_issue():
+    azure = _azure_result(
+        transcript="I am sleeping now.", confidence=0.9
+    )
+    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+    issue = evaluator.EvaluationIssue(
+        category=evaluator.IssueCategory.PRONUNCIATION,
+        description_en=(
+            "Say 'sleeping' smoothly without adding an extra sound."
+        ),
+        description_th="พูดคำว่า sleeping ให้ต่อเนื่อง",
+    )
+    previous_policy = {
+        "matches": [
+            {
+                "pattern_id": "cluster_epenthesis",
+                "evidence_score": 90,
+                "evidence": {
+                    "word": "sleeping",
+                    "expected_cluster": ["s", "l"],
+                },
+            }
+        ]
+    }
+
+    improved_candidate = evaluator._PronunciationCandidate(
+        word_index=2,
+        focus_match=False,
+        severity=90,
+        status=evaluator.AssessmentTokenStatus.NEEDS_WORK,
+        issue=issue,
+        pattern_id="cluster_epenthesis",
+        evidence_score=84,
+        priority_score=94,
+        evidence={
+            "word": "sleeping",
+            "expected_cluster": ["s", "l"],
+        },
+    )
+    improved = evaluator._compose_language_evaluation(
+        azure,
+        language,
+        pronunciation_candidates=[improved_candidate],
+        include_transcript=False,
+        instructional_attempt_number=2,
+        previous_evaluation={"_provider_policy": previous_policy},
+    )
+
+    unchanged_candidate = evaluator._PronunciationCandidate(
+        word_index=2,
+        focus_match=False,
+        severity=90,
+        status=evaluator.AssessmentTokenStatus.NEEDS_WORK,
+        issue=issue,
+        pattern_id="cluster_epenthesis",
+        evidence_score=90,
+        priority_score=100,
+        evidence={
+            "word": "sleeping",
+            "expected_cluster": ["s", "l"],
+        },
+    )
+    unchanged = evaluator._compose_language_evaluation(
+        azure,
+        language,
+        pronunciation_candidates=[unchanged_candidate],
+        include_transcript=False,
+        instructional_attempt_number=2,
+        previous_evaluation={"_provider_policy": previous_policy},
+    )
+
+    assert improved.status == evaluator.EvaluationStatus.PASS
+    assert improved.displayed_issues == []
+    assert unchanged.status == evaluator.EvaluationStatus.CONTINUE_WITH_CORRECTION
+    assert unchanged.corrected_answer is None
+    assert unchanged.retry_focus == []
+
+
+def test_tiny_contextual_cluster_artifact_does_not_create_pronunciation_issue():
+    azure = _studying_artifact_result(inserted_vowel_duration=500_000)
+    context = {
+        "prompt_en": "What are you studying?",
+        "focus": "Use present continuous tense in your answer.",
+        "target_answers": [],
+        "examples": [{"en": "I'm studying English."}],
+    }
+
+    candidates = evaluator._unscripted_pronunciation_candidates(
+        azure,
+        focus=context["focus"],
+        evaluation_context=context,
+    )
+    alignment = evaluator._contextual_st_cluster_alignment(
+        azure, evaluation_context=context
+    )
+
+    assert candidates == []
+    assert alignment["inserted_vowel_duration_100ns"] == 500_000
+    assert evaluator._cluster_artifact_language_transcript(
+        azure, alignment
+    ) == "i'm studying english"
+    assert evaluator._focus_validation_issues(
+        azure,
+        focus=context["focus"],
+        transcript_override="i'm studying english",
+    ) == []
+
+
+def test_longer_contextual_cluster_insertion_keeps_coaching_feedback():
+    azure = _studying_artifact_result(inserted_vowel_duration=1_200_000)
+    context = {
+        "prompt_en": "What are you studying?",
+        "focus": "Use present continuous tense in your answer.",
+        "target_answers": [],
+        "examples": [{"en": "I'm studying English."}],
+    }
+
+    candidates = evaluator._unscripted_pronunciation_candidates(
+        azure,
+        focus=context["focus"],
+        evaluation_context=context,
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].pattern_id == "cluster_epenthesis"
+    assert candidates[0].evidence["inserted_vowel_duration_100ns"] == 1_200_000
+    assert candidates[0].evidence_score == 80
+
+
+def test_open_evaluation_uses_cleaned_cluster_artifact_text_for_language(
+    monkeypatch,
+):
+    azure = _studying_artifact_result(inserted_vowel_duration=500_000)
+    captured = {}
+    monkeypatch.setattr(
+        evaluator,
+        "normalize_speaking_audio",
+        lambda *_args, **_kwargs: b"normalized wav",
+    )
+    monkeypatch.setattr(
+        evaluator,
+        "assess_with_azure_speech",
+        lambda *_args, **_kwargs: azure,
+    )
+    monkeypatch.setattr(evaluator.Config, "AZURE_SPEECH_REGION", "southeastasia")
+
+    def fake_language(**kwargs):
+        captured.update(kwargs)
+        language = evaluator.LanguageEvaluation.model_validate(_language_output())
+        return evaluator.GeminiLanguageResult(
+            evaluation=language,
+            model="gemini-3.5-flash-lite",
+            latency_ms=30,
+            usage={},
+            provider_metadata={},
+            provider_output_text=language.model_dump_json(),
+        )
+
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", fake_language)
+
+    result = evaluator.evaluate_speaking_attempt(
+        audio_bytes=b"m4a bytes",
+        audio_mime_type="audio/mp4",
+        practice_type="open",
+        focus="Use present continuous tense in your answer.",
+        prompt_en="What are you studying?",
+        prompt_th=None,
+        target_answers=[],
+        examples=[{"en": "I'm studying English."}],
+        instructional_attempt_number=2,
+    )
+
+    assert captured["azure"].transcript == "i'm studying english"
+    assert captured["azure"].alternatives == []
+    assert result.evaluation.status == evaluator.EvaluationStatus.PASS
+    assert result.evaluation.displayed_issues == []
+    artifact = result.provider_metadata["policy"]["language_transcript_artifact"]
+    assert artifact == {
+        "detected": True,
+        "removed_word": "sad",
+        "evaluation_transcript": "i'm studying english",
+        "inserted_vowel_duration_100ns": 500_000,
+    }
 
 
 def test_open_detects_final_sh_replaced_by_t_like_stop():
@@ -518,6 +1247,7 @@ def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
                     {
                         "Phoneme": "ɛ",
                         "AccuracyScore": 80,
+                        "Duration": 1_200_000,
                         "NBestPhonemes": [{"Phoneme": "æ", "Score": 100}],
                     },
                     {
@@ -578,7 +1308,7 @@ def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
     assert evaluation.status == evaluator.EvaluationStatus.RETRY
     assert evaluation.transcript is None
     assert evaluation.content.target_usage_correct is False
-    assert len(descriptions) == 3
+    assert len(descriptions) == 2
     assert sum(
         "am/is/are" in description or "present continuous" in description.lower()
         for description in descriptions
@@ -589,9 +1319,12 @@ def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
     ) == 1
     assert any("am/is/are" in description for description in descriptions)
     assert any("smoothly" in description for description in descriptions)
+    detected_descriptions = [
+        issue.description_en for issue in evaluation.detected_issues
+    ]
     assert any(
         "english" in description.lower() and "ending" in description
-        for description in descriptions
+        for description in detected_descriptions
     )
     assert all("/" not in description for description in descriptions[1:])
     diagnostics = evaluator._pronunciation_policy_metadata(
@@ -605,6 +1338,7 @@ def test_open_detects_present_continuous_cluster_epenthesis_and_final_sound():
         "enabled": True,
         "score": None,
         "learner_feedback_enabled": False,
+        "benchmark_status": "collecting",
     }
     assert all(match["evidence_score"] >= 55 for match in diagnostics["matches"])
 

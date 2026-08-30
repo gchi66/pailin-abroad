@@ -1,5 +1,5 @@
 {
-  "catalog_version": "thai-english-pronunciation-v2",
+  "catalog_version": "thai-english-pronunciation-v3",
   "purpose": "Background context for interpreting Azure evidence. Pattern prevalence is never evidence that an individual learner made an error.",
   "learner_feedback_policy": "word_level_only",
   "patterns": [
@@ -29,13 +29,13 @@
     },
     {
       "id": "r_l_confusion",
-      "name": "R and L confusion, including final N realization",
+      "name": "R and L confusion, including post-vocalic R deletion and final N realization",
       "category": "substitution",
       "contexts": ["word_initial", "word_medial", "word_final"],
-      "expected_phonemes": ["r", "ɹ", "l"],
+      "expected_phonemes": ["r", "ɹ", "l", "ɑɹ", "ɔɹ", "ɛɹ", "ɝ", "ɚ"],
       "likely_substitutions": {"r": ["l", "n"], "ɹ": ["l", "n"], "l": ["r", "ɹ", "n"]},
       "grapheme_clusters": [],
-      "azure_signals": ["low expected phoneme accuracy", "likely substitute is leading spoken candidate"],
+      "azure_signals": ["low expected phoneme accuracy", "likely substitute is leading spoken candidate", "rhotic vowel aligns to a non-rhotic vowel candidate", "word or syllable corroboration"],
       "runtime_support": "active",
       "priority_weight": 8
     },

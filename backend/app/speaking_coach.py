@@ -366,7 +366,8 @@ def _attempts_for_question(session_id: str, question_id: int) -> list[dict[str, 
         supabase_admin.table("user_speaking_coach_attempts")
         .select(
             "id,evaluation_sequence,instructional_attempt_number,processing_status,"
-            "evaluation_result,normalized_evaluation,completes_question"
+            "evaluation_result,normalized_evaluation,provider_response_raw,"
+            "completes_question"
         )
         .eq("session_id", session_id)
         .eq("question_id", question_id)
@@ -684,9 +685,19 @@ def evaluate_speaking_recording():
             attempt_id,
             {"processing_status": "evaluating", "updated_at": _iso(_now())},
         )
-        previous_evaluation = (
-            retry_attempt.get("normalized_evaluation") if retry_attempt else None
-        )
+        previous_evaluation = None
+        if retry_attempt:
+            normalized_previous = retry_attempt.get("normalized_evaluation")
+            previous_evaluation = (
+                dict(normalized_previous)
+                if isinstance(normalized_previous, dict)
+                else {}
+            )
+            previous_provider = retry_attempt.get("provider_response_raw")
+            if isinstance(previous_provider, dict):
+                previous_evaluation["_provider_policy"] = (
+                    previous_provider.get("policy")
+                )
         result = evaluate_speaking_attempt(
             audio_bytes=audio_bytes,
             audio_mime_type=provider_mime_type,

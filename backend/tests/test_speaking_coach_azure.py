@@ -66,6 +66,21 @@ def test_parse_nested_pronunciation_response_shape():
     primary["Words"][0]["PronunciationAssessment"] = {
         "AccuracyScore": 77,
         "ErrorType": "None",
+        "Feedback": {
+            "Prosody": {
+                "Break": {
+                    "UnexpectedBreak": {"Confidence": 0.82},
+                    "MissingBreak": {"Confidence": 0.14},
+                    "BreakLength": 4200000,
+                },
+                "Intonation": {
+                    "ErrorTypes": ["Monotone"],
+                    "Monotone": {
+                        "SyllablePitchDeltaConfidence": 0.91
+                    },
+                },
+            }
+        },
     }
 
     result = azure.parse_azure_speech_response(payload, latency_ms=75)
@@ -73,6 +88,37 @@ def test_parse_nested_pronunciation_response_shape():
     assert result.pronunciation.accuracy_score == 93
     assert result.pronunciation.words[0].accuracy_score == 77
     assert result.pronunciation.words[0].error_type == "None"
+    assert result.pronunciation.words[0].unexpected_break_confidence == 0.82
+    assert result.pronunciation.words[0].missing_break_confidence == 0.14
+    assert result.pronunciation.words[0].break_length == 4_200_000
+    assert result.pronunciation.words[0].intonation_error_types == ["Monotone"]
+    assert (
+        result.pronunciation.words[0].monotone_syllable_pitch_delta_confidence
+        == 0.91
+    )
+
+
+def test_out_of_range_azure_prosody_confidence_is_clamped():
+    payload = _flat_response()
+    payload["NBest"][0]["Words"][0]["Feedback"] = {
+        "Prosody": {
+            "Break": {
+                "UnexpectedBreak": {"Confidence": 3.0990992},
+                "MissingBreak": {"Confidence": -0.25},
+            }
+        }
+    }
+
+    result = azure.parse_azure_speech_response(payload, latency_ms=75)
+    word = result.pronunciation.words[0]
+
+    assert word.unexpected_break_confidence == 1
+    assert word.missing_break_confidence == 0
+    assert (
+        result.raw_payload["NBest"][0]["Words"][0]["Feedback"]["Prosody"]
+        ["Break"]["UnexpectedBreak"]["Confidence"]
+        == 3.0990992
+    )
 
 
 def test_azure_request_uses_pcm_wav_and_scripted_header(monkeypatch):
