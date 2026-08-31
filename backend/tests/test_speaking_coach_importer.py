@@ -104,6 +104,12 @@ def test_prepares_current_parser_output() -> None:
     assert len(data.questions) == 13
     assert len(data.practice_sets[0]["content_hash"]) == 64
     assert len(data.questions[0]["content_hash"]) == 64
+    assert data.questions[0]["focus_items"] == [
+        {
+            "priority": 1,
+            "instruction": data.questions[0]["focus"],
+        }
+    ]
     questions_by_lesson = {
         lesson_id: [
             row["prompt_audio_key"]
@@ -172,6 +178,123 @@ def test_question_edit_changes_question_and_parent_hashes() -> None:
         original.practice_sets[0]["content_hash"]
         != changed.practice_sets[0]["content_hash"]
     )
+
+
+def test_question_focus_is_imported_and_changes_content_hashes() -> None:
+    payload = _payload()
+    payload["schema_version"] = "speaking-coach-parser-v2"
+    practice = payload["lessons"][0]["practice_sets"][0]
+    practice["focus"] = None
+    practice["questions"][0]["focus"] = "Require a natural translation."
+
+    original, original_errors = prepare_import(payload)
+    changed_payload = deepcopy(payload)
+    changed_payload["lessons"][0]["practice_sets"][0]["questions"][0][
+        "focus"
+    ] = "Require the negation marker."
+    changed, changed_errors = prepare_import(changed_payload)
+
+    assert original_errors == []
+    assert changed_errors == []
+    assert original is not None and changed is not None
+    assert original.questions[0]["focus"] == "Require a natural translation."
+    assert original.questions[0]["focus_items"] == [
+        {"priority": 1, "instruction": "Require a natural translation."}
+    ]
+    assert original.practice_sets[0]["focus"] == "Require a natural translation."
+    assert original.questions[0]["content_hash"] != changed.questions[0]["content_hash"]
+    assert original.practice_sets[0]["content_hash"] != changed.practice_sets[0]["content_hash"]
+
+
+def test_v3_focus_items_are_imported_and_change_content_hashes() -> None:
+    payload = _payload()
+    payload["schema_version"] = "speaking-coach-parser-v3"
+    practice = payload["lessons"][0]["practice_sets"][0]
+    question = practice["questions"][0]
+    question["focus"] = (
+        "[P1] Preserve the meaning.\n"
+        "[P1] Include the required negation.\n"
+        "[P2] Use natural English."
+    )
+    question["focus_items"] = [
+        {"priority": 1, "instruction": "Preserve the meaning."},
+        {"priority": 1, "instruction": "Include the required negation."},
+        {"priority": 2, "instruction": "Use natural English."},
+    ]
+
+    original, original_errors = prepare_import(payload)
+    priority_changed_payload = deepcopy(payload)
+    priority_changed_payload["lessons"][0]["practice_sets"][0]["questions"][0][
+        "focus_items"
+    ][1]["priority"] = 2
+    priority_changed, priority_changed_errors = prepare_import(
+        priority_changed_payload
+    )
+    order_changed_payload = deepcopy(payload)
+    order_changed_items = order_changed_payload["lessons"][0]["practice_sets"][0][
+        "questions"
+    ][0]["focus_items"]
+    order_changed_items[0], order_changed_items[1] = (
+        order_changed_items[1],
+        order_changed_items[0],
+    )
+    order_changed, order_changed_errors = prepare_import(order_changed_payload)
+
+    assert original_errors == []
+    assert priority_changed_errors == []
+    assert order_changed_errors == []
+    assert original is not None
+    assert priority_changed is not None
+    assert order_changed is not None
+    assert original.questions[0]["focus_items"] == question["focus_items"]
+    assert (
+        original.questions[0]["content_hash"]
+        != priority_changed.questions[0]["content_hash"]
+    )
+    assert (
+        original.questions[0]["content_hash"]
+        != order_changed.questions[0]["content_hash"]
+    )
+    assert (
+        original.practice_sets[0]["content_hash"]
+        != priority_changed.practice_sets[0]["content_hash"]
+    )
+    assert (
+        original.practice_sets[0]["content_hash"]
+        != order_changed.practice_sets[0]["content_hash"]
+    )
+
+
+def test_v3_rejects_missing_empty_or_invalid_focus_items() -> None:
+    cases = [
+        (None, "focus_items must be an array"),
+        ([], "focus_items must contain at least one focus item"),
+        (
+            [{"priority": 4, "instruction": "Check this."}],
+            "priority must be the integer 1, 2, or 3",
+        ),
+        (
+            [{"priority": True, "instruction": "Check this."}],
+            "priority must be the integer 1, 2, or 3",
+        ),
+        (
+            [{"priority": 1, "instruction": "   "}],
+            "instruction must be a non-empty string",
+        ),
+    ]
+
+    for focus_items, expected_error in cases:
+        payload = _payload()
+        payload["schema_version"] = "speaking-coach-parser-v3"
+        question = payload["lessons"][0]["practice_sets"][0]["questions"][0]
+        question["focus"] = "[P1] Check this."
+        if focus_items is not None:
+            question["focus_items"] = focus_items
+
+        data, errors = prepare_import(payload)
+
+        assert data is None
+        assert any(expected_error in error for error in errors)
 
 
 def test_dry_run_only_resolves_lessons_and_never_writes() -> None:

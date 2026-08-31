@@ -32,7 +32,12 @@ from app.supabase_client import supabase_admin
 PRACTICE_SETS_TABLE = "speaking_coach_practice_sets"
 QUESTIONS_TABLE = "speaking_coach_questions"
 LESSONS_TABLE = "lessons"
-PARSER_SCHEMA_VERSION = "speaking-coach-parser-v1"
+PARSER_SCHEMA_VERSION = "speaking-coach-parser-v3"
+SUPPORTED_PARSER_SCHEMA_VERSIONS = {
+    "speaking-coach-parser-v1",
+    "speaking-coach-parser-v2",
+    PARSER_SCHEMA_VERSION,
+}
 DEFAULT_BATCH_SIZE = 100
 SUPPORTED_PRACTICE_TYPES = {"pronunciation", "open", "translation"}
 
@@ -102,15 +107,61 @@ def _validate_examples(value: Any, context: str, errors: List[str]) -> List[Dict
     return examples
 
 
+def _validate_focus_items(
+    value: Any,
+    context: str,
+    errors: List[str],
+) -> List[Dict[str, Any]]:
+    if not isinstance(value, list):
+        errors.append(f"{context} must be an array.")
+        return []
+    if not value:
+        errors.append(f"{context} must contain at least one focus item.")
+        return []
+
+    focus_items: List[Dict[str, Any]] = []
+    for index, item in enumerate(value, start=1):
+        item_context = f"{context}[{index}]"
+        if not isinstance(item, dict):
+            errors.append(f"{item_context} must be an object.")
+            continue
+
+        priority = item.get("priority")
+        instruction = _optional_text(item.get("instruction"))
+        if (
+            not isinstance(priority, int)
+            or isinstance(priority, bool)
+            or priority not in {1, 2, 3}
+        ):
+            errors.append(f"{item_context}.priority must be the integer 1, 2, or 3.")
+        if instruction is None:
+            errors.append(f"{item_context}.instruction must be a non-empty string.")
+        if (
+            isinstance(priority, int)
+            and not isinstance(priority, bool)
+            and priority in {1, 2, 3}
+            and instruction is not None
+        ):
+            focus_items.append(
+                {
+                    "priority": priority,
+                    "instruction": instruction,
+                }
+            )
+    return focus_items
+
+
 def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
     """Validate parser output and flatten it into database-ready logical rows."""
     errors: List[str] = []
     if not isinstance(payload, dict):
         return None, ["Root JSON must be an object."]
 
-    if payload.get("schema_version") != PARSER_SCHEMA_VERSION:
+    schema_version = payload.get("schema_version")
+    if schema_version not in SUPPORTED_PARSER_SCHEMA_VERSIONS:
         errors.append(
-            f"'schema_version' must be '{PARSER_SCHEMA_VERSION}'."
+            "'schema_version' must be one of "
+            f"{sorted(SUPPORTED_PARSER_SCHEMA_VERSIONS)}."
         )
 
     document = payload.get("document")
@@ -185,7 +236,7 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
             tip = practice.get("tip")
             questions = practice.get("questions")
 
-            for field in ("source_key", "lesson_source_key", "source_practice_type", "focus"):
+            for field in ("source_key", "lesson_source_key", "source_practice_type"):
                 if not _non_empty(practice.get(field)):
                     errors.append(f"{practice_context}.{field} must be a non-empty string.")
             if parent_key != lesson_source_key:
@@ -220,6 +271,7 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
                 errors.append(f"{practice_context} must contain at least one question.")
 
             practice_question_hashes: List[str] = []
+            question_focuses: List[str] = []
             for question_index, question in enumerate(questions, start=1):
                 lesson_question_position += 1
                 question_context = f"{practice_context}.Question[{question_index}]"
@@ -268,6 +320,25 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
                 examples = _validate_examples(
                     question.get("examples"), f"{question_context}.examples", errors
                 )
+                focus = _optional_text(question.get("focus")) or _optional_text(
+                    practice.get("focus")
+                )
+                if focus is None:
+                    errors.append(f"{question_context}.focus must be a non-empty string.")
+                else:
+                    question_focuses.append(focus)
+                if schema_version == PARSER_SCHEMA_VERSION:
+                    focus_items = _validate_focus_items(
+                        question.get("focus_items"),
+                        f"{question_context}.focus_items",
+                        errors,
+                    )
+                else:
+                    focus_items = (
+                        [{"priority": 1, "instruction": focus}]
+                        if focus is not None
+                        else []
+                    )
                 if not isinstance(question_source, dict):
                     errors.append(f"{question_context}.source must be an object.")
                     question_source = {}
@@ -296,6 +367,8 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
                     "prompt_th": prompt_th,
                     "target_answers": target_answers,
                     "examples": examples,
+                    "focus": focus,
+                    "focus_items": focus_items,
                     "prompt_audio_key": prompt_audio_key,
                 }
                 question_hash = _content_hash(hash_input)
@@ -310,6 +383,8 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
                         "prompt_th": prompt_th,
                         "target_answers": target_answers,
                         "examples": examples,
+                        "focus": focus,
+                        "focus_items": focus_items,
                         "prompt_audio_key": prompt_audio_key,
                         "source_paragraph_index": question_source.get(
                             "paragraph_index"
@@ -319,10 +394,13 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
                     }
                 )
 
+            practice_focus = _optional_text(practice.get("focus")) or "\n\n".join(
+                question_focuses
+            )
             practice_hash = _content_hash(
                 {
                     "practice_type": practice_type,
-                    "focus": practice.get("focus"),
+                    "focus": practice_focus,
                     "tip_en": _optional_text(tip.get("en")),
                     "tip_th": _optional_text(tip.get("th")),
                     "questions": practice_question_hashes,
@@ -339,7 +417,7 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
                     "source_paragraph_index": source.get("paragraph_index"),
                     "practice_type": practice_type,
                     "source_practice_type": practice.get("source_practice_type"),
-                    "focus": practice.get("focus"),
+                    "focus": practice_focus,
                     "tip_en": _optional_text(tip.get("en")),
                     "tip_th": _optional_text(tip.get("th")),
                     "sort_order": practice.get("sort_order"),

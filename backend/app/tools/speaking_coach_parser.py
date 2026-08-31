@@ -26,10 +26,12 @@ from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Sequence, Tuple
 
 
-SCHEMA_VERSION = "speaking-coach-parser-v1"
+SCHEMA_VERSION = "speaking-coach-parser-v3"
 LABEL_RE = re.compile(r"^\s*([A-Z][A-Z0-9_]*):(?:\s*(.*))?$", re.DOTALL)
 ANSWER_LABEL_RE = re.compile(r"^ANSWER_(\d+)$")
-LESSON_ID_RE = re.compile(r"^\d+\.\d+$")
+LESSON_ID_RE = re.compile(r"^\d+\.(?:\d+|CHP)$", re.I)
+FOCUS_ITEM_RE = re.compile(r"^\[P([123])\]\s+(.+)$")
+FOCUS_MARKER_RE = re.compile(r"^\[[Pp]([^\]]*)\]")
 
 PRACTICE_TYPE_ALIASES = {
     "pronunciation": "pronunciation",
@@ -37,12 +39,14 @@ PRACTICE_TYPE_ALIASES = {
     "repeat_after_me": "pronunciation",
     "open": "open",
     "open_ended": "open",
+    "open_chp": "open",
     "translate": "translation",
     "translation": "translation",
 }
 
-PRACTICE_FIELDS = {"FOCUS", "TIP_ENGLISH", "TIP_THAI"}
+PRACTICE_FIELDS = {"TIP_ENGLISH", "TIP_THAI"}
 QUESTION_FIELDS = {
+    "FOCUS",
     "REPEAT_ENGLISH",
     "REPEAT_THAI",
     "OPEN_ENGLISH",
@@ -51,6 +55,17 @@ QUESTION_FIELDS = {
     "EXAMPLE_THAI",
     "TRANSLATE_ENGLISH",
     "TRANSLATE_THAI",
+    "CHP_ENGLISH",
+    "CHP_THAI",
+    "FOR_EXAMPLE_ENG",
+    "FOR_EXAMPLE_TH",
+}
+
+QUESTION_FIELD_ALIASES = {
+    "CHP_ENGLISH": "OPEN_ENGLISH",
+    "CHP_THAI": "OPEN_THAI",
+    "FOR_EXAMPLE_ENG": "EXAMPLE_ENGLISH",
+    "FOR_EXAMPLE_TH": "EXAMPLE_THAI",
 }
 
 
@@ -448,6 +463,8 @@ class SpeakingCoachParser:
                 if label == "LESSON":
                     flush_lesson()
                     lesson_id = value.strip()
+                    if re.match(r"^\d+\.chp$", lesson_id, re.I):
+                        lesson_id = lesson_id.lower()
                     lesson_order = lesson_offset + len(lessons) + 1
                     current_lesson = {
                         "source_key": _hash_key(
@@ -561,6 +578,61 @@ class SpeakingCoachParser:
                     pending_field = ("practice", field_name)
                     continue
 
+                if label == "FOCUS":
+                    if re.match(r"^FOCUS\s*:", value, re.I):
+                        cleaned = re.sub(
+                            r"^FOCUS\s*:\s*", "", value, count=1, flags=re.I
+                        )
+                        value_rich = _plain_rich(cleaned)
+                        self._issue(
+                            "warning",
+                            "duplicate_focus_prefix",
+                            "Removed a repeated FOCUS prefix from the field value.",
+                            tab=tab,
+                            paragraph_index=paragraph.paragraph_index,
+                            **context(),
+                        )
+                    if current_question is not None:
+                        if label in current_question["fields"]:
+                            self._issue(
+                                "warning",
+                                "duplicate_question_field",
+                                "Appended duplicate FOCUS field.",
+                                tab=tab,
+                                paragraph_index=paragraph.paragraph_index,
+                                **context(),
+                            )
+                            current_question["fields"][label].append(value_rich)
+                        else:
+                            current_question["fields"][label] = value_rich
+                        pending_field = ("question", label)
+                        continue
+                    if current_practice is not None:
+                        if "focus" in current_practice["_rich_fields"]:
+                            self._issue(
+                                "warning",
+                                "duplicate_practice_field",
+                                "Appended duplicate FOCUS field.",
+                                tab=tab,
+                                paragraph_index=paragraph.paragraph_index,
+                                **context(),
+                            )
+                            current_practice["_rich_fields"]["focus"].append(value_rich)
+                        else:
+                            current_practice["_rich_fields"]["focus"] = value_rich
+                        pending_field = ("practice", "focus")
+                        continue
+                    self._issue(
+                        "warning",
+                        "orphan_practice_field",
+                        "Ignored FOCUS before PRACTICE_TYPE or QUESTION.",
+                        tab=tab,
+                        paragraph_index=paragraph.paragraph_index,
+                        **context(),
+                    )
+                    pending_field = None
+                    continue
+
                 if label == "QUESTION":
                     flush_question()
                     if current_practice is None:
@@ -622,7 +694,8 @@ class SpeakingCoachParser:
                         pending_field = ("answer", str(answer_index))
                         continue
 
-                    if label in current_question["fields"]:
+                    canonical_label = QUESTION_FIELD_ALIASES.get(label, label)
+                    if canonical_label in current_question["fields"]:
                         self._issue(
                             "warning",
                             "duplicate_question_field",
@@ -631,10 +704,10 @@ class SpeakingCoachParser:
                             paragraph_index=paragraph.paragraph_index,
                             **context(),
                         )
-                        current_question["fields"][label].append(value_rich)
+                        current_question["fields"][canonical_label].append(value_rich)
                     else:
-                        current_question["fields"][label] = value_rich
-                    pending_field = ("question", label)
+                        current_question["fields"][canonical_label] = value_rich
+                    pending_field = ("question", canonical_label)
                     continue
 
                 self._issue(
@@ -681,6 +754,15 @@ class SpeakingCoachParser:
         tip_th = rich_fields.get("tip_th") or RichText()
         practice["focus"] = focus.text or None
         practice["focus_runs"] = focus.runs
+        practice["focus_items"] = self._parse_focus_items(
+            practice["focus"],
+            tab=tab,
+            lesson_external_id=practice["source"]["lesson_external_id"],
+            practice_type=practice["practice_type"],
+            question_number=None,
+            paragraph_index=practice["source"]["paragraph_index"],
+            allow_legacy_unranked=True,
+        )
         practice["tip"] = {
             "en": tip_en.text or None,
             "th": tip_th.text or None,
@@ -701,6 +783,24 @@ class SpeakingCoachParser:
         answers: Dict[int, RichText] = question["answers"]
         answer_indexes = sorted(answers)
         accepted_answers = [answers[index].text for index in answer_indexes if answers[index].text]
+        question_focus = (fields.get("FOCUS") or RichText()).text or None
+        question_focus_runs = (fields.get("FOCUS") or RichText()).runs
+        inherited_legacy_focus = False
+        if question_focus is None:
+            legacy_focus = practice.get("_rich_fields", {}).get("focus") or RichText()
+            question_focus = legacy_focus.text or None
+            question_focus_runs = legacy_focus.runs
+            inherited_legacy_focus = question_focus is not None
+
+        focus_items = self._parse_focus_items(
+            question_focus,
+            tab=tab,
+            lesson_external_id=practice["source"]["lesson_external_id"],
+            practice_type=practice["practice_type"],
+            question_number=question["source_number"],
+            paragraph_index=question["paragraph_index"],
+            allow_legacy_unranked=inherited_legacy_focus,
+        )
 
         practice_type = practice["practice_type"]
         if practice_type == "pronunciation":
@@ -746,12 +846,107 @@ class SpeakingCoachParser:
             },
             "target_answers": target_answers,
             "examples": examples,
+            "focus": question_focus,
+            "focus_runs": question_focus_runs,
+            "focus_items": focus_items,
             "source": {
                 "paragraph_index": question["paragraph_index"],
             },
         }
         self._validate_question(result, fields, answer_indexes, practice, tab)
         return result
+
+    def _parse_focus_items(
+        self,
+        focus: Optional[str],
+        *,
+        tab: SourceTab,
+        lesson_external_id: Optional[str],
+        practice_type: Optional[str],
+        question_number: Optional[str],
+        paragraph_index: Optional[int],
+        allow_legacy_unranked: bool,
+    ) -> List[Dict[str, Any]]:
+        if not focus:
+            return []
+
+        lines = [line.strip() for line in focus.splitlines() if line.strip()]
+        ranked_items: List[Dict[str, Any]] = []
+        unranked_lines: List[str] = []
+        invalid_marker = False
+
+        for line in lines:
+            item_match = FOCUS_ITEM_RE.match(line)
+            if item_match:
+                ranked_items.append(
+                    {
+                        "priority": int(item_match.group(1)),
+                        "instruction": item_match.group(2).strip(),
+                    }
+                )
+                continue
+
+            marker_match = FOCUS_MARKER_RE.match(line)
+            if marker_match:
+                invalid_marker = True
+                marker = marker_match.group(0)
+                code = (
+                    "empty_focus_instruction"
+                    if marker in {"[P1]", "[P2]", "[P3]"}
+                    else "invalid_focus_priority"
+                )
+                message = (
+                    f"{marker} must be followed by a non-empty instruction."
+                    if code == "empty_focus_instruction"
+                    else f"Focus priority {marker!r} must be [P1], [P2], or [P3]."
+                )
+                self._issue(
+                    "error",
+                    code,
+                    message,
+                    tab=tab,
+                    lesson_external_id=lesson_external_id,
+                    practice_type=practice_type,
+                    question_number=question_number,
+                    paragraph_index=paragraph_index,
+                )
+                continue
+
+            unranked_lines.append(line)
+
+        if ranked_items and unranked_lines:
+            self._issue(
+                "error",
+                "mixed_ranked_unranked_focus",
+                "Every paragraph in a ranked FOCUS must begin with [P1], [P2], or [P3].",
+                tab=tab,
+                lesson_external_id=lesson_external_id,
+                practice_type=practice_type,
+                question_number=question_number,
+                paragraph_index=paragraph_index,
+            )
+            return ranked_items
+
+        if ranked_items or invalid_marker:
+            return ranked_items
+
+        instruction = "\n".join(unranked_lines).strip()
+        if not instruction:
+            return []
+        if allow_legacy_unranked:
+            return [{"priority": 1, "instruction": instruction}]
+
+        self._issue(
+            "error",
+            "unranked_question_focus",
+            "Question-level FOCUS items must begin with [P1], [P2], or [P3].",
+            tab=tab,
+            lesson_external_id=lesson_external_id,
+            practice_type=practice_type,
+            question_number=question_number,
+            paragraph_index=paragraph_index,
+        )
+        return [{"priority": 1, "instruction": instruction}]
 
     def _validate_lesson(self, lesson: Dict[str, Any], tab: SourceTab) -> None:
         lesson_id = lesson["lesson_external_id"]
@@ -793,15 +988,6 @@ class SpeakingCoachParser:
                 lesson_external_id=lesson_id,
                 practice_type=practice_type,
                 paragraph_index=practice["source"]["paragraph_index"],
-            )
-        if not practice.get("focus"):
-            self._issue(
-                "error",
-                "missing_focus",
-                "Speaking practice set is missing FOCUS.",
-                tab=tab,
-                lesson_external_id=lesson_id,
-                practice_type=practice_type,
             )
         if not practice["questions"]:
             self._issue(
@@ -854,6 +1040,9 @@ class SpeakingCoachParser:
                 paragraph_index=paragraph_index,
             )
 
+        if not question.get("focus"):
+            missing("FOCUS")
+
         if not number:
             missing("QUESTION number")
         if practice_type == "pronunciation":
@@ -897,10 +1086,35 @@ def parse_file(path: str | Path) -> Dict[str, Any]:
         return parse_document(json.load(handle))
 
 
+def select_document_tab(document: Dict[str, Any], tab_title: str) -> Dict[str, Any]:
+    """Return a document containing only the uniquely named Google Docs tab."""
+    requested = tab_title.strip().casefold()
+    matches: List[Dict[str, Any]] = []
+
+    def collect(tabs: Sequence[Dict[str, Any]]) -> None:
+        for tab in tabs:
+            properties = tab.get("tabProperties") or {}
+            title = str(properties.get("title") or "").strip()
+            if title.casefold() == requested:
+                matches.append(tab)
+            collect(tab.get("childTabs", []) or [])
+
+    collect(document.get("tabs", []) or [])
+    if not matches:
+        raise ValueError(f"Google Docs tab {tab_title!r} was not found.")
+    if len(matches) > 1:
+        raise ValueError(
+            f"Google Docs tab title {tab_title!r} is not unique; "
+            f"found {len(matches)} matches."
+        )
+    return {**document, "tabs": [matches[0]]}
+
+
 def fetch_and_parse(
     document_id: str,
     *,
     include_tabs_content: bool = False,
+    tab_title: str | None = None,
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     try:
         from .docs_fetch import fetch_doc
@@ -910,7 +1124,10 @@ def fetch_and_parse(
     document = fetch_doc(document_id, include_tabs_content=include_tabs_content)
     if not document:
         raise RuntimeError(f"Failed to fetch Google document {document_id}")
-    return document, parse_document(document)
+    selected_document = (
+        select_document_tab(document, tab_title) if tab_title else document
+    )
+    return document, parse_document(selected_document)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -930,6 +1147,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "--all-tabs",
         action="store_true",
         help="Fetch and parse all Google Docs tabs",
+    )
+    argument_parser.add_argument(
+        "--tab-title",
+        help="Fetch all tab content but parse only the uniquely named tab",
     )
     argument_parser.add_argument(
         "--raw-input",
@@ -961,7 +1182,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 )
             raw_document, result = fetch_and_parse(
                 args.document_id,
-                include_tabs_content=args.all_tabs,
+                include_tabs_content=args.all_tabs or bool(args.tab_title),
+                tab_title=args.tab_title,
             )
             if args.raw_output:
                 raw_output_path = Path(args.raw_output)
@@ -974,7 +1196,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     "[speaking_coach_parser] "
                     f"wrote raw Google Docs JSON to {raw_output_path}"
                 )
-    except (OSError, json.JSONDecodeError, RuntimeError) as error:
+    except (OSError, json.JSONDecodeError, RuntimeError, ValueError) as error:
         print(f"[speaking_coach_parser] {error}", file=sys.stderr)
         return 2
 

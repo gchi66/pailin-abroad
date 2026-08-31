@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from app.tools.speaking_coach_parser import parse_document
+from app.tools.speaking_coach_parser import parse_document, select_document_tab
 
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
@@ -56,6 +56,7 @@ def test_parses_saved_speaking_coach_document() -> None:
     assert lesson_41["lesson_external_id"] == "4.1"
     pronunciation, open_practice = lesson_41["practice_sets"]
     assert "1. Structure Check:" in pronunciation["focus"]
+    assert pronunciation["questions"][0]["focus"] == pronunciation["focus"]
     assert pronunciation["questions"][0]["prompt"] == {
         "en": "I’m eating lunch.",
         "th": "ฉันกำลังกินข้าวเที่ยงอยู่",
@@ -95,6 +96,136 @@ def test_supports_multiline_focus_and_legacy_document_body() -> None:
         "1. Listen for the final consonant.\n"
         "2. Do not penalize the learner's accent."
     )
+    assert practice["questions"][0]["focus"] == practice["focus"]
+    assert practice["focus_items"] == [
+        {
+            "priority": 1,
+            "instruction": (
+                "Check the target sentence.\n"
+                "1. Listen for the final consonant.\n"
+                "2. Do not penalize the learner's accent."
+            ),
+        }
+    ]
+    assert practice["questions"][0]["focus_items"] == practice["focus_items"]
+
+
+def test_parses_question_level_focus_without_practice_focus() -> None:
+    result = parse_document(
+        _legacy_document(
+            "LESSON: 1.1",
+            "PRACTICE_TYPE: pronunciation",
+            "QUESTION: 1",
+            "REPEAT_ENGLISH: I’m Pailin.",
+            "REPEAT_THAI: ฉันชื่อไพลิน",
+            "FOCUS: [P1] Check that the /m/ in ‘I’m’ is pronounced.",
+            "QUESTION: 2",
+            "REPEAT_ENGLISH: My name is Pailin.",
+            "REPEAT_THAI: ฉันชื่อไพลิน",
+            "FOCUS: [P2] Check that ‘is’ is not omitted.",
+        )
+    )
+
+    assert result["summary"]["error_count"] == 0
+    practice = result["lessons"][0]["practice_sets"][0]
+    assert practice["focus"] is None
+    assert [question["focus"] for question in practice["questions"]] == [
+        "[P1] Check that the /m/ in ‘I’m’ is pronounced.",
+        "[P2] Check that ‘is’ is not omitted.",
+    ]
+    assert [question["focus_items"] for question in practice["questions"]] == [
+        [{"priority": 1, "instruction": "Check that the /m/ in ‘I’m’ is pronounced."}],
+        [{"priority": 2, "instruction": "Check that ‘is’ is not omitted."}],
+    ]
+
+
+def test_parses_ranked_focus_items_and_preserves_duplicate_priorities() -> None:
+    result = parse_document(
+        _legacy_document(
+            "LESSON: 1.1",
+            "PRACTICE_TYPE: open",
+            "QUESTION: 1",
+            "OPEN_ENGLISH: Hi, I’m Pailin!",
+            "OPEN_THAI: สวัสดีค่ะ ฉันไพลินนะคะ",
+            "EXAMPLE_ENGLISH: Hi, I’m Gift.",
+            "EXAMPLE_THAI: สวัสดีค่ะ ฉันชื่อกิ๊ฟ",
+            "FOCUS: [P1] Check that the learner gives their name.",
+            "[P1] If the learner uses I’m, check the final /m/.",
+            "[P2] Check that the initial /h/ is pronounced.",
+            "[P3] Check that the greeting vowel is intelligible.",
+        )
+    )
+
+    assert result["schema_version"] == "speaking-coach-parser-v3"
+    assert result["summary"]["error_count"] == 0
+    question = result["lessons"][0]["practice_sets"][0]["questions"][0]
+    assert question["focus_items"] == [
+        {"priority": 1, "instruction": "Check that the learner gives their name."},
+        {"priority": 1, "instruction": "If the learner uses I’m, check the final /m/."},
+        {"priority": 2, "instruction": "Check that the initial /h/ is pronounced."},
+        {"priority": 3, "instruction": "Check that the greeting vowel is intelligible."},
+    ]
+
+
+def test_rejects_unranked_question_focus() -> None:
+    result = parse_document(
+        _legacy_document(
+            "LESSON: 1.1",
+            "PRACTICE_TYPE: pronunciation",
+            "QUESTION: 1",
+            "REPEAT_ENGLISH: Hi.",
+            "REPEAT_THAI: สวัสดีค่ะ",
+            "FOCUS: Check the greeting.",
+        )
+    )
+
+    assert _issue_codes(result, "error") == ["unranked_question_focus"]
+    question = result["lessons"][0]["practice_sets"][0]["questions"][0]
+    assert question["focus_items"] == [
+        {"priority": 1, "instruction": "Check the greeting."}
+    ]
+
+
+def test_rejects_mixed_ranked_and_unranked_focus_items() -> None:
+    result = parse_document(
+        _legacy_document(
+            "LESSON: 1.1",
+            "PRACTICE_TYPE: pronunciation",
+            "QUESTION: 1",
+            "REPEAT_ENGLISH: Hi.",
+            "REPEAT_THAI: สวัสดีค่ะ",
+            "FOCUS: [P1] Check the initial /h/.",
+            "Check the vowel.",
+        )
+    )
+
+    assert _issue_codes(result, "error") == ["mixed_ranked_unranked_focus"]
+
+
+def test_rejects_invalid_priority_and_empty_instruction() -> None:
+    invalid_priority = parse_document(
+        _legacy_document(
+            "LESSON: 1.1",
+            "PRACTICE_TYPE: pronunciation",
+            "QUESTION: 1",
+            "REPEAT_ENGLISH: Hi.",
+            "REPEAT_THAI: สวัสดีค่ะ",
+            "FOCUS: [P4] Check the initial /h/.",
+        )
+    )
+    empty_instruction = parse_document(
+        _legacy_document(
+            "LESSON: 1.1",
+            "PRACTICE_TYPE: pronunciation",
+            "QUESTION: 1",
+            "REPEAT_ENGLISH: Hi.",
+            "REPEAT_THAI: สวัสดีค่ะ",
+            "FOCUS: [P1]",
+        )
+    )
+
+    assert _issue_codes(invalid_priority, "error") == ["invalid_focus_priority"]
+    assert _issue_codes(empty_instruction, "error") == ["empty_focus_instruction"]
 
 
 def test_reports_missing_type_specific_fields() -> None:
@@ -156,3 +287,45 @@ def test_reports_duplicate_question_numbers_within_a_practice_set() -> None:
 
     assert "duplicate_question_number" in _issue_codes(result, "error")
 
+
+def test_normalizes_open_chp_fields_into_open_questions() -> None:
+    result = parse_document(
+        _legacy_document(
+            "LESSON: 1.CHP",
+            "PRACTICE_TYPE: open_chp",
+            "QUESTION: 1",
+            "CHP_ENGLISH: What’s your name?",
+            "CHP_THAI: คุณชื่ออะไรคะ?",
+            "FOR_EXAMPLE_ENG: I’m Gift.",
+            "FOR_EXAMPLE_TH: ฉันชื่อกิ๊ฟ",
+            "FOCUS: [P1] Check that the learner gives their name.",
+        )
+    )
+
+    assert result["summary"]["error_count"] == 0
+    practice = result["lessons"][0]["practice_sets"][0]
+    assert result["lessons"][0]["lesson_external_id"] == "1.chp"
+    assert practice["practice_type"] == "open"
+    assert practice["source_practice_type"] == "open_chp"
+    assert practice["questions"][0]["prompt"]["en"] == "What’s your name?"
+    assert practice["questions"][0]["examples"] == [
+        {"en": "I’m Gift.", "th": "ฉันชื่อกิ๊ฟ"}
+    ]
+
+
+def test_selects_one_google_docs_tab_by_title() -> None:
+    document = {
+        "documentId": "doc-1",
+        "tabs": [
+            {"tabProperties": {"title": "Notes"}, "documentTab": {}},
+            {
+                "tabProperties": {"title": "Level 1 - AI"},
+                "documentTab": {"body": {"content": []}},
+            },
+        ],
+    }
+
+    selected = select_document_tab(document, "level 1 - ai")
+
+    assert len(selected["tabs"]) == 1
+    assert selected["tabs"][0]["tabProperties"]["title"] == "Level 1 - AI"

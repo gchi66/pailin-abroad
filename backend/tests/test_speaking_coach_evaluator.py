@@ -490,6 +490,312 @@ def test_current_are_evidence_uses_specific_rhotic_catalog_finding():
     assert "clear r sound" in candidates[0].issue.description_en
 
 
+@pytest.mark.parametrize(
+    ("word", "expected_phoneme", "spoken_phoneme"),
+    [("your", "ʊɹ", "u"), ("four", "ɔɹ", "ɔ")],
+)
+def test_strong_final_r_mismatch_overrides_misleading_word_score(
+    word, expected_phoneme, spoken_phoneme
+):
+    azure = _azure_result(
+        transcript=word,
+        words=[
+            AzureWordAssessment(
+                word=word,
+                accuracy_score=94,
+                error_type="None",
+                phonemes=[
+                    {
+                        "Phoneme": expected_phoneme,
+                        "AccuracyScore": 82,
+                        "NBestPhonemes": [
+                            {"Phoneme": spoken_phoneme, "Score": 100},
+                            {"Phoneme": "n", "Score": 40},
+                        ],
+                    }
+                ],
+                syllables=[
+                    {"Syllable": expected_phoneme, "AccuracyScore": 85}
+                ],
+            )
+        ],
+    )
+
+    candidates = evaluator._rhotic_vowel_deletion_candidates(
+        azure, focus="Check another primary pronunciation point."
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].pattern_id == "r_l_confusion"
+    assert candidates[0].focus_match is False
+    assert candidates[0].evidence["strong_final_r_mismatch"] is True
+    assert candidates[0].evidence_score >= 90
+
+
+def test_scripted_evaluation_displays_focus_and_final_r_fallback_together():
+    azure = _azure_result(
+        transcript="What’s your name?",
+        words=[
+            AzureWordAssessment(
+                word="what’s",
+                accuracy_score=91,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "w", "AccuracyScore": 87},
+                    {"Phoneme": "ʌ", "AccuracyScore": 100},
+                    {"Phoneme": "t", "AccuracyScore": 10},
+                    {
+                        "Phoneme": "s",
+                        "AccuracyScore": 0,
+                        "NBestPhonemes": [{"Phoneme": "t", "Score": 100}],
+                    },
+                ],
+                syllables=[{"Syllable": "wʌts", "AccuracyScore": 71}],
+            ),
+            AzureWordAssessment(
+                word="your",
+                accuracy_score=94,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "j", "AccuracyScore": 92},
+                    {
+                        "Phoneme": "ʊɹ",
+                        "AccuracyScore": 82,
+                        "NBestPhonemes": [
+                            {"Phoneme": "u", "Score": 100},
+                            {"Phoneme": "n", "Score": 56},
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "jʊɹ", "AccuracyScore": 85}],
+            ),
+            AzureWordAssessment(word="name", accuracy_score=97),
+        ],
+    )
+    focus = "Check that the final -s in ‘What’s’ is pronounced."
+    catalog_candidates = evaluator._rhotic_vowel_deletion_candidates(
+        azure, focus=focus
+    )
+
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="What’s your name?",
+        focus=focus,
+        catalog_candidates=catalog_candidates,
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert len(evaluation.displayed_issues) == 2
+    descriptions = [
+        issue.description_en.lower() for issue in evaluation.displayed_issues
+    ]
+    assert "what’s" in descriptions[0]
+    assert any("'your'" in description for description in descriptions)
+
+
+def test_strong_final_consonant_mismatch_can_be_off_focus_fallback():
+    azure = _azure_result(
+        transcript="cat",
+        words=[
+            AzureWordAssessment(
+                word="cat",
+                accuracy_score=95,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "k", "AccuracyScore": 100},
+                    {"Phoneme": "æ", "AccuracyScore": 100},
+                    {
+                        "Phoneme": "t",
+                        "AccuracyScore": 0,
+                        "NBestPhonemes": [
+                            {"Phoneme": "k", "Score": 100},
+                            {"Phoneme": "t", "Score": 0},
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "kæt", "AccuracyScore": 90}],
+            )
+        ],
+    )
+
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="cat",
+        focus="Check another primary pronunciation point.",
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert len(evaluation.displayed_issues) == 1
+    assert evaluation.displayed_issues[0].category == "pronunciation"
+    assert "ending" in evaluation.displayed_issues[0].description_en
+
+
+def _meet_to_miss_result(
+    *, leading_score: float = 100, expected_candidate_score: float = 19
+) -> AzureSpeechResult:
+    return _azure_result(
+        transcript="It’s nice to meet you.",
+        words=[
+            AzureWordAssessment(word="it’s", accuracy_score=98),
+            AzureWordAssessment(word="nice", accuracy_score=100),
+            AzureWordAssessment(word="to", accuracy_score=100),
+            AzureWordAssessment(
+                word="meet",
+                accuracy_score=97,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "m", "AccuracyScore": 100},
+                    {"Phoneme": "i", "AccuracyScore": 72},
+                    {
+                        "Phoneme": "t",
+                        "AccuracyScore": 32,
+                        "NBestPhonemes": [
+                            {"Phoneme": "s", "Score": leading_score},
+                            {
+                                "Phoneme": "t",
+                                "Score": expected_candidate_score,
+                            },
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "mit", "AccuracyScore": 66}],
+            ),
+            AzureWordAssessment(word="you", accuracy_score=97),
+        ],
+    )
+
+
+def test_strong_local_nbest_mismatch_catches_meet_to_miss_without_focus():
+    azure = _meet_to_miss_result()
+
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="It’s nice to meet you!",
+        focus="In ‘It’s,’ check that the final /s/ is pronounced.",
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert len(evaluation.displayed_issues) == 1
+    assert evaluation.displayed_issues[0].category == "pronunciation"
+    assert "meet" in evaluation.displayed_issues[0].description_en.lower()
+
+
+@pytest.mark.parametrize(
+    ("leading_score", "expected_candidate_score"),
+    [(89, 19), (100, 75)],
+)
+def test_local_nbest_mismatch_requires_high_score_and_wide_margin(
+    leading_score, expected_candidate_score
+):
+    evaluation = evaluator._pronunciation_evaluation(
+        _meet_to_miss_result(
+            leading_score=leading_score,
+            expected_candidate_score=expected_candidate_score,
+        ),
+        reference_text="It’s nice to meet you!",
+        focus="In ‘It’s,’ check that the final /s/ is pronounced.",
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.PASS
+    assert evaluation.displayed_issues == []
+
+
+def _truncated_nice_result() -> AzureSpeechResult:
+    return _azure_result(
+        transcript="It’s nice to meet you.",
+        words=[
+            AzureWordAssessment(word="it’s", accuracy_score=94),
+            AzureWordAssessment(
+                word="nice",
+                accuracy_score=76,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "n", "AccuracyScore": 100},
+                    {"Phoneme": "aɪ", "AccuracyScore": 63},
+                    {
+                        "Phoneme": "s",
+                        "AccuracyScore": 23,
+                        "NBestPhonemes": [
+                            {"Phoneme": "t", "Score": 100},
+                            {"Phoneme": "n", "Score": 93},
+                            {"Phoneme": "aɪ", "Score": 58},
+                            {"Phoneme": "i", "Score": 26},
+                            {"Phoneme": "eɪ", "Score": 20},
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "naɪs", "AccuracyScore": 66}],
+            ),
+            AzureWordAssessment(word="to", accuracy_score=100),
+            AzureWordAssessment(word="meet", accuracy_score=100),
+            AzureWordAssessment(word="you", accuracy_score=97),
+        ],
+    )
+
+
+def test_expected_phoneme_missing_from_full_nbest_is_strong_local_mismatch():
+    candidates = []
+    evaluation = evaluator._pronunciation_evaluation(
+        _truncated_nice_result(),
+        reference_text="It’s nice to meet you!",
+        focus="In ‘nice,’ check that the final /s/ is pronounced.",
+        catalog_candidates=candidates,
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert "nice" in evaluation.displayed_issues[0].description_en.lower()
+    assert candidates[0].evidence["local_mismatch"] == {
+        "leading_phoneme": "t",
+        "leading_score": 100.0,
+        "expected_candidate_score": None,
+        "expected_candidate_missing": True,
+        "score_margin": None,
+    }
+
+
+def test_second_attempt_does_not_hide_new_issue_after_prior_issue_resolves():
+    previous_issue = evaluator.EvaluationIssue(
+        category="focus",
+        description_en="Say 'meet' again, focusing on the ending.",
+        description_th="ลองพูดคำว่า 'meet' อีกครั้ง โดยเน้นเสียงท้ายคำ",
+    )
+    previous_candidate = evaluator._PronunciationCandidate(
+        word_index=3,
+        focus_match=True,
+        severity=90,
+        status=evaluator.AssessmentTokenStatus.NEEDS_WORK,
+        issue=previous_issue,
+        evidence_score=66,
+        priority_score=81,
+        evidence={"word": "meet", "expected_phoneme": "t"},
+    )
+    previous_policy = evaluator._pronunciation_policy_metadata(
+        [previous_candidate], focus_issues=[]
+    )
+    current_candidates = []
+
+    evaluation = evaluator._pronunciation_evaluation(
+        _truncated_nice_result(),
+        reference_text="It’s nice to meet you!",
+        focus="In ‘nice,’ check that the final /s/ is pronounced.",
+        instructional_attempt_number=2,
+        previous_evaluation={"_provider_policy": previous_policy},
+        catalog_candidates=current_candidates,
+    )
+    policy = evaluator._coaching_attempt_policy(
+        current_candidates,
+        instructional_attempt_number=2,
+        previous_evaluation={"_provider_policy": previous_policy},
+    )
+
+    assert policy["resolved_issue_keys"] == ["generic:meet:t"]
+    assert policy["new_issue_keys"] == ["generic:nice:s"]
+    assert policy["meaningful_improvement"] is True
+    assert evaluation.status == evaluator.EvaluationStatus.CONTINUE_WITH_CORRECTION
+    assert "nice" in evaluation.displayed_issues[0].description_en.lower()
+    assert "move on" in evaluation.feedback_en.lower()
+
+
 def test_ultra_strong_schwa_catches_latest_sleeping_evidence_shape():
     azure = _sleeping_cluster_result(
         consonant_accuracy=60,
@@ -724,6 +1030,134 @@ def test_focus_phoneme_is_prioritized_before_severe_off_focus_word():
         ("I’m", 0),
         ("lunch", 1),
     ]
+
+
+def _ranked_focus_result(*, whats_accuracy: float = 65) -> AzureSpeechResult:
+    return _azure_result(
+        transcript="What’s your name?",
+        words=[
+            AzureWordAssessment(
+                word="what's",
+                accuracy_score=whats_accuracy,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "w", "AccuracyScore": 92},
+                    {"Phoneme": "ʌ", "AccuracyScore": 91},
+                    {"Phoneme": "t", "AccuracyScore": 93},
+                    {"Phoneme": "s", "AccuracyScore": 90},
+                ],
+                syllables=[{"Syllable": "wʌts", "AccuracyScore": 90}],
+            ),
+            AzureWordAssessment(
+                word="your",
+                accuracy_score=60,
+                error_type="Mispronunciation",
+                phonemes=[
+                    {"Phoneme": "j", "AccuracyScore": 90},
+                    {"Phoneme": "ʊ", "AccuracyScore": 80},
+                    {
+                        "Phoneme": "ɹ",
+                        "AccuracyScore": 20,
+                        "NBestPhonemes": [
+                            {"Phoneme": "ə", "Score": 100},
+                            {"Phoneme": "ɹ", "Score": 15},
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "jʊɹ", "AccuracyScore": 40}],
+            ),
+            AzureWordAssessment(
+                word="name",
+                accuracy_score=98,
+                error_type="None",
+            ),
+        ],
+    )
+
+
+def test_authored_priority_orders_supported_pronunciation_findings() -> None:
+    focus_items = [
+        {
+            "priority": 1,
+            "instruction": "In “What’s,” check that the final /s/ is pronounced.",
+        },
+        {
+            "priority": 3,
+            "instruction": "In “your,” check that the final /r/ is pronounced.",
+        },
+    ]
+
+    evaluation = evaluator._pronunciation_evaluation(
+        _ranked_focus_result(),
+        reference_text="What’s your name?",
+        focus="\n".join(
+            f"[P{item['priority']}] {item['instruction']}"
+            for item in focus_items
+        ),
+        focus_items=focus_items,
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert [
+        issue.description_en.lower()
+        for issue in evaluation.displayed_issues
+    ] == [
+        "say 'what's' again, focusing on the ending.",
+        "say 'your' again, focusing on the ending.",
+    ]
+
+
+def test_authored_priority_does_not_create_unsupported_finding() -> None:
+    focus_items = [
+        {
+            "priority": 1,
+            "instruction": "In “What’s,” check that the final /s/ is pronounced.",
+        },
+        {
+            "priority": 3,
+            "instruction": "In “your,” check that the final /r/ is pronounced.",
+        },
+    ]
+
+    evaluation = evaluator._pronunciation_evaluation(
+        _ranked_focus_result(whats_accuracy=98),
+        reference_text="What’s your name?",
+        focus="\n".join(
+            f"[P{item['priority']}] {item['instruction']}"
+            for item in focus_items
+        ),
+        focus_items=focus_items,
+    )
+
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert len(evaluation.displayed_issues) == 1
+    assert "your" in evaluation.displayed_issues[0].description_en.lower()
+
+
+def test_same_priority_preserves_authored_focus_order() -> None:
+    focus_items = [
+        {
+            "priority": 1,
+            "instruction": "In “What’s,” check that the final /s/ is pronounced.",
+        },
+        {
+            "priority": 1,
+            "instruction": "In “your,” check that the final /r/ is pronounced.",
+        },
+    ]
+
+    evaluation = evaluator._pronunciation_evaluation(
+        _ranked_focus_result(),
+        reference_text="What’s your name?",
+        focus="\n".join(
+            f"[P{item['priority']}] {item['instruction']}"
+            for item in focus_items
+        ),
+        focus_items=focus_items,
+    )
+
+    assert "what's" in evaluation.displayed_issues[0].description_en.lower()
+    assert "your" in evaluation.displayed_issues[1].description_en.lower()
 
 
 def test_moderately_low_focus_phoneme_requires_two_supporting_signals():
@@ -1073,11 +1507,36 @@ def test_second_open_attempt_does_not_block_on_coaching_only_issue():
         previous_evaluation={"_provider_policy": previous_policy},
     )
 
+    new_issue_candidate = evaluator._PronunciationCandidate(
+        word_index=1,
+        focus_match=False,
+        severity=75,
+        status=evaluator.AssessmentTokenStatus.NEEDS_WORK,
+        issue=evaluator.EvaluationIssue(
+            category=evaluator.IssueCategory.PRONUNCIATION,
+            description_en="Say 'now' again, focusing on the ending.",
+            description_th="ลองพูดคำว่า now อีกครั้ง โดยเน้นเสียงท้ายคำ",
+        ),
+        evidence_score=80,
+        priority_score=80,
+        evidence={"word": "now", "expected_phoneme": "aʊ"},
+    )
+    newly_introduced = evaluator._compose_language_evaluation(
+        azure,
+        language,
+        pronunciation_candidates=[new_issue_candidate],
+        include_transcript=False,
+        instructional_attempt_number=2,
+        previous_evaluation={"_provider_policy": previous_policy},
+    )
+
     assert improved.status == evaluator.EvaluationStatus.PASS
     assert improved.displayed_issues == []
     assert unchanged.status == evaluator.EvaluationStatus.CONTINUE_WITH_CORRECTION
     assert unchanged.corrected_answer is None
     assert unchanged.retry_focus == []
+    assert newly_introduced.status == evaluator.EvaluationStatus.CONTINUE_WITH_CORRECTION
+    assert "now" in newly_introduced.displayed_issues[0].description_en.lower()
 
 
 def test_tiny_contextual_cluster_artifact_does_not_create_pronunciation_issue():
@@ -1382,7 +1841,13 @@ def test_open_answer_routes_azure_text_to_gemini_and_backend_derives_status(monk
     assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
     assert result.evaluation.pronunciation.issues == []
     assert result.provider == "microsoft+google"
-    assert set(result.provider_metadata) == {"azure", "gemini", "policy"}
+    assert set(result.provider_metadata) == {
+        "azure",
+        "gemini",
+        "policy",
+        "timings_ms",
+    }
+    assert result.provider_metadata["timings_ms"]["gemini_request"] == 30
     assert set(result.usage) == {"azure", "gemini"}
 
 

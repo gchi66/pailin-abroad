@@ -1,3 +1,4 @@
+import io
 import subprocess
 import wave
 
@@ -12,6 +13,26 @@ def _write_wav(path, *, seconds=1):
         output.setsampwidth(2)
         output.setframerate(16000)
         output.writeframes(b"\x00\x00" * 16000 * seconds)
+
+
+def _wav_bytes(*, sample_rate=16000, channels=1, seconds=1):
+    buffer = io.BytesIO()
+    with wave.open(buffer, "wb") as output:
+        output.setnchannels(channels)
+        output.setsampwidth(2)
+        output.setframerate(sample_rate)
+        output.writeframes(b"\x00\x00" * sample_rate * channels * seconds)
+    return buffer.getvalue()
+
+
+def test_normalization_bypasses_ffmpeg_for_azure_ready_wav(monkeypatch):
+    def unexpected_ffmpeg(*_args, **_kwargs):
+        raise AssertionError("ffmpeg should not run for Azure-ready PCM WAV")
+
+    monkeypatch.setattr(audio.subprocess, "run", unexpected_ffmpeg)
+    recording = _wav_bytes()
+
+    assert audio.normalize_speaking_audio(recording, "audio/wav") == recording
 
 
 def test_normalization_invokes_bounded_ffmpeg_without_shell(monkeypatch):

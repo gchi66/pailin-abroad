@@ -3,6 +3,7 @@ from importlib import import_module
 from io import BytesIO
 
 from flask import Flask
+import pytest
 
 from app.speaking_coach_evaluator import (
     EvaluatorError,
@@ -168,6 +169,13 @@ class FakeSupabase:
                     "examples": [{"en": "I'm studying Thai.", "th": "..."}],
                     "prompt_audio_key": "4.1_speaking_2.mp3",
                     "target_answers": ["private answer"],
+                    "focus": "question-specific open rubric",
+                    "focus_items": [
+                        {
+                            "priority": 1,
+                            "instruction": "question-specific open rubric",
+                        }
+                    ],
                     "is_active": True,
                     "content_hash": "question-201",
                 },
@@ -180,6 +188,13 @@ class FakeSupabase:
                     "examples": [],
                     "prompt_audio_key": "4.1_speaking_1.mp3",
                     "target_answers": ["private answer"],
+                    "focus": "question-specific pronunciation rubric",
+                    "focus_items": [
+                        {
+                            "priority": 2,
+                            "instruction": "question-specific pronunciation rubric",
+                        }
+                    ],
                     "is_active": True,
                     "content_hash": "question-101",
                 },
@@ -263,6 +278,36 @@ def test_lesson_rejects_invalid_token(monkeypatch):
     assert response.get_json() == {"error": "Invalid token"}
 
 
+def test_admin_can_list_available_speaking_lessons(monkeypatch):
+    client, _ = _client(monkeypatch)
+
+    response = client.get("/api/speaking/lessons", headers=_headers())
+
+    assert response.status_code == 200
+    assert response.get_json() == {
+        "lessons": [
+            {
+                "id": "lesson-uuid",
+                "lesson_external_id": "4.1",
+                "title": "What are you doing?",
+                "title_th": "คุณกำลังทำอะไร",
+                "practice_set_count": 2,
+                "question_count": 2,
+            }
+        ]
+    }
+
+
+def test_non_admin_cannot_list_available_speaking_lessons(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.tables["users"][0]["is_admin"] = False
+
+    response = client.get("/api/speaking/lessons", headers=_headers())
+
+    assert response.status_code == 403
+    assert response.get_json() == {"error": "Admin access required"}
+
+
 def test_lesson_returns_ordered_display_safe_curriculum(monkeypatch):
     client, fake_supabase = _client(monkeypatch)
 
@@ -289,6 +334,7 @@ def test_lesson_returns_ordered_display_safe_curriculum(monkeypatch):
     )
     response_text = response.get_data(as_text=True)
     assert "focus" not in response_text
+    assert "focus_items" not in response_text
     assert "target_answers" not in response_text
     assert all("focus" not in columns for columns in fake_supabase.selected_columns)
     assert all(
@@ -383,7 +429,23 @@ def test_force_new_session_preserves_old_session_as_abandoned(monkeypatch):
     assert sessions[1]["status"] == "active"
 
 
-def test_evaluation_uploads_audio_persists_result_and_advances(monkeypatch):
+@pytest.mark.parametrize(
+    ("upload", "expected_mime_type"),
+    [
+        ((b"fake m4a audio", "recording.m4a", "audio/mp4"), "audio/mp4"),
+        (
+            (b"RIFF\x00\x00\x00\x00WAVEfake", "recording.wav", "application/octet-stream"),
+            "audio/wav",
+        ),
+        (
+            (b"RIFF\x00\x00\x00\x00WAVEfake", "recording.wav", "audio/vnd.wave"),
+            "audio/wav",
+        ),
+    ],
+)
+def test_evaluation_uploads_audio_persists_result_and_advances(
+    monkeypatch, upload, expected_mime_type
+):
     client, fake_supabase = _client(monkeypatch)
     session_response = client.post(
         "/api/speaking/sessions",
@@ -434,7 +496,7 @@ def test_evaluation_uploads_audio_persists_result_and_advances(monkeypatch):
             "session_id": session_id,
             "question_id": "101",
             "instructional_attempt_number": "1",
-            "audio": (BytesIO(b"fake m4a audio"), "recording.m4a", "audio/mp4"),
+            "audio": (BytesIO(upload[0]), upload[1], upload[2]),
         },
         content_type="multipart/form-data",
     )
@@ -442,12 +504,21 @@ def test_evaluation_uploads_audio_persists_result_and_advances(monkeypatch):
     assert response.status_code == 200
     payload = response.get_json()
     assert payload["attempt"]["evaluation"]["status"] == "pass"
-    assert payload["attempt"]["debug"] == {
+    debug = payload["attempt"]["debug"]
+    assert {key: value for key, value in debug.items() if key != "request_timings_ms"} == {
         "provider": "google",
         "model": "gemini-3.5-flash-lite",
         "latency_ms": 120,
         "usage": {"total_token_count": 12},
         "provider_response": {"id": "interaction-1"},
+    }
+    assert set(debug["request_timings_ms"]) == {
+        "auth",
+        "setup",
+        "audio_storage",
+        "evaluator",
+        "persistence",
+        "total",
     }
     assert payload["session"]["current_question_id"] == 201
     attempt = fake_supabase.tables["user_speaking_coach_attempts"][0]
@@ -455,11 +526,20 @@ def test_evaluation_uploads_audio_persists_result_and_advances(monkeypatch):
     assert attempt["evaluation_result"] == "pass"
     assert attempt["normalized_evaluation"]["status"] == "pass"
     assert attempt["evaluation_context"]["focus"] == "private rubric"
-    assert captured_evaluator["audio_mime_type"] == "audio/mp4"
+    assert captured_evaluator["audio_mime_type"] == expected_mime_type
+    assert captured_evaluator["focus"] == "question-specific pronunciation rubric"
+    assert captured_evaluator["focus_items"] == [
+        {
+            "priority": 2,
+            "instruction": "question-specific pronunciation rubric",
+        }
+    ]
     uploads = fake_supabase.storage.buckets[module.LEARNER_AUDIO_BUCKET].uploads
     assert len(uploads) == 1
-    assert uploads[0][0].endswith(".m4a")
-    assert uploads[0][2]["content-type"] == "audio/mp4"
+    assert uploads[0][0].endswith(
+        ".wav" if expected_mime_type == "audio/wav" else ".m4a"
+    )
+    assert uploads[0][2]["content-type"] == expected_mime_type
 
 
 def test_evaluation_omits_debug_diagnostics_for_non_admin(monkeypatch):

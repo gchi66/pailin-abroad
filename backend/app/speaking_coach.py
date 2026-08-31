@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import hmac
 import json
+import time
 from typing import Any
 from urllib.parse import quote
 from uuid import uuid4
@@ -41,6 +42,8 @@ ALLOWED_AUDIO_MIME_TYPES = {
     "audio/mpeg": "audio/mpeg",
     "audio/mp3": "audio/mp3",
     "audio/wav": "audio/wav",
+    "audio/wave": "audio/wav",
+    "audio/vnd.wave": "audio/wav",
     "audio/x-wav": "audio/wav",
     "audio/aiff": "audio/aiff",
     "audio/ogg": "audio/ogg",
@@ -64,6 +67,14 @@ PRACTICE_SET_SELECT = "id,practice_type,tip_en,tip_th,sort_order"
 QUESTION_SELECT = (
     "id,practice_set_id,sort_order,prompt_en,prompt_th,examples,prompt_audio_key"
 )
+
+
+def _looks_like_wav(audio_bytes: bytes) -> bool:
+    return (
+        len(audio_bytes) >= 12
+        and audio_bytes[:4] == b"RIFF"
+        and audio_bytes[8:12] == b"WAVE"
+    )
 
 
 def _rows(response: Any) -> list[dict[str, Any]]:
@@ -144,6 +155,84 @@ def _fetch_lesson(lesson_external_id: str) -> dict[str, Any] | None:
     if len(lessons) > 1:
         raise RuntimeError("Multiple lessons share the same lesson_external_id")
     return lessons[0] if lessons else None
+
+
+def _lesson_external_id_sort_key(value: Any) -> tuple[int, int, str]:
+    text = str(value or "").strip()
+    level_text, separator, lesson_text = text.partition(".")
+    if not separator or not level_text.isdigit():
+        return (10**9, 10**9, text.casefold())
+    level = int(level_text)
+    if lesson_text.isdigit():
+        return (level, int(lesson_text), "")
+    if lesson_text.casefold() == "chp":
+        return (level, 10**8, "")
+    return (level, 10**9, lesson_text.casefold())
+
+
+def _available_speaking_lessons() -> list[dict[str, Any]]:
+    practice_response = (
+        supabase_admin.table("speaking_coach_practice_sets")
+        .select("id,lesson_id")
+        .eq("is_active", True)
+        .execute()
+    )
+    practices = _rows(practice_response)
+    if not practices:
+        return []
+
+    practice_ids = [row["id"] for row in practices]
+    question_response = (
+        supabase_admin.table("speaking_coach_questions")
+        .select("id,practice_set_id")
+        .in_("practice_set_id", practice_ids)
+        .eq("is_active", True)
+        .execute()
+    )
+    question_counts: dict[Any, int] = defaultdict(int)
+    for question in _rows(question_response):
+        question_counts[question.get("practice_set_id")] += 1
+
+    lesson_counts: dict[Any, dict[str, int]] = defaultdict(
+        lambda: {"practice_set_count": 0, "question_count": 0}
+    )
+    for practice in practices:
+        question_count = question_counts.get(practice.get("id"), 0)
+        if question_count <= 0:
+            continue
+        counts = lesson_counts[practice.get("lesson_id")]
+        counts["practice_set_count"] += 1
+        counts["question_count"] += question_count
+    lesson_ids = [lesson_id for lesson_id in lesson_counts if lesson_id is not None]
+    if not lesson_ids:
+        return []
+
+    lesson_response = (
+        supabase_admin.table("lessons")
+        .select(LESSON_SELECT)
+        .in_("id", lesson_ids)
+        .execute()
+    )
+    result = []
+    for lesson in _rows(lesson_response):
+        counts = lesson_counts.get(lesson.get("id"))
+        if not counts:
+            continue
+        result.append(
+            {
+                "id": lesson.get("id"),
+                "lesson_external_id": lesson.get("lesson_external_id"),
+                "title": lesson.get("title"),
+                "title_th": lesson.get("title_th"),
+                **counts,
+            }
+        )
+    return sorted(
+        result,
+        key=lambda lesson: _lesson_external_id_sort_key(
+            lesson.get("lesson_external_id")
+        ),
+    )
 
 
 def _fetch_lesson_payload(lesson: dict[str, Any]) -> dict[str, Any]:
@@ -339,7 +428,8 @@ def _fetch_evaluator_question(question_id: int) -> tuple[dict[str, Any], dict[st
     question_response = (
         supabase_admin.table("speaking_coach_questions")
         .select(
-            "id,practice_set_id,prompt_en,prompt_th,target_answers,examples,is_active"
+            "id,practice_set_id,prompt_en,prompt_th,target_answers,examples,"
+            "focus,focus_items,is_active"
         )
         .eq("id", question_id)
         .limit(1)
@@ -485,6 +575,21 @@ def get_speaking_lesson(lesson_external_id: str):
         return jsonify({"error": "Failed to fetch speaking lesson"}), 500
 
 
+@speaking_coach.route("/api/speaking/lessons", methods=["GET"])
+def list_speaking_lessons():
+    user_id, auth_error = _authenticated_user_id()
+    if auth_error:
+        return auth_error
+    if not _is_admin_user(user_id):
+        return jsonify({"error": "Admin access required"}), 403
+
+    try:
+        return jsonify({"lessons": _available_speaking_lessons()}), 200
+    except Exception:
+        current_app.logger.exception("Failed to list speaking lessons")
+        return jsonify({"error": "Failed to list speaking lessons"}), 500
+
+
 @speaking_coach.route("/api/speaking/sessions", methods=["POST"])
 def create_or_resume_speaking_session():
     user_id, auth_error = _authenticated_user_id()
@@ -562,9 +667,12 @@ def create_or_resume_speaking_session():
 
 @speaking_coach.route("/api/speaking/evaluate", methods=["POST"])
 def evaluate_speaking_recording():
+    request_started = time.monotonic()
+    auth_started = time.monotonic()
     user_id, auth_error = _authenticated_user_id()
     if auth_error:
         return auth_error
+    auth_ms = round((time.monotonic() - auth_started) * 1000)
 
     session_id = str(request.form.get("session_id") or "").strip()
     try:
@@ -578,17 +686,21 @@ def evaluate_speaking_recording():
     if not audio:
         return jsonify({"error": "Audio recording is required"}), 400
     supplied_mime_type = (audio.mimetype or "").lower().split(";", 1)[0]
-    provider_mime_type = ALLOWED_AUDIO_MIME_TYPES.get(supplied_mime_type)
-    if not provider_mime_type:
-        return jsonify({"error": "Unsupported audio format"}), 415
     audio_bytes = audio.read(MAX_AUDIO_BYTES + 1)
     if not audio_bytes:
         return jsonify({"error": "Audio recording is empty"}), 400
     if len(audio_bytes) > MAX_AUDIO_BYTES:
         return jsonify({"error": "Audio recording exceeds 10 MB"}), 413
+    provider_mime_type = ALLOWED_AUDIO_MIME_TYPES.get(supplied_mime_type)
+    if not provider_mime_type and _looks_like_wav(audio_bytes):
+        supplied_mime_type = "audio/wav"
+        provider_mime_type = "audio/wav"
+    if not provider_mime_type:
+        return jsonify({"error": "Unsupported audio format"}), 415
 
     attempt_id: str | None = None
     try:
+        setup_started = time.monotonic()
         session = _fetch_session(session_id, user_id)
         if not session:
             return jsonify({"error": "Speaking session not found"}), 404
@@ -635,7 +747,7 @@ def evaluate_speaking_recording():
             [int(item.get("evaluation_sequence") or 0) for item in attempts],
             default=0,
         ) + 1
-        audio_extension = AUDIO_FILE_EXTENSIONS[supplied_mime_type]
+        audio_extension = AUDIO_FILE_EXTENSIONS[provider_mime_type]
         audio_object_path = (
             f"{user_id}/{session_id}/{attempt_id}{audio_extension}"
         )
@@ -659,12 +771,14 @@ def evaluate_speaking_recording():
         supabase_admin.table("user_speaking_coach_attempts").insert(
             attempt_values
         ).execute()
+        setup_ms = round((time.monotonic() - setup_started) * 1000)
 
+        storage_started = time.monotonic()
         try:
             supabase_admin.storage.from_(LEARNER_AUDIO_BUCKET).upload(
                 audio_object_path,
                 audio_bytes,
-                {"content-type": supplied_mime_type, "upsert": "false"},
+                {"content-type": provider_mime_type, "upsert": "false"},
             )
         except Exception as exc:
             _update_attempt(
@@ -680,6 +794,7 @@ def evaluate_speaking_recording():
             return jsonify(
                 {"error": "Could not store the audio recording", "code": "audio_upload_failed"}
             ), 503
+        storage_ms = round((time.monotonic() - storage_started) * 1000)
 
         _update_attempt(
             attempt_id,
@@ -698,11 +813,13 @@ def evaluate_speaking_recording():
                 previous_evaluation["_provider_policy"] = (
                     previous_provider.get("policy")
                 )
+        evaluator_started = time.monotonic()
         result = evaluate_speaking_attempt(
             audio_bytes=audio_bytes,
             audio_mime_type=provider_mime_type,
             practice_type=practice["practice_type"],
-            focus=practice.get("focus") or "",
+            focus=question.get("focus") or practice.get("focus") or "",
+            focus_items=question.get("focus_items") or [],
             prompt_en=question.get("prompt_en"),
             prompt_th=question.get("prompt_th"),
             target_answers=question.get("target_answers") or [],
@@ -710,9 +827,11 @@ def evaluate_speaking_recording():
             instructional_attempt_number=instructional_attempt_number,
             previous_evaluation=previous_evaluation,
         )
+        evaluator_ms = round((time.monotonic() - evaluator_started) * 1000)
         evaluation = result.evaluation
         normalized = evaluation.model_dump(mode="json")
         completed_at = _iso(_now())
+        persistence_started = time.monotonic()
         _update_attempt(
             attempt_id,
             {
@@ -754,6 +873,27 @@ def evaluate_speaking_recording():
             session_payload = _advance_session(session, ordered_question_ids)
         else:
             session_payload = _session_payload(session, ordered_question_ids)
+        persistence_ms = round((time.monotonic() - persistence_started) * 1000)
+        total_ms = round((time.monotonic() - request_started) * 1000)
+        evaluator_timings = result.provider_metadata.get("timings_ms", {})
+        print(
+            "[speaking-coach-timing] "
+            + json.dumps(
+                {
+                    "question_id": question_id,
+                    "practice_type": practice["practice_type"],
+                    "auth_ms": auth_ms,
+                    "setup_ms": setup_ms,
+                    "audio_storage_ms": storage_ms,
+                    "evaluator_ms": evaluator_ms,
+                    "persistence_ms": persistence_ms,
+                    "total_ms": total_ms,
+                    "evaluator": evaluator_timings,
+                },
+                separators=(",", ":"),
+            ),
+            flush=True,
+        )
         attempt_payload: dict[str, Any] = {
             "id": attempt_id,
             "instructional_attempt_number": instructional_attempt_number,
@@ -767,6 +907,14 @@ def evaluate_speaking_recording():
                 "latency_ms": result.latency_ms,
                 "usage": result.usage,
                 "provider_response": result.provider_metadata,
+                "request_timings_ms": {
+                    "auth": auth_ms,
+                    "setup": setup_ms,
+                    "audio_storage": storage_ms,
+                    "evaluator": evaluator_ms,
+                    "persistence": persistence_ms,
+                    "total": total_ms,
+                },
             }
         return jsonify(
             {"attempt": attempt_payload, "session": session_payload}

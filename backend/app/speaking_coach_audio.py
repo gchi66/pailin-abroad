@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import io
 import os
 from pathlib import Path
 import subprocess
@@ -64,6 +65,32 @@ def normalize_speaking_audio(
         raise AudioNormalizationError(
             "audio_too_large", "The audio recording exceeds the input size limit."
         )
+
+    # iOS can record the exact PCM format required by Azure. Validate every WAV
+    # property before bypassing ffmpeg so this remains safe for untrusted uploads.
+    if mime_type in {"audio/wav", "audio/x-wav"}:
+        try:
+            with wave.open(io.BytesIO(audio_bytes), "rb") as wav_file:
+                duration_seconds = wav_file.getnframes() / wav_file.getframerate()
+                is_azure_ready = (
+                    wav_file.getnchannels() == 1
+                    and wav_file.getframerate() == 16000
+                    and wav_file.getsampwidth() == 2
+                    and wav_file.getcomptype() == "NONE"
+                )
+        except (wave.Error, EOFError, ZeroDivisionError):
+            is_azure_ready = False
+            duration_seconds = 0
+        if is_azure_ready:
+            if len(audio_bytes) > max_output_bytes:
+                raise AudioNormalizationError(
+                    "audio_too_large", "The normalized audio exceeds the size limit."
+                )
+            if duration_seconds > max_duration_seconds + 0.05:
+                raise AudioNormalizationError(
+                    "audio_too_long", "The audio recording is too long."
+                )
+            return audio_bytes
 
     try:
         with tempfile.TemporaryDirectory(prefix="speaking-audio-") as temp_dir:
