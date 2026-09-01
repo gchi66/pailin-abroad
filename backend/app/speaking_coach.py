@@ -235,7 +235,9 @@ def _available_speaking_lessons() -> list[dict[str, Any]]:
     )
 
 
-def _fetch_lesson_payload(lesson: dict[str, Any]) -> dict[str, Any]:
+def _fetch_lesson_payload(
+    lesson: dict[str, Any], *, include_test_answers: bool = False
+) -> dict[str, Any]:
     practice_response = (
         supabase_admin.table("speaking_coach_practice_sets")
         .select(PRACTICE_SET_SELECT)
@@ -252,9 +254,12 @@ def _fetch_lesson_payload(lesson: dict[str, Any]) -> dict[str, Any]:
 
     questions: list[dict[str, Any]] = []
     if practice_ids:
+        question_select = QUESTION_SELECT
+        if include_test_answers:
+            question_select += ",target_answers"
         question_response = (
             supabase_admin.table("speaking_coach_questions")
-            .select(QUESTION_SELECT)
+            .select(question_select)
             .in_("practice_set_id", practice_ids)
             .eq("is_active", True)
             .execute()
@@ -276,19 +281,28 @@ def _fetch_lesson_payload(lesson: dict[str, Any]) -> dict[str, Any]:
         grouped_questions = questions_by_practice.get(practice["id"], [])
         for set_position, question in enumerate(grouped_questions, start=1):
             lesson_position += 1
-            question_payloads.append(
-                {
-                    "id": question.get("id"),
-                    "position": set_position,
-                    "lesson_position": lesson_position,
-                    "prompt_en": question.get("prompt_en"),
-                    "prompt_th": question.get("prompt_th"),
-                    "examples": question.get("examples") or [],
-                    "prompt_audio_url": _prompt_audio_url(
-                        question.get("prompt_audio_key")
+            question_payload = {
+                "id": question.get("id"),
+                "position": set_position,
+                "lesson_position": lesson_position,
+                "prompt_en": question.get("prompt_en"),
+                "prompt_th": question.get("prompt_th"),
+                "examples": question.get("examples") or [],
+                "prompt_audio_url": _prompt_audio_url(
+                    question.get("prompt_audio_key")
+                ),
+            }
+            if include_test_answers:
+                target_answers = question.get("target_answers") or []
+                question_payload["test_answer_en"] = next(
+                    (
+                        answer.strip()
+                        for answer in target_answers
+                        if isinstance(answer, str) and answer.strip()
                     ),
-                }
-            )
+                    None,
+                )
+            question_payloads.append(question_payload)
         practice_payloads.append(
             {
                 "id": practice.get("id"),
@@ -552,7 +566,7 @@ def cleanup_speaking_retention():
     "/api/speaking/lessons/<string:lesson_external_id>", methods=["GET"]
 )
 def get_speaking_lesson(lesson_external_id: str):
-    _user_id, auth_error = _authenticated_user_id()
+    user_id, auth_error = _authenticated_user_id()
     if auth_error:
         return auth_error
 
@@ -564,7 +578,13 @@ def get_speaking_lesson(lesson_external_id: str):
         lesson = _fetch_lesson(normalized_id)
         if not lesson:
             return jsonify({"error": "Speaking lesson not found"}), 404
-        payload = _fetch_lesson_payload(lesson)
+        include_test_answers = (
+            request.args.get("include_test_answers") == "1"
+            and _is_admin_user(user_id)
+        )
+        payload = _fetch_lesson_payload(
+            lesson, include_test_answers=include_test_answers
+        )
         if not payload["lesson"]["practice_sets"]:
             return jsonify({"error": "Speaking lesson not found"}), 404
         return jsonify(payload), 200

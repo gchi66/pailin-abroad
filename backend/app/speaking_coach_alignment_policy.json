@@ -1,0 +1,20 @@
+{
+  "version": "target-alignment-v1",
+  "costs": {
+    "exact_match": 0.0,
+    "catalog_substitution": 0.25,
+    "candidate_supported_substitution": 0.25,
+    "cluster_epenthesis": 0.2,
+    "ordinary_substitution": 1.0,
+    "insertion": 0.85,
+    "deletion": 0.85
+  },
+  "thresholds": {
+    "target_like_score": 0.55,
+    "ambiguous_score": 0.35,
+    "minimum_target_coverage": 0.6,
+    "maximum_unsupported_changes": 2,
+    "candidate_support_score": 75.0,
+    "candidate_support_max_gap": 25.0
+  }
+}

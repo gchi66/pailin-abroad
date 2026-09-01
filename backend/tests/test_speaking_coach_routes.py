@@ -343,6 +343,39 @@ def test_lesson_returns_ordered_display_safe_curriculum(monkeypatch):
     )
 
 
+def test_admin_can_request_test_answer_without_exposing_target_answer_list(monkeypatch):
+    client, _fake_supabase = _client(monkeypatch)
+
+    response = client.get(
+        "/api/speaking/lessons/4.1?include_test_answers=1",
+        headers=_headers(),
+    )
+
+    assert response.status_code == 200
+    first_question = response.get_json()["lesson"]["practice_sets"][0][
+        "questions"
+    ][0]
+    assert first_question["test_answer_en"] == "private answer"
+    assert "target_answers" not in first_question
+
+
+def test_non_admin_cannot_request_test_answer(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.tables["users"][0]["is_admin"] = False
+
+    response = client.get(
+        "/api/speaking/lessons/4.1?include_test_answers=1",
+        headers=_headers(),
+    )
+
+    assert response.status_code == 200
+    first_question = response.get_json()["lesson"]["practice_sets"][0][
+        "questions"
+    ][0]
+    assert "test_answer_en" not in first_question
+    assert "target_answers" not in first_question
+
+
 def test_missing_lesson_returns_404(monkeypatch):
     client, _ = _client(monkeypatch)
 

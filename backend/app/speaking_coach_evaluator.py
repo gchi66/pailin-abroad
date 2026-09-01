@@ -6,6 +6,7 @@ import json
 import re
 import time
 from dataclasses import dataclass, field
+from difflib import SequenceMatcher
 from enum import Enum
 from typing import Any, Literal
 
@@ -24,6 +25,13 @@ from app.speaking_coach_thai_patterns import (
     pattern_by_id,
     substitution_pattern,
     thai_pronunciation_catalog,
+)
+from app.speaking_coach_target_alignment import (
+    ExpectedPhoneme,
+    ObservedPhoneme,
+    PhonemeCandidate,
+    TargetAlignmentResult,
+    align_phonemes_to_target,
 )
 
 
@@ -67,6 +75,8 @@ LOCAL_PHONEME_MISMATCH_CANDIDATE_SCORE = 90
 LOCAL_PHONEME_MISMATCH_MIN_SCORE_MARGIN = 30
 PROSODY_MIN_WORDS = 5
 PROSODY_BREAK_CONFIDENCE_THRESHOLD = 0.75
+SHORT_P1_GATE_MAX_WORDS = 3
+SHORT_P1_GATE_UNRELATED_SIMILARITY = 0.45
 IPA_VOWELS = {
     "a",
     "æ",
@@ -389,6 +399,16 @@ class _PronunciationCandidate:
     blocking: bool = False
 
 
+@dataclass(frozen=True)
+class _P1FocusTarget:
+    word: str
+    word_index: int
+    expected_segment: str
+    position: Literal["initial", "medial", "final", "any"]
+    instruction: str
+    focus_order: int
+
+
 def _normalized_match_text(value: str) -> str:
     return value.lower().replace("’", "'")
 
@@ -477,6 +497,491 @@ def _normalized_focus_items(
         if focus.strip()
         else []
     )
+
+
+_CONTRACTION_EXPANSIONS = {
+    "i'm": ("i", "am"),
+    "isn't": ("is", "not"),
+    "they're": ("they", "are"),
+    "we're": ("we", "are"),
+    "you're": ("you", "are"),
+}
+
+
+def _spoken_words(value: str) -> list[str]:
+    return [
+        _normalized_match_text(word)
+        for word in re.findall(r"[A-Za-z]+(?:['’][A-Za-z]+)*", value)
+    ]
+
+
+def _expanded_alignment_units(words: list[str]) -> list[tuple[str, int]]:
+    units: list[tuple[str, int]] = []
+    for word_index, word in enumerate(words):
+        expansion = _CONTRACTION_EXPANSIONS.get(word, (word,))
+        units.extend((unit, word_index) for unit in expansion)
+    return units
+
+
+def _focus_segment_position(
+    instruction: str, marker_start: int
+) -> Literal["initial", "medial", "final", "any"]:
+    nearby = _normalized_match_text(
+        instruction[max(0, marker_start - 45):marker_start]
+    )
+    if re.search(r"\b(final|ending|end)\b", nearby):
+        return "final"
+    if re.search(r"\b(initial|beginning|start)\b", nearby):
+        return "initial"
+    if re.search(r"\b(medial|middle)\b", nearby):
+        return "medial"
+    return "any"
+
+
+def _short_p1_focus_targets(
+    reference_text: str,
+    *,
+    focus: str,
+    focus_items: list[dict[str, Any]] | None,
+) -> list[_P1FocusTarget]:
+    reference_words = _spoken_words(reference_text)
+    if not reference_words or len(reference_words) > SHORT_P1_GATE_MAX_WORDS:
+        return []
+
+    targets: list[_P1FocusTarget] = []
+    seen: set[tuple[int, str, str]] = set()
+    for focus_order, item in enumerate(
+        _normalized_focus_items(focus_items, focus=focus)
+    ):
+        if item["priority"] != 1:
+            continue
+        instruction = item["instruction"]
+        if not _focus_is_pronunciation_specific(instruction):
+            continue
+        matching_word_indexes = [
+            index
+            for index, word in enumerate(reference_words)
+            if _focus_matches_word(word, instruction)
+        ]
+        if len(matching_word_indexes) != 1:
+            continue
+        word_index = matching_word_indexes[0]
+        for marker in re.finditer(r"/([^/\n]{1,20})/", instruction):
+            expected_segment = marker.group(1).strip().lower()
+            if not expected_segment:
+                continue
+            position = _focus_segment_position(instruction, marker.start())
+            key = (word_index, expected_segment, position)
+            if key in seen:
+                continue
+            seen.add(key)
+            targets.append(
+                _P1FocusTarget(
+                    word=reference_words[word_index],
+                    word_index=word_index,
+                    expected_segment=expected_segment,
+                    position=position,
+                    instruction=instruction,
+                    focus_order=focus_order,
+                )
+            )
+    return targets
+
+
+def _word_alignment(
+    target_units: list[tuple[str, int]],
+    hypothesis_units: list[tuple[str, int]],
+) -> dict[int, int | None]:
+    target_count = len(target_units)
+    hypothesis_count = len(hypothesis_units)
+    costs = [
+        [float("inf") for _ in range(hypothesis_count + 1)]
+        for _ in range(target_count + 1)
+    ]
+    steps: list[list[tuple[int, int, str] | None]] = [
+        [None for _ in range(hypothesis_count + 1)]
+        for _ in range(target_count + 1)
+    ]
+    costs[0][0] = 0
+    for target_index in range(1, target_count + 1):
+        costs[target_index][0] = target_index * 0.8
+        steps[target_index][0] = (target_index - 1, 0, "delete")
+    for hypothesis_index in range(1, hypothesis_count + 1):
+        costs[0][hypothesis_index] = hypothesis_index * 0.8
+        steps[0][hypothesis_index] = (0, hypothesis_index - 1, "insert")
+
+    for target_index in range(1, target_count + 1):
+        for hypothesis_index in range(1, hypothesis_count + 1):
+            target_word = target_units[target_index - 1][0]
+            hypothesis_word = hypothesis_units[hypothesis_index - 1][0]
+            substitution_cost = 1 - SequenceMatcher(
+                None, target_word, hypothesis_word
+            ).ratio()
+            options = (
+                (
+                    costs[target_index - 1][hypothesis_index - 1]
+                    + substitution_cost,
+                    (target_index - 1, hypothesis_index - 1, "match"),
+                ),
+                (
+                    costs[target_index - 1][hypothesis_index] + 0.8,
+                    (target_index - 1, hypothesis_index, "delete"),
+                ),
+                (
+                    costs[target_index][hypothesis_index - 1] + 0.8,
+                    (target_index, hypothesis_index - 1, "insert"),
+                ),
+            )
+            costs[target_index][hypothesis_index], steps[target_index][
+                hypothesis_index
+            ] = min(options, key=lambda option: option[0])
+
+    mapping: dict[int, int | None] = {
+        target_index: None for target_index in range(target_count)
+    }
+    target_index = target_count
+    hypothesis_index = hypothesis_count
+    while target_index or hypothesis_index:
+        step = steps[target_index][hypothesis_index]
+        if step is None:
+            break
+        previous_target, previous_hypothesis, operation = step
+        if operation == "match":
+            mapping[target_index - 1] = hypothesis_index - 1
+        target_index, hypothesis_index = previous_target, previous_hypothesis
+    return mapping
+
+
+def _normalized_ipa(value: str) -> str:
+    return (
+        re.sub(r"[\s.ˈˌ-]+", "", value.lower())
+        .replace("r", "ɹ")
+        .replace("ɻ", "ɹ")
+        .replace("ɫ", "l")
+    )
+
+
+def _target_alignment_observed_phonemes(
+    azure: AzureSpeechResult,
+) -> list[ObservedPhoneme]:
+    if not azure.pronunciation:
+        return []
+    result: list[ObservedPhoneme] = []
+    for word_index, word in enumerate(azure.pronunciation.words):
+        for phoneme_index, item in enumerate(word.phonemes):
+            leading = _leading_spoken_phoneme(item)
+            if not leading and isinstance(item.get("Phoneme"), str):
+                leading = item["Phoneme"].strip()
+            if not leading:
+                continue
+            candidates = []
+            for candidate in _nbest_phonemes(item)[:10]:
+                sound = candidate.get("Phoneme")
+                score = candidate.get("Score")
+                if (
+                    isinstance(sound, str)
+                    and sound.strip()
+                    and not isinstance(score, bool)
+                    and isinstance(score, (int, float))
+                ):
+                    candidates.append(
+                        PhonemeCandidate(phoneme=sound.strip(), score=float(score))
+                    )
+            result.append(
+                ObservedPhoneme(
+                    phoneme=leading,
+                    word=word.word,
+                    word_index=word_index,
+                    phoneme_index=phoneme_index,
+                    duration_100ns=(
+                        item.get("Duration")
+                        if isinstance(item.get("Duration"), int)
+                        and not isinstance(item.get("Duration"), bool)
+                        and item.get("Duration") >= 0
+                        else None
+                    ),
+                    candidates=candidates,
+                )
+            )
+    return result
+
+
+def _target_alignment_expected_phonemes(
+    azure: AzureSpeechResult,
+) -> list[ExpectedPhoneme]:
+    if not azure.pronunciation:
+        return []
+    result: list[ExpectedPhoneme] = []
+    for word_index, word in enumerate(azure.pronunciation.words):
+        usable = [
+            item
+            for item in word.phonemes
+            if isinstance(item.get("Phoneme"), str) and item["Phoneme"].strip()
+        ]
+        for phoneme_index, item in enumerate(usable):
+            result.append(
+                ExpectedPhoneme(
+                    phoneme=item["Phoneme"].strip(),
+                    word=word.word,
+                    word_index=word_index,
+                    phoneme_index=phoneme_index,
+                    word_final=phoneme_index == len(usable) - 1,
+                )
+            )
+    return result
+
+
+def _translation_alignment_reference(target_answers: list[str]) -> str | None:
+    """Choose an expanded accepted answer for the first translation aligner."""
+    usable = list(
+        dict.fromkeys(answer.strip() for answer in target_answers if answer.strip())
+    )
+    if not usable:
+        return None
+    return max(
+        usable,
+        key=lambda answer: (len(_spoken_words(answer)), -len(answer)),
+    )
+
+
+def _target_alignment_candidates(
+    alignment: TargetAlignmentResult,
+    *,
+    focus: str,
+    focus_items: list[dict[str, Any]] | None,
+) -> list[_PronunciationCandidate]:
+    candidates: list[_PronunciationCandidate] = []
+    for operation in alignment.operations:
+        word = operation.expected_word
+        if not word or operation.expected_word_index is None:
+            continue
+        if operation.kind == "cluster_epenthesis":
+            inserted_duration = operation.evidence.get(
+                "inserted_vowel_duration_100ns"
+            )
+            if (
+                isinstance(inserted_duration, int)
+                and inserted_duration
+                < CLUSTER_CONTEXT_MIN_INSERTED_VOWEL_DURATION_100NS
+            ):
+                continue
+            focus_rank = _pronunciation_focus_rank(
+                word,
+                focus=focus,
+                focus_items=focus_items,
+                general_markers=("consonant cluster",),
+            )
+            evidence_score = max(55, round((1 - operation.cost) * 100))
+            candidates.append(
+                _PronunciationCandidate(
+                    word_index=operation.expected_word_index,
+                    focus_match=focus_rank is not None,
+                    severity=evidence_score,
+                    status=AssessmentTokenStatus.NEEDS_WORK,
+                    pattern_id="cluster_epenthesis",
+                    evidence_score=evidence_score,
+                    priority_score=evidence_score,
+                    evidence={
+                        **operation.evidence,
+                        "alignment_operation": operation.model_dump(mode="json"),
+                    },
+                    issue=EvaluationIssue(
+                        category=(
+                            IssueCategory.FOCUS
+                            if focus_rank is not None
+                            else IssueCategory.PRONUNCIATION
+                        ),
+                        description_en=(
+                            f"Say '{word}' smoothly without adding an extra sound "
+                            "between the first consonants."
+                        ),
+                        description_th=(
+                            f"พูดคำว่า '{word}' ให้ต่อเนื่อง "
+                            "โดยไม่เพิ่มเสียงแทรกระหว่างพยัญชนะต้น"
+                        ),
+                    ),
+                    focus_priority=focus_rank[0] if focus_rank else None,
+                    focus_order=focus_rank[1] if focus_rank else None,
+                )
+            )
+        elif (
+            operation.kind == "candidate_supported_substitution"
+            and operation.expected_word_final
+        ):
+            expected_sound = operation.expected[0] if operation.expected else ""
+            focus_rank = _pronunciation_focus_rank(
+                word,
+                focus=focus,
+                focus_items=focus_items,
+                phonemes=(expected_sound,),
+                general_markers=("ending", "final consonant"),
+            )
+            evidence_score = max(55, round((1 - operation.cost) * 100))
+            candidates.append(
+                _PronunciationCandidate(
+                    word_index=operation.expected_word_index,
+                    focus_match=focus_rank is not None,
+                    severity=evidence_score,
+                    status=AssessmentTokenStatus.NEEDS_WORK,
+                    pattern_id=operation.pattern_id,
+                    evidence_score=evidence_score,
+                    priority_score=evidence_score,
+                    evidence={"alignment_operation": operation.model_dump(mode="json")},
+                    issue=EvaluationIssue(
+                        category=(
+                            IssueCategory.FOCUS
+                            if focus_rank is not None
+                            else IssueCategory.PRONUNCIATION
+                        ),
+                        description_en=f"Say '{word}' again, focusing on the ending.",
+                        description_th=(
+                            f"ลองพูดคำว่า '{word}' อีกครั้ง โดยเน้นเสียงท้ายคำ"
+                        ),
+                    ),
+                    focus_priority=focus_rank[0] if focus_rank else None,
+                    focus_order=focus_rank[1] if focus_rank else None,
+                )
+            )
+    return candidates
+
+
+def _unbiased_word_phonemes(word: Any) -> tuple[str, bool]:
+    spoken: list[str] = []
+    has_nbest = False
+    for item in word.phonemes:
+        candidates = _nbest_phonemes(item)
+        has_nbest = has_nbest or bool(candidates)
+        phoneme = _leading_spoken_phoneme(item)
+        if not phoneme and isinstance(item.get("Phoneme"), str):
+            phoneme = item["Phoneme"].strip()
+        if phoneme:
+            spoken.append(_normalized_ipa(phoneme))
+    return "".join(spoken), has_nbest
+
+
+def _segment_matches_position(
+    spoken: str,
+    expected: str,
+    position: Literal["initial", "medial", "final", "any"],
+) -> bool:
+    if expected == "ɹ":
+        if position == "initial":
+            return spoken.startswith("ɹ")
+        if position == "final":
+            return spoken.endswith(("ɹ", "ɚ", "ɝ"))
+        return _contains_rhotic(spoken)
+    if position == "initial":
+        return spoken.startswith(expected)
+    if position == "final":
+        return spoken.endswith(expected)
+    return expected in spoken
+
+
+def _short_p1_gate_policy(
+    azure: AzureSpeechResult,
+    *,
+    reference_text: str,
+    targets: list[_P1FocusTarget],
+) -> dict[str, Any]:
+    target_words = _spoken_words(reference_text)
+    hypothesis_words = [
+        _normalized_match_text(word.word)
+        for word in (azure.pronunciation.words if azure.pronunciation else [])
+    ]
+    target_units = _expanded_alignment_units(target_words)
+    hypothesis_units = _expanded_alignment_units(hypothesis_words)
+    target_text = " ".join(unit for unit, _ in target_units)
+    hypothesis_text = " ".join(unit for unit, _ in hypothesis_units)
+    similarity = SequenceMatcher(None, target_text, hypothesis_text).ratio()
+    base = {
+        "eligible": True,
+        "decision": "ambiguous",
+        "reference_word_count": len(target_words),
+        "reference_text": reference_text,
+        "unbiased_transcript": azure.transcript,
+        "unbiased_confidence": azure.confidence,
+        "text_similarity": round(similarity, 3),
+        "targets": [],
+    }
+    if _azure_is_unclear(azure) or not azure.pronunciation:
+        base["reason"] = "unbiased_recognition_unclear"
+        return base
+    if similarity < SHORT_P1_GATE_UNRELATED_SIMILARITY:
+        base["decision"] = "unrelated"
+        base["reason"] = "unbiased_transcript_does_not_resemble_reference"
+        return base
+
+    alignment = _word_alignment(target_units, hypothesis_units)
+    divergent = False
+    ambiguous = False
+    for target in targets:
+        target_unit_indexes = [
+            index
+            for index, (_, original_index) in enumerate(target_units)
+            if original_index == target.word_index
+        ]
+        if not target_unit_indexes:
+            continue
+        target_unit_index = (
+            target_unit_indexes[-1]
+            if target.position == "final"
+            else target_unit_indexes[0]
+        )
+        hypothesis_unit_index = alignment.get(target_unit_index)
+        evidence: dict[str, Any] = {
+            "word": target.word,
+            "word_index": target.word_index,
+            "expected_segment": target.expected_segment,
+            "position": target.position,
+            "focus_order": target.focus_order,
+            "instruction": target.instruction,
+        }
+        if hypothesis_unit_index is None:
+            evidence["result"] = "diverged"
+            evidence["reason"] = "focused_word_or_contraction_part_missing"
+            divergent = True
+            base["targets"].append(evidence)
+            continue
+
+        hypothesis_word_index = hypothesis_units[hypothesis_unit_index][1]
+        hypothesis_word = azure.pronunciation.words[hypothesis_word_index]
+        spoken_phonemes, has_nbest = _unbiased_word_phonemes(hypothesis_word)
+        expected_segment = _normalized_ipa(target.expected_segment)
+        evidence.update(
+            {
+                "hypothesis_word": hypothesis_word.word,
+                "spoken_phonemes": spoken_phonemes,
+                "has_nbest_phonemes": has_nbest,
+            }
+        )
+        if not spoken_phonemes:
+            evidence["result"] = "ambiguous"
+            evidence["reason"] = "unbiased_phonemes_missing"
+            ambiguous = True
+        elif _segment_matches_position(
+            spoken_phonemes, expected_segment, target.position
+        ):
+            evidence["result"] = "plausible"
+        else:
+            target_unit = target_units[target_unit_index][0]
+            hypothesis_unit = hypothesis_units[hypothesis_unit_index][0]
+            if has_nbest or target_unit != hypothesis_unit:
+                evidence["result"] = "diverged"
+                evidence["reason"] = "focused_segment_missing_or_substituted"
+                divergent = True
+            else:
+                evidence["result"] = "ambiguous"
+                evidence["reason"] = "focused_segment_not_corroborated"
+                ambiguous = True
+        base["targets"].append(evidence)
+
+    if divergent:
+        base["decision"] = "diverged"
+    elif ambiguous or not base["targets"]:
+        base["decision"] = "ambiguous"
+    else:
+        base["decision"] = "plausible"
+    return base
 
 
 def _pronunciation_focus_rank(
@@ -1651,6 +2156,143 @@ def _word_issue(
     )
 
 
+def _short_gate_status(instructional_attempt_number: int) -> EvaluationStatus:
+    return (
+        EvaluationStatus.RETRY
+        if instructional_attempt_number == 1
+        else EvaluationStatus.CONTINUE_WITH_CORRECTION
+    )
+
+
+def _short_gate_focus_evaluation(
+    azure: AzureSpeechResult,
+    *,
+    reference_text: str,
+    targets: list[_P1FocusTarget],
+    policy: dict[str, Any],
+    instructional_attempt_number: int,
+) -> SpeakingEvaluation:
+    target_by_key = {
+        (target.word_index, target.expected_segment, target.focus_order): target
+        for target in targets
+    }
+    issues: list[EvaluationIssue] = []
+    seen_words: set[str] = set()
+    for evidence in policy.get("targets") or []:
+        if evidence.get("result") != "diverged":
+            continue
+        target = target_by_key.get(
+            (
+                evidence.get("word_index"),
+                evidence.get("expected_segment"),
+                evidence.get("focus_order"),
+            )
+        )
+        if not target or target.word in seen_words:
+            continue
+        seen_words.add(target.word)
+        if target.position == "initial":
+            issue = EvaluationIssue(
+                category=IssueCategory.FOCUS,
+                description_en=(
+                    f"Say '{target.word}' again, focusing on the beginning."
+                ),
+                description_th=(
+                    f"ลองพูดคำว่า '{target.word}' อีกครั้ง โดยเน้นเสียงต้นคำ"
+                ),
+            )
+        else:
+            issue = _word_issue(
+                word=target.word,
+                phoneme=target.expected_segment,
+                focus_match=True,
+                final_phoneme=target.position == "final",
+            )
+        issues.append(issue)
+        if len(issues) >= MAX_DISPLAYED_ISSUES:
+            break
+
+    if not issues:
+        issues = [
+            EvaluationIssue(
+                category=IssueCategory.FOCUS,
+                description_en="Say the target sentence once more, slowly and clearly.",
+                description_th="ลองพูดประโยคเป้าหมายอีกครั้งอย่างช้า ๆ และชัดเจน",
+            )
+        ]
+    status = _short_gate_status(instructional_attempt_number)
+    return SpeakingEvaluation(
+        status=status,
+        transcript=azure.transcript,
+        content=ContentEvaluation(
+            meaning_correct=True,
+            relevant=True,
+            target_usage_correct=True,
+            grammar_correct=True,
+        ),
+        pronunciation=PronunciationEvaluation(intelligible=True, issues=issues),
+        detected_issues=issues,
+        displayed_issues=issues,
+        corrected_answer=reference_text,
+        feedback_en=(
+            issues[0].description_en
+            if len(issues) == 1
+            else "Focus on these two parts, then try once more."
+        ),
+        feedback_th=(
+            issues[0].description_th
+            if len(issues) == 1
+            else "เน้นสองจุดนี้ แล้วลองพูดอีกครั้ง"
+        ),
+        retry_focus=(
+            [issue.description_en for issue in issues]
+            if status == EvaluationStatus.RETRY
+            else []
+        ),
+    )
+
+
+def _short_gate_unrelated_evaluation(
+    azure: AzureSpeechResult,
+    *,
+    reference_text: str,
+    instructional_attempt_number: int,
+) -> SpeakingEvaluation:
+    issue = EvaluationIssue(
+        category=IssueCategory.FOCUS,
+        description_en=(
+            "That didn't match the sentence. Listen, then say the whole "
+            "sentence again."
+        ),
+        description_th=(
+            "เสียงที่พูดยังไม่ตรงกับประโยค "
+            "ลองฟังแล้วพูดทั้งประโยคอีกครั้ง"
+        ),
+    )
+    status = _short_gate_status(instructional_attempt_number)
+    return SpeakingEvaluation(
+        status=status,
+        transcript=azure.transcript,
+        content=ContentEvaluation(
+            meaning_correct=False,
+            relevant=False,
+            target_usage_correct=False,
+            grammar_correct=None,
+        ),
+        pronunciation=PronunciationEvaluation(intelligible=True),
+        detected_issues=[issue],
+        displayed_issues=[issue],
+        corrected_answer=reference_text,
+        feedback_en=issue.description_en,
+        feedback_th=issue.description_th,
+        retry_focus=(
+            [issue.description_en]
+            if status == EvaluationStatus.RETRY
+            else []
+        ),
+    )
+
+
 def _select_display_candidates(
     candidates: list[_PronunciationCandidate],
 ) -> list[_PronunciationCandidate]:
@@ -2504,6 +3146,7 @@ def evaluate_speaking_attempt(
     previous_evaluation: dict[str, Any] | None = None,
 ) -> EvaluatorResult:
     total_started = time.monotonic()
+    uses_unscripted_acoustics = practice_type in {"open", "translation"}
     context = _evaluation_context(
         practice_type=practice_type,
         focus=focus,
@@ -2538,19 +3181,157 @@ def evaluate_speaking_attempt(
                 "The pronunciation exercise has no reference text.",
             )
     azure_started = time.monotonic()
+    unbiased_azure: AzureSpeechResult | None = None
+    short_gate_targets: list[_P1FocusTarget] = []
+    short_gate_policy: dict[str, Any] | None = None
+    if practice_type == "pronunciation" and reference_text:
+        reference_word_count = len(_spoken_words(reference_text))
+        short_gate_targets = _short_p1_focus_targets(
+            reference_text,
+            focus=focus,
+            focus_items=focus_items,
+        )
+        try:
+            unbiased_azure = assess_with_azure_speech(
+                normalized_wav,
+                reference_text=None,
+                enable_unscripted_assessment=True,
+                enable_prosody_assessment=False,
+            )
+        except AzureSpeechError as exc:
+            raise EvaluatorError(exc.code, exc.detail) from exc
+        if short_gate_targets:
+            short_gate_policy = _short_p1_gate_policy(
+                unbiased_azure,
+                reference_text=reference_text,
+                targets=short_gate_targets,
+            )
+        else:
+            short_gate_policy = {
+                "eligible": False,
+                "decision": "not_run",
+                "reference_word_count": reference_word_count,
+                "reason": (
+                    "reference_too_long"
+                    if reference_word_count > SHORT_P1_GATE_MAX_WORDS
+                    else "no_parseable_p1_focus"
+                ),
+            }
+
+    if unbiased_azure and short_gate_policy and short_gate_policy["decision"] in {
+        "diverged",
+        "unrelated",
+    }:
+        evaluation = (
+            _short_gate_focus_evaluation(
+                unbiased_azure,
+                reference_text=reference_text or "",
+                targets=short_gate_targets,
+                policy=short_gate_policy,
+                instructional_attempt_number=instructional_attempt_number,
+            )
+            if short_gate_policy["decision"] == "diverged"
+            else _short_gate_unrelated_evaluation(
+                unbiased_azure,
+                reference_text=reference_text or "",
+                instructional_attempt_number=instructional_attempt_number,
+            )
+        )
+        azure_stage_ms = round((time.monotonic() - azure_started) * 1000)
+        timings_ms = {
+            "normalization": normalization_ms,
+            "azure_request": unbiased_azure.latency_ms,
+            "azure_stage": azure_stage_ms,
+            "policy": max(0, azure_stage_ms - unbiased_azure.latency_ms),
+            "gemini_request": 0,
+            "evaluator_total": round((time.monotonic() - total_started) * 1000),
+        }
+        azure_metadata = {
+            "model": AZURE_SPEECH_MODEL,
+            "region": Config.AZURE_SPEECH_REGION,
+            "response": unbiased_azure.raw_payload,
+        }
+        return EvaluatorResult(
+            evaluation=evaluation,
+            provider="microsoft",
+            model=AZURE_SPEECH_MODEL,
+            latency_ms=unbiased_azure.latency_ms,
+            usage={
+                "azure": {
+                    "duration_100ns": unbiased_azure.duration_100ns,
+                    "request_count": 1,
+                }
+            },
+            provider_metadata={
+                "azure": azure_metadata,
+                "policy": {"short_p1_gate": short_gate_policy},
+                "timings_ms": timings_ms,
+            },
+            provider_output_text=json.dumps(
+                unbiased_azure.raw_payload,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ),
+            evaluation_context=context,
+        )
+
     try:
         azure = assess_with_azure_speech(
             normalized_wav,
             reference_text=reference_text,
-            enable_unscripted_assessment=practice_type == "open",
+            enable_unscripted_assessment=uses_unscripted_acoustics,
         )
     except AzureSpeechError as exc:
         raise EvaluatorError(exc.code, exc.detail) from exc
+
+    translation_reference = (
+        _translation_alignment_reference(target_answers)
+        if practice_type == "translation"
+        else None
+    )
+    translation_reference_azure: AzureSpeechResult | None = None
+    translation_target_alignment: TargetAlignmentResult | None = None
+    if translation_reference and not _azure_is_unclear(azure):
+        try:
+            translation_reference_azure = assess_with_azure_speech(
+                normalized_wav,
+                reference_text=translation_reference,
+                enable_prosody_assessment=False,
+            )
+        except AzureSpeechError as exc:
+            raise EvaluatorError(exc.code, exc.detail) from exc
+        expected_phonemes = _target_alignment_expected_phonemes(
+            translation_reference_azure
+        )
+        observed_phonemes = _target_alignment_observed_phonemes(azure)
+        if expected_phonemes and observed_phonemes:
+            translation_target_alignment = align_phonemes_to_target(
+                expected_phonemes,
+                observed_phonemes,
+            )
     azure_stage_ms = round((time.monotonic() - azure_started) * 1000)
 
+    azure_request_count = (
+        1
+        + (1 if unbiased_azure else 0)
+        + (1 if translation_reference_azure else 0)
+    )
+    azure_duration = sum(
+        duration
+        for duration in (
+            unbiased_azure.duration_100ns if unbiased_azure else None,
+            azure.duration_100ns,
+            (
+                translation_reference_azure.duration_100ns
+                if translation_reference_azure
+                else None
+            ),
+        )
+        if duration is not None
+    )
     azure_usage = {
-        "duration_100ns": azure.duration_100ns,
-        "request_count": 1,
+        "duration_100ns": azure_duration or None,
+        "request_count": azure_request_count,
     }
     azure_metadata = {
         "model": AZURE_SPEECH_MODEL,
@@ -2559,6 +3340,15 @@ def evaluate_speaking_attempt(
     }
     if practice_type == "pronunciation":
         policy_started = time.monotonic()
+        target_alignment: TargetAlignmentResult | None = None
+        if unbiased_azure:
+            expected_phonemes = _target_alignment_expected_phonemes(azure)
+            observed_phonemes = _target_alignment_observed_phonemes(unbiased_azure)
+            if expected_phonemes and observed_phonemes:
+                target_alignment = align_phonemes_to_target(
+                    expected_phonemes,
+                    observed_phonemes,
+                )
         scripted_candidates = _s_cluster_epenthesis_candidates(
             azure,
             focus=focus,
@@ -2571,6 +3361,14 @@ def evaluate_speaking_attempt(
                 focus_items=focus_items,
             )
         )
+        if target_alignment:
+            scripted_candidates.extend(
+                _target_alignment_candidates(
+                    target_alignment,
+                    focus=focus,
+                    focus_items=focus_items,
+                )
+            )
         evaluation = _pronunciation_evaluation(
             azure,
             reference_text=reference_text or "",
@@ -2580,6 +3378,30 @@ def evaluate_speaking_attempt(
             previous_evaluation=previous_evaluation,
             catalog_candidates=scripted_candidates,
         )
+        if (
+            short_gate_policy
+            and short_gate_policy.get("decision") == "ambiguous"
+            and evaluation.status == EvaluationStatus.PASS
+        ):
+            evaluation = _unclear_audio_evaluation(
+                unbiased_azure.transcript if unbiased_azure else None
+            )
+        if (
+            target_alignment
+            and target_alignment.classification == "unrelated"
+            and evaluation.status == EvaluationStatus.PASS
+        ):
+            evaluation = _short_gate_unrelated_evaluation(
+                unbiased_azure,
+                reference_text=reference_text or "",
+                instructional_attempt_number=instructional_attempt_number,
+            )
+        elif (
+            target_alignment
+            and target_alignment.classification == "ambiguous"
+            and evaluation.status == EvaluationStatus.PASS
+        ):
+            evaluation = _unclear_audio_evaluation(unbiased_azure.transcript)
         policy_metadata = _pronunciation_policy_metadata(
             scripted_candidates,
             focus_issues=[],
@@ -2590,10 +3412,17 @@ def evaluate_speaking_attempt(
             instructional_attempt_number=instructional_attempt_number,
             previous_evaluation=previous_evaluation,
         )
+        if short_gate_policy is not None:
+            policy_metadata["short_p1_gate"] = short_gate_policy
+        if target_alignment is not None:
+            policy_metadata["target_alignment"] = target_alignment.model_dump(
+                mode="json"
+            )
         policy_ms = round((time.monotonic() - policy_started) * 1000)
         timings_ms = {
             "normalization": normalization_ms,
-            "azure_request": azure.latency_ms,
+            "azure_request": azure.latency_ms
+            + (unbiased_azure.latency_ms if unbiased_azure else 0),
             "azure_stage": azure_stage_ms,
             "policy": policy_ms,
             "gemini_request": 0,
@@ -2603,15 +3432,36 @@ def evaluate_speaking_attempt(
             evaluation=evaluation,
             provider="microsoft",
             model=AZURE_SPEECH_MODEL,
-            latency_ms=azure.latency_ms,
+            latency_ms=azure.latency_ms
+            + (unbiased_azure.latency_ms if unbiased_azure else 0),
             usage={"azure": azure_usage},
             provider_metadata={
                 "azure": azure_metadata,
+                **(
+                    {
+                        "unbiased_azure": {
+                            "model": AZURE_SPEECH_MODEL,
+                            "region": Config.AZURE_SPEECH_REGION,
+                            "response": unbiased_azure.raw_payload,
+                        }
+                    }
+                    if unbiased_azure
+                    else {}
+                ),
                 "policy": policy_metadata,
                 "timings_ms": timings_ms,
             },
             provider_output_text=json.dumps(
-                azure.raw_payload, ensure_ascii=False, separators=(",", ":")
+                (
+                    {
+                        "unbiased": unbiased_azure.raw_payload,
+                        "scripted": azure.raw_payload,
+                    }
+                    if unbiased_azure
+                    else azure.raw_payload
+                ),
+                ensure_ascii=False,
+                separators=(",", ":"),
             ),
             evaluation_context=context,
         )
@@ -2624,17 +3474,31 @@ def evaluate_speaking_attempt(
             focus_items=focus_items,
             evaluation_context=context,
         )
-        if practice_type == "open"
+        if uses_unscripted_acoustics
         else []
     )
+    if translation_target_alignment:
+        pronunciation_candidates.extend(
+            _target_alignment_candidates(
+                translation_target_alignment,
+                focus=focus,
+                focus_items=focus_items,
+            )
+        )
     contextual_alignment = (
         _contextual_st_cluster_alignment(azure, evaluation_context=context)
-        if practice_type == "open"
+        if uses_unscripted_acoustics
         else None
     )
-    language_transcript_override = (
+    target_alignment_transcript = (
+        translation_reference
+        if translation_target_alignment
+        and translation_target_alignment.classification == "target_like"
+        else None
+    )
+    language_transcript_override = target_alignment_transcript or (
         _cluster_artifact_language_transcript(azure, contextual_alignment)
-        if practice_type == "open"
+        if uses_unscripted_acoustics
         else None
     )
     language_azure = (
@@ -2653,7 +3517,7 @@ def evaluate_speaking_attempt(
             focus=focus,
             transcript_override=language_transcript_override,
         )
-        if practice_type == "open"
+        if uses_unscripted_acoustics
         else []
     )
     policy_metadata = (
@@ -2662,10 +3526,18 @@ def evaluate_speaking_attempt(
             focus_issues=focus_issues,
             prosody=_prosody_policy_metadata(azure, focus=focus),
         )
-        if practice_type == "open"
+        if uses_unscripted_acoustics
         else None
     )
     if policy_metadata is not None:
+        if translation_target_alignment is not None:
+            policy_metadata["target_alignment"] = {
+                **translation_target_alignment.model_dump(mode="json"),
+                "reference_text": translation_reference,
+                "language_transcript_reconstructed": bool(
+                    target_alignment_transcript
+                ),
+            }
         if language_transcript_override and contextual_alignment:
             artifact_index = contextual_alignment["first_word_index"]
             policy_metadata["language_transcript_artifact"] = {
@@ -2688,7 +3560,7 @@ def evaluate_speaking_attempt(
             if pronunciation_candidates
             else _unclear_audio_evaluation(azure.transcript)
         )
-        if practice_type == "open":
+        if uses_unscripted_acoustics:
             evaluation = evaluation.model_copy(update={"transcript": None})
         timings_ms = {
             "normalization": normalization_ms,
@@ -2725,13 +3597,18 @@ def evaluate_speaking_attempt(
         gemini.evaluation,
         pronunciation_candidates=pronunciation_candidates,
         focus_issues=focus_issues,
-        include_transcript=practice_type != "open",
+        include_transcript=practice_type == "pronunciation",
         instructional_attempt_number=instructional_attempt_number,
         previous_evaluation=previous_evaluation,
     )
     timings_ms = {
         "normalization": normalization_ms,
-        "azure_request": azure.latency_ms,
+        "azure_request": azure.latency_ms
+        + (
+            translation_reference_azure.latency_ms
+            if translation_reference_azure
+            else 0
+        ),
         "azure_stage": azure_stage_ms,
         "policy": policy_ms,
         "gemini_request": gemini.latency_ms,
@@ -2741,10 +3618,30 @@ def evaluate_speaking_attempt(
         evaluation=evaluation,
         provider="microsoft+google",
         model=f"{AZURE_SPEECH_MODEL}+{gemini.model}",
-        latency_ms=azure.latency_ms + gemini.latency_ms,
+        latency_ms=(
+            azure.latency_ms
+            + (
+                translation_reference_azure.latency_ms
+                if translation_reference_azure
+                else 0
+            )
+            + gemini.latency_ms
+        ),
         usage={"azure": azure_usage, "gemini": gemini.usage},
         provider_metadata={
             "azure": azure_metadata,
+            **(
+                {
+                    "target_reference_azure": {
+                        "model": AZURE_SPEECH_MODEL,
+                        "region": Config.AZURE_SPEECH_REGION,
+                        "reference_text": translation_reference,
+                        "response": translation_reference_azure.raw_payload,
+                    }
+                }
+                if translation_reference_azure
+                else {}
+            ),
             "gemini": gemini.provider_metadata,
             **({"policy": policy_metadata} if policy_metadata else {}),
             "timings_ms": timings_ms,

@@ -108,6 +108,79 @@ def _language_output(*, material_error=False):
     }
 
 
+def _short_pronunciation_result(
+    transcript: str,
+    words: list[AzureWordAssessment],
+    *,
+    confidence: float = 0.95,
+) -> AzureSpeechResult:
+    return _azure_result(
+        transcript=transcript,
+        confidence=confidence,
+        words=words,
+    )
+
+
+def _word_with_phonemes(word: str, phonemes: list[str]) -> AzureWordAssessment:
+    return AzureWordAssessment(
+        word=word,
+        accuracy_score=95,
+        phonemes=[
+            {
+                "Phoneme": phoneme,
+                "AccuracyScore": 95,
+                "NBestPhonemes": [{"Phoneme": phoneme, "Score": 98}],
+            }
+            for phoneme in phonemes
+        ],
+    )
+
+
+def _evaluate_short_p1(monkeypatch, azure_results: list[AzureSpeechResult]):
+    calls = []
+    monkeypatch.setattr(
+        evaluator,
+        "normalize_speaking_audio",
+        lambda *_args, **_kwargs: b"normalized wav",
+    )
+
+    def fake_azure(*_args, **kwargs):
+        calls.append(kwargs)
+        return azure_results[len(calls) - 1]
+
+    monkeypatch.setattr(evaluator, "assess_with_azure_speech", fake_azure)
+    monkeypatch.setattr(evaluator.Config, "AZURE_SPEECH_REGION", "southeastasia")
+    result = evaluator.evaluate_speaking_attempt(
+        audio_bytes=b"m4a bytes",
+        audio_mime_type="audio/mp4",
+        practice_type="pronunciation",
+        focus=(
+            '[P1] In “You’re,” check that the final /r/ is pronounced.\n'
+            '[P1] In “tall,” check that the final /l/ is clearly pronounced.'
+        ),
+        focus_items=[
+            {
+                "priority": 1,
+                "instruction": (
+                    'In “You’re,” check that the final /r/ is pronounced.'
+                ),
+            },
+            {
+                "priority": 1,
+                "instruction": (
+                    'In “tall,” check that the final /l/ is clearly pronounced.'
+                ),
+            },
+        ],
+        prompt_en="You’re tall.",
+        prompt_th="คุณตัวสูง",
+        target_answers=["You’re tall."],
+        examples=[],
+        instructional_attempt_number=1,
+    )
+    return result, calls
+
+
 def _sleeping_cluster_result(
     *,
     consonant_accuracy: float = 34,
@@ -260,6 +333,250 @@ def _studying_artifact_result(*, inserted_vowel_duration: int = 500_000):
             AzureWordAssessment(word="english", accuracy_score=97),
         ],
     )
+
+
+def test_short_p1_gate_rejects_you_taw_before_scripted_assessment(monkeypatch):
+    unbiased = _short_pronunciation_result(
+        "You taw.",
+        [
+            _word_with_phonemes("you", ["j", "u"]),
+            _word_with_phonemes("taw", ["t", "ɔ"]),
+        ],
+    )
+
+    result, calls = _evaluate_short_p1(monkeypatch, [unbiased])
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.evaluation.transcript == "You taw."
+    assert len(result.evaluation.displayed_issues) == 2
+    assert "you're" in result.evaluation.displayed_issues[0].description_en
+    assert "tall" in result.evaluation.displayed_issues[1].description_en
+    assert len(calls) == 1
+    assert calls[0] == {
+        "reference_text": None,
+        "enable_unscripted_assessment": True,
+        "enable_prosody_assessment": False,
+    }
+    gate = result.provider_metadata["policy"]["short_p1_gate"]
+    assert gate["decision"] == "diverged"
+    assert result.usage["azure"]["request_count"] == 1
+
+
+def test_short_p1_gate_uses_separate_message_for_unrelated_speech(monkeypatch):
+    unbiased = _short_pronunciation_result(
+        "Banana.",
+        [_word_with_phonemes("banana", ["b", "ə", "n", "æ", "n", "ə"])],
+    )
+
+    result, calls = _evaluate_short_p1(monkeypatch, [unbiased])
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert "didn't match the sentence" in result.evaluation.feedback_en
+    assert "You’re" not in result.evaluation.feedback_en
+    assert len(calls) == 1
+    assert result.provider_metadata["policy"]["short_p1_gate"]["decision"] == (
+        "unrelated"
+    )
+
+
+def test_short_p1_gate_runs_scripted_assessment_after_plausible_unbiased_pass(
+    monkeypatch,
+):
+    unbiased = _short_pronunciation_result(
+        "You’re tall.",
+        [
+            _word_with_phonemes("you’re", ["j", "ɔɹ"]),
+            _word_with_phonemes("tall", ["t", "ɔ", "l"]),
+        ],
+    )
+    scripted = _short_pronunciation_result(
+        "You’re tall.",
+        [
+            _word_with_phonemes("you’re", ["j", "ɔɹ"]),
+            _word_with_phonemes("tall", ["t", "ɔ", "l"]),
+        ],
+    )
+
+    result, calls = _evaluate_short_p1(monkeypatch, [unbiased, scripted])
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.PASS
+    assert len(calls) == 2
+    assert calls[1]["reference_text"] == "You’re tall."
+    assert result.usage["azure"]["request_count"] == 2
+    assert result.provider_metadata["policy"]["short_p1_gate"]["decision"] == (
+        "plausible"
+    )
+
+
+def test_short_p1_gate_does_not_auto_pass_ambiguous_provider_disagreement(
+    monkeypatch,
+):
+    unbiased = _short_pronunciation_result(
+        "You’re tall.",
+        [
+            AzureWordAssessment(word="you’re", accuracy_score=95),
+            AzureWordAssessment(word="tall", accuracy_score=95),
+        ],
+    )
+    scripted = _short_pronunciation_result(
+        "You’re tall.",
+        [
+            _word_with_phonemes("you’re", ["j", "ɔɹ"]),
+            _word_with_phonemes("tall", ["t", "ɔ", "l"]),
+        ],
+    )
+
+    result, calls = _evaluate_short_p1(monkeypatch, [unbiased, scripted])
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.UNCLEAR_AUDIO
+    assert "record it once more" in result.evaluation.feedback_en
+    assert len(calls) == 2
+    assert result.provider_metadata["policy"]["short_p1_gate"]["decision"] == (
+        "ambiguous"
+    )
+
+
+def test_four_word_p1_prompt_uses_general_target_alignment_without_short_gate(monkeypatch):
+    azure = _azure_result(transcript="You’re a tall person.")
+    calls = []
+    monkeypatch.setattr(
+        evaluator,
+        "normalize_speaking_audio",
+        lambda *_args, **_kwargs: b"normalized wav",
+    )
+
+    def fake_azure(*_args, **kwargs):
+        calls.append(kwargs)
+        return azure
+
+    monkeypatch.setattr(evaluator, "assess_with_azure_speech", fake_azure)
+    monkeypatch.setattr(evaluator.Config, "AZURE_SPEECH_REGION", "southeastasia")
+    result = evaluator.evaluate_speaking_attempt(
+        audio_bytes=b"m4a bytes",
+        audio_mime_type="audio/mp4",
+        practice_type="pronunciation",
+        focus='[P1] In “person,” check that the final /n/ is pronounced.',
+        focus_items=[
+            {
+                "priority": 1,
+                "instruction": (
+                    'In “person,” check that the final /n/ is pronounced.'
+                ),
+            }
+        ],
+        prompt_en="You’re a tall person.",
+        prompt_th=None,
+        target_answers=["You’re a tall person."],
+        examples=[],
+        instructional_attempt_number=1,
+    )
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.PASS
+    assert len(calls) == 2
+    assert calls[0] == {
+        "reference_text": None,
+        "enable_unscripted_assessment": True,
+        "enable_prosody_assessment": False,
+    }
+    assert calls[1]["reference_text"] == "You’re a tall person."
+    assert result.provider_metadata["policy"]["short_p1_gate"] == {
+        "eligible": False,
+        "decision": "not_run",
+        "reference_word_count": 4,
+        "reason": "reference_too_long",
+    }
+
+
+def test_general_target_alignment_reconstructs_fragmented_smart_attempt(monkeypatch):
+    unbiased = _azure_result(
+        transcript="Use a map.",
+        confidence=0.59,
+        words=[
+            _word_with_phonemes("use", ["ju", "s"]),
+            _word_with_phonemes("a", ["ʌ"]),
+            AzureWordAssessment(
+                word="map",
+                accuracy_score=94,
+                phonemes=[
+                    {
+                        "Phoneme": "m",
+                        "NBestPhonemes": [{"Phoneme": "m", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "æ",
+                        "NBestPhonemes": [{"Phoneme": "æ", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "p",
+                        "NBestPhonemes": [
+                            {"Phoneme": "p", "Score": 94},
+                            {"Phoneme": "t", "Score": 82},
+                        ],
+                    },
+                ],
+            ),
+        ],
+    )
+    scripted = _azure_result(
+        transcript="You are smart.",
+        words=[
+            _word_with_phonemes("you", ["ju"]),
+            _word_with_phonemes("are", ["ɑɹ"]),
+            _word_with_phonemes("smart", ["s", "m", "ɑɹ", "t"]),
+        ],
+    )
+    calls = []
+    monkeypatch.setattr(
+        evaluator,
+        "normalize_speaking_audio",
+        lambda *_args, **_kwargs: b"normalized wav",
+    )
+
+    def fake_azure(*_args, **kwargs):
+        calls.append(kwargs)
+        return [unbiased, scripted][len(calls) - 1]
+
+    monkeypatch.setattr(evaluator, "assess_with_azure_speech", fake_azure)
+    monkeypatch.setattr(evaluator.Config, "AZURE_SPEECH_REGION", "southeastasia")
+
+    result = evaluator.evaluate_speaking_attempt(
+        audio_bytes=b"m4a bytes",
+        audio_mime_type="audio/mp4",
+        practice_type="pronunciation",
+        focus=(
+            '[P1] In “smart,” say the opening consonant cluster smoothly.\n'
+            '[P2] In “smart,” pronounce the ending clearly.'
+        ),
+        focus_items=[
+            {
+                "priority": 1,
+                "instruction": (
+                    'In “smart,” say the opening consonant cluster smoothly.'
+                ),
+            },
+            {
+                "priority": 2,
+                "instruction": 'In “smart,” pronounce the ending clearly.',
+            },
+        ],
+        prompt_en="You are smart.",
+        prompt_th=None,
+        target_answers=["You are smart."],
+        examples=[],
+        instructional_attempt_number=1,
+    )
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.usage["azure"]["request_count"] == 2
+    assert result.provider_metadata["policy"]["target_alignment"][
+        "classification"
+    ] == "target_like"
+    assert [
+        issue.description_en for issue in result.evaluation.displayed_issues
+    ] == [
+        "Say 'smart' smoothly without adding an extra sound between the first consonants.",
+        "Say 'smart' again, focusing on the ending.",
+    ]
 
 
 def test_pronunciation_is_azure_only_and_transcript_mismatch_cannot_fail(monkeypatch):
@@ -1849,6 +2166,224 @@ def test_open_answer_routes_azure_text_to_gemini_and_backend_derives_status(monk
     }
     assert result.provider_metadata["timings_ms"]["gemini_request"] == 30
     assert set(result.usage) == {"azure", "gemini"}
+
+
+def test_translation_uses_private_focus_but_does_not_return_transcript(monkeypatch):
+    azure = _azure_result(
+        transcript="You are smart.",
+        confidence=0.88,
+        words=[
+            AzureWordAssessment(
+                word="smart",
+                accuracy_score=48,
+                error_type="Mispronunciation",
+                phonemes=[
+                    {
+                        "Phoneme": "ɹ",
+                        "PronunciationAssessment": {
+                            "AccuracyScore": 28,
+                            "NBestPhonemes": [
+                                {"Phoneme": "l", "Score": 92},
+                                {"Phoneme": "ɹ", "Score": 25},
+                            ],
+                        },
+                    }
+                ],
+            )
+        ],
+    )
+    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+    captured = {"azure_requests": []}
+
+    monkeypatch.setattr(
+        evaluator,
+        "normalize_speaking_audio",
+        lambda *_args, **_kwargs: b"normalized wav",
+    )
+
+    def fake_azure(*_args, **kwargs):
+        captured["azure_requests"].append(kwargs)
+        return azure
+
+    def fake_language(**kwargs):
+        captured["language_request"] = kwargs
+        return evaluator.GeminiLanguageResult(
+            evaluation=language,
+            model="gemini-3.5-flash-lite",
+            latency_ms=30,
+            usage={"total_tokens": 20},
+            provider_metadata={"id": "interaction-1"},
+            provider_output_text=language.model_dump_json(),
+        )
+
+    monkeypatch.setattr(evaluator, "assess_with_azure_speech", fake_azure)
+    monkeypatch.setattr(evaluator.Config, "AZURE_SPEECH_REGION", "southeastasia")
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", fake_language)
+    result = evaluator.evaluate_speaking_attempt(
+        audio_bytes=b"m4a bytes",
+        audio_mime_type="audio/mp4",
+        practice_type="translation",
+        focus=(
+            "[P1] Check that the answer includes the required copula.\n"
+            "[P1] Check that the answer describes the person as smart."
+        ),
+        focus_items=[
+            {
+                "priority": 1,
+                "instruction": "Check that the answer includes the required copula.",
+            },
+            {
+                "priority": 1,
+                "instruction": "Check that the answer describes the person as smart.",
+            },
+        ],
+        prompt_en=None,
+        prompt_th="คุณฉลาด",
+        target_answers=["You’re smart.", "You are smart."],
+        examples=[],
+        instructional_attempt_number=1,
+    )
+
+    assert captured["azure_requests"] == [{
+        "reference_text": None,
+        "enable_unscripted_assessment": True,
+    }, {
+        "reference_text": "You are smart.",
+        "enable_prosody_assessment": False,
+    }]
+    context = captured["language_request"]["evaluation_context"]
+    assert context["focus_items"] == [
+        {
+            "priority": 1,
+            "instruction": "Check that the answer includes the required copula.",
+        },
+        {
+            "priority": 1,
+            "instruction": "Check that the answer describes the person as smart.",
+        },
+    ]
+    assert context["target_answers"] == ["You’re smart.", "You are smart."]
+    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.evaluation.transcript is None
+    assert result.evaluation.pronunciation.issues
+    assert result.provider_metadata["policy"]["matches"][0]["pattern_id"] == (
+        "r_l_confusion"
+    )
+    assert result.provider == "microsoft+google"
+
+
+def test_translation_reconstructs_use_a_map_before_language_grading(monkeypatch):
+    unbiased = _azure_result(
+        transcript="Use a map.",
+        confidence=0.605,
+        words=[
+            _word_with_phonemes("use", ["ju", "s"]),
+            AzureWordAssessment(
+                word="a",
+                accuracy_score=100,
+                phonemes=[
+                    {
+                        "Phoneme": "ʌ",
+                        "Duration": 700_000,
+                        "NBestPhonemes": [{"Phoneme": "ʌ", "Score": 100}],
+                    }
+                ],
+            ),
+            AzureWordAssessment(
+                word="map",
+                accuracy_score=97,
+                phonemes=[
+                    {
+                        "Phoneme": "m",
+                        "NBestPhonemes": [{"Phoneme": "m", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "æ",
+                        "NBestPhonemes": [{"Phoneme": "æ", "Score": 100}],
+                    },
+                    {
+                        "Phoneme": "p",
+                        "NBestPhonemes": [
+                            {"Phoneme": "p", "Score": 98},
+                            {"Phoneme": "t", "Score": 76},
+                        ],
+                    },
+                ],
+            ),
+        ],
+    )
+    scripted = _azure_result(
+        transcript="You are smart.",
+        words=[
+            _word_with_phonemes("you", ["ju"]),
+            _word_with_phonemes("are", ["ɑɹ"]),
+            _word_with_phonemes("smart", ["s", "m", "ɑɹ", "t"]),
+        ],
+    )
+    calls = []
+    captured = {}
+    monkeypatch.setattr(
+        evaluator,
+        "normalize_speaking_audio",
+        lambda *_args, **_kwargs: b"normalized wav",
+    )
+
+    def fake_azure(*_args, **kwargs):
+        calls.append(kwargs)
+        return [unbiased, scripted][len(calls) - 1]
+
+    def fake_language(**kwargs):
+        captured["language_azure"] = kwargs["azure"]
+        language = evaluator.LanguageEvaluation.model_validate(_language_output())
+        return evaluator.GeminiLanguageResult(
+            evaluation=language,
+            model="gemini-3.5-flash-lite",
+            latency_ms=30,
+            usage={"total_tokens": 20},
+            provider_metadata={"id": "interaction-1"},
+            provider_output_text=language.model_dump_json(),
+        )
+
+    monkeypatch.setattr(evaluator, "assess_with_azure_speech", fake_azure)
+    monkeypatch.setattr(evaluator.Config, "AZURE_SPEECH_REGION", "southeastasia")
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", fake_language)
+
+    result = evaluator.evaluate_speaking_attempt(
+        audio_bytes=b"m4a bytes",
+        audio_mime_type="audio/mp4",
+        practice_type="translation",
+        focus=(
+            "[P1] Check that the answer includes the required copula.\n"
+            "[P1] Check that the answer describes the person as smart."
+        ),
+        prompt_en=None,
+        prompt_th="คุณฉลาด",
+        target_answers=["You’re smart.", "You are smart."],
+        examples=[],
+        instructional_attempt_number=1,
+    )
+
+    assert calls == [
+        {"reference_text": None, "enable_unscripted_assessment": True},
+        {
+            "reference_text": "You are smart.",
+            "enable_prosody_assessment": False,
+        },
+    ]
+    assert captured["language_azure"].transcript == "You are smart."
+    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.evaluation.transcript is None
+    assert result.evaluation.content.meaning_correct is True
+    assert [
+        issue.description_en for issue in result.evaluation.displayed_issues
+    ] == [
+        "Say 'smart' again, focusing on the ending."
+    ]
+    assert result.usage["azure"]["request_count"] == 2
+    alignment = result.provider_metadata["policy"]["target_alignment"]
+    assert alignment["classification"] == "target_like"
+    assert alignment["reference_text"] == "You are smart."
+    assert alignment["language_transcript_reconstructed"] is True
 
 
 def test_text_only_gemini_request_contains_no_audio(monkeypatch):

@@ -265,6 +265,7 @@ def assess_with_azure_speech(
     *,
     reference_text: str | None = None,
     enable_unscripted_assessment: bool = False,
+    enable_prosody_assessment: bool = True,
 ) -> AzureSpeechResult:
     """Recognize speech and optionally assess scripted or unscripted pronunciation."""
 
@@ -290,10 +291,11 @@ def assess_with_azure_speech(
             "GradingSystem": "HundredMark",
             "Granularity": "Phoneme",
             "Dimension": "Comprehensive",
-            "EnableProsodyAssessment": "True",
             "PhonemeAlphabet": "IPA",
             "NBestPhonemeCount": 5,
         }
+        if enable_prosody_assessment:
+            assessment["EnableProsodyAssessment"] = "True"
         if reference_text:
             assessment["ReferenceText"] = reference_text
             assessment["EnableMiscue"] = "True"

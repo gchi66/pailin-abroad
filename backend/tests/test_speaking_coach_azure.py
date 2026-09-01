@@ -222,6 +222,29 @@ def test_unscripted_request_uses_pronunciation_header_without_reference(monkeypa
     assert result.pronunciation is not None
 
 
+def test_unscripted_gate_can_disable_paid_prosody_add_on(monkeypatch):
+    captured = {}
+
+    def fake_post(_url, *, headers, params, data, timeout):
+        captured["headers"] = headers
+        return SimpleNamespace(ok=True, status_code=200, json=_flat_response)
+
+    monkeypatch.setattr(azure.Config, "AZURE_API_KEY", "azure-secret")
+    monkeypatch.setattr(azure.Config, "AZURE_SPEECH_REGION", "southeastasia")
+    monkeypatch.setattr(azure.requests, "post", fake_post)
+
+    azure.assess_with_azure_speech(
+        b"wav",
+        enable_unscripted_assessment=True,
+        enable_prosody_assessment=False,
+    )
+
+    assessment = json.loads(
+        base64.b64decode(captured["headers"]["Pronunciation-Assessment"])
+    )
+    assert "EnableProsodyAssessment" not in assessment
+
+
 def test_azure_requires_key_and_valid_region(monkeypatch):
     monkeypatch.setattr(azure.Config, "AZURE_API_KEY", None)
     monkeypatch.setattr(azure.Config, "AZURE_SPEECH_REGION", "southeastasia")
