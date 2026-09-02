@@ -1451,6 +1451,136 @@ def test_authored_priority_does_not_create_unsupported_finding() -> None:
     assert "your" in evaluation.displayed_issues[0].description_en.lower()
 
 
+def test_authored_focus_grades_strong_local_nbest_despite_high_aggregate_scores() -> None:
+    azure = _azure_result(
+        transcript="It's nice to meet you.",
+        words=[
+            AzureWordAssessment(
+                word="nice",
+                accuracy_score=97,
+                error_type="None",
+                phonemes=[
+                    {"Phoneme": "n", "AccuracyScore": 99},
+                    {"Phoneme": "aɪ", "AccuracyScore": 98},
+                    {
+                        "Phoneme": "s",
+                        "AccuracyScore": 61,
+                        "NBestPhonemes": [
+                            {"Phoneme": "t", "Score": 100},
+                            {"Phoneme": "s", "Score": 8},
+                            {"Phoneme": "z", "Score": 3},
+                        ],
+                    },
+                ],
+                syllables=[{"Syllable": "naɪs", "AccuracyScore": 93}],
+            )
+        ],
+    )
+    focus_items = [
+        {
+            "priority": 1,
+            "instruction": "In “nice,” check the final /s/, not /t/.",
+        }
+    ]
+
+    candidates = evaluator._authorized_local_nbest_candidates(
+        azure,
+        focus=focus_items[0]["instruction"],
+        focus_items=focus_items,
+    )
+    evaluation = evaluator._pronunciation_evaluation(
+        azure,
+        reference_text="It's nice to meet you.",
+        focus=focus_items[0]["instruction"],
+        focus_items=focus_items,
+        catalog_candidates=candidates,
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].focus_match is True
+    assert candidates[0].focus_priority == 1
+    assert candidates[0].pattern_id == "final_consonant_weakening"
+    assert candidates[0].evidence["expected_accuracy"] == 61
+    assert candidates[0].evidence["local_mismatch"] == {
+        "leading_phoneme": "t",
+        "leading_score": 100.0,
+        "expected_candidate_score": 8.0,
+        "expected_candidate_missing": False,
+        "score_margin": 92.0,
+    }
+    assert evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert "nice" in evaluation.displayed_issues[0].description_en.lower()
+
+
+def test_active_catalog_grades_strong_local_nbest_without_authored_focus() -> None:
+    azure = _azure_result(
+        transcript="think",
+        words=[
+            AzureWordAssessment(
+                word="think",
+                accuracy_score=96,
+                error_type="None",
+                phonemes=[
+                    {
+                        "Phoneme": "θ",
+                        "AccuracyScore": 88,
+                        "NBestPhonemes": [
+                            {"Phoneme": "t", "Score": 98},
+                            {"Phoneme": "θ", "Score": 20},
+                        ],
+                    },
+                    {"Phoneme": "ɪ", "AccuracyScore": 97},
+                    {"Phoneme": "ŋ", "AccuracyScore": 96},
+                    {"Phoneme": "k", "AccuracyScore": 97},
+                ],
+            )
+        ],
+    )
+
+    candidates = evaluator._authorized_local_nbest_candidates(
+        azure,
+        focus="Use a complete sentence.",
+        focus_items=None,
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].focus_match is False
+    assert candidates[0].pattern_id == "th_substitution"
+    assert candidates[0].evidence["authorization"] == "catalog"
+
+
+def test_unscoped_local_nbest_mismatch_remains_diagnostic_only() -> None:
+    azure = _azure_result(
+        transcript="about",
+        words=[
+            AzureWordAssessment(
+                word="about",
+                accuracy_score=96,
+                error_type="None",
+                phonemes=[
+                    {
+                        "Phoneme": "ə",
+                        "AccuracyScore": 70,
+                        "NBestPhonemes": [
+                            {"Phoneme": "ʌ", "Score": 99},
+                            {"Phoneme": "ə", "Score": 10},
+                        ],
+                    },
+                    {"Phoneme": "b", "AccuracyScore": 98},
+                ],
+            )
+        ],
+    )
+
+    candidates = evaluator._authorized_local_nbest_candidates(
+        azure,
+        focus="Use a complete sentence.",
+        focus_items=None,
+    )
+
+    assert candidates == []
+
+
 def test_same_priority_preserves_authored_focus_order() -> None:
     focus_items = [
         {
@@ -1475,6 +1605,61 @@ def test_same_priority_preserves_authored_focus_order() -> None:
 
     assert "what's" in evaluation.displayed_issues[0].description_en.lower()
     assert "your" in evaluation.displayed_issues[1].description_en.lower()
+
+
+def test_all_supported_authored_findings_rank_before_severe_fallback() -> None:
+    def candidate(
+        label: str,
+        *,
+        focus_priority: int | None,
+        focus_order: int | None,
+        severity: int,
+    ) -> evaluator._PronunciationCandidate:
+        return evaluator._PronunciationCandidate(
+            word_index=None,
+            focus_match=focus_priority is not None,
+            focus_priority=focus_priority,
+            focus_order=focus_order,
+            severity=severity,
+            status=evaluator.AssessmentTokenStatus.NEEDS_WORK,
+            issue=evaluator.EvaluationIssue(
+                category=(
+                    evaluator.IssueCategory.FOCUS
+                    if focus_priority is not None
+                    else evaluator.IssueCategory.PRONUNCIATION
+                ),
+                description_en=label,
+                description_th=label,
+            ),
+        )
+
+    selected = evaluator._select_display_candidates(
+        [
+            candidate(
+                "Severe fallback",
+                focus_priority=None,
+                focus_order=None,
+                severity=100,
+            ),
+            candidate(
+                "Authored P3",
+                focus_priority=3,
+                focus_order=1,
+                severity=40,
+            ),
+            candidate(
+                "Authored P1",
+                focus_priority=1,
+                focus_order=0,
+                severity=35,
+            ),
+        ]
+    )
+
+    assert [item.issue.description_en for item in selected] == [
+        "Authored P1",
+        "Authored P3",
+    ]
 
 
 def test_moderately_low_focus_phoneme_requires_two_supporting_signals():
@@ -1644,6 +1829,129 @@ def test_non_open_language_evaluation_retains_transcript():
     evaluation = evaluator._compose_language_evaluation(azure, language)
 
     assert evaluation.transcript == "She is going to work."
+
+
+def test_language_composition_preserves_priority_order_instead_of_category_order():
+    azure = _azure_result(transcript="I am studying Thai.", pronunciation=False)
+    language = evaluator.LanguageEvaluation.model_validate(
+        {
+            "material_error": False,
+            "content": {},
+            "detected_issues": [],
+            "displayed_issues": [
+                {
+                    "category": "grammar",
+                    "description_en": "Higher-priority authored grammar finding.",
+                    "description_th": "ข้อไวยากรณ์ตามลำดับความสำคัญ",
+                },
+                {
+                    "category": "meaning",
+                    "description_en": "Lower-priority meaning fallback.",
+                    "description_th": "ข้อเสนอแนะด้านความหมายลำดับรอง",
+                },
+            ],
+            "feedback_en": "Feedback.",
+            "feedback_th": "คำแนะนำ",
+        }
+    )
+
+    evaluation = evaluator._compose_language_evaluation(azure, language)
+
+    assert [issue.category for issue in evaluation.displayed_issues] == [
+        evaluator.IssueCategory.GRAMMAR,
+        evaluator.IssueCategory.MEANING,
+    ]
+
+
+def test_language_composition_enforces_authored_priority_over_model_order():
+    azure = _azure_result(transcript="I study Thai yesterday.", pronunciation=False)
+    language = evaluator.LanguageEvaluation.model_validate(
+        {
+            "material_error": True,
+            "content": {},
+            "detected_issues": [],
+            "displayed_issues": [
+                {
+                    "category": "meaning",
+                    "description_en": "Independent fallback finding.",
+                    "description_th": "ข้อเสนอแนะเพิ่มเติม",
+                    "focus_item_index": None,
+                },
+                {
+                    "category": "vocabulary",
+                    "description_en": "Authored P3 finding.",
+                    "description_th": "ข้อกำหนด P3",
+                    "focus_item_index": 1,
+                },
+                {
+                    "category": "grammar",
+                    "description_en": "Authored P1 finding.",
+                    "description_th": "ข้อกำหนด P1",
+                    "focus_item_index": 2,
+                },
+            ],
+            "feedback_en": "Independent fallback finding.",
+            "feedback_th": "ข้อเสนอแนะเพิ่มเติม",
+            "retry_focus": ["Independent fallback finding."],
+        }
+    )
+    focus_items = [
+        {"priority": 2, "instruction": "Unused P2 item."},
+        {"priority": 3, "instruction": "Check the target vocabulary."},
+        {"priority": 1, "instruction": "Check the target grammar."},
+    ]
+
+    evaluation = evaluator._compose_language_evaluation(
+        azure,
+        language,
+        focus_items=focus_items,
+    )
+
+    assert [issue.description_en for issue in evaluation.displayed_issues] == [
+        "Authored P1 finding.",
+        "Authored P3 finding.",
+    ]
+    assert evaluation.feedback_en == "Authored P1 finding."
+    assert evaluation.retry_focus[:2] == [
+        "Authored P1 finding.",
+        "Authored P3 finding.",
+    ]
+
+
+def test_language_composition_treats_invalid_focus_index_as_fallback():
+    azure = _azure_result(transcript="I study Thai.", pronunciation=False)
+    language = evaluator.LanguageEvaluation.model_validate(
+        {
+            "material_error": True,
+            "content": {},
+            "detected_issues": [],
+            "displayed_issues": [
+                {
+                    "category": "grammar",
+                    "description_en": "Invalid claimed focus finding.",
+                    "description_th": "ดัชนีไม่ถูกต้อง",
+                    "focus_item_index": 99,
+                },
+                {
+                    "category": "vocabulary",
+                    "description_en": "Valid authored finding.",
+                    "description_th": "ข้อกำหนดที่ถูกต้อง",
+                    "focus_item_index": 0,
+                },
+            ],
+            "feedback_en": "Invalid claimed focus finding.",
+            "feedback_th": "ดัชนีไม่ถูกต้อง",
+            "retry_focus": ["Invalid claimed focus finding."],
+        }
+    )
+
+    evaluation = evaluator._compose_language_evaluation(
+        azure,
+        language,
+        focus_items=[{"priority": 2, "instruction": "Check vocabulary."}],
+    )
+
+    assert evaluation.displayed_issues[0].description_en == "Valid authored finding."
 
 
 def test_private_comparison_policy_is_not_sent_in_model_context():

@@ -48,7 +48,6 @@ FOCUS_COMPLETENESS_SUPPORT_THRESHOLD = 85
 SEVERE_WORD_ACCURACY_THRESHOLD = 45
 SEVERE_PHONEME_ACCURACY_THRESHOLD = 15
 LOW_COMPLETENESS_THRESHOLD = 70
-SEVERE_CANDIDATE_PRIORITY = 70
 UNSCRIPTED_TRANSFER_PHONEME_THRESHOLD = 45
 UNSCRIPTED_SEVERE_PHONEME_THRESHOLD = 30
 UNSCRIPTED_SEVERE_WORD_SUPPORT_THRESHOLD = 65
@@ -183,6 +182,26 @@ class SpeakingEvaluation(BaseModel):
         return self
 
 
+class LanguageEvaluationIssue(EvaluationIssue):
+    """Text-model finding with an optional link to the authored focus rubric."""
+
+    focus_item_index: int | None = Field(
+        default=None,
+        ge=0,
+        description=(
+            "Zero-based index of the supporting evaluation_context.focus_items entry; "
+            "null for a non-authored fallback finding."
+        ),
+    )
+
+    def public_issue(self) -> EvaluationIssue:
+        return EvaluationIssue(
+            category=self.category,
+            description_en=self.description_en,
+            description_th=self.description_th,
+        )
+
+
 class LanguageEvaluation(BaseModel):
     """Gemini's language-only result; the backend owns final status."""
 
@@ -190,8 +209,12 @@ class LanguageEvaluation(BaseModel):
 
     material_error: bool
     content: ContentEvaluation
-    detected_issues: list[EvaluationIssue] = Field(default_factory=list, max_length=12)
-    displayed_issues: list[EvaluationIssue] = Field(default_factory=list, max_length=3)
+    detected_issues: list[LanguageEvaluationIssue] = Field(
+        default_factory=list, max_length=12
+    )
+    displayed_issues: list[LanguageEvaluationIssue] = Field(
+        default_factory=list, max_length=3
+    )
     corrected_answer: str | None = Field(default=None, max_length=1000)
     feedback_en: str = Field(min_length=1, max_length=500)
     feedback_th: str = Field(min_length=1, max_length=700)
@@ -267,6 +290,14 @@ rather than exact strings. Apply the private FOCUS rubric before general refinem
 The private context may contain ordered focus_items with priority 1, 2, or 3.
 After an issue is supported by transcript evidence, prefer P1 over P2 over P3 and
 preserve source order between supported items with the same priority.
+For every detected or displayed issue supported by an authored focus item, set
+focus_item_index to that item's zero-based position in focus_items. Set it to null
+for an independently supported fallback finding. The backend validates the index
+and derives priority from the authoritative focus_items; do not encode priority in
+the issue text.
+Treat issue category only as a description of the finding; it must never reorder
+eligible authored findings. Put independently supported non-FOCUS findings only
+after all supported authored findings.
 Ignore minor imperfections that do not justify asking the learner to record again.
 Normally display one issue, at most two. Feedback must be concise, encouraging,
 actionable, and bilingual. {attempt_rules}
@@ -1012,6 +1043,48 @@ def _pronunciation_focus_rank(
     return min(matches) if matches else None
 
 
+def _local_mismatch_focus_rank(
+    word: str,
+    *,
+    expected_phoneme: str,
+    observed_phoneme: str,
+    phoneme_index: int,
+    word_final: bool,
+    focus: str,
+    focus_items: list[dict[str, Any]] | None,
+) -> tuple[int, int] | None:
+    """Match a local phoneme mismatch to the authored rubric precisely enough to grade."""
+    matches: list[tuple[int, int]] = []
+    for index, item in enumerate(_normalized_focus_items(focus_items, focus=focus)):
+        instruction = item["instruction"]
+        normalized = _normalized_match_text(instruction)
+        mentioned_phonemes = re.findall(r"/([^/]+)/", normalized)
+        if not _focus_is_pronunciation_specific(instruction) and not mentioned_phonemes:
+            continue
+        final_specific = any(
+            marker in normalized
+            for marker in ("word-final", "word final", "final consonant", "ending")
+        )
+        initial_specific = any(
+            marker in normalized
+            for marker in ("word-initial", "word initial", "initial consonant", "beginning")
+        )
+        if final_specific and not word_final:
+            continue
+        if initial_specific and phoneme_index != 0:
+            continue
+
+        word_match = _focus_matches_word(word, instruction)
+        phoneme_match = _focus_mentions_phoneme(
+            instruction, expected_phoneme, observed_phoneme
+        )
+        if word_match and mentioned_phonemes and not phoneme_match:
+            continue
+        if word_match or phoneme_match:
+            matches.append((item["priority"], index))
+    return min(matches) if matches else None
+
+
 def _candidate_sort_key(
     candidate: _PronunciationCandidate,
 ) -> tuple[int, int, int, int]:
@@ -1237,6 +1310,135 @@ def _priority_score(
         else 0
     )
     return min(100, evidence_score + pattern_weight + focus_bonus)
+
+
+def _catalog_pattern_for_local_mismatch(
+    expected_phoneme: str,
+    observed_phoneme: str,
+    *,
+    word_final: bool,
+):
+    pattern = substitution_pattern(expected_phoneme, observed_phoneme)
+    if pattern and (
+        "word_final" in pattern.contexts
+        and "any" not in pattern.contexts
+        and not word_final
+    ):
+        pattern = None
+    if pattern:
+        return pattern
+    if word_final:
+        final_pattern = pattern_by_id("final_consonant_weakening")
+        if (
+            final_pattern
+            and final_pattern.runtime_support in ("active", "partial")
+            and expected_phoneme in final_pattern.expected_phonemes
+        ):
+            return final_pattern
+    inventory_pattern = pattern_by_id("non_native_consonant_mapping")
+    if (
+        inventory_pattern
+        and inventory_pattern.runtime_support in ("active", "partial")
+        and expected_phoneme in inventory_pattern.expected_phonemes
+    ):
+        return inventory_pattern
+    return None
+
+
+def _authorized_local_nbest_candidates(
+    azure: AzureSpeechResult,
+    *,
+    focus: str,
+    focus_items: list[dict[str, Any]] | None,
+) -> list[_PronunciationCandidate]:
+    """Grade decisive local N-best mismatches authorized by focus or catalog."""
+    assessment = azure.pronunciation
+    if not assessment:
+        return []
+    candidates: list[_PronunciationCandidate] = []
+    for word_index, word in enumerate(assessment.words):
+        usable_phonemes = [
+            item
+            for item in word.phonemes
+            if isinstance(item.get("Phoneme"), str) and item["Phoneme"].strip()
+        ]
+        for phoneme_index, phoneme in enumerate(usable_phonemes):
+            expected = phoneme["Phoneme"].strip().lower()
+            mismatch = _strong_local_phoneme_mismatch([phoneme], expected)
+            if not mismatch:
+                continue
+            observed = mismatch["leading_phoneme"].lower()
+            word_final = phoneme_index == len(usable_phonemes) - 1
+            focus_rank = _local_mismatch_focus_rank(
+                word.word,
+                expected_phoneme=expected,
+                observed_phoneme=observed,
+                phoneme_index=phoneme_index,
+                word_final=word_final,
+                focus=focus,
+                focus_items=focus_items,
+            )
+            catalog_pattern = _catalog_pattern_for_local_mismatch(
+                expected, observed, word_final=word_final
+            )
+            if focus_rank is None and catalog_pattern is None:
+                continue
+
+            aggregate_accuracy = _nested_accuracy_score(phoneme)
+            expected_candidate_score = mismatch.get("expected_candidate_score")
+            local_expected_score = (
+                float(expected_candidate_score)
+                if isinstance(expected_candidate_score, (int, float))
+                and not isinstance(expected_candidate_score, bool)
+                else 0.0
+            )
+            evidence_score = _phoneme_evidence_score(
+                expected_accuracy=local_expected_score,
+                word_accuracy=word.accuracy_score,
+                candidate_mismatch=True,
+                error_type=word.error_type,
+            )
+            focus_priority = focus_rank[0] if focus_rank else None
+            focus_order = focus_rank[1] if focus_rank else None
+            priority_score = _priority_score(
+                evidence_score,
+                focus_match=focus_rank is not None,
+                pattern_weight=(catalog_pattern.priority_weight if catalog_pattern else 0),
+                focus_priority=focus_priority,
+            )
+            candidates.append(
+                _PronunciationCandidate(
+                    word_index=word_index,
+                    focus_match=focus_rank is not None,
+                    severity=priority_score,
+                    status=AssessmentTokenStatus.NEEDS_WORK,
+                    pattern_id=(catalog_pattern.id if catalog_pattern else None),
+                    evidence_score=evidence_score,
+                    priority_score=priority_score,
+                    evidence={
+                        "word": word.word,
+                        "expected_phoneme": expected,
+                        "leading_spoken_phoneme": observed,
+                        "expected_accuracy": aggregate_accuracy,
+                        "word_accuracy": word.accuracy_score,
+                        "error_type": word.error_type,
+                        "strong_local_phoneme_mismatch": True,
+                        "local_mismatch": mismatch,
+                        "authorization": (
+                            "authored_focus" if focus_rank is not None else "catalog"
+                        ),
+                    },
+                    issue=_word_issue(
+                        word=word.word,
+                        phoneme=expected,
+                        focus_match=focus_rank is not None,
+                        final_phoneme=word_final,
+                    ),
+                    focus_priority=focus_priority,
+                    focus_order=focus_order,
+                )
+            )
+    return candidates
 
 
 def _display_phoneme(phoneme: str) -> str:
@@ -1759,7 +1961,11 @@ def _unscripted_pronunciation_candidates(
     assessment = azure.pronunciation
     if not assessment:
         return []
-    candidates: list[_PronunciationCandidate] = []
+    candidates = _authorized_local_nbest_candidates(
+        azure,
+        focus=focus,
+        focus_items=focus_items,
+    )
     for word_index, word in enumerate(assessment.words):
         for phoneme in word.phonemes:
             expected = phoneme.get("Phoneme")
@@ -1845,6 +2051,12 @@ def _unscripted_pronunciation_candidates(
             else:
                 description_en = f"Say '{word.word}' again clearly."
                 description_th = f"ลองพูดคำว่า '{word.word}' อีกครั้งให้ชัดเจน"
+            if any(
+                candidate.word_index == word_index
+                and candidate.evidence.get("expected_phoneme") == expected
+                for candidate in candidates
+            ):
+                continue
             candidates.append(
                 _PronunciationCandidate(
                     word_index=word_index,
@@ -2297,29 +2509,7 @@ def _select_display_candidates(
     candidates: list[_PronunciationCandidate],
 ) -> list[_PronunciationCandidate]:
     ordered = sorted(candidates, key=_candidate_sort_key, reverse=True)
-    selected: list[_PronunciationCandidate] = []
-    focus_candidate = next(
-        (candidate for candidate in ordered if candidate.focus_match), None
-    )
-    if focus_candidate:
-        selected.append(focus_candidate)
-    severe_off_focus = next(
-        (
-            candidate
-            for candidate in ordered
-            if not candidate.focus_match
-            and candidate.severity >= SEVERE_CANDIDATE_PRIORITY
-        ),
-        None,
-    )
-    if severe_off_focus and severe_off_focus not in selected:
-        selected.append(severe_off_focus)
-    for candidate in ordered:
-        if len(selected) >= MAX_DISPLAYED_ISSUES:
-            break
-        if candidate not in selected:
-            selected.append(candidate)
-    return selected[:MAX_DISPLAYED_ISSUES]
+    return ordered[:MAX_DISPLAYED_ISSUES]
 
 
 def _candidate_comparison_key(
@@ -2962,36 +3152,90 @@ def _compose_language_evaluation(
     language: LanguageEvaluation,
     pronunciation_candidates: list[_PronunciationCandidate] | None = None,
     focus_issues: list[EvaluationIssue] | None = None,
+    focus_items: list[dict[str, Any]] | None = None,
     include_transcript: bool = True,
     instructional_attempt_number: int = 1,
     previous_evaluation: dict[str, Any] | None = None,
 ) -> SpeakingEvaluation:
+    pronunciation_display_candidates = (pronunciation_candidates or [])[:2]
     pronunciation_issues = [
-        candidate.issue for candidate in (pronunciation_candidates or [])[:2]
+        candidate.issue for candidate in pronunciation_display_candidates
     ]
     deterministic_focus_issues = (focus_issues or [])[:1]
+    normalized_focus_items = _normalized_focus_items(focus_items, focus="")
+
+    def language_rank(
+        issue: LanguageEvaluationIssue,
+    ) -> tuple[int | None, int | None]:
+        index = issue.focus_item_index
+        if index is None or index >= len(normalized_focus_items):
+            return None, None
+        return normalized_focus_items[index]["priority"], index
+
+    deterministic_rank: tuple[int | None, int | None] = (None, None)
+    if deterministic_focus_issues:
+        markers = ("present continuous", "am/is/are", "be + -ing", "be + ing")
+        matching_items = [
+            (item["priority"], index)
+            for index, item in enumerate(normalized_focus_items)
+            if any(
+                marker in _normalized_match_text(item["instruction"])
+                for marker in markers
+            )
+        ]
+        if matching_items:
+            deterministic_rank = min(matching_items)
+
+    def prioritized_issues(
+        language_issues: list[LanguageEvaluationIssue],
+        *,
+        limit: int,
+    ) -> list[EvaluationIssue]:
+        ranked: list[
+            tuple[EvaluationIssue, int | None, int | None, int]
+        ] = []
+        sequence = 0
+        for issue in deterministic_focus_issues:
+            ranked.append((issue, *deterministic_rank, sequence))
+            sequence += 1
+        for issue in language_issues:
+            ranked.append((issue.public_issue(), *language_rank(issue), sequence))
+            sequence += 1
+        for candidate in pronunciation_display_candidates:
+            ranked.append(
+                (
+                    candidate.issue,
+                    candidate.focus_priority,
+                    candidate.focus_order,
+                    sequence,
+                )
+            )
+            sequence += 1
+        ranked.sort(
+            key=lambda item: (
+                0 if item[1] is not None else 1,
+                item[1] if item[1] is not None else 4,
+                item[2] if item[2] is not None else 10_000,
+                item[3],
+            )
+        )
+        return _dedupe_language_issues([item[0] for item in ranked])[:limit]
+
     language_displayed = language.displayed_issues or language.detected_issues
-    prioritized_language = [
-        issue
-        for issue in language_displayed
-        if language.material_error
-        or issue.category
-        in {IssueCategory.FOCUS, IssueCategory.MEANING, IssueCategory.RELEVANCE}
-    ]
-    remaining_language = [
-        issue for issue in language_displayed if issue not in prioritized_language
-    ]
-    displayed = _dedupe_language_issues(
+    original_displayed = _dedupe_language_issues(
         deterministic_focus_issues
-        + prioritized_language
+        + [issue.public_issue() for issue in language_displayed]
         + pronunciation_issues
-        + remaining_language
     )[:MAX_OPEN_DISPLAYED_ISSUES]
-    detected = _dedupe_language_issues(
-        deterministic_focus_issues
-        + language.detected_issues
-        + pronunciation_issues
-    )[:12]
+    displayed = prioritized_issues(
+        language_displayed, limit=MAX_OPEN_DISPLAYED_ISSUES
+    )
+    display_order_changed = [
+        _language_issue_concept(issue) for issue in displayed
+    ] != [
+        _language_issue_concept(issue) for issue in original_displayed
+    ]
+    detected = prioritized_issues(language.detected_issues, limit=12)
     has_material_issue = (
         language.material_error
         or bool(deterministic_focus_issues)
@@ -3000,10 +3244,8 @@ def _compose_language_evaluation(
     retry_focus: list[str] = []
     retry_concepts: set[str] = set()
     retry_candidates = [
-        issue.description_en for issue in deterministic_focus_issues
-    ] + language.retry_focus[:2] + [
-        issue.description_en for issue in pronunciation_issues
-    ]
+        issue.description_en for issue in displayed
+    ] + language.retry_focus
     for retry_candidate in retry_candidates:
         concept = _language_text_concept(retry_candidate)
         if concept in retry_concepts:
@@ -3026,6 +3268,9 @@ def _compose_language_evaluation(
     elif pronunciation_issues and language.material_error:
         feedback_en = "Focus on these two parts, then try once more."
         feedback_th = "เน้นสองจุดนี้ แล้วลองพูดอีกครั้ง"
+    elif display_order_changed and displayed:
+        feedback_en = displayed[0].description_en
+        feedback_th = displayed[0].description_th
     else:
         feedback_en = language.feedback_en
         feedback_th = language.feedback_th
@@ -3355,6 +3600,13 @@ def evaluate_speaking_attempt(
             focus_items=focus_items,
         )
         scripted_candidates.extend(
+            _authorized_local_nbest_candidates(
+                azure,
+                focus=focus,
+                focus_items=focus_items,
+            )
+        )
+        scripted_candidates.extend(
             _rhotic_vowel_deletion_candidates(
                 azure,
                 focus=focus,
@@ -3597,6 +3849,7 @@ def evaluate_speaking_attempt(
         gemini.evaluation,
         pronunciation_candidates=pronunciation_candidates,
         focus_issues=focus_issues,
+        focus_items=context.get("focus_items"),
         include_transcript=practice_type == "pronunciation",
         instructional_attempt_number=instructional_attempt_number,
         previous_evaluation=previous_evaluation,

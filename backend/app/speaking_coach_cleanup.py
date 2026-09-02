@@ -11,6 +11,8 @@ from app.supabase_client import supabase_admin
 
 LEARNER_AUDIO_BUCKET = "speaking-coach-audio"
 ATTEMPTS_TABLE = "user_speaking_coach_attempts"
+SESSIONS_TABLE = "user_speaking_coach_sessions"
+SKIPS_TABLE = "user_speaking_coach_skips"
 
 
 def _now() -> datetime:
@@ -96,6 +98,27 @@ def delete_user_audio(
     return _delete_audio_rows(_rows(response), deleted_at=deleted_at, client=database)
 
 
+def delete_user_history(user_id: str, *, client: Any = None) -> int:
+    """Delete all identifiable speaking rows after the user's audio is removed."""
+    database = client or supabase_admin
+    response = (
+        database.table(SESSIONS_TABLE)
+        .select("id")
+        .eq("user_id", user_id)
+        .execute()
+    )
+    session_ids = [row["id"] for row in _rows(response) if row.get("id")]
+    if not session_ids:
+        return 0
+
+    database.table(ATTEMPTS_TABLE).delete().in_(
+        "session_id", session_ids
+    ).execute()
+    database.table(SKIPS_TABLE).delete().in_("session_id", session_ids).execute()
+    database.table(SESSIONS_TABLE).delete().in_("id", session_ids).execute()
+    return len(session_ids)
+
+
 def delete_expired_audio(
     *, now: datetime | None = None, batch_size: int | None = None
 ) -> int:
@@ -115,43 +138,116 @@ def delete_expired_audio(
     )
 
 
-def redact_expired_diagnostics(
+def fail_stale_processing_attempts(
     *, now: datetime | None = None, batch_size: int | None = None
 ) -> int:
-    """Purge raw provider/debug material while retaining normalized results and usage."""
+    """Release concurrency locks left behind by interrupted request workers."""
+    current_time = now or _now()
+    stale_before = _iso(
+        current_time
+        - timedelta(minutes=Config.SPEAKING_COACH_PROCESSING_STALE_MINUTES)
+    )
+    response = (
+        supabase_admin.table(ATTEMPTS_TABLE)
+        .select("id")
+        .in_("processing_status", ["uploaded", "evaluating"])
+        .lte("updated_at", stale_before)
+        .limit(_bounded_batch_size(batch_size))
+        .execute()
+    )
+    attempt_ids = [row["id"] for row in _rows(response) if row.get("id")]
+    if not attempt_ids:
+        return 0
+
+    failed_at = _iso(current_time)
+    (
+        supabase_admin.table(ATTEMPTS_TABLE)
+        .update(
+            {
+                "processing_status": "failed",
+                "failure_code": "processing_interrupted",
+                "failure_detail": None,
+                "completed_at": failed_at,
+                "updated_at": failed_at,
+            }
+        )
+        .in_("id", attempt_ids)
+        .execute()
+    )
+    return len(attempt_ids)
+
+
+def redact_expired_attempt_details(
+    *, now: datetime | None = None, batch_size: int | None = None
+) -> int:
+    """Purge detailed learner/evaluator text while retaining compact metrics."""
     current_time = now or _now()
     cutoff = _iso(
         current_time
-        - timedelta(days=Config.SPEAKING_COACH_DIAGNOSTIC_RETENTION_DAYS)
+        - timedelta(days=Config.SPEAKING_COACH_DETAILED_RETENTION_DAYS)
     )
     limit = _bounded_batch_size(batch_size)
     redacted_at = _iso(current_time)
     redacted_ids: set[str] = set()
 
-    completed_response = (
-        supabase_admin.table(ATTEMPTS_TABLE)
-        .select("id")
-        .lte("created_at", cutoff)
-        .not_.is_("provider_response_raw", "null")
-        .limit(limit)
-        .execute()
-    )
-    completed_ids = [row["id"] for row in _rows(completed_response) if row.get("id")]
-    if completed_ids:
+    for column in ("normalized_evaluation", "transcript", "provider_response_raw"):
+        response = (
+            supabase_admin.table(ATTEMPTS_TABLE)
+            .select("id")
+            .lte("created_at", cutoff)
+            .not_.is_(column, "null")
+            .limit(limit)
+            .execute()
+        )
+        redacted_ids.update(
+            row["id"] for row in _rows(response) if row.get("id")
+        )
+
+    if redacted_ids:
         (
             supabase_admin.table(ATTEMPTS_TABLE)
             .update(
                 {
+                    "transcript": None,
+                    "content_result": None,
+                    "pronunciation_result": None,
+                    "feedback_en": None,
+                    "feedback_th": None,
+                    "detected_issues": [],
+                    "displayed_issues": [],
+                    "corrected_answer": None,
+                    "retry_focus": [],
                     "evaluation_context": None,
                     "provider_response_raw": None,
                     "provider_output_text": None,
+                    "normalized_evaluation": None,
                     "updated_at": redacted_at,
                 }
             )
-            .in_("id", completed_ids)
+            .in_("id", list(redacted_ids))
             .execute()
         )
-        redacted_ids.update(completed_ids)
+
+    deleted_audio_response = (
+        supabase_admin.table(ATTEMPTS_TABLE)
+        .select("id")
+        .lte("created_at", cutoff)
+        .not_.is_("audio_deleted_at", "null")
+        .not_.is_("audio_object_path", "null")
+        .limit(limit)
+        .execute()
+    )
+    deleted_audio_ids = [
+        row["id"] for row in _rows(deleted_audio_response) if row.get("id")
+    ]
+    if deleted_audio_ids:
+        (
+            supabase_admin.table(ATTEMPTS_TABLE)
+            .update({"audio_object_path": None, "updated_at": redacted_at})
+            .in_("id", deleted_audio_ids)
+            .execute()
+        )
+        redacted_ids.update(deleted_audio_ids)
 
     failed_response = (
         supabase_admin.table(ATTEMPTS_TABLE)
@@ -174,16 +270,55 @@ def redact_expired_diagnostics(
     return len(redacted_ids)
 
 
+def delete_expired_history(
+    *, now: datetime | None = None, batch_size: int | None = None
+) -> int:
+    """Delete identifiable speaking history after the compact-metrics window."""
+    current_time = now or _now()
+    cutoff = _iso(
+        current_time
+        - timedelta(days=Config.SPEAKING_COACH_HISTORY_RETENTION_DAYS)
+    )
+    response = (
+        supabase_admin.table(SESSIONS_TABLE)
+        .select("id")
+        .lte("created_at", cutoff)
+        .limit(_bounded_batch_size(batch_size))
+        .execute()
+    )
+    session_ids = [row["id"] for row in _rows(response) if row.get("id")]
+    if not session_ids:
+        return 0
+
+    for session_id in session_ids:
+        delete_session_audio(str(session_id), now=current_time, client=supabase_admin)
+
+    supabase_admin.table(ATTEMPTS_TABLE).delete().in_(
+        "session_id", session_ids
+    ).execute()
+    supabase_admin.table(SKIPS_TABLE).delete().in_(
+        "session_id", session_ids
+    ).execute()
+    supabase_admin.table(SESSIONS_TABLE).delete().in_("id", session_ids).execute()
+    return len(session_ids)
+
+
 def run_retention_cleanup(
     *, now: datetime | None = None, batch_size: int | None = None
 ) -> dict[str, int]:
     """Run a safe, bounded retention pass suitable for an hourly scheduler."""
     current_time = now or _now()
     return {
+        "stale_attempts_failed": fail_stale_processing_attempts(
+            now=current_time, batch_size=batch_size
+        ),
         "audio_deleted": delete_expired_audio(
             now=current_time, batch_size=batch_size
         ),
-        "diagnostics_redacted": redact_expired_diagnostics(
+        "details_redacted": redact_expired_attempt_details(
+            now=current_time, batch_size=batch_size
+        ),
+        "history_deleted": delete_expired_history(
             now=current_time, batch_size=batch_size
         ),
     }

@@ -10,7 +10,7 @@ import json
 import time
 from typing import Any
 from urllib.parse import quote
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from flask import Blueprint, current_app, jsonify, request
 
@@ -34,6 +34,7 @@ speaking_coach = Blueprint("speaking_coach", __name__)
 
 PROMPT_AUDIO_BUCKET = "speaking-coach-prompts"
 MAX_AUDIO_BYTES = 10 * 1024 * 1024
+UNCLEAR_AUDIO_RETRY_LIMIT = 5
 ALLOWED_AUDIO_MIME_TYPES = {
     "audio/aac": "audio/aac",
     "audio/m4a": "audio/m4a",
@@ -398,18 +399,36 @@ def _completed_question_ids(session_id: str) -> set[int]:
     }
 
 
+def _skipped_question_ids(session_id: str) -> set[int]:
+    response = (
+        supabase_admin.table("user_speaking_coach_skips")
+        .select("question_id")
+        .eq("session_id", session_id)
+        .execute()
+    )
+    return {
+        int(row["question_id"])
+        for row in _rows(response)
+        if row.get("question_id") is not None
+    }
+
+
 def _session_payload(
     session: dict[str, Any], ordered_question_ids: list[int]
 ) -> dict[str, Any]:
     completed = _completed_question_ids(str(session["id"]))
+    skipped = _skipped_question_ids(str(session["id"]))
+    resolved = completed | skipped
     current_question_id = next(
-        (question_id for question_id in ordered_question_ids if question_id not in completed),
+        (question_id for question_id in ordered_question_ids if question_id not in resolved),
         None,
     )
     instructional_attempt_number = 1
     previous_attempt_id = None
+    consecutive_unclear_audio_count = 0
     if current_question_id is not None:
         attempts = _attempts_for_question(str(session["id"]), current_question_id)
+        consecutive_unclear_audio_count = _consecutive_unclear_audio_count(attempts)
         instructional_attempt_number, retry_attempt = _expected_instructional_attempt(
             attempts
         )
@@ -421,8 +440,11 @@ def _session_payload(
         "status": session.get("status"),
         "current_question_id": current_question_id,
         "completed_question_ids": sorted(completed),
+        "skipped_question_ids": sorted(skipped),
         "instructional_attempt_number": instructional_attempt_number,
         "previous_attempt_id": previous_attempt_id,
+        "consecutive_unclear_audio_count": consecutive_unclear_audio_count,
+        "unclear_audio_retry_limit": UNCLEAR_AUDIO_RETRY_LIMIT,
     }
 
 
@@ -483,6 +505,98 @@ def _attempts_for_question(session_id: str, question_id: int) -> list[dict[str, 
     )
 
 
+def _consecutive_unclear_audio_count(attempts: list[dict[str, Any]]) -> int:
+    """Count completed unclear results since the most recent usable evaluation."""
+
+    count = 0
+    for attempt in reversed(attempts):
+        if attempt.get("processing_status") != "completed":
+            continue
+        if attempt.get("evaluation_result") == EvaluationStatus.UNCLEAR_AUDIO.value:
+            count += 1
+            continue
+        break
+    return count
+
+
+def _attempt_for_submission(
+    session_id: str, client_submission_id: str
+) -> dict[str, Any] | None:
+    response = (
+        supabase_admin.table("user_speaking_coach_attempts")
+        .select(
+            "id,question_id,evaluation_sequence,instructional_attempt_number,processing_status,"
+            "evaluation_result,normalized_evaluation,failure_code"
+        )
+        .eq("session_id", session_id)
+        .eq("client_submission_id", client_submission_id)
+        .limit(1)
+        .execute()
+    )
+    return _first_row(response)
+
+
+def _existing_submission_response(
+    attempt: dict[str, Any],
+    session: dict[str, Any],
+    ordered_question_ids: list[int],
+):
+    processing_status = attempt.get("processing_status")
+    normalized = attempt.get("normalized_evaluation")
+    if processing_status == "completed" and isinstance(normalized, dict):
+        return jsonify(
+            {
+                "attempt": {
+                    "id": attempt.get("id"),
+                    "instructional_attempt_number": attempt.get(
+                        "instructional_attempt_number"
+                    ),
+                    "evaluation_sequence": attempt.get("evaluation_sequence"),
+                    "evaluation": normalized,
+                    "replayed": True,
+                },
+                "session": _session_payload(session, ordered_question_ids),
+            }
+        ), 200
+    if processing_status in {"uploaded", "evaluating"}:
+        return jsonify(
+            {
+                "error": "This recording is still being evaluated.",
+                "code": "submission_in_progress",
+                "attempt_id": attempt.get("id"),
+            }
+        ), 409
+    if processing_status == "failed":
+        return jsonify(
+            {
+                "error": "This recording could not be evaluated. Record again to create a new submission.",
+                "code": "submission_failed",
+                "attempt_id": attempt.get("id"),
+                "failure_code": attempt.get("failure_code"),
+            }
+        ), 409
+    return jsonify(
+        {
+            "error": "The stored submission result is unavailable.",
+            "code": "submission_result_unavailable",
+            "attempt_id": attempt.get("id"),
+        }
+    ), 409
+
+
+def _is_attempt_uniqueness_error(error: Exception) -> bool:
+    code = getattr(error, "code", None)
+    message = str(error)
+    return code == "23505" or any(
+        marker in message
+        for marker in (
+            "23505",
+            "user_speaking_coach_attempts_submission_unique",
+            "user_speaking_coach_attempts_one_processing",
+        )
+    )
+
+
 def _expected_instructional_attempt(
     attempts: list[dict[str, Any]],
 ) -> tuple[int, dict[str, Any] | None]:
@@ -511,8 +625,10 @@ def _advance_session(
     session: dict[str, Any], ordered_question_ids: list[int]
 ) -> dict[str, Any]:
     completed = _completed_question_ids(str(session["id"]))
+    skipped = _skipped_question_ids(str(session["id"]))
+    resolved = completed | skipped
     next_question_id = next(
-        (question_id for question_id in ordered_question_ids if question_id not in completed),
+        (question_id for question_id in ordered_question_ids if question_id not in resolved),
         None,
     )
     values: dict[str, Any] = {
@@ -695,12 +811,19 @@ def evaluate_speaking_recording():
     auth_ms = round((time.monotonic() - auth_started) * 1000)
 
     session_id = str(request.form.get("session_id") or "").strip()
+    raw_submission_id = str(
+        request.form.get("client_submission_id") or ""
+    ).strip()
     try:
         question_id = int(request.form.get("question_id") or "")
     except ValueError:
         return jsonify({"error": "Invalid question"}), 400
     if not session_id:
         return jsonify({"error": "Invalid evaluation request"}), 400
+    try:
+        client_submission_id = str(UUID(raw_submission_id))
+    except (ValueError, AttributeError):
+        return jsonify({"error": "Invalid client_submission_id"}), 400
 
     audio = request.files.get("audio")
     if not audio:
@@ -724,11 +847,25 @@ def evaluate_speaking_recording():
         session = _fetch_session(session_id, user_id)
         if not session:
             return jsonify({"error": "Speaking session not found"}), 404
-        if session.get("status") != "active":
-            return jsonify({"error": "Speaking session is not active"}), 409
 
         practices, questions = _active_curriculum(str(session["lesson_id"]))
         ordered_question_ids = [int(question["id"]) for question in questions]
+        existing_submission = _attempt_for_submission(
+            session_id, client_submission_id
+        )
+        if existing_submission:
+            if int(existing_submission.get("question_id") or 0) != question_id:
+                return jsonify(
+                    {
+                        "error": "This submission ID belongs to a different question.",
+                        "code": "submission_id_conflict",
+                    }
+                ), 409
+            return _existing_submission_response(
+                existing_submission, session, ordered_question_ids
+            )
+        if session.get("status") != "active":
+            return jsonify({"error": "Speaking session is not active"}), 409
         if _curriculum_hash(practices, questions) != session.get("content_hash"):
             supabase_admin.table("user_speaking_coach_sessions").update(
                 {
@@ -745,6 +882,8 @@ def evaluate_speaking_recording():
             ), 409
         if question_id not in ordered_question_ids:
             return jsonify({"error": "Question is not part of this session"}), 400
+        if question_id in _skipped_question_ids(session_id):
+            return jsonify({"error": "This speaking question was skipped."}), 409
 
         question, practice = _fetch_evaluator_question(question_id)
         if (
@@ -755,6 +894,14 @@ def evaluate_speaking_recording():
             return jsonify({"error": "Speaking question is not active"}), 409
 
         attempts = _attempts_for_question(session_id, question_id)
+        if _consecutive_unclear_audio_count(attempts) >= UNCLEAR_AUDIO_RETRY_LIMIT:
+            return jsonify(
+                {
+                    "error": "We’re unable to check another recording for this question. Skip it or exit practice.",
+                    "code": "unclear_audio_limit_reached",
+                    "session": _session_payload(session, ordered_question_ids),
+                }
+            ), 429
         try:
             expected_attempt, retry_attempt = _expected_instructional_attempt(attempts)
         except ValueError as exc:
@@ -776,6 +923,7 @@ def evaluate_speaking_recording():
             "user_id": user_id,
             "session_id": session_id,
             "question_id": question_id,
+            "client_submission_id": client_submission_id,
             "evaluation_sequence": evaluation_sequence,
             "instructional_attempt_number": instructional_attempt_number,
             "previous_attempt_id": previous_attempt_id,
@@ -788,9 +936,26 @@ def evaluate_speaking_recording():
                 _now() + timedelta(hours=Config.SPEAKING_COACH_AUDIO_RETENTION_HOURS)
             ),
         }
-        supabase_admin.table("user_speaking_coach_attempts").insert(
-            attempt_values
-        ).execute()
+        try:
+            supabase_admin.table("user_speaking_coach_attempts").insert(
+                attempt_values
+            ).execute()
+        except Exception as exc:
+            if not _is_attempt_uniqueness_error(exc):
+                raise
+            existing_submission = _attempt_for_submission(
+                session_id, client_submission_id
+            )
+            if existing_submission:
+                return _existing_submission_response(
+                    existing_submission, session, ordered_question_ids
+                )
+            return jsonify(
+                {
+                    "error": "Another recording for this question is already being evaluated.",
+                    "code": "question_evaluation_in_progress",
+                }
+            ), 409
         setup_ms = round((time.monotonic() - setup_started) * 1000)
 
         storage_started = time.monotonic()
@@ -998,3 +1163,62 @@ def evaluate_speaking_recording():
             except Exception:
                 pass
         return jsonify({"error": "Failed to evaluate speaking recording"}), 500
+
+
+@speaking_coach.route(
+    "/api/speaking/sessions/<string:session_id>/questions/<int:question_id>/skip",
+    methods=["POST"],
+)
+def skip_speaking_question(session_id: str, question_id: int):
+    user_id, auth_error = _authenticated_user_id()
+    if auth_error:
+        return auth_error
+
+    try:
+        session = _fetch_session(session_id, user_id)
+        if not session:
+            return jsonify({"error": "Speaking session not found"}), 404
+
+        practices, questions = _active_curriculum(str(session["lesson_id"]))
+        ordered_question_ids = [int(question["id"]) for question in questions]
+        if question_id in _skipped_question_ids(session_id):
+            return jsonify({"session": _session_payload(session, ordered_question_ids)}), 200
+        if session.get("status") != "active":
+            return jsonify({"error": "Speaking session is not active"}), 409
+        if _curriculum_hash(practices, questions) != session.get("content_hash"):
+            supabase_admin.table("user_speaking_coach_sessions").update(
+                {
+                    "status": "abandoned",
+                    "ended_at": _iso(_now()),
+                    "updated_at": _iso(_now()),
+                }
+            ).eq("id", session_id).execute()
+            return jsonify(
+                {
+                    "error": "Speaking lesson changed; start a new session",
+                    "code": "session_content_changed",
+                }
+            ), 409
+        if question_id not in ordered_question_ids:
+            return jsonify({"error": "Question is not part of this session"}), 400
+        if question_id in _completed_question_ids(session_id):
+            return jsonify({"error": "This speaking question is already complete."}), 409
+
+        supabase_admin.table("user_speaking_coach_skips").insert(
+            {
+                "id": str(uuid4()),
+                "user_id": user_id,
+                "session_id": session_id,
+                "question_id": question_id,
+                "skipped_at": _iso(_now()),
+            }
+        ).execute()
+
+        return jsonify({"session": _advance_session(session, ordered_question_ids)}), 200
+    except Exception:
+        current_app.logger.exception(
+            "Failed to skip speaking question %s in session %s",
+            question_id,
+            session_id,
+        )
+        return jsonify({"error": "Failed to skip speaking question"}), 500

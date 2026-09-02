@@ -29,6 +29,10 @@ class FakeQuery:
         self.values = values
         return self
 
+    def delete(self):
+        self.operation = "delete"
+        return self
+
     def eq(self, column, value):
         self.filters.append(("eq", column, value))
         return self
@@ -71,6 +75,9 @@ class FakeQuery:
         if self.operation == "update":
             for row in rows:
                 row.update(self.values)
+        elif self.operation == "delete":
+            for row in rows:
+                self.rows.remove(row)
         return SimpleNamespace(data=[dict(row) for row in rows])
 
 
@@ -107,14 +114,20 @@ class FakeStorage:
 
 
 class FakeSupabase:
-    def __init__(self, attempts, *, storage_fails=False):
+    def __init__(self, attempts, *, sessions=None, skips=None, storage_fails=False):
         self.attempts = attempts
+        self.sessions = sessions or []
+        self.skips = skips or []
         self.bucket = FakeBucket(fail=storage_fails)
         self.storage = FakeStorage(self.bucket)
 
     def table(self, name):
-        assert name == cleanup.ATTEMPTS_TABLE
-        return FakeQuery(self.attempts)
+        tables = {
+            cleanup.ATTEMPTS_TABLE: self.attempts,
+            cleanup.SESSIONS_TABLE: self.sessions,
+            cleanup.SKIPS_TABLE: self.skips,
+        }
+        return FakeQuery(tables[name])
 
 
 def test_expired_audio_is_deleted_and_marked(monkeypatch):
@@ -161,6 +174,31 @@ def test_storage_failure_does_not_mark_audio_deleted(monkeypatch):
     assert attempts[0]["audio_deleted_at"] is None
 
 
+def test_stale_processing_attempt_is_failed_to_release_question_lock(monkeypatch):
+    attempts = [
+        {
+            "id": "stale",
+            "processing_status": "evaluating",
+            "updated_at": "2026-08-25T11:00:00Z",
+        },
+        {
+            "id": "recent",
+            "processing_status": "evaluating",
+            "updated_at": "2026-08-25T11:55:00Z",
+        },
+    ]
+    fake = FakeSupabase(attempts)
+    monkeypatch.setattr(cleanup, "supabase_admin", fake)
+    monkeypatch.setattr(cleanup.Config, "SPEAKING_COACH_PROCESSING_STALE_MINUTES", 10)
+
+    count = cleanup.fail_stale_processing_attempts(now=NOW)
+
+    assert count == 1
+    assert attempts[0]["processing_status"] == "failed"
+    assert attempts[0]["failure_code"] == "processing_interrupted"
+    assert attempts[1]["processing_status"] == "evaluating"
+
+
 def test_user_audio_cleanup_ignores_expiry(monkeypatch):
     attempts = [
         {
@@ -187,7 +225,30 @@ def test_user_audio_cleanup_ignores_expiry(monkeypatch):
     assert attempts[1]["audio_deleted_at"] is None
 
 
-def test_old_diagnostics_are_redacted_but_normalized_results_remain(monkeypatch):
+def test_user_history_cleanup_removes_sessions_attempts_and_skips():
+    sessions = [
+        {"id": "target-session", "user_id": "user-1"},
+        {"id": "other-session", "user_id": "user-2"},
+    ]
+    attempts = [
+        {"id": "target-attempt", "session_id": "target-session"},
+        {"id": "other-attempt", "session_id": "other-session"},
+    ]
+    skips = [
+        {"id": "target-skip", "session_id": "target-session"},
+        {"id": "other-skip", "session_id": "other-session"},
+    ]
+    fake = FakeSupabase(attempts, sessions=sessions, skips=skips)
+
+    count = cleanup.delete_user_history("user-1", client=fake)
+
+    assert count == 1
+    assert [row["id"] for row in sessions] == ["other-session"]
+    assert [row["id"] for row in attempts] == ["other-attempt"]
+    assert [row["id"] for row in skips] == ["other-skip"]
+
+
+def test_old_detailed_data_is_redacted_but_compact_metrics_remain(monkeypatch):
     attempts = [
         {
             "id": "old",
@@ -196,7 +257,21 @@ def test_old_diagnostics_are_redacted_but_normalized_results_remain(monkeypatch)
             "provider_response_raw": {"id": "interaction"},
             "provider_output_text": "raw model output",
             "failure_detail": "provider details",
+            "transcript": "I'm studying English.",
+            "content_result": {"meaning_correct": True},
+            "pronunciation_result": {"intelligible": True},
+            "feedback_en": "Good answer.",
+            "feedback_th": "คำตอบดี",
+            "detected_issues": [{"category": "grammar"}],
+            "displayed_issues": [{"category": "grammar"}],
+            "corrected_answer": "I'm studying English.",
+            "retry_focus": ["grammar"],
             "normalized_evaluation": {"status": "retry"},
+            "audio_object_path": "user/session/old.m4a",
+            "audio_deleted_at": "2026-05-01T01:00:00Z",
+            "evaluation_result": "retry",
+            "provider": "azure+gemini",
+            "latency_ms": 1200,
             "usage": {"total_token_count": 42},
         },
         {
@@ -209,16 +284,87 @@ def test_old_diagnostics_are_redacted_but_normalized_results_remain(monkeypatch)
     fake = FakeSupabase(attempts)
     monkeypatch.setattr(cleanup, "supabase_admin", fake)
     monkeypatch.setattr(
-        cleanup.Config, "SPEAKING_COACH_DIAGNOSTIC_RETENTION_DAYS", 90
+        cleanup.Config, "SPEAKING_COACH_DETAILED_RETENTION_DAYS", 90
     )
 
-    count = cleanup.redact_expired_diagnostics(now=NOW)
+    count = cleanup.redact_expired_attempt_details(now=NOW)
 
     assert count == 1
     assert attempts[0]["evaluation_context"] is None
     assert attempts[0]["provider_response_raw"] is None
     assert attempts[0]["provider_output_text"] is None
     assert attempts[0]["failure_detail"] is None
-    assert attempts[0]["normalized_evaluation"] == {"status": "retry"}
+    assert attempts[0]["transcript"] is None
+    assert attempts[0]["content_result"] is None
+    assert attempts[0]["pronunciation_result"] is None
+    assert attempts[0]["feedback_en"] is None
+    assert attempts[0]["feedback_th"] is None
+    assert attempts[0]["detected_issues"] == []
+    assert attempts[0]["displayed_issues"] == []
+    assert attempts[0]["corrected_answer"] is None
+    assert attempts[0]["retry_focus"] == []
+    assert attempts[0]["normalized_evaluation"] is None
+    assert attempts[0]["audio_object_path"] is None
+    assert attempts[0]["evaluation_result"] == "retry"
+    assert attempts[0]["provider"] == "azure+gemini"
+    assert attempts[0]["latency_ms"] == 1200
     assert attempts[0]["usage"] == {"total_token_count": 42}
     assert attempts[1]["provider_response_raw"] == {"id": "recent"}
+
+
+def test_redaction_keeps_path_when_audio_deletion_is_unconfirmed(monkeypatch):
+    attempts = [
+        {
+            "id": "old",
+            "created_at": "2026-05-01T00:00:00Z",
+            "normalized_evaluation": {"status": "pass"},
+            "audio_object_path": "user/session/orphan-risk.m4a",
+            "audio_deleted_at": None,
+        }
+    ]
+    fake = FakeSupabase(attempts)
+    monkeypatch.setattr(cleanup, "supabase_admin", fake)
+    monkeypatch.setattr(
+        cleanup.Config, "SPEAKING_COACH_DETAILED_RETENTION_DAYS", 90
+    )
+
+    cleanup.redact_expired_attempt_details(now=NOW)
+
+    assert attempts[0]["normalized_evaluation"] is None
+    assert attempts[0]["audio_object_path"] == "user/session/orphan-risk.m4a"
+
+
+def test_expired_identifiable_history_is_deleted(monkeypatch):
+    sessions = [
+        {"id": "old-session", "created_at": "2025-08-01T00:00:00Z"},
+        {"id": "recent-session", "created_at": "2026-08-01T00:00:00Z"},
+    ]
+    attempts = [
+        {
+            "id": "old-attempt",
+            "session_id": "old-session",
+            "audio_object_path": "user/old-session/audio.m4a",
+            "audio_deleted_at": None,
+        },
+        {
+            "id": "recent-attempt",
+            "session_id": "recent-session",
+            "audio_object_path": None,
+            "audio_deleted_at": "2026-08-01T01:00:00Z",
+        },
+    ]
+    skips = [
+        {"id": "old-skip", "session_id": "old-session"},
+        {"id": "recent-skip", "session_id": "recent-session"},
+    ]
+    fake = FakeSupabase(attempts, sessions=sessions, skips=skips)
+    monkeypatch.setattr(cleanup, "supabase_admin", fake)
+    monkeypatch.setattr(cleanup.Config, "SPEAKING_COACH_HISTORY_RETENTION_DAYS", 365)
+
+    count = cleanup.delete_expired_history(now=NOW)
+
+    assert count == 1
+    assert fake.bucket.removed == ["user/old-session/audio.m4a"]
+    assert [row["id"] for row in sessions] == ["recent-session"]
+    assert [row["id"] for row in attempts] == ["recent-attempt"]
+    assert [row["id"] for row in skips] == ["recent-skip"]

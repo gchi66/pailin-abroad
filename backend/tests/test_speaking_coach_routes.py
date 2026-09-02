@@ -13,12 +13,14 @@ from app.speaking_coach_evaluator import (
 
 
 module = import_module("app.speaking_coach")
+SUBMISSION_ID = "11111111-1111-4111-8111-111111111111"
 
 
 class FakeQuery:
-    def __init__(self, rows, selected_columns):
+    def __init__(self, rows, selected_columns, table_name=None):
         self.rows = rows
         self.selected_columns = selected_columns
+        self.table_name = table_name
         self.filters = []
         self.limit_count = None
         self.operation = "select"
@@ -63,6 +65,24 @@ class FakeQuery:
 
     def execute(self):
         if self.operation == "insert":
+            if self.table_name == "user_speaking_coach_attempts":
+                for row in self.rows:
+                    if (
+                        row.get("session_id") == self.values.get("session_id")
+                        and row.get("client_submission_id")
+                        == self.values.get("client_submission_id")
+                    ):
+                        raise RuntimeError(
+                            "23505 user_speaking_coach_attempts_submission_unique"
+                        )
+                    if (
+                        row.get("session_id") == self.values.get("session_id")
+                        and row.get("question_id") == self.values.get("question_id")
+                        and row.get("processing_status") in {"uploaded", "evaluating"}
+                    ):
+                        raise RuntimeError(
+                            "23505 user_speaking_coach_attempts_one_processing"
+                        )
             self.rows.append(dict(self.values))
             return SimpleNamespace(data=[dict(self.values)])
         rows = self.rows
@@ -201,10 +221,11 @@ class FakeSupabase:
             ],
             "user_speaking_coach_sessions": [],
             "user_speaking_coach_attempts": [],
+            "user_speaking_coach_skips": [],
         }
 
     def table(self, name):
-        return FakeQuery(self.tables.get(name, []), self.selected_columns)
+        return FakeQuery(self.tables.get(name, []), self.selected_columns, name)
 
 
 def _client(monkeypatch, *, authenticated=True):
@@ -462,6 +483,102 @@ def test_force_new_session_preserves_old_session_as_abandoned(monkeypatch):
     assert sessions[1]["status"] == "active"
 
 
+def test_skip_persists_and_advances_session(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]
+
+    skipped = client.post(
+        f"/api/speaking/sessions/{session['id']}/questions/101/skip",
+        headers=_headers(),
+    )
+    resumed = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    )
+
+    assert skipped.status_code == 200
+    payload = skipped.get_json()["session"]
+    assert payload["current_question_id"] == 201
+    assert payload["completed_question_ids"] == []
+    assert payload["skipped_question_ids"] == [101]
+    assert resumed.get_json()["session"]["current_question_id"] == 201
+    assert fake_supabase.tables["user_speaking_coach_skips"][0]["question_id"] == 101
+
+
+def test_skipping_final_unresolved_question_completes_session(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]
+    fake_supabase.tables["user_speaking_coach_attempts"].append(
+        {
+            "id": "first-attempt",
+            "user_id": "user-123",
+            "session_id": session["id"],
+            "question_id": 101,
+            "processing_status": "completed",
+            "evaluation_result": "pass",
+            "completes_question": True,
+            "audio_object_path": "user-123/session/first.m4a",
+            "audio_deleted_at": None,
+        }
+    )
+
+    response = client.post(
+        f"/api/speaking/sessions/{session['id']}/questions/201/skip",
+        headers=_headers(),
+    )
+    repeated = client.post(
+        f"/api/speaking/sessions/{session['id']}/questions/201/skip",
+        headers=_headers(),
+    )
+
+    assert response.status_code == 200
+    assert repeated.status_code == 200
+    payload = response.get_json()["session"]
+    assert payload["status"] == "completed"
+    assert payload["current_question_id"] is None
+    assert payload["skipped_question_ids"] == [201]
+    bucket = fake_supabase.storage.buckets[module.LEARNER_AUDIO_BUCKET]
+    assert bucket.removed == ["user-123/session/first.m4a"]
+    assert len(fake_supabase.tables["user_speaking_coach_skips"]) == 1
+
+
+def test_evaluation_rejects_a_skipped_question(monkeypatch):
+    client, _ = _client(monkeypatch)
+    session = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]
+    client.post(
+        f"/api/speaking/sessions/{session['id']}/questions/101/skip",
+        headers=_headers(),
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session["id"],
+            "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
+            "audio": (BytesIO(b"fake m4a audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 409
+    assert response.get_json() == {"error": "This speaking question was skipped."}
+
+
 @pytest.mark.parametrize(
     ("upload", "expected_mime_type"),
     [
@@ -528,6 +645,7 @@ def test_evaluation_uploads_audio_persists_result_and_advances(
         data={
             "session_id": session_id,
             "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
             "instructional_attempt_number": "1",
             "audio": (BytesIO(upload[0]), upload[1], upload[2]),
         },
@@ -557,6 +675,7 @@ def test_evaluation_uploads_audio_persists_result_and_advances(
     attempt = fake_supabase.tables["user_speaking_coach_attempts"][0]
     assert attempt["processing_status"] == "completed"
     assert attempt["evaluation_result"] == "pass"
+    assert attempt["client_submission_id"] == SUBMISSION_ID
     assert attempt["normalized_evaluation"]["status"] == "pass"
     assert attempt["evaluation_context"]["focus"] == "private rubric"
     assert captured_evaluator["audio_mime_type"] == expected_mime_type
@@ -573,6 +692,330 @@ def test_evaluation_uploads_audio_persists_result_and_advances(
         ".wav" if expected_mime_type == "audio/wav" else ".m4a"
     )
     assert uploads[0][2]["content-type"] == expected_mime_type
+
+
+def test_completed_submission_is_replayed_without_another_provider_call(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session_id = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]["id"]
+    evaluation = SpeakingEvaluation.model_validate(
+        {
+            "status": "pass",
+            "transcript": "I'm eating lunch.",
+            "content": {},
+            "pronunciation": {"intelligible": True, "issues": []},
+            "feedback_en": "Good.",
+            "feedback_th": "ดี",
+        }
+    )
+    provider_calls = []
+
+    def fake_evaluator(**_kwargs):
+        provider_calls.append(True)
+        return EvaluatorResult(
+            evaluation=evaluation,
+            provider="microsoft",
+            model="speech-to-text-short-v1",
+            latency_ms=50,
+            usage={},
+            provider_metadata={},
+            provider_output_text="{}",
+            evaluation_context={},
+        )
+
+    monkeypatch.setattr(module, "evaluate_speaking_attempt", fake_evaluator)
+
+    def submit():
+        return client.post(
+            "/api/speaking/evaluate",
+            headers=_headers(),
+            data={
+                "session_id": session_id,
+                "question_id": "101",
+                "client_submission_id": SUBMISSION_ID,
+                "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+            },
+            content_type="multipart/form-data",
+        )
+
+    original = submit()
+    replay = submit()
+
+    assert original.status_code == 200
+    assert replay.status_code == 200
+    assert replay.get_json()["attempt"]["replayed"] is True
+    assert replay.get_json()["attempt"]["id"] == original.get_json()["attempt"]["id"]
+    assert len(provider_calls) == 1
+    assert len(fake_supabase.tables["user_speaking_coach_attempts"]) == 1
+    assert len(fake_supabase.storage.buckets[module.LEARNER_AUDIO_BUCKET].uploads) == 1
+
+
+def test_session_reports_consecutive_unclear_audio_and_usable_result_resets_count(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]
+    attempts = fake_supabase.tables["user_speaking_coach_attempts"]
+    for sequence in range(1, 4):
+        attempts.append(
+            {
+                "id": f"unclear-{sequence}",
+                "session_id": session["id"],
+                "question_id": 101,
+                "evaluation_sequence": sequence,
+                "instructional_attempt_number": 1,
+                "processing_status": "completed",
+                "evaluation_result": "unclear_audio",
+                "normalized_evaluation": {"status": "unclear_audio"},
+                "completes_question": False,
+            }
+        )
+
+    resumed = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]
+    assert resumed["consecutive_unclear_audio_count"] == 3
+    assert resumed["unclear_audio_retry_limit"] == 5
+
+    attempts.append(
+        {
+            "id": "usable-retry",
+            "session_id": session["id"],
+            "question_id": 101,
+            "evaluation_sequence": 4,
+            "instructional_attempt_number": 1,
+            "processing_status": "completed",
+            "evaluation_result": "retry",
+            "normalized_evaluation": {"status": "retry"},
+            "completes_question": False,
+        }
+    )
+    resumed_after_usable_result = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]
+    assert resumed_after_usable_result["consecutive_unclear_audio_count"] == 0
+
+
+def test_sixth_consecutive_unclear_audio_submission_is_blocked(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]
+    attempts = fake_supabase.tables["user_speaking_coach_attempts"]
+    for sequence in range(1, 6):
+        attempts.append(
+            {
+                "id": f"unclear-{sequence}",
+                "session_id": session["id"],
+                "question_id": 101,
+                "client_submission_id": f"00000000-0000-4000-8000-{sequence:012d}",
+                "evaluation_sequence": sequence,
+                "instructional_attempt_number": 1,
+                "processing_status": "completed",
+                "evaluation_result": "unclear_audio",
+                "normalized_evaluation": {"status": "unclear_audio"},
+                "completes_question": False,
+            }
+        )
+    monkeypatch.setattr(
+        module,
+        "evaluate_speaking_attempt",
+        lambda **_kwargs: pytest.fail("provider must not be called"),
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session["id"],
+            "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
+            "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 429
+    payload = response.get_json()
+    assert payload["code"] == "unclear_audio_limit_reached"
+    assert payload["session"]["consecutive_unclear_audio_count"] == 5
+    assert len(attempts) == 5
+
+
+def test_same_submission_reports_in_progress_without_provider_call(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session_id = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]["id"]
+    fake_supabase.tables["user_speaking_coach_attempts"].append(
+        {
+            "id": "processing-attempt",
+            "session_id": session_id,
+            "question_id": 101,
+            "client_submission_id": SUBMISSION_ID,
+            "evaluation_sequence": 1,
+            "instructional_attempt_number": 1,
+            "processing_status": "evaluating",
+            "completes_question": False,
+        }
+    )
+    monkeypatch.setattr(
+        module,
+        "evaluate_speaking_attempt",
+        lambda **_kwargs: pytest.fail("provider must not be called"),
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session_id,
+            "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
+            "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 409
+    assert response.get_json()["code"] == "submission_in_progress"
+    assert len(fake_supabase.tables["user_speaking_coach_attempts"]) == 1
+
+
+def test_different_submission_is_rejected_while_question_is_processing(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session_id = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]["id"]
+    fake_supabase.tables["user_speaking_coach_attempts"].append(
+        {
+            "id": "processing-attempt",
+            "session_id": session_id,
+            "question_id": 101,
+            "client_submission_id": SUBMISSION_ID,
+            "evaluation_sequence": 1,
+            "instructional_attempt_number": 1,
+            "processing_status": "evaluating",
+            "completes_question": False,
+        }
+    )
+    monkeypatch.setattr(
+        module,
+        "evaluate_speaking_attempt",
+        lambda **_kwargs: pytest.fail("provider must not be called"),
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session_id,
+            "question_id": "101",
+            "client_submission_id": "22222222-2222-4222-8222-222222222222",
+            "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 409
+    assert response.get_json()["code"] == "question_evaluation_in_progress"
+    assert len(fake_supabase.tables["user_speaking_coach_attempts"]) == 1
+
+
+def test_failed_submission_is_replayed_as_failure_without_provider_call(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session_id = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]["id"]
+    fake_supabase.tables["user_speaking_coach_attempts"].append(
+        {
+            "id": "failed-attempt",
+            "session_id": session_id,
+            "question_id": 101,
+            "client_submission_id": SUBMISSION_ID,
+            "evaluation_sequence": 1,
+            "instructional_attempt_number": 1,
+            "processing_status": "failed",
+            "failure_code": "azure_timeout",
+            "completes_question": False,
+        }
+    )
+    monkeypatch.setattr(
+        module,
+        "evaluate_speaking_attempt",
+        lambda **_kwargs: pytest.fail("provider must not be called"),
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session_id,
+            "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
+            "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 409
+    assert response.get_json()["code"] == "submission_failed"
+    assert response.get_json()["failure_code"] == "azure_timeout"
+
+
+def test_submission_id_cannot_be_reused_for_another_question(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session_id = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]["id"]
+    fake_supabase.tables["user_speaking_coach_attempts"].append(
+        {
+            "id": "original-attempt",
+            "session_id": session_id,
+            "question_id": 101,
+            "client_submission_id": SUBMISSION_ID,
+            "evaluation_sequence": 1,
+            "instructional_attempt_number": 1,
+            "processing_status": "completed",
+            "evaluation_result": "pass",
+            "normalized_evaluation": {"status": "pass"},
+            "completes_question": True,
+        }
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session_id,
+            "question_id": "201",
+            "client_submission_id": SUBMISSION_ID,
+            "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 409
+    assert response.get_json()["code"] == "submission_id_conflict"
 
 
 def test_evaluation_omits_debug_diagnostics_for_non_admin(monkeypatch):
@@ -614,6 +1057,7 @@ def test_evaluation_omits_debug_diagnostics_for_non_admin(monkeypatch):
         data={
             "session_id": session_id,
             "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
             "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
         },
         content_type="multipart/form-data",
@@ -642,6 +1086,7 @@ def test_evaluation_returns_422_for_malformed_audio(monkeypatch):
         data={
             "session_id": session_id,
             "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
             "audio": (BytesIO(b"bad audio"), "recording.m4a", "audio/mp4"),
         },
         content_type="multipart/form-data",
@@ -720,6 +1165,7 @@ def test_completing_session_deletes_its_recordings(monkeypatch):
         data={
             "session_id": session["id"],
             "question_id": "201",
+            "client_submission_id": SUBMISSION_ID,
             "audio": (BytesIO(b"fake m4a audio"), "recording.m4a", "audio/mp4"),
         },
         content_type="multipart/form-data",
