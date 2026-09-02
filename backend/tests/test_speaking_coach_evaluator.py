@@ -575,7 +575,6 @@ def test_general_target_alignment_reconstructs_fragmented_smart_attempt(monkeypa
         issue.description_en for issue in result.evaluation.displayed_issues
     ] == [
         "Say 'smart' smoothly without adding an extra sound between the first consonants.",
-        "Say 'smart' again, focusing on the ending.",
     ]
 
 
@@ -2592,7 +2591,7 @@ def test_translation_reconstructs_use_a_map_before_language_grading(monkeypatch)
                 phonemes=[
                     {
                         "Phoneme": "ʌ",
-                        "Duration": 700_000,
+                        "Duration": 900_000,
                         "NBestPhonemes": [{"Phoneme": "ʌ", "Score": 100}],
                     }
                 ],
@@ -2624,7 +2623,11 @@ def test_translation_reconstructs_use_a_map_before_language_grading(monkeypatch)
         transcript="You are smart.",
         words=[
             _word_with_phonemes("you", ["ju"]),
-            _word_with_phonemes("are", ["ɑɹ"]),
+            AzureWordAssessment(
+                word="are",
+                accuracy_score=0,
+                error_type="Omission",
+            ),
             _word_with_phonemes("smart", ["s", "m", "ɑɹ", "t"]),
         ],
     )
@@ -2685,13 +2688,47 @@ def test_translation_reconstructs_use_a_map_before_language_grading(monkeypatch)
     assert [
         issue.description_en for issue in result.evaluation.displayed_issues
     ] == [
-        "Say 'smart' again, focusing on the ending."
+        "Include 'are' or its contraction: say ‘You’re smart.’ or ‘You are smart.’",
+        "Say 'smart' smoothly without adding an extra sound between the first consonants.",
     ]
     assert result.usage["azure"]["request_count"] == 2
     alignment = result.provider_metadata["policy"]["target_alignment"]
     assert alignment["classification"] == "target_like"
     assert alignment["reference_text"] == "You are smart."
     assert alignment["language_transcript_reconstructed"] is True
+
+
+def test_copula_omission_feedback_uses_the_question_target_answers() -> None:
+    reference = _azure_result(
+        transcript="They late.",
+        words=[
+            _word_with_phonemes("they", ["ð", "eɪ"]),
+            AzureWordAssessment(
+                word="are",
+                accuracy_score=0,
+                error_type="Omission",
+            ),
+            _word_with_phonemes("late", ["l", "eɪ", "t"]),
+        ],
+    )
+
+    issues = evaluator._target_reference_focus_issues(
+        reference,
+        focus="Check that the answer includes the required copula.",
+        focus_items=[
+            {
+                "priority": 1,
+                "instruction": "Check that the answer includes the required copula.",
+            }
+        ],
+        target_answers=["They’re late.", "They are late."],
+    )
+
+    assert len(issues) == 1
+    assert issues[0].description_en == (
+        "Include 'are' or its contraction: say ‘They’re late.’ or ‘They are late.’"
+    )
+    assert "You" not in issues[0].description_en
 
 
 def test_text_only_gemini_request_contains_no_audio(monkeypatch):

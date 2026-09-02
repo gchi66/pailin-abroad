@@ -835,44 +835,6 @@ def _target_alignment_candidates(
                     focus_order=focus_rank[1] if focus_rank else None,
                 )
             )
-        elif (
-            operation.kind == "candidate_supported_substitution"
-            and operation.expected_word_final
-        ):
-            expected_sound = operation.expected[0] if operation.expected else ""
-            focus_rank = _pronunciation_focus_rank(
-                word,
-                focus=focus,
-                focus_items=focus_items,
-                phonemes=(expected_sound,),
-                general_markers=("ending", "final consonant"),
-            )
-            evidence_score = max(55, round((1 - operation.cost) * 100))
-            candidates.append(
-                _PronunciationCandidate(
-                    word_index=operation.expected_word_index,
-                    focus_match=focus_rank is not None,
-                    severity=evidence_score,
-                    status=AssessmentTokenStatus.NEEDS_WORK,
-                    pattern_id=operation.pattern_id,
-                    evidence_score=evidence_score,
-                    priority_score=evidence_score,
-                    evidence={"alignment_operation": operation.model_dump(mode="json")},
-                    issue=EvaluationIssue(
-                        category=(
-                            IssueCategory.FOCUS
-                            if focus_rank is not None
-                            else IssueCategory.PRONUNCIATION
-                        ),
-                        description_en=f"Say '{word}' again, focusing on the ending.",
-                        description_th=(
-                            f"ลองพูดคำว่า '{word}' อีกครั้ง โดยเน้นเสียงท้ายคำ"
-                        ),
-                    ),
-                    focus_priority=focus_rank[0] if focus_rank else None,
-                    focus_order=focus_rank[1] if focus_rank else None,
-                )
-            )
     return candidates
 
 
@@ -2308,6 +2270,75 @@ def _focus_validation_issues(
     ]
 
 
+def _target_reference_focus_issues(
+    reference_azure: AzureSpeechResult | None,
+    *,
+    focus: str,
+    focus_items: list[dict[str, Any]] | None,
+    target_answers: list[str],
+) -> list[EvaluationIssue]:
+    """Preserve authored grammar checks hidden by target-like reconstruction."""
+    if not reference_azure or not reference_azure.pronunciation:
+        return []
+    normalized_items = _normalized_focus_items(focus_items, focus=focus)
+    requires_copula = any(
+        any(
+            marker in _normalized_match_text(item["instruction"])
+            for marker in ("required copula", "copula", "am/is/are")
+        )
+        for item in normalized_items
+    )
+    if not requires_copula:
+        return []
+    omitted_copulas = [
+        word.word.strip().lower()
+        for word in reference_azure.pronunciation.words
+        if word.error_type.lower() == "omission"
+        and word.word.strip().lower() in {"am", "is", "are"}
+    ]
+    if not omitted_copulas:
+        return []
+    copula = omitted_copulas[0]
+    contraction_markers = {
+        "am": ("i'm",),
+        "is": ("he's", "she's", "it's", "that's", "what's", "who's", "there's"),
+        "are": ("you're", "we're", "they're"),
+    }
+    examples: list[str] = []
+    for answer in target_answers:
+        normalized = _normalized_match_text(answer.strip())
+        if not normalized or not (
+            re.search(rf"\b{re.escape(copula)}\b", normalized)
+            or any(
+                re.search(rf"\b{re.escape(contraction)}\b", normalized)
+                for contraction in contraction_markers[copula]
+            )
+        ):
+            continue
+        if answer.strip() not in examples:
+            examples.append(answer.strip())
+        if len(examples) == 2:
+            break
+    example_text = " or ".join(f"‘{example}’" for example in examples)
+    description_en = f"Include '{copula}' or its contraction"
+    if example_text:
+        description_en += f": say {example_text}"
+    else:
+        description_en += "."
+    if len(description_en) > 240:
+        description_en = f"Include the missing verb '{copula}' or its contraction."
+    return [
+        EvaluationIssue(
+            category=IssueCategory.FOCUS,
+            description_en=description_en,
+            description_th=(
+                f"ใส่คำว่า '{copula}' หรือใช้รูปย่อ"
+                + (f" เช่น {example_text}" if example_text else "")
+            ),
+        )
+    ]
+
+
 def _unscripted_pronunciation_retry(
     azure: AzureSpeechResult, candidates: list[_PronunciationCandidate]
 ) -> SpeakingEvaluation:
@@ -3174,7 +3205,14 @@ def _compose_language_evaluation(
 
     deterministic_rank: tuple[int | None, int | None] = (None, None)
     if deterministic_focus_issues:
-        markers = ("present continuous", "am/is/are", "be + -ing", "be + ing")
+        markers = (
+            "present continuous",
+            "am/is/are",
+            "be + -ing",
+            "be + ing",
+            "required copula",
+            "copula",
+        )
         matching_items = [
             (item["priority"], index)
             for index, item in enumerate(normalized_focus_items)
@@ -3763,15 +3801,24 @@ def evaluate_speaking_attempt(
         if language_transcript_override
         else azure
     )
-    focus_issues = (
-        _focus_validation_issues(
-            azure,
-            focus=focus,
-            transcript_override=language_transcript_override,
+    focus_issues = []
+    if uses_unscripted_acoustics:
+        focus_issues.extend(
+            _focus_validation_issues(
+                azure,
+                focus=focus,
+                transcript_override=language_transcript_override,
+            )
         )
-        if uses_unscripted_acoustics
-        else []
-    )
+        if translation_target_alignment:
+            focus_issues.extend(
+                _target_reference_focus_issues(
+                    translation_reference_azure,
+                    focus=focus,
+                    focus_items=focus_items,
+                    target_answers=target_answers,
+                )
+            )
     policy_metadata = (
         _pronunciation_policy_metadata(
             pronunciation_candidates,
