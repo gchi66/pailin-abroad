@@ -35,6 +35,18 @@ def test_normalization_bypasses_ffmpeg_for_azure_ready_wav(monkeypatch):
     assert audio.normalize_speaking_audio(recording, "audio/wav") == recording
 
 
+def test_normalization_rejects_zero_frame_azure_ready_wav(monkeypatch):
+    def unexpected_ffmpeg(*_args, **_kwargs):
+        raise AssertionError("an empty Azure-ready WAV should fail before ffmpeg")
+
+    monkeypatch.setattr(audio.subprocess, "run", unexpected_ffmpeg)
+
+    with pytest.raises(audio.AudioNormalizationError) as error:
+        audio.normalize_speaking_audio(_wav_bytes(seconds=0), "audio/wav")
+
+    assert error.value.code == "audio_empty"
+
+
 def test_normalization_invokes_bounded_ffmpeg_without_shell(monkeypatch):
     captured = {}
 

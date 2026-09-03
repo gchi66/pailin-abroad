@@ -3533,6 +3533,11 @@ def evaluate_speaking_attempt(
             "model": AZURE_SPEECH_MODEL,
             "region": Config.AZURE_SPEECH_REGION,
             "response": unbiased_azure.raw_payload,
+            **(
+                {"retry_diagnostics": unbiased_azure.retry_diagnostics}
+                if unbiased_azure.retry_diagnostics
+                else {}
+            ),
         }
         return EvaluatorResult(
             evaluation=evaluation,
@@ -3542,7 +3547,7 @@ def evaluate_speaking_attempt(
             usage={
                 "azure": {
                     "duration_100ns": unbiased_azure.duration_100ns,
-                    "request_count": 1,
+                    "request_count": unbiased_azure.request_count,
                 }
             },
             provider_metadata={
@@ -3594,10 +3599,10 @@ def evaluate_speaking_attempt(
             )
     azure_stage_ms = round((time.monotonic() - azure_started) * 1000)
 
-    azure_request_count = (
-        1
-        + (1 if unbiased_azure else 0)
-        + (1 if translation_reference_azure else 0)
+    azure_request_count = sum(
+        result.request_count
+        for result in (unbiased_azure, azure, translation_reference_azure)
+        if result is not None
     )
     azure_duration = sum(
         duration
@@ -3620,6 +3625,11 @@ def evaluate_speaking_attempt(
         "model": AZURE_SPEECH_MODEL,
         "region": Config.AZURE_SPEECH_REGION,
         "response": azure.raw_payload,
+        **(
+            {"retry_diagnostics": azure.retry_diagnostics}
+            if azure.retry_diagnostics
+            else {}
+        ),
     }
     if practice_type == "pronunciation":
         policy_started = time.monotonic()
@@ -3733,6 +3743,15 @@ def evaluate_speaking_attempt(
                             "model": AZURE_SPEECH_MODEL,
                             "region": Config.AZURE_SPEECH_REGION,
                             "response": unbiased_azure.raw_payload,
+                            **(
+                                {
+                                    "retry_diagnostics": (
+                                        unbiased_azure.retry_diagnostics
+                                    )
+                                }
+                                if unbiased_azure.retry_diagnostics
+                                else {}
+                            ),
                         }
                     }
                     if unbiased_azure
@@ -3937,6 +3956,15 @@ def evaluate_speaking_attempt(
                         "region": Config.AZURE_SPEECH_REGION,
                         "reference_text": translation_reference,
                         "response": translation_reference_azure.raw_payload,
+                        **(
+                            {
+                                "retry_diagnostics": (
+                                    translation_reference_azure.retry_diagnostics
+                                )
+                            }
+                            if translation_reference_azure.retry_diagnostics
+                            else {}
+                        ),
                     }
                 }
                 if translation_reference_azure

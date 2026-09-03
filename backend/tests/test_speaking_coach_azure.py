@@ -245,6 +245,70 @@ def test_unscripted_gate_can_disable_paid_prosody_add_on(monkeypatch):
     assert "EnableProsodyAssessment" not in assessment
 
 
+def test_azure_retries_missing_recognition_status_once(monkeypatch):
+    payloads = iter(
+        [
+            {"error": "NBest[0] is missing PronunciationAssessment block"},
+            _flat_response(),
+        ]
+    )
+    request_count = 0
+
+    def fake_post(_url, *, headers, params, data, timeout):
+        nonlocal request_count
+        request_count += 1
+        payload = next(payloads)
+        return SimpleNamespace(
+            ok=True,
+            status_code=200,
+            json=lambda: payload,
+        )
+
+    monkeypatch.setattr(azure.Config, "AZURE_API_KEY", "azure-secret")
+    monkeypatch.setattr(azure.Config, "AZURE_SPEECH_REGION", "southeastasia")
+    monkeypatch.setattr(azure.requests, "post", fake_post)
+
+    result = azure.assess_with_azure_speech(b"wav")
+
+    assert request_count == 2
+    assert result.request_count == 2
+    assert result.recognition_status == "Success"
+    assert result.retry_diagnostics == [
+        {
+            "reason": "missing_recognition_status",
+            "response_keys": ["error"],
+            "provider_error": (
+                "NBest[0] is missing PronunciationAssessment block"
+            ),
+        }
+    ]
+
+
+def test_azure_stops_after_one_schema_retry(monkeypatch):
+    request_count = 0
+
+    def fake_post(_url, *, headers, params, data, timeout):
+        nonlocal request_count
+        request_count += 1
+        return SimpleNamespace(
+            ok=True,
+            status_code=200,
+            json=lambda: {"error": "temporary malformed response"},
+        )
+
+    monkeypatch.setattr(azure.Config, "AZURE_API_KEY", "azure-secret")
+    monkeypatch.setattr(azure.Config, "AZURE_SPEECH_REGION", "southeastasia")
+    monkeypatch.setattr(azure.requests, "post", fake_post)
+
+    with pytest.raises(azure.AzureSpeechError) as error:
+        azure.assess_with_azure_speech(b"wav")
+
+    assert request_count == 2
+    assert error.value.code == "azure_schema_invalid"
+    assert "after one automatic retry" in error.value.detail
+    assert "temporary malformed response" in error.value.detail
+
+
 def test_azure_requires_key_and_valid_region(monkeypatch):
     monkeypatch.setattr(azure.Config, "AZURE_API_KEY", None)
     monkeypatch.setattr(azure.Config, "AZURE_SPEECH_REGION", "southeastasia")

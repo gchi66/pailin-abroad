@@ -81,6 +81,10 @@ def normalize_speaking_audio(
         except (wave.Error, EOFError, ZeroDivisionError):
             is_azure_ready = False
             duration_seconds = 0
+        if is_azure_ready and duration_seconds <= 0:
+            raise AudioNormalizationError(
+                "audio_empty", "The audio recording contains no usable audio."
+            )
         if is_azure_ready:
             if len(audio_bytes) > max_output_bytes:
                 raise AudioNormalizationError(

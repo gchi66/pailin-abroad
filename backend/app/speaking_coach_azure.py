@@ -81,6 +81,8 @@ class AzureSpeechResult(BaseModel):
     duration_100ns: int | None = None
     snr: float | None = None
     latency_ms: int
+    request_count: int = Field(default=1, ge=1, le=2)
+    retry_diagnostics: list[dict[str, Any]] = Field(default_factory=list)
     raw_payload: dict[str, Any]
 
 
@@ -107,6 +109,22 @@ def _integer(value: Any) -> int | None:
 
 def _text(value: Any) -> str | None:
     return value.strip()[:1000] if isinstance(value, str) and value.strip() else None
+
+
+def _schema_failure_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    """Retain useful provider diagnostics without copying recognition text."""
+
+    summary: dict[str, Any] = {
+        "reason": "missing_recognition_status",
+        "response_keys": sorted(str(key)[:80] for key in payload)[:20],
+    }
+    raw_error = payload.get("error")
+    if isinstance(raw_error, dict):
+        raw_error = raw_error.get("message") or raw_error.get("code")
+    error_text = _text(raw_error)
+    if error_text:
+        summary["provider_error"] = error_text[:300]
+    return summary
 
 
 def _assessment_value(alternative: dict[str, Any], key: str) -> float | None:
@@ -186,7 +204,9 @@ def _parse_word(raw_word: Any) -> AzureWordAssessment | None:
 
 
 def parse_azure_speech_response(
-    payload: dict[str, Any], *, latency_ms: int
+    payload: dict[str, Any], *, latency_ms: int,
+    request_count: int = 1,
+    retry_diagnostics: list[dict[str, Any]] | None = None,
 ) -> AzureSpeechResult:
     raw_status = payload.get("RecognitionStatus")
     if raw_status == 0:
@@ -256,6 +276,8 @@ def parse_azure_speech_response(
         duration_100ns=_integer(payload.get("Duration")),
         snr=_number(payload, "SNR"),
         latency_ms=latency_ms,
+        request_count=request_count,
+        retry_diagnostics=retry_diagnostics or [],
         raw_payload=payload,
     )
 
@@ -311,35 +333,63 @@ def assess_with_azure_speech(
         "speech/recognition/conversation/cognitiveservices/v1"
     )
     started = time.monotonic()
-    try:
-        response = requests.post(
-            url,
-            headers=headers,
-            params={"language": "en-US", "format": "detailed", "profanity": "raw"},
-            data=wav_bytes,
-            timeout=Config.SPEAKING_COACH_EVALUATION_TIMEOUT_SECONDS,
-        )
-    except requests.Timeout as exc:
-        raise AzureSpeechError("azure_timeout", "Azure Speech timed out.") from exc
-    except requests.RequestException as exc:
-        raise AzureSpeechError(
-            "azure_unavailable", "Azure Speech request failed."
-        ) from exc
-    latency_ms = round((time.monotonic() - started) * 1000)
+    timeout_seconds = Config.SPEAKING_COACH_EVALUATION_TIMEOUT_SECONDS
+    retry_diagnostics: list[dict[str, Any]] = []
+    for request_number in (1, 2):
+        elapsed = time.monotonic() - started
+        remaining_timeout = max(1.0, timeout_seconds - elapsed)
+        try:
+            response = requests.post(
+                url,
+                headers=headers,
+                params={"language": "en-US", "format": "detailed", "profanity": "raw"},
+                data=wav_bytes,
+                timeout=remaining_timeout,
+            )
+        except requests.Timeout as exc:
+            raise AzureSpeechError("azure_timeout", "Azure Speech timed out.") from exc
+        except requests.RequestException as exc:
+            raise AzureSpeechError(
+                "azure_unavailable", "Azure Speech request failed."
+            ) from exc
 
-    try:
-        payload = response.json()
-    except ValueError as exc:
-        raise AzureSpeechError(
-            "azure_invalid_response", "Azure Speech returned a non-JSON response."
-        ) from exc
-    if not response.ok:
-        raise AzureSpeechError(
-            f"azure_http_{response.status_code}",
-            f"Azure Speech rejected the request with status {response.status_code}.",
-        )
-    if not isinstance(payload, dict):
-        raise AzureSpeechError(
-            "azure_invalid_response", "Azure Speech returned an invalid response."
-        )
-    return parse_azure_speech_response(payload, latency_ms=latency_ms)
+        try:
+            payload = response.json()
+        except ValueError as exc:
+            raise AzureSpeechError(
+                "azure_invalid_response", "Azure Speech returned a non-JSON response."
+            ) from exc
+        if not response.ok:
+            raise AzureSpeechError(
+                f"azure_http_{response.status_code}",
+                f"Azure Speech rejected the request with status {response.status_code}.",
+            )
+        if not isinstance(payload, dict):
+            raise AzureSpeechError(
+                "azure_invalid_response", "Azure Speech returned an invalid response."
+            )
+
+        latency_ms = round((time.monotonic() - started) * 1000)
+        try:
+            return parse_azure_speech_response(
+                payload,
+                latency_ms=latency_ms,
+                request_count=request_number,
+                retry_diagnostics=retry_diagnostics,
+            )
+        except AzureSpeechError as exc:
+            if exc.code != "azure_schema_invalid":
+                raise
+            summary = _schema_failure_summary(payload)
+            retry_diagnostics.append(summary)
+            if request_number == 1 and remaining_timeout > 1:
+                continue
+            raise AzureSpeechError(
+                exc.code,
+                "Azure omitted the recognition status after one automatic retry. "
+                f"Sanitized response summary: {json.dumps(summary, separators=(',', ':'))}",
+            ) from exc
+
+    raise AzureSpeechError(
+        "azure_schema_invalid", "Azure returned an invalid recognition response."
+    )

@@ -6,11 +6,13 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 import hashlib
 import hmac
+import io
 import json
 import time
 from typing import Any
 from urllib.parse import quote
 from uuid import UUID, uuid4
+import wave
 
 from flask import Blueprint, current_app, jsonify, request
 
@@ -76,6 +78,40 @@ def _looks_like_wav(audio_bytes: bytes) -> bool:
         and audio_bytes[:4] == b"RIFF"
         and audio_bytes[8:12] == b"WAVE"
     )
+
+
+def _audio_capture_diagnostics(
+    audio_bytes: bytes, audio_mime_type: str
+) -> dict[str, Any]:
+    """Return non-content metadata that helps diagnose empty native recordings."""
+
+    diagnostics: dict[str, Any] = {
+        "byte_count": len(audio_bytes),
+        "mime_type": audio_mime_type,
+        "looks_like_wav": _looks_like_wav(audio_bytes),
+    }
+    if not diagnostics["looks_like_wav"]:
+        return diagnostics
+    try:
+        with wave.open(io.BytesIO(audio_bytes), "rb") as wav_file:
+            frame_count = wav_file.getnframes()
+            frame_rate = wav_file.getframerate()
+            diagnostics.update(
+                {
+                    "wav_frame_count": frame_count,
+                    "wav_frame_rate": frame_rate,
+                    "wav_channel_count": wav_file.getnchannels(),
+                    "wav_sample_width_bytes": wav_file.getsampwidth(),
+                    "wav_duration_ms": (
+                        round(frame_count * 1000 / frame_rate)
+                        if frame_rate > 0
+                        else None
+                    ),
+                }
+            )
+    except (wave.Error, EOFError):
+        diagnostics["wav_parse_error"] = True
+    return diagnostics
 
 
 def _rows(response: Any) -> list[dict[str, Any]]:
@@ -384,19 +420,23 @@ def _curriculum_hash(
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
-def _completed_question_ids(session_id: str) -> set[int]:
+def _completed_question_results(session_id: str) -> dict[int, str]:
     response = (
         supabase_admin.table("user_speaking_coach_attempts")
-        .select("question_id")
+        .select("question_id,evaluation_result")
         .eq("session_id", session_id)
         .eq("completes_question", True)
         .execute()
     )
     return {
-        int(row["question_id"])
+        int(row["question_id"]): str(row.get("evaluation_result") or "")
         for row in _rows(response)
         if row.get("question_id") is not None
     }
+
+
+def _completed_question_ids(session_id: str) -> set[int]:
+    return set(_completed_question_results(session_id))
 
 
 def _skipped_question_ids(session_id: str) -> set[int]:
@@ -416,9 +456,16 @@ def _skipped_question_ids(session_id: str) -> set[int]:
 def _session_payload(
     session: dict[str, Any], ordered_question_ids: list[int]
 ) -> dict[str, Any]:
-    completed = _completed_question_ids(str(session["id"]))
+    completed_results = _completed_question_results(str(session["id"]))
+    completed = set(completed_results)
     skipped = _skipped_question_ids(str(session["id"]))
     resolved = completed | skipped
+    correct = {
+        question_id
+        for question_id, result in completed_results.items()
+        if result == EvaluationStatus.PASS.value
+    }
+    needs_review = (completed - correct) | skipped
     current_question_id = next(
         (question_id for question_id in ordered_question_ids if question_id not in resolved),
         None,
@@ -441,6 +488,8 @@ def _session_payload(
         "current_question_id": current_question_id,
         "completed_question_ids": sorted(completed),
         "skipped_question_ids": sorted(skipped),
+        "correct_question_ids": sorted(correct),
+        "needs_review_question_ids": sorted(needs_review),
         "instructional_attempt_number": instructional_attempt_number,
         "previous_attempt_id": previous_attempt_id,
         "consecutive_unclear_audio_count": consecutive_unclear_audio_count,
@@ -840,6 +889,21 @@ def evaluate_speaking_recording():
         provider_mime_type = "audio/wav"
     if not provider_mime_type:
         return jsonify({"error": "Unsupported audio format"}), 415
+    capture_diagnostics = _audio_capture_diagnostics(
+        audio_bytes, provider_mime_type
+    )
+    print(
+        "[speaking-capture-received] "
+        + json.dumps(
+            {
+                "client_submission_id": client_submission_id,
+                "question_id": question_id,
+                **capture_diagnostics,
+            },
+            separators=(",", ":"),
+        ),
+        flush=True,
+    )
 
     attempt_id: str | None = None
     try:
@@ -931,6 +995,9 @@ def evaluate_speaking_recording():
             "detected_issues": [],
             "displayed_issues": [],
             "retry_focus": [],
+            "evaluation_context": {
+                "capture_diagnostics": capture_diagnostics,
+            },
             "audio_object_path": audio_object_path,
             "audio_expires_at": _iso(
                 _now() + timedelta(hours=Config.SPEAKING_COACH_AUDIO_RETENTION_HOURS)
@@ -1039,7 +1106,10 @@ def evaluate_speaking_recording():
                 "model_used": result.model,
                 "prompt_version": PROMPT_VERSION,
                 "evaluator_schema_version": EVALUATOR_SCHEMA_VERSION,
-                "evaluation_context": result.evaluation_context,
+                "evaluation_context": {
+                    **result.evaluation_context,
+                    "capture_diagnostics": capture_diagnostics,
+                },
                 "provider_response_raw": result.provider_metadata,
                 "provider_output_text": result.provider_output_text,
                 "normalized_evaluation": normalized,

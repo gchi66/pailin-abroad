@@ -506,6 +506,8 @@ def test_skip_persists_and_advances_session(monkeypatch):
     assert payload["current_question_id"] == 201
     assert payload["completed_question_ids"] == []
     assert payload["skipped_question_ids"] == [101]
+    assert payload["correct_question_ids"] == []
+    assert payload["needs_review_question_ids"] == [101]
     assert resumed.get_json()["session"]["current_question_id"] == 201
     assert fake_supabase.tables["user_speaking_coach_skips"][0]["question_id"] == 101
 
@@ -546,6 +548,8 @@ def test_skipping_final_unresolved_question_completes_session(monkeypatch):
     assert payload["status"] == "completed"
     assert payload["current_question_id"] is None
     assert payload["skipped_question_ids"] == [201]
+    assert payload["correct_question_ids"] == [101]
+    assert payload["needs_review_question_ids"] == [201]
     bucket = fake_supabase.storage.buckets[module.LEARNER_AUDIO_BUCKET]
     assert bucket.removed == ["user-123/session/first.m4a"]
     assert len(fake_supabase.tables["user_speaking_coach_skips"]) == 1
@@ -672,12 +676,20 @@ def test_evaluation_uploads_audio_persists_result_and_advances(
         "total",
     }
     assert payload["session"]["current_question_id"] == 201
+    assert payload["session"]["correct_question_ids"] == [101]
+    assert payload["session"]["needs_review_question_ids"] == []
     attempt = fake_supabase.tables["user_speaking_coach_attempts"][0]
     assert attempt["processing_status"] == "completed"
     assert attempt["evaluation_result"] == "pass"
     assert attempt["client_submission_id"] == SUBMISSION_ID
     assert attempt["normalized_evaluation"]["status"] == "pass"
     assert attempt["evaluation_context"]["focus"] == "private rubric"
+    capture_diagnostics = attempt["evaluation_context"]["capture_diagnostics"]
+    assert capture_diagnostics["byte_count"] == len(upload[0])
+    assert capture_diagnostics["mime_type"] == expected_mime_type
+    assert capture_diagnostics["looks_like_wav"] is (
+        expected_mime_type == "audio/wav"
+    )
     assert captured_evaluator["audio_mime_type"] == expected_mime_type
     assert captured_evaluator["focus"] == "question-specific pronunciation rubric"
     assert captured_evaluator["focus_items"] == [
