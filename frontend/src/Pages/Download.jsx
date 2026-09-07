@@ -49,27 +49,30 @@ export default function Download() {
   return (
     <main className="download-page">
       <section className="download-card" aria-labelledby="download-title">
-        <img
-          className="download-logo"
-          src="/images/full-logo.webp"
-          alt="Pailin Abroad"
-        />
+        <header className="download-header">
+          <div className="download-heading">
+            <img
+              className="download-logo"
+              src="/images/full-logo.webp"
+              alt="Pailin Abroad"
+            />
+            <h1 id="download-title">
+              ฟังภาษาอังกฤษให้ทัน
+              <span>พูดได้อย่างเป็นธรรมชาติ</span>
+            </h1>
+          </div>
+          <img
+            className="download-character"
+            src="/images/characters/placement-test-pailin-thumbs-up.webp"
+            alt=""
+          />
+        </header>
 
-        <img
-          className="download-character"
-          src="/images/characters/pailin_blue_circle.webp"
-          alt=""
-        />
-
-        <p className="download-eyebrow">ภาษาอังกฤษที่ใช้ได้จริง สำหรับคนไทย</p>
-        <h1 id="download-title">
-          ฟังภาษาอังกฤษให้ทัน
-          <span>พูดได้อย่างเป็นธรรมชาติ</span>
-        </h1>
-        <p className="download-thai-copy">
-          เรียนผ่านเรื่องราวและบทสนทนา พร้อมคำแปลและคำอธิบายภาษาไทย
-          ที่สร้างมาเพื่อผู้เรียนชาวไทยโดยเฉพาะ
-        </p>
+        <ul className="download-highlights" aria-label="สิ่งที่คุณจะได้รับ">
+          <li><span aria-hidden="true">🎁</span>เริ่มเรียนฟรี</li>
+          <li><span aria-hidden="true">📖</span>200+ บทเรียน</li>
+          <li><span aria-hidden="true">文</span>มีคำแปลไทย</li>
+        </ul>
 
         <ul className="download-benefits" aria-label="จุดเด่นของ Pailin Abroad">
           <li>
@@ -90,14 +93,23 @@ export default function Download() {
             <span className="download-benefit-icon" aria-hidden="true">🇹🇭</span>
             <div>
               <strong>สร้างมาเพื่อคนไทย</strong>
-              <p>มีคำแปลไทย พร้อมคำแนะนำเรื่องข้อผิดพลาดที่คนไทยมักใช้</p>
+              <p>มีคำแปลไทย พร้อมคำแนะนำเรื่องข้อผิดพลาดที่คนไทยมักทำ</p>
             </div>
           </li>
         </ul>
 
-        <p className="download-trust-line">
-          เริ่มเรียนฟรี <span aria-hidden="true">•</span> Beginner–Expert <span aria-hidden="true">•</span> มีคำแปลภาษาไทย
-        </p>
+        <div className="download-web-panel">
+          <p>เรียนได้เลย<br />บนคอมพิวเตอร์<br />ไม่ต้องดาวน์โหลด</p>
+          <a className="download-web-button" href="/lessons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <ellipse cx="12" cy="12" rx="4" ry="9" />
+              <path d="M3 12h18M5 6.5h14M5 17.5h14" />
+            </svg>
+            เรียนต่อบนเว็บไซต์
+          </a>
+        </div>
+        <p className="download-store-divider">หรือดาวน์โหลดแอป</p>
 
         <div className="download-store-buttons">
           <StoreButton href={APP_STORE_URL} store="ios">
