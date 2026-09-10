@@ -150,6 +150,7 @@ class FakeSupabase:
         self.table_rows = table_rows
         self.queries = []
         self.rpc_calls = []
+        self.rpc_payloads = {}
         self.rpc_result = {
             "topic_id": 9,
             "question_id": 601,
@@ -169,8 +170,11 @@ class FakeSupabase:
 
     def rpc(self, name, params):
         self.rpc_calls.append((name, params))
+        payload = self.rpc_payloads.get(name, self.rpc_result)
         return SimpleNamespace(
-            execute=lambda: SimpleNamespace(data=dict(self.rpc_result))
+            execute=lambda: SimpleNamespace(
+                data=list(payload) if isinstance(payload, list) else dict(payload)
+            )
         )
 
 
@@ -353,6 +357,52 @@ def _headers():
     return {"Authorization": "Bearer test-token"}
 
 
+def _session_rpc_payload():
+    tables = _tables()
+    exercise = tables["exercise_bank_exercises"][0]
+    states = {row["question_id"]: row for row in tables["user_exercise_bank_question_state"]}
+    examples = [row for row in tables["exercise_bank_questions"] if row.get("is_example")]
+    questions = []
+    for question in tables["exercise_bank_questions"][:5]:
+        questions.append({
+            **question,
+            "exercise_id": exercise["id"],
+            "exercise_type": exercise["exercise_type"],
+            "display_type": exercise["display_type"],
+            "display_type_th": exercise["display_type_th"],
+            "prompt": exercise["prompt"],
+            "prompt_th": exercise["prompt_th"],
+            "keywords": exercise["keywords"],
+            "state": states.get(question["id"]),
+            "examples": examples,
+        })
+    return {
+        "topic": _topic(),
+        "progress": {
+            "total_questions": 6,
+            "total_sets": 2,
+            "mastered_questions": 5,
+            "completed_sets": 1,
+            "is_completed": False,
+            "is_current_version_completed": False,
+            "has_new_content": False,
+            "active_set_number": 2,
+            "active_set_position": 1,
+            "active_view": "question",
+            "last_advanced_set_number": 1,
+            "first_completed_at": "2026-07-20T00:00:00Z",
+            "completed_content_version": 1,
+            "version_completed_at": "2026-07-20T00:00:00Z",
+        },
+        "sets": [
+            {"set_number": 1, "question_count": 5, "attempted_questions": 5, "mastered_questions": 5, "is_complete": True},
+            {"set_number": 2, "question_count": 1, "attempted_questions": 1, "mastered_questions": 0, "is_complete": False},
+        ],
+        "set_number": 1,
+        "questions": questions,
+    }
+
+
 def test_topics_require_authentication(monkeypatch):
     client, _ = _client(monkeypatch)
 
@@ -396,6 +446,51 @@ def test_topic_summaries_include_sets_and_user_progress(monkeypatch):
         "total_sets": 2,
         "version_completed_at": "2026-07-20T00:00:00Z",
     }
+
+
+def test_topic_summaries_use_single_aggregate_rpc_when_available(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    expected = [{
+        **_topic(),
+        "progress": {"total_questions": 6, "active_set_number": 2},
+    }]
+    fake_supabase.rpc_payloads["get_exercise_bank_v2_topic_summaries"] = expected
+
+    response = client.get("/api/exercise-bank-v2/topics", headers=_headers())
+
+    assert response.status_code == 200
+    assert response.get_json()["topics"] == expected
+    assert fake_supabase.queries == []
+    assert fake_supabase.rpc_calls == [(
+        "get_exercise_bank_v2_topic_summaries",
+        {"p_user_id": "user-123", "p_category": None, "p_featured_only": False},
+    )]
+
+
+def test_session_bootstrap_uses_one_rpc_and_returns_only_requested_set(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.rpc_payloads["get_exercise_bank_v2_session"] = _session_rpc_payload()
+
+    response = client.get(
+        "/api/exercise-bank-v2/topics/9/session?set_number=1",
+        headers=_headers(),
+    )
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["topic"]["resume"] == {
+        "set_number": 2,
+        "set_position": 1,
+        "view": "question",
+    }
+    assert payload["set"]["set_number"] == 1
+    assert len(payload["set"]["questions"]) == 5
+    assert payload["set"]["questions"][0]["content_th"]["text"].endswith("คำถามที่ 1 _____")
+    assert fake_supabase.queries == []
+    assert fake_supabase.rpc_calls == [(
+        "get_exercise_bank_v2_session",
+        {"p_user_id": "user-123", "p_topic_id": 9, "p_set_number": 1},
+    )]
 
 
 def test_thai_language_localizes_topic_exercise_and_question(monkeypatch):

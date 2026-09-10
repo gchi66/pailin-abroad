@@ -681,6 +681,179 @@ def _load_topic_context(user_id: str, topics: list[dict[str, Any]]) -> dict[str,
     }
 
 
+def _rpc_json_value(name: str, params: dict[str, Any]) -> Any:
+    return getattr(supabase_admin.rpc(name, params).execute(), "data", None)
+
+
+def _session_bootstrap_payload(data: Mapping[str, Any]) -> dict[str, Any]:
+    topic = data.get("topic") if isinstance(data.get("topic"), dict) else {}
+    progress = data.get("progress") if isinstance(data.get("progress"), dict) else {}
+    sets = data.get("sets") if isinstance(data.get("sets"), list) else []
+    raw_questions = data.get("questions") if isinstance(data.get("questions"), list) else []
+    set_number = data.get("set_number")
+
+    response_topic = _topic_payload(topic, progress)
+    response_topic["sets"] = sets
+    response_topic["next_incomplete_set"] = (
+        progress.get("active_set_number")
+        if int(progress.get("last_advanced_set_number") or 0)
+        < int(progress.get("total_sets") or 0)
+        else None
+    )
+    response_topic["resume"] = {
+        "set_number": int(progress.get("active_set_number") or 1),
+        "set_position": int(progress.get("active_set_position") or 1),
+        "view": progress.get("active_view")
+        if progress.get("active_view") in {"question", "results"}
+        else "question",
+    }
+
+    questions = []
+    for raw in raw_questions:
+        if not isinstance(raw, dict):
+            continue
+        exercise = {
+            "id": raw.get("exercise_id"),
+            "exercise_type": raw.get("exercise_type"),
+            "display_type": raw.get("display_type"),
+            "display_type_th": raw.get("display_type_th"),
+            "prompt": raw.get("prompt"),
+            "prompt_th": raw.get("prompt_th"),
+            "keywords": raw.get("keywords"),
+        }
+        state = raw.get("state") if isinstance(raw.get("state"), dict) else {}
+        examples = raw.get("examples") if isinstance(raw.get("examples"), list) else []
+        questions.append(
+            {
+                "id": raw.get("id"),
+                "source_number": raw.get("source_number"),
+                "practice_order": raw.get("practice_order"),
+                "set_number": set_number,
+                "set_position": _set_position(int(raw.get("practice_order") or 1)),
+                "exercise": {
+                    "id": exercise["id"],
+                    "exercise_type": exercise["exercise_type"],
+                    "display_type": _localized_text(exercise, "display_type"),
+                    "display_type_en": exercise["display_type"],
+                    "display_type_th": exercise["display_type_th"],
+                    "prompt": _localized_text(exercise, "prompt"),
+                    "prompt_en": exercise["prompt"],
+                    "prompt_th": exercise["prompt_th"],
+                    "keywords": exercise["keywords"],
+                    "examples": [
+                        {
+                            "id": example.get("id"),
+                            "content": _localized_question_content(example, example=True),
+                            "content_en": _sanitize_example_content(example.get("content") or {}),
+                            "content_th": _sanitize_content(example.get("content_th") or {}),
+                        }
+                        for example in examples
+                        if isinstance(example, dict)
+                    ],
+                },
+                "content": _localized_question_content(raw),
+                "content_en": _sanitize_content(raw.get("content") or {}),
+                "content_th": _sanitize_content(raw.get("content_th") or {}),
+                "progress": {
+                    "attempt_count": int(state.get("attempt_count") or 0),
+                    "has_answered_correctly": bool(state.get("has_answered_correctly")),
+                    "latest_user_answer": _deserialize_answer(state.get("latest_user_answer")),
+                    "latest_is_correct": state.get("latest_is_correct"),
+                    "latest_score": float(state.get("latest_ai_score") or 0),
+                    "latest_feedback_en": state.get("latest_ai_feedback_en") or "",
+                    "latest_feedback_th": state.get("latest_ai_feedback_th") or "",
+                    "review_answer": _review_answer(exercise, raw)
+                    if int(state.get("attempt_count") or 0) > 0 else "",
+                    "last_attempted_at": state.get("last_attempted_at"),
+                },
+            }
+        )
+
+    mastered = sum(item["progress"]["has_answered_correctly"] for item in questions)
+    return {
+        "topic": response_topic,
+        "set": None if set_number is None else {
+            "set_number": int(set_number),
+            "question_count": len(questions),
+            "mastered_questions": mastered,
+            "is_complete": int(set_number) <= int(progress.get("last_advanced_set_number") or 0),
+            "questions": questions,
+        },
+    }
+
+
+def _legacy_session_data(
+    user_id: str,
+    topic_id: int,
+    requested_set_number: int | None,
+) -> dict[str, Any] | None:
+    """Compatibility path used until the optimized read RPC is installed."""
+    topic = _fetch_topic(topic_id)
+    if not topic:
+        return None
+    context = _load_topic_context(user_id, [topic])
+    questions = context["questions_by_topic"].get(topic_id, [])
+    state_by_question = context["states_by_topic"].get(topic_id, {})
+    progress = _progress_payload(
+        topic,
+        questions,
+        state_by_question,
+        context["progress_by_topic"].get(topic_id),
+    )
+    sets = []
+    for number in range(1, progress["total_sets"] + 1):
+        rows = [q for q in questions if _set_number(q["practice_order"]) == number]
+        sets.append(
+            {
+                "set_number": number,
+                "question_count": len(rows),
+                "attempted_questions": sum(
+                    int(state_by_question.get(q["id"], {}).get("attempt_count") or 0) > 0
+                    for q in rows
+                ),
+                "mastered_questions": sum(
+                    state_by_question.get(q["id"], {}).get("has_answered_correctly") is True
+                    for q in rows
+                ),
+                "is_complete": number <= progress["last_advanced_set_number"],
+            }
+        )
+    set_number = requested_set_number
+    if set_number is None and progress["last_advanced_set_number"] < progress["total_sets"]:
+        set_number = progress["active_set_number"]
+    if set_number is not None and not 1 <= set_number <= progress["total_sets"]:
+        raise ValueError("set not found")
+
+    exercise_by_id = context["exercise_by_id"]
+    examples_by_exercise = context["examples_by_exercise"]
+    raw_questions = []
+    for question in questions:
+        if set_number is None or _set_number(question["practice_order"]) != set_number:
+            continue
+        exercise = exercise_by_id[question["exercise_id"]]
+        raw_questions.append(
+            {
+                **question,
+                "exercise_id": exercise.get("id"),
+                "exercise_type": exercise.get("exercise_type"),
+                "display_type": exercise.get("display_type"),
+                "display_type_th": exercise.get("display_type_th"),
+                "prompt": exercise.get("prompt"),
+                "prompt_th": exercise.get("prompt_th"),
+                "keywords": exercise.get("keywords"),
+                "state": state_by_question.get(question["id"]),
+                "examples": examples_by_exercise.get(exercise.get("id"), []),
+            }
+        )
+    return {
+        "topic": topic,
+        "progress": progress,
+        "sets": sets,
+        "set_number": set_number,
+        "questions": raw_questions,
+    }
+
+
 def _fetch_question_for_grading(
     question_id: int,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]] | None:
@@ -760,6 +933,29 @@ def list_topics():
     if auth_error:
         return auth_error
     try:
+        try:
+            fast_payload = _rpc_json_value(
+                "get_exercise_bank_v2_topic_summaries",
+                {
+                    "p_user_id": user_id,
+                    "p_category": (request.args.get("category") or "").strip() or None,
+                    "p_featured_only": (request.args.get("featured") or "").strip().lower()
+                    in {"1", "true", "yes"},
+                },
+            )
+            if isinstance(fast_payload, list) and len(fast_payload) == 1 and isinstance(fast_payload[0], list):
+                fast_payload = fast_payload[0]
+        except Exception:
+            fast_payload = None
+        if isinstance(fast_payload, list):
+            for item in fast_payload:
+                if isinstance(item, dict):
+                    if _use_thai() and _serialize_answer(item.get("topic_th")):
+                        item["topic"] = item["topic_th"]
+                    if _use_thai() and _serialize_answer(item.get("display_title_th")):
+                        item["display_title"] = item["display_title_th"]
+            return jsonify({"topics": fast_payload}), 200
+
         topics = _fetch_topics()
         context = _load_topic_context(user_id, topics)
         payload = []
@@ -776,6 +972,53 @@ def list_topics():
     except Exception as exc:
         print(f"Error fetching Exercise Bank v2 topics: {exc}", flush=True)
         return jsonify({"error": "Failed to fetch exercise topics"}), 500
+
+
+@exercise_bank_v2.route(
+    "/api/exercise-bank-v2/topics/<int:topic_id>/session",
+    methods=["GET"],
+)
+def get_topic_session(topic_id: int):
+    user_id, auth_error = _authenticated_user_id()
+    if auth_error:
+        return auth_error
+    raw_set_number = (request.args.get("set_number") or "").strip()
+    if raw_set_number:
+        try:
+            set_number = int(raw_set_number)
+        except ValueError:
+            return jsonify({"error": "Set number must be an integer"}), 400
+        if set_number < 1:
+            return jsonify({"error": "Set number must be positive"}), 400
+    else:
+        set_number = None
+    try:
+        try:
+            data = _rpc_json_value(
+                "get_exercise_bank_v2_session",
+                {
+                    "p_user_id": user_id,
+                    "p_topic_id": topic_id,
+                    "p_set_number": set_number,
+                },
+            )
+            if isinstance(data, list) and len(data) == 1 and isinstance(data[0], dict):
+                data = data[0]
+            if not isinstance(data, dict) or not isinstance(data.get("topic"), dict):
+                raise RuntimeError("Session bootstrap returned an invalid payload")
+        except Exception:
+            data = _legacy_session_data(user_id, topic_id, set_number)
+        if data is None:
+            return jsonify({"error": "Exercise topic not found"}), 404
+        return jsonify(_session_bootstrap_payload(data)), 200
+    except ValueError:
+        return jsonify({"error": "Exercise set not found"}), 404
+    except Exception as exc:
+        print(
+            f"Error fetching Exercise Bank v2 session topic_id={topic_id}: {exc}",
+            flush=True,
+        )
+        return jsonify({"error": "Failed to fetch exercise session"}), 500
 
 
 @exercise_bank_v2.route("/api/exercise-bank-v2/topics/<int:topic_id>", methods=["GET"])
