@@ -6,7 +6,7 @@ import json
 import math
 import re
 from collections import defaultdict
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
 from flask import Blueprint, jsonify, request
 
@@ -23,15 +23,16 @@ exercise_bank_v2 = Blueprint("exercise_bank_v2", __name__)
 
 TOPIC_SELECT = (
     "id,topic,display_title,category,sub_category,lesson_external_id,sort_order,"
-    "is_featured,featured_sort_order,content_version"
+    "is_featured,featured_sort_order,content_version,topic_th,display_title_th"
 )
 EXERCISE_SELECT = (
-    "id,topic_id,exercise_type,display_type,prompt,keywords,sort_order"
+    "id,topic_id,exercise_type,display_type,prompt,keywords,sort_order,"
+    "display_type_th,prompt_th"
 )
 QUESTION_SELECT = (
-    "id,exercise_id,source_number,content,practice_order"
+    "id,exercise_id,source_number,content,content_th,practice_order"
 )
-EXAMPLE_SELECT = "id,exercise_id,source_number,content,sort_order"
+EXAMPLE_SELECT = "id,exercise_id,source_number,content,content_th,sort_order"
 STATE_SELECT = (
     "topic_id,question_id,set_number,set_position,attempt_count,"
     "has_answered_correctly,latest_user_answer,latest_is_correct,latest_ai_score,"
@@ -138,6 +139,31 @@ def _sanitize_example_content(value: Any) -> dict[str, Any]:
     if correct_option:
         sanitized["example_correct_option"] = correct_option
     return sanitized
+
+
+def _use_thai() -> bool:
+    return (request.args.get("lang") or "").strip().casefold() == "th"
+
+
+def _localized_text(row: Mapping[str, Any], field: str) -> Any:
+    thai_value = row.get(f"{field}_th")
+    return thai_value if _use_thai() and _serialize_answer(thai_value) else row.get(field)
+
+
+def _localized_question_content(row: Mapping[str, Any], *, example: bool = False) -> dict[str, Any]:
+    base = (
+        _sanitize_example_content(row.get("content") or {})
+        if example
+        else _sanitize_content(row.get("content") or {})
+    )
+    if not isinstance(base, dict):
+        base = {}
+    if not _use_thai():
+        return base
+    localized = _sanitize_content(row.get("content_th") or {})
+    if not isinstance(localized, dict):
+        return base
+    return {**base, **localized}
 
 
 def _eligible_questions(
@@ -509,8 +535,10 @@ def _progress_payload(
 def _topic_payload(topic: dict[str, Any], progress: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": topic.get("id"),
-        "topic": topic.get("topic"),
-        "display_title": topic.get("display_title"),
+        "topic": _localized_text(topic, "topic"),
+        "topic_th": topic.get("topic_th"),
+        "display_title": _localized_text(topic, "display_title"),
+        "display_title_th": topic.get("display_title_th"),
         "category": topic.get("category"),
         "sub_category": topic.get("sub_category"),
         "lesson_external_id": topic.get("lesson_external_id"),
@@ -854,18 +882,26 @@ def get_topic_set(topic_id: int, set_number: int):
                     "exercise": {
                         "id": exercise.get("id"),
                         "exercise_type": exercise.get("exercise_type"),
-                        "display_type": exercise.get("display_type"),
-                        "prompt": exercise.get("prompt"),
+                        "display_type": _localized_text(exercise, "display_type"),
+                        "display_type_en": exercise.get("display_type"),
+                        "display_type_th": exercise.get("display_type_th"),
+                        "prompt": _localized_text(exercise, "prompt"),
+                        "prompt_en": exercise.get("prompt"),
+                        "prompt_th": exercise.get("prompt_th"),
                         "keywords": exercise.get("keywords"),
                         "examples": [
                             {
                                 "id": example.get("id"),
-                                "content": _sanitize_example_content(example.get("content") or {}),
+                                "content": _localized_question_content(example, example=True),
+                                "content_en": _sanitize_example_content(example.get("content") or {}),
+                                "content_th": _sanitize_content(example.get("content_th") or {}),
                             }
                             for example in examples_by_exercise.get(exercise.get("id"), [])
                         ],
                     },
-                    "content": _sanitize_content(question.get("content") or {}),
+                    "content": _localized_question_content(question),
+                    "content_en": _sanitize_content(question.get("content") or {}),
+                    "content_th": _sanitize_content(question.get("content_th") or {}),
                     "progress": {
                         "attempt_count": int(state.get("attempt_count") or 0),
                         "has_answered_correctly": bool(state.get("has_answered_correctly")),
@@ -891,8 +927,12 @@ def get_topic_set(topic_id: int, set_number: int):
             {
                 "topic": {
                     "id": topic.get("id"),
-                    "topic": topic.get("topic"),
-                    "display_title": topic.get("display_title"),
+                    "topic": _localized_text(topic, "topic"),
+                    "topic_en": topic.get("topic"),
+                    "topic_th": topic.get("topic_th"),
+                    "display_title": _localized_text(topic, "display_title"),
+                    "display_title_en": topic.get("display_title"),
+                    "display_title_th": topic.get("display_title_th"),
                     "category": topic.get("category"),
                     "content_version": int(topic.get("content_version") or 1),
                 },

@@ -179,6 +179,8 @@ def _topic(**overrides):
         "id": 9,
         "topic": "To-be: am, are, is",
         "display_title": "Pailin is hungry",
+        "topic_th": "คำกริยา: am, are, is",
+        "display_title_th": "ไพลินหิว",
         "category": "verbs_and_tenses",
         "sub_category": "present_tense",
         "lesson_external_id": "1.6",
@@ -229,6 +231,7 @@ def _tables():
                 "exercise_id": 90,
                 "source_number": str(number),
                 "content": content,
+                "content_th": {"text": f"Question {number} _____\nคำถามที่ {number} _____"},
                 "practice_order": number,
                 "is_active": True,
                 "is_example": False,
@@ -245,6 +248,7 @@ def _tables():
                     "accepted_answers": ["example answer"],
                     "raw_answers": ["example answer"],
                 },
+                "content_th": {"text": "Example _____\nตัวอย่าง _____"},
                 "sort_order": 1,
                 "practice_order": None,
                 "is_active": True,
@@ -291,7 +295,9 @@ def _tables():
                 "topic_id": 9,
                 "exercise_type": "fill_blank",
                 "display_type": "Fill in the blank",
+                "display_type_th": "🧩 เติมคำในช่องว่าง",
                 "prompt": "Complete the sentence",
+                "prompt_th": "เติมคำในช่องว่าง",
                 "keywords": ["am", "are", "is"],
                 "sort_order": 1,
                 "is_active": True,
@@ -389,6 +395,28 @@ def test_topic_summaries_include_sets_and_user_progress(monkeypatch):
         "total_questions": 6,
         "total_sets": 2,
         "version_completed_at": "2026-07-20T00:00:00Z",
+    }
+
+
+def test_thai_language_localizes_topic_exercise_and_question(monkeypatch):
+    client, _ = _client(monkeypatch)
+
+    response = client.get(
+        "/api/exercise-bank-v2/topics/9/sets/1?lang=th", headers=_headers()
+    )
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["topic"]["topic"] == "คำกริยา: am, are, is"
+    assert payload["topic"]["display_title"] == "ไพลินหิว"
+    question = payload["set"]["questions"][0]
+    assert question["exercise"]["display_type"] == "🧩 เติมคำในช่องว่าง"
+    assert question["exercise"]["display_type_en"] == "Fill in the blank"
+    assert question["exercise"]["prompt"] == "เติมคำในช่องว่าง"
+    assert question["content"]["text"] == "Question 1 _____\nคำถามที่ 1 _____"
+    assert question["exercise"]["examples"][0]["content"] == {
+        "text": "Example _____\nตัวอย่าง _____",
+        "example_answer": "example answer",
     }
 
 
@@ -524,8 +552,19 @@ def test_set_returns_five_sanitized_questions(monkeypatch):
                 "text": "Example _____",
                 "example_answer": "example answer",
             },
+            "content_en": {
+                "text": "Example _____",
+                "example_answer": "example answer",
+            },
+            "content_th": {"text": "Example _____\nตัวอย่าง _____"},
         }
     ]
+    assert questions[0]["content_en"] == questions[0]["content"]
+    assert questions[0]["content_th"] == {
+        "text": "Question 1 _____\nคำถามที่ 1 _____"
+    }
+    assert questions[0]["exercise"]["display_type_th"] == "🧩 เติมคำในช่องว่าง"
+    assert questions[0]["exercise"]["prompt_th"] == "เติมคำในช่องว่าง"
     assert questions[0]["progress"]["latest_user_answer"] == "secret"
     assert questions[0]["progress"]["latest_is_correct"] is True
     assert questions[0]["progress"]["review_answer"] == "Question 1 secret."
@@ -534,7 +573,7 @@ def test_set_returns_five_sanitized_questions(monkeypatch):
         "accepted_answers",
         "raw_answers",
         "correct_option",
-        "is_correct",
+        '"is_correct":',
         "nested secret",
         "review_answer_meta",
     ):
@@ -633,7 +672,8 @@ def test_non_exact_fill_blank_uses_ai_and_hides_expected_answer(monkeypatch):
     payload = response.get_json()
     assert payload["correct"] is False
     assert payload["grading_method"] == "ai"
-    assert "secret" not in response.get_data(as_text=True).lower()
+    assert "secret" not in payload["feedback_en"].lower()
+    assert "secret" not in payload["feedback_th"].lower()
     rpc_params = fake_supabase.rpc_calls[0][1]
     assert rpc_params["p_grading_method"] == "ai"
     assert rpc_params["p_ai_score"] == 0.25

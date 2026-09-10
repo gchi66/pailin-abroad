@@ -8,6 +8,7 @@ from app.supabase_client import supabase
 
 APP_PAGE_ORDER = [
     "prepare",
+    "listen",
     "comprehension",
     "transcript",
     "apply",
@@ -194,6 +195,7 @@ def _fetch_app_progress_source_rows(lesson_ids):
     lesson_ids = [lesson_id for lesson_id in lesson_ids if lesson_id]
     if not lesson_ids:
         return {
+            "lessons": [],
             "sections": [],
             "transcript": [],
             "questions": [],
@@ -202,6 +204,14 @@ def _fetch_app_progress_source_rows(lesson_ids):
             "phrases": [],
         }
 
+    lessons_result = _execute_with_retry(
+        lambda: (
+            supabase.table("lessons")
+            .select("id, conversation_audio_url")
+            .in_("id", lesson_ids)
+        ),
+        "app lesson progress lessons",
+    )
     sections_result = _execute_with_retry(
         lambda: (
             supabase.table("lesson_sections")
@@ -263,6 +273,7 @@ def _fetch_app_progress_source_rows(lesson_ids):
         phrases = phrases_result.data or []
 
     return {
+        "lessons": lessons_result.data or [],
         "sections": sections_result.data or [],
         "transcript": transcript_result.data or [],
         "questions": questions_result.data or [],
@@ -290,6 +301,11 @@ def _set_cached_app_expectation(lesson_id, expectation):
 
 
 def _build_app_lesson_expectations_from_rows(lesson_ids, source_rows):
+    lessons_by_id = {
+        row.get("id"): row
+        for row in source_rows.get("lessons") or []
+        if row.get("id")
+    }
     sections_by_lesson = defaultdict(list)
     for row in source_rows.get("sections") or []:
         sections_by_lesson[row.get("lesson_id")].append(row)
@@ -346,6 +362,21 @@ def _build_app_lesson_expectations_from_rows(lesson_ids, source_rows):
                             "section_key": None,
                             "sort_order": page_sort_order,
                             "label": "Prepare",
+                        }
+                    )
+                continue
+
+            if page_name == "listen":
+                lesson = lessons_by_id.get(lesson_id) or {}
+                if _clean_text(lesson.get("conversation_audio_url")):
+                    units.append(
+                        {
+                            "unit_type": "page",
+                            "unit_key": page_key,
+                            "parent_unit_key": None,
+                            "section_key": None,
+                            "sort_order": page_sort_order,
+                            "label": "Listen",
                         }
                     )
                 continue

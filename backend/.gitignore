@@ -10,6 +10,8 @@ data/
 data/*
 !data/placement-test.json
 tests/*
+!tests/test_app_lesson_progress.py
+!tests/test_exercise_bank_v2_importer.py
 !tests/test_exercise_bank_v2_routes.py
 !tests/test_parser_practice_ordered_thai.py
 !tests/test_import_lessons_thai_ordered_content.py
