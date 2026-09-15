@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 from importlib import import_module
 from io import BytesIO
+import json
 
 from flask import Flask
 import pytest
@@ -305,6 +306,12 @@ def test_admin_can_list_available_speaking_lessons(monkeypatch):
     response = client.get("/api/speaking/lessons", headers=_headers())
 
     assert response.status_code == 200
+    timing = json.loads(response.headers["X-Speaking-Coach-Timing"])
+    assert timing["route"] == "lesson_catalog"
+    assert timing["status"] == 200
+    assert "auth_ms" in timing
+    assert "practice_sets_query_ms" in timing
+    assert "total_ms" in timing
     assert response.get_json() == {
         "lessons": [
             {

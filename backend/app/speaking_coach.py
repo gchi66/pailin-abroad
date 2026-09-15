@@ -14,7 +14,7 @@ from urllib.parse import quote
 from uuid import UUID, uuid4
 import wave
 
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app, g, jsonify, request
 
 from app.config import Config
 from app.speaking_coach_evaluator import (
@@ -132,6 +132,79 @@ def _iso(value: datetime) -> str:
     return value.isoformat().replace("+00:00", "Z")
 
 
+def _measure_stage(
+    timings: dict[str, int] | None,
+    stage: str,
+    operation,
+):
+    """Measure one startup operation without changing its return value."""
+
+    started = time.monotonic()
+    try:
+        return operation()
+    finally:
+        if timings is not None:
+            elapsed_ms = round((time.monotonic() - started) * 1000)
+            timings[stage] = timings.get(stage, 0) + elapsed_ms
+
+
+def _log_startup_timing(
+    *,
+    route: str,
+    request_id: str,
+    request_started: float,
+    status: int,
+    timings: dict[str, int],
+    lesson_external_id: str | None = None,
+) -> dict[str, Any]:
+    payload = {
+        "request_id": request_id,
+        "route": route,
+        "lesson_external_id": lesson_external_id,
+        "status": status,
+        **timings,
+        "total_ms": round((time.monotonic() - request_started) * 1000),
+    }
+    print(
+        "[speaking-coach-startup-timing] "
+        + json.dumps(payload, separators=(",", ":")),
+        flush=True,
+    )
+    return payload
+
+
+def _begin_startup_timing(
+    route: str, lesson_external_id: str | None = None
+) -> dict[str, int]:
+    timings: dict[str, int] = {}
+    g.speaking_coach_startup_timing = {
+        "route": route,
+        "request_id": uuid4().hex[:8],
+        "request_started": time.monotonic(),
+        "timings": timings,
+        "lesson_external_id": lesson_external_id,
+    }
+    return timings
+
+
+@speaking_coach.after_request
+def _emit_startup_timing(response):
+    context = getattr(g, "speaking_coach_startup_timing", None)
+    if context:
+        payload = _log_startup_timing(
+            route=context["route"],
+            request_id=context["request_id"],
+            request_started=context["request_started"],
+            status=response.status_code,
+            timings=context["timings"],
+            lesson_external_id=context["lesson_external_id"],
+        )
+        response.headers["X-Speaking-Coach-Timing"] = json.dumps(
+            payload, separators=(",", ":")
+        )
+    return response
+
+
 def _authenticated_user_id() -> tuple[str | None, tuple[Any, int] | None]:
     auth_header = request.headers.get("Authorization") or ""
     scheme, separator, token = auth_header.partition(" ")
@@ -207,24 +280,30 @@ def _lesson_external_id_sort_key(value: Any) -> tuple[int, int, str]:
     return (level, 10**9, lesson_text.casefold())
 
 
-def _available_speaking_lessons() -> list[dict[str, Any]]:
-    practice_response = (
-        supabase_admin.table("speaking_coach_practice_sets")
+def _available_speaking_lessons(
+    timings: dict[str, int] | None = None,
+) -> list[dict[str, Any]]:
+    practice_response = _measure_stage(
+        timings,
+        "practice_sets_query_ms",
+        lambda: supabase_admin.table("speaking_coach_practice_sets")
         .select("id,lesson_id")
         .eq("is_active", True)
-        .execute()
+        .execute(),
     )
     practices = _rows(practice_response)
     if not practices:
         return []
 
     practice_ids = [row["id"] for row in practices]
-    question_response = (
-        supabase_admin.table("speaking_coach_questions")
+    question_response = _measure_stage(
+        timings,
+        "questions_query_ms",
+        lambda: supabase_admin.table("speaking_coach_questions")
         .select("id,practice_set_id")
         .in_("practice_set_id", practice_ids)
         .eq("is_active", True)
-        .execute()
+        .execute(),
     )
     question_counts: dict[Any, int] = defaultdict(int)
     for question in _rows(question_response):
@@ -244,11 +323,13 @@ def _available_speaking_lessons() -> list[dict[str, Any]]:
     if not lesson_ids:
         return []
 
-    lesson_response = (
-        supabase_admin.table("lessons")
+    lesson_response = _measure_stage(
+        timings,
+        "lessons_query_ms",
+        lambda: supabase_admin.table("lessons")
         .select(LESSON_SELECT)
         .in_("id", lesson_ids)
-        .execute()
+        .execute(),
     )
     result = []
     for lesson in _rows(lesson_response):
@@ -273,15 +354,20 @@ def _available_speaking_lessons() -> list[dict[str, Any]]:
 
 
 def _fetch_lesson_payload(
-    lesson: dict[str, Any], *, include_test_answers: bool = False
+    lesson: dict[str, Any],
+    *,
+    include_test_answers: bool = False,
+    timings: dict[str, int] | None = None,
 ) -> dict[str, Any]:
-    practice_response = (
-        supabase_admin.table("speaking_coach_practice_sets")
+    practice_response = _measure_stage(
+        timings,
+        "practice_sets_query_ms",
+        lambda: supabase_admin.table("speaking_coach_practice_sets")
         .select(PRACTICE_SET_SELECT)
         .eq("lesson_id", lesson["id"])
         .eq("is_active", True)
         .order("sort_order")
-        .execute()
+        .execute(),
     )
     practice_sets = sorted(
         _rows(practice_response),
@@ -294,12 +380,14 @@ def _fetch_lesson_payload(
         question_select = QUESTION_SELECT
         if include_test_answers:
             question_select += ",target_answers"
-        question_response = (
-            supabase_admin.table("speaking_coach_questions")
+        question_response = _measure_stage(
+            timings,
+            "questions_query_ms",
+            lambda: supabase_admin.table("speaking_coach_questions")
             .select(question_select)
             .in_("practice_set_id", practice_ids)
             .eq("is_active", True)
-            .execute()
+            .execute(),
         )
         questions = _rows(question_response)
 
@@ -365,14 +453,19 @@ def _fetch_lesson_payload(
     }
 
 
-def _active_curriculum(lesson_id: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    practice_response = (
-        supabase_admin.table("speaking_coach_practice_sets")
+def _active_curriculum(
+    lesson_id: str,
+    timings: dict[str, int] | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    practice_response = _measure_stage(
+        timings,
+        "practice_sets_query_ms",
+        lambda: supabase_admin.table("speaking_coach_practice_sets")
         .select("id,sort_order,content_hash")
         .eq("lesson_id", lesson_id)
         .eq("is_active", True)
         .order("sort_order")
-        .execute()
+        .execute(),
     )
     practices = sorted(
         _rows(practice_response),
@@ -381,12 +474,14 @@ def _active_curriculum(lesson_id: str) -> tuple[list[dict[str, Any]], list[dict[
     practice_ids = [row["id"] for row in practices]
     if not practice_ids:
         return practices, []
-    question_response = (
-        supabase_admin.table("speaking_coach_questions")
+    question_response = _measure_stage(
+        timings,
+        "questions_query_ms",
+        lambda: supabase_admin.table("speaking_coach_questions")
         .select("id,practice_set_id,sort_order,content_hash")
         .in_("practice_set_id", practice_ids)
         .eq("is_active", True)
-        .execute()
+        .execute(),
     )
     practice_positions = {
         practice["id"]: index for index, practice in enumerate(practices)
@@ -454,11 +549,21 @@ def _skipped_question_ids(session_id: str) -> set[int]:
 
 
 def _session_payload(
-    session: dict[str, Any], ordered_question_ids: list[int]
+    session: dict[str, Any],
+    ordered_question_ids: list[int],
+    timings: dict[str, int] | None = None,
 ) -> dict[str, Any]:
-    completed_results = _completed_question_results(str(session["id"]))
+    completed_results = _measure_stage(
+        timings,
+        "completed_attempts_query_ms",
+        lambda: _completed_question_results(str(session["id"])),
+    )
     completed = set(completed_results)
-    skipped = _skipped_question_ids(str(session["id"]))
+    skipped = _measure_stage(
+        timings,
+        "skips_query_ms",
+        lambda: _skipped_question_ids(str(session["id"])),
+    )
     resolved = completed | skipped
     correct = {
         question_id
@@ -474,7 +579,13 @@ def _session_payload(
     previous_attempt_id = None
     consecutive_unclear_audio_count = 0
     if current_question_id is not None:
-        attempts = _attempts_for_question(str(session["id"]), current_question_id)
+        attempts = _measure_stage(
+            timings,
+            "current_question_attempts_query_ms",
+            lambda: _attempts_for_question(
+                str(session["id"]), current_question_id
+            ),
+        )
         consecutive_unclear_audio_count = _consecutive_unclear_audio_count(attempts)
         instructional_attempt_number, retry_attempt = _expected_instructional_attempt(
             attempts
@@ -731,24 +842,39 @@ def cleanup_speaking_retention():
     "/api/speaking/lessons/<string:lesson_external_id>", methods=["GET"]
 )
 def get_speaking_lesson(lesson_external_id: str):
-    user_id, auth_error = _authenticated_user_id()
+    normalized_id = lesson_external_id.strip()
+    timings = _begin_startup_timing("lesson", normalized_id or None)
+    user_id, auth_error = _measure_stage(
+        timings, "auth_ms", _authenticated_user_id
+    )
     if auth_error:
         return auth_error
 
-    normalized_id = lesson_external_id.strip()
     if not normalized_id:
         return jsonify({"error": "Lesson ID is required"}), 400
 
     try:
-        lesson = _fetch_lesson(normalized_id)
+        lesson = _measure_stage(
+            timings,
+            "lesson_query_ms",
+            lambda: _fetch_lesson(normalized_id),
+        )
         if not lesson:
             return jsonify({"error": "Speaking lesson not found"}), 404
-        include_test_answers = (
-            request.args.get("include_test_answers") == "1"
-            and _is_admin_user(user_id)
+        wants_test_answers = request.args.get("include_test_answers") == "1"
+        include_test_answers = wants_test_answers and _measure_stage(
+            timings,
+            "admin_query_ms",
+            lambda: _is_admin_user(user_id),
         )
-        payload = _fetch_lesson_payload(
-            lesson, include_test_answers=include_test_answers
+        payload = _measure_stage(
+            timings,
+            "payload_total_ms",
+            lambda: _fetch_lesson_payload(
+                lesson,
+                include_test_answers=include_test_answers,
+                timings=timings,
+            ),
         )
         if not payload["lesson"]["practice_sets"]:
             return jsonify({"error": "Speaking lesson not found"}), 404
@@ -762,14 +888,25 @@ def get_speaking_lesson(lesson_external_id: str):
 
 @speaking_coach.route("/api/speaking/lessons", methods=["GET"])
 def list_speaking_lessons():
-    user_id, auth_error = _authenticated_user_id()
+    timings = _begin_startup_timing("lesson_catalog")
+    user_id, auth_error = _measure_stage(
+        timings, "auth_ms", _authenticated_user_id
+    )
     if auth_error:
         return auth_error
-    if not _is_admin_user(user_id):
+    is_admin = _measure_stage(
+        timings, "admin_query_ms", lambda: _is_admin_user(user_id)
+    )
+    if not is_admin:
         return jsonify({"error": "Admin access required"}), 403
 
     try:
-        return jsonify({"lessons": _available_speaking_lessons()}), 200
+        lessons = _measure_stage(
+            timings,
+            "catalog_total_ms",
+            lambda: _available_speaking_lessons(timings),
+        )
+        return jsonify({"lessons": lessons}), 200
     except Exception:
         current_app.logger.exception("Failed to list speaking lessons")
         return jsonify({"error": "Failed to list speaking lessons"}), 500
@@ -777,34 +914,58 @@ def list_speaking_lessons():
 
 @speaking_coach.route("/api/speaking/sessions", methods=["POST"])
 def create_or_resume_speaking_session():
-    user_id, auth_error = _authenticated_user_id()
+    timings = _begin_startup_timing("session")
+    user_id, auth_error = _measure_stage(
+        timings, "auth_ms", _authenticated_user_id
+    )
     if auth_error:
         return auth_error
 
     payload = request.get_json(silent=True) or {}
     lesson_external_id = str(payload.get("lesson_external_id") or "").strip()
+    g.speaking_coach_startup_timing["lesson_external_id"] = (
+        lesson_external_id or None
+    )
     force_new = payload.get("force_new") is True
+    timings["force_new"] = int(force_new)
     if not lesson_external_id:
         return jsonify({"error": "lesson_external_id is required"}), 400
 
     try:
-        lesson = _fetch_lesson(lesson_external_id)
+        lesson = _measure_stage(
+            timings,
+            "lesson_query_ms",
+            lambda: _fetch_lesson(lesson_external_id),
+        )
         if not lesson:
             return jsonify({"error": "Speaking lesson not found"}), 404
-        practices, questions = _active_curriculum(str(lesson["id"]))
+        practices, questions = _measure_stage(
+            timings,
+            "curriculum_total_ms",
+            lambda: _active_curriculum(str(lesson["id"]), timings),
+        )
         if not practices or not questions:
             return jsonify({"error": "Speaking lesson not found"}), 404
 
-        content_hash = _curriculum_hash(practices, questions)
-        ordered_question_ids = [int(question["id"]) for question in questions]
-        active_response = (
-            supabase_admin.table("user_speaking_coach_sessions")
+        curriculum_state = _measure_stage(
+            timings,
+            "curriculum_build_ms",
+            lambda: (
+                _curriculum_hash(practices, questions),
+                [int(question["id"]) for question in questions],
+            ),
+        )
+        content_hash, ordered_question_ids = curriculum_state
+        active_response = _measure_stage(
+            timings,
+            "active_session_query_ms",
+            lambda: supabase_admin.table("user_speaking_coach_sessions")
             .select("id,user_id,lesson_id,content_hash,status,current_question_id")
             .eq("user_id", user_id)
             .eq("lesson_id", lesson["id"])
             .eq("status", "active")
             .limit(2)
-            .execute()
+            .execute(),
         )
         active_sessions = _rows(active_response)
         if len(active_sessions) > 1:
@@ -815,18 +976,30 @@ def create_or_resume_speaking_session():
             and not force_new
             and active_session.get("content_hash") == content_hash
         ):
-            return jsonify(
-                {"session": _session_payload(active_session, ordered_question_ids)}
-            ), 200
+            session_payload = _measure_stage(
+                timings,
+                "session_payload_total_ms",
+                lambda: _session_payload(
+                    active_session, ordered_question_ids, timings
+                ),
+            )
+            return jsonify({"session": session_payload}), 200
 
         if active_session:
-            supabase_admin.table("user_speaking_coach_sessions").update(
-                {
-                    "status": "abandoned",
-                    "ended_at": _iso(_now()),
-                    "updated_at": _iso(_now()),
-                }
-            ).eq("id", active_session["id"]).execute()
+            _measure_stage(
+                timings,
+                "abandon_session_query_ms",
+                lambda: supabase_admin.table("user_speaking_coach_sessions")
+                .update(
+                    {
+                        "status": "abandoned",
+                        "ended_at": _iso(_now()),
+                        "updated_at": _iso(_now()),
+                    }
+                )
+                .eq("id", active_session["id"])
+                .execute(),
+            )
 
         session_values = {
             "id": str(uuid4()),
@@ -836,15 +1009,20 @@ def create_or_resume_speaking_session():
             "status": "active",
             "current_question_id": ordered_question_ids[0],
         }
-        inserted = (
-            supabase_admin.table("user_speaking_coach_sessions")
+        inserted = _measure_stage(
+            timings,
+            "insert_session_query_ms",
+            lambda: supabase_admin.table("user_speaking_coach_sessions")
             .insert(session_values)
-            .execute()
+            .execute(),
         )
         session = _first_row(inserted) or session_values
-        return jsonify(
-            {"session": _session_payload(session, ordered_question_ids)}
-        ), 201
+        session_payload = _measure_stage(
+            timings,
+            "session_payload_total_ms",
+            lambda: _session_payload(session, ordered_question_ids, timings),
+        )
+        return jsonify({"session": session_payload}), 201
     except Exception as exc:
         print(f"Error creating speaking session: {exc}", flush=True)
         return jsonify({"error": "Failed to create speaking session"}), 500
