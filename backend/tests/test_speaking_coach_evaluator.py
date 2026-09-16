@@ -1810,7 +1810,7 @@ def test_open_requests_unscripted_assessment_in_the_existing_azure_call(monkeypa
 
     assert captured["reference_text"] is None
     assert captured["enable_unscripted_assessment"] is True
-    assert result.evaluation.transcript is None
+    assert result.evaluation.transcript == "She isn't going to work."
     assert result.provider_metadata["azure"]["response"] == azure.raw_payload
     prosody = result.provider_metadata["policy"]["prosody"]
     assert prosody["enabled"] is True
@@ -2463,6 +2463,7 @@ def test_open_answer_routes_azure_text_to_gemini_and_backend_derives_status(monk
 
     assert captured["azure"] is azure
     assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.evaluation.transcript == "She go to work."
     assert result.evaluation.pronunciation.issues == []
     assert result.provider == "microsoft+google"
     assert set(result.provider_metadata) == {

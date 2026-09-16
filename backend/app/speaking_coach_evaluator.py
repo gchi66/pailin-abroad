@@ -3916,7 +3916,7 @@ def evaluate_speaking_attempt(
         pronunciation_candidates=pronunciation_candidates,
         focus_issues=focus_issues,
         focus_items=context.get("focus_items"),
-        include_transcript=practice_type == "pronunciation",
+        include_transcript=practice_type in {"pronunciation", "open"},
         instructional_attempt_number=instructional_attempt_number,
         previous_evaluation=previous_evaluation,
     )

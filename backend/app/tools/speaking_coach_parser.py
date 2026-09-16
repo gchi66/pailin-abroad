@@ -32,6 +32,7 @@ ANSWER_LABEL_RE = re.compile(r"^ANSWER_(\d+)$")
 LESSON_ID_RE = re.compile(r"^\d+\.(?:\d+|CHP)$", re.I)
 FOCUS_ITEM_RE = re.compile(r"^\[P([123])\]\s+(.+)$")
 FOCUS_MARKER_RE = re.compile(r"^\[[Pp]([^\]]*)\]")
+AUDIO_TAG_RE = re.compile(r"\[audio:\s*[^\]]+?\s*\]", re.I)
 
 PRACTICE_TYPE_ALIASES = {
     "pronunciation": "pronunciation",
@@ -134,6 +135,17 @@ def _merge_runs(runs: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 continue
         merged.append(run)
     return merged
+
+
+def _strip_audio_tags(text: str) -> str:
+    """Remove legacy inline audio metadata from learner-facing text."""
+
+    without_tags = AUDIO_TAG_RE.sub(" ", text)
+    normalized_lines = [
+        re.sub(r"[ \t]+", " ", line).strip()
+        for line in without_tags.splitlines()
+    ]
+    return "\n".join(normalized_lines).strip()
 
 
 def _slice_rich(rich: RichText, start: int, end: Optional[int] = None) -> RichText:
@@ -266,6 +278,10 @@ def _hash_key(*parts: Any) -> str:
 
 def _plain_rich(text: str) -> RichText:
     return RichText(text=text, runs=[{"text": text}] if text else [])
+
+
+def _is_checkpoint_lesson(lesson_id: str) -> bool:
+    return bool(re.match(r"^\d+\.chp$", lesson_id, re.I))
 
 
 class SpeakingCoachParser:
@@ -434,6 +450,16 @@ class SpeakingCoachParser:
             nonlocal pending_field, practice_type_occurrences
             flush_practice()
             if current_lesson is None:
+                return
+            if (
+                not current_lesson["practice_sets"]
+                and _is_checkpoint_lesson(current_lesson["lesson_external_id"])
+            ):
+                current_lesson = None
+                current_practice = None
+                current_question = None
+                pending_field = None
+                practice_type_occurrences = {}
                 return
             self._validate_lesson(current_lesson, tab)
             lessons.append(current_lesson)
@@ -782,7 +808,11 @@ class SpeakingCoachParser:
         fields: Dict[str, RichText] = question["fields"]
         answers: Dict[int, RichText] = question["answers"]
         answer_indexes = sorted(answers)
-        accepted_answers = [answers[index].text for index in answer_indexes if answers[index].text]
+        accepted_answers = [
+            cleaned
+            for index in answer_indexes
+            if (cleaned := _strip_audio_tags(answers[index].text))
+        ]
         question_focus = (fields.get("FOCUS") or RichText()).text or None
         question_focus_runs = (fields.get("FOCUS") or RichText()).runs
         inherited_legacy_focus = False
@@ -804,24 +834,46 @@ class SpeakingCoachParser:
 
         practice_type = practice["practice_type"]
         if practice_type == "pronunciation":
-            prompt_en = (fields.get("REPEAT_ENGLISH") or RichText()).text
-            prompt_th = (fields.get("REPEAT_THAI") or RichText()).text
+            prompt_en = _strip_audio_tags(
+                (fields.get("REPEAT_ENGLISH") or RichText()).text
+            )
+            prompt_th = _strip_audio_tags(
+                (fields.get("REPEAT_THAI") or RichText()).text
+            )
             target_answers = [prompt_en] if prompt_en else []
             examples: List[Dict[str, Optional[str]]] = []
         elif practice_type == "open":
-            prompt_en = (fields.get("OPEN_ENGLISH") or RichText()).text
-            prompt_th = (fields.get("OPEN_THAI") or RichText()).text
+            prompt_en = _strip_audio_tags(
+                (fields.get("OPEN_ENGLISH") or RichText()).text
+            )
+            prompt_th = _strip_audio_tags(
+                (fields.get("OPEN_THAI") or RichText()).text
+            )
             target_answers = []
-            example_en = (fields.get("EXAMPLE_ENGLISH") or RichText()).text or None
-            example_th = (fields.get("EXAMPLE_THAI") or RichText()).text or None
+            example_en = (
+                _strip_audio_tags(
+                    (fields.get("EXAMPLE_ENGLISH") or RichText()).text
+                )
+                or None
+            )
+            example_th = (
+                _strip_audio_tags(
+                    (fields.get("EXAMPLE_THAI") or RichText()).text
+                )
+                or None
+            )
             examples = (
                 [{"en": example_en, "th": example_th}]
                 if example_en or example_th
                 else []
             )
         elif practice_type == "translation":
-            prompt_en = (fields.get("TRANSLATE_ENGLISH") or RichText()).text
-            prompt_th = (fields.get("TRANSLATE_THAI") or RichText()).text
+            prompt_en = _strip_audio_tags(
+                (fields.get("TRANSLATE_ENGLISH") or RichText()).text
+            )
+            prompt_th = _strip_audio_tags(
+                (fields.get("TRANSLATE_THAI") or RichText()).text
+            )
             target_answers = accepted_answers
             examples = []
         else:

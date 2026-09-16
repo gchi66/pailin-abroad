@@ -36,6 +36,7 @@ speaking_coach = Blueprint("speaking_coach", __name__)
 
 PROMPT_AUDIO_BUCKET = "speaking-coach-prompts"
 MAX_AUDIO_BYTES = 10 * 1024 * 1024
+SUPABASE_PAGE_SIZE = 1000
 UNCLEAR_AUDIO_RETRY_LIMIT = 5
 ALLOWED_AUDIO_MIME_TYPES = {
     "audio/aac": "audio/aac",
@@ -117,6 +118,21 @@ def _audio_capture_diagnostics(
 def _rows(response: Any) -> list[dict[str, Any]]:
     data = getattr(response, "data", None)
     return data if isinstance(data, list) else []
+
+
+def _paged_rows(build_query: Any, page_size: int = SUPABASE_PAGE_SIZE) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    start = 0
+    while True:
+        query = build_query()
+        if not hasattr(query, "range"):
+            return _rows(query.execute())
+        response = query.range(start, start + page_size - 1).execute()
+        batch = _rows(response)
+        rows.extend(batch)
+        if len(batch) < page_size:
+            return rows
+        start += page_size
 
 
 def _first_row(response: Any) -> dict[str, Any] | None:
@@ -283,30 +299,31 @@ def _lesson_external_id_sort_key(value: Any) -> tuple[int, int, str]:
 def _available_speaking_lessons(
     timings: dict[str, int] | None = None,
 ) -> list[dict[str, Any]]:
-    practice_response = _measure_stage(
+    practices = _measure_stage(
         timings,
         "practice_sets_query_ms",
-        lambda: supabase_admin.table("speaking_coach_practice_sets")
-        .select("id,lesson_id")
-        .eq("is_active", True)
-        .execute(),
+        lambda: _paged_rows(
+            lambda: supabase_admin.table("speaking_coach_practice_sets")
+            .select("id,lesson_id")
+            .eq("is_active", True)
+        ),
     )
-    practices = _rows(practice_response)
     if not practices:
         return []
 
     practice_ids = [row["id"] for row in practices]
-    question_response = _measure_stage(
+    questions = _measure_stage(
         timings,
         "questions_query_ms",
-        lambda: supabase_admin.table("speaking_coach_questions")
-        .select("id,practice_set_id")
-        .in_("practice_set_id", practice_ids)
-        .eq("is_active", True)
-        .execute(),
+        lambda: _paged_rows(
+            lambda: supabase_admin.table("speaking_coach_questions")
+            .select("id,practice_set_id")
+            .in_("practice_set_id", practice_ids)
+            .eq("is_active", True)
+        ),
     )
     question_counts: dict[Any, int] = defaultdict(int)
-    for question in _rows(question_response):
+    for question in questions:
         question_counts[question.get("practice_set_id")] += 1
 
     lesson_counts: dict[Any, dict[str, int]] = defaultdict(
@@ -323,16 +340,17 @@ def _available_speaking_lessons(
     if not lesson_ids:
         return []
 
-    lesson_response = _measure_stage(
+    lessons = _measure_stage(
         timings,
         "lessons_query_ms",
-        lambda: supabase_admin.table("lessons")
-        .select(LESSON_SELECT)
-        .in_("id", lesson_ids)
-        .execute(),
+        lambda: _paged_rows(
+            lambda: supabase_admin.table("lessons")
+            .select(LESSON_SELECT)
+            .in_("id", lesson_ids)
+        ),
     )
     result = []
-    for lesson in _rows(lesson_response):
+    for lesson in lessons:
         counts = lesson_counts.get(lesson.get("id"))
         if not counts:
             continue

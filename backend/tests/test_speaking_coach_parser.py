@@ -110,6 +110,27 @@ def test_supports_multiline_focus_and_legacy_document_body() -> None:
     assert practice["questions"][0]["focus_items"] == practice["focus_items"]
 
 
+def test_strips_legacy_audio_tags_from_prompts_and_target_answers() -> None:
+    result = parse_document(
+        _legacy_document(
+            "LESSON: 1.2",
+            "PRACTICE_TYPE: pronunciation",
+            "FOCUS: Check the target sentence.",
+            "QUESTION: 1",
+            "REPEAT_ENGLISH: What’s your name? [audio: 1.2_speaking_1 ]",
+            "REPEAT_THAI: คุณชื่ออะไร?",
+        )
+    )
+
+    assert result["summary"]["error_count"] == 0
+    question = result["lessons"][0]["practice_sets"][0]["questions"][0]
+    assert question["prompt"] == {
+        "en": "What’s your name?",
+        "th": "คุณชื่ออะไร?",
+    }
+    assert question["target_answers"] == ["What’s your name?"]
+
+
 def test_parses_question_level_focus_without_practice_focus() -> None:
     result = parse_document(
         _legacy_document(
@@ -244,6 +265,29 @@ def test_reports_missing_type_specific_fields() -> None:
     assert result["issues"][0]["message"] == (
         "Question is missing required REPEAT_THAI."
     )
+
+
+def test_skips_empty_checkpoint_lessons() -> None:
+    result = parse_document(
+        _legacy_document(
+            "LESSON: 2.1",
+            "PRACTICE_TYPE: pronunciation",
+            "FOCUS: Check pronunciation.",
+            "QUESTION: 1",
+            "REPEAT_ENGLISH: I work late.",
+            "REPEAT_THAI: ฉันทำงานดึก",
+            "LESSON: 2.CHP",
+        )
+    )
+
+    assert result["summary"]["error_count"] == 0
+    assert [lesson["lesson_external_id"] for lesson in result["lessons"]] == ["2.1"]
+
+
+def test_rejects_empty_non_checkpoint_lessons() -> None:
+    result = parse_document(_legacy_document("LESSON: 2.1"))
+
+    assert _issue_codes(result, "error") == ["lesson_without_practice_sets"]
 
 
 def test_accepts_dynamic_translation_answers_and_warns_on_number_gaps() -> None:
