@@ -34,3 +34,13 @@ __pycache__/
 
 
 schema.sql
+
+# Supabase migration scratch files
+data.sql
+roles.sql
+auth_storage_changes.sql
+auth_storage_schema.diff
+old_auth_storage_schema.sql
+new_auth_storage_schema.sql
+supabase/.temp/
+frontend/scripts/migrate-supabase-storage.cjs
