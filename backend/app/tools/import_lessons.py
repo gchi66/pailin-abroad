@@ -22,6 +22,7 @@ import httpx
 from postgrest.exceptions import APIError
 from app.app_lesson_progress import refresh_app_total_units_for_lessons
 from app.supabase_client import supabase
+from app.tools.phrase_labels import normalize_thai_phrase_label
 
 
 
@@ -900,7 +901,7 @@ def upsert_phrases(lesson_id, sections, lang="en", dry_run=False):
                     nodes_payload = _resolve_sentinel_links(nodes_payload, supabase)
                 text_fallback = (item.get("content") or "").strip()
             notes     = item.get("notes")
-            phrase_th = item.get("phrase_th")
+            phrase_th = normalize_thai_phrase_label(item.get("phrase_th"))
             notes_th  = item.get("notes_th")
             if item.get("reference"):
                 row = _find_phrase_by_norm(variant, phrase_raw)

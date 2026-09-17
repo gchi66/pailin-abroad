@@ -24,6 +24,7 @@ from typing import Dict, List, Tuple, Union
 
 from .docs_fetch import fetch_doc      # fetch_doc uses the Google Docs API
 from .docwalker import paragraph_nodes, Node
+from .phrase_labels import normalize_thai_phrase_label
 from .textutils import is_subheader
 
 SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
@@ -1139,7 +1140,7 @@ class GoogleDocsParser:
                 variant = 0
             en, th = split_en_th(s)  # your existing helper
             phrase = en or s
-            phrase_th = th or ""
+            phrase_th = normalize_thai_phrase_label(th)
             return phrase, phrase_th, variant
 
         def _norm(s: str) -> str:

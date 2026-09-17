@@ -1,8 +1,22 @@
 from app.tools.parser import GoogleDocsParser
+from app.tools.phrase_labels import normalize_thai_phrase_label
 
 
 def _tokens(item):
     return item["content"]["blocks"][0]["tokens"]
+
+
+def test_phrase_header_separates_translation_from_parenthetical_usage_note():
+    items = GoogleDocsParser().parse_phrases_verbs(
+        [("BY THE WAY ว่าแต่ว่า… (ใช้เมื่อต้องการเปลี่ยนหัวข้อบทสนทนาเป็นเรื่องอื่น)", "NORMAL_TEXT")],
+        [],
+        "LESSON 10.10: Example",
+        lang="th",
+    )
+
+    assert items[0]["phrase_th"] == "ว่าแต่ว่า…"
+    assert normalize_thai_phrase_label("ว่าแต่ว่า… ใช้เมื่อต้องการเปลี่ยนหัวข้อบทสนทนาเป็นเรื่องอื่น") == "ว่าแต่ว่า…"
+    assert normalize_thai_phrase_label("การคุยๆกัน(ในเชิงเดท) กำลังดูใจกัน") == "การคุยๆกัน(ในเชิงเดท) กำลังดูใจกัน"
 
 
 def test_non_quick_thai_sentence_transform_preserves_authored_bilingual_order():
