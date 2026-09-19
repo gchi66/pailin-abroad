@@ -300,7 +300,7 @@ def test_lesson_rejects_invalid_token(monkeypatch):
     assert response.get_json() == {"error": "Invalid token"}
 
 
-def test_admin_can_list_available_speaking_lessons(monkeypatch):
+def test_member_can_list_available_speaking_lessons(monkeypatch):
     client, _ = _client(monkeypatch)
 
     response = client.get("/api/speaking/lessons", headers=_headers())
@@ -321,19 +321,23 @@ def test_admin_can_list_available_speaking_lessons(monkeypatch):
                 "title_th": "คุณกำลังทำอะไร",
                 "practice_set_count": 2,
                 "question_count": 2,
+                "is_completed": False,
             }
         ]
     }
 
 
-def test_non_admin_cannot_list_available_speaking_lessons(monkeypatch):
+def test_non_admin_sees_completed_speaking_lessons(monkeypatch):
     client, fake_supabase = _client(monkeypatch)
     fake_supabase.tables["users"][0]["is_admin"] = False
+    fake_supabase.tables["user_speaking_coach_sessions"].append({
+        "user_id": "user-123", "lesson_id": "lesson-uuid", "status": "completed"
+    })
 
     response = client.get("/api/speaking/lessons", headers=_headers())
 
-    assert response.status_code == 403
-    assert response.get_json() == {"error": "Admin access required"}
+    assert response.status_code == 200
+    assert response.get_json()["lessons"][0]["is_completed"] is True
 
 
 def test_lesson_returns_ordered_display_safe_curriculum(monkeypatch):
@@ -369,6 +373,23 @@ def test_lesson_returns_ordered_display_safe_curriculum(monkeypatch):
         "target_answers" not in columns
         for columns in fake_supabase.selected_columns
     )
+
+
+def test_lesson_can_load_only_first_speaking_set(monkeypatch):
+    client, _ = _client(monkeypatch)
+
+    response = client.get(
+        "/api/speaking/lessons/4.1?first_set_only=1", headers=_headers()
+    )
+
+    assert response.status_code == 200
+    lesson = response.get_json()["lesson"]
+    assert lesson["practice_set_count"] == 1
+    assert lesson["question_count"] == 1
+    assert [set_row["practice_type"] for set_row in lesson["practice_sets"]] == [
+        "pronunciation"
+    ]
+    assert [question["id"] for question in lesson["practice_sets"][0]["questions"]] == [101]
 
 
 def test_admin_can_request_test_answer_without_exposing_target_answer_list(monkeypatch):

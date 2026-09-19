@@ -375,6 +375,7 @@ def _fetch_lesson_payload(
     lesson: dict[str, Any],
     *,
     include_test_answers: bool = False,
+    first_set_only: bool = False,
     timings: dict[str, int] | None = None,
 ) -> dict[str, Any]:
     practice_response = _measure_stage(
@@ -391,6 +392,8 @@ def _fetch_lesson_payload(
         _rows(practice_response),
         key=lambda row: (row.get("sort_order") or 0, row.get("id") or 0),
     )
+    if first_set_only:
+        practice_sets = practice_sets[:1]
     practice_ids = [row["id"] for row in practice_sets]
 
     questions: list[dict[str, Any]] = []
@@ -880,6 +883,7 @@ def get_speaking_lesson(lesson_external_id: str):
         if not lesson:
             return jsonify({"error": "Speaking lesson not found"}), 404
         wants_test_answers = request.args.get("include_test_answers") == "1"
+        first_set_only = request.args.get("first_set_only") == "1"
         include_test_answers = wants_test_answers and _measure_stage(
             timings,
             "admin_query_ms",
@@ -891,6 +895,7 @@ def get_speaking_lesson(lesson_external_id: str):
             lambda: _fetch_lesson_payload(
                 lesson,
                 include_test_answers=include_test_answers,
+                first_set_only=first_set_only,
                 timings=timings,
             ),
         )
@@ -912,18 +917,25 @@ def list_speaking_lessons():
     )
     if auth_error:
         return auth_error
-    is_admin = _measure_stage(
-        timings, "admin_query_ms", lambda: _is_admin_user(user_id)
-    )
-    if not is_admin:
-        return jsonify({"error": "Admin access required"}), 403
-
     try:
         lessons = _measure_stage(
             timings,
             "catalog_total_ms",
             lambda: _available_speaking_lessons(timings),
         )
+        completed_sessions = _measure_stage(
+            timings,
+            "completed_sessions_query_ms",
+            lambda: _paged_rows(
+                lambda: supabase_admin.table("user_speaking_coach_sessions")
+                .select("lesson_id")
+                .eq("user_id", user_id)
+                .eq("status", "completed")
+            ),
+        )
+        completed_lesson_ids = {row.get("lesson_id") for row in completed_sessions}
+        for lesson in lessons:
+            lesson["is_completed"] = lesson["id"] in completed_lesson_ids
         return jsonify({"lessons": lessons}), 200
     except Exception:
         current_app.logger.exception("Failed to list speaking lessons")
