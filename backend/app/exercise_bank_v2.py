@@ -13,6 +13,7 @@ from flask import Blueprint, jsonify, request
 from app.ai_evaluate import (
     _personalize_feedback,
     _remove_correct_answer,
+    _safe_retry_feedback,
     contractions_equivalent,
     evaluate_with_gpt,
 )
@@ -305,11 +306,11 @@ def _deterministic_result(correct: bool, *, kind: str = "answer") -> dict[str, A
             "ai_model": None,
         }
     if kind == "judgment":
-        feedback_en = "Take another look at whether the original sentence is correct."
-        feedback_th = "ลองตรวจดูอีกครั้งว่าประโยคเดิมถูกต้องหรือไม่"
+        feedback_en = "Is the original sentence correct, or does it need a change?"
+        feedback_th = "ประโยคเดิมถูกต้องหรือควรแก้ไข?"
     else:
-        feedback_en = "That answer is not correct yet. Try again."
-        feedback_th = "คำตอบนี้ยังไม่ถูกต้อง ลองอีกครั้ง"
+        feedback_en = "What could you change to better match the question?"
+        feedback_th = "ควรเปลี่ยนอะไรเพื่อให้คำตอบตรงกับโจทย์?"
     return {
         "correct": False,
         "score": 0.0,
@@ -345,11 +346,21 @@ def _ai_result(
     except (TypeError, ValueError):
         score = 1.0 if correct else 0.0
     score = max(0.0, min(1.0, score))
-    feedback_en = _personalize_feedback(parsed.get("feedback_en") or "")
+    feedback_en = parsed.get("feedback_en") or ""
     feedback_th = parsed.get("feedback_th") or ""
-    for private_answer in (accepted_raw, review_answer):
-        feedback_en = _remove_correct_answer(feedback_en, private_answer)
-        feedback_th = _remove_correct_answer(feedback_th, private_answer)
+    if correct:
+        feedback_en = _personalize_feedback(feedback_en)
+        for private_answer in (accepted_raw, review_answer):
+            feedback_en = _remove_correct_answer(feedback_en, private_answer)
+            feedback_th = _remove_correct_answer(feedback_th, private_answer)
+    else:
+        feedback_en = _safe_retry_feedback(
+            feedback_en, user_answer_raw, accepted_raw, review_answer=review_answer
+        )
+        feedback_th = _safe_retry_feedback(
+            feedback_th, user_answer_raw, accepted_raw,
+            review_answer=review_answer, language="th",
+        )
     return {
         "correct": correct,
         "score": score,

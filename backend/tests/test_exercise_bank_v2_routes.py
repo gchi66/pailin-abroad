@@ -4,6 +4,7 @@ from importlib import import_module
 from flask import Flask
 
 module = import_module("app.exercise_bank_v2")
+ai_module = import_module("app.ai_evaluate")
 review_module = import_module("app.tools.exercise_bank_v2_review_answers")
 
 
@@ -25,11 +26,78 @@ def test_short_grammar_answer_is_not_removed_from_feedback():
     assert module._remove_correct_answer(feedback, '["is"]') == feedback
 
 
-def test_long_answer_is_removed_without_touching_part_of_other_words():
-    feedback = "Use driving here because the sentence describes an ongoing action."
-    assert module._remove_correct_answer(feedback, '["driving"]') == (
-        "Use here because the sentence describes an ongoing action."
+def test_revealed_answer_is_replaced_with_a_question_about_the_learners_word():
+    feedback = "Change 'somewhere' to 'everywhere'."
+    result = module._safe_retry_feedback(
+        feedback,
+        "I've looked somewhere for my passport.",
+        "I've looked everywhere for my passport.",
     )
+    assert "somewhere" in result
+    assert "everywhere" not in result
+    assert result.endswith("?")
+
+
+def test_safe_question_is_kept():
+    feedback = "Does 'somewhere' match the meaning you need?"
+    assert module._safe_retry_feedback(
+        feedback, "I've looked somewhere.", "I've looked everywhere."
+    ) == feedback
+
+
+def test_practice_feedback_hides_replacement_and_uses_exercise_instruction(monkeypatch):
+    captured = {}
+
+    def fake_evaluate(**kwargs):
+        captured.update(kwargs)
+        return {
+            "correct": False,
+            "score": 0.0,
+            "feedback_en": "Change 'somewhere' to 'everywhere'.",
+            "feedback_th": "เปลี่ยน somewhere เป็น everywhere",
+        }
+
+    class FakeSupabase:
+        def table(self, _name):
+            return self
+
+        def upsert(self, _record):
+            return self
+
+        def execute(self):
+            return SimpleNamespace(error=None)
+
+    monkeypatch.setattr(ai_module, "evaluate_with_gpt", fake_evaluate)
+    monkeypatch.setattr(ai_module, "supabase", FakeSupabase())
+    app = Flask(__name__)
+    app.register_blueprint(ai_module.bp)
+
+    response = app.test_client().post("/api/evaluate_answer", json={
+        "user_id": "learner-1",
+        "source_type": "practice",
+        "practice_exercise_id": "practice-1",
+        "exercise_type": "sentence_transform",
+        "user_answer": "I've looked somewhere for my passport.",
+        "correct_answer": "I've looked everywhere for my passport.",
+        "question_prompt": "I've looked nowhere for my passport.",
+        "exercise_instruction": "Express the opposite meaning.",
+    })
+
+    assert response.status_code == 200
+    result = response.get_json()
+    assert "somewhere" in result["feedback_en"]
+    assert "everywhere" not in result["feedback_en"]
+    assert "everywhere" not in result["feedback_th"]
+    assert result["feedback_en"].endswith("?")
+    assert result["feedback_th"].endswith("?")
+    assert captured["instruction"] == "Express the opposite meaning."
+
+
+def test_full_model_sentence_is_removed_from_feedback():
+    feedback = "Try: I looked everywhere for my passport."
+    assert module._remove_correct_answer(
+        feedback, '["I looked everywhere for my passport."]'
+    ) == "Try:"
 
 
 def test_generates_complete_structured_review_answer():
@@ -738,7 +806,7 @@ def test_multiple_choice_is_graded_without_ai(monkeypatch):
     assert fake_supabase.rpc_calls[0][1]["p_is_correct"] is False
 
 
-def test_non_exact_fill_blank_uses_ai_and_hides_expected_answer(monkeypatch):
+def test_non_exact_fill_blank_hides_ai_answer_and_asks_a_question(monkeypatch):
     client, fake_supabase = _client(monkeypatch)
     captured = {}
 
@@ -769,6 +837,8 @@ def test_non_exact_fill_blank_uses_ai_and_hides_expected_answer(monkeypatch):
     assert payload["grading_method"] == "ai"
     assert "secret" not in payload["feedback_en"].lower()
     assert "secret" not in payload["feedback_th"].lower()
+    assert payload["feedback_en"].endswith("?")
+    assert payload["feedback_th"].endswith("?")
     rpc_params = fake_supabase.rpc_calls[0][1]
     assert rpc_params["p_grading_method"] == "ai"
     assert rpc_params["p_ai_score"] == 0.25

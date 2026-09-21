@@ -1004,7 +1004,7 @@ def get_user_profile():
         result = (
             supabase.table('users')
             .select(
-                'id, username, email, avatar_image, is_admin, created_at'
+                'id, username, email, avatar_image, is_admin, created_at, password_hash'
             )
             .eq('id', user_id)
             .execute()
@@ -1047,6 +1047,10 @@ def get_user_profile():
             "username": user_data.get("username"),
             "email": user_data.get("email"),
             "avatar_image": user_data.get("avatar_image"),
+            "has_password": bool(
+                user_data.get("password_hash")
+                and user_data.get("password_hash") != "pending_onboarding"
+            ),
             "is_admin": user_data.get("is_admin", False),
             "created_at": user_data.get("created_at"),
             "lessons_complete": lessons_complete
@@ -1069,6 +1073,82 @@ def get_user_profile():
             flush=True,
         )
         return jsonify({"error": "Internal server error"}), 500
+
+
+@routes.route('/api/user/password', methods=['POST'])
+@handle_options
+def update_user_password():
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return jsonify({"error": "Authorization token required"}), 401
+
+    data = request.get_json(silent=True) or {}
+    new_password = data.get('new_password')
+    current_password = data.get('current_password')
+    if not isinstance(new_password, str) or (
+        len(new_password) < 8
+        or not re.search(r'[A-Z]', new_password)
+        or not re.search(r'[a-z]', new_password)
+        or not re.search(r'\d', new_password)
+        or not re.search(r'[!@#$%^&*(),.?":{}|<>_;\'\-+=/\\[\]~`]', new_password)
+    ):
+        return jsonify({"error": "Password does not meet the requirements"}), 400
+
+    try:
+        auth_user = create_auth_client().auth.get_user(auth_header.split(' ', 1)[1]).user
+        if not auth_user:
+            return jsonify({"error": "Invalid token"}), 401
+
+        result = (
+            supabase_admin.table('users')
+            .select('password_hash')
+            .eq('id', auth_user.id)
+            .maybe_single()
+            .execute()
+        )
+        if not result.data:
+            return jsonify({"error": "User not found"}), 404
+
+        has_password = bool(
+            result.data.get('password_hash')
+            and result.data.get('password_hash') != 'pending_onboarding'
+        )
+        if has_password:
+            if not isinstance(current_password, str) or not current_password:
+                return jsonify({"error": "Current password is required"}), 400
+            if not auth_user.email:
+                return jsonify({"error": "No email address is linked to this account"}), 400
+            try:
+                confirmation = create_auth_client().auth.sign_in_with_password({
+                    'email': auth_user.email,
+                    'password': current_password,
+                })
+                if not confirmation.user or confirmation.user.id != auth_user.id:
+                    return jsonify({"error": "Current password is incorrect"}), 401
+            except Exception:
+                return jsonify({"error": "Current password is incorrect"}), 401
+        else:
+            provider = (auth_user.app_metadata or {}).get('provider')
+            if provider not in ('google', 'apple'):
+                return jsonify({"error": "Password setup is unavailable for this sign-in method"}), 403
+            last_sign_in = auth_user.last_sign_in_at
+            if not last_sign_in:
+                return jsonify({"error": "Sign in again before setting a password"}), 403
+            if isinstance(last_sign_in, str):
+                last_sign_in = datetime.fromisoformat(last_sign_in.replace('Z', '+00:00'))
+            if last_sign_in.tzinfo is None:
+                last_sign_in = last_sign_in.replace(tzinfo=timezone.utc)
+            if datetime.now(timezone.utc) - last_sign_in > timedelta(hours=24):
+                return jsonify({"error": "Sign in again before setting a password"}), 403
+
+        supabase_admin.auth.admin.update_user_by_id(auth_user.id, {"password": new_password})
+        supabase_admin.table('users').update({
+            'password_hash': 'set_in_profile'
+        }).eq('id', auth_user.id).execute()
+        return jsonify({"has_password": True}), 200
+    except Exception as error:
+        print(f"Error updating user password: {error}")
+        return jsonify({"error": "Could not update password. Please try again."}), 500
 
 
 @routes.route('/api/user/profile', methods=['PUT'])

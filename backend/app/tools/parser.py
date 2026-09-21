@@ -51,7 +51,7 @@ TH = re.compile(r'[\u0E00-\u0E7F]')
 EN = re.compile(r'[A-Za-z]')
 PRACTICE_DIRECTIVE_RE = re.compile(
     r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
-    r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
+    r'ANSWER:|REVIEW_ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
     re.I
 )
 
@@ -2062,7 +2062,7 @@ class GoogleDocsParser:
                 else:
                     # Add directive regex for quick practice harvesting
                     directive_re = re.compile(
-                        r"^(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|CORRECT:|KEYWORDS:|INPUTS:|CHARACTERS:)",
+                        r"^(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|STEM:|TEXT:|OPTIONS:|ANSWER:|REVIEW_ANSWER:|CORRECT:|KEYWORDS:|INPUTS:|CHARACTERS:)",
                         re.I
                     )
                     qp_chunk, keep_lines = [], []
@@ -3146,6 +3146,7 @@ class GoogleDocsParser:
         STEM: <stem> (alternative to TEXT)
         OPTIONS:                # the very next lines are A. / B. / …
         ANSWER: <letter(s)>     # for MC or fill_blank
+        REVIEW_ANSWER: <polished answer shown to learners>
         KEYWORDS: <kw list>     # for open items
         PINNED COMMENT          # everything after this goes into a pinned_comment string
         """
@@ -3607,7 +3608,7 @@ class GoogleDocsParser:
                         th_entry["text"] = th_text or ""
                         if item.get("text_jsonb_th"):
                             th_entry["text_jsonb"] = item["text_jsonb_th"]
-                        for key in ("answer", "keywords", "inputs", "options", "correct"):
+                        for key in ("answer", "review_answer", "keywords", "inputs", "options", "correct"):
                             if key in item and item[key] not in (None, ""):
                                 th_entry[key] = item[key]
                         items_th_collection.append(th_entry)
@@ -3710,7 +3711,7 @@ class GoogleDocsParser:
             if collecting_prompt and cur_ex:
                 directive_re_check = re.compile(
                     r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
-                    r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:|CHARACTERS:)',
+                    r'ANSWER:|REVIEW_ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:|CHARACTERS:)',
                     re.I
                 )
                 if directive_re_check.match(upper_line):
@@ -3924,6 +3925,17 @@ class GoogleDocsParser:
                 item_complete = True
                 continue
 
+            if upper_line.startswith("REVIEW_ANSWER:"):
+                if not cur_items:
+                    cur_items.append({})
+                cur_items[-1]["review_answer"] = line.split(":", 1)[1].strip()
+                collecting_opts = False
+                collecting_text = False
+                collecting_paragraph = False
+                collecting_prompt = False
+                item_complete = True
+                continue
+
             if upper_line.startswith("KEYWORDS:") or upper_line.startswith("PINNED COMMENT"):
                 kw = line.split(":", 1)[1].strip() if ":" in line else ""
                 if kw:
@@ -3982,7 +3994,7 @@ class GoogleDocsParser:
                 # Check if this is a directive line
                 directive_re_check = re.compile(
                     r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
-                    r'ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
+                    r'ANSWER:|REVIEW_ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
                     re.I
                 )
                 if directive_re_check.match(upper_line):
@@ -4668,7 +4680,7 @@ class GoogleDocsParser:
                 if source_item.get("text_jsonb_th") and not existing.get("text_jsonb"):
                     existing["text_jsonb"] = source_item["text_jsonb_th"]
                 for key in (
-                    "answer", "keywords", "inputs", "correct", "image_key",
+                    "answer", "review_answer", "keywords", "inputs", "correct", "image_key",
                     "audio_key", "alt_text",
                 ):
                     if key in source_item and key not in existing:

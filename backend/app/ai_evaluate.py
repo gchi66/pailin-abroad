@@ -69,16 +69,16 @@ SYSTEM_PROMPTS = {
         "Address the learner directly using 'you' and 'your'. "
         "Accept contractions and equivalent grammatical forms. "
         "Allow minor spelling or plural variations if they are grammatically valid. "
-        "Do not reveal the expected answer or give the solution explicitly; provide guidance instead. "
+        "Do not reveal the expected word or answer in feedback. "
         "Always respond with strict JSON containing keys: correct (bool), score (0-1 float), "
         "feedback_en (English), feedback_th (Thai)."
     ),
     "sentence_transform": (
         "You are grading a sentence transformation exercise. "
         "Address the learner directly using 'you' and 'your'. "
-        "Mark correct if the student's sentence contains or correctly applies the grammatical structure "
-        "of the correct answer, even if rewritten. Do not penalize for extra words or rephrasing. "
-        "Do not reveal the expected answer; offer constructive guidance only. "
+        "Mark correct when the sentence meets the required meaning and grammar, even if reworded. "
+        "Do not penalize harmless extra words or rephrasing. "
+        "Do not reveal the expected word or corrected sentence in feedback. "
         "Respond only with JSON keys: correct (bool), score (0-1 float), feedback_en, feedback_th."
     ),
     "open": (
@@ -86,7 +86,7 @@ SYSTEM_PROMPTS = {
         "Address the learner directly using 'you' and 'your'. "
         "Evaluate grammar, fluency, and relevance to the prompt. "
         "Provide a score between 0 and 1 and give concise bilingual feedback. "
-        "Do not reveal the expected answer; provide guidance instead. "
+        "Do not reveal the expected word or model answer in feedback. "
         "Respond strictly with JSON keys: correct (bool), score (0-1 float), feedback_en, feedback_th."
     ),
 }
@@ -183,13 +183,14 @@ def get_prompt_for_type(
         f"{accepted_line}"
         f"{review_line}"
         f"Learner answer: {user_answer}\n"
-        "Evaluate the learner's answer against every relevant requirement in the exercise "
-        "instruction and question context, not merely whether it resembles an accepted form. "
-        "Check meaning and required grammar, including polarity, tense, aspect, verb form, "
-        "word order, and sentence completeness when applicable. If it is incorrect, identify "
-        "the most important unmet requirement first and briefly mention other material errors. "
-        "Use the accepted forms and complete model answer only as private grading references. "
-        "Do not quote, reveal, or reconstruct the answer in the feedback. "
+        "Grade against the exercise instruction and question, including meaning and grammar. "
+        "For feedback_en and feedback_th, use very simple, everyday language that an English learner can understand. "
+        "If incorrect, give one short question that helps the learner find the most useful change. "
+        "You may quote the learner's incorrect word, but never name its replacement or any other answer word. "
+        "End incorrect feedback with a question mark. Do not list other errors or use grammar jargon. "
+        "Avoid formal phrases such as 'convey the intended meaning' and 'overall structure'. "
+        "Keep English feedback to about 20 words or fewer and Thai feedback similarly brief. "
+        "If correct, give only a short positive sentence. "
         "Respond with JSON only."
     )
     return base_prompt, user_prompt
@@ -290,15 +291,7 @@ def _extract_answer_phrases(raw_correct: str) -> Tuple[str, ...]:
     if parsed is not None:
         _collect_answer_phrases(parsed, phrases)
 
-    extended_phrases = set(phrases)
-    for phrase in list(phrases):
-        tokens = re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ']+", phrase)
-        for token in tokens:
-            token_clean = token.strip("'").lower()
-            if len(token_clean) >= 4:
-                extended_phrases.add(token_clean)
-
-    return tuple(sorted(extended_phrases, key=len, reverse=True))
+    return tuple(sorted(phrases, key=len, reverse=True))
 
 
 def _remove_correct_answer(text: str, correct_answer_raw: str) -> str:
@@ -317,6 +310,61 @@ def _remove_correct_answer(text: str, correct_answer_raw: str) -> str:
     sanitized = re.sub(r"\s+['\"`]{2,}\s*", " ", sanitized)
     sanitized = re.sub(r"\s+", " ", sanitized).strip()
     return sanitized
+
+
+def _safe_retry_feedback(
+    feedback: str,
+    user_answer: str,
+    correct_answer: str,
+    *,
+    review_answer: str = "",
+    language: str = "en",
+) -> str:
+    """Keep incorrect feedback as a question without leaking a missing answer word."""
+    text = _personalize_feedback(feedback) if language == "en" else _value_to_string(feedback)
+    user_words = set(re.findall(r"[a-zà-öø-ÿ]+", user_answer.casefold()))
+    expected_words = set()
+    single_word_answers = set()
+    full_answers = []
+    for reference in (correct_answer, review_answer):
+        for phrase in _extract_answer_phrases(reference):
+            words = re.findall(r"[a-zà-öø-ÿ]+", phrase.casefold())
+            expected_words.update(words)
+            if len(words) == 1:
+                single_word_answers.add(words[0])
+            elif len(words) >= 3:
+                full_answers.append(_normalize_for_contains(phrase))
+    missing_words = expected_words - user_words
+    generic_words = {"answer", "question", "sentence", "word", "words"}
+    normalized_feedback = _normalize_for_contains(text)
+    revealed = any(
+        re.search(rf"(?<!\w){re.escape(word)}(?!\w)", text, flags=re.IGNORECASE)
+        for word in missing_words
+        if word in single_word_answers or (word not in generic_words and len(word) >= 4)
+    ) or any(answer and answer in normalized_feedback for answer in full_answers)
+    too_long = len(text.split()) > 25 if language == "en" else len(text) > 140
+    if text and text.endswith(("?", "？")) and not revealed and not too_long:
+        return text
+
+    learner_words = re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ]+(?:['’][A-Za-z]+)?", user_answer)
+    focus = next(
+        (
+            word for word in learner_words
+            if len(word) >= 4
+            and word.casefold().replace("’", "'") not in CONTRACTIONS_MAP
+            and word.casefold() not in expected_words
+        ),
+        None,
+    )
+    if language == "th":
+        return (
+            f"คำว่า “{focus}” ควรเปลี่ยนเป็นคำไหนให้ตรงกับโจทย์?"
+            if focus else "ควรเปลี่ยนอะไรเพื่อให้คำตอบตรงกับโจทย์?"
+        )
+    return (
+        f"What word could replace '{focus}' to better match the question?"
+        if focus else "What could you change to better match the question?"
+    )
 
 
 @bp.route("/api/evaluate_answer", methods=["POST"])
@@ -376,6 +424,7 @@ def evaluate_answer():
         or payload.get("question_text")
         or ""
     )
+    instruction_text = _value_to_string(payload.get("exercise_instruction"))
 
     normalized_user = _normalize_for_contains(user_answer_raw)
     normalized_correct = _normalize_for_contains(correct_answer_raw)
@@ -413,6 +462,7 @@ def evaluate_answer():
                 question=question_text,
                 user_answer=user_answer_raw,
                 correct_answer=correct_answer_raw,
+                instruction=instruction_text,
             )
         except ValueError as exc:
             return jsonify({"error": str(exc)}), 500
@@ -445,10 +495,12 @@ def evaluate_answer():
     feedback_en = result_payload.get("feedback_en") or ""
     feedback_th = result_payload.get("feedback_th") or ""
 
-    feedback_en = _remove_correct_answer(
-        _personalize_feedback(feedback_en), correct_answer_raw
-    )
-    feedback_th = _remove_correct_answer(feedback_th, correct_answer_raw)
+    if correct_flag:
+        feedback_en = _remove_correct_answer(_personalize_feedback(feedback_en), correct_answer_raw)
+        feedback_th = _remove_correct_answer(feedback_th, correct_answer_raw)
+    else:
+        feedback_en = _safe_retry_feedback(feedback_en, user_answer_raw, correct_answer_raw)
+        feedback_th = _safe_retry_feedback(feedback_th, user_answer_raw, correct_answer_raw, language="th")
 
     record = {
         "user_id": user_id,
