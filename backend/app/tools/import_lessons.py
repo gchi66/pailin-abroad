@@ -483,7 +483,9 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
             "title":      ex.get("title", "") or "",
             "prompt_md":  (ex.get("prompt_md") or ex.get("prompt")) or None,
             "paragraph":  ex.get("paragraph") or None,
-            "items":      ex.get("items", []),
+            # Items are intentionally imported as authored JSON so item-level
+            # presentation fields such as display_answer survive unchanged.
+            "items":      copy.deepcopy(ex.get("items", [])),
             "prompt_blocks": ex.get("prompt_blocks", None),
             "options":    ex.get("options", []),    # EN-only, keep NOT NULL
             "answer_key": ex.get("answer_key", {}), # EN-only, keep NOT NULL if you want

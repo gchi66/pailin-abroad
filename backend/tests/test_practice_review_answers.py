@@ -22,6 +22,19 @@ def test_review_answer_directive_is_preserved_without_changing_grading_answer():
     assert item["review_answer"] == "I've looked everywhere…"
 
 
+def test_display_answer_directive_is_preserved_without_changing_grading_answer():
+    exercise = GoogleDocsParser().parse_practice([
+        "TYPE: sentence_transform",
+        "QUESTION: 1",
+        "STEM: Have a big dog over there.",
+        "ANSWER: theres a big dog",
+        "DISPLAY_ANSWER: There’s a big dog over there.",
+    ])[0]
+    item = exercise["items"][0]
+    assert item["answer"] == "theres a big dog"
+    assert item["display_answer"] == "There’s a big dog over there."
+
+
 class FakeTable:
     def __init__(self, data):
         self.data = data

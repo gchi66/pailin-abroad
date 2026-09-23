@@ -25,6 +25,15 @@ class _FakeQuery:
         self.payload = payload
         return self
 
+    def delete(self):
+        self.operation = "delete"
+        return self
+
+    def upsert(self, payload, **_kwargs):
+        self.operation = "upsert"
+        self.payload = payload
+        return self
+
     def eq(self, *_args, **_kwargs):
         return self
 
@@ -37,6 +46,9 @@ class _FakeQuery:
         if self.operation == "update":
             self.owner.updates.append(self.payload)
             return SimpleNamespace(data=[self.payload])
+        if self.operation == "upsert":
+            self.owner.upserts.append(self.payload)
+            return SimpleNamespace(data=[])
         return SimpleNamespace(data=[])
 
 
@@ -44,6 +56,7 @@ class _FakeSupabase:
     def __init__(self, english_items=None):
         self.english_items = english_items or []
         self.updates = []
+        self.upserts = []
 
     def table(self, _name):
         return _FakeQuery(self)
@@ -128,3 +141,26 @@ def test_ordered_contract_rejects_blanks_outside_fill_blank():
     )
 
     assert any("blank is not allowed" in error for error in errors)
+
+
+def test_english_importer_preserves_item_display_answer(monkeypatch):
+    exercise = {
+        "kind": "sentence_transform",
+        "sort_order": 1,
+        "items": [{
+            "number": "1",
+            "text": "Have a big dog over there.",
+            "answer": "theres a big dog",
+            "display_answer": "There’s a big dog over there.",
+        }],
+    }
+    fake = _FakeSupabase()
+    monkeypatch.setattr(import_lessons, "supabase", fake)
+
+    import_lessons.upsert_practice_exercises(
+        "lesson-id", [exercise], lang="en"
+    )
+
+    [rows] = fake.upserts
+    assert rows[0]["items"][0]["answer"] == "theres a big dog"
+    assert rows[0]["items"][0]["display_answer"] == "There’s a big dog over there."
