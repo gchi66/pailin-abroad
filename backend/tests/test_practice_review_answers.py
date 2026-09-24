@@ -90,6 +90,20 @@ def test_authored_answer_takes_priority_over_cache_and_ai(monkeypatch):
     assert not db.writes
 
 
+def test_display_answer_takes_priority_over_cache_and_ai(monkeypatch):
+    exercise = {"id": "exercise", "kind": "sentence_transform", "prompt_md": "Rewrite",
+                "items": [{"answer": "orange cat", "display_answer": "This is an orange cat."}]}
+    client, db = _client(monkeypatch, exercise)
+    monkeypatch.setattr(module, "_generate_review_answer", lambda *_: (_ for _ in ()).throw(AssertionError("AI called")))
+    response = client.post("/api/lessons/practice/review-answer",
+                           headers={"Authorization": "Bearer token"},
+                           json={"exercise_id": "exercise", "item_key": "exercise-1"})
+    assert response.status_code == 200
+    assert response.json["review_answer"] == "This is an orange cat."
+    assert response.json["source"] == "authored"
+    assert not db.writes
+
+
 def test_first_reveal_generates_and_caches_then_reuses(monkeypatch):
     item = {"answer": "ive looked everywhere", "text": "I've looked nowhere for my passport."}
     exercise = {"id": "exercise", "kind": "sentence_transform", "prompt_md": "Rewrite",

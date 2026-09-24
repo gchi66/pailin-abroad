@@ -122,7 +122,7 @@ def reveal_practice_review_answer():
     if not found:
         return jsonify({"error": "Practice item not found"}), 404
     item, _ = found
-    authored = _text(item.get("review_answer"))
+    authored = _text(item.get("review_answer")) or _text(item.get("display_answer"))
     if authored:
         return jsonify({"review_answer": authored, "source": "authored"})
 
