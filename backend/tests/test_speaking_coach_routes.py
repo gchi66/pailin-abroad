@@ -142,10 +142,24 @@ class FakeStorage:
         return self.buckets.setdefault(name, FakeBucket())
 
 
+class FakeRpcQuery:
+    def __init__(self, result=None, error=None):
+        self.result = result
+        self.error = error
+
+    def execute(self):
+        if self.error:
+            raise self.error
+        return SimpleNamespace(data=self.result)
+
+
 class FakeSupabase:
     def __init__(self):
         self.selected_columns = []
         self.storage = FakeStorage()
+        self.rpc_calls = []
+        self.rpc_result = {"allowed": True, "reason": None}
+        self.rpc_error = None
         self.tables = {
             "users": [{"id": "user-123", "is_admin": True}],
             "lessons": [
@@ -227,6 +241,10 @@ class FakeSupabase:
 
     def table(self, name):
         return FakeQuery(self.tables.get(name, []), self.selected_columns, name)
+
+    def rpc(self, name, params):
+        self.rpc_calls.append((name, dict(params)))
+        return FakeRpcQuery(self.rpc_result, self.rpc_error)
 
 
 def _client(monkeypatch, *, authenticated=True):
@@ -789,8 +807,97 @@ def test_completed_submission_is_replayed_without_another_provider_call(monkeypa
     assert replay.get_json()["attempt"]["replayed"] is True
     assert replay.get_json()["attempt"]["id"] == original.get_json()["attempt"]["id"]
     assert len(provider_calls) == 1
+    assert len(fake_supabase.rpc_calls) == 1
     assert len(fake_supabase.tables["user_speaking_coach_attempts"]) == 1
     assert len(fake_supabase.storage.buckets[module.LEARNER_AUDIO_BUCKET].uploads) == 1
+
+
+def test_evaluation_is_blocked_before_storage_and_provider_when_daily_limit_reached(
+    monkeypatch,
+):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.tables["users"][0]["is_admin"] = False
+    session_id = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]["id"]
+    fake_supabase.rpc_result = {
+        "allowed": False,
+        "reason": "per_user_daily_limit",
+        "retry_after_seconds": 3600,
+    }
+    monkeypatch.setattr(
+        module,
+        "evaluate_speaking_attempt",
+        lambda **_kwargs: pytest.fail("provider must not be called"),
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session_id,
+            "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
+            "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 429
+    assert response.headers["Retry-After"] == "3600"
+    assert response.get_json() == {
+        "error": "You’ve reached today’s speaking-practice limit. Please try again tomorrow.",
+        "code": "per_user_daily_limit",
+        "retry_after_seconds": 3600,
+    }
+    assert fake_supabase.rpc_calls == [
+        (
+            "reserve_speaking_coach_usage",
+            {
+                "p_user_id": "user-123",
+                "p_is_admin": False,
+                "p_per_minute_limit": module.Config.SPEAKING_COACH_PER_MINUTE_LIMIT,
+                "p_per_user_daily_limit": module.Config.SPEAKING_COACH_PER_USER_DAILY_LIMIT,
+                "p_global_daily_limit": module.Config.SPEAKING_COACH_GLOBAL_DAILY_LIMIT,
+            },
+        )
+    ]
+    assert fake_supabase.tables["user_speaking_coach_attempts"] == []
+    assert module.LEARNER_AUDIO_BUCKET not in fake_supabase.storage.buckets
+
+
+def test_evaluation_fails_closed_when_usage_limiter_is_unavailable(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    session_id = client.post(
+        "/api/speaking/sessions",
+        headers=_headers(),
+        json={"lesson_external_id": "4.1"},
+    ).get_json()["session"]["id"]
+    fake_supabase.rpc_error = RuntimeError("database unavailable")
+    monkeypatch.setattr(
+        module,
+        "evaluate_speaking_attempt",
+        lambda **_kwargs: pytest.fail("provider must not be called"),
+    )
+
+    response = client.post(
+        "/api/speaking/evaluate",
+        headers=_headers(),
+        data={
+            "session_id": session_id,
+            "question_id": "101",
+            "client_submission_id": SUBMISSION_ID,
+            "audio": (BytesIO(b"audio"), "recording.m4a", "audio/mp4"),
+        },
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 503
+    assert response.get_json()["code"] == "speaking_coach_limiter_unavailable"
+    assert fake_supabase.tables["user_speaking_coach_attempts"] == []
+    assert module.LEARNER_AUDIO_BUCKET not in fake_supabase.storage.buckets
 
 
 def test_session_reports_consecutive_unclear_audio_and_usable_result_resets_count(monkeypatch):

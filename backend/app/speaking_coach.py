@@ -256,6 +256,59 @@ def _is_admin_user(user_id: str) -> bool:
         return False
 
 
+def _reserve_speaking_coach_usage(user_id: str) -> dict[str, Any]:
+    """Atomically reserve one billable evaluation before contacting providers."""
+
+    response = supabase_admin.rpc(
+        "reserve_speaking_coach_usage",
+        {
+            "p_user_id": user_id,
+            "p_is_admin": _is_admin_user(user_id),
+            "p_per_minute_limit": Config.SPEAKING_COACH_PER_MINUTE_LIMIT,
+            "p_per_user_daily_limit": (
+                Config.SPEAKING_COACH_PER_USER_DAILY_LIMIT
+            ),
+            "p_global_daily_limit": Config.SPEAKING_COACH_GLOBAL_DAILY_LIMIT,
+        },
+    ).execute()
+    result = response.data
+    if isinstance(result, list):
+        result = result[0] if result else None
+    if not isinstance(result, dict) or not isinstance(result.get("allowed"), bool):
+        raise RuntimeError("Speaking-coach quota RPC returned an invalid response")
+    return result
+
+
+def _speaking_coach_limit_response(reservation: dict[str, Any]):
+    reason = reservation.get("reason")
+    messages = {
+        "per_minute_limit": (
+            "You’re submitting recordings too quickly. Please try again in a minute."
+        ),
+        "per_user_daily_limit": (
+            "You’ve reached today’s speaking-practice limit. Please try again tomorrow."
+        ),
+        "global_daily_limit": (
+            "Speaking practice has reached today’s usage limit. Please try again tomorrow."
+        ),
+    }
+    response = jsonify(
+        {
+            "error": messages.get(
+                reason,
+                "Speaking practice is temporarily unavailable. Please try again later.",
+            ),
+            "code": reason or "speaking_coach_limit_reached",
+            "retry_after_seconds": reservation.get("retry_after_seconds"),
+        }
+    )
+    response.status_code = 429
+    retry_after = reservation.get("retry_after_seconds")
+    if isinstance(retry_after, int) and retry_after > 0:
+        response.headers["Retry-After"] = str(retry_after)
+    return response
+
+
 def _prompt_audio_url(object_key: Any) -> str | None:
     if not isinstance(object_key, str) or not object_key.strip():
         return None
@@ -1180,6 +1233,21 @@ def evaluate_speaking_recording():
             return jsonify({"error": str(exc)}), 409
         instructional_attempt_number = expected_attempt
         previous_attempt_id = str(retry_attempt["id"]) if retry_attempt else None
+
+        try:
+            usage_reservation = _reserve_speaking_coach_usage(user_id)
+        except Exception:
+            current_app.logger.exception(
+                "Speaking-coach usage limiter unavailable for user %s", user_id
+            )
+            return jsonify(
+                {
+                    "error": "Speaking practice is temporarily unavailable. Please try again later.",
+                    "code": "speaking_coach_limiter_unavailable",
+                }
+            ), 503
+        if not usage_reservation["allowed"]:
+            return _speaking_coach_limit_response(usage_reservation)
 
         attempt_id = str(uuid4())
         evaluation_sequence = max(
