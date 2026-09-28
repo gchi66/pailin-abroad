@@ -11,10 +11,10 @@ from typing import Any, Iterable, Mapping
 from flask import Blueprint, jsonify, request
 
 from app.ai_evaluate import (
+    answer_match_kind,
     _personalize_feedback,
     _remove_correct_answer,
     _safe_retry_feedback,
-    contractions_equivalent,
     evaluate_with_gpt,
 )
 from app.supabase_client import create_auth_client, supabase_admin
@@ -271,16 +271,27 @@ def _answer_values(value: Any) -> list[str]:
 
 
 def _matches_accepted_answer(user_answer: Any, accepted_answers: Any) -> bool:
+    return _accepted_answer_match_kind(user_answer, accepted_answers) is not None
+
+
+def _accepted_answer_match_kind(
+    user_answer: Any,
+    accepted_answers: Any,
+    *,
+    canonical_answer: str = "",
+) -> str | None:
     user_values = _answer_values(user_answer)
-    expected_values = _answer_values(accepted_answers)
+    expected_values = [canonical_answer] if canonical_answer else []
+    expected_values.extend(_answer_values(accepted_answers))
     for user_value in user_values:
-        normalized_user = _normalized_answer(user_value)
         for expected_value in expected_values:
+            match_kind = answer_match_kind(user_value, expected_value)
+            if match_kind:
+                return match_kind
+            normalized_user = _normalized_answer(user_value)
             if normalized_user and normalized_user == _normalized_answer(expected_value):
-                return True
-            if contractions_equivalent(user_value, expected_value):
-                return True
-    return False
+                return "canonical"
+    return None
 
 
 def _boolean_answer(value: Any) -> bool | None:
@@ -295,13 +306,25 @@ def _boolean_answer(value: Any) -> bool | None:
     return None
 
 
-def _deterministic_result(correct: bool, *, kind: str = "answer") -> dict[str, Any]:
+def _deterministic_result(
+    correct: bool,
+    *,
+    kind: str = "answer",
+    advisory: bool = False,
+) -> dict[str, Any]:
     if correct:
         return {
             "correct": True,
             "score": 1.0,
-            "feedback_en": "Great job! Your answer is correct.",
-            "feedback_th": "เยี่ยมมาก! คำตอบของคุณถูกต้อง",
+            "feedback_en": (
+                "Correct! Just remember the apostrophe."
+                if advisory else "Great job! Your answer is correct."
+            ),
+            "feedback_th": (
+                "ถูกต้อง! อย่าลืมใส่เครื่องหมายอะพอสทรอฟี"
+                if advisory else "เยี่ยมมาก! คำตอบของคุณถูกต้อง"
+            ),
+            "advisory": advisory,
             "grading_method": "deterministic",
             "ai_model": None,
         }
@@ -433,9 +456,22 @@ def _grade_question(
             or user_answer.get("text")
         )
         if not _serialize_answer(rewrite):
-            return _deterministic_result(False)
-        if _matches_accepted_answer(rewrite, accepted_answers):
-            return _deterministic_result(True)
+            return {
+                "correct": False,
+                "score": 0.0,
+                "feedback_en": "Good work! The sentence needs a correction.",
+                "feedback_th": "ทำได้ดี! ประโยคนี้ต้องแก้ไข",
+                "grading_method": "deterministic",
+                "ai_model": None,
+                "requires_rewrite": True,
+            }
+        rewrite_match = _accepted_answer_match_kind(
+            rewrite, accepted_answers, canonical_answer=review_answer
+        )
+        if rewrite_match:
+            return _deterministic_result(
+                True, advisory=rewrite_match == "missing_apostrophe"
+            )
         return _ai_result(
             exercise_type="sentence_transform",
             instruction=instruction,
@@ -460,8 +496,13 @@ def _grade_question(
         )
 
     if exercise_type == "sentence_transform":
-        if _matches_accepted_answer(user_answer, accepted_answers):
-            return _deterministic_result(True)
+        sentence_match = _accepted_answer_match_kind(
+            user_answer, accepted_answers, canonical_answer=review_answer
+        )
+        if sentence_match:
+            return _deterministic_result(
+                True, advisory=sentence_match == "missing_apostrophe"
+            )
         if not accepted_answers:
             raise ValueError("Question has no accepted answers")
         return _ai_result(
@@ -1313,7 +1354,8 @@ def submit_question_answer(question_id: int):
             )
             return jsonify({"error": "Unable to grade this answer right now"}), 502
 
-        progress = _persist_evaluation(
+        requires_rewrite = result.get("requires_rewrite") is True
+        progress = {} if requires_rewrite else _persist_evaluation(
             user_id=user_id,
             question_id=question_id,
             user_answer_raw=user_answer_raw,
@@ -1327,8 +1369,10 @@ def submit_question_answer(question_id: int):
                 "score": result.get("score"),
                 "feedback_en": result.get("feedback_en") or "",
                 "feedback_th": result.get("feedback_th") or "",
-                "review_answer": _review_answer(exercise, question),
+                "review_answer": "" if requires_rewrite else _review_answer(exercise, question),
                 "grading_method": result.get("grading_method"),
+                "advisory": result.get("advisory") is True,
+                "requires_rewrite": requires_rewrite,
                 "progress": progress,
             }
         ), 200

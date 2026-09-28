@@ -77,6 +77,8 @@ SYSTEM_PROMPTS = {
         "You are grading a sentence transformation exercise. "
         "Address the learner directly using 'you' and 'your'. "
         "Mark correct when the sentence meets the required meaning and grammar, even if reworded. "
+        "Treat contractions and their full forms as equivalent. Do not mark an answer incorrect "
+        "only because an apostrophe or terminal punctuation mark is missing. "
         "Do not penalize harmless extra words or rephrasing. "
         "Do not reveal the expected word or corrected sentence in feedback. "
         "Respond only with JSON keys: correct (bool), score (0-1 float), feedback_en, feedback_th."
@@ -130,6 +132,15 @@ def _normalize_for_contains(text: str) -> str:
     return text.strip()
 
 
+def _normalize_for_answer_match(text: str, *, keep_apostrophes: bool = True) -> str:
+    text = text.lower().replace("’", "'")
+    if not keep_apostrophes:
+        text = text.replace("'", "")
+    allowed_punctuation = "'" if keep_apostrophes else ""
+    text = re.sub(rf"[^\w\s{re.escape(allowed_punctuation)}]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def _expand_contractions(text: str) -> str:
     lowered = text.lower().replace("’", "'")
     for contraction, expansion in CONTRACTIONS_MAP.items():
@@ -151,6 +162,35 @@ def contractions_equivalent(user_answer: str, correct_answer: str) -> bool:
     if expanded_user in expanded_correct:
         return True
     return False
+
+
+def answer_match_kind(user_answer: str, correct_answer: str) -> str | None:
+    """Classify safe deterministic matches against a canonical display answer."""
+    if not user_answer or not correct_answer:
+        return None
+
+    normalized_user = _normalize_for_answer_match(user_answer)
+    normalized_correct = _normalize_for_answer_match(correct_answer)
+    if normalized_user and normalized_user == normalized_correct:
+        return "canonical"
+
+    without_apostrophes_user = _normalize_for_answer_match(
+        user_answer, keep_apostrophes=False
+    )
+    without_apostrophes_correct = _normalize_for_answer_match(
+        correct_answer, keep_apostrophes=False
+    )
+    if (
+        "'" in normalized_correct
+        and "'" not in normalized_user
+        and without_apostrophes_user
+        and without_apostrophes_user == without_apostrophes_correct
+    ):
+        return "missing_apostrophe"
+
+    if contractions_equivalent(user_answer, correct_answer):
+        return "expanded_contraction"
+    return None
 
 
 def get_prompt_for_type(
@@ -436,7 +476,32 @@ def evaluate_answer():
     result_payload: Dict[str, Any] = {}
     ai_model_used = "gpt-4o-mini"
 
-    if normalized_user and normalized_correct and normalized_correct in normalized_user:
+    match_kind = (
+        answer_match_kind(user_answer_raw, correct_answer_raw)
+        if exercise_type == "sentence_transform"
+        else None
+    )
+
+    if match_kind:
+        used_contractions = match_kind in {"expanded_contraction", "missing_apostrophe"}
+        is_missing_apostrophe = match_kind == "missing_apostrophe"
+        result_payload = {
+            "correct": True,
+            "score": 1.0,
+            "feedback_en": (
+                "Correct! Just remember the apostrophe."
+                if is_missing_apostrophe
+                else "Nice work!"
+            ),
+            "feedback_th": (
+                "ถูกต้อง! อย่าลืมใส่เครื่องหมายอะพอสทรอฟี"
+                if is_missing_apostrophe
+                else "ทำได้ดี!"
+            ),
+            "advisory": is_missing_apostrophe,
+        }
+        ai_model_used = f"rule:{match_kind}"
+    elif normalized_user and normalized_correct and normalized_correct in normalized_user:
         used_contains = True
         result_payload = {
             "correct": True,
@@ -534,6 +599,7 @@ def evaluate_answer():
         "score": score,
         "feedback_en": feedback_en,
         "feedback_th": feedback_th,
+        "advisory": result_payload.get("advisory") is True,
     }
 
     return jsonify(result), 200

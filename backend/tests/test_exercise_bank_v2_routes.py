@@ -21,6 +21,85 @@ class FakeOpenAI:
         )
 
 
+def test_sentence_transform_matcher_accepts_safe_contraction_variants():
+    expected = "What's your favorite fruit?"
+
+    assert ai_module.answer_match_kind(expected, expected) == "canonical"
+    assert (
+        ai_module.answer_match_kind("What is your favorite fruit?", expected)
+        == "expanded_contraction"
+    )
+    assert (
+        ai_module.answer_match_kind("Whats your favorite fruit?", expected)
+        == "missing_apostrophe"
+    )
+    assert ai_module.answer_match_kind("Where is your favorite fruit?", expected) is None
+
+
+def test_sentence_transform_uses_review_answer_and_keeps_apostrophe_note_advisory():
+    exercise = {
+        "exercise_type": "sentence_transform",
+        "prompt": "Make a question beginning with What's your favorite...",
+    }
+    question = {
+        "content": {
+            "stem": "My favorite fruit is mango.",
+            "accepted_answers": ["whats your favorite fruit"],
+            "review_answer": "What's your favorite fruit?",
+        }
+    }
+
+    expanded = module._grade_question(
+        exercise, question, "What is your favorite fruit?"
+    )
+    missing_apostrophe = module._grade_question(
+        exercise, question, "Whats your favorite fruit?"
+    )
+
+    assert expanded["correct"] is True
+    assert expanded["advisory"] is False
+    assert missing_apostrophe["correct"] is True
+    assert missing_apostrophe["advisory"] is True
+    assert "apostrophe" in missing_apostrophe["feedback_en"].lower()
+
+
+def test_practice_route_accepts_missing_apostrophe_with_advisory(monkeypatch):
+    class PracticeSupabase:
+        def table(self, _name):
+            return self
+
+        def upsert(self, _record):
+            return self
+
+        def execute(self):
+            return SimpleNamespace(error=None)
+
+    def unexpected_ai_call(**_kwargs):
+        raise AssertionError("deterministic contraction variants should not call AI")
+
+    monkeypatch.setattr(ai_module, "evaluate_with_gpt", unexpected_ai_call)
+    monkeypatch.setattr(ai_module, "supabase", PracticeSupabase())
+    app = Flask(__name__)
+    app.register_blueprint(ai_module.bp)
+
+    response = app.test_client().post("/api/evaluate_answer", json={
+        "user_id": "learner-1",
+        "source_type": "practice",
+        "practice_exercise_id": "practice-1",
+        "exercise_type": "sentence_transform",
+        "user_answer": "Whats your favorite fruit?",
+        "correct_answer": "What's your favorite fruit?",
+        "question_prompt": "My favorite fruit is mango.",
+        "exercise_instruction": "Make a question.",
+    })
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["correct"] is True
+    assert payload["advisory"] is True
+    assert "apostrophe" in payload["feedback_en"].lower()
+
+
 def test_short_grammar_answer_is_not_removed_from_feedback():
     feedback = "Remember that 'everyone' is a singular subject."
     assert module._remove_correct_answer(feedback, '["is"]') == feedback
@@ -873,6 +952,35 @@ def test_correct_or_incorrect_question_requires_correct_judgment(monkeypatch):
     assert response.status_code == 200
     assert response.get_json()["correct"] is True
     assert response.get_json()["grading_method"] == "deterministic"
+
+
+def test_correct_incorrect_question_requests_rewrite_before_recording_attempt(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.table_rows["exercise_bank_exercises"][0]["exercise_type"] = (
+        "sentence_transform"
+    )
+    fake_supabase.table_rows["exercise_bank_questions"][0]["content"] = {
+        "stem": "How come didn't she answer?",
+        "is_correct": False,
+        "accepted_answers": ["how come she didnt answer"],
+    }
+
+    response = client.post(
+        "/api/exercise-bank-v2/questions/601/answer",
+        headers=_headers(),
+        json={
+            "user_answer": {
+                "marked_as_correct": False,
+                "rewrite": "",
+            }
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.get_json()["requires_rewrite"] is True
+    assert response.get_json()["correct"] is False
+    assert response.get_json()["review_answer"] == ""
+    assert fake_supabase.rpc_calls == []
 
 
 def test_ai_failure_does_not_persist_attempt(monkeypatch):
