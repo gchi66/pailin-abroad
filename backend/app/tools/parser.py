@@ -50,10 +50,14 @@ STANDALONE_TRANSCRIPT_ELLIPSIS_RE = re.compile(r"^(?:\.{3}|…+)$")
 TH = re.compile(r'[\u0E00-\u0E7F]')
 EN = re.compile(r'[A-Za-z]')
 PRACTICE_DIRECTIVE_RE = re.compile(
-    r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
+    r'^\s*(TYPE:|PRACTICE_PRIORITY:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
     r'ANSWER:|DISPLAY_ANSWER:|REVIEW_ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
     re.I
 )
+SHORT_FOCUS_RE = re.compile(r"^\s*SHORT_FOCUS\s*:\s*(.*?)\s*$", re.I)
+
+AUTHORED_BLUE = "#0000ff"
+APP_BLUE = "#2563EB"
 
 SECTION_ORDER = [
     "FOCUS",
@@ -829,6 +833,21 @@ def _line_parts(line: Tuple[str, str] | Tuple[str, str, dict] | str) -> Tuple[st
     return line, "", None
 
 
+def _normalize_lesson_app_blue(value) -> None:
+    """Replace authored pure blue inside an already section-scoped rich payload."""
+    if isinstance(value, list):
+        for item in value:
+            _normalize_lesson_app_blue(item)
+        return
+    if not isinstance(value, dict):
+        return
+    color = value.get("color")
+    if isinstance(color, str) and color.lower() == AUTHORED_BLUE:
+        value["color"] = APP_BLUE
+    for child in value.values():
+        _normalize_lesson_app_blue(child)
+
+
 def extract_sections(doc_json) -> List[Tuple[str, List[Tuple[str, str, dict | None]]]]:
     """
     Returns a list of (header, [lines]) tuples for each section.
@@ -1220,6 +1239,10 @@ class GoogleDocsParser:
                         "link": None,
                     }
                 ]
+                return
+            # The common case is an exact match against the original paragraph.
+            # Keep every run so inline formatting (including text color) survives.
+            if "".join(span.get("text", "") for span in inlines).strip() == text:
                 return
             first = inlines[0].copy()
             first["text"] = text
@@ -1878,6 +1901,9 @@ class GoogleDocsParser:
         embedded_practice_lines: list[str] = []
 
         tagged_nodes = tag_nodes_with_sections(doc_json)
+        for node in tagged_nodes:
+            if node.get("section_context") in {"APPLY", "PHRASES & VERBS"}:
+                _normalize_lesson_app_blue(node)
         table_nodes = {n["id"]: n for n in tagged_nodes
             if n.get("kind") == "table"
             and _same_lesson(n)
@@ -1979,7 +2005,20 @@ class GoogleDocsParser:
 
             # ---- simple text buckets ---------------------------------------
             if   norm_header == "FOCUS":
-                lesson["focus"] = "\n".join(texts_only).strip()
+                focus_lines: list[str] = []
+                short_focus = None
+                for text in texts_only:
+                    for piece in (text or "").replace("\u000b", "\n").splitlines():
+                        match = SHORT_FOCUS_RE.match(piece)
+                        if lang == "en" and match:
+                            value = match.group(1).strip()
+                            if value:
+                                short_focus = value
+                            continue
+                        focus_lines.append(piece)
+                lesson["focus"] = "\n".join(focus_lines).strip()
+                if short_focus is not None:
+                    lesson["focus_short"] = short_focus
                 continue
             elif norm_header == "BACKSTORY":
                 lesson["backstory"] = "\n".join(texts_only).strip()
@@ -2492,6 +2531,7 @@ class GoogleDocsParser:
                             "underline": inline_src.get("underline", False),
                             "link": inline_src.get("link"),
                             "highlight": inline_src.get("highlight"),
+                            "color": inline_src.get("color"),
                         }],
                         "indent": node.get("indent", 0),
                         "detection_indent": node.get("detection_indent", 0),
@@ -2532,6 +2572,21 @@ class GoogleDocsParser:
                             text_to_nodes.setdefault(k, []).append(n)
                             if n.get("kind") in {"list_item", "numbered_item"}:
                                 orig_kind_by_text[k] = n["kind"]
+
+                        # RESPONSE: is parser metadata, not display content. Index
+                        # a prefix-free alias while retaining every authored run
+                        # so styles such as text color survive in the example.
+                        response_match = response_re.match(plain)
+                        if response_match:
+                            response_text = response_match.group(1).strip()
+                            response_key = _norm2(response_text)
+                            if response_key:
+                                response_node = n.copy()
+                                response_node["inlines"] = _strip_prefix_inlines(
+                                    n.get("inlines", []),
+                                    response_match.start(1),
+                                )
+                                text_to_nodes.setdefault(response_key, []).append(response_node)
 
                 def _build_nodes_from_lines(lines_list: list[tuple[str, str]]) -> list[dict]:
                     node_list: list[dict] = []
@@ -3138,6 +3193,7 @@ class GoogleDocsParser:
 
         Markers handled:
         TYPE: <multiple_choice | open | fill_blank | ...>
+        PRACTICE_PRIORITY: <core | extra>
         TITLE: <exercise title>
         PROMPT: <prompt shown above the items>
         PARAGRAPH: <optional explanatory paragraph>
@@ -3622,6 +3678,7 @@ class GoogleDocsParser:
             flush_exercise()
             return {
                 "kind": kind,
+                "practice_priority": "core",
                 "title": "",
                 "prompt": "",
                 "paragraph": "",
@@ -3711,7 +3768,7 @@ class GoogleDocsParser:
 
             if collecting_prompt and cur_ex:
                 directive_re_check = re.compile(
-                    r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
+                    r'^\s*(TYPE:|PRACTICE_PRIORITY:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
                     r'ANSWER:|DISPLAY_ANSWER:|REVIEW_ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:|CHARACTERS:)',
                     re.I
                 )
@@ -3737,6 +3794,19 @@ class GoogleDocsParser:
 
             if cur_ex is None:
                 # Skip lines before the first TYPE:
+                continue
+
+            if upper_line.startswith("PRACTICE_PRIORITY:"):
+                priority = line.split(":", 1)[1].strip().lower()
+                if priority not in {"core", "extra"}:
+                    raise ValueError(
+                        f"Invalid PRACTICE_PRIORITY '{priority}'. Expected 'core' or 'extra'."
+                    )
+                cur_ex["practice_priority"] = priority
+                collecting_text = False
+                collecting_opts = False
+                collecting_paragraph = False
+                collecting_prompt = False
                 continue
 
             if upper_line.startswith("TITLE:"):
@@ -4005,7 +4075,7 @@ class GoogleDocsParser:
 
                 # Check if this is a directive line
                 directive_re_check = re.compile(
-                    r'^\s*(TYPE:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
+                    r'^\s*(TYPE:|PRACTICE_PRIORITY:|TITLE:|PROMPT:|PARAGRAPH:|ITEM:|QUESTION:|TEXT:|STEM:|CORRECT:|'
                     r'ANSWER:|DISPLAY_ANSWER:|REVIEW_ANSWER:|OPTIONS:|KEYWORDS:|INPUTS:)',
                     re.I
                 )

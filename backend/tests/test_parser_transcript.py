@@ -1,6 +1,54 @@
 import unittest
+from unittest.mock import patch
 
-from app.tools.parser import GoogleDocsParser, pair_transcript_bilingual
+from app.tools import import_lessons
+from app.tools.parser import (
+    GoogleDocsParser,
+    extract_sections,
+    pair_transcript_bilingual,
+    split_lessons_by_header,
+)
+
+
+def _paragraph(text=None, *, style="NORMAL_TEXT", runs=None):
+    elements = runs or [{"textRun": {"content": f"{text}\n"}}]
+    return {
+        "paragraph": {
+            "elements": elements,
+            "paragraphStyle": {"namedStyleType": style},
+        }
+    }
+
+
+def _run(text, *, color=None):
+    text_style = {}
+    if color is not None:
+        text_style["foregroundColor"] = {"color": {"rgbColor": color}}
+    return {"textRun": {"content": text, "textStyle": text_style}}
+
+
+def _parse_document(*content):
+    document = {"body": {"content": list(content)}, "lists": {}}
+    lessons = split_lessons_by_header(extract_sections(document))
+    return GoogleDocsParser().build_lesson_from_sections(
+        lessons[0], "Beginner", document, lang="en"
+    )
+
+
+class _FakeLessonsQuery:
+    def __init__(self):
+        self.record = None
+
+    def table(self, name):
+        assert name == "lessons"
+        return self
+
+    def upsert(self, record, **_kwargs):
+        self.record = record
+        return self
+
+    def execute(self):
+        return type("Response", (), {"data": [{"id": "lesson-id"}]})()
 
 
 class TranscriptParserTests(unittest.TestCase):
@@ -76,6 +124,108 @@ class TranscriptParserTests(unittest.TestCase):
         self.assertEqual(rows[0]["line_text_th"], "…")
         self.assertEqual(rows[1]["speaker"], "Luke")
         self.assertEqual(rows[1]["speaker_th"], "ลูค")
+
+    def test_short_focus_is_authored_separately_and_imported(self):
+        parsed = _parse_document(
+            _paragraph("LESSON 1.1: Greetings", style="HEADING_3"),
+            _paragraph("FOCUS", style="HEADING_3"),
+            _paragraph("How to greet someone"),
+            _paragraph("SHORT_FOCUS: greetings"),
+        )
+
+        self.assertEqual(parsed["lesson"]["focus"], "How to greet someone")
+        self.assertEqual(parsed["lesson"]["focus_short"], "greetings")
+
+        fake = _FakeLessonsQuery()
+        with patch.object(import_lessons, "supabase", fake):
+            import_lessons.upsert_lesson(parsed, lang="en")
+        self.assertEqual(fake.record["focus_short"], "greetings")
+
+    def test_authored_blue_is_normalized_only_in_apply_and_phrases_verbs(self):
+        blue = {"blue": 1}
+        parsed = _parse_document(
+            _paragraph("LESSON 1.1: Greetings", style="HEADING_3"),
+            _paragraph("APPLY", style="HEADING_3"),
+            _paragraph(runs=[
+                _run("Pailin: I’m "),
+                _run("not", color=blue),
+                _run(" cold.\n"),
+            ]),
+            _paragraph(runs=[
+                _run("RESPONSE: I’m "),
+                _run("not", color=blue),
+                _run(" tired.\n"),
+            ]),
+            _paragraph("UNDERSTAND", style="HEADING_3"),
+            _paragraph(runs=[_run("Unchanged blue\n", color=blue)]),
+            _paragraph("PHRASES & VERBS", style="HEADING_3"),
+            _paragraph("LOOK FOR"),
+            _paragraph(runs=[
+                _run("I’m "),
+                _run("looking for", color=blue),
+                _run(" my keys.\n"),
+            ]),
+        )
+
+        sections = {section["type"]: section for section in parsed["sections"]}
+        apply_colors = [
+            span.get("color")
+            for node in sections["apply"]["content_jsonb"]["prompt_nodes"]
+            for span in node.get("inlines", [])
+        ]
+        apply_response_colors = [
+            span.get("color")
+            for node in sections["apply"]["content_jsonb"]["response_nodes"]
+            for span in node.get("inlines", [])
+        ]
+        phrases_colors = [
+            span.get("color")
+            for node in sections["phrases_verbs"]["items"][0]["content_jsonb"]
+            for span in node.get("inlines", [])
+        ]
+        understand_colors = [
+            span.get("color")
+            for node in sections["understand"]["content_jsonb"]
+            for span in node.get("inlines", [])
+        ]
+
+        self.assertIn("#2563EB", apply_colors)
+        self.assertIn("#2563EB", apply_response_colors)
+        self.assertIn("#2563EB", phrases_colors)
+        self.assertIn("#0000ff", understand_colors)
+
+    def test_practice_priority_preserves_document_order_and_defaults_to_core(self):
+        exercises = self.parser.parse_practice([
+            "TYPE: multiple_choice",
+            "PRACTICE_PRIORITY: core",
+            "TITLE: First core exercise",
+            "QUESTION: 99",
+            "TEXT: First",
+            "OPTIONS:",
+            "A. Yes",
+            "B. No",
+            "ANSWER: A",
+            "TYPE: multiple_choice",
+            "PRACTICE_PRIORITY: extra",
+            "TITLE: Extra exercise",
+            "QUESTION: 1",
+            "TEXT: Second",
+            "OPTIONS:",
+            "A. Yes",
+            "B. No",
+            "ANSWER: B",
+            "TYPE: open",
+            "TITLE: Legacy core exercise",
+            "QUESTION: 2",
+            "TEXT: Third",
+        ])
+
+        self.assertEqual(
+            [(exercise["sort_order"], exercise["practice_priority"]) for exercise in exercises],
+            [(1, "core"), (2, "extra"), (3, "core")],
+        )
+        self.assertEqual(exercises[0]["title"], "First core exercise")
+        self.assertEqual(exercises[1]["title"], "Extra exercise")
 
 
 if __name__ == "__main__":

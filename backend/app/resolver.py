@@ -679,6 +679,7 @@ def resolve_lesson(lesson_id: str, lang: Lang) -> Dict[str, Any]:
                 "id": ex["id"],
                 "lesson_id": ex["lesson_id"],
                 "sort_order": ex.get("sort_order"),
+                "practice_priority": ex.get("practice_priority", "core"),
                 "kind": ex.get("kind"),
                 "title": _pick_lang(title_en, title_th, lang),
                 "title_en": title_en,

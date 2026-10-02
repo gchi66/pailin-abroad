@@ -43,3 +43,32 @@ def test_listen_is_not_expected_without_conversation_audio():
     )["lesson-1"]
 
     assert expectation["unit_keys"] == ["app:page:prepare"]
+
+
+def test_extra_practice_is_optional_and_excluded_from_required_units():
+    source_rows = _source_rows()
+    source_rows["exercises"] = [
+        {
+            "lesson_id": "lesson-1",
+            "id": "core-1",
+            "title": "Core",
+            "sort_order": 1,
+            "practice_priority": "core",
+        },
+        {
+            "lesson_id": "lesson-1",
+            "id": "extra-1",
+            "title": "Extra",
+            "sort_order": 2,
+            "practice_priority": "extra",
+        },
+    ]
+
+    expectation = _build_app_lesson_expectations_from_rows(
+        ["lesson-1"],
+        source_rows,
+    )["lesson-1"]
+
+    assert "app:page:practice" in expectation["unit_keys"]
+    assert "app:exercise:core-1" in expectation["unit_keys"]
+    assert "app:exercise:extra-1" not in expectation["unit_keys"]

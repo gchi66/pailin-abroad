@@ -479,6 +479,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
         rows.append({
             "lesson_id": lesson_id,
             "kind": kind,
+            "practice_priority": ex.get("practice_priority", "core"),
             "sort_order": ex.get("sort_order", 0),
             "title":      ex.get("title", "") or "",
             "prompt_md":  (ex.get("prompt_md") or ex.get("prompt")) or None,
@@ -635,6 +636,11 @@ def upsert_lesson(data, lang="en", dry_run=False):
             "header_img": lesson.get("header_img") or None,
             # add other base fields here if you have them (e.g., conversation_audio_url)
         }
+        # Older source documents do not have SHORT_FOCUS. Only include this
+        # column when the parser saw the directive so a re-import cannot erase
+        # an existing, explicitly authored value.
+        if "focus_short" in lesson:
+            record["focus_short"] = lesson.get("focus_short") or None
 
         if dry_run:
             print(f"[DRY RUN] Lesson EN UPSERT:", record)

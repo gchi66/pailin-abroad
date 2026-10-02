@@ -484,7 +484,7 @@ def _build_web_lesson_expectations(lesson_ids):
     exercises_result = _execute_with_retry(
         lambda: (
             supabase.table("practice_exercises")
-            .select("lesson_id, id, title, title_th, sort_order")
+            .select("lesson_id, id, title, title_th, sort_order, practice_priority")
             .in_("lesson_id", uncached_lesson_ids)
             .order("sort_order", desc=False)
         ),
@@ -565,6 +565,8 @@ def _build_web_lesson_expectations(lesson_ids):
         visible_exercise_keys = []
         practice_exercise_keys = []
         for exercise in exercise_rows:
+            if exercise.get("practice_priority", "core") != "core":
+                continue
             title = (exercise.get("title") or "").strip().lower()
             title_th = (exercise.get("title_th") or "").strip()
             is_quick = title.startswith("quick practice") or "แบบฝึกหัด" in title_th

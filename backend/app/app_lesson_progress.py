@@ -240,7 +240,7 @@ def _fetch_app_progress_source_rows(lesson_ids):
     exercises_result = _execute_with_retry(
         lambda: (
             supabase.table("practice_exercises")
-            .select("lesson_id, id, title, sort_order")
+            .select("lesson_id, id, title, sort_order, practice_priority")
             .in_("lesson_id", lesson_ids)
             .order("sort_order", desc=False)
         ),
@@ -420,7 +420,11 @@ def _build_app_lesson_expectations_from_rows(lesson_ids, source_rows):
                 continue
 
             if page_name == "practice":
-                practice_exercises = exercises_by_lesson.get(lesson_id, [])
+                practice_exercises = [
+                    exercise
+                    for exercise in exercises_by_lesson.get(lesson_id, [])
+                    if exercise.get("practice_priority", "core") == "core"
+                ]
                 if practice_exercises:
                     units.append(
                         {
