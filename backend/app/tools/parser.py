@@ -1244,6 +1244,39 @@ class GoogleDocsParser:
             # Keep every run so inline formatting (including text color) survives.
             if "".join(span.get("text", "") for span in inlines).strip() == text:
                 return
+
+            # docwalker trims line-break characters from the ends of individual
+            # Google Docs runs. Restore those separators from the raw paragraph
+            # without flattening its styled runs into the first run's style.
+            rebuilt_inlines: list[dict] = []
+            cursor = 0
+            can_rebuild = True
+            for inline in inlines:
+                inline_text = inline.get("text", "")
+                if not inline_text:
+                    continue
+                match_at = text.find(inline_text, cursor)
+                if match_at < 0:
+                    can_rebuild = False
+                    break
+                gap = text[cursor:match_at]
+                if gap:
+                    if rebuilt_inlines:
+                        rebuilt_inlines[-1]["text"] += gap
+                    else:
+                        inline_text = gap + inline_text
+                rebuilt = inline.copy()
+                rebuilt["text"] = inline_text
+                rebuilt_inlines.append(rebuilt)
+                cursor = match_at + len(inline.get("text", ""))
+
+            if can_rebuild and rebuilt_inlines:
+                if cursor < len(text):
+                    rebuilt_inlines[-1]["text"] += text[cursor:]
+                if "".join(span.get("text", "") for span in rebuilt_inlines) == text:
+                    node["inlines"] = rebuilt_inlines
+                    return
+
             first = inlines[0].copy()
             first["text"] = text
             first.setdefault("bold", False)
@@ -1323,6 +1356,17 @@ class GoogleDocsParser:
                     return result
                 return None
 
+            # Prefer the complete paragraph before looking at its individual
+            # visual lines. A bilingual phrase example commonly lives in one
+            # Google Docs paragraph with a soft line break. Taking only its
+            # first line causes _trim_node_text() to copy that line's first
+            # style across the whole line and loses the Thai line's run styles.
+            norm_key = _norm(raw)
+            hit = _try_maps(norm_key)
+            if hit:
+                _trim_node_text(hit, raw)
+                return hit
+
             pieces = re.split(r"(?:\u000b|\n)+", (raw or "").strip())
             for part in pieces:
                 p = part.strip()
@@ -1332,12 +1376,6 @@ class GoogleDocsParser:
                 if hit:
                     _trim_node_text(hit, p)
                     return hit
-
-            norm_key = _norm(raw)
-            hit = _try_maps(norm_key)
-            if hit:
-                _trim_node_text(hit, raw)
-                return hit
 
             m = TH_RX.search(raw or "")
             if m:
@@ -1424,6 +1462,40 @@ class GoogleDocsParser:
                 continue
 
             pieces = re.split(r"(?:\u000b|\n)+", raw_text)
+            visible_pieces = [(piece or "").strip() for piece in pieces if (piece or "").strip()]
+
+            # Keep non-header multiline paragraphs intact. In Thai phrase
+            # documents, the English example and its Thai translation are
+            # authored as separate visual lines in the same rich paragraph.
+            # Keeping the paragraph intact preserves formatting such as blue
+            # on only "Wow!" and only "ว้าว!".
+            if len(visible_pieces) > 1 and not looks_like_header(visible_pieces[0], style, 0):
+                text_buffer.extend(visible_pieces)
+                node = _take_node(raw_text)
+                if node is not None:
+                    if node.get("kind") == "heading":
+                        node["kind"] = "paragraph"
+                    if _is_bullet_node(node):
+                        node["kind"] = "list_item"
+                    else:
+                        if last_audio_node:
+                            for key in (
+                                "indent",
+                                "detection_indent",
+                                "indent_level",
+                                "indent_start_pts",
+                                "indent_first_line_pts",
+                                "indent_first_line_level",
+                            ):
+                                if key in last_audio_node and last_audio_node[key] is not None:
+                                    node[key] = last_audio_node[key]
+                    node_buffer.append(node)
+                    if node.get("kind") == "list_item" and (node.get("audio_key") or node.get("audio_seq")):
+                        last_audio_node = node
+                else:
+                    node_buffer.append(_synth_node("paragraph", "\n".join(visible_pieces)))
+                continue
+
             line_list_node = None if len(pieces) > 1 else None
             for i, piece in enumerate(pieces):
                 text = (piece or "").strip()

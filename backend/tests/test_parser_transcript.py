@@ -27,11 +27,11 @@ def _run(text, *, color=None):
     return {"textRun": {"content": text, "textStyle": text_style}}
 
 
-def _parse_document(*content):
+def _parse_document(*content, lang="en"):
     document = {"body": {"content": list(content)}, "lists": {}}
     lessons = split_lessons_by_header(extract_sections(document))
     return GoogleDocsParser().build_lesson_from_sections(
-        lessons[0], "Beginner", document, lang="en"
+        lessons[0], "Beginner", document, lang=lang
     )
 
 
@@ -193,6 +193,30 @@ class TranscriptParserTests(unittest.TestCase):
         self.assertIn("#2563EB", apply_response_colors)
         self.assertIn("#2563EB", phrases_colors)
         self.assertIn("#0000ff", understand_colors)
+
+    def test_thai_phrase_keeps_blue_on_only_the_authored_words(self):
+        blue = {"blue": 1}
+        parsed = _parse_document(
+            _paragraph("LESSON 1.11: I’m from Thailand ฉันมาจากประเทศไทย", style="HEADING_3"),
+            _paragraph("PHRASES & VERBS", style="HEADING_3"),
+            _paragraph("WOW ว้าว"),
+            _paragraph(runs=[
+                _run("Wow!", color=blue),
+                _run(" This cake is beautiful.\n"),
+                _run("ว้าว!", color=blue),
+                _run(" เค้กก้อนนี้สวยมากเลย\n"),
+            ]),
+            lang="th",
+        )
+
+        phrase = parsed["sections"][0]["items"][0]
+        inlines = phrase["content_jsonb_th"][0]["inlines"]
+        colored_text = [span["text"] for span in inlines if span.get("color") == "#2563EB"]
+        uncolored_text = [span["text"] for span in inlines if not span.get("color")]
+
+        self.assertEqual(colored_text, ["Wow!", "ว้าว!"])
+        self.assertIn(" This cake is beautiful.\n", uncolored_text)
+        self.assertIn(" เค้กก้อนนี้สวยมากเลย", uncolored_text)
 
     def test_practice_priority_preserves_document_order_and_defaults_to_core(self):
         exercises = self.parser.parse_practice([
