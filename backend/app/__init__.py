@@ -27,7 +27,7 @@ def create_app():
         resources={
             r"/*": {
                 "origins": allowed_origins,
-                "allow_headers": ["Content-Type", "Authorization"],
+                "allow_headers": ["Content-Type", "Authorization", "X-Guest-RevenueCat-User-Id"],
                 "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
             }
         },
@@ -40,7 +40,9 @@ def create_app():
             response.headers["Access-Control-Allow-Origin"] = origin
             response.headers["Vary"] = "Origin"
             response.headers["Access-Control-Allow-Credentials"] = "true"
-            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+            response.headers["Access-Control-Allow-Headers"] = (
+                "Content-Type, Authorization, X-Guest-RevenueCat-User-Id"
+            )
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
         return response
     # , resources={r"/api/*": {"origins": "*"}} # Define resources later in production

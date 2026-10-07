@@ -356,10 +356,13 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
                 if practice_type in {"pronunciation", "translation"} and not target_answers:
                     errors.append(f"{question_context}.target_answers cannot be empty.")
 
+                # Prompt recordings are numbered by their overall position in
+                # the lesson, including Thai-to-English questions. Translation
+                # recordings contain the first accepted English answer and are
+                # revealed after an incorrect first attempt as "Hear Pailin".
                 prompt_audio_key = (
                     f"{lesson_external_id}_speaking_{lesson_question_position}.mp3"
                     if _non_empty(lesson_external_id)
-                    and practice_type != "translation"
                     else None
                 )
                 hash_input = {

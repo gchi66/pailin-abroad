@@ -77,13 +77,6 @@ CATEGORY_LABELS = {
     "other_concepts": "Other Concepts",
 }
 
-PUBLIC_TRY_LESSON_IDS = [
-    "a34f5a4b-0729-430e-9b92-900dcad2f977",
-    "5f9d09b4-ed35-40ac-b89f-50dbd7e96c0c",
-    "27e50504-7021-4a7b-b30d-0cae34a094bf",
-    "d93a5298-b462-4d4e-b900-b23fd3e33613",
-]
-
 LESSON_AUDIO_BUCKET = "lesson-audio"
 TRY_AUDIO_TTL_SECONDS = 2 * 60 * 60
 TRY_AUDIO_CACHE_TTL_SECONDS = 50 * 60
@@ -137,6 +130,23 @@ def _sign_audio_batch(items):
             if signed_url:
                 results.append({**item, "signed_url": signed_url})
     return results
+
+
+def _is_first_lesson_in_level(database, lesson):
+    if not lesson or not lesson.get("id") or not lesson.get("stage") or lesson.get("level") is None:
+        return False
+
+    result = (
+        database.table("lessons")
+        .select("id")
+        .eq("stage", lesson["stage"])
+        .eq("level", lesson["level"])
+        .order("lesson_order", desc=False)
+        .limit(1)
+        .execute()
+    )
+    rows = result.data or []
+    return bool(rows and rows[0].get("id") == lesson["id"])
 
 
 def _slugify(value: str) -> str:
@@ -811,21 +821,15 @@ def get_pricing():
 
     return jsonify(response), 200
 
+@routes.route('/api/lessons/<lesson_id>/audio-url', methods=['GET'])
 @routes.route('/api/try-lessons/<lesson_id>/audio-url', methods=['GET'])
 @handle_options
 def get_try_lesson_audio(lesson_id):
-    if lesson_id not in PUBLIC_TRY_LESSON_IDS:
-        return jsonify({"error": "Not allowed"}), 403
-
     try:
-        cached = _get_try_audio_cache(lesson_id)
-        if cached:
-            return jsonify(cached), 200
-
         lesson_result = (
             supabase_admin
             .table("lessons")
-            .select("id, lesson_external_id, conversation_audio_url")
+            .select("id, stage, level, lesson_order, lesson_external_id, conversation_audio_url")
             .eq("id", lesson_id)
             .limit(1)
             .execute()
@@ -835,13 +839,33 @@ def get_try_lesson_audio(lesson_id):
             return jsonify({"error": "Lesson not found"}), 404
 
         lesson_row = lesson_rows[0]
+        has_access = _is_first_lesson_in_level(supabase_admin, lesson_row)
+        guest_revenuecat_user_id = _get_guest_revenuecat_user_id()
+        if not has_access and guest_revenuecat_user_id:
+            try:
+                subscriber_response = fetch_revenuecat_subscriber(guest_revenuecat_user_id)
+                has_access = derive_membership_state_from_subscriber(subscriber_response)["has_access"]
+            except Exception as e:
+                print(f"Guest audio access check error for lesson {lesson_id}: {e}", flush=True)
+
+        if not has_access:
+            return jsonify({"error": "Not allowed"}), 403
+
+        cached = _get_try_audio_cache(lesson_id)
+        if cached:
+            return jsonify(cached), 200
+
         lesson_external_id = lesson_row.get("lesson_external_id")
         conversation_path = lesson_row.get("conversation_audio_url")
 
-        conversation = {"path": conversation_path}
+        conversation = {
+            "path": conversation_path,
+            "signed_url": _sign_audio_path(conversation_path),
+        }
 
         snippets_out = []
         if lesson_external_id:
+            items = []
             snippets_result = (
                 supabase_admin
                 .table("audio_snippets")
@@ -854,11 +878,19 @@ def get_try_lesson_audio(lesson_id):
                 storage_path = row.get("storage_path")
                 if not audio_key or not storage_path:
                     continue
-                snippets_out.append({
+                items.append({
                     "audio_key": audio_key,
                     "section": row.get("section"),
                     "seq": row.get("seq"),
-                    "storage_path": storage_path,
+                    "path": storage_path,
+                })
+            for row in _sign_audio_batch(items):
+                snippets_out.append({
+                    "audio_key": row.get("audio_key"),
+                    "section": row.get("section"),
+                    "seq": row.get("seq"),
+                    "storage_path": row.get("path"),
+                    "signed_url": row.get("signed_url"),
                 })
 
         phrase_ids = []
@@ -2080,8 +2112,7 @@ def get_lesson_resolved(lesson_id):
         return jsonify({"error": "lang must be 'en' or 'th'"}), 400
 
     # Check if user is authenticated and has paid access
-    is_public_try_lesson = lesson_id in PUBLIC_TRY_LESSON_IDS
-    is_locked = not is_public_try_lesson
+    is_locked = True
     user_id = None
     lesson_row = None
     guest_revenuecat_user_id = _get_guest_revenuecat_user_id()
@@ -2137,15 +2168,7 @@ def get_lesson_resolved(lesson_id):
         ).eq('id', lesson_id).single().execute()
         lesson_row = lesson_result.data
         if lesson_row:
-            level_lessons = (
-                supabase.table('lessons')
-                .select('id, lesson_order')
-                .eq('stage', lesson_row['stage'])
-                .eq('level', lesson_row['level'])
-                .order('lesson_order', desc=False)
-                .execute()
-            )
-            if level_lessons.data and lesson_id == level_lessons.data[0]['id']:
+            if _is_first_lesson_in_level(supabase, lesson_row):
                 is_locked = False
 
     if is_locked:

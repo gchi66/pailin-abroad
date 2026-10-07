@@ -97,6 +97,26 @@ def test_thai_importer_preserves_valid_ordered_item_and_option_content(monkeypat
     assert patch["items_th"][0]["options"][0]["content"] == option_content
 
 
+def test_thai_importer_preserves_english_prompt_lead_in(monkeypatch):
+    exercise = {
+        "kind": "multiple_choice",
+        "sort_order": 1,
+        "prompt": "can",
+        "prompt_th": "ในประโยคนี้หมายถึงอะไร?",
+        "items": [{"number": "1"}],
+        "items_th": [{"number": "1", "text": "ฉันขอกาแฟหนึ่งแก้วได้ไหม?"}],
+    }
+    fake = _FakeSupabase(english_items=[{"number": "1"}])
+    monkeypatch.setattr(import_lessons, "supabase", fake)
+
+    import_lessons.upsert_practice_exercises(
+        "lesson-id", [exercise], lang="th"
+    )
+
+    [patch] = fake.updates
+    assert patch["prompt_th"] == "can ในประโยคนี้หมายถึงอะไร?"
+
+
 def test_thai_importer_strips_entire_ordered_contract_when_validation_fails(monkeypatch):
     exercise = {
         "kind": "fill_blank",

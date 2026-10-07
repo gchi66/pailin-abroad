@@ -143,6 +143,20 @@ def _extract_th(val):
     return ""
 
 
+_THAI_CHAR_RE = re.compile(r"[\u0E00-\u0E7F]")
+
+
+def _thai_practice_prompt(exercise: dict) -> str:
+    """Preserve an English lead-in when a Thai prompt continues it."""
+    prompt = _extract_th(exercise.get("prompt_md") or exercise.get("prompt"))
+    prompt_th = _extract_th(exercise.get("prompt_th"))
+
+    if prompt and prompt_th and not _THAI_CHAR_RE.search(prompt) and _THAI_CHAR_RE.search(prompt_th):
+        return f"{prompt} {prompt_th}".strip()
+
+    return prompt or prompt_th
+
+
 _ORDERED_CONTENT_TOKEN_TYPES = {"text", "line_break", "blank"}
 _ORDERED_CONTENT_STYLE_KEYS = {
     "bold", "italic", "underline", "link", "highlight", "color"
@@ -394,7 +408,7 @@ def upsert_practice_exercises(lesson_id, practice_exercises, lang=None, dry_run=
 
             patch = {
                 "title_th":     _extract_th(ex.get("title_th")),
-                "prompt_th":    _extract_th(ex.get("prompt_md") or ex.get("prompt")),
+                "prompt_th":    _thai_practice_prompt(ex),
                 "paragraph_th": _extract_th(ex.get("paragraph_th")),
                 # Store the validated Thai items (with alt text / answers). We do NOT attempt to
                 # reconcile or alter image keys here; EN remains source-of-truth.

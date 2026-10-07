@@ -126,19 +126,13 @@ def test_prepares_current_parser_output() -> None:
     assert questions_by_lesson["4.1"] == [
         *(f"4.1_speaking_{position}.mp3" for position in range(1, 7))
     ]
-    assert any(key is None for key in questions_by_lesson["4.9"])
+    assert questions_by_lesson["4.9"] == [
+        *(f"4.9_speaking_{position}.mp3" for position in range(1, 8))
+    ]
 
-    practice_type_by_source_key = {
-        row["source_key"]: row["practice_type"] for row in data.practice_sets
-    }
-    for question in data.questions:
-        practice_type = practice_type_by_source_key[
-            question["_practice_set_source_key"]
-        ]
-        if practice_type == "translation":
-            assert question["prompt_audio_key"] is None
-        else:
-            assert question["prompt_audio_key"] is not None
+    assert all(
+        question["prompt_audio_key"] is not None for question in data.questions
+    )
 
 
 def test_refuses_parser_errors() -> None:
