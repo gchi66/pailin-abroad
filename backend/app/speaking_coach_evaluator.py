@@ -44,6 +44,8 @@ MIN_RECOGNITION_CONFIDENCE = 0.35
 # words with a weak-but-successful result, which should be treated as unclear audio
 # rather than sent to the language grader as the learner's answer.
 MIN_OPEN_RECOGNITION_CONFIDENCE = 0.55
+MAX_AMBIGUOUS_OPEN_RECOGNITION_CONFIDENCE = 0.65
+MAX_AMBIGUOUS_OPEN_PRONUNCIATION_SCORE = 55
 MAX_DISPLAYED_ISSUES = 2
 MAX_OPEN_DISPLAYED_ISSUES = 2
 FOCUS_WORD_ACCURACY_THRESHOLD = 70
@@ -420,6 +422,26 @@ def _azure_is_unclear(
     return (
         result.confidence is not None
         and result.confidence < min_confidence
+    )
+
+
+def _open_answer_is_ambiguous_audio(
+    azure: AzureSpeechResult,
+    language: LanguageEvaluation,
+) -> bool:
+    """Reject a weak forced-English transcript when its meaning is also unrelated."""
+
+    pronunciation_score = (
+        azure.pronunciation.pronunciation_score
+        if azure.pronunciation is not None
+        else None
+    )
+    return (
+        language.content.relevant is False
+        and azure.confidence is not None
+        and azure.confidence < MAX_AMBIGUOUS_OPEN_RECOGNITION_CONFIDENCE
+        and pronunciation_score is not None
+        and pronunciation_score < MAX_AMBIGUOUS_OPEN_PRONUNCIATION_SCORE
     )
 
 
@@ -3891,7 +3913,11 @@ def evaluate_speaking_attempt(
     ):
         evaluation = (
             _unscripted_pronunciation_retry(azure, pronunciation_candidates)
-            if pronunciation_candidates and _azure_is_unclear(azure)
+            if (
+                practice_type != "open"
+                and pronunciation_candidates
+                and _azure_is_unclear(azure)
+            )
             else _unclear_audio_evaluation(azure.transcript)
         )
         if uses_unscripted_acoustics:
@@ -3926,16 +3952,34 @@ def evaluate_speaking_attempt(
         evaluation_context=context,
         instructional_attempt_number=instructional_attempt_number,
     )
-    evaluation = _compose_language_evaluation(
-        azure,
-        gemini.evaluation,
-        pronunciation_candidates=pronunciation_candidates,
-        focus_issues=focus_issues,
-        focus_items=context.get("focus_items"),
-        include_transcript=practice_type in {"pronunciation", "open"},
-        instructional_attempt_number=instructional_attempt_number,
-        previous_evaluation=previous_evaluation,
+    ambiguous_open_audio = (
+        practice_type == "open"
+        and _open_answer_is_ambiguous_audio(azure, gemini.evaluation)
     )
+    if ambiguous_open_audio:
+        evaluation = _unclear_audio_evaluation(azure.transcript)
+        if policy_metadata is not None:
+            policy_metadata["open_audio_gate"] = {
+                "decision": "unclear_audio",
+                "reason": "weak_recognition_and_unrelated_transcript",
+                "recognition_confidence": azure.confidence,
+                "pronunciation_score": (
+                    azure.pronunciation.pronunciation_score
+                    if azure.pronunciation is not None
+                    else None
+                ),
+            }
+    else:
+        evaluation = _compose_language_evaluation(
+            azure,
+            gemini.evaluation,
+            pronunciation_candidates=pronunciation_candidates,
+            focus_issues=focus_issues,
+            focus_items=context.get("focus_items"),
+            include_transcript=practice_type in {"pronunciation", "open"},
+            instructional_attempt_number=instructional_attempt_number,
+            previous_evaluation=previous_evaluation,
+        )
     timings_ms = {
         "normalization": normalization_ms,
         "azure_request": azure.latency_ms

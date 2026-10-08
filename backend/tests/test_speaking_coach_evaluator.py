@@ -1787,7 +1787,7 @@ def test_confident_open_transcript_still_reaches_language_grading(monkeypatch):
     assert gemini_called is True
 
 
-def test_low_confidence_open_answer_can_report_supported_r_to_l_transfer(monkeypatch):
+def test_low_confidence_open_answer_ignores_phoneme_guess_and_is_unclear(monkeypatch):
     azure = _azure_result(
         transcript="I'm Satani History.",
         confidence=0.102,
@@ -1820,17 +1820,76 @@ def test_low_confidence_open_answer_can_report_supported_r_to_l_transfer(monkeyp
     monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", unexpected_gemini)
     result = _evaluate(monkeypatch, practice_type="open", azure=azure)
 
-    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.evaluation.status == evaluator.EvaluationStatus.UNCLEAR_AUDIO
     assert result.evaluation.transcript is None
-    assert result.evaluation.displayed_issues[0].category == "pronunciation"
-    assert "history" in result.evaluation.feedback_en
-    assert "/" not in result.evaluation.feedback_en
-    assert result.evaluation.pronunciation.issues
+    assert result.evaluation.displayed_issues == []
+    assert result.evaluation.pronunciation.issues == []
     policy = result.provider_metadata["policy"]
     assert policy["catalog_version"] == "thai-english-pronunciation-v3"
     assert policy["matches"][0]["pattern_id"] == "r_l_confusion"
     assert policy["matches"][0]["evidence_score"] >= 55
     assert gemini_called is False
+
+
+def test_weak_unrelated_open_transcript_is_treated_as_ambiguous_audio(monkeypatch):
+    azure = _azure_result(
+        transcript="From now on.", confidence=0.585, pronunciation=True
+    )
+    azure.pronunciation.pronunciation_score = 47.6
+    language_output = _language_output(material_error=True)
+    language_output["content"]["relevant"] = False
+    language = evaluator.LanguageEvaluation.model_validate(language_output)
+
+    def fake_gemini(**_kwargs):
+        return evaluator.GeminiLanguageResult(
+            evaluation=language,
+            model="gemini-3.5-flash-lite",
+            latency_ms=30,
+            usage={"total_tokens": 20},
+            provider_metadata={"id": "interaction-1"},
+            provider_output_text=language.model_dump_json(),
+        )
+
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", fake_gemini)
+    result = _evaluate(monkeypatch, practice_type="open", azure=azure)
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.UNCLEAR_AUDIO
+    assert result.evaluation.transcript is None
+    assert result.evaluation.displayed_issues == []
+    assert result.provider == "microsoft+google"
+    assert result.provider_metadata["policy"]["open_audio_gate"] == {
+        "decision": "unclear_audio",
+        "reason": "weak_recognition_and_unrelated_transcript",
+        "recognition_confidence": 0.585,
+        "pronunciation_score": 47.6,
+    }
+
+
+def test_clear_unrelated_open_speech_remains_a_language_retry(monkeypatch):
+    azure = _azure_result(
+        transcript="I don't know.", confidence=0.8, pronunciation=True
+    )
+    azure.pronunciation.pronunciation_score = 80
+    language_output = _language_output(material_error=True)
+    language_output["content"]["relevant"] = False
+    language = evaluator.LanguageEvaluation.model_validate(language_output)
+
+    def fake_gemini(**_kwargs):
+        return evaluator.GeminiLanguageResult(
+            evaluation=language,
+            model="gemini-3.5-flash-lite",
+            latency_ms=30,
+            usage={"total_tokens": 20},
+            provider_metadata={"id": "interaction-1"},
+            provider_output_text=language.model_dump_json(),
+        )
+
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", fake_gemini)
+    result = _evaluate(monkeypatch, practice_type="open", azure=azure)
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.RETRY
+    assert result.evaluation.transcript == "I don't know."
+    assert "open_audio_gate" not in result.provider_metadata["policy"]
 
 
 def test_open_requests_unscripted_assessment_in_the_existing_azure_call(monkeypatch):
