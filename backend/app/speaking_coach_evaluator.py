@@ -39,6 +39,11 @@ PROMPT_VERSION = "speaking-coach-hybrid-v10"
 EVALUATOR_SCHEMA_VERSION = "speaking-evaluation-v1"
 GEMINI_INTERACTIONS_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
 MIN_RECOGNITION_CONFIDENCE = 0.35
+# Open-ended conversation answers have no reference sentence to anchor speech
+# recognition. Azure can otherwise turn non-speech sounds into plausible English
+# words with a weak-but-successful result, which should be treated as unclear audio
+# rather than sent to the language grader as the learner's answer.
+MIN_OPEN_RECOGNITION_CONFIDENCE = 0.55
 MAX_DISPLAYED_ISSUES = 2
 MAX_OPEN_DISPLAYED_ISSUES = 2
 FOCUS_WORD_ACCURACY_THRESHOLD = 70
@@ -405,12 +410,16 @@ def _unclear_audio_evaluation(_transcript: str | None = None) -> SpeakingEvaluat
     )
 
 
-def _azure_is_unclear(result: AzureSpeechResult) -> bool:
+def _azure_is_unclear(
+    result: AzureSpeechResult,
+    *,
+    min_confidence: float = MIN_RECOGNITION_CONFIDENCE,
+) -> bool:
     if result.recognition_status.lower() != "success" or not result.transcript:
         return True
     return (
         result.confidence is not None
-        and result.confidence < MIN_RECOGNITION_CONFIDENCE
+        and result.confidence < min_confidence
     )
 
 
@@ -3872,10 +3881,17 @@ def evaluate_speaking_attempt(
             previous_evaluation=previous_evaluation,
         )
     policy_ms = round((time.monotonic() - policy_started) * 1000)
-    if _azure_is_unclear(azure):
+    min_recognition_confidence = (
+        MIN_OPEN_RECOGNITION_CONFIDENCE
+        if practice_type == "open"
+        else MIN_RECOGNITION_CONFIDENCE
+    )
+    if _azure_is_unclear(
+        azure, min_confidence=min_recognition_confidence
+    ):
         evaluation = (
             _unscripted_pronunciation_retry(azure, pronunciation_candidates)
-            if pronunciation_candidates
+            if pronunciation_candidates and _azure_is_unclear(azure)
             else _unclear_audio_evaluation(azure.transcript)
         )
         if uses_unscripted_acoustics:

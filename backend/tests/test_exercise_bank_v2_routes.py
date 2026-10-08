@@ -100,6 +100,55 @@ def test_practice_route_accepts_missing_apostrophe_with_advisory(monkeypatch):
     assert "apostrophe" in payload["feedback_en"].lower()
 
 
+def test_practice_route_grades_guest_without_persisting(monkeypatch):
+    class UnexpectedSupabase:
+        def table(self, _name):
+            raise AssertionError("guest evaluations must not be persisted")
+
+    monkeypatch.setattr(ai_module, "supabase", UnexpectedSupabase())
+    app = Flask(__name__)
+    app.register_blueprint(ai_module.bp)
+    guest_id = "guest:00000000-0000-4000-8000-000000000001"
+
+    response = app.test_client().post(
+        "/api/evaluate_answer",
+        headers={"X-Guest-RevenueCat-User-Id": guest_id},
+        json={
+            "user_id": guest_id,
+            "source_type": "practice",
+            "practice_exercise_id": "practice-1",
+            "exercise_type": "sentence_transform",
+            "user_answer": "The ending was so surprising.",
+            "correct_answer": "The ending was so surprising.",
+            "question_prompt": "The ending was so surprised.",
+            "exercise_instruction": "Fix the sentence.",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.get_json()["correct"] is True
+
+
+def test_practice_route_rejects_guest_identity_without_matching_header():
+    app = Flask(__name__)
+    app.register_blueprint(ai_module.bp)
+
+    response = app.test_client().post(
+        "/api/evaluate_answer",
+        json={
+            "user_id": "guest:00000000-0000-4000-8000-000000000001",
+            "source_type": "practice",
+            "practice_exercise_id": "practice-1",
+            "exercise_type": "sentence_transform",
+            "user_answer": "The ending was so surprising.",
+            "correct_answer": "The ending was so surprising.",
+        },
+    )
+
+    assert response.status_code == 401
+    assert response.get_json() == {"error": "Invalid guest identity"}
+
+
 def test_short_grammar_answer_is_not_removed_from_feedback():
     feedback = "Remember that 'everyone' is a singular subject."
     assert module._remove_correct_answer(feedback, '["is"]') == feedback
@@ -504,6 +553,12 @@ def _headers():
     return {"Authorization": "Bearer test-token"}
 
 
+def _guest_headers():
+    return {
+        "X-Guest-RevenueCat-User-Id": "guest:00000000-0000-4000-8000-000000000001"
+    }
+
+
 def _session_rpc_payload():
     tables = _tables()
     exercise = tables["exercise_bank_exercises"][0]
@@ -638,6 +693,67 @@ def test_session_bootstrap_uses_one_rpc_and_returns_only_requested_set(monkeypat
         "get_exercise_bank_v2_session",
         {"p_user_id": "user-123", "p_topic_id": 9, "p_set_number": 1},
     )]
+
+
+def test_guest_can_open_featured_topic_session_without_user_progress(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+
+    response = client.get(
+        "/api/exercise-bank-v2/topics/9/session?set_number=1",
+        headers=_guest_headers(),
+    )
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["topic"]["is_featured"] is True
+    assert len(payload["set"]["questions"]) == 5
+    assert payload["set"]["questions"][0]["progress"]["attempt_count"] == 0
+    assert payload["set"]["questions"][0]["progress"]["latest_user_answer"] is None
+    assert fake_supabase.rpc_calls == []
+    assert all(
+        table_name not in {
+            "user_exercise_bank_question_state",
+            "user_exercise_bank_topic_progress",
+        }
+        for table_name, _query in fake_supabase.queries
+    )
+
+
+def test_topic_session_requires_account_or_guest_identity(monkeypatch):
+    client, _ = _client(monkeypatch)
+
+    response = client.get("/api/exercise-bank-v2/topics/9/session?set_number=1")
+
+    assert response.status_code == 401
+    assert response.get_json() == {"error": "Guest identity required"}
+
+
+def test_guest_cannot_open_non_featured_topic_session(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.table_rows["exercise_bank_topics"][0]["is_featured"] = False
+    monkeypatch.setattr(module, "_guest_can_access_topic", lambda _topic: False)
+
+    response = client.get(
+        "/api/exercise-bank-v2/topics/9/session?set_number=1",
+        headers=_guest_headers(),
+    )
+
+    assert response.status_code == 404
+    assert response.get_json() == {"error": "Exercise topic not found"}
+
+
+def test_guest_member_can_open_non_featured_topic_session(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.table_rows["exercise_bank_topics"][0]["is_featured"] = False
+    monkeypatch.setattr(module, "_guest_can_access_topic", lambda _topic: True)
+
+    response = client.get(
+        "/api/exercise-bank-v2/topics/9/session?set_number=1",
+        headers=_guest_headers(),
+    )
+
+    assert response.status_code == 200
+    assert len(response.get_json()["set"]["questions"]) == 5
 
 
 def test_thai_language_localizes_topic_exercise_and_question(monkeypatch):
@@ -864,6 +980,38 @@ def test_exact_fill_blank_is_graded_deterministically_and_persisted(monkeypatch)
             },
         )
     ]
+
+
+def test_guest_answer_is_graded_for_featured_topic_without_persisting(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+
+    response = client.post(
+        "/api/exercise-bank-v2/questions/601/answer",
+        headers=_guest_headers(),
+        json={"user_answer": "secret"},
+    )
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["correct"] is True
+    assert payload["progress"] == {}
+    assert fake_supabase.rpc_calls == []
+
+
+def test_guest_cannot_submit_answer_for_non_featured_topic(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.table_rows["exercise_bank_topics"][0]["is_featured"] = False
+    monkeypatch.setattr(module, "_guest_can_access_topic", lambda _topic: False)
+
+    response = client.post(
+        "/api/exercise-bank-v2/questions/601/answer",
+        headers=_guest_headers(),
+        json={"user_answer": "secret"},
+    )
+
+    assert response.status_code == 404
+    assert response.get_json() == {"error": "Exercise question not found"}
+    assert fake_supabase.rpc_calls == []
 
 
 def test_multiple_choice_is_graded_without_ai(monkeypatch):

@@ -4,6 +4,8 @@ import re
 from typing import Any, Dict, Optional, Tuple
 
 from flask import Blueprint, jsonify, request
+
+from app.revenuecat_membership import is_guest_revenuecat_app_user_id
 from openai import OpenAI
 
 from app.supabase_client import supabase
@@ -448,6 +450,13 @@ def evaluate_answer():
     user_id = str(payload.get("user_id", "")).strip()
     if not user_id:
         return jsonify({"error": "user_id cannot be empty"}), 400
+    is_guest_user = is_guest_revenuecat_app_user_id(user_id)
+    if is_guest_user:
+        guest_header_user_id = (
+            request.headers.get("X-Guest-RevenueCat-User-Id") or ""
+        ).strip()
+        if guest_header_user_id != user_id:
+            return jsonify({"error": "Invalid guest identity"}), 401
 
     user_answer_raw = _value_to_string(payload.get("user_answer"))
     if not user_answer_raw:
@@ -585,14 +594,15 @@ def evaluate_answer():
         record["practice_exercise_id"] = practice_exercise_id
         record["exercise_bank_id"] = None
 
-    try:
-        supabase_response = (
-            supabase.table("user_exercise_answers").upsert(record).execute()
-        )
-        if getattr(supabase_response, "error", None):
-            return jsonify({"error": "Failed to store AI evaluation"}), 500
-    except Exception as exc:
-        return jsonify({"error": f"Supabase error: {exc}"}), 500
+    if not is_guest_user:
+        try:
+            supabase_response = (
+                supabase.table("user_exercise_answers").upsert(record).execute()
+            )
+            if getattr(supabase_response, "error", None):
+                return jsonify({"error": "Failed to store AI evaluation"}), 500
+        except Exception as exc:
+            return jsonify({"error": f"Supabase error: {exc}"}), 500
 
     result = {
         "correct": correct_flag,

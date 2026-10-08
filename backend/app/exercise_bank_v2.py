@@ -1,4 +1,4 @@
-"""Authenticated read API for the normalized Exercise Bank v2."""
+"""Exercise Bank v2 API with guest access to featured topics."""
 
 from __future__ import annotations
 
@@ -16,6 +16,11 @@ from app.ai_evaluate import (
     _remove_correct_answer,
     _safe_retry_feedback,
     evaluate_with_gpt,
+)
+from app.revenuecat_membership import (
+    derive_membership_state_from_subscriber,
+    fetch_revenuecat_subscriber,
+    is_guest_revenuecat_app_user_id,
 )
 from app.supabase_client import create_auth_client, supabase_admin
 
@@ -94,6 +99,36 @@ def _authenticated_user_id() -> tuple[str | None, tuple[Any, int] | None]:
     if not user_id:
         return None, (jsonify({"error": "Invalid token"}), 401)
     return str(user_id), None
+
+
+def _optional_authenticated_user_id() -> tuple[str | None, tuple[Any, int] | None]:
+    """Return an authenticated user when supplied, while allowing no token."""
+    auth_header = request.headers.get("Authorization") or ""
+    if not auth_header.strip():
+        return None, None
+    return _authenticated_user_id()
+
+
+def _has_valid_guest_identity() -> bool:
+    guest_user_id = (
+        request.headers.get("X-Guest-RevenueCat-User-Id") or ""
+    ).strip()
+    return is_guest_revenuecat_app_user_id(guest_user_id)
+
+
+def _guest_can_access_topic(topic: Mapping[str, Any]) -> bool:
+    if topic.get("is_featured"):
+        return True
+    guest_user_id = (
+        request.headers.get("X-Guest-RevenueCat-User-Id") or ""
+    ).strip()
+    try:
+        subscriber = fetch_revenuecat_subscriber(guest_user_id)
+        membership = derive_membership_state_from_subscriber(subscriber)
+        return bool(membership.get("has_access"))
+    except Exception as exc:
+        print(f"Exercise Bank guest membership check failed: {exc}", flush=True)
+        return False
 
 
 def _sanitize_content(value: Any) -> Any:
@@ -694,7 +729,10 @@ def _fetch_topic_progress(user_id: str, topic_ids: list[Any]) -> list[dict[str, 
     )
 
 
-def _load_topic_context(user_id: str, topics: list[dict[str, Any]]) -> dict[str, Any]:
+def _load_topic_context(
+    user_id: str | None,
+    topics: list[dict[str, Any]],
+) -> dict[str, Any]:
     topic_ids = [topic["id"] for topic in topics]
     exercises = _fetch_exercises(topic_ids)
     exercise_by_id = {exercise["id"]: exercise for exercise in exercises}
@@ -715,13 +753,14 @@ def _load_topic_context(user_id: str, topics: list[dict[str, Any]]) -> dict[str,
     for example in _fetch_examples(list(exercise_by_id)):
         examples_by_exercise[example.get("exercise_id")].append(example)
 
-    states = _fetch_states(user_id, topic_ids)
+    states = _fetch_states(user_id, topic_ids) if user_id else []
     states_by_topic: dict[Any, dict[Any, dict[str, Any]]] = defaultdict(dict)
     for state in states:
         states_by_topic[state.get("topic_id")][state.get("question_id")] = state
 
     progress_by_topic = {
-        row.get("topic_id"): row for row in _fetch_topic_progress(user_id, topic_ids)
+        row.get("topic_id"): row
+        for row in (_fetch_topic_progress(user_id, topic_ids) if user_id else [])
     }
     return {
         "exercise_by_id": exercise_by_id,
@@ -835,7 +874,7 @@ def _session_bootstrap_payload(data: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _legacy_session_data(
-    user_id: str,
+    user_id: str | None,
     topic_id: int,
     requested_set_number: int | None,
 ) -> dict[str, Any] | None:
@@ -1031,7 +1070,7 @@ def list_topics():
     methods=["GET"],
 )
 def get_topic_session(topic_id: int):
-    user_id, auth_error = _authenticated_user_id()
+    user_id, auth_error = _optional_authenticated_user_id()
     if auth_error:
         return auth_error
     raw_set_number = (request.args.get("set_number") or "").strip()
@@ -1045,6 +1084,17 @@ def get_topic_session(topic_id: int):
     else:
         set_number = None
     try:
+        if user_id is None:
+            if not _has_valid_guest_identity():
+                return jsonify({"error": "Guest identity required"}), 401
+            topic = _fetch_topic(topic_id)
+            if not topic or not _guest_can_access_topic(topic):
+                return jsonify({"error": "Exercise topic not found"}), 404
+            data = _legacy_session_data(None, topic_id, set_number)
+            if data is None:
+                return jsonify({"error": "Exercise topic not found"}), 404
+            return jsonify(_session_bootstrap_payload(data)), 200
+
         try:
             data = _rpc_json_value(
                 "get_exercise_bank_v2_session",
@@ -1325,9 +1375,11 @@ def advance_topic_set(topic_id: int, set_number: int):
     methods=["POST"],
 )
 def submit_question_answer(question_id: int):
-    user_id, auth_error = _authenticated_user_id()
+    user_id, auth_error = _optional_authenticated_user_id()
     if auth_error:
         return auth_error
+    if user_id is None and not _has_valid_guest_identity():
+        return jsonify({"error": "Guest identity required"}), 401
 
     payload = request.get_json(silent=True)
     if not isinstance(payload, dict) or "user_answer" not in payload:
@@ -1342,6 +1394,9 @@ def submit_question_answer(question_id: int):
         if not context:
             return jsonify({"error": "Exercise question not found"}), 404
         topic, exercise, question = context
+        if user_id is None:
+            if not _guest_can_access_topic(topic):
+                return jsonify({"error": "Exercise question not found"}), 404
 
         try:
             result = _grade_question(exercise, question, user_answer)
@@ -1355,12 +1410,14 @@ def submit_question_answer(question_id: int):
             return jsonify({"error": "Unable to grade this answer right now"}), 502
 
         requires_rewrite = result.get("requires_rewrite") is True
-        progress = {} if requires_rewrite else _persist_evaluation(
-            user_id=user_id,
-            question_id=question_id,
-            user_answer_raw=user_answer_raw,
-            result=result,
-        )
+        progress = {}
+        if user_id is not None and not requires_rewrite:
+            progress = _persist_evaluation(
+                user_id=user_id,
+                question_id=question_id,
+                user_answer_raw=user_answer_raw,
+                result=result,
+            )
         return jsonify(
             {
                 "question_id": question_id,

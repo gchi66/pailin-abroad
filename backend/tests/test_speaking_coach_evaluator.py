@@ -1720,6 +1720,73 @@ def test_low_confidence_open_answer_is_unclear_without_gemini(monkeypatch):
     assert gemini_called is False
 
 
+def test_weak_open_transcript_from_non_speech_is_unclear_without_gemini(monkeypatch):
+    azure = _azure_result(
+        transcript="The lawn is famous.",
+        confidence=0.49,
+        words=[
+            AzureWordAssessment(
+                word="lawn",
+                accuracy_score=40,
+                error_type="Mispronunciation",
+                phonemes=[
+                    {
+                        "Phoneme": "ɹ",
+                        "PronunciationAssessment": {
+                            "AccuracyScore": 20,
+                            "NBestPhonemes": [
+                                {"Phoneme": "l", "Score": 95},
+                                {"Phoneme": "ɹ", "Score": 20},
+                            ],
+                        },
+                    }
+                ],
+            )
+        ],
+    )
+    gemini_called = False
+
+    def unexpected_gemini(**_kwargs):
+        nonlocal gemini_called
+        gemini_called = True
+
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", unexpected_gemini)
+    result = _evaluate(monkeypatch, practice_type="open", azure=azure)
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.UNCLEAR_AUDIO
+    assert result.evaluation.transcript is None
+    assert result.provider == "microsoft"
+    assert gemini_called is False
+
+
+def test_confident_open_transcript_still_reaches_language_grading(monkeypatch):
+    azure = _azure_result(
+        transcript="I'm studying English.", confidence=0.55, pronunciation=False
+    )
+    language = evaluator.LanguageEvaluation.model_validate(_language_output())
+    gemini_called = False
+
+    def fake_gemini(**_kwargs):
+        nonlocal gemini_called
+        gemini_called = True
+        return evaluator.GeminiLanguageResult(
+            evaluation=language,
+            model="gemini-3.5-flash-lite",
+            latency_ms=30,
+            usage={"total_tokens": 20},
+            provider_metadata={"id": "interaction-1"},
+            provider_output_text=language.model_dump_json(),
+        )
+
+    monkeypatch.setattr(evaluator, "evaluate_language_with_gemini", fake_gemini)
+    result = _evaluate(monkeypatch, practice_type="open", azure=azure)
+
+    assert result.evaluation.status == evaluator.EvaluationStatus.PASS
+    assert result.evaluation.transcript == "I'm studying English."
+    assert result.provider == "microsoft+google"
+    assert gemini_called is True
+
+
 def test_low_confidence_open_answer_can_report_supported_r_to_l_transfer(monkeypatch):
     azure = _azure_result(
         transcript="I'm Satani History.",
