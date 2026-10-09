@@ -3906,6 +3906,31 @@ class GoogleDocsParser:
                 collecting_paragraph = False
                 collecting_prompt = False
                 continue
+
+            # A standalone prompt image/audio may follow CHARACTERS (or another
+            # exercise-level directive) before the first QUESTION/ITEM. Keep it
+            # with the exercise prompt instead of silently dropping it. Setting
+            # collecting_prompt also lets a following ALT-TEXT line attach to
+            # this media block.
+            if (
+                not cur_items
+                and (IMG_TAG_RE.search(line) or AUDIO_TAG_RE.search(line))
+            ):
+                line_to_add = original_line.strip()
+                if (
+                    pending_prompt_alt_text
+                    and "[img:" in line_to_add.lower()
+                    and "ALT-TEXT" not in line_to_add.upper()
+                ):
+                    line_to_add = f"{line_to_add} ALT-TEXT: {pending_prompt_alt_text}".strip()
+                    pending_prompt_alt_text = None
+                cur_ex.setdefault("_prompt_lines", []).append(line_to_add)
+                collecting_text = False
+                collecting_opts = False
+                collecting_paragraph = False
+                collecting_prompt = True
+                continue
+
             if upper_line.startswith("PARAGRAPH:"):
                 # Get the content after the colon
                 content = line.split(":", 1)[1].strip() if ":" in line else ""

@@ -83,6 +83,42 @@ def test_ordered_fill_blank_inherits_characters_width_with_historical_plus_one()
     assert item["blanks"][0]["min_len"] == 51
 
 
+def test_fill_blank_keeps_standalone_prompt_image_after_characters():
+    parser = GoogleDocsParser()
+    exercise = parser.parse_practice(
+        [
+            "TYPE: fill_blank",
+            "PRACTICE_PRIORITY: core",
+            "TITLE: PRACTICE DATES แบบฝึกหัด เรื่องวันที่",
+            "PROMPT: Look at the calendar. Enter the date as 8th, not eighth.",
+            "CHARACTERS: 5",
+            "[img:4.3_practice]",
+            "ALT-TEXT: ESL calendar with events for practicing ordinal dates.",
+            "QUESTION: 1",
+            "TEXT: Pailin has tennis practice on May ___",
+            "ANSWER: 3rd",
+        ],
+        lang="en",
+    )[0]
+
+    image_blocks = [
+        block for block in exercise["prompt_blocks"]
+        if block.get("type") == "image"
+    ]
+    assert image_blocks == [{
+        "type": "image",
+        "image_key": "4.3_practice",
+        "alt_text": "ESL calendar with events for practicing ordinal dates.",
+    }]
+    assert any(
+        block.get("type") == "text"
+        and block.get("text") == "Look at the calendar. Enter the date as 8th, not eighth."
+        for block in exercise["prompt_blocks"]
+    )
+    assert "image_key" not in exercise["items"][0]
+    assert "alt_text" not in exercise["items"][0]
+
+
 def test_ordered_content_is_not_added_to_quick_or_image_practices():
     parser = GoogleDocsParser()
     quick = parser.parse_practice(
