@@ -26,3 +26,7 @@ tests/*
 !tests/test_speaking_coach_azure.py
 !tests/test_speaking_coach_cleanup.py
 !tests/test_speaking_coach_thai_patterns.py
+!tests/test_lesson_translation_manifest.py
+!tests/test_lesson_translation_validator.py
+!tests/test_lesson_translation_generate.py
+!tests/test_lesson_translation_writer.py
