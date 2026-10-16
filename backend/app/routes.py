@@ -261,6 +261,52 @@ def _get_cached_pathway_lessons():
     }
 
 
+def _pathway_progress_activity_time(progress):
+    """Return the newest usable activity timestamp for one lesson row."""
+    timestamps = []
+    for key in ("last_visited_at", "completed_at", "started_at"):
+        raw_value = progress.get(key)
+        if not raw_value:
+            continue
+        try:
+            parsed_value = datetime.fromisoformat(
+                str(raw_value).replace("Z", "+00:00")
+            )
+            if parsed_value.tzinfo is None:
+                parsed_value = parsed_value.replace(tzinfo=timezone.utc)
+            timestamps.append(parsed_value.timestamp())
+        except (TypeError, ValueError):
+            continue
+
+    return max(timestamps, default=None)
+
+
+def _get_pathway_start_index(progress_rows, lesson_index_by_id):
+    """Keep the latest unfinished lesson current; advance only once completed."""
+    indexed_progress = [
+        progress
+        for progress in progress_rows
+        if progress.get("lesson_id") in lesson_index_by_id
+    ]
+    recently_active = [
+        (activity_time, progress)
+        for progress in indexed_progress
+        if (activity_time := _pathway_progress_activity_time(progress)) is not None
+    ]
+
+    if recently_active:
+        _, current_progress = max(recently_active, key=lambda item: item[0])
+        if not current_progress.get("is_completed"):
+            return lesson_index_by_id[current_progress["lesson_id"]]
+
+    completed_indexes = [
+        lesson_index_by_id[progress["lesson_id"]]
+        for progress in indexed_progress
+        if progress.get("is_completed")
+    ]
+    return max(completed_indexes, default=-1) + 1
+
+
 def _get_authenticated_user_id():
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
@@ -1471,18 +1517,18 @@ def get_pathway_lessons():
 
         user_id = user_response.user.id
 
-        # Find the highest completed lesson to determine starting point
+        # Resume the latest active lesson until it is completed. Completion is
+        # the only event that advances the pathway card to the following lesson.
         try:
-            completed_start = time.perf_counter()
-            completed_result = (
+            progress_start = time.perf_counter()
+            progress_result = (
                 supabase.table('user_lesson_progress')
-                .select('lesson_id')
+                .select('lesson_id, is_completed, started_at, completed_at, last_visited_at')
                 .eq('user_id', user_id)
-                .eq('is_completed', True)
                 .execute()
             )
-            completed_query_ms = _elapsed_ms(completed_start)
-            completed_lessons = completed_result.data if completed_result.data else []
+            progress_query_ms = _elapsed_ms(progress_start)
+            progress_rows = progress_result.data if progress_result.data else []
 
             compute_start = time.perf_counter()
             cached_lessons = _get_cached_pathway_lessons()
@@ -1491,17 +1537,10 @@ def get_pathway_lessons():
             lessons_query_ms = cached_lessons["query_ms"]
             lessons_cache_hit = cached_lessons["cache_hit"]
 
-            start_index = 0
-            if completed_lessons:
-                highest_completed_index = max(
-                    (
-                        lesson_index_by_id.get(progress.get('lesson_id'), -1)
-                        for progress in completed_lessons
-                        if progress.get('lesson_id')
-                    ),
-                    default=-1,
-                )
-                start_index = highest_completed_index + 1
+            start_index = _get_pathway_start_index(
+                progress_rows,
+                lesson_index_by_id,
+            )
 
             pathway_lessons = ordered_lessons[start_index:start_index + 5]
             compute_ms = _elapsed_ms(compute_start)
@@ -1510,8 +1549,8 @@ def get_pathway_lessons():
                 "[pathway-lessons] "
                 f"request_id={request_id} "
                 f"auth_ms={auth_ms} "
-                f"completed_query_ms={completed_query_ms} "
-                f"completed_count={len(completed_lessons)} "
+                f"progress_query_ms={progress_query_ms} "
+                f"progress_count={len(progress_rows)} "
                 f"lessons_query_ms={lessons_query_ms} "
                 f"lessons_cache_hit={lessons_cache_hit} "
                 f"lesson_count={len(ordered_lessons)} "

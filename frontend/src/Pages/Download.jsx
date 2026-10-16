@@ -98,19 +98,6 @@ export default function Download() {
           </li>
         </ul>
 
-        <div className="download-web-panel">
-          <p>เรียนได้เลย<br />บนคอมพิวเตอร์<br />ไม่ต้องดาวน์โหลด</p>
-          <a className="download-web-button" href="/lessons">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" />
-              <ellipse cx="12" cy="12" rx="4" ry="9" />
-              <path d="M3 12h18M5 6.5h14M5 17.5h14" />
-            </svg>
-            เรียนต่อบนเว็บไซต์
-          </a>
-        </div>
-        <p className="download-store-divider">หรือดาวน์โหลดแอป</p>
-
         <div className="download-store-buttons">
           <StoreButton href={APP_STORE_URL} store="ios">
             ดาวน์โหลดบน App Store

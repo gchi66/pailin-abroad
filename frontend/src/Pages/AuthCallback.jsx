@@ -1,147 +1,81 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../config/api";
-import supabaseClient from "../supabaseClient";
+import React, { useEffect, useMemo } from "react";
+import "../Styles/AuthCallback.css";
 
-const getCallbackParams = () => {
+const APP_CALLBACK_URL = "pailinabroadmobile://auth/callback";
+
+const getCallbackState = () => {
   const query = new URLSearchParams(window.location.search);
   const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const error = query.get("error") || hash.get("error");
+  const errorDescription =
+    query.get("error_description") ||
+    hash.get("error_description") ||
+    query.get("error_code") ||
+    hash.get("error_code");
+  const hasAuthenticationPayload = Boolean(
+    query.get("code") ||
+      (hash.get("access_token") && hash.get("refresh_token"))
+  );
 
   return {
-    code: query.get("code"),
-    error: query.get("error") || hash.get("error"),
-    errorDescription:
-      query.get("error_description") ||
-      hash.get("error_description") ||
-      query.get("error_code") ||
-      hash.get("error_code"),
-    accessToken: hash.get("access_token"),
-    refreshToken: hash.get("refresh_token"),
+    appUrl: `${APP_CALLBACK_URL}${window.location.search}${window.location.hash}`,
+    error: errorDescription || error || "",
+    hasAuthenticationPayload,
   };
 };
 
 const AuthCallback = () => {
-  const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const callback = useMemo(getCallbackState, []);
+  const canOpenApp = callback.hasAuthenticationPayload && !callback.error;
 
   useEffect(() => {
-    let isMounted = true;
-
-    const finishAuthentication = async () => {
-      try {
-        const callback = getCallbackParams();
-
-        if (callback.error || callback.errorDescription) {
-          throw new Error(
-            callback.errorDescription ||
-              callback.error ||
-              "This authentication link is invalid or has expired."
-          );
-        }
-
-        // Supabase initializes the client by consuming callback parameters when
-        // possible. Check that result first so a PKCE code is not exchanged
-        // twice by the client initialization and this page.
-        const { data: initializedData, error: initializedSessionError } =
-          await supabaseClient.auth.getSession();
-        if (initializedSessionError) throw initializedSessionError;
-
-        let session = initializedData.session;
-
-        if (!session && callback.code) {
-          const { data, error: exchangeError } =
-            await supabaseClient.auth.exchangeCodeForSession(callback.code);
-          if (exchangeError) throw exchangeError;
-          session = data.session;
-        } else if (
-          !session &&
-          callback.accessToken &&
-          callback.refreshToken
-        ) {
-          const { data, error: sessionError } =
-            await supabaseClient.auth.setSession({
-              access_token: callback.accessToken,
-              refresh_token: callback.refreshToken,
-          });
-          if (sessionError) throw sessionError;
-          session = data.session;
-        }
-
-        if (!session?.access_token) {
-          throw new Error(
-            "We couldn't complete authentication. The link may have expired or already been used."
-          );
-        }
-
-        const syncResponse = await fetch(`${API_BASE_URL}/api/confirm-email`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const syncData = await syncResponse.json().catch(() => ({}));
-
-        if (!syncResponse.ok) {
-          throw new Error(
-            syncData.error || "We couldn't finish setting up your account."
-          );
-        }
-
-        const { data: profile, error: profileError } = await supabaseClient
-          .from("users")
-          .select("onboarding_completed")
-          .eq("id", session.user.id)
-          .single();
-
-        if (profileError) throw profileError;
-
-        if (isMounted) {
-          navigate(profile?.onboarding_completed ? "/pathway" : "/onboarding", {
-            replace: true,
-          });
-        }
-      } catch (callbackError) {
-        console.error("Authentication callback failed:", callbackError);
-        if (isMounted) {
-          setError(
-            callbackError.message ||
-              "We couldn't complete authentication. Please request a new link."
-          );
-        }
-      }
-    };
-
-    finishAuthentication();
+    const previousTitle = document.title;
+    document.title = "Open Pailin Abroad";
 
     return () => {
-      isMounted = false;
+      document.title = previousTitle;
     };
-  }, [navigate]);
+  }, []);
 
   return (
-    <main
-      style={{
-        alignItems: "center",
-        display: "flex",
-        justifyContent: "center",
-        minHeight: "100vh",
-        padding: "2rem",
-      }}
-    >
-      <div style={{ maxWidth: "34rem", textAlign: "center" }}>
-        <h1>{error ? "Unable to continue" : "Confirming your account…"}</h1>
-        {error ? (
+    <main className="auth-handoff-page">
+      <section className="auth-handoff-card" aria-labelledby="auth-handoff-title">
+        <img
+          className="auth-handoff-logo"
+          src="/images/full-logo.webp"
+          alt="Pailin Abroad"
+        />
+
+        {canOpenApp ? (
           <>
-            <p>{error}</p>
+            <h1 id="auth-handoff-title">กลับไปที่แอป Pailin Abroad</h1>
             <p>
-              Return to the <Link to="/">home page</Link> to request a new link.
+              เปิดแอปเพื่อยืนยันบัญชีและทำขั้นตอนการสมัครให้เสร็จสมบูรณ์
             </p>
+            <p className="auth-handoff-english">
+              Open the app to confirm your account and finish setting it up.
+            </p>
+            <a className="auth-handoff-primary" href={callback.appUrl}>
+              เปิดแอป Pailin Abroad
+            </a>
           </>
         ) : (
-          <p>Please wait while we securely finish signing you in.</p>
+          <>
+            <h1 id="auth-handoff-title">ไม่สามารถเปิดลิงก์นี้ได้</h1>
+            <p>
+              {callback.error ||
+                "ลิงก์ยืนยันไม่สมบูรณ์หรือหมดอายุแล้ว กรุณาขอลิงก์ใหม่จากในแอป"}
+            </p>
+            <p className="auth-handoff-english">
+              This confirmation link is invalid or expired. Please request a new link from the app.
+            </p>
+          </>
         )}
-      </div>
+
+        <a className="auth-handoff-secondary" href="/download">
+          ดาวน์โหลดแอป
+        </a>
+      </section>
     </main>
   );
 };

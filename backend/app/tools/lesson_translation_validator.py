@@ -20,6 +20,15 @@ from .lesson_translation_manifest import _protected_tokens
 
 
 THAI_RE = re.compile(r"[\u0E00-\u0E7F]")
+WRONG_LUKE_RE = re.compile(r"ลุค")
+THAI_RESPONSE_LABEL_RE = re.compile(r"^\s*คำตอบ\s*:")
+QUOTED_ENGLISH_RE = re.compile(
+    r"(?:['‘“\"]\s*[A-Za-z][A-Za-z0-9 _-]*\s*['’”\"])", re.UNICODE
+)
+TRANSLATABLE_BRACKET_WORD_RE = re.compile(
+    r"\[([A-Za-z][A-Za-z -]*(?:-ing)?)\]"
+)
+THAI_BRACKET_WORD_RE = re.compile(r"\[[^\]]*[\u0E00-\u0E7F][^\]]*\]")
 MARKDOWN_FENCE_RE = re.compile(r"```|~~~")
 INTERNAL_MARKER_RE = re.compile(
     r"(?:<\/?(?:translate|translation|segment|style|unit)(?:\s[^>]*)?>|"
@@ -77,6 +86,44 @@ def _reconstruct_source(parts: list[dict[str, Any]]) -> str:
 
 def _translation_required(part: dict[str, Any]) -> bool:
     return part.get("recommended_action") in REQUIRED_ACTIONS
+
+
+def _source_is_question(source: str) -> bool:
+    without_trailing_audio = re.sub(
+        r"(?:\s*\[audio:[^\]]+\]\s*)+$", "", source, flags=re.IGNORECASE
+    )
+    return without_trailing_audio.rstrip().endswith("?")
+
+
+def _is_blue_style(style: dict[str, Any]) -> bool:
+    rgb = (
+        style.get("foregroundColor", {})
+        .get("color", {})
+        .get("rgbColor", {})
+    )
+    red = float(rgb.get("red", 0))
+    green = float(rgb.get("green", 0))
+    blue = float(rgb.get("blue", 0))
+    return blue >= 0.55 and blue > red and blue > green
+
+
+def _blue_source_segments(unit: dict[str, Any], part: dict[str, Any]) -> list[str]:
+    source = part.get("source_text", "")
+    return [
+        segment.get("text", "")
+        for segment in unit.get("style_segments", [])
+        if segment.get("text")
+        and segment.get("text") in source
+        and _is_blue_style(segment.get("style", {}))
+    ]
+
+
+def _translatable_bracket_words(text: str) -> list[str]:
+    return [
+        word
+        for word in TRANSLATABLE_BRACKET_WORD_RE.findall(text)
+        if word != word.upper()
+    ]
 
 
 def _validate_part(
@@ -153,7 +200,10 @@ def _validate_part(
                 message="Translated inline-style span has an invalid range, text, or style.",
             )
 
-    if not THAI_RE.search(translated):
+    # Punctuation-only content (for example an intentional standalone ellipsis
+    # in a conversation) has no linguistic content to translate. Requiring a
+    # Thai code point here would force the translator to invent text.
+    if not THAI_RE.search(translated) and re.search(r"[A-Za-z]", source):
         valid = False
         _issue(
             issues,
@@ -221,10 +271,24 @@ def _validate_part(
         )
 
     if not preserve_source:
+        def protected_span_present(span: str) -> bool:
+            if span in translated:
+                return True
+            # Grammar formulas remain English, but ordinary placeholder words
+            # inside brackets are intentionally localized (for example
+            # [someone] -> [ใครบางคน]).
+            chunks = re.split(r"\[[^\]]+\]", span)
+            if len(chunks) == 1:
+                return False
+            pattern = r"\[[^\]]*[\u0E00-\u0E7F][^\]]*\]".join(
+                re.escape(chunk) for chunk in chunks
+            )
+            return re.search(pattern, translated) is not None
+
         missing_english = [
             span
             for span in part.get("protected_english_spans", [])
-            if span not in translated
+            if not protected_span_present(span)
         ]
         if missing_english:
             valid = False
@@ -390,6 +454,110 @@ def validate_manifest(
             if _translation_required(part):
                 required_parts += 1
             part_valid = _validate_part(part, unit_id=unit_id, issues=issues)
+            translated = part.get("translated_text")
+            if isinstance(translated, str) and QUOTED_ENGLISH_RE.search(translated):
+                part_valid = False
+                _issue(
+                    issues,
+                    severity="error",
+                    code="quoted-english-term",
+                    unit_id=unit_id,
+                    part_id=part.get("part_id"),
+                    message="Retained English teaching words in Thai text must not be wrapped in quotation marks.",
+                )
+            if isinstance(translated, str) and WRONG_LUKE_RE.search(translated):
+                part_valid = False
+                _issue(
+                    issues,
+                    severity="error",
+                    code="luke-name-spelling",
+                    unit_id=unit_id,
+                    part_id=part.get("part_id"),
+                    message="Luke must be spelled ลูค in Thai, never ลุค.",
+                )
+            if (
+                isinstance(translated, str)
+                and _source_is_question(part.get("source_text", ""))
+                and not translated.rstrip().endswith("?")
+            ):
+                part_valid = False
+                _issue(
+                    issues,
+                    severity="error",
+                    code="thai-question-mark-missing",
+                    unit_id=unit_id,
+                    part_id=part.get("part_id"),
+                    message="Thai companion for an English question must end with '?'.",
+                )
+            if (
+                unit.get("role") == "apply_example_or_response"
+                and part.get("source_text", "").lstrip().upper().startswith("RESPONSE:")
+                and isinstance(translated, str)
+                and THAI_RESPONSE_LABEL_RE.match(translated)
+            ):
+                part_valid = False
+                _issue(
+                    issues,
+                    severity="error",
+                    code="duplicated-thai-response-label",
+                    unit_id=unit_id,
+                    part_id=part.get("part_id"),
+                    message="Thai companion beneath RESPONSE: must omit คำตอบ:.",
+                )
+            if (
+                unit.get("section") in {"UNDERSTAND", "EXTRA TIPS", "COMMON MISTAKES"}
+                and isinstance(translated, str)
+            ):
+                bracket_words = _translatable_bracket_words(part.get("source_text", ""))
+                untranslated_brackets = _translatable_bracket_words(translated)
+                if bracket_words and (
+                    untranslated_brackets
+                    or len(THAI_BRACKET_WORD_RE.findall(translated)) < len(bracket_words)
+                ):
+                    part_valid = False
+                    _issue(
+                        issues,
+                        severity="error",
+                        code="bracket-word-not-translated",
+                        unit_id=unit_id,
+                        part_id=part.get("part_id"),
+                        message="Ordinary English words inside brackets must be translated to Thai while retaining the brackets.",
+                    )
+            if (
+                unit.get("role") == "phrase_term_audio"
+                and isinstance(translated, str)
+                and "/" in translated
+            ):
+                part_valid = False
+                _issue(
+                    issues,
+                    severity="error",
+                    code="phrase-definition-slash",
+                    unit_id=unit_id,
+                    part_id=part.get("part_id"),
+                    message="Multiple Thai phrase definitions must use commas, not slash separators.",
+                )
+            if unit.get("role") in {"apply_example_or_response", "phrase_example"}:
+                blue_segments = _blue_source_segments(unit, part)
+                mapped_blue_spans = [
+                    span
+                    for span in part.get("translated_style_spans", [])
+                    if _is_blue_style(span.get("style", {}))
+                    and THAI_RE.search(span.get("text", ""))
+                ]
+                if blue_segments and len(mapped_blue_spans) < len(blue_segments):
+                    part_valid = False
+                    _issue(
+                        issues,
+                        severity="error",
+                        code="blue-thai-style-missing",
+                        unit_id=unit_id,
+                        part_id=part.get("part_id"),
+                        message=(
+                            "Each blue English teaching span requires a blue Thai-equivalent "
+                            f"translated_style_span; source spans={blue_segments!r}."
+                        ),
+                    )
             if _translation_required(part) and part_valid:
                 completed_parts += 1
             if not part_valid:

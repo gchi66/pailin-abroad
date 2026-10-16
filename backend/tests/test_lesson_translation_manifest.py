@@ -1,5 +1,6 @@
 from app.tools.lesson_translation_manifest import (
     _protected_english_spans,
+    _protected_tokens,
     build_manifest,
     render_report,
 )
@@ -114,6 +115,41 @@ def test_header_image_marker_is_removed_but_regular_image_marker_is_preserved():
         }
     ]
     assert manifest["summary"]["header_image_removal_count"] == 1
+
+
+def test_header_marker_variants_and_short_focus_are_removed():
+    doc = _doc(
+        _paragraph("LESSON 14.1: Test", 1, style="HEADING_3"),
+        _paragraph("[header:img]", 30),
+        _paragraph("FOCUS", 50, style="HEADING_4"),
+        _paragraph("Main focus wording", 70),
+        _paragraph("SHORT_FOCUS: internal metadata", 100),
+    )
+
+    manifest = build_manifest(doc)
+    units = {unit["source_text"]: unit for unit in manifest["units"]}
+
+    assert units["[header:img]"]["role"] == "lesson_banner_marker"
+    assert units["SHORT_FOCUS: internal metadata"]["role"] == "short_focus"
+    assert [removal["section"] for removal in manifest["planned_removals"]] == [
+        "HEADER_IMAGE",
+        "SHORT_FOCUS",
+    ]
+
+
+def test_understand_all_caps_headers_are_bilingual_inline_roles():
+    doc = _doc(
+        _paragraph("LESSON 14.1: Test", 1, style="HEADING_3"),
+        _paragraph("UNDERSTAND", 30, style="HEADING_4"),
+        _paragraph("LESSON FOCUS", 50),
+        _paragraph("DISCOURSE MARKERS", 80),
+    )
+
+    units = {unit["source_text"]: unit for unit in build_manifest(doc)["units"]}
+
+    for source in ("LESSON FOCUS", "DISCOURSE MARKERS"):
+        assert units[source]["recommended_action"] == "bilingual"
+        assert units[source]["role"] == "instructional_subheading"
 
 
 def test_table_cell_units_inherit_current_lesson_and_section():
@@ -237,6 +273,35 @@ def test_practice_text_translates_without_repeating_directive_or_dialogue_label(
         "B: ",
         "Not yet.",
     ]
+
+
+def test_standalone_practice_text_directive_stays_english_only():
+    doc = _doc(
+        _paragraph("LESSON 14.1: Test", 1, style="HEADING_3"),
+        _paragraph("PRACTICE", 30, style="HEADING_4"),
+        _paragraph("TEXT:", 50),
+        _paragraph("A: Did you call?", 60),
+    )
+
+    units = build_manifest(doc)["units"]
+    text = next(unit for unit in units if unit["source_text"] == "TEXT:")
+
+    assert text["role"] == "practice_directive_text"
+    assert text["recommended_action"] == "preserve"
+    assert text["translation_parts"][0]["recommended_action"] == "preserve"
+
+
+def test_practice_speaker_line_containing_only_a_blank_is_preserved():
+    doc = _doc(
+        _paragraph("LESSON 14.1: Test", 1, style="HEADING_3"),
+        _paragraph("PRACTICE", 30, style="HEADING_4"),
+        _paragraph("B: ___", 50),
+    )
+
+    unit = next(unit for unit in build_manifest(doc)["units"] if unit["source_text"] == "B: ___")
+
+    assert unit["recommended_action"] == "preserve"
+    assert unit["translation_parts"][0]["recommended_action"] == "preserve"
 
 
 def test_phrase_term_gloss_is_inserted_before_audio_token():
@@ -381,3 +446,66 @@ def test_protected_english_span_handles_curly_apostrophes_inside_quote():
     )
 
     assert spans == ["I’m not exaggerating."]
+
+
+def test_lesson_focus_protects_term_without_surrounding_quote_marks():
+    spans = _protected_english_spans(
+        "How to use the phrase ‘I wish’",
+        role="lesson_focus",
+        action="localize",
+    )
+
+    assert spans == ["I wish"]
+
+    straight = _protected_english_spans(
+        "How to use the phrase 'I wish'",
+        role="lesson_focus",
+        action="localize",
+    )
+    assert straight == ["I wish"]
+
+    contraction = _protected_english_spans(
+        "How to say you're 'used to' something",
+        role="lesson_focus",
+        action="localize",
+    )
+    assert contraction == ["used to"]
+
+    mixed_quotes = _protected_english_spans(
+        "How to use the past tense modal verbs 'should’ve · could’ve · would’ve’",
+        role="lesson_focus",
+        action="localize",
+    )
+    assert mixed_quotes == ["should’ve · could’ve · would’ve"]
+
+
+def test_plain_bracket_grammar_words_translate_but_machine_markers_stay_exact():
+    tokens = _protected_tokens(
+        "must be [adjective] [audio:test] [cm_14.3_1] [SCM] [X] [-]"
+    )
+    protected = [token["text"] for token in tokens]
+
+    assert "[adjective]" not in protected
+    assert "[audio:test]" in protected
+    assert "[cm_14.3_1]" in protected
+    assert "[SCM]" in protected
+    assert "[X]" in protected
+    assert "[-]" in protected
+
+
+def test_common_mistake_asset_title_is_preserved_and_culture_caps_are_bilingual():
+    doc = _doc(
+        _paragraph("LESSON 14.3: Test", 1, style="HEADING_3"),
+        _paragraph("COMMON MISTAKES", 30, style="HEADING_4"),
+        _paragraph("I MUST GO NOW [cm_14.3_1]", 60),
+        _paragraph("CULTURE NOTE", 110, style="HEADING_4"),
+        _paragraph("AMERICAN SMALL TALK", 140),
+    )
+    units = build_manifest(doc)["units"]
+    title = next(unit for unit in units if "[cm_" in unit["source_text"])
+    culture = next(unit for unit in units if unit["source_text"] == "AMERICAN SMALL TALK")
+
+    assert title["role"] == "common_mistake_title"
+    assert title["recommended_action"] == "preserve"
+    assert culture["role"] == "culture_subheading"
+    assert culture["recommended_action"] == "bilingual"

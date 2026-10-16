@@ -158,6 +158,53 @@ def test_completed_lessons_keeps_nested_lesson_payload(monkeypatch, capsys):
     assert "[completed-lessons]" in capsys.readouterr().out
 
 
+def test_pathway_keeps_latest_unfinished_lesson_as_current():
+    lesson_indexes = {"lesson-1": 0, "lesson-2": 1, "lesson-3": 2}
+    progress_rows = [
+        {
+            "lesson_id": "lesson-1",
+            "is_completed": True,
+            "completed_at": "2026-10-15T10:00:00Z",
+        },
+        {
+            "lesson_id": "lesson-2",
+            "is_completed": False,
+            "last_visited_at": "2026-10-16T10:00:00Z",
+        },
+    ]
+
+    assert routes_module._get_pathway_start_index(progress_rows, lesson_indexes) == 1
+
+
+def test_pathway_advances_after_latest_lesson_is_completed():
+    lesson_indexes = {"lesson-1": 0, "lesson-2": 1, "lesson-3": 2}
+    progress_rows = [
+        {
+            "lesson_id": "lesson-1",
+            "is_completed": True,
+            "completed_at": "2026-10-15T10:00:00Z",
+        },
+        {
+            "lesson_id": "lesson-2",
+            "is_completed": True,
+            "last_visited_at": "2026-10-16T09:00:00Z",
+            "completed_at": "2026-10-16T10:00:00Z",
+        },
+    ]
+
+    assert routes_module._get_pathway_start_index(progress_rows, lesson_indexes) == 2
+
+
+def test_pathway_falls_back_to_highest_completed_lesson_without_activity():
+    lesson_indexes = {"lesson-1": 0, "lesson-2": 1, "lesson-3": 2}
+    progress_rows = [
+        {"lesson_id": "lesson-1", "is_completed": True},
+        {"lesson_id": "lesson-2", "is_completed": True},
+    ]
+
+    assert routes_module._get_pathway_start_index(progress_rows, lesson_indexes) == 2
+
+
 def test_daily_streak_keeps_response_contract(monkeypatch, capsys):
     today = datetime.now(ZoneInfo("Asia/Bangkok")).date().isoformat()
     fake_supabase = FakeSupabase({})

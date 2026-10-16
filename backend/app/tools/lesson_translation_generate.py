@@ -21,7 +21,7 @@ from openai import OpenAI
 
 REQUIRED_ACTIONS = {"translate", "localize", "bilingual"}
 DEFAULT_MODEL = os.getenv("LESSON_TRANSLATION_MODEL", "gpt-4o")
-PROMPT_VERSION = "lesson-thai-translation-v1"
+PROMPT_VERSION = "lesson-thai-translation-v3"
 
 SYSTEM_PROMPT = """You are translating English-learning lesson material for Thai learners.
 Return only the structured translations requested by the response schema.
@@ -45,7 +45,22 @@ For translate/localize items, reproduce every protected token exactly and once. 
 may include audio markers, blanks, URLs, image keys, or parser directives. Never wrap
 output in Markdown, XML, labels, or commentary. Preserve exercise labels, speaker
 identity, and placeholders when they are meaningful. Use established Thai character
-names where applicable: Pailin = ไพลิน, Chloe = โคลอี้, Tyler = ไทเลอร์.
+names where applicable: Pailin = ไพลิน, Chloe = โคลอี้, Tyler = ไทเลอร์,
+Luke = ลูค. Never spell Luke as ลุค.
+
+Thai questions must end with a question mark whenever the English source is a
+question. In APPLY response companions, omit a Thai label such as "คำตอบ:" because
+the retained English line already contains RESPONSE:. Keep PRACTICE PROMPT wording
+short and concise while preserving its teaching instruction.
+
+Do not put quotation marks around retained English teaching words in Thai text.
+In UNDERSTAND, EXTRA TIPS, and COMMON MISTAKES, translate ordinary grammar words
+inside square brackets into Thai while keeping the brackets, for example
+[adjective] -> [คำคุณศัพท์]. Never alter machine markers such as [cm_...], [SCM],
+[audio:...], [X], or [-]. COMMON MISTAKES title lines containing [cm_...] or [SCM]
+are source-only and receive no Thai translation. CULTURE NOTE all-caps English
+headers remain English and receive Thai on the same line. In PHRASES & VERBS,
+separate multiple Thai definitions with commas, never a slash.
 """
 
 

@@ -1,148 +1,40 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import "./Styles/App.css";
-import Navbar from "./Components/Navbar";
-import Home from "./Pages/Home";
-import AboutPage from "./Pages/AboutPage";
-import LessonsIndex from "./Pages/LessonsIndex";
-import FreeLessonsIndex from "./Pages/FreeLessonsIndex";
-import TryLessons from "./Pages/TryLessons";
-import Lesson from "./Pages/Lesson";
-import Resources from "./Pages/Resources";
-import TopicLibrary from "./Pages/TopicLibrary";
-import TopicDetail from "./Pages/TopicDetail";
-import ExerciseBank from "./Pages/ExerciseBank";
-import ExerciseSection from "./Pages/ExerciseSection";
-import ExerciseBankSession from "./Pages/ExerciseBankSession";
-import Contact from "./Pages/Contact";
-import FAQPage from "./Pages/FAQPage";
-import Modal from "./Components/Modal";
-import AccountSettings from "./Pages/AccountSettings";
-import Membership from "./Pages/Membership";
-import MyPathway from "./Pages/MyPathway";
-import EmailConfirmationPage from "./Pages/EmailConfirmationPage";
-import Onboarding from "./Pages/Onboarding";
-import Checkout from "./Pages/Checkout";
-import PaymentSuccess from "./Pages/PaymentSuccess";
-import VerifyEmail from "./Pages/VerifyEmail";
-import AuthCallback from "./Pages/AuthCallback";
-import SignUpPage from "./Pages/SignUpPage";
-import StatsPage from "./Pages/StatsPage";
-import Terms from "./Pages/Terms";
-import Privacy from "./Pages/Privacy";
-import DeleteAccount from "./Pages/DeleteAccount";
-import SurveyRedirect from "./Pages/SurveyRedirect";
-import Download from "./Pages/Download";
-import Footer from "./Components/Footer";
-import ProtectedRoute from "./Components/ProtectedRoute";
-import LoginModal from "./Components/LoginModal";
-import SignUpModal from "./Components/SignUpModal";
-import ScrollToTop from "./Components/ScrollToTop";
 import Analytics from "./Components/Analytics";
-import OnboardingGate from "./Components/OnboardingGate";
-import GetAppBottomSheet from "./Components/GetAppBottomSheet";
-import { AuthProvider } from "./AuthContext";
-
-// ⬇️ import the provider
+import ScrollToTop from "./Components/ScrollToTop";
+import AuthCallback from "./Pages/AuthCallback";
+import Contact from "./Pages/Contact";
+import DeleteAccount from "./Pages/DeleteAccount";
+import Download from "./Pages/Download";
+import Privacy from "./Pages/Privacy";
+import SurveyRedirect from "./Pages/SurveyRedirect";
+import Terms from "./Pages/Terms";
 import { UiLangProvider } from "./ui-lang/UiLangContext";
-import { StickyLessonToggleProvider } from "./StickyLessonToggleContext";
 
 function App() {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isSignupModalOpen, setSignupModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ isOpen: false, title: "", message: "" });
-
-  const openModal = (title, message) => setModalContent({ isOpen: true, title, message });
-  const closeModal = () => setModalContent({ isOpen: false, title: "", message: "" });
-  const toggleLoginModal = () => setIsLoginModalOpen((prev) => !prev);
-  const toggleSignupModal = () => setSignupModalOpen((prev) => !prev);
-
   return (
-    <AuthProvider>
-      <Router>
-        {/* ⬇️ UiLangProvider must be inside the Router */}
-        <UiLangProvider>
-          <StickyLessonToggleProvider>
-            <ScrollToTop />
-            <Analytics />
-            <Routes>
-            {/* Full-screen onboarding route - isolated from main app structure */}
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/email-confirmation" element={<EmailConfirmationPage />} />
-            <Route path="/survey" element={<SurveyRedirect />} />
-            {/* Dedicated store handoff: intentionally bypasses the site shell and app prompt. */}
-            <Route path="/download" element={<Download />} />
-            <Route path="/reset-password" element={<div style={{ padding: '2rem', textAlign: 'center' }}>
-              <h2>Password Reset</h2>
-              <p>This page will handle password reset functionality.</p>
-              <p>You'll be able to set a new password here after clicking the reset link in your email.</p>
-            </div>} />
+    <Router>
+      <UiLangProvider>
+        <ScrollToTop />
+        <Analytics />
+        <Routes>
+          {/* Mobile authentication bridge. The browser must not consume its credentials. */}
+          <Route path="/auth/callback" element={<AuthCallback />} />
 
-            {/* Main app routes with navbar and footer */}
-            <Route path="/*" element={
-              <OnboardingGate>
-                <>
-                  <Navbar
-                    toggleLoginModal={toggleLoginModal}
-                    toggleSignupModal={toggleSignupModal}
-                  />
-                  <LoginModal isOpen={isLoginModalOpen} onClose={toggleLoginModal} toggleSignupModal={toggleSignupModal} />
-                  <SignUpModal isOpen={isSignupModalOpen} onClose={toggleSignupModal} toggleLoginModal={toggleLoginModal} />
-                  <Modal
-                    isOpen={modalContent.isOpen}
-                    title={modalContent.title}
-                    message={modalContent.message}
-                    onClose={closeModal}
-                  />
-                  <Routes>
-                    <Route path="/" element={<Home toggleSignupModal={toggleSignupModal} />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/lessons" element={<LessonsIndex />} />
-                    <Route path="/free-lessons" element={<FreeLessonsIndex />} />
-                    <Route path="/try-lessons" element={<TryLessons />} />
-                    <Route
-                      path="/lesson/:id"
-                      element={<Lesson toggleLoginModal={toggleLoginModal} toggleSignupModal={toggleSignupModal} />}
-                    />
-                    <Route path="/pathway" element={<MyPathway />} />
-                    <Route path="/stats" element={<StatsPage />} />
-                    <Route path="/resources" element={<Resources />} />
-                    <Route path="/topic-library" element={<TopicLibrary toggleSignupModal={toggleSignupModal} />} />
-                    <Route path="/topic-library/:slug" element={<TopicDetail />} />
-                    <Route path="/exercise-bank" element={<ExerciseBank />} />
-                    <Route path="/exercise-bank/topics/:topicId" element={<ExerciseBankSession />} />
-                    <Route path="/exercise-bank/topics/:topicId/sets/:setNumber" element={<ExerciseBankSession />} />
-                    <Route path="/exercise-bank/:categorySlug/:sectionSlug" element={<ExerciseSection />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/faq" element={<FAQPage />} />
-                    <Route path="/membership" element={<Membership />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/payment-success" element={<PaymentSuccess />} />
-                    <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/terms" element={<Terms />} />
-                    <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/delete-account" element={<DeleteAccount />} />
-                    <Route
-                      path="/profile"
-                      element={
-                        <ProtectedRoute openModal={openModal}>
-                          <AccountSettings />
-                        </ProtectedRoute>
-                      }
-                    />
-                  </Routes>
-                  <GetAppBottomSheet />
-                  <Footer />
-                </>
-              </OnboardingGate>
-            } />
-          </Routes>
-          </StickyLessonToggleProvider>
-        </UiLangProvider>
-      </Router>
-    </AuthProvider>
+          {/* Public app handoff, support, and compliance pages. */}
+          <Route path="/download" element={<Download />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
+          <Route path="/survey" element={<SurveyRedirect />} />
+
+          {/* The legacy website remains in source but is no longer publicly routed. */}
+          <Route path="*" element={<Navigate to="/download" replace />} />
+        </Routes>
+      </UiLangProvider>
+    </Router>
   );
 }
 

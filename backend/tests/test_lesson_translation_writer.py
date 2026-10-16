@@ -14,12 +14,23 @@ from app.tools.lesson_translation_writer import (
 def test_bulleted_phrase_companions_use_soft_break_and_term_gloss_is_inline():
     assert _bilingual_prefix(
         {"role": "phrase_example", "paragraph": {"bullet": {"listId": "list-1"}}},
-        {"separator_after": ""},
+        {"source_text": "Example. [audio:phrase_2]", "separator_after": ""},
     ) == "\u000b"
+
+
+def test_culture_subheading_translation_is_inline():
+    assert _bilingual_prefix(
+        {"role": "culture_subheading", "paragraph": {}},
+        {"separator_after": ""},
+    ) == " "
     assert _bilingual_prefix(
         {"role": "phrase_term_audio", "paragraph": {"bullet": {"listId": "list-1"}}},
         {"separator_after": ""},
     ) == " "
+    assert _bilingual_prefix(
+        {"role": "practice_content", "paragraph": {"bullet": {"listId": "list-1"}}},
+        {"source_text": "Listen. [audio:practice_1]", "separator_after": ""},
+    ) == "\u000b"
 
 
 def _paragraph(text, start, *, style="NORMAL_TEXT"):

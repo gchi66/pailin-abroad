@@ -4,7 +4,7 @@ from app.tools.lesson_translation_manifest import build_manifest
 from app.tools.lesson_translation_validator import validate_manifest
 
 
-def _paragraph(text, start, *, style="NORMAL_TEXT"):
+def _paragraph(text, start, *, style="NORMAL_TEXT", text_style=None):
     return {
         "startIndex": start,
         "endIndex": start + len(text) + 1,
@@ -13,7 +13,7 @@ def _paragraph(text, start, *, style="NORMAL_TEXT"):
                 {
                     "startIndex": start,
                     "endIndex": start + len(text) + 1,
-                    "textRun": {"content": text + "\n", "textStyle": {}},
+                    "textRun": {"content": text + "\n", "textStyle": text_style or {}},
                 }
             ],
             "paragraphStyle": {"namedStyleType": style},
@@ -33,7 +33,7 @@ def _source_manifest():
                 _paragraph("CONVERSATION", 100),
                 _paragraph("Pailin: Keep this. [audio:test_1]", 120),
                 _paragraph("UNDERSTAND", 180, style="HEADING_4"),
-                _paragraph("Use [verb] in this structure.", 200),
+                _paragraph("Use [verb] [X] in this structure.", 200),
                 _paragraph("PREPARE", 250, style="HEADING_4"),
                 _paragraph("Word: ความหมาย", 270),
             ]
@@ -49,7 +49,7 @@ def _complete(source):
         "lesson_heading": "ชื่อบทเรียนภาษาไทย",
         "lesson_backstory": "เรื่องราวเบื้องหลังภาษาไทย",
         "conversation_line": "ไพลิน: เก็บประโยคนี้ไว้",
-        "instructional_explanation": "ใช้ [verb] ในโครงสร้างนี้",
+        "instructional_explanation": "ใช้ [คำกริยา] [X] ในโครงสร้างนี้",
     }
     for unit in completed["units"]:
         if unit["role"] in translations:
@@ -215,3 +215,98 @@ def test_localized_lesson_focus_must_retain_named_english_target():
     result = validate_manifest(completed, source_manifest=source)
 
     assert any(issue["code"] == "protected-english-missing" for issue in result["issues"])
+
+
+def test_reviewed_name_question_and_apply_response_rules_are_enforced():
+    doc = {
+        "documentId": "destination-copy",
+        "title": "Test copy",
+        "body": {
+            "content": [
+                _paragraph("LESSON 14.1: Test", 1, style="HEADING_3"),
+                _paragraph("CONVERSATION", 40, style="HEADING_4"),
+                _paragraph("Luke: Are you ready? [audio:q_1]", 60),
+                _paragraph("APPLY", 110, style="HEADING_4"),
+                _paragraph("RESPONSE: I think so.", 130),
+            ]
+        },
+        "lists": {},
+    }
+    source = build_manifest(doc)
+    completed = copy.deepcopy(source)
+    for unit in completed["units"]:
+        for part in unit["translation_parts"]:
+            if part["recommended_action"] not in {"translate", "localize", "bilingual"}:
+                continue
+            if unit["role"] == "lesson_heading":
+                part["translated_text"] = "ทดสอบ"
+            elif unit["role"] == "conversation_line":
+                part["translated_text"] = "ลุค: พร้อมหรือยัง"
+            elif unit["role"] == "apply_example_or_response":
+                part["translated_text"] = "คำตอบ: ฉันคิดว่าใช่"
+        if any(
+            part["recommended_action"] in {"translate", "localize", "bilingual"}
+            for part in unit["translation_parts"]
+        ):
+            unit["translation"]["status"] = "complete"
+
+    result = validate_manifest(completed, source_manifest=source)
+    codes = {issue["code"] for issue in result["issues"]}
+
+    assert "luke-name-spelling" in codes
+    assert "thai-question-mark-missing" in codes
+    assert "duplicated-thai-response-label" in codes
+
+
+def test_reviewed_quote_bracket_definition_and_blue_mapping_rules_are_enforced():
+    blue = {
+        "foregroundColor": {
+            "color": {"rgbColor": {"red": 0.05, "green": 0.3, "blue": 0.8}}
+        }
+    }
+    doc = {
+        "documentId": "destination-copy",
+        "title": "Test copy",
+        "body": {
+            "content": [
+                _paragraph("LESSON 14.3: Test", 1, style="HEADING_3"),
+                _paragraph("UNDERSTAND", 40, style="HEADING_4"),
+                _paragraph("must be [adjective]", 60),
+                _paragraph("PHRASES & VERBS", 100, style="HEADING_4"),
+                _paragraph("Deal / agree [audio:phrases_verbs_deal_1]", 130),
+                _paragraph(
+                    "That sounds like a deal. [audio:deal_2]",
+                    180,
+                    text_style=blue,
+                ),
+            ]
+        },
+        "lists": {},
+    }
+    source = build_manifest(doc)
+    completed = copy.deepcopy(source)
+    for unit in completed["units"]:
+        for part in unit["translation_parts"]:
+            if part["recommended_action"] not in {"translate", "localize", "bilingual"}:
+                continue
+            if unit["role"] == "lesson_heading":
+                part["translated_text"] = "ทดสอบ"
+            elif unit["role"] == "instructional_explanation":
+                part["translated_text"] = "must be [adjective] ใช้บอกสภาพ"
+            elif unit["role"] == "phrase_term_audio":
+                part["translated_text"] = "ตกลง / เห็นด้วย"
+            elif unit["role"] == "phrase_example":
+                part["translated_text"] = "ฟังดูเป็น 'deal' ที่ดี"
+        if any(
+            part["recommended_action"] in {"translate", "localize", "bilingual"}
+            for part in unit["translation_parts"]
+        ):
+            unit["translation"]["status"] = "complete"
+
+    result = validate_manifest(completed, source_manifest=source)
+    codes = {issue["code"] for issue in result["issues"]}
+
+    assert "bracket-word-not-translated" in codes
+    assert "phrase-definition-slash" in codes
+    assert "quoted-english-term" in codes
+    assert "blue-thai-style-missing" in codes

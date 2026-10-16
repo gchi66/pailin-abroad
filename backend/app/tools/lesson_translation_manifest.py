@@ -28,6 +28,10 @@ from typing import Any, Iterable
 
 SCHEMA_VERSION = 1
 
+HEADER_IMAGE_RE = re.compile(
+    r"\[header(?:_|:)img(?::[^\]]*)?\]", re.IGNORECASE
+)
+
 LESSON_RE = re.compile(r"^\s*LESSON\s+(\d+)\.(\d+)\b", re.IGNORECASE)
 CHECKPOINT_RE = re.compile(r"^\s*CHECKPOINT\s+(\d+)\b", re.IGNORECASE)
 LESSON_TITLE_PREFIX_RE = re.compile(
@@ -85,7 +89,8 @@ SECTION_HEADERS = {
 TOKEN_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("audio", re.compile(r"\[audio:\s*[^\]]+\]", re.IGNORECASE)),
     ("image", re.compile(r"\[img:\s*[^\]]+\]", re.IGNORECASE)),
-    ("header_image", re.compile(r"\[header_img:\s*[^\]]+\]", re.IGNORECASE)),
+    ("header_image", HEADER_IMAGE_RE),
+    ("correctness_marker", re.compile(r"\[(?:X|\+|-|✓|✗)\]", re.IGNORECASE)),
     ("bracket_token", re.compile(r"\[[A-Za-z_][^\]\n]{0,100}\]")),
     ("blank", re.compile(r"_{2,}")),
     ("url", re.compile(r"https?://[^\s<>()]+")),
@@ -94,6 +99,18 @@ TOKEN_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 
 def _normalized_header(text: str) -> str:
     return " ".join(text.strip().rstrip(":").upper().split())
+
+
+def _is_all_caps_english_header(text: str) -> bool:
+    stripped = text.strip()
+    letters = re.findall(r"[A-Za-z]", stripped)
+    return (
+        bool(letters)
+        and len(stripped) <= 120
+        and stripped == stripped.upper()
+        and "[audio:" not in stripped.lower()
+        and not DIRECTIVE_RE.match(stripped)
+    )
 
 
 def _lesson_id(text: str) -> str | None:
@@ -191,6 +208,8 @@ def _protected_tokens(text: str) -> list[dict[str, Any]]:
             span = match.span()
             if span in occupied:
                 continue
+            if kind == "bracket_token" and _is_translatable_bracket_token(match.group(0)):
+                continue
             occupied.add(span)
             tokens.append(
                 {
@@ -218,12 +237,45 @@ def _protected_tokens(text: str) -> list[dict[str, Any]]:
 
 
 QUOTED_ENGLISH_PATTERNS = (
+    # Google Docs text sometimes mixes straight and curly quote marks. This
+    # pattern accepts either style while still ignoring apostrophes embedded
+    # in contractions.
+    re.compile(
+        r"(?<![A-Za-z])['‘](?=[^\n]*[A-Za-z])"
+        r"((?:[^'‘’\n]|[’'](?=[A-Za-z]))+)['’](?![A-Za-z])"
+    ),
     # A right single quote is also used as an apostrophe. Treat it as part of
     # the quoted phrase when followed by an ASCII letter (for example, I'm).
     re.compile(r"‘(?=[^‘\n]*[A-Za-z])((?:[^’\n]|’(?=[A-Za-z]))+)’"),
     re.compile(r"“(?=[^“\n]*[A-Za-z])([^”\n]+)”"),
+    # Do not treat apostrophes inside contractions (you're, don't) as an
+    # opening or closing quote.
+    re.compile(r"(?<![A-Za-z])'(?=[^'\n]*[A-Za-z])([^'\n]+)'(?![A-Za-z])"),
+    re.compile(r'"(?=[^"\n]*[A-Za-z])([^"\n]+)"'),
 )
 FOCUS_TARGET_RE = re.compile(r"^How to use\s+(.+?)\s*$", re.IGNORECASE)
+COMMON_MISTAKE_TITLE_MARKER_RE = re.compile(
+    r"\[(?:cm_[^\]]+|scm(?:_[^\]]+)?|scm)\]", re.IGNORECASE
+)
+TRANSLATABLE_BRACKET_WORD_RE = re.compile(
+    r"\[([A-Za-z][A-Za-z -]*(?:-ing)?)\]"
+)
+
+
+def _is_translatable_bracket_token(text: str) -> bool:
+    match = TRANSLATABLE_BRACKET_WORD_RE.fullmatch(text)
+    if match:
+        inner = match.group(1)
+        return inner != inner.upper()
+    # Grammar templates can mix operators or protected grammar forms with
+    # ordinary prose, for example ``[would + verb]`` or
+    # ``[main clause with ‘would’ve’]``. The prose inside those brackets is
+    # intentionally localized in Thai lesson documents, so the whole bracket
+    # must not be treated as an exact protected token.
+    if text.startswith("[") and text.endswith("]"):
+        words = re.findall(r"[A-Za-z]+", text[1:-1])
+        return any(word != word.upper() for word in words)
+    return False
 
 
 def _protected_english_spans(text: str, *, role: str, action: str) -> list[str]:
@@ -242,9 +294,19 @@ def _protected_english_spans(text: str, *, role: str, action: str) -> list[str]:
         for pattern in QUOTED_ENGLISH_PATTERNS
         for match in pattern.finditer(text)
     ]
-    spans = [span for _, span in sorted(matches)]
+    spans = [
+        span
+        for _, span in sorted(matches)
+        if not (span.startswith("[") and _is_translatable_bracket_token(span.rstrip(".")))
+    ]
     if role == "lesson_focus" and (match := FOCUS_TARGET_RE.match(text)):
-        spans.append(match.group(1))
+        focus_target = match.group(1)
+        quoted_targets = [
+            quoted.group(1)
+            for pattern in QUOTED_ENGLISH_PATTERNS
+            for quoted in pattern.finditer(focus_target)
+        ]
+        spans.extend(quoted_targets or [focus_target])
     return list(dict.fromkeys(spans))
 
 
@@ -277,13 +339,15 @@ def _classify(
         return "preserve", "section_heading", warnings
     if not lesson_id:
         return "preserve", "document_preamble", warnings
-    if re.fullmatch(r"\[header_img:[^\]]+\]", text.strip(), re.IGNORECASE):
+    if HEADER_IMAGE_RE.fullmatch(text.strip()):
         return "remove", "lesson_banner_marker", warnings
     if re.fullmatch(r"\[img:[^\]]+\]", text.strip(), re.IGNORECASE):
         return "preserve", "asset_marker", warnings
     if section == "PREPARE":
         return "remove", "prepare_content", warnings
     if section == "FOCUS":
+        if re.match(r"^\s*SHORT_FOCUS\s*:", text, re.IGNORECASE):
+            return "remove", "short_focus", warnings
         return "localize", "lesson_focus", warnings
     if section == "BACKSTORY":
         return "translate", "lesson_backstory", warnings
@@ -310,7 +374,11 @@ def _classify(
     if section in {"UNDERSTAND", "EXTRA TIPS", "COMMON MISTAKES"}:
         if section == "COMMON MISTAKES":
             warnings.append("Source may contain intentional errors; preserve every English contrast exactly.")
+            if COMMON_MISTAKE_TITLE_MARKER_RE.search(text):
+                return "preserve", "common_mistake_title", warnings
         if is_heading:
+            return "bilingual", "instructional_subheading", warnings
+        if normalized == "LESSON FOCUS" or _is_all_caps_english_header(text):
             return "bilingual", "instructional_subheading", warnings
         if SPEAKER_RE.match(text) or "[audio:" in text.lower():
             return "bilingual", "instructional_example", warnings
@@ -326,7 +394,7 @@ def _classify(
         return "localize", "phrase_explanation", warnings
 
     if section == "CULTURE NOTE":
-        if is_heading:
+        if is_heading or _is_all_caps_english_header(text):
             return "bilingual", "culture_subheading", warnings
         return "translate", "culture_explanation", warnings
 
@@ -334,6 +402,8 @@ def _classify(
         directive = DIRECTIVE_RE.match(text)
         if directive:
             label = directive.group(1).upper()
+            if label in {"TEXT", "STEM", "CORRECT"} and not text[directive.end() :].strip():
+                return "preserve", f"practice_directive_{label.lower()}", warnings
             if label in PRESERVE_DIRECTIVES:
                 return "preserve", f"practice_directive_{label.lower()}", warnings
             if label == "TITLE":
@@ -436,6 +506,24 @@ def _translation_parts(
         prefix_match = PRACTICE_TEXT_PREFIX_RE.match(text)
     elif role == "practice_content":
         prefix_match = PRACTICE_SPEAKER_PREFIX_RE.match(text)
+    if (
+        prefix_match
+        and re.fullmatch(r"\s*_{2,}\s*", text[prefix_match.end() :])
+    ):
+        return "preserve", [
+            {
+                "part_id": "p1",
+                "source_text": text,
+                "start": 0,
+                "end": len(text),
+                "separator_after": "",
+                "recommended_action": "preserve",
+                "preserve_source_in_output": True,
+                "protected_tokens": _protected_tokens(text),
+                "protected_english_spans": [],
+                "translated_text": None,
+            }
+        ]
     if prefix_match and prefix_match.end() < len(text):
         prefix = text[: prefix_match.end()]
         content = text[prefix_match.end() :]
@@ -607,6 +695,29 @@ def _header_image_removals(units: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "start_body_index": None,
                     "end_body_index_exclusive": None,
                     "reason": "Thai lesson documents omit the English document lesson banner marker.",
+                }
+            )
+    return removals
+
+
+def _short_focus_removals(units: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    removals: list[dict[str, Any]] = []
+    for unit in units:
+        if unit.get("role") != "short_focus":
+            continue
+        location = unit.get("location", {})
+        start = location.get("element_start_index")
+        end = location.get("element_end_index")
+        if isinstance(start, int) and isinstance(end, int) and start < end:
+            removals.append(
+                {
+                    "lesson_id": unit.get("lesson_id"),
+                    "section": "SHORT_FOCUS",
+                    "start_index": start,
+                    "end_index": end,
+                    "start_body_index": None,
+                    "end_body_index_exclusive": None,
+                    "reason": "Thai lesson documents omit SHORT_FOCUS metadata lines.",
                 }
             )
     return removals
@@ -791,6 +902,7 @@ def build_manifest(
         if lesson_filter is None or removal.get("lesson_id") == lesson_filter
     ]
     removals.extend(_header_image_removals(units))
+    removals.extend(_short_focus_removals(units))
     removals.sort(key=lambda removal: removal["start_index"])
     _apply_practice_option_policy(units)
 
@@ -848,6 +960,9 @@ def build_manifest(
             "header_image_removal_count": sum(
                 removal.get("section") == "HEADER_IMAGE" for removal in removals
             ),
+            "short_focus_removal_count": sum(
+                removal.get("section") == "SHORT_FOCUS" for removal in removals
+            ),
             "warning_count": warning_count,
             "validation_issue_count": len(validation_issues),
         },
@@ -897,6 +1012,7 @@ def render_report(manifest: dict[str, Any]) -> str:
             f"- Translation units: {summary['unit_count']}",
             f"- PREPARE ranges planned for removal: {summary['prepare_removal_count']}",
             f"- Header-image markers planned for removal: {summary['header_image_removal_count']}",
+            f"- SHORT_FOCUS lines planned for removal: {summary['short_focus_removal_count']}",
             f"- Classification warnings: {summary['warning_count']}",
             "",
             "### Units by recommended action",

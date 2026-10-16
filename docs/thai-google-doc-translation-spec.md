@@ -187,6 +187,9 @@ The source-only lesson banner marker immediately following the heading, such
 as `[header_img:pailin_chloe]`, MUST be removed from the Thai document. Regular
 `[img:...]` content markers are unaffected by this rule.
 
+`SHORT_FOCUS:` is source metadata and MUST be removed completely. It must not
+appear in either English or Thai in the localized document.
+
 In parsed/localized metadata:
 
 - `external_id`, `level`, `lesson_order`, and stage classification MUST remain unchanged.
@@ -234,6 +237,13 @@ General scenario instructions SHOULD be translated into Thai.
 Quoted dialogue from the lesson MUST remain in English and receive a Thai line directly beneath it.
 
 The model response MUST remain in English and receive a Thai line directly beneath it.
+Because the retained English line already contains `RESPONSE:`, its Thai
+companion MUST NOT add a redundant `คำตอบ:` label.
+
+Retained English teaching words in Thai prose MUST NOT be wrapped in straight
+or curly quotation marks. If the English quote or English response contains a
+blue teaching span, preserve blue on the English and apply the same blue style
+to the Thai words that translate it via `translated_style_spans`.
 
 Formatting applied to an English quoted line, such as cyan highlighting, MUST be retained on that English line. The Thai companion line SHOULD inherit the paragraph-level treatment seen in the established Thai documents.
 
@@ -249,6 +259,9 @@ LESSON FOCUS ประเด็นหลักของบทเรียนน�
 
 Rules:
 
+- The first authored line inside `UNDERSTAND` MUST be `LESSON FOCUS ประเด็นหลักของบทเรียนนี้`.
+- The next line MUST repeat the wording used in the lesson's `FOCUS` section, localized consistently.
+- All-uppercase English instructional headers MUST remain in English and append their Thai translation on the same line.
 - Explanatory prose becomes Thai.
 - English terms being taught remain English inside the Thai explanation.
 - English sentence structures remain English.
@@ -256,6 +269,9 @@ Rules:
 - Labels such as `Sentence structures` SHOULD be translated into Thai unless their bilingual form is part of the established visual design.
 - Grammatical annotations may be translated, but they MUST continue pointing to the same semantic part of the example.
 - Contrasts such as correct/incorrect, singular/plural, formal/informal, or intentional/accidental MUST remain explicit.
+- Translate ordinary grammar words inside square brackets to Thai while keeping
+  the brackets: `[adjective]` becomes `[คำคุณศัพท์]`. Do not translate machine
+  or correctness markers such as `[audio:...]`, `[cm_...]`, `[SCM]`, `[X]`, or `[-]`.
 
 ### 6.6 EXTRA TIP
 
@@ -265,6 +281,7 @@ Use the same basic policy as `UNDERSTAND`:
 - Preserve English target expressions and construction patterns.
 - Make instructional examples bilingual.
 - Preserve emphasis that identifies the feature being taught.
+- Apply the same bracketed grammar-word rule as `UNDERSTAND`.
 
 ### 6.7 COMMON MISTAKE
 
@@ -276,6 +293,10 @@ Rules:
 - Preserve correctness markers, contrast formatting, strikethrough, color, and emphasis.
 - Add Thai explanation or glosses without rewriting the English error into a different error.
 - Never allow the language model to “fix” intentionally incorrect English before the contrast is recorded.
+- Preserve an entire title line containing `[cm_...]` or `[SCM]` exactly as
+  authored; do not append or substitute Thai on that line.
+- Apply the bracketed grammar-word rule to ordinary placeholders without
+  changing asset or correctness markers.
 
 ### 6.8 PHRASES & VERBS
 
@@ -290,7 +311,11 @@ For each entry:
 - Add its Thai translation directly after it.
 - Preserve speaker identities and use Thai speaker names on Thai lines.
 - Preserve all audio markers exactly and keep each marker associated with its original English example.
+- Preserve blue or otherwise colored font on quoted English words and phrases; localization must not flatten styling on retained English teaching text.
+- In each Thai example translation, color the Thai words corresponding to every
+  blue English teaching span blue as well, using `translated_style_spans`.
 - Preserve list indentation and grouping so examples remain attached to the correct phrase.
+- When an entry has multiple Thai definitions, separate them with commas, not `/`.
 
 The first audio item for an entry uses a single bullet and a single line:
 
@@ -313,6 +338,8 @@ Luke: English example. [audio:...]
 ลูค: ตัวอย่างภาษาไทย
 ```
 
+The Thai spelling of Luke is always `ลูค`; `ลุค` is not permitted.
+
 Phrase headings that function as category labels may be bilingual on one line. Examples and dialogue should remain English-first/Thai-second.
 
 ### 6.9 CULTURE NOTE
@@ -321,7 +348,9 @@ Culture-note explanatory prose SHOULD be Thai-only.
 
 English cultural terms or phrases under discussion MAY remain in English with a Thai explanation, especially when the learner may encounter the English term in real life.
 
-Headings SHOULD be Thai or bilingual according to the dominant precedent for that heading level.
+All-caps English Culture Note headers MUST remain in English and append their
+Thai translation on the same line. Other headings SHOULD be Thai or bilingual
+according to the dominant precedent for that heading level.
 
 The translation SHOULD explain the intended cultural point naturally rather than reproduce English syntax literally.
 
@@ -330,6 +359,7 @@ The translation SHOULD explain the intended cultural point naturally rather than
 For each question:
 
 - Translate the prompt into Thai.
+- If the English source is a question, the Thai translation MUST end in `?`.
 - Preserve question order.
 - Preserve each option label on the English option only.
 - Preserve the answer key exactly.
@@ -356,6 +386,7 @@ Rules common to all exercise kinds:
 
 - Preserve kind, ordering, item numbering, answer keys, and scoring-relevant data.
 - Translate general directions into Thai.
+- Translate each `PROMPT:` concisely in short, direct Thai while preserving the instruction.
 - Preserve target English phrases and answer banks.
 - Keep answer-bearing English text visible.
 - Add Thai support beneath corresponding English text where established.
@@ -363,6 +394,9 @@ Rules common to all exercise kinds:
 - A Thai companion line SHOULD represent a blank with a non-answer-revealing placeholder such as an em dash when that matches existing practice.
 - Do not translate a correct English answer into the actual answer field.
 - Preserve audio and image markers.
+- When an English audio-bearing line is a bullet, add its Thai companion with a
+  soft line break inside the same list item. The Thai line MUST NOT receive its
+  own bullet, and the audio marker remains only on the English-bearing line.
 
 Additional rules by kind:
 
@@ -568,7 +602,9 @@ The planned translation MUST pass all of these checks:
 - Every URL and link target is unchanged.
 - Every table maps to the same table, row, column, and cell structure.
 - Every lesson and section boundary is accounted for.
-- `PREPARE` is the only section removed by the default policy.
+- Only content explicitly designated as source-only metadata is removed by the
+  default policy: the `PREPARE` section, lesson-banner markers such as
+  `[header_img:...]` / `[header:img]`, and `SHORT_FOCUS:`.
 - No internal unit markers or model instructions appear in final text.
 - Thai output does not contain accidental Markdown or JSON escaping.
 

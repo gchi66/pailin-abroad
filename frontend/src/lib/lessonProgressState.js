@@ -76,6 +76,7 @@ export async function saveSectionVisitProgress({
         user_id: userId,
         lesson_id: lessonId,
         started_at: now,
+        last_visited_at: now,
         last_unit_type: "section",
         last_unit_key: sectionKey,
       },
@@ -122,6 +123,7 @@ export async function saveExerciseCompletionProgress({
     user_id: userId,
     lesson_id: lessonId,
     started_at: now,
+    last_visited_at: now,
     last_unit_type: "exercise",
     last_unit_key: unitKey,
   };

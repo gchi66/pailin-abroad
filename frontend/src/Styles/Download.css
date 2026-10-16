@@ -142,23 +142,7 @@
   line-height: 1.45;
 }
 
-.download-web-panel {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding: 22px 28px;
-  border: 1px solid #85bfff;
-  border-radius: 8px;
-  background: #ebf5ff;
-}
-.download-web-panel p {
-  flex: 1;
-  margin: 0;
-  font-size: 17px;
-  font-weight: 800;
-  line-height: 1.25;
-}
-.download-web-button, .download-store-button {
+.download-store-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,49 +158,24 @@
   text-decoration: none;
   transition: transform 120ms ease, box-shadow 120ms ease;
 }
-.download-web-button {
-  flex: 1.3;
-  color: #fff;
-  background: #2860eb;
-}
 .download-store-button {
   color: #111;
   background: #fff;
 }
-.download-web-button:hover, .download-store-button:hover {
+.download-store-button:hover {
   transform: translate(1px, 1px);
   box-shadow: 2px 2px 0 #222;
-}
-.download-web-button:hover {
-  color: #fff;
-}
-.download-store-button:hover {
   color: #111;
 }
-.download-web-button:focus-visible, .download-store-button:focus-visible, .download-qr a:focus-visible {
+.download-store-button:focus-visible, .download-qr a:focus-visible {
   outline: 3px solid #0759d8;
   outline-offset: 5px;
 }
-.download-web-button svg, .download-store-button svg {
+.download-store-button svg {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-}
-.download-store-button svg {
   fill: currentColor;
-}
-.download-store-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 20px 0 16px;
-  color: #737373;
-  font-size: 12px;
-}
-.download-store-divider::before, .download-store-divider::after {
-  content: "";
-  flex: 1;
-  border-top: 1px dashed #ddd;
 }
 .download-store-buttons {
   display: grid;
@@ -322,9 +281,6 @@
   .download-benefits p {
     font-size: 11px;
   }
-  .download-web-panel, .download-store-divider {
-    display: none;
-  }
   .download-store-buttons {
     gap: 12px;
     padding: 0 10px;
@@ -348,7 +304,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .download-web-button, .download-store-button {
+  .download-store-button {
     transition: none;
   }
 }

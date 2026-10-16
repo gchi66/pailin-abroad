@@ -21,6 +21,7 @@ from .lesson_translation_validator import render_validation_report, validate_man
 
 REQUIRED_ACTIONS = {"translate", "localize", "bilingual"}
 INLINE_BILINGUAL_ROLES = {
+    "culture_subheading",
     "lesson_heading",
     "instructional_subheading",
     "phrase_heading",
@@ -151,7 +152,10 @@ def _part_start_index(unit: dict[str, Any], part: dict[str, Any]) -> int:
 def _bilingual_prefix(unit: dict[str, Any], part: dict[str, Any]) -> str:
     if unit.get("role") in INLINE_BILINGUAL_ROLES:
         return " "
-    if unit.get("role") == "phrase_example" and unit.get("paragraph", {}).get("bullet"):
+    if (
+        unit.get("paragraph", {}).get("bullet")
+        and "[audio:" in part.get("source_text", "").lower()
+    ):
         return "\u000b"
     if part.get("separator_after") == "\u000b":
         return "\u000b"

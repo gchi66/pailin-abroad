@@ -16,3 +16,12 @@ test("renders a QR code linking to the public download page", () => {
     screen.getByTitle("QR code สำหรับหน้าดาวน์โหลด Pailin Abroad")
   ).toBeInTheDocument();
 });
+
+test("does not offer the retired website learning experience", () => {
+  render(<Download />);
+
+  expect(
+    screen.queryByRole("link", { name: "เรียนต่อบนเว็บไซต์" })
+  ).not.toBeInTheDocument();
+  expect(screen.queryByText("หรือดาวน์โหลดแอป")).not.toBeInTheDocument();
+});
