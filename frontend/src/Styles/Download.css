@@ -47,6 +47,7 @@
   height: 145px;
   object-fit: contain;
   flex-shrink: 0;
+  transform: scaleX(-1);
 }
 .download-card h1 {
   margin: 0;

@@ -63,7 +63,7 @@ export default function Download() {
           </div>
           <img
             className="download-character"
-            src="/images/characters/placement-test-pailin-thumbs-up.webp"
+            src="/images/characters/pailin-thumbs-up-head.webp"
             alt=""
           />
         </header>

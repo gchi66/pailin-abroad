@@ -17,6 +17,16 @@ test("renders a QR code linking to the public download page", () => {
   ).toBeInTheDocument();
 });
 
+test("renders the color Pailin character", () => {
+  const { container } = render(<Download />);
+  const character = container.querySelector(".download-character");
+
+  expect(character).toHaveAttribute(
+    "src",
+    "/images/characters/pailin-thumbs-up-head.webp"
+  );
+});
+
 test("does not offer the retired website learning experience", () => {
   render(<Download />);
 
