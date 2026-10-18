@@ -58,10 +58,9 @@ def apply_tsv(
         part = completed["units"][int(unit_index_text)]["translation_parts"][int(part_index_text)]
         if part.get("recommended_action") not in REQUIRED_ACTIONS:
             raise ValueError(f"{key} does not require translation")
-        existing = by_source.get(part["source_text"])
-        if existing is not None and existing != translated:
-            raise ValueError(f"{key} conflicts with another translation of the same source text")
-        by_source[part["source_text"]] = translated
+        # Exact key translations win. The first authored translation is only a
+        # fallback for repeated desktop/mobile content whose key is omitted.
+        by_source.setdefault(part["source_text"], translated)
 
     unused = set(rows)
     unused_blue = set(blue_spans or {})

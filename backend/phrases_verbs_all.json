@@ -2642,44 +2642,11 @@
     ]
   },
   {
-    "section_index": 1973,
+    "section_index": 1976,
     "paragraphs": [
       {
-        "index": 1974,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1975,
-        "text": "ON MY MIND อยู่ในใจ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 1976,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
         "index": 1977,
-        "text": "UP-AND-COMING ดาวรุ่ง, กำลังมาแรง",
+        "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -2690,6 +2657,39 @@
       },
       {
         "index": 1978,
+        "text": "ON MY MIND อยู่ในใจ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1979,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1980,
+        "text": "UP-AND-COMING ดาวรุ่ง, กำลังมาแรง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 1981,
         "text": "Up-and-coming ดาวรุ่ง, กำลังมาแรง [audio:phrases_verbs_up_and_coming_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2709,7 +2709,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1979,
+        "index": 1982,
         "text": "ใช้บรรยายบุคคล สถานที่ หรือธุรกิจที่กำลังได้รับความนิยมและประสบความสำเร็จมากขึ้น พร้อมศักยภาพสูงในอนาคต",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2720,7 +2720,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1980,
+        "index": 1983,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2731,7 +2731,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1981,
+        "index": 1984,
         "text": "This is a really up-and-coming neighborhood. A lot of cool restaurants and bars have been opening up here. [audio:phrases_verbs_up_and_coming_2]\u000bย่านนี้กำลังมาแรงมาก มีร้านอาหารและบาร์เจ๋ง ๆ เปิดใหม่เยอะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2751,7 +2751,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1982,
+        "index": 1985,
         "text": "My friend Victoria is an up-and-coming designer. Everyone in the industry is watching her. [audio:phrases_verbs_up_and_coming_3]\u000bวิกตอเรียเพื่อนฉันเป็นดีไซเนอร์ดาวรุ่ง ทุกคนในวงการกำลังจับตามองเธอ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2771,7 +2771,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1983,
+        "index": 1986,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2782,7 +2782,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1984,
+        "index": 1987,
         "text": "PLAN OUT วางแผนอย่างละเอียด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2793,7 +2793,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1985,
+        "index": 1988,
         "text": "Plan out วางแผนอย่างละเอียด [audio:phrases_verbs_plan_out_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2813,7 +2813,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1986,
+        "index": 1989,
         "text": "จัดระเบียบรายละเอียดหรือขั้นตอนของบางสิ่งล่วงหน้าอย่างรอบคอบ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2824,7 +2824,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1987,
+        "index": 1990,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2835,7 +2835,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1988,
+        "index": 1991,
         "text": "We’ve already planned out our trip to Greece, we just need to book everything. [audio:phrases_verbs_plan_out_2]\u000bเราวางแผนทริปกรีซอย่างละเอียดแล้ว เหลือแค่จองทุกอย่าง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2855,7 +2855,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1989,
+        "index": 1992,
         "text": "This music festival really wasn’t planned out well. There aren’t enough bathrooms and the lines just to buy food and water are insane. [audio:phrases_verbs_plan_out_3]\u000bเทศกาลดนตรีนี้วางแผนมาไม่ดีเลย ห้องน้ำไม่พอ และแถวซื้ออาหารกับน้ำยาวเหลือเชื่อ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2875,7 +2875,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1990,
+        "index": 1993,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2886,7 +2886,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1991,
+        "index": 1994,
         "text": "INSIDE AND OUT อย่างละเอียดทุกแง่มุม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2897,7 +2897,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1992,
+        "index": 1995,
         "text": "Inside and out อย่างละเอียดทุกแง่มุม [audio:phrases_verbs_inside_and_out_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2917,7 +2917,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1993,
+        "index": 1996,
         "text": "รู้หรือเข้าใจใครหรือบางสิ่งเป็นอย่างดีมาก รวมถึงรายละเอียดเล็ก ๆ ทั้งหมด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2928,7 +2928,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1994,
+        "index": 1997,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2939,7 +2939,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1995,
+        "index": 1998,
         "text": "I know this neighborhood inside and out. I grew up here. [audio:phrases_verbs_inside_and_out_2]\u000bฉันรู้จักย่านนี้ทุกซอกทุกมุม เพราะโตที่นี่",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2959,7 +2959,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1996,
+        "index": 1999,
         "text": "She knows everything about the film industry inside and out. She’s been working on movie sets since she was 18. [audio:phrases_verbs_inside_and_out_3]\u000bเธอรู้จักวงการภาพยนตร์ทุกแง่มุม เพราะทำงานในกองถ่ายตั้งแต่อายุสิบแปด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -2979,7 +2979,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 1997,
+        "index": 2000,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -2990,7 +2990,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1998,
+        "index": 2001,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3001,7 +3001,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 1999,
+        "index": 2002,
         "text": "THAT WAY แบบนั้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3012,7 +3012,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2000,
+        "index": 2003,
         "text": "That way แบบนั้น [audio:phrases_verbs_that_way_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3032,7 +3032,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2001,
+        "index": 2004,
         "text": "ใช้เพื่ออธิบายว่าการกระทำหนึ่งช่วยให้ได้ผลลัพธ์เฉพาะหรือป้องกันปัญหาอย่างไร",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3043,7 +3043,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2002,
+        "index": 2005,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3054,7 +3054,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2003,
+        "index": 2006,
         "text": "I’ve hidden a few copies of my house keys around the yard. That way, if I lose one, I won’t be locked out. [audio:phrases_verbs_that_way_2]\u000bฉันซ่อนสำเนากุญแจบ้านไว้รอบสวน แบบนั้นถ้าทำหายหนึ่งดอกก็จะไม่ถูกล็อกอยู่นอกบ้าน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3074,7 +3074,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2004,
+        "index": 2007,
         "text": "I like to meal prep on Sundays. That way, I don’t have to think about what to cook all week. [audio:phrases_verbs_that_way_3]\u000bฉันชอบเตรียมอาหารวันอาทิตย์ แบบนั้นทั้งสัปดาห์ไม่ต้องคิดว่าจะทำอะไรกิน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3094,7 +3094,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2005,
+        "index": 2008,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3105,7 +3105,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2006,
+        "index": 2009,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3116,7 +3116,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2007,
+        "index": 2010,
         "text": "GLOWING REVIEW คำรีวิวชื่นชมอย่างมาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3127,7 +3127,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2008,
+        "index": 2011,
         "text": "Glowing review คำรีวิวชื่นชมอย่างมาก [audio:phrases_verbs_glowing_review_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3147,7 +3147,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2009,
+        "index": 2012,
         "text": "รีวิวเชิงบวกอย่างยิ่งที่เต็มไปด้วยคำชื่นชม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3158,7 +3158,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2010,
+        "index": 2013,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3169,7 +3169,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2011,
+        "index": 2014,
         "text": "I’m so excited to watch this movie! It got glowing reviews. [audio:phrases_verbs_glowing_review_2]\u000bตื่นเต้นมากที่จะดูหนังเรื่องนี้! ได้รับรีวิวชื่นชมมาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3189,8 +3189,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2012,
-        "text": "I love this facewash so much that I left it a glowing review on their site. [audio:phrases_verbs_glowing_review_3]\u000bฉันชอบโฟมล้างหน้านี้มากจนเขียนรีวิวชื่นชมไว้บนเว็บไซต์",
+        "index": 2015,
+        "text": "I love this face wash so much that I left it a glowing review on their site. [audio:phrases_verbs_glowing_review_3]\u000bฉันชอบโฟมล้างหน้านี้มากจนเขียนรีวิวชื่นชมไว้บนเว็บไซต์",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.jg192fwesjaa",
@@ -3209,7 +3209,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2013,
+        "index": 2016,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3220,7 +3220,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2014,
+        "index": 2017,
         "text": "I’VE GOT TO RUN ต้องไปแล้ว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3231,7 +3231,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2015,
+        "index": 2018,
         "text": "I’ve got to run ต้องไปแล้ว [audio:phrases_verbs_ive_got_to_run_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3251,7 +3251,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2016,
+        "index": 2019,
         "text": "วิธีพูดแบบสบาย ๆ ว่าต้องไป มักเพราะมีที่อื่นต้องไปต่อ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3262,7 +3262,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2017,
+        "index": 2020,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3273,7 +3273,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2018,
+        "index": 2021,
         "text": "It’s been so much fun catching up with you! I’ve got to run though, I have a dentist appointment in 20 minutes. [audio:phrases_verbs_ive_got_to_run_2]\u000bคุยอัปเดตชีวิตกับคุณสนุกมาก! แต่ฉันต้องไปแล้ว มีนัดหมอทำฟันในอีกยี่สิบนาที",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3293,7 +3293,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2019,
+        "index": 2022,
         "text": "Make yourself at home! I’ve got to run, but help yourself to anything in the fridge. [audio:phrases_verbs_ive_got_to_run_3]\u000bทำตัวตามสบายนะ! ฉันต้องไปแล้ว แต่หยิบอะไรกินในตู้เย็นได้เลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3313,7 +3313,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2020,
+        "index": 2023,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3324,7 +3324,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2021,
+        "index": 2024,
         "text": "MAKE IT ไปทัน, ทำสำเร็จ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3335,7 +3335,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2022,
+        "index": 2025,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3348,10 +3348,10 @@
     ]
   },
   {
-    "section_index": 2554,
+    "section_index": 2528,
     "paragraphs": [
       {
-        "index": 2555,
+        "index": 2529,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3362,7 +3362,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2556,
+        "index": 2530,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3373,7 +3373,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2557,
+        "index": 2531,
         "text": "IF I CAN HELP IT ถ้าเลี่ยงได้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3384,7 +3384,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2558,
+        "index": 2532,
         "text": "If I can help it ถ้าเลี่ยงได้ [audio:phrases_verbs_if_i_can_help_it_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3404,7 +3404,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2559,
+        "index": 2533,
         "text": "ใช้เมื่ออยากหลีกเลี่ยงบางสิ่งและจะพยายามเต็มที่เพื่อป้องกันหากอยู่ในการควบคุม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3415,7 +3415,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2560,
+        "index": 2534,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3426,7 +3426,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2561,
+        "index": 2535,
         "text": "I try not to schedule meetings before 10AM if I can help it. [audio:phrases_verbs_if_i_can_help_it_2]\u000bถ้าเลี่ยงได้ ฉันพยายามไม่จัดประชุมก่อนสิบโมง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3446,7 +3446,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2562,
+        "index": 2536,
         "text": "I avoid driving during rush hour if I can help it. There’s nothing worse than sitting in traffic just to go to the grocery store. [audio:phrases_verbs_if_i_can_help_it_3]\u000bถ้าเลี่ยงได้ ฉันไม่ขับรถช่วงเร่งด่วน ไม่มีอะไรแย่กว่านั่งรถติดแค่เพื่อไปร้านขายของชำ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3466,7 +3466,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2563,
+        "index": 2537,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3477,7 +3477,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2564,
+        "index": 2538,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3488,7 +3488,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2565,
+        "index": 2539,
         "text": "POP UP ผุดขึ้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3499,7 +3499,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2566,
+        "index": 2540,
         "text": "Pop up ผุดขึ้น [audio:phrases_verbs_pop_up_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3519,7 +3519,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2567,
+        "index": 2541,
         "text": "ปรากฏหรือพัฒนาขึ้นอย่างฉับพลันและมักไม่คาดคิด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3530,7 +3530,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2568,
+        "index": 2542,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3541,7 +3541,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2569,
+        "index": 2543,
         "text": "New coffee shops keep popping up in this neighborhood. I wonder how they’ll stay in business. [audio:phrases_verbs_pop_up_2]\u000bร้านกาแฟใหม่ผุดขึ้นในย่านนี้ไม่หยุด สงสัยว่าจะอยู่รอดกันอย่างไร",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3561,7 +3561,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2570,
+        "index": 2544,
         "text": "Protests started popping up across the country after the price of gas started to rise. [audio:phrases_verbs_pop_up_3]\u000bการประท้วงเริ่มผุดขึ้นทั่วประเทศหลังราคาน้ำมันสูงขึ้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3581,7 +3581,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2571,
+        "index": 2545,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3592,7 +3592,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2572,
+        "index": 2546,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3603,7 +3603,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2573,
+        "index": 2547,
         "text": "HOLD DOWN รักษาไว้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3614,8 +3614,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2574,
-        "text": "Hold down [a job / a relationship] รักษา [งาน, ความสัมพันธ์] ไว้ [audio:phrases_verbs_hold_down_1]",
+        "index": 2548,
+        "text": "Hold down รักษาไว้ [audio:phrases_verbs_hold_down_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.qwgetynbo0bf",
@@ -3634,7 +3634,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2575,
+        "index": 2549,
+        "text": "Hold down [งาน/ความสัมพันธ์]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 2550,
         "text": "รักษางานหรือความสัมพันธ์ไว้ได้ในระยะยาว โดยเฉพาะเมื่อทำได้ยาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3645,7 +3656,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2576,
+        "index": 2551,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3656,7 +3667,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2577,
+        "index": 2552,
         "text": "It’s been hard for him to hold down a job for over a month. He keeps getting fired. [audio:phrases_verbs_hold_down_2]\u000bเขารักษางานไว้เกินหนึ่งเดือนได้ยาก ถูกไล่ออกตลอด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3676,7 +3687,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2578,
+        "index": 2553,
         "text": "Mark seems like the perfect boyfriend. Why has he never been able to hold down a relationship longer than a few months? [audio:phrases_verbs_hold_down_3]\u000bมาร์กดูเป็นแฟนที่สมบูรณ์แบบ ทำไมไม่เคยรักษาความสัมพันธ์ได้นานเกินสองสามเดือน?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3696,7 +3707,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2579,
+        "index": 2554,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3707,7 +3718,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2580,
+        "index": 2555,
         "text": "COST OF LIVING ค่าครองชีพ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3718,7 +3729,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2581,
+        "index": 2556,
         "text": "Cost of living ค่าครองชีพ [audio:phrases_verbs_cost_of_living_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3738,7 +3749,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2582,
+        "index": 2557,
         "text": "จำนวนเงินที่ต้องใช้จ่ายในชีวิตประจำวันที่สถานที่หนึ่ง เช่น ที่อยู่อาศัย อาหาร และการเดินทาง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3749,7 +3760,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2583,
+        "index": 2558,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3760,7 +3771,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2584,
+        "index": 2559,
         "text": "I plan to retire in Portugal. The cost of living is way lower than the US. [audio:phrases_verbs_cost_of_living_2]\u000bฉันวางแผนเกษียณที่โปรตุเกส ค่าครองชีพต่ำกว่าสหรัฐฯ มาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3780,7 +3791,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2585,
+        "index": 2560,
         "text": "I want to move to New York so badly, but the cost of living is getting insane. A 1-bedroom apartment can be over $4,000 a month! [audio:phrases_verbs_cost_of_living_3]\u000bฉันอยากย้ายนิวยอร์กมาก แต่ค่าครองชีพบ้าคลั่งขึ้นเรื่อย ๆ อะพาร์ตเมนต์หนึ่งห้องนอนอาจเกินเดือนละ 4,000 ดอลลาร์!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3800,7 +3811,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2586,
+        "index": 2561,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3811,7 +3822,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2587,
+        "index": 2562,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3822,7 +3833,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2588,
+        "index": 2563,
         "text": "LOOK INTO ตรวจสอบ, หาข้อมูล",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3833,8 +3844,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2589,
-        "text": "Look into [something] ตรวจสอบ, หาข้อมูล [บางสิ่ง] [audio:phrases_verbs_look_into_1]",
+        "index": 2564,
+        "text": "Look into ตรวจสอบ, หาข้อมูล [audio:phrases_verbs_look_into_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.ir6v8wkrti3h",
@@ -3853,7 +3864,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2590,
+        "index": 2565,
         "text": "ตรวจสอบหรือค้นหาข้อมูลเพิ่มเติมเกี่ยวกับบางสิ่ง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3864,7 +3875,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2591,
+        "index": 2566,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3875,7 +3886,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 2592,
+        "index": 2567,
         "text": "The microwave is broken? Okay, I’ll look into it when I get home from work. [audio:phrases_verbs_look_into_2]\u000bไมโครเวฟเสียเหรอ? โอเค กลับจากงานแล้วฉันจะตรวจดู",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3895,7 +3906,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2593,
+        "index": 2568,
         "text": "I’ve been looking into getting therapy. I think it would be good for my mental health. [audio:phrases_verbs_look_into_3]\u000bฉันกำลังหาข้อมูลเรื่องการบำบัด คิดว่าน่าจะดีต่อสุขภาพจิต",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3915,7 +3926,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 2594,
+        "index": 2569,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3928,10 +3939,10 @@
     ]
   },
   {
-    "section_index": 3053,
+    "section_index": 2983,
     "paragraphs": [
       {
-        "index": 3054,
+        "index": 2984,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3942,7 +3953,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3055,
+        "index": 2985,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3953,7 +3964,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3056,
+        "index": 2986,
         "text": "THINK OF IT THIS WAY ลองคิดแบบนี้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3964,7 +3975,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3057,
+        "index": 2987,
         "text": "Think of it this way ลองคิดแบบนี้ [audio:phrases_verbs_think_of_it_this_way_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -3984,7 +3995,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3058,
+        "index": 2988,
         "text": "ใช้ชวนให้ใครมองสถานการณ์จากอีกมุม มักเพื่อช่วยให้เข้าใจหรือรู้สึกดีขึ้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -3995,7 +4006,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3059,
+        "index": 2989,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4006,7 +4017,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3060,
+        "index": 2990,
         "text": "Luke: I told this girl that I liked her and she told me she just wants to be friends. I feel so dumb. [audio:phrases_verbs_think_of_it_this_way_2]\u000bลูค: ผมบอกผู้หญิงคนนี้ว่าชอบเธอ แต่เธอบอกว่าอยากเป็นแค่เพื่อน ผมรู้สึกโง่มาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4026,8 +4037,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3061,
-        "text": "Pailin: Think of it this way. If you hadn’t said anything, you would’ve always wondered if she likes you back. Now that you know she doesn’t, you can move on.",
+        "index": 2991,
+        "text": "Pailin: Think of it this way. If you hadn’t said anything, you would’ve always wondered if she likes you back. Now that you know she doesn’t, you can move on.\u000bไพลิน: ลองคิดแบบนี้ ถ้าคุณไม่พูด คุณคงสงสัยตลอดว่าเธอชอบกลับไหม ตอนนี้รู้ว่าไม่ชอบแล้วก็เดินหน้าต่อได้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4037,18 +4048,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3062,
-        "text": "ไพลิน: ลองคิดแบบนี้ ถ้าคุณไม่พูด คุณคงสงสัยตลอดว่าเธอชอบกลับไหม ตอนนี้รู้ว่าไม่ชอบแล้วก็เดินหน้าต่อได้",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3063,
+        "index": 2992,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4059,7 +4059,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3064,
+        "index": 2993,
         "text": "Pailin: I want to work as a server at a restaurant, but I’ve never done it before. What if I’m terrible at it? [audio:phrases_verbs_think_of_it_this_way_3]\u000bไพลิน: ฉันอยากเป็นพนักงานเสิร์ฟแต่ไม่เคยทำ ถ้าทำได้แย่มากล่ะ?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4079,8 +4079,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3065,
-        "text": "Luke: Think of it this way. Everyone who’s ever waited tables was terrible at it on their first day. Just apply!",
+        "index": 2994,
+        "text": "Luke: Think of it this way. Everyone who’s ever waited tables was terrible at it on their first day. Just apply!\u000bลูค: ลองคิดแบบนี้ ทุกคนที่เคยเสิร์ฟโต๊ะก็ทำได้แย่ในวันแรก สมัครเลย!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4090,18 +4090,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3066,
-        "text": "ลูค: ลองคิดแบบนี้ ทุกคนที่เคยเสิร์ฟโต๊ะก็ทำได้แย่ในวันแรก สมัครเลย!",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3067,
+        "index": 2995,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4112,7 +4101,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3068,
+        "index": 2996,
         "text": "OUT-OF-POCKET จ่ายเอง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4123,7 +4112,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3069,
+        "index": 2997,
         "text": "Out-of-pocket จ่ายเอง [audio:phrases_verbs_out_of_pocket_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4143,7 +4132,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3070,
+        "index": 2998,
         "text": "จ่ายด้วยเงินตัวเองแทนที่จะได้รับความคุ้มครองหรือเงินคืนจากประกัน นายจ้าง หรือผู้อื่น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4154,7 +4143,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3071,
+        "index": 2999,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4165,7 +4154,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3072,
+        "index": 3000,
         "text": "I ended up having to pay $10,000 for that surgery out-of-pocket. [audio:phrases_verbs_out_of_pocket_2]\u000bสุดท้ายฉันต้องจ่ายค่าผ่าตัดนั้นเอง 10,000 ดอลลาร์",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4185,7 +4174,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3073,
+        "index": 3001,
         "text": "I have a work trip coming up in Dubai. My company’s gonna pay for my flight and hotel, but everything else will be out-of-pocket. [audio:phrases_verbs_out_of_pocket_3]\u000bฉันมีทริปงานที่ดูไบ บริษัทจ่ายค่าเครื่องบินกับโรงแรม แต่ที่เหลือต้องจ่ายเอง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4205,7 +4194,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3074,
+        "index": 3002,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4216,7 +4205,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3075,
+        "index": 3003,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4227,7 +4216,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3076,
+        "index": 3004,
         "text": "WIPE YOU OUT ทำให้หมดแรง, ทำให้หมดตัว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4238,8 +4227,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3077,
-        "text": "Wipe you out · wipe [someone] out ทำให้คุณหมดแรง, ทำให้ [ใครบางคน] หมดตัว [audio:phrases_verbs_wipe_out_1]",
+        "index": 3005,
+        "text": "Wipe you out ทำให้คุณหมดแรง [audio:phrases_verbs_wipe_out_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.bftenp90v00m",
@@ -4258,7 +4247,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3078,
+        "index": 3006,
+        "text": "Wipe [someone] out",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3007,
         "text": "ทำให้ใครเหนื่อยหมดแรงหรือใช้เงินและทรัพยากรเกือบทั้งหมดจนหมด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4269,7 +4269,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3079,
+        "index": 3008,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4280,7 +4280,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3080,
+        "index": 3009,
         "text": "That hike wiped me out. I took a 4 hour nap as soon as I got home. [audio:phrases_verbs_wipe_out_2]\u000bการเดินป่านั้นทำฉันหมดแรง กลับถึงบ้านก็นอนสี่ชั่วโมง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4300,7 +4300,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3081,
+        "index": 3010,
         "text": "Fixing the roof of our house nearly wiped us out. But if we hadn’t redone it, the roof could’ve collapsed. [audio:phrases_verbs_wipe_out_3]\u000bการซ่อมหลังคาเกือบทำเราหมดตัว แต่ถ้าไม่ทำใหม่ หลังคาอาจถล่ม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4320,7 +4320,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3082,
+        "index": 3011,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4331,7 +4331,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3083,
+        "index": 3012,
         "text": "ADD ON เพิ่มเข้าไป",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4342,8 +4342,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3084,
-        "text": "Add on · add [something] on เพิ่มเข้าไป · เพิ่ม [บางสิ่ง] เข้าไป [audio:phrases_verbs_add_on_1]",
+        "index": 3013,
+        "text": "Add on เพิ่มเข้าไป [audio:phrases_verbs_add_on_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.ka0odk8enphl",
@@ -4362,7 +4362,18 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3085,
+        "index": 3014,
+        "text": "Add [สิ่ง] on",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3015,
         "text": "ใส่สิ่งพิเศษเพิ่มจากสิ่งที่มีอยู่ มักมีค่าใช้จ่ายเพิ่ม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4373,7 +4384,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3086,
+        "index": 3016,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4384,7 +4395,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3087,
+        "index": 3017,
         "text": "I’ll take one burger, please. Oh, could I add on some fries with that? [audio:phrases_verbs_add_on_2]\u000bขอเบอร์เกอร์หนึ่งชิ้นครับ อ้อ เพิ่มเฟรนช์ฟรายส์ด้วยได้ไหม?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4404,7 +4415,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3088,
+        "index": 3018,
         "text": "Getting food delivered looks cheap, but then they add on all these extra fees so the price ends up double what they advertise. [audio:phrases_verbs_add_on_3]\u000bอาหารเดลิเวอรีดูราคาถูก แต่พวกเขาเพิ่มค่าธรรมเนียมสารพัดจนราคาสุดท้ายเป็นสองเท่าของที่โฆษณา",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -4424,7 +4435,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3089,
+        "index": 3019,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4435,7 +4446,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3090,
+        "index": 3020,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4448,10 +4459,10 @@
     ]
   },
   {
-    "section_index": 3720,
+    "section_index": 3676,
     "paragraphs": [
       {
-        "index": 3721,
+        "index": 3677,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -4462,8 +4473,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3722,
-        "text": "AS USUAL",
+        "index": 3678,
+        "text": "AS USUAL ตามปกติ, เหมือนเคย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4473,8 +4484,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3723,
-        "text": "As usual [audio:phrases_verbs_as_usual_1]",
+        "index": 3679,
+        "text": "As usual ตามปกติ, เหมือนเคย [audio:phrases_verbs_as_usual_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.eyzxqkfm8c1m",
@@ -4493,8 +4504,654 @@
         "docwalker_kind_guess": "list_item"
       },
       {
+        "index": 3680,
+        "text": "ใช้เมื่อบางสิ่งเกิดขึ้นแบบเดียวกับที่เกิดเป็นประจำ บางครั้งใช้เพื่อแสดงความรำคาญหรือประชดประชัน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3681,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3682,
+        "text": "Bobby showed up to dinner late, as usual. Luckily, we just ordered our meals before he arrived. [audio:phrases_verbs_as_usual_2]\u000bบ็อบบี้มาทานมื้อเย็นสายตามเคย โชคดีที่เราเพิ่งสั่งอาหารไปก่อนเขามาถึง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.dyhdmnocbur9",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3683,
+        "text": "My boss took all the credit for my work, as usual. It’s getting so annoying. [audio:phrases_verbs_as_usual_3]\u000bเจ้านายของฉันเอาความดีความชอบจากงานของฉันไปทั้งหมดเหมือนเคย เริ่มน่ารำคาญมากแล้ว",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.dyhdmnocbur9",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3684,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3685,
+        "text": "HARDCORE จริงจังมาก, สุดขั้ว",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3686,
+        "text": "Hardcore จริงจังมาก, สุดขั้ว [audio:phrases_verbs_hardcore_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.marzpk81v9ts",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3687,
+        "text": "ใช้บรรยายคนที่ทุ่มเทหรือจริงจังกับบางสิ่งอย่างมาก หรือสิ่งที่หนักหน่วง สุดขั้ว หรือท้าทายเป็นพิเศษ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3688,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3689,
+        "text": "My brother is a hardcore gamer. He’ll play for 12 hours straight without having any meals. [audio:phrases_verbs_hardcore_2]\u000bพี่ชายของฉันเป็นเกมเมอร์ตัวยง เขาเล่นเกมต่อเนื่อง 12 ชั่วโมงโดยไม่กินอะไรเลย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.tr41a3qxm6xu",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3690,
+        "text": "They’ve been hardcore vegans for the past few years. They won’t even sit at a table with us if one of us is eating meat. [audio:phrases_verbs_hardcore_3]\u000bพวกเขาเป็นวีแกนอย่างเคร่งครัดมาหลายปีแล้ว ถ้ามีใครในพวกเรากินเนื้อ พวกเขาจะไม่ยอมนั่งร่วมโต๊ะด้วยซ้ำ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.tr41a3qxm6xu",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3691,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3692,
+        "text": "POINT OUT ชี้ให้เห็น",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3693,
+        "text": "Point out ชี้ให้เห็น [audio:phrases_verbs_point_out_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.739umi2aijof",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3694,
+        "text": "กล่าวถึงหรือดึงความสนใจไปยังข้อเท็จจริงหรือรายละเอียดบางอย่างที่อีกฝ่ายอาจไม่ได้สังเกตเห็น",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3695,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3696,
+        "text": "I’m not that excited to spend Christmas with my mother-in-law. She loves pointing out all my flaws. [audio:phrases_verbs_point_out_2]\u000bฉันไม่ค่อยตื่นเต้นที่จะใช้เวลาช่วงคริสต์มาสกับแม่สามีเท่าไร เธอชอบชี้ให้เห็นข้อบกพร่องทุกอย่างของฉัน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.s4bn2f2qgwid",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3697,
+        "text": "Nobody wanted to point out that our boss had something in his teeth. [audio:phrases_verbs_point_out_3]\u000bไม่มีใครอยากชี้ให้เห็นว่าเจ้านายของเรามีอะไรติดฟันอยู่",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.s4bn2f2qgwid",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3698,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3699,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3700,
+        "text": "FAR-LEFT / FAR-RIGHT ฝ่ายซ้ายจัด / ฝ่ายขวาจัด",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3701,
+        "text": "Far-left · Far-right ฝ่ายซ้ายจัด · ฝ่ายขวาจัด [audio:phrases_verbs_far_left_right_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.za6amivs6v4a",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3702,
+        "text": "ใช้บรรยายจุดยืนทางการเมืองที่มีแนวคิดสุดขั้วบนสเปกตรัมทางการเมือง ฝ่ายซ้ายจัดมีแนวคิดเสรีนิยมมาก ส่วนฝ่ายขวาจัดมีแนวคิดอนุรักษนิยมมาก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3703,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3704,
+        "text": "I identify as a democrat, but that news station is just too far-left for me. [audio:phrases_verbs_far_left_right_2]\u000bฉันมองว่าตัวเองเป็น Democrat แต่สถานีข่าวนั้นเอียงซ้ายเกินไปสำหรับฉัน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.c1hwzg2niulc",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3705,
+        "text": "My grandparents have become more and more far-right as the years go by. [audio:phrases_verbs_far_left_right_3]\u000bเมื่อเวลาผ่านไป ปู่ย่าของฉันยิ่งมีแนวคิดฝ่ายขวาจัดมากขึ้นเรื่อย ๆ",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.c1hwzg2niulc",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3706,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3707,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3708,
+        "text": "GO ROUND AND ROUND IN CIRCLES พูดหรือเถียงเรื่องเดิมวนไปวนมา",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3709,
+        "text": "Go round and round in circles พูดเรื่องเดิมวนไปวนมา [audio:phrases_verbs_go_round_and_round_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.s5g154yprpzr",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3710,
+        "text": "พูดคุยหรือโต้เถียงเรื่องเดิมซ้ำ ๆ โดยไม่มีความคืบหน้าหรือข้อสรุป",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3711,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3712,
+        "text": "We’ve been going round and round in circles for over an hour. Can we just make a decision? [audio:phrases_verbs_go_round_and_round_2]\u000bเราเถียงเรื่องเดิมวนไปวนมานานกว่าหนึ่งชั่วโมงแล้ว ตัดสินใจกันสักทีได้ไหม?",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.ovkqrbgmplgy",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3713,
+        "text": "The meeting went round and round in circles and ended with no conclusion, as usual. [audio:phrases_verbs_go_round_and_round_3]\u000bการประชุมวนไปวนมาและจบลงโดยไม่มีข้อสรุปตามเคย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.ovkqrbgmplgy",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3714,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3715,
+        "text": "FALL IN THE MIDDLE อยู่กึ่งกลาง, มีจุดยืนตรงกลาง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3716,
+        "text": "Fall in the middle อยู่กึ่งกลาง, มีจุดยืนตรงกลาง [audio:phrases_verbs_fall_in_the_middle_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.mmqo96aphsk7",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3717,
+        "text": "มีความคิดเห็นหรือจุดยืนอยู่ระหว่างสองฝ่ายที่ตรงข้ามกัน แทนที่จะเอนเอียงไปทางสุดขั้วฝ่ายใดฝ่ายหนึ่งอย่างชัดเจน",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3718,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3719,
+        "text": "She’s not super introverted or super extroverted. She falls right in the middle. [audio:phrases_verbs_fall_in_the_middle_2]\u000bเธอไม่ได้เก็บตัวมากหรือชอบเข้าสังคมมาก เธออยู่กึ่งกลางพอดี",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.v6lgpc4jg7f5",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3720,
+        "text": "On the matter of the economy, I’m not super liberal or super conservative. My views fall right in the middle. [audio:phrases_verbs_fall_in_the_middle_3]\u000bในเรื่องเศรษฐกิจ ฉันไม่ได้มีแนวคิดเสรีนิยมหรืออนุรักษนิยมมากนัก มุมมองของฉันอยู่ตรงกลางพอดี",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.v6lgpc4jg7f5",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
+        "index": 3721,
+        "text": "",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3722,
+        "text": "PUT IT พูด, อธิบาย",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3723,
+        "text": "Put it พูด, อธิบาย [audio:phrases_verbs_put_it_1]",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": {
+          "listId": "kix.6g2ewigzrrc",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": "●"
+        },
+        "docwalker_kind_guess": "list_item"
+      },
+      {
         "index": 3724,
-        "text": "Used when something happens in the same way it normally does, sometimes to express annoyance or sarcasm.",
+        "text": "ใช้เกริ่นนำวิธีพูดหรืออธิบายบางสิ่งในรูปแบบหนึ่ง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4516,10 +5173,10 @@
       },
       {
         "index": 3726,
-        "text": "Bobby showed up to dinner late, as usual. Luckily, we just ordered our meals before he arrived. [audio:phrases_verbs_as_usual_2]",
+        "text": "I finally understand how the law system works in America. My friend put it in a way that finally made sense to me. [audio:phrases_verbs_put_it_2]\u000bในที่สุดฉันก็เข้าใจว่าระบบกฎหมายในอเมริกาทำงานอย่างไร เพื่อนอธิบายในแบบที่ทำให้ฉันเข้าใจได้เสียที",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.dyhdmnocbur9",
+          "listId": "kix.n1ju423pcaxj",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4536,10 +5193,10 @@
       },
       {
         "index": 3727,
-        "text": "My boss took all the credit for my work, as usual. It’s getting so annoying. [audio:phrases_verbs_as_usual_3]",
+        "text": "How do I put it nicely…his art skills need a lot of work. [audio:phrases_verbs_put_it_3]\u000bจะพูดให้ดีอย่างไรนะ...ทักษะศิลปะของเขายังต้องพัฒนาอีกมาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.dyhdmnocbur9",
+          "listId": "kix.n1ju423pcaxj",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4567,7 +5224,7 @@
       },
       {
         "index": 3729,
-        "text": "HARDCORE",
+        "text": "TAKE CARE OF ดูแล, จัดการ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4578,10 +5235,10 @@
       },
       {
         "index": 3730,
-        "text": "Hardcore [audio:phrases_verbs_hardcore_1]",
+        "text": "Take care of ดูแล, จัดการ [audio:phrases_verbs_take_care_of_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.marzpk81v9ts",
+          "listId": "kix.k1jk5gqnctpf",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4598,7 +5255,7 @@
       },
       {
         "index": 3731,
-        "text": "Used to describe someone who's extremely dedicated or intense about something, or something that's especially extreme or demanding.",
+        "text": "Take care of [คน / สิ่ง]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4609,7 +5266,7 @@
       },
       {
         "index": 3732,
-        "text": "",
+        "text": "ดูแลใครบางคนหรือบางสิ่ง หรือรับผิดชอบจัดการหน้าที่หรืองานหนึ่ง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4620,30 +5277,21 @@
       },
       {
         "index": 3733,
-        "text": "My brother is a hardcore gamer. He’ll play for 12 hours straight without having any meals. [audio:phrases_verbs_hardcore_2]",
+        "text": "",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.tr41a3qxm6xu",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
+        "bullet": null,
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": "●"
+          "glyphSymbol": null
         },
-        "docwalker_kind_guess": "list_item"
+        "docwalker_kind_guess": "paragraph"
       },
       {
         "index": 3734,
-        "text": "They’ve been hardcore vegans for the past few years. They won’t even sit at a table with us if one of us is eating meat. [audio:phrases_verbs_hardcore_3]",
+        "text": "I need to take care of my little sister while my parents are away. [audio:phrases_verbs_take_care_of_2]\u000bฉันต้องดูแลน้องสาวตอนที่พ่อแม่ไม่อยู่",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.tr41a3qxm6xu",
+          "listId": "kix.j1cmlm4vpbcp",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4660,18 +5308,27 @@
       },
       {
         "index": 3735,
-        "text": "",
+        "text": "Please take care of my plants while I’m away on vacation. [audio:phrases_verbs_take_care_of_3]\u000bช่วยดูแลต้นไม้ของฉันตอนที่ฉันไปเที่ยวพักผ่อนด้วยนะ",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
+        "bullet": {
+          "listId": "kix.j1cmlm4vpbcp",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": null
+          "glyphSymbol": "●"
         },
-        "docwalker_kind_guess": "paragraph"
+        "docwalker_kind_guess": "list_item"
       },
       {
         "index": 3736,
-        "text": "POINT OUT",
+        "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4682,10 +5339,21 @@
       },
       {
         "index": 3737,
-        "text": "Point out [audio:phrases_verbs_point_out_1]",
+        "text": "WATERED-DOWN ลดทอน, อ่อนลง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 3738,
+        "text": "Watered-down ลดทอน, อ่อนลง [audio:phrases_verbs_watered_down_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.739umi2aijof",
+          "listId": "kix.a34lwz6mu7c4",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4701,19 +5369,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3738,
-        "text": "To mention or draw attention to a particular fact or detail that someone may not have noticed.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
         "index": 3739,
-        "text": "",
+        "text": "ใช้บรรยายสิ่งที่ถูกทำให้อ่อนลง รุนแรงน้อยลง หรือมีรายละเอียดน้อยกว่าต้นฉบับ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4724,30 +5381,21 @@
       },
       {
         "index": 3740,
-        "text": "I’m not that excited to spend Christmas with my mother-in-law. She loves pointing out all my flaws. [audio:phrases_verbs_point_out_2]",
+        "text": "",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.s4bn2f2qgwid",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
+        "bullet": null,
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": "●"
+          "glyphSymbol": null
         },
-        "docwalker_kind_guess": "list_item"
+        "docwalker_kind_guess": "paragraph"
       },
       {
         "index": 3741,
-        "text": "Nobody wanted to point out that our boss had something in his teeth. [audio:phrases_verbs_point_out_3]",
+        "text": "His feedback was so watered-down that it wasn’t even useful. It’s like he was afraid of hurting my feelings. [audio:phrases_verbs_watered_down_2]\u000bความคิดเห็นของเขาถูกลดทอนเสียจนไม่มีประโยชน์เลย เหมือนเขากลัวทำร้ายความรู้สึกฉัน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.s4bn2f2qgwid",
+          "listId": "kix.xzebgmyiiw5",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4764,14 +5412,23 @@
       },
       {
         "index": 3742,
-        "text": "",
+        "text": "I don’t want a watered-down apology. I want you to actually mean it. [audio:phrases_verbs_watered_down_3]\u000bฉันไม่ต้องการคำขอโทษแบบขอไปที ฉันอยากให้คุณรู้สึกอย่างนั้นจริง ๆ",
         "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
+        "bullet": {
+          "listId": "kix.xzebgmyiiw5",
+          "textStyle": {
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Work Sans",
+              "weight": 400
+            }
+          }
+        },
         "resolvedListGlyph": {
           "glyphType": null,
-          "glyphSymbol": null
+          "glyphSymbol": "●"
         },
-        "docwalker_kind_guess": "paragraph"
+        "docwalker_kind_guess": "list_item"
       },
       {
         "index": 3743,
@@ -4786,7 +5443,7 @@
       },
       {
         "index": 3744,
-        "text": "FAR-LEFT / FAR-RIGHT",
+        "text": "GET THE GIST เข้าใจใจความสำคัญ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4797,10 +5454,10 @@
       },
       {
         "index": 3745,
-        "text": "Far-left · Far-right [audio:phrases_verbs_far_left_right_1]",
+        "text": "Get the gist เข้าใจใจความสำคัญ [audio:phrases_verbs_get_the_gist_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.za6amivs6v4a",
+          "listId": "kix.nhc4rk2cg09o",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4817,7 +5474,7 @@
       },
       {
         "index": 3746,
-        "text": "Used to describe political positions that hold extreme views of the political spectrum. The far-left is very liberal, while the far-right is very conservative.",
+        "text": "เข้าใจแนวคิดหลักหรือความหมายโดยรวมของบางสิ่ง โดยไม่จำเป็นต้องเข้าใจทุกรายละเอียด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4839,10 +5496,10 @@
       },
       {
         "index": 3748,
-        "text": "I identify as a democrat, but that news station is just too far-left for me. [audio:phrases_verbs_far_left_right_2]",
+        "text": "I missed the first ten minutes of the meeting, but I got the gist of it. Basically, we’re cutting budgets and restructuring the team. [audio:phrases_verbs_get_the_gist_2]\u000bฉันพลาดสิบนาทีแรกของการประชุม แต่ก็เข้าใจใจความสำคัญ โดยพื้นฐานแล้วเรากำลังลดงบประมาณและปรับโครงสร้างทีม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.c1hwzg2niulc",
+          "listId": "kix.qjlstmkhr1bv",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4859,10 +5516,10 @@
       },
       {
         "index": 3749,
-        "text": "My grandparents have become more and more far-right as the years go by. [audio:phrases_verbs_far_left_right_3]",
+        "text": "I don’t speak French, but I got the gist of what he was saying - he wasn’t happy with the food. [audio:phrases_verbs_get_the_gist_3]\u000bฉันพูดภาษาฝรั่งเศสไม่ได้ แต่พอเข้าใจใจความที่เขาพูด คือเขาไม่พอใจกับอาหาร",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
-          "listId": "kix.c1hwzg2niulc",
+          "listId": "kix.qjlstmkhr1bv",
           "textStyle": {
             "underline": false,
             "weightedFontFamily": {
@@ -4890,7 +5547,7 @@
       },
       {
         "index": 3751,
-        "text": "",
+        "text": "GET HEATED เริ่มดุเดือด, เริ่มตึงเครียด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -4901,642 +5558,7 @@
       },
       {
         "index": 3752,
-        "text": "GO ROUND AND ROUND IN CIRCLES",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3753,
-        "text": "Go round and round in circles [audio:phrases_verbs_go_round_and_round_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.s5g154yprpzr",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3754,
-        "text": "To keep discussing or arguing about the same thing without making any progress or reaching a solution.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3755,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3756,
-        "text": "We’ve been going round and round in circles for over an hour. Can we just make a decision? [audio:phrases_verbs_go_round_and_round_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ovkqrbgmplgy",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3757,
-        "text": "The meeting went round and round in circles and ended with no conclusion, as usual. [audio:phrases_verbs_go_round_and_round_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.ovkqrbgmplgy",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3758,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3759,
-        "text": "FALL IN THE MIDDLE",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3760,
-        "text": "Fall in the middle [audio:phrases_verbs_fall_in_the_middle_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.mmqo96aphsk7",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3761,
-        "text": "To have opinions or a position somewhere between two opposing sides, rather than strongly favoring either extreme.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3762,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3763,
-        "text": "She’s not super introverted or super extroverted. She falls right in the middle. [audio:phrases_verbs_fall_in_the_middle_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.v6lgpc4jg7f5",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3764,
-        "text": "On the matter of the economy, I’m not super liberal or super conservative. My views fall right in the middle. [audio:phrases_verbs_fall_in_the_middle_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.v6lgpc4jg7f5",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3765,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3766,
-        "text": "PUT IT",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3767,
-        "text": "Put it [audio:phrases_verbs_put_it_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.6g2ewigzrrc",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3768,
-        "text": "Used to introduce a particular way of expressing or explaining something.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3769,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3770,
-        "text": "I finally understand how the law system works in America. My friend put it in a way that finally made sense to me. [audio:phrases_verbs_put_it_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.n1ju423pcaxj",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3771,
-        "text": "How do I put it nicely…his art skills need a lot of work. [audio:phrases_verbs_put_it_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.n1ju423pcaxj",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3772,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3773,
-        "text": "TAKE CARE OF ",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3774,
-        "text": "Take care of [someone / something] [audio:phrases_verbs_take_care_of_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.k1jk5gqnctpf",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3775,
-        "text": "To look after someone or something, or to handle a responsibility or task.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3776,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3777,
-        "text": "I need to take care of my little sister while my parents are away. [audio:phrases_verbs_take_care_of_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.j1cmlm4vpbcp",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3778,
-        "text": "Please take care of my plants while I’m away on vacation. [audio:phrases_verbs_take_care_of_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.j1cmlm4vpbcp",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3779,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3780,
-        "text": "WATERED-DOWN",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3781,
-        "text": "Watered-down [audio:phrases_verbs_watered_down_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.a34lwz6mu7c4",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3782,
-        "text": "Used to describe something that's been made weaker, less intense, or less detailed than the original.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3783,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3784,
-        "text": "His feedback was so watered-down that it wasn’t even useful. It’s like he was afraid of hurting my feelings. [audio:phrases_verbs_watered_down_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.xzebgmyiiw5",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3785,
-        "text": "I don’t want a watered-down apology. I want you to actually mean it. [audio:phrases_verbs_watered_down_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.xzebgmyiiw5",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3786,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3787,
-        "text": "GET THE GIST",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3788,
-        "text": "Get the gist [audio:phrases_verbs_get_the_gist_1]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.nhc4rk2cg09o",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3789,
-        "text": "To understand the main idea or general meaning of something without necessarily understanding every detail.",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3790,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3791,
-        "text": "I missed the first ten minutes of the meeting, but I got the gist of it. Basically, we’re cutting budgets and restructuring the team. [audio:phrases_verbs_get_the_gist_2]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.qjlstmkhr1bv",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3792,
-        "text": "I don’t speak French, but I got the gist of what he was saying - he wasn’t happy with the food. [audio:phrases_verbs_get_the_gist_3]",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": {
-          "listId": "kix.qjlstmkhr1bv",
-          "textStyle": {
-            "underline": false,
-            "weightedFontFamily": {
-              "fontFamily": "Work Sans",
-              "weight": 400
-            }
-          }
-        },
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": "●"
-        },
-        "docwalker_kind_guess": "list_item"
-      },
-      {
-        "index": 3793,
-        "text": "",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3794,
-        "text": "GET HEATED",
-        "namedStyleType": "NORMAL_TEXT",
-        "bullet": null,
-        "resolvedListGlyph": {
-          "glyphType": null,
-          "glyphSymbol": null
-        },
-        "docwalker_kind_guess": "paragraph"
-      },
-      {
-        "index": 3795,
-        "text": "Get heated [audio:phrases_verbs_get_heated_1]",
+        "text": "Get heated เริ่มดุเดือด, เริ่มตึงเครียด [audio:phrases_verbs_get_heated_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.rweew4rjzvbq",
@@ -5555,8 +5577,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3796,
-        "text": "Used when a discussion, argument, or situation becomes increasingly emotional, tense, or angry.",
+        "index": 3753,
+        "text": "ใช้เมื่อการพูดคุย การโต้เถียง หรือสถานการณ์เริ่มมีอารมณ์ ตึงเครียด หรือโกรธมากขึ้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5566,7 +5588,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3797,
+        "index": 3754,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5577,8 +5599,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 3798,
-        "text": "The debate got really heated toward the end. Both sides were basically yelling at each other. [audio:phrases_verbs_get_heated_2]",
+        "index": 3755,
+        "text": "The debate got really heated toward the end. Both sides were basically yelling at each other. [audio:phrases_verbs_get_heated_2]\u000bช่วงท้ายการโต้วาทีดุเดือดมาก ทั้งสองฝ่ายแทบจะตะโกนใส่กัน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.vobthtegy7bp",
@@ -5597,8 +5619,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3799,
-        "text": "Things got heated at the family dinner when someone brought up politics. [audio:phrases_verbs_get_heated_3]",
+        "index": 3756,
+        "text": "Things got heated at the family dinner when someone brought up politics. [audio:phrases_verbs_get_heated_3]\u000bบรรยากาศในมื้อเย็นของครอบครัวเริ่มตึงเครียดเมื่อมีคนพูดเรื่องการเมือง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.vobthtegy7bp",
@@ -5617,7 +5639,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 3800,
+        "index": 3757,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5630,10 +5652,10 @@
     ]
   },
   {
-    "section_index": 4639,
+    "section_index": 4695,
     "paragraphs": [
       {
-        "index": 4640,
+        "index": 4696,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5644,8 +5666,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4641,
-        "text": "IN THE MEANTIME",
+        "index": 4697,
+        "text": "IN THE MEANTIME ระหว่างนี้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5655,7 +5677,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4642,
+        "index": 4698,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5666,8 +5688,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4643,
-        "text": "SAVE UP",
+        "index": 4699,
+        "text": "SAVE UP เก็บเงิน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5677,7 +5699,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4644,
+        "index": 4700,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5688,8 +5710,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4645,
-        "text": "PAY ATTENTION",
+        "index": 4701,
+        "text": "PAY ATTENTION ให้ความสนใจ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5699,7 +5721,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 4646,
+        "index": 4702,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5712,10 +5734,10 @@
     ]
   },
   {
-    "section_index": 5423,
+    "section_index": 5436,
     "paragraphs": [
       {
-        "index": 5424,
+        "index": 5437,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5726,8 +5748,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5425,
-        "text": "NOT GONNA LIE",
+        "index": 5438,
+        "text": "NOT GONNA LIE พูดตามตรงนะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5737,8 +5759,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5426,
-        "text": "Not gonna lie [audio:phrases_verbs_not_gonna_lie_1]",
+        "index": 5439,
+        "text": "Not gonna lie พูดตามตรงนะ [audio:phrases_verbs_not_gonna_lie_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.8mkaysizfykb",
@@ -5757,8 +5779,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5427,
-        "text": "A very casual expression used before sharing an honest opinion or admitting something, especially when it might be surprising or uncomfortable.",
+        "index": 5440,
+        "text": "สำนวนกันเองมากที่ใช้ก่อนแสดงความคิดเห็นอย่างตรงไปตรงมาหรือยอมรับบางสิ่ง โดยเฉพาะเมื่อเรื่องนั้นอาจน่าประหลาดใจหรือทำให้อึดอัด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5768,7 +5790,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5428,
+        "index": 5441,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5779,8 +5801,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5429,
-        "text": "People love to hate on McDonald’s. But not gonna lie, there’s nothing better than having their chicken nuggets after a night out. [audio:phrases_verbs_not_gonna_lie_2]",
+        "index": 5442,
+        "text": "People love to hate on McDonald’s. But not gonna lie, there’s nothing better than having their chicken nuggets after a night out. [audio:phrases_verbs_not_gonna_lie_2]\u000bผู้คนชอบวิจารณ์ McDonald’s แต่พูดตามตรงนะ ไม่มีอะไรดีไปกว่าการกินนักเก็ตไก่หลังเที่ยวกลางคืน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.ycvf4qldfcf",
@@ -5799,8 +5821,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5430,
-        "text": "I finally watched ‘A Star is Born.’ Not gonna lie, I cried for an hour straight after it ended. [audio:phrases_verbs_not_gonna_lie_3]",
+        "index": 5443,
+        "text": "I finally watched ‘A Star is Born.’ Not gonna lie, I cried for an hour straight after it ended. [audio:phrases_verbs_not_gonna_lie_3]\u000bในที่สุดฉันก็ดูเรื่อง อะสตาร์อิสบอร์น พูดตามตรงนะ ฉันร้องไห้ต่อเนื่องหนึ่งชั่วโมงหลังหนังจบ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.ycvf4qldfcf",
@@ -5819,7 +5841,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5431,
+        "index": 5444,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5830,7 +5852,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5432,
+        "index": 5445,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5841,8 +5863,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5433,
-        "text": "A SPECIAL PLACE IN MY HEART",
+        "index": 5446,
+        "text": "A SPECIAL PLACE IN MY HEART มีที่พิเศษในใจ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5852,8 +5874,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5434,
-        "text": "A special place in my heart [audio:phrases_verbs_a_special_place_1]",
+        "index": 5447,
+        "text": "A special place in my heart มีที่พิเศษในใจ [audio:phrases_verbs_a_special_place_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.5qkbf7cvjspu",
@@ -5872,8 +5894,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5435,
-        "text": "Used to describe someone or something you feel especially fond of or emotionally connected to.",
+        "index": 5448,
+        "text": "ใช้บรรยายคนหรือสิ่งที่คุณรู้สึกรักใคร่เป็นพิเศษหรือผูกพันทางอารมณ์",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5883,7 +5905,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5436,
+        "index": 5449,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5894,8 +5916,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5437,
-        "text": "Paris will always have a special place in my heart, even though I lived there for only a year. [audio:phrases_verbs_a_special_place_2]",
+        "index": 5450,
+        "text": "Paris will always have a special place in my heart, even though I lived there for only a year. [audio:phrases_verbs_a_special_place_2]\u000bปารีสจะมีที่พิเศษในใจฉันเสมอ แม้ว่าฉันจะอยู่ที่นั่นเพียงปีเดียว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.c3sdyd3t69s",
@@ -5914,8 +5936,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5438,
-        "text": "I only knew him for a few months but he’ll always have a special place in my heart. He was such a good person. [audio:phrases_verbs_a_special_place_3]",
+        "index": 5451,
+        "text": "I only knew him for a few months but he’ll always have a special place in my heart. He was such a good person. [audio:phrases_verbs_a_special_place_3]\u000bฉันรู้จักเขาเพียงไม่กี่เดือน แต่เขาจะมีที่พิเศษในใจฉันเสมอ เขาเป็นคนดีมาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.c3sdyd3t69s",
@@ -5934,7 +5956,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5439,
+        "index": 5452,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5945,7 +5967,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5440,
+        "index": 5453,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -5956,8 +5978,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5441,
-        "text": "SPLASH OUT",
+        "index": 5454,
+        "text": "SPLASH OUT ใช้เงินจัดเต็ม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5967,8 +5989,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5442,
-        "text": "Splash out [audio:phrases_verbs_splash_out_1]",
+        "index": 5455,
+        "text": "Splash out ใช้เงินจัดเต็ม [audio:phrases_verbs_splash_out_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.gm4iu91t5hj",
@@ -5987,8 +6009,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5443,
-        "text": "To spend a lot of money on something special or expensive, often as a treat.",
+        "index": 5456,
+        "text": "ใช้เงินจำนวนมากกับสิ่งพิเศษหรือมีราคาแพง โดยมักเป็นการให้รางวัลตัวเอง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -5998,7 +6020,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5444,
+        "index": 5457,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6009,8 +6031,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5445,
-        "text": "We splashed out on a really nice hotel for our anniversary. [audio:phrases_verbs_splash_out_2]",
+        "index": 5458,
+        "text": "We splashed out on a really nice hotel for our anniversary. [audio:phrases_verbs_splash_out_2]\u000bเราใช้เงินจัดเต็มกับโรงแรมดีมากในวันครบรอบ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.y362lzfgjool",
@@ -6029,8 +6051,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5446,
-        "text": "I’ve been really frugal these past few months, but I had to splash out on a designer bag I’ve been wanting for a while. [audio:phrases_verbs_splash_out_3]",
+        "index": 5459,
+        "text": "I’ve been really frugal these past few months, but I had to splash out on a designer bag I’ve been wanting for a while. [audio:phrases_verbs_splash_out_3]\u000bช่วงสองสามเดือนที่ผ่านมาฉันประหยัดมาก แต่ต้องใช้เงินจัดเต็มกับกระเป๋าดีไซเนอร์ที่อยากได้มาสักพัก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.y362lzfgjool",
@@ -6049,7 +6071,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5447,
+        "index": 5460,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6060,8 +6082,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5448,
-        "text": "FREAKED OUT",
+        "index": 5461,
+        "text": "FREAKED OUT ตกใจมาก, กังวลมาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6071,8 +6093,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5449,
-        "text": "Freaked out [audio:phrases_verbs_freaked_out_1]",
+        "index": 5462,
+        "text": "Freaked out ตกใจมาก, กังวลมาก [audio:phrases_verbs_freaked_out_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.rnunblgz3nnq",
@@ -6091,8 +6113,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5450,
-        "text": "To react very strongly to something because of fear, shock, worry, or excitement.",
+        "index": 5463,
+        "text": "มีปฏิกิริยารุนแรงต่อบางสิ่งเพราะความกลัว ตกใจ กังวล หรือตื่นเต้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6102,7 +6124,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5451,
+        "index": 5464,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6113,8 +6135,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5452,
-        "text": "Don’t freak out, but I think I left my passport at home. [audio:phrases_verbs_freaked_out_2]",
+        "index": 5465,
+        "text": "Don’t freak out, but I think I left my passport at home. [audio:phrases_verbs_freaked_out_2]\u000bอย่าตกใจนะ แต่ฉันคิดว่าทิ้งหนังสือเดินทางไว้ที่บ้าน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.wykgxta90zg7",
@@ -6133,8 +6155,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5453,
-        "text": "I’m a little freaked out by this rainstorm. I’m worried the streets will start flooding. [audio:phrases_verbs_freaked_out_3]",
+        "index": 5466,
+        "text": "I’m a little freaked out by this rainstorm. I’m worried the streets will start flooding. [audio:phrases_verbs_freaked_out_3]\u000bฉันกังวลกับพายุฝนนี้นิดหน่อย กลัวว่าถนนจะเริ่มน้ำท่วม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.wykgxta90zg7",
@@ -6153,7 +6175,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5454,
+        "index": 5467,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6164,7 +6186,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5455,
+        "index": 5468,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6175,8 +6197,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5456,
-        "text": "SPLIT UP",
+        "index": 5469,
+        "text": "SPLIT UP เลิกกัน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6186,8 +6208,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5457,
-        "text": "Split up [audio:phrases_verbs_split_up_1]",
+        "index": 5470,
+        "text": "Split up เลิกกัน [audio:phrases_verbs_split_up_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.n40qwmanoq3h",
@@ -6206,8 +6228,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5458,
-        "text": "Another way of saying to ‘break up’ with someone. To end a romantic relationship.",
+        "index": 5471,
+        "text": "เป็นอีกวิธีหนึ่งในการพูดว่า break up กับใครบางคน หมายถึงยุติความสัมพันธ์เชิงรัก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6217,7 +6239,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5459,
+        "index": 5472,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6228,8 +6250,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5460,
-        "text": "My ex and I split up a few months ago. [audio:phrases_verbs_split_up_2]",
+        "index": 5473,
+        "text": "My ex and I split up a few months ago. [audio:phrases_verbs_split_up_2]\u000bฉันกับแฟนเก่าเลิกกันเมื่อสองสามเดือนก่อน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.fmbxi0mx41bn",
@@ -6248,8 +6270,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5461,
-        "text": "I heard they split up but I don’t know the details. [audio:phrases_verbs_split_up_3]",
+        "index": 5474,
+        "text": "I heard they split up but I don’t know the details. [audio:phrases_verbs_split_up_3]\u000bฉันได้ยินว่าพวกเขาเลิกกัน แต่ไม่รู้รายละเอียด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.fmbxi0mx41bn",
@@ -6268,7 +6290,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5462,
+        "index": 5475,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6279,8 +6301,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5463,
-        "text": "THE RIGHT CALL",
+        "index": 5476,
+        "text": "THE RIGHT CALL การตัดสินใจที่ถูกต้อง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6290,8 +6312,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5464,
-        "text": "The right call [audio:phrases_verbs_the_right_call_1]",
+        "index": 5477,
+        "text": "The right call การตัดสินใจที่ถูกต้อง [audio:phrases_verbs_the_right_call_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.h6erckymg89j",
@@ -6310,8 +6332,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5465,
-        "text": "Used to describe a decision that was correct or appropriate for the situation.",
+        "index": 5478,
+        "text": "ใช้บรรยายการตัดสินใจที่ถูกต้องหรือเหมาะสมกับสถานการณ์",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6321,7 +6343,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5466,
+        "index": 5479,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6332,8 +6354,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5467,
-        "text": "Leaving that job was the right call. I’m so much happier at my new job. [audio:phrases_verbs_the_right_call_2]",
+        "index": 5480,
+        "text": "Leaving that job was the right call. I’m so much happier at my new job. [audio:phrases_verbs_the_right_call_2]\u000bการออกจากงานนั้นเป็นการตัดสินใจที่ถูกต้อง ฉันมีความสุขกับงานใหม่มากกว่า",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.gbvzxmotofuv",
@@ -6352,8 +6374,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5468,
-        "text": "Choosing the smaller apartment was the right call. We never would’ve been able to afford the bigger one in the long run. [audio:phrases_verbs_the_right_call_3]",
+        "index": 5481,
+        "text": "Choosing the smaller apartment was the right call. We never would’ve been able to afford the bigger one in the long run. [audio:phrases_verbs_the_right_call_3]\u000bการเลือกอพาร์ตเมนต์ที่เล็กกว่าเป็นการตัดสินใจที่ถูกต้อง ระยะยาวเราไม่มีทางจ่ายค่าอพาร์ตเมนต์ที่ใหญ่กว่าไหว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.gbvzxmotofuv",
@@ -6372,7 +6394,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5469,
+        "index": 5482,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6383,8 +6405,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5470,
-        "text": "END THINGS ON A HIGH NOTE",
+        "index": 5483,
+        "text": "END THINGS ON A HIGH NOTE จบลงในช่วงเวลาที่ดี",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6394,8 +6416,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5471,
-        "text": "End things on a high note [audio:phrases_verbs_end_things_on_a_high_note_1]",
+        "index": 5484,
+        "text": "End things on a high note จบลงในช่วงเวลาที่ดี [audio:phrases_verbs_end_things_on_a_high_note_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.4fpqjurfssp9",
@@ -6414,8 +6436,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5472,
-        "text": "To finish an experience in a positive way rather than letting things drag on or deteriorate.",
+        "index": 5485,
+        "text": "จบประสบการณ์ในทางบวก แทนที่จะปล่อยให้ยืดเยื้อหรือแย่ลง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6425,7 +6447,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5473,
+        "index": 5486,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6436,8 +6458,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5474,
-        "text": "Let’s end the meeting on a high note. Does anyone have any good news to share? [audio:phrases_verbs_end_things_on_a_high_note_2]",
+        "index": 5487,
+        "text": "Let’s end the meeting on a high note. Does anyone have any good news to share? [audio:phrases_verbs_end_things_on_a_high_note_2]\u000bมาจบการประชุมด้วยเรื่องดี ๆ กัน ใครมีข่าวดีอยากแบ่งปันไหม?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.fkal0vehbnbd",
@@ -6456,8 +6478,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5475,
-        "text": "She ended her singing career on a high note. It’s so sad when good singers keep making music but the quality of their music gets worse and worse. [audio:phrases_verbs_end_things_on_a_high_note_3]",
+        "index": 5488,
+        "text": "She ended her singing career on a high note. It’s so sad when good singers keep making music but the quality of their music gets worse and worse. [audio:phrases_verbs_end_things_on_a_high_note_3]\u000bเธอจบอาชีพนักร้องในช่วงที่ดีที่สุด น่าเศร้าเวลานักร้องเก่ง ๆ ยังทำเพลงต่อแต่คุณภาพเพลงกลับแย่ลงเรื่อย ๆ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.fkal0vehbnbd",
@@ -6476,7 +6498,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5476,
+        "index": 5489,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6487,8 +6509,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5477,
-        "text": "LOOK BACK ON",
+        "index": 5490,
+        "text": "LOOK BACK ON มองย้อนกลับไป",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6498,8 +6520,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5478,
-        "text": "Look back on [audio:phrases_verbs_look_back_on_1]",
+        "index": 5491,
+        "text": "Look back on มองย้อนกลับไป [audio:phrases_verbs_look_back_on_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.ptpzdinu2mfy",
@@ -6518,8 +6540,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5479,
-        "text": "To think about or remember something that happened in the past, often while reflecting on the experience.",
+        "index": 5492,
+        "text": "คิดถึงหรือจดจำสิ่งที่เกิดขึ้นในอดีต โดยมักไตร่ตรองถึงประสบการณ์นั้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6529,7 +6551,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5480,
+        "index": 5493,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6540,8 +6562,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5481,
-        "text": "I hated my first job as a waiter, but looking back on it, it was a great experience. I learned a lot from it. [audio:phrases_verbs_look_back_on_2]",
+        "index": 5494,
+        "text": "I hated my first job as a waiter, but looking back on it, it was a great experience. I learned a lot from it. [audio:phrases_verbs_look_back_on_2]\u000bฉันเกลียดงานแรกที่เป็นพนักงานเสิร์ฟ แต่เมื่อมองย้อนกลับไป มันเป็นประสบการณ์ที่ดีมากและฉันได้เรียนรู้มากมาย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.fud691bxtkg",
@@ -6560,8 +6582,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5482,
-        "text": "Looking back on it, I wish I’d taken more risks in my life when I was younger. [audio:phrases_verbs_look_back_on_3]",
+        "index": 5495,
+        "text": "Looking back on it, I wish I’d taken more risks in my life when I was younger. [audio:phrases_verbs_look_back_on_3]\u000bเมื่อมองย้อนกลับไป ฉันหวังว่าตอนอายุน้อยจะกล้าเสี่ยงในชีวิตมากกว่านี้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.fud691bxtkg",
@@ -6580,7 +6602,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5483,
+        "index": 5496,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6591,7 +6613,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5484,
+        "index": 5497,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6602,8 +6624,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5485,
-        "text": "PULL OVER",
+        "index": 5498,
+        "text": "PULL OVER จอดข้างทาง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6613,8 +6635,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5486,
-        "text": "Pull over [audio:phrases_verbs_pull_over_1]",
+        "index": 5499,
+        "text": "Pull over จอดข้างทาง [audio:phrases_verbs_pull_over_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.1p1qysiid2m",
@@ -6633,8 +6655,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5487,
-        "text": "To drive your car to the side of the road and stop, usually for a short time.",
+        "index": 5500,
+        "text": "ขับรถเข้าข้างทางแล้วหยุด โดยปกติเป็นเวลาสั้น ๆ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6644,7 +6666,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5488,
+        "index": 5501,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6655,8 +6677,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 5489,
-        "text": "I’m gonna pull over for a second. I want to grab my sunglasses from the trunk. [audio:phrases_verbs_pull_over_2]",
+        "index": 5502,
+        "text": "I’m gonna pull over for a second. I want to grab my sunglasses from the trunk. [audio:phrases_verbs_pull_over_2]\u000bฉันจะจอดข้างทางสักครู่ อยากหยิบแว่นกันแดดจากท้ายรถ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.v0x7vap1rq8c",
@@ -6675,8 +6697,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5490,
-        "text": "Can we pull over at the next gas station we see? I want to use the bathroom. [audio:phrases_verbs_pull_over_3]",
+        "index": 5503,
+        "text": "Can we pull over at the next gas station we see? I want to use the bathroom. [audio:phrases_verbs_pull_over_3]\u000bเราแวะจอดปั๊มน้ำมันแห่งถัดไปที่เห็นได้ไหม? ฉันอยากเข้าห้องน้ำ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.v0x7vap1rq8c",
@@ -6695,7 +6717,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 5491,
+        "index": 5504,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6708,10 +6730,10 @@
     ]
   },
   {
-    "section_index": 6000,
+    "section_index": 6084,
     "paragraphs": [
       {
-        "index": 6001,
+        "index": 6085,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6722,8 +6744,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6002,
-        "text": "WHEN IT COMES TO",
+        "index": 6086,
+        "text": "WHEN IT COMES TO เมื่อพูดถึง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6733,8 +6755,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6003,
-        "text": "When it comes to [something] [audio:phrases_verbs_when_it_comes_to_1]",
+        "index": 6087,
+        "text": "When it comes to เมื่อพูดถึง [audio:phrases_verbs_when_it_comes_to_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.5c56f3uyk5wv",
@@ -6753,8 +6775,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6004,
-        "text": "Used to introduce a specific topic or area when expressing an opinion or explaining something.",
+        "index": 6088,
+        "text": "When it comes to [สิ่ง]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6764,7 +6786,18 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6005,
+        "index": 6089,
+        "text": "ใช้เพื่อนำเสนอหัวข้อหรือด้านใดด้านหนึ่งโดยเฉพาะ ขณะแสดงความคิดเห็นหรืออธิบายบางสิ่ง",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6090,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6775,8 +6808,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6006,
-        "text": "I’m pretty easygoing about most things, but when it comes to my sleep, I don’t mess around. I have to be in bed by 10 or I’ll be cranky the next day. [audio:phrases_verbs_when_it_comes_to_2]",
+        "index": 6091,
+        "text": "I’m pretty easygoing about most things, but when it comes to my sleep, I don’t mess around. I have to be in bed by 10 or I’ll be cranky the next day. [audio:phrases_verbs_when_it_comes_to_2]\u000bโดยทั่วไปฉันสบาย ๆ กับเรื่องส่วนใหญ่ แต่เมื่อพูดถึงการนอน ฉันจริงจังมาก ฉันต้องเข้านอนภายในสี่ทุ่ม ไม่อย่างนั้นวันรุ่งขึ้นจะหงุดหงิด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.716miesb2pcv",
@@ -6795,8 +6828,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6007,
-        "text": "He’s very good at planning things out, but when it comes to making quick decisions under pressure, he’s not the best. [audio:phrases_verbs_when_it_comes_to_3]",
+        "index": 6092,
+        "text": "He’s very good at planning things out, but when it comes to making quick decisions under pressure, he’s not the best. [audio:phrases_verbs_when_it_comes_to_3]\u000bเขาวางแผนเรื่องต่าง ๆ ได้เก่งมาก แต่เมื่อพูดถึงการตัดสินใจอย่างรวดเร็วภายใต้ความกดดัน เขาไม่ค่อยเก่งนัก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.716miesb2pcv",
@@ -6815,7 +6848,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6008,
+        "index": 6093,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6826,8 +6859,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6009,
-        "text": "OUT OF TOWN",
+        "index": 6094,
+        "text": "OUT OF TOWN ไปต่างเมือง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6837,8 +6870,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6010,
-        "text": "Out of town [audio:phrases_verbs_out_of_town_1]",
+        "index": 6095,
+        "text": "Out of town ไปต่างเมือง [audio:phrases_verbs_out_of_town_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.a0fdb81rodj9",
@@ -6857,8 +6890,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6011,
-        "text": "Away from the city or town where you normally live, usually because you're traveling.",
+        "index": 6096,
+        "text": "อยู่ห่างจากเมืองที่ปกติคุณอาศัยอยู่ โดยมากเป็นเพราะกำลังเดินทาง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6868,7 +6901,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6012,
+        "index": 6097,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6879,8 +6912,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6013,
-        "text": "I’ll be out of town next week, but let’s grab a drink the week after that! [audio:phrases_verbs_out_of_town_2]",
+        "index": 6098,
+        "text": "I’ll be out of town next week, but let’s grab a drink the week after that! [audio:phrases_verbs_out_of_town_2]\u000bสัปดาห์หน้าฉันจะไปต่างเมือง แต่สัปดาห์ถัดไปไปดื่มอะไรกันนะ!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.e35t7nd6ldrg",
@@ -6899,8 +6932,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6014,
-        "text": "My wife has been out of town a lot recently for work. [audio:phrases_verbs_out_of_town_3]",
+        "index": 6099,
+        "text": "My wife has been out of town a lot recently for work. [audio:phrases_verbs_out_of_town_3]\u000bช่วงนี้ภรรยาของฉันต้องไปต่างเมืองเพราะงานบ่อยมาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.e35t7nd6ldrg",
@@ -6919,7 +6952,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6015,
+        "index": 6100,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6930,8 +6963,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6016,
-        "text": "SOON ENOUGH",
+        "index": 6101,
+        "text": "SOON ENOUGH อีกไม่นาน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6941,8 +6974,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6017,
-        "text": "Soon enough [audio:phrases_verbs_soon_enough_1]",
+        "index": 6102,
+        "text": "Soon enough อีกไม่นาน [audio:phrases_verbs_soon_enough_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.2onequxc39s",
@@ -6961,8 +6994,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6018,
-        "text": "Used to express confidence that something will happen before too long, even if it hasn't happened yet.",
+        "index": 6103,
+        "text": "ใช้แสดงความมั่นใจว่าบางสิ่งจะเกิดขึ้นในเวลาไม่นาน แม้ว่ายังไม่เกิดขึ้นก็ตาม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -6972,7 +7005,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6019,
+        "index": 6104,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -6983,8 +7016,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6020,
-        "text": "Stop stressing, you’ll find a job soon enough. Any job would be lucky to hire you! [audio:phrases_verbs_soon_enough_2]",
+        "index": 6105,
+        "text": "Stop stressing, you’ll find a job soon enough. Any job would be lucky to hire you! [audio:phrases_verbs_soon_enough_2]\u000bเลิกเครียดได้แล้ว อีกไม่นานคุณก็จะหางานได้ งานไหน ๆ ก็โชคดีที่ได้คุณไปทำ!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.e9ti51aui0dg",
@@ -7003,8 +7036,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6021,
-        "text": "It’s always hard moving to a new city when you don't know anyone, but you’ll make friends soon enough. You just have to put yourself out there. [audio:phrases_verbs_soon_enough_3]",
+        "index": 6106,
+        "text": "It’s always hard moving to a new city when you don't know anyone, but you’ll make friends soon enough. You just have to put yourself out there. [audio:phrases_verbs_soon_enough_3]\u000bการย้ายไปเมืองใหม่ทั้งที่ไม่รู้จักใครเป็นเรื่องยากเสมอ แต่อีกไม่นานคุณก็จะมีเพื่อน แค่ต้องกล้าออกไปพบปะผู้คน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.e9ti51aui0dg",
@@ -7023,7 +7056,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6022,
+        "index": 6107,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7034,7 +7067,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6023,
+        "index": 6108,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7045,8 +7078,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6024,
-        "text": "NOT THAT I CAN THINK OF",
+        "index": 6109,
+        "text": "NOT THAT I CAN THINK OF เท่าที่นึกออกก็ไม่มี",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7056,8 +7089,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6025,
-        "text": "Not that I can think of [audio:phrases_verbs_not_that_i_can_think_of_1]",
+        "index": 6110,
+        "text": "Not that I can think of เท่าที่นึกออกก็ไม่มี [audio:phrases_verbs_not_that_i_can_think_of_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.18elica8z9z0",
@@ -7076,8 +7109,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6026,
-        "text": "Used to say that you can't remember or think of anything that answers a question, although you might have forgotten something.",
+        "index": 6111,
+        "text": "ใช้บอกว่าคุณจำหรือนึกถึงสิ่งที่ตอบคำถามนั้นไม่ได้ แม้ว่าคุณอาจลืมบางอย่างไปก็ตาม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7087,7 +7120,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6027,
+        "index": 6112,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7098,8 +7131,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6028,
-        "text": "Pailin: Is there anything we’re forgetting for our trip? [audio:phrases_verbs_not_that_i_can_think_of_2]",
+        "index": 6113,
+        "text": "Pailin: Is there anything we’re forgetting for our trip? [audio:phrases_verbs_not_that_i_can_think_of_2]\u000bไพลิน: มีอะไรที่เราลืมเตรียมสำหรับทริปนี้ไหม?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.h6yllyckokkl",
@@ -7118,8 +7151,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6029,
-        "text": "Luke: Not that I can think of.",
+        "index": 6114,
+        "text": "Luke: Not that I can think of.\u000bลูค: เท่าที่นึกออกก็ไม่มีนะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7129,7 +7162,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6030,
+        "index": 6115,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7140,8 +7173,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6031,
-        "text": "Luke: Did Britney say anything bad about me at dinner? [audio:phrases_verbs_not_that_i_can_think_of_2]",
+        "index": 6116,
+        "text": "Luke: Did Britney say anything bad about me at dinner? [audio:phrases_verbs_not_that_i_can_think_of_2]\u000bลูค: บริตนีย์พูดอะไรไม่ดีเกี่ยวกับฉันตอนมื้อเย็นไหม?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.9d0oc3hdqxdb",
@@ -7160,8 +7193,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6032,
-        "text": "Pailin: Not that I can think of. I don’t think she mentioned you at all.",
+        "index": 6117,
+        "text": "Pailin: Not that I can think of. I don’t think she mentioned you at all.\u000bไพลิน: เท่าที่นึกออกก็ไม่มีนะ ฉันไม่คิดว่าเธอพูดถึงคุณเลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7171,7 +7204,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6033,
+        "index": 6118,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7182,7 +7215,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6034,
+        "index": 6119,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7193,8 +7226,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6035,
-        "text": "ZELLE",
+        "index": 6120,
+        "text": "ZELLE เซลล์",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7204,8 +7237,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6036,
-        "text": "Zelle [audio:phrases_verbs_zelle_1]",
+        "index": 6121,
+        "text": "Zelle เซลล์ [audio:phrases_verbs_zelle_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.jxs338y7xxn0",
@@ -7224,8 +7257,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6037,
-        "text": "A popular money transfer service in the US that lets people send money directly between bank accounts. It's often used as a verb meaning to send someone money through Zelle.",
+        "index": 6122,
+        "text": "บริการโอนเงินยอดนิยมในสหรัฐฯ ที่ช่วยให้ผู้คนส่งเงินระหว่างบัญชีธนาคารได้โดยตรง มักใช้เป็นคำกริยา หมายถึงส่งเงินให้ใครบางคนผ่าน Zelle",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7235,7 +7268,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6038,
+        "index": 6123,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7246,8 +7279,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6039,
-        "text": "I’m gonna Zelle you my portion of dinner. [audio:phrases_verbs_zelle_2]",
+        "index": 6124,
+        "text": "I’m gonna Zelle you my portion of dinner. [audio:phrases_verbs_zelle_2]\u000bฉันจะโอนเงินค่าอาหารส่วนของฉันให้คุณผ่าน Zelle",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.wz6u78wfpjny",
@@ -7266,8 +7299,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6040,
-        "text": "He said he would Zelle me for the groceries but he never did. [audio:phrases_verbs_zelle_3]",
+        "index": 6125,
+        "text": "He said he would Zelle me for the groceries but he never did. [audio:phrases_verbs_zelle_3]\u000bเขาบอกว่าจะโอนค่าของชำให้ฉันผ่าน Zelle แต่สุดท้ายก็ไม่ได้โอน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.wz6u78wfpjny",
@@ -7286,7 +7319,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6041,
+        "index": 6126,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7299,10 +7332,10 @@
     ]
   },
   {
-    "section_index": 6336,
+    "section_index": 6461,
     "paragraphs": [
       {
-        "index": 6337,
+        "index": 6462,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7313,8 +7346,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6338,
-        "text": "THINK STRAIGHT",
+        "index": 6463,
+        "text": "THINK STRAIGHT คิดอะไรได้ชัดเจน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7324,8 +7357,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6339,
-        "text": "Think straight [audio:phrases_verbs_think_straight_1]",
+        "index": 6464,
+        "text": "Think straight คิดอะไรได้ชัดเจน [audio:phrases_verbs_think_straight_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.sczsap5jyrjd",
@@ -7344,8 +7377,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6340,
-        "text": "To think clearly and make reasonable decisions, especially when you're under stress, exhausted, or distracted.",
+        "index": 6465,
+        "text": "คิดอย่างชัดเจนและตัดสินใจอย่างสมเหตุสมผล โดยเฉพาะเมื่ออยู่ภายใต้ความเครียด เหนื่อยล้า หรือเสียสมาธิ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7355,7 +7388,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6341,
+        "index": 6466,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7366,8 +7399,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6342,
-        "text": "Can we discuss this tomorrow? I’ve had 3 hours of sleep and I can’t think straight. [audio:phrases_verbs_think_straight_2]",
+        "index": 6467,
+        "text": "Can we discuss this tomorrow? I’ve had 3 hours of sleep and I can’t think straight. [audio:phrases_verbs_think_straight_2]\u000bเราคุยเรื่องนี้พรุ่งนี้ได้ไหม? ฉันได้นอนแค่ 3 ชั่วโมงและตอนนี้คิดอะไรไม่ออกเลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.11sisgn1rrgs",
@@ -7386,8 +7419,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6343,
-        "text": "I’ve been in back-to-back meetings since 8AM. I can’t think straight anymore. [audio:phrases_verbs_think_straight_3]",
+        "index": 6468,
+        "text": "I’ve been in back-to-back meetings since 8AM. I can’t think straight anymore. [audio:phrases_verbs_think_straight_3]\u000bฉันประชุมต่อเนื่องตั้งแต่ 8 โมงเช้า ตอนนี้คิดอะไรไม่ออกแล้ว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.11sisgn1rrgs",
@@ -7406,8 +7439,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6344,
-        "text": "He quit his job without anything lined up. He must not be thinking straight. [audio:phrases_verbs_think_straight_4]",
+        "index": 6469,
+        "text": "He quit his job without anything lined up. He must not be thinking straight. [audio:phrases_verbs_think_straight_4]\u000bเขาลาออกจากงานทั้งที่ยังไม่มีงานใหม่รองรับ เขาคงคิดอะไรไม่รอบคอบ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.11sisgn1rrgs",
@@ -7426,7 +7459,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6345,
+        "index": 6470,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7437,8 +7470,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6346,
-        "text": "RUNNING ON",
+        "index": 6471,
+        "text": "RUNNING ON ประคองตัวด้วย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7448,8 +7481,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6347,
-        "text": "Running on [something] [audio:phrases_verbs_running_on_1]",
+        "index": 6472,
+        "text": "Running on ประคองตัวด้วย [audio:phrases_verbs_running_on_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.vapfbi3s16z1",
@@ -7468,8 +7501,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6348,
-        "text": "Used when someone is managing to function with very little sleep, energy, or other necessities.",
+        "index": 6473,
+        "text": "Running on [สิ่ง]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7479,7 +7512,18 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6349,
+        "index": 6474,
+        "text": "ใช้เมื่อใครบางคนพยายามใช้ชีวิตหรือทำงานต่อไปทั้งที่ได้นอน มีพลังงาน หรือมีสิ่งจำเป็นอื่น ๆ น้อยมาก",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6475,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7490,8 +7534,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6350,
-        "text": "I’m only running on 4 hours of sleep right now. I’m practically a zombie at this point. [audio:phrases_verbs_running_on_2]",
+        "index": 6476,
+        "text": "I’m only running on 4 hours of sleep right now. I’m practically a zombie at this point. [audio:phrases_verbs_running_on_2]\u000bตอนนี้ฉันประคองตัวด้วยการนอนแค่ 4 ชั่วโมง ฉันแทบเป็นซอมบี้แล้ว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.luw5r6lxd2ux",
@@ -7510,8 +7554,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6351,
-        "text": "I don’t know how I made it through finals week. I was basically running on coffee and protein bars. [audio:phrases_verbs_running_on_3]",
+        "index": 6477,
+        "text": "I don’t know how I made it through finals week. I was basically running on coffee and protein bars. [audio:phrases_verbs_running_on_3]\u000bฉันไม่รู้ว่าผ่านสัปดาห์สอบปลายภาคมาได้อย่างไร ตอนนั้นแทบประคองตัวด้วยกาแฟและโปรตีนบาร์",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.luw5r6lxd2ux",
@@ -7530,7 +7574,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6352,
+        "index": 6478,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7541,8 +7585,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6353,
-        "text": "I FIND IT SO",
+        "index": 6479,
+        "text": "I FIND IT SO ฉันรู้สึกว่า...มาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7552,8 +7596,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6354,
-        "text": "I find it so [adjective] [audio:phrases_verbs_i_find_it_so_1]",
+        "index": 6480,
+        "text": "I find it so ฉันรู้สึกว่า [audio:phrases_verbs_i_find_it_so_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.ymgez6ncfu6",
@@ -7572,8 +7616,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6355,
-        "text": "Used to express a strong personal opinion or feeling about something, followed by an adjective.",
+        "index": 6481,
+        "text": "I find it so [คำคุณศัพท์]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7583,7 +7627,18 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6356,
+        "index": 6482,
+        "text": "ใช้แสดงความคิดเห็นหรือความรู้สึกส่วนตัวอย่างหนักแน่นเกี่ยวกับบางสิ่ง ตามด้วยคำคุณศัพท์",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6483,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7594,8 +7649,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6357,
-        "text": "I find it so frustrating when people don’t line up for the subway. [audio:phrases_verbs_i_find_it_so_2]",
+        "index": 6484,
+        "text": "I find it so frustrating when people don’t line up for the subway. [audio:phrases_verbs_i_find_it_so_2]\u000bฉันรู้สึกหงุดหงิดมากเวลาคนไม่ต่อแถวขึ้นรถไฟใต้ดิน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.6cbmdbc9fd1h",
@@ -7614,8 +7669,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6358,
-        "text": "I find it so hard to say no when someone asks me to do something I don’t want to do. I’m working on it. [audio:phrases_verbs_i_find_it_so_3]",
+        "index": 6485,
+        "text": "I find it so hard to say no when someone asks me to do something I don’t want to do. I’m working on it. [audio:phrases_verbs_i_find_it_so_3]\u000bฉันรู้สึกว่าการปฏิเสธเป็นเรื่องยากมาก เมื่อมีคนขอให้ทำสิ่งที่ฉันไม่อยากทำ ฉันกำลังพยายามปรับปรุงตัวเองอยู่",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.6cbmdbc9fd1h",
@@ -7634,8 +7689,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6359,
-        "text": "I find it so exhausting to be around people who complain constantly. [audio:phrases_verbs_i_find_it_so_4]",
+        "index": 6486,
+        "text": "I find it so exhausting to be around people who complain constantly. [audio:phrases_verbs_i_find_it_so_4]\u000bฉันรู้สึกเหนื่อยมากที่ต้องอยู่ใกล้คนซึ่งบ่นตลอดเวลา",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.6cbmdbc9fd1h",
@@ -7654,7 +7709,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6360,
+        "index": 6487,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7665,7 +7720,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6361,
+        "index": 6488,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7676,8 +7731,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6362,
-        "text": "NO KIDDING",
+        "index": 6489,
+        "text": "NO KIDDING จริงด้วย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7687,8 +7742,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6363,
-        "text": "No kidding [audio:phrases_verbs_no_kidding_1]",
+        "index": 6490,
+        "text": "No kidding จริงด้วย [audio:phrases_verbs_no_kidding_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.pgkh4o46b3tg",
@@ -7707,8 +7762,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6364,
-        "text": "Used to strongly agree with something someone has said, especially when you've had a similar experience or think it's obviously true.",
+        "index": 6491,
+        "text": "ใช้แสดงความเห็นด้วยอย่างมากกับสิ่งที่ใครบางคนพูด โดยเฉพาะเมื่อคุณเคยมีประสบการณ์คล้ายกันหรือคิดว่าเรื่องนั้นจริงอย่างเห็นได้ชัด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7718,7 +7773,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6365,
+        "index": 6492,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7729,8 +7784,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6366,
-        "text": "Luke: The cost of living in LA is getting out of control. [audio:phrases_verbs_no_kidding_2]",
+        "index": 6493,
+        "text": "Luke: The cost of living in LA is getting out of control. [audio:phrases_verbs_no_kidding_2]\u000bลูค: ค่าครองชีพในแอลเอเริ่มควบคุมไม่อยู่แล้ว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.ymor5luem6go",
@@ -7749,8 +7804,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6367,
-        "text": "Pailin: No kidding. Maybe I should move back to Thailand.",
+        "index": 6494,
+        "text": "Pailin: No kidding. Maybe I should move back to Thailand.\u000bไพลิน: จริงด้วย บางทีฉันควรย้ายกลับประเทศไทย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7760,7 +7815,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6368,
+        "index": 6495,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7771,8 +7826,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6369,
-        "text": "Pailin: The wind was insane today! [audio:phrases_verbs_no_kidding_3]",
+        "index": 6496,
+        "text": "Pailin: The wind was insane today! [audio:phrases_verbs_no_kidding_3]\u000bไพลิน: วันนี้ลมแรงบ้าคลั่งมาก!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.twsfhu1i6llb",
@@ -7791,8 +7846,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6370,
-        "text": "Luke: No kidding. It knocked over a tree in my front yard.",
+        "index": 6497,
+        "text": "Luke: No kidding. It knocked over a tree in my front yard.\u000bลูค: จริงด้วย ลมพัดต้นไม้ในสนามหน้าบ้านฉันล้มเลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7802,7 +7857,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6371,
+        "index": 6498,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7813,7 +7868,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6372,
+        "index": 6499,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7824,8 +7879,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6373,
-        "text": "STOP",
+        "index": 6500,
+        "text": "STOP เดี๋ยวนะ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7835,8 +7890,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6374,
-        "text": "Stop [audio:phrases_verbs_stop_1]",
+        "index": 6501,
+        "text": "Stop เดี๋ยวนะ [audio:phrases_verbs_stop_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.5xapea9elmei",
@@ -7855,8 +7910,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6375,
-        "text": "A playful expression of surprise, disbelief, or excitement, used when someone tells you something shocking or unexpected. It doesn't literally mean you want them to stop talking.",
+        "index": 6502,
+        "text": "คำอุทานแบบหยอกเล่นที่แสดงความประหลาดใจ ไม่อยากเชื่อ หรือตื่นเต้น ใช้เมื่อมีคนบอกเรื่องที่น่าตกใจหรือคาดไม่ถึง ไม่ได้หมายความตามตัวอักษรว่าต้องการให้อีกฝ่ายหยุดพูด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7866,7 +7921,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6376,
+        "index": 6503,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7877,8 +7932,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6377,
-        "text": "Luke: I won a free plane ticket to London! [audio:phrases_verbs_stop_2]",
+        "index": 6504,
+        "text": "Luke: I won a free plane ticket to London! [audio:phrases_verbs_stop_2]\u000bลูค: ฉันได้ตั๋วเครื่องบินไปลอนดอนฟรี!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.pqnox854ersg",
@@ -7897,8 +7952,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6378,
-        "text": "Pailin: Stop, you’re kidding! That’s amazing!",
+        "index": 6505,
+        "text": "Pailin: Stop, you’re kidding! That’s amazing!\u000bไพลิน: เดี๋ยวนะ ล้อเล่นใช่ไหม! เยี่ยมมากเลย!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7908,7 +7963,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6379,
+        "index": 6506,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7919,8 +7974,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6380,
-        "text": "Luke: I haven’t been paid by the coffee shop in over a month. [audio:phrases_verbs_stop_3]",
+        "index": 6507,
+        "text": "Luke: I haven’t been paid by the coffee shop in over a month. [audio:phrases_verbs_stop_3]\u000bลูค: ร้านกาแฟยังไม่จ่ายเงินฉันมาเกินหนึ่งเดือนแล้ว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.tg3ggkt4ksya",
@@ -7939,8 +7994,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6381,
-        "text": "Pailin: Stop. Luke, that’s so illegal! They need to pay you!",
+        "index": 6508,
+        "text": "Pailin: Stop. Luke, that’s so illegal! They need to pay you!\u000bไพลิน: เดี๋ยวนะ ลูค นั่นผิดกฎหมายมากเลย! พวกเขาต้องจ่ายเงินให้นายนะ!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7950,7 +8005,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6382,
+        "index": 6509,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -7961,8 +8016,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6383,
-        "text": "DEAD SERIOUS",
+        "index": 6510,
+        "text": "DEAD SERIOUS จริงจังสุด ๆ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -7972,8 +8027,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6384,
-        "text": "Dead serious [audio:phrases_verbs_dead_serious_1]",
+        "index": 6511,
+        "text": "Dead serious จริงจังสุด ๆ [audio:phrases_verbs_dead_serious_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.3xxgo681zm8",
@@ -7992,8 +8047,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6385,
-        "text": "Used to emphasize that you're being completely serious and aren't joking or exaggerating.",
+        "index": 6512,
+        "text": "ใช้เน้นว่าคุณกำลังพูดอย่างจริงจังโดยสมบูรณ์ ไม่ได้ล้อเล่นหรือพูดเกินจริง",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8003,7 +8058,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6386,
+        "index": 6513,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8014,8 +8069,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6387,
-        "text": "Pailin: You don’t like sushi?? You’re joking. [audio:phrases_verbs_dead_serious_2]",
+        "index": 6514,
+        "text": "Pailin: You don’t like sushi?? You’re joking. [audio:phrases_verbs_dead_serious_2]\u000bไพลิน: นายไม่ชอบซูชิเหรอ?? ล้อเล่นใช่ไหม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.8cch1uatgq2a",
@@ -8034,8 +8089,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6388,
-        "text": "Luke: No, dead serious. I’ve never liked it.",
+        "index": 6515,
+        "text": "Luke: No, dead serious. I’ve never liked it.\u000bลูค: ไม่ จริงจังสุด ๆ ฉันไม่เคยชอบเลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8045,7 +8100,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6389,
+        "index": 6516,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8056,8 +8111,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6390,
-        "text": "Pailin: You saw a ghost in your room? Nah, it was probably a trick of the light. [audio:phrases_verbs_dead_serious_3]",
+        "index": 6517,
+        "text": "Pailin: You saw a ghost in your room? Nah, it was probably a trick of the light. [audio:phrases_verbs_dead_serious_3]\u000bไพลิน: นายเห็นผีในห้องเหรอ? ไม่หรอก คงเป็นแค่แสงหลอกตา",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.dbbcg2acn6vh",
@@ -8076,8 +8131,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6391,
-        "text": "Luke: I’m dead serious. Even the dog was looking directly at it.",
+        "index": 6518,
+        "text": "Luke: I’m dead serious. Even the dog was looking directly at it.\u000bลูค: ฉันพูดจริงนะ แม้แต่สุนัขยังมองตรงไปที่มันเลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8087,7 +8142,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6392,
+        "index": 6519,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8098,7 +8153,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6393,
+        "index": 6520,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8109,8 +8164,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6394,
-        "text": "IN CASE",
+        "index": 6521,
+        "text": "IN CASE เผื่อไว้",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8120,8 +8175,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6395,
-        "text": "In case [audio:phrases_verbs_in_case_1]",
+        "index": 6522,
+        "text": "In case เผื่อไว้ [audio:phrases_verbs_in_case_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.a0ort6i5eb9w",
@@ -8140,8 +8195,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6396,
-        "text": "Used when taking a precaution or preparing for something that might happen, even though you're not sure it will.",
+        "index": 6523,
+        "text": "ใช้เมื่อเตรียมป้องกันหรือเตรียมพร้อมสำหรับบางสิ่งที่อาจเกิดขึ้น แม้จะไม่แน่ใจว่าจะเกิดขึ้นจริงหรือไม่",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8151,7 +8206,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6397,
+        "index": 6524,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8162,8 +8217,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6398,
-        "text": "I’m gonna bring an umbrella just in case. I’d rather be too prepared than be soaking wet in a rainstorm. [audio:phrases_verbs_in_case_2]",
+        "index": 6525,
+        "text": "I’m gonna bring an umbrella just in case. I’d rather be too prepared than be soaking wet in a rainstorm. [audio:phrases_verbs_in_case_2]\u000bฉันจะเอาร่มไปด้วยเผื่อไว้ เตรียมเกินไปยังดีกว่าเปียกโชกกลางพายุฝน",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.wbrvb59jwa0z",
@@ -8182,8 +8237,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6399,
-        "text": "Take some cash in case they don’t accept card. [audio:phrases_verbs_in_case_3]",
+        "index": 6526,
+        "text": "Take some cash in case they don’t accept card. [audio:phrases_verbs_in_case_3]\u000bพกเงินสดไปด้วย เผื่อร้านไม่รับบัตร",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.wbrvb59jwa0z",
@@ -8202,7 +8257,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6400,
+        "index": 6527,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8215,10 +8270,10 @@
     ]
   },
   {
-    "section_index": 6770,
+    "section_index": 6945,
     "paragraphs": [
       {
-        "index": 6771,
+        "index": 6946,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8229,7 +8284,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6772,
+        "index": 6947,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8240,8 +8295,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6773,
-        "text": "RUNNING AROUND",
+        "index": 6948,
+        "text": "วิ่งวุ่น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8251,8 +8306,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6774,
-        "text": "Running around [audio:phrases_verbs_running_around_1]",
+        "index": 6949,
+        "text": "Running around วิ่งวุ่น [audio:phrases_verbs_running_around_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.6sf6gpqb97uq",
@@ -8271,8 +8326,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6775,
-        "text": "To be very busy going from place to place or doing lots of different tasks, often in a rushed or hectic way.",
+        "index": 6950,
+        "text": "ยุ่งมากกับการเดินทางไปหลายที่หรือทำงานหลายอย่าง โดยมักทำอย่างรีบเร่งหรือวุ่นวาย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8282,7 +8337,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6776,
+        "index": 6951,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8293,8 +8348,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6777,
-        "text": "I’ve been running around all day. I haven’t even had a chance to sit down. [audio:phrases_verbs_running_around_2]",
+        "index": 6952,
+        "text": "I’ve been running around all day. I haven’t even had a chance to sit down. [audio:phrases_verbs_running_around_2]\u000bฉันวิ่งวุ่นมาทั้งวัน ยังไม่มีโอกาสได้นั่งเลย",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.lgl2sbhnqvwi",
@@ -8313,8 +8368,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6778,
-        "text": "Grace has been running around all week getting ready for her birthday party. [audio:phrases_verbs_running_around_3]",
+        "index": 6953,
+        "text": "Grace has been running around all week getting ready for her birthday party. [audio:phrases_verbs_running_around_3]\u000bเกรซวิ่งวุ่นมาตลอดทั้งสัปดาห์เพื่อเตรียมงานวันเกิด",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.lgl2sbhnqvwi",
@@ -8333,7 +8388,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6779,
+        "index": 6954,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8344,7 +8399,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6780,
+        "index": 6955,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8355,8 +8410,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6781,
-        "text": "UH-OH",
+        "index": 6956,
+        "text": "อ๊ะโอ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8366,8 +8421,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6782,
-        "text": "Uh-oh [audio:phrases_verbs_uh_oh_1]",
+        "index": 6957,
+        "text": "Uh-oh อ๊ะโอ [audio:phrases_verbs_uh_oh_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.15bqff4aiopz",
@@ -8386,8 +8441,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6783,
-        "text": "An expression used when you realize something has gone wrong or that a problem might be about to happen.",
+        "index": 6958,
+        "text": "คำอุทานที่ใช้เมื่อตระหนักว่ามีบางอย่างผิดพลาดหรือปัญหาอาจกำลังจะเกิดขึ้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8397,7 +8452,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6784,
+        "index": 6959,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8408,8 +8463,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6785,
-        "text": "Uh-oh, the WIFI just went out. Could you turn on your hotspot for a minute? [audio:phrases_verbs_uh_oh_2]",
+        "index": 6960,
+        "text": "Uh-oh, the WIFI just went out. Could you turn on your hotspot for a minute? [audio:phrases_verbs_uh_oh_2]\u000bอ๊ะโอ WIFI เพิ่งใช้ไม่ได้ ช่วยเปิดฮอตสปอตให้สักครู่ได้ไหม?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.vu8unwibfpmv",
@@ -8428,8 +8483,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6786,
-        "text": "Uh-oh, I forgot to put the food in the fridge last night. I think it’s gone bad. [audio:phrases_verbs_uh_oh_3]",
+        "index": 6961,
+        "text": "Uh-oh, I forgot to put the food in the fridge last night. I think it’s gone bad. [audio:phrases_verbs_uh_oh_3]\u000bอ๊ะโอ เมื่อคืนฉันลืมเอาอาหารใส่ตู้เย็น คิดว่าน่าจะเสียแล้ว",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.vu8unwibfpmv",
@@ -8448,7 +8503,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6787,
+        "index": 6962,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8459,7 +8514,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6788,
+        "index": 6963,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8470,8 +8525,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6789,
-        "text": "PASS UP",
+        "index": 6964,
+        "text": "ปล่อยโอกาสให้หลุดมือ",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8481,7 +8536,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6790,
+        "index": 6965,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8492,8 +8547,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6791,
-        "text": "COME ON [2]",
+        "index": 6966,
+        "text": "โธ่ [2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8503,8 +8558,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6792,
-        "text": "Come on [audio:phrases_verbs_come_on2_1]",
+        "index": 6967,
+        "text": "Come on โธ่ [audio:phrases_verbs_come_on2_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.f75fqplhipqd",
@@ -8523,8 +8578,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6793,
-        "text": "Used to express mild disagreement, disbelief, or playful frustration with someone, often when you think they're being unreasonable.",
+        "index": 6968,
+        "text": "ใช้แสดงความไม่เห็นด้วยเล็กน้อย ความไม่เชื่อ หรือความหงุดหงิดแบบหยอกล้อ โดยมักใช้เมื่อคิดว่าอีกฝ่ายกำลังไม่มีเหตุผล",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8534,7 +8589,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6794,
+        "index": 6969,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8545,8 +8600,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6795,
-        "text": "You don’t think I’ll be able to drive a scooter in Thailand? Come on, have a little faith in me. It can’t be that hard. [audio:phrases_verbs_come_on2_2]",
+        "index": 6970,
+        "text": "You don’t think I’ll be able to drive a scooter in Thailand? Come on, have a little faith in me. It can’t be that hard. [audio:phrases_verbs_come_on2_2]\u000bคุณคิดว่าฉันจะขี่สกู๊ตเตอร์ในประเทศไทยไม่ได้เหรอ? โธ่ เชื่อใจกันหน่อยสิ มันคงไม่ยากขนาดนั้นหรอก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.91lafbc1d19s",
@@ -8565,7 +8620,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6796,
+        "index": 6971,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8576,8 +8631,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6797,
-        "text": "Mom: Make sure you call me every day on your trip! [audio:phrases_verbs_come_on2_3]",
+        "index": 6972,
+        "text": "Mom: Make sure you call me every day on your trip! [audio:phrases_verbs_come_on2_3]\u000bแม่: อย่าลืมโทรหาแม่ทุกวันระหว่างทริปนะ!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.j463b95h80qo",
@@ -8596,7 +8651,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6798,
+        "index": 6973,
         "text": "Luke: Mom, come on. I’m 25! I’ll text you with photos during my trip.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8607,7 +8662,18 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6799,
+        "index": 6974,
+        "text": "ลูค: แม่ โธ่ ผมอายุ 25 แล้วนะ! ผมจะส่งข้อความพร้อมรูปให้แม่ระหว่างทริป",
+        "namedStyleType": "NORMAL_TEXT",
+        "bullet": null,
+        "resolvedListGlyph": {
+          "glyphType": null,
+          "glyphSymbol": null
+        },
+        "docwalker_kind_guess": "paragraph"
+      },
+      {
+        "index": 6975,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8618,8 +8684,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6800,
-        "text": "(link) See more uses of ‘Come on’",
+        "index": 6976,
+        "text": "(ลิงก์) ดูวิธีใช้อื่น ๆ ของ Come on เพิ่มเติม",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8629,7 +8695,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6801,
+        "index": 6977,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8640,8 +8706,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6802,
-        "text": "ON TOP OF",
+        "index": 6978,
+        "text": "นอกเหนือจาก",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8651,8 +8717,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6803,
-        "text": "On top of [something] [audio:phrases_verbs_on_top_of_1]",
+        "index": 6979,
+        "text": "On top of [something] นอกเหนือจาก [บางสิ่ง] [audio:phrases_verbs_on_top_of_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.i4ous9bb4jol",
@@ -8671,8 +8737,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6804,
-        "text": "Used to introduce something additional to an existing situation, especially when it makes things more difficult or overwhelming.",
+        "index": 6980,
+        "text": "ใช้เพื่อพูดถึงบางสิ่งที่เพิ่มเข้ามาในสถานการณ์เดิม โดยเฉพาะเมื่อทำให้เรื่องยากหรือหนักหนายิ่งขึ้น",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
         "resolvedListGlyph": {
@@ -8682,7 +8748,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6805,
+        "index": 6981,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8693,8 +8759,8 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6806,
-        "text": "My rent is gonna increase by 10% next year. And on top of that, my electricity bill is gonna go up! [audio:phrases_verbs_on_top_of_2]",
+        "index": 6982,
+        "text": "My rent is gonna increase by 10% next year. And on top of that, my electricity bill is gonna go up! [audio:phrases_verbs_on_top_of_2]\u000bปีหน้าค่าเช่าของฉันจะเพิ่มขึ้น 10% และนอกเหนือจากนั้น ค่าไฟก็จะเพิ่มขึ้นด้วย!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.m8kj51c7zylh",
@@ -8713,8 +8779,8 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6807,
-        "text": "On top of being late to dinner, Owen wore flip-flops to the restaurant! [audio:phrases_verbs_on_top_of_3]",
+        "index": 6983,
+        "text": "On top of being late to dinner, Owen wore flip-flops to the restaurant! [audio:phrases_verbs_on_top_of_3]\u000bนอกจากโอเวนจะมาสายสำหรับมื้อเย็นแล้ว เขายังใส่รองเท้าแตะมาร้านอาหารอีก!",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
           "listId": "kix.m8kj51c7zylh",
@@ -8733,7 +8799,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 6808,
+        "index": 6984,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8744,7 +8810,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 6809,
+        "index": 6985,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8757,10 +8823,10 @@
     ]
   },
   {
-    "section_index": 7047,
+    "section_index": 7239,
     "paragraphs": [
       {
-        "index": 7048,
+        "index": 7240,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8771,7 +8837,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7049,
+        "index": 7241,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8782,7 +8848,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7050,
+        "index": 7242,
         "text": "EXCUSE ME",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8793,7 +8859,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7051,
+        "index": 7243,
         "text": "Excuse me [audio:phrases_verbs_excuse_me_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -8813,7 +8879,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7052,
+        "index": 7244,
         "text": "Used to express surprise, disbelief, or playful offense at something someone has said, often as a humorous way of defending yourself.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8824,7 +8890,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7053,
+        "index": 7245,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8835,7 +8901,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7054,
+        "index": 7246,
         "text": "Pailin: You ordered the pad Thai? That’s the most touristy thing you could’ve ordered. [audio:phrases_verbs_excuse_me_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -8855,7 +8921,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7055,
+        "index": 7247,
         "text": "Luke: Excuse me, it’s a classic for a reason.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8866,7 +8932,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7056,
+        "index": 7248,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8877,7 +8943,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7057,
+        "index": 7249,
         "text": "Luke: You’ve been on your phone for the past hour. [audio:phrases_verbs_excuse_me_3]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -8897,7 +8963,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7058,
+        "index": 7250,
         "text": "Pailin: Excuse me, I was researching places to visit for our upcoming trip.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8908,7 +8974,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7059,
+        "index": 7251,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8919,7 +8985,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7060,
+        "index": 7252,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8930,7 +8996,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7061,
+        "index": 7253,
         "text": "JOKES ASIDE",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8941,7 +9007,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7062,
+        "index": 7254,
         "text": "Jokes aside [audio:phrases_verbs_jokes_aside_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -8961,7 +9027,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7063,
+        "index": 7255,
         "text": "Used to shift from joking or teasing to saying something serious or sincere.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8972,7 +9038,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7064,
+        "index": 7256,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -8983,7 +9049,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7065,
+        "index": 7257,
         "text": "Hey, it only took you 6 years to graduate college! But jokes aside, we’re really proud of you. [audio:phrases_verbs_jokes_aside_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9003,7 +9069,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7066,
+        "index": 7258,
         "text": "We joke about how chaotic that trip was but jokes aside, it's one of my favorite memories. I wouldn't change a thing. [audio:phrases_verbs_jokes_aside_3]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9023,7 +9089,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7067,
+        "index": 7259,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9034,7 +9100,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7068,
+        "index": 7260,
         "text": "TURN OUT",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9045,7 +9111,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7069,
+        "index": 7261,
         "text": "Turn out [audio:phrases_verbs_turn_out_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9065,7 +9131,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7070,
+        "index": 7262,
         "text": "To develop or end in a particular way, especially when the result is different from what you originally expected.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9076,7 +9142,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7071,
+        "index": 7263,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9087,7 +9153,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7072,
+        "index": 7264,
         "text": "I was hesitant to try a new cookie recipe, but I think they actually turned out really good! [audio:phrases_verbs_turn_out_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9107,7 +9173,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7073,
+        "index": 7265,
         "text": "I didn’t think many people would be at the networking event, but it turned out to be super packed. [audio:phrases_verbs_turn_out_3]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9127,7 +9193,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7074,
+        "index": 7266,
         "text": "I thought I’d hate living alone but turns out I actually love it. [audio:phrases_verbs_turn_out_4]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9147,7 +9213,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7075,
+        "index": 7267,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9158,7 +9224,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7076,
+        "index": 7268,
         "text": "WHIP UP",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9169,7 +9235,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7077,
+        "index": 7269,
         "text": "Whip up [audio:phrases_verbs_whip_up_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9189,7 +9255,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7078,
+        "index": 7270,
         "text": "To quickly make or prepare something, especially food, without much difficulty or planning.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9200,7 +9266,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7079,
+        "index": 7271,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9211,7 +9277,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7080,
+        "index": 7272,
         "text": "Are you hungry? I can whip up some guacamole. [audio:phrases_verbs_whip_up_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9231,7 +9297,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7081,
+        "index": 7273,
         "text": "Give me a few minutes and I’ll whip up a quick summary of the meeting. [audio:phrases_verbs_whip_up_3]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9251,7 +9317,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7082,
+        "index": 7274,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9262,7 +9328,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7083,
+        "index": 7275,
         "text": "I SEE HOW IT IS",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9273,7 +9339,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7084,
+        "index": 7276,
         "text": "I see how it is [audio:phrases_verbs_i_see_how_it_is_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9293,7 +9359,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7085,
+        "index": 7277,
         "text": "Used when you feel someone has treated you unfairly, excluded you, or shown where their priorities lie. It can be said jokingly or with genuine annoyance.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9304,7 +9370,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7086,
+        "index": 7278,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9315,7 +9381,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7087,
+        "index": 7279,
         "text": "Luke: I didn’t send you an invite for my birthday party because I knew you’d be out of town on that day. [audio:phrases_verbs_i_see_how_it_is_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9335,7 +9401,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7088,
+        "index": 7280,
         "text": "Pailin: Oh, I see how it is. I guess I’m not good enough for an invite.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9346,7 +9412,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7089,
+        "index": 7281,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9357,7 +9423,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7090,
+        "index": 7282,
         "text": "When someone else asks you for help, you’ll drop everything to help them. But when I ask for help, you drag your feet. I see how it is. [audio:phrases_verbs_i_see_how_it_is_3]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9377,7 +9443,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7091,
+        "index": 7283,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9388,7 +9454,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7092,
+        "index": 7284,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9399,7 +9465,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7093,
+        "index": 7285,
         "text": "HEAD OUT",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9410,7 +9476,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7094,
+        "index": 7286,
         "text": "Head out [audio:phrases_verbs_head_out_1]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9430,7 +9496,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7095,
+        "index": 7287,
         "text": "A casual way to say you're leaving a place or setting off somewhere.",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9441,7 +9507,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7096,
+        "index": 7288,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9452,7 +9518,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7097,
+        "index": 7289,
         "text": "We’re about to head out for coffee, do you want to join? [audio:phrases_verbs_head_out_2]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9472,7 +9538,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7098,
+        "index": 7290,
         "text": "What time are you heading out tomorrow morning? [audio:phrases_verbs_head_out_3]",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": {
@@ -9492,7 +9558,7 @@
         "docwalker_kind_guess": "list_item"
       },
       {
-        "index": 7099,
+        "index": 7291,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9503,7 +9569,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7100,
+        "index": 7292,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9514,7 +9580,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7101,
+        "index": 7293,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9525,7 +9591,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7102,
+        "index": 7294,
         "text": "PINNED COMMENT",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9536,7 +9602,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7103,
+        "index": 7295,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9547,7 +9613,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7104,
+        "index": 7296,
         "text": "Thank you for following Pailin's journey! We hope you’ve enjoyed it. What do you think is in store for her future?",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9558,7 +9624,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7105,
+        "index": 7297,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9569,7 +9635,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7106,
+        "index": 7298,
         "text": "TAGS",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9580,7 +9646,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7107,
+        "index": 7299,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9591,7 +9657,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7108,
+        "index": 7300,
         "text": "moving out, friendship, family, love, relationship, goodbye, roommate, apartment, neighborhood, miss you, host family, parents, siblings, friends, friendship, coffee, moving",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
@@ -9602,7 +9668,7 @@
         "docwalker_kind_guess": "paragraph"
       },
       {
-        "index": 7109,
+        "index": 7301,
         "text": "",
         "namedStyleType": "NORMAL_TEXT",
         "bullet": null,
