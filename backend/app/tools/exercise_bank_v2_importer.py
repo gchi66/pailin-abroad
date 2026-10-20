@@ -17,6 +17,7 @@ Records absent from an import are left alone unless ``--deactivate-missing`` is 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import time
@@ -56,6 +57,65 @@ class ThaiImportData:
     skipped_thai_examples: List[str]
     unmatched_thai: List[str]
     unmatched_english: List[str]
+
+
+def _stable_question_rank(topic_key: str, question_key: str) -> bytes:
+    """Return a repeatable shuffle rank for a question within a topic."""
+    return hashlib.sha256(f"{topic_key}\0{question_key}".encode("utf-8")).digest()
+
+
+def _assign_practice_orders(
+    exercises: Sequence[Dict[str, Any]], questions: Sequence[Dict[str, Any]]
+) -> None:
+    """Assign contiguous topic-wide practice order, excluding examples.
+
+    The greedy ordering mirrors the maintenance SQL's preference for alternating
+    exercise types. A stable hash replaces SQL ``random()`` so identical imports
+    remain idempotent and do not reshuffle learner progress.
+    """
+    exercises_by_key = {row["source_key"]: row for row in exercises}
+    candidates_by_topic: Dict[str, List[Dict[str, Any]]] = {}
+    for question in questions:
+        question["practice_order"] = None
+        if question.get("is_example"):
+            continue
+        exercise = exercises_by_key.get(question.get("_exercise_source_key"))
+        if exercise is None:
+            continue
+        topic_key = exercise.get("_topic_source_key")
+        if not _non_empty(topic_key):
+            continue
+        candidates_by_topic.setdefault(topic_key, []).append(question)
+
+    for topic_key, candidates in candidates_by_topic.items():
+        remaining = list(candidates)
+        previous_type: str | None = None
+        practice_order = 1
+        while remaining:
+            type_counts: Dict[str, int] = {}
+            for question in remaining:
+                exercise_type = exercises_by_key[
+                    question["_exercise_source_key"]
+                ]["exercise_type"]
+                type_counts[exercise_type] = type_counts.get(exercise_type, 0) + 1
+
+            chosen = min(
+                remaining,
+                key=lambda question: (
+                    exercises_by_key[question["_exercise_source_key"]]["exercise_type"]
+                    == previous_type,
+                    -type_counts[
+                        exercises_by_key[question["_exercise_source_key"]]["exercise_type"]
+                    ],
+                    _stable_question_rank(topic_key, question["source_key"]),
+                ),
+            )
+            chosen["practice_order"] = practice_order
+            previous_type = exercises_by_key[
+                chosen["_exercise_source_key"]
+            ]["exercise_type"]
+            remaining.remove(chosen)
+            practice_order += 1
 
 
 def _non_empty(value: Any) -> bool:
@@ -237,6 +297,7 @@ def prepare_import(payload: Any) -> tuple[ImportData | None, List[str]]:
 
     if errors:
         return None, errors
+    _assign_practice_orders(exercise_rows, question_rows)
     return ImportData(document_id, topic_rows, exercise_rows, question_rows), []
 
 
@@ -352,10 +413,240 @@ def _question_is_example(item: Mapping[str, Any]) -> bool:
     return bool(item.get("is_example")) or str(item.get("number") or "").casefold() == "example"
 
 
+def _v2_localized_display_type(exercise: Mapping[str, Any]) -> str:
+    exercise_type = str(exercise.get("exercise_type") or "")
+    title = str(exercise.get("title") or "").upper()
+    if exercise_type == "fill_blank":
+        return "🧩 เติมคำในช่องว่าง"
+    if exercise_type == "multiple_choice":
+        return "🔘 เลือกคำตอบที่ถูกต้อง"
+    if "CORRECT OR INCORRECT" in title:
+        return "✅❌ ถูกหรือผิด?"
+    return "✏️ เขียนประโยคใหม่"
+
+
+def _v2_localized_prompt(exercise: Mapping[str, Any]) -> str:
+    prompt = str(exercise.get("prompt") or "").strip()
+    if THAI_RE.search(prompt):
+        return prompt
+    exercise_type = str(exercise.get("exercise_type") or "")
+    if exercise_type == "fill_blank":
+        return "เติมคำในช่องว่าง"
+    if exercise_type == "multiple_choice":
+        return "เลือกคำตอบที่ถูกต้อง"
+    return "เขียนประโยคใหม่"
+
+
+def _v2_localized_question_content(content: Mapping[str, Any]) -> Dict[str, Any]:
+    localized: Dict[str, Any] = {}
+    for field in ("text", "stem"):
+        value = str(content.get(field) or "").strip()
+        if value:
+            localized[field] = value
+    options = _localized_options(content.get("options"))
+    if options:
+        localized["options"] = options
+    return localized
+
+
+def _prepare_v2_thai_import(
+    thai_payload: Mapping[str, Any], english_payload: Any
+) -> tuple[ThaiImportData | None, List[str]]:
+    """Align two v2 parser outputs by their validated document order."""
+    english_data, english_errors = prepare_import(english_payload)
+    thai_data, thai_errors = prepare_import(thai_payload)
+    errors = [f"English source: {error}" for error in english_errors]
+    errors.extend(f"Thai source: {error}" for error in thai_errors)
+    if errors or english_data is None or thai_data is None:
+        return None, errors
+
+    english_topics = sorted(
+        english_data.topics, key=lambda row: int(row.get("source_tab_order") or 0)
+    )
+    thai_topics = sorted(
+        thai_data.topics, key=lambda row: int(row.get("source_tab_order") or 0)
+    )
+    if len(thai_topics) != len(english_topics):
+        errors.append(
+            f"Thai topic count ({len(thai_topics)}) does not match English "
+            f"topic count ({len(english_topics)})."
+        )
+        return None, errors
+
+    english_exercises_by_topic: Dict[str, List[Dict[str, Any]]] = {}
+    thai_exercises_by_topic: Dict[str, List[Dict[str, Any]]] = {}
+    for exercise in english_data.exercises:
+        english_exercises_by_topic.setdefault(
+            exercise["_topic_source_key"], []
+        ).append(exercise)
+    for exercise in thai_data.exercises:
+        thai_exercises_by_topic.setdefault(exercise["_topic_source_key"], []).append(
+            exercise
+        )
+    english_questions_by_exercise: Dict[str, List[Dict[str, Any]]] = {}
+    thai_questions_by_exercise: Dict[str, List[Dict[str, Any]]] = {}
+    for question in english_data.questions:
+        english_questions_by_exercise.setdefault(
+            question["_exercise_source_key"], []
+        ).append(question)
+    for question in thai_data.questions:
+        thai_questions_by_exercise.setdefault(
+            question["_exercise_source_key"], []
+        ).append(question)
+
+    topic_updates: List[Dict[str, Any]] = []
+    exercise_updates: List[Dict[str, Any]] = []
+    question_updates: List[Dict[str, Any]] = []
+
+    for topic_index, (thai_topic, english_topic) in enumerate(
+        zip(thai_topics, english_topics), start=1
+    ):
+        for field in ("source_tab_order", "category", "sub_category", "lesson_external_id"):
+            if thai_topic.get(field) != english_topic.get(field):
+                errors.append(
+                    f"Topic {topic_index} has mismatched {field}: "
+                    f"Thai={thai_topic.get(field)!r}, English={english_topic.get(field)!r}."
+                )
+
+        topic_patch = {"source_key": english_topic["source_key"]}
+        thai_topic_name = str(thai_topic.get("topic") or "").strip()
+        thai_display_title = str(thai_topic.get("display_title") or "").strip()
+        if THAI_RE.search(thai_topic_name):
+            topic_patch["topic_th"] = thai_topic_name
+        if THAI_RE.search(thai_display_title):
+            topic_patch["display_title_th"] = thai_display_title
+        if len(topic_patch) > 1:
+            topic_updates.append(topic_patch)
+
+        english_exercises = sorted(
+            english_exercises_by_topic.get(english_topic["source_key"], []),
+            key=lambda row: int(row.get("sort_order") or 0),
+        )
+        thai_exercises = sorted(
+            thai_exercises_by_topic.get(thai_topic["source_key"], []),
+            key=lambda row: int(row.get("sort_order") or 0),
+        )
+        if len(thai_exercises) != len(english_exercises):
+            errors.append(
+                f"Topic {topic_index} exercise count differs: Thai={len(thai_exercises)}, "
+                f"English={len(english_exercises)}."
+            )
+            continue
+
+        for exercise_index, (thai_exercise, english_exercise) in enumerate(
+            zip(thai_exercises, english_exercises), start=1
+        ):
+            if thai_exercise.get("exercise_type") != english_exercise.get("exercise_type"):
+                errors.append(
+                    f"Topic {topic_index} exercise {exercise_index} type differs: "
+                    f"Thai={thai_exercise.get('exercise_type')!r}, "
+                    f"English={english_exercise.get('exercise_type')!r}."
+                )
+                continue
+            exercise_updates.append(
+                {
+                    "source_key": english_exercise["source_key"],
+                    "display_type_th": _v2_localized_display_type(thai_exercise),
+                    "prompt_th": _v2_localized_prompt(thai_exercise),
+                }
+            )
+
+            english_questions = sorted(
+                english_questions_by_exercise.get(english_exercise["source_key"], []),
+                key=lambda row: int(row.get("sort_order") or 0),
+            )
+            thai_questions = sorted(
+                thai_questions_by_exercise.get(thai_exercise["source_key"], []),
+                key=lambda row: int(row.get("sort_order") or 0),
+            )
+            if len(thai_questions) != len(english_questions):
+                errors.append(
+                    f"Topic {topic_index} exercise {exercise_index} question count "
+                    f"differs: Thai={len(thai_questions)}, English={len(english_questions)}."
+                )
+                continue
+
+            for question_index, (thai_question, english_question) in enumerate(
+                zip(thai_questions, english_questions), start=1
+            ):
+                identity_fields = ("source_number", "is_example", "sort_order")
+                mismatches = [
+                    field for field in identity_fields
+                    if thai_question.get(field) != english_question.get(field)
+                ]
+                if mismatches:
+                    errors.append(
+                        f"Topic {topic_index} exercise {exercise_index} question "
+                        f"{question_index} differs in {', '.join(mismatches)}."
+                    )
+                    continue
+                english_content = english_question.get("content") or {}
+                thai_content = thai_question.get("content") or {}
+                semantic_fields = ("correct_option", "accepted_answers", "is_correct")
+                semantic_mismatches = [
+                    field for field in semantic_fields
+                    if english_content.get(field) != thai_content.get(field)
+                ]
+                english_option_labels = [
+                    option.get("label")
+                    for option in english_content.get("options") or []
+                    if isinstance(option, dict)
+                ]
+                thai_option_labels = [
+                    option.get("label")
+                    for option in thai_content.get("options") or []
+                    if isinstance(option, dict)
+                ]
+                if english_option_labels != thai_option_labels:
+                    semantic_mismatches.append("option labels")
+                if semantic_mismatches:
+                    errors.append(
+                        f"Topic {topic_index} exercise {exercise_index} question "
+                        f"{question_index} differs in {', '.join(semantic_mismatches)}."
+                    )
+                    continue
+                localized_content = _v2_localized_question_content(thai_content)
+                if not localized_content:
+                    errors.append(
+                        f"Topic {topic_index} exercise {exercise_index} question "
+                        f"{question_index} has no localized display content."
+                    )
+                    continue
+                localized_text = " ".join(
+                    str(value) for value in localized_content.values()
+                )
+                if not THAI_RE.search(localized_text):
+                    errors.append(
+                        f"Topic {topic_index} exercise {exercise_index} question "
+                        f"{question_index} contains no Thai translation."
+                    )
+                    continue
+                question_updates.append(
+                    {
+                        "source_key": english_question["source_key"],
+                        "content_th": localized_content,
+                    }
+                )
+
+    if errors:
+        return None, errors
+    return ThaiImportData(
+        topics=topic_updates,
+        exercises=exercise_updates,
+        questions=question_updates,
+        skipped_thai_examples=[],
+        unmatched_thai=[],
+        unmatched_english=[],
+    ), []
+
+
 def prepare_thai_import(
     thai_payload: Any, english_payload: Any
 ) -> tuple[ThaiImportData | None, List[str]]:
-    """Align legacy Thai parser output to existing v2 English source keys."""
+    """Align Thai parser output to existing v2 English source keys."""
+    if isinstance(thai_payload, dict):
+        return _prepare_v2_thai_import(thai_payload, english_payload)
+
     errors: List[str] = []
     english_data, english_errors = prepare_import(english_payload)
     if english_errors or english_data is None:

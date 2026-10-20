@@ -165,6 +165,24 @@ def _rich_from_paragraph(paragraph: Dict[str, Any]) -> RichText:
     return rich
 
 
+def _split_rich_lines(rich: RichText) -> Iterator[RichText]:
+    """Yield logical lines while retaining the styles attached to each span.
+
+    Google Docs represents a Shift+Enter soft break as ``\u000b`` inside a
+    single paragraph. Exercise-bank documents commonly use those breaks
+    between schema fields, so parsing only physical paragraphs causes every
+    field after the first one to be swallowed into its value.
+    """
+    start = 0
+    while True:
+        end = rich.text.find("\n", start)
+        if end < 0:
+            yield _slice_rich(rich, start)
+            return
+        yield _slice_rich(rich, start, end)
+        start = end + 1
+
+
 def _walk_structural_elements(
     elements: Sequence[Dict[str, Any]],
 ) -> Iterator[Tuple[int, Dict[str, Any]]]:
@@ -186,18 +204,19 @@ def _walk_structural_elements(
 def _paragraphs(document_tab: Dict[str, Any]) -> List[Paragraph]:
     result: List[Paragraph] = []
     body = (document_tab.get("body") or {}).get("content", []) or []
-    for paragraph_index, (element_index, paragraph) in enumerate(
-        _walk_structural_elements(body)
-    ):
+    paragraph_index = 0
+    for element_index, paragraph in _walk_structural_elements(body):
         rich = _rich_from_paragraph(paragraph)
-        result.append(
-            Paragraph(
-                text=rich.text,
-                runs=rich.runs,
-                element_index=element_index,
-                paragraph_index=paragraph_index,
+        for line in _split_rich_lines(rich):
+            result.append(
+                Paragraph(
+                    text=line.text,
+                    runs=line.runs,
+                    element_index=element_index,
+                    paragraph_index=paragraph_index,
+                )
             )
-        )
+            paragraph_index += 1
     return result
 
 
@@ -399,14 +418,23 @@ class ExerciseBankParser:
             ]
             if differences:
                 self._issue(
-                    "error",
-                    "conflicting_topic_metadata",
+                    "warning",
+                    "normalized_topic_metadata",
                     (
-                        "Exercises in the same source tab have conflicting topic "
-                        f"metadata: {', '.join(differences)}."
+                        "Exercises in the same source tab have inconsistent topic "
+                        f"metadata ({', '.join(differences)}); using the first "
+                        "exercise's values for the tab."
                     ),
                     exercise_order=source["exercise_order"],
                 )
+                for topic_field, exercise_field in (
+                    ("topic", "topic"),
+                    ("display_title", "display_title"),
+                    ("category", "category"),
+                    ("sub_category", "sub_category"),
+                    ("lesson_external_id", "lesson"),
+                ):
+                    exercise[exercise_field] = existing.get(topic_field)
 
         return topics
 
@@ -496,7 +524,7 @@ class ExerciseBankParser:
                         )
                     continue
 
-                if label in {"DISPLAY_TYPE", "PROMPT", "KEYWORDS", "CHARACTERS"}:
+                if label in {"TITLE", "DISPLAY_TYPE", "PROMPT", "KEYWORDS", "CHARACTERS"}:
                     if label == "CHARACTERS":
                         try:
                             characters = int(value)
@@ -517,6 +545,7 @@ class ExerciseBankParser:
                         pending_field = None
                         continue
                     key = {
+                        "TITLE": "title",
                         "DISPLAY_TYPE": "display_type",
                         "PROMPT": "prompt",
                         "KEYWORDS": "keywords_raw",
@@ -651,6 +680,7 @@ class ExerciseBankParser:
             "difficulty": metadata.get("difficulty"),
             "lesson": metadata.get("lesson"),
             "exercise_type": exercise_type.strip().lower(),
+            "title": None,
             "display_type": None,
             "prompt": None,
             "keywords": None,
@@ -794,6 +824,16 @@ class ExerciseBankParser:
         tab: SourceTab,
     ) -> None:
         order = exercise["source"]["exercise_order"]
+        if not exercise.get("prompt") and exercise.get("title"):
+            exercise["prompt"] = exercise["title"]
+            exercise["_prompt_rich"] = exercise.get("_title_rich")
+            self._issue(
+                "warning",
+                "prompt_fallback_from_title",
+                "Exercise has no PROMPT; using TITLE as its prompt.",
+                tab=tab,
+                exercise_order=order,
+            )
         for field_name in sorted(REQUIRED_TOPIC_FIELDS):
             if not exercise.get(field_name):
                 self._issue(
@@ -851,7 +891,7 @@ class ExerciseBankParser:
 
     @staticmethod
     def _expose_rich_exercise_fields(exercise: Dict[str, Any]) -> None:
-        for field_name in ("display_type", "prompt"):
+        for field_name in ("title", "display_type", "prompt"):
             rich = exercise.pop(f"_{field_name}_rich", None)
             if rich:
                 exercise[f"{field_name}_runs"] = rich.runs
