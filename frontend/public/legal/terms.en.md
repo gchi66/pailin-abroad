@@ -1,6 +1,6 @@
 # Pailin Abroad - Terms & Conditions
 
-Last Updated: November 28, 2025
+Last Updated: October 19, 2026
 
 These Terms & Conditions ("Terms") are a contract between you and Pailin Abroad LLC ("Pailin Abroad", "Company", "we", "us", or "our"). They govern your access to and use of:
 
@@ -115,7 +115,7 @@ You are responsible for maintaining the confidentiality of your login credential
 ----------------------------------------------------------------------
 
 9.1 Subscription Plans
-We offer monthly, 3-month, and 6-month subscriptions. Fees are listed in Thai Baht (THB).
+We offer monthly and 3-month subscriptions. Fees are listed in Thai Baht (THB).
 
 9.2 Auto-Renewal
 Subscriptions renew automatically at the end of each term unless canceled.
