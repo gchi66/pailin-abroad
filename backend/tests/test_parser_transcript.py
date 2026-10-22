@@ -4,10 +4,13 @@ from unittest.mock import patch
 from app.tools import import_lessons
 from app.tools.parser import (
     GoogleDocsParser,
+    bilingualize_headers_th,
     extract_sections,
     pair_transcript_bilingual,
+    split_en_th,
     split_lessons_by_header,
 )
+from app.tools.textutils import is_subheader
 
 
 def _paragraph(text=None, *, style="NORMAL_TEXT", runs=None):
@@ -33,6 +36,60 @@ def _parse_document(*content, lang="en"):
     return GoogleDocsParser().build_lesson_from_sections(
         lessons[0], "Beginner", document, lang=lang
     )
+
+
+def _rich_paragraph(text):
+    return {
+        "kind": "paragraph",
+        "inlines": [{"text": text, "bold": False}],
+    }
+
+
+class ThaiHeadingRegressionTests(unittest.TestCase):
+    def test_split_keeps_complete_english_phrase_before_newline(self):
+        self.assertEqual(
+            split_en_th("I think\nฉันคิดว่า"),
+            ("I think", "ฉันคิดว่า"),
+        )
+
+    def test_mixed_thai_english_prose_is_not_inferred_as_subheader(self):
+        examples = (
+            "ก่อนคริสตกาล (BC)",
+            "NIMBY ย่อมาจาก Not In My Backyard",
+            "-สนับสนุนสิทธิของชุมชน LGBTQ+",
+        )
+        for text in examples:
+            with self.subTest(text=text):
+                self.assertFalse(is_subheader(text, "NORMAL_TEXT"))
+
+    def test_explicit_heading_style_still_wins_for_mixed_text(self):
+        self.assertTrue(is_subheader("NIMBY นิมบี", "HEADING_3"))
+
+    def test_false_bilingual_headings_stay_paragraphs(self):
+        examples = (
+            "I think\nฉันคิดว่า",
+            "I see\nเข้าใจแล้ว",
+            "I hope\nฉันหวังว่า",
+            "I guess\nฉันว่า",
+            "NIMBY ย่อมาจาก Not In My Backyard",
+        )
+        result = bilingualize_headers_th([_rich_paragraph(text) for text in examples])
+        self.assertEqual([node["kind"] for node in result], ["paragraph"] * len(examples))
+
+    def test_intentional_bilingual_all_caps_heading_is_preserved(self):
+        examples = (
+            "AC VS. BC YEARS ปี ค.ศ. กับปี ก.ค.ศ.",
+            "EREWHON ร้านขายของ EREWHON",
+            "SENTENCE STRUCTURE โครงสร้างประโยค",
+        )
+        for text in examples:
+            with self.subTest(text=text):
+                self.assertTrue(is_subheader(text, "NORMAL_TEXT"))
+                result = bilingualize_headers_th([_rich_paragraph(text)])
+                self.assertEqual(result[0]["kind"], "heading")
+
+    def test_pure_english_all_caps_subheader_is_preserved(self):
+        self.assertTrue(is_subheader("COMMON MISTAKES", "NORMAL_TEXT"))
 
 
 class _FakeLessonsQuery:

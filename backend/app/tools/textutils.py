@@ -42,30 +42,34 @@ def is_subheader(text: str, style: str) -> bool:
             break
         # otherwise keep scanning
 
-    # ALL-CAPS test should ignore Thai letters
+    # ALL-CAPS test should ignore Thai letters, but the English must lead the
+    # line. A Thai bullet/body sentence can contain an uppercase acronym such
+    # as LGBTQ+ without becoming a subheader. Ignore punctuation when deciding
+    # which script actually comes first (for example, "-สนับสนุน... LGBTQ+").
     ascii_only = TH_RX.sub("", normalized_text).strip()
     has_thai = bool(TH_RX.search(normalized_text))
-    if has_thai:
-        # Avoid treating single-letter English + Thai as a subheader (e.g., "I (ฉัน)").
-        upper_letters = re.findall(r"[A-Z]", ascii_only)
-        if len(upper_letters) < 2:
-            return False
-    # Check if text starts with Thai (after trimming whitespace)
-    if normalized_text and '\u0E00' <= normalized_text[0] <= '\u0E7F':
-        # Text starts with Thai, skip ALL-CAPS English header detection
-        pass  # Don't return True here
-    else:
-        # Text doesn't start with Thai, proceed with your current logic
-        if (
-            ascii_only
-            and re.search(r'[A-Z]', ascii_only)
-            and UPPER_SUB_RE.match(ascii_only)  # reasonably "header-like"
-            and re.search(r'[A-Z]{2,}', ascii_only)  # at least one 2+ letter English word
-        ):
-            # NEW GUARD: only accept this ALL-CAPS path if first Latin letter is uppercase A–Z
-            if first_latin_letter is not None and 'A' <= first_latin_letter <= 'Z':
-                return True
-            # else: fall through (don’t classify as header)
+    first_thai_index = next(
+        (index for index, char in enumerate(normalized_text) if '\u0E00' <= char <= '\u0E7F'),
+        None,
+    )
+    first_latin_index = next(
+        (index for index, char in enumerate(normalized_text) if char.isascii() and char.isalpha()),
+        None,
+    )
+    if (
+        has_thai
+        and first_thai_index is not None
+        and (first_latin_index is None or first_thai_index < first_latin_index)
+    ):
+        return False
+    if (
+        ascii_only
+        and re.search(r'[A-Z]', ascii_only)
+        and UPPER_SUB_RE.match(ascii_only)  # reasonably "header-like"
+        and re.search(r'[A-Z]{2,}', ascii_only)  # at least one 2+ letter English word
+    ):
+        if first_latin_letter is not None and 'A' <= first_latin_letter <= 'Z':
+            return True
 
     # time-range header like "TELLING THE TIME: 12:01 - 12:09"
     if HEADER_WITH_COLON_RE.match(ascii_only):

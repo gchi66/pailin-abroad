@@ -542,7 +542,9 @@ def split_en_th(line: str, ignore_paren: bool = False):
             return en, th
 
     # "EN … TH" pattern (first Thai char starts TH)
-    # Look for the first Thai character
+    # Split exactly at the first Thai character. Looking backwards for a plain
+    # space is incorrect when the authored separator is a newline/soft break:
+    # "I think\nฉันคิดว่า" used to split as EN="I", TH="think\n…".
     thai_start = -1
     for i, ch in enumerate(line):
         if '\u0E00' <= ch <= '\u0E7F':  # Thai Unicode range
@@ -550,16 +552,8 @@ def split_en_th(line: str, ignore_paren: bool = False):
             break
 
     if thai_start >= 0:
-        # Find a good split point - prefer splitting at word boundaries
-        # Look backwards from thai_start to find a space
-        split_point = thai_start
-        for i in range(thai_start - 1, -1, -1):
-            if line[i] == ' ':
-                split_point = i + 1
-                break
-
-        en = line[:split_point].strip() or None
-        th = line[split_point:].strip() or None
+        en = line[:thai_start].strip() or None
+        th = line[thai_start:].strip() or None
         return en, th
 
     # mono language
@@ -625,12 +619,18 @@ def bilingualize_headers_th(nodes, default_level=3):
         upper = en_part.strip().upper()
         return any(upper.startswith(prefix) for prefix in KNOWN_TITLE_PREFIXES)
 
+    def _is_forced_non_header_paragraph(text: str) -> bool:
+        # This is explanatory Culture Note prose, not the title immediately
+        # above it ("ปรากฏการณ์ NIMBY:"). Keep the exception narrow so
+        # legitimate one-word bilingual headings continue to create pages.
+        return text.strip().startswith("NIMBY ย่อมาจาก")
+
     out = []
 
     for original in nodes:
         node = _clone_node(original)
         node_text = node_plain_text(node).strip()
-        if node_text.startswith("I (ฉัน)"):
+        if node_text.startswith("I (ฉัน)") or _is_forced_non_header_paragraph(node_text):
             out.append(node)
             continue
 
