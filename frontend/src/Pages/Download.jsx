@@ -27,6 +27,20 @@ function PlayLogo() {
   );
 }
 
+function TranslationGlobeIcon() {
+  return (
+    <svg
+      className="download-translation-icon"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M3.8 9h16.4M3.8 15h16.4M12 3.5c2.2 2.3 3.3 5.1 3.3 8.5S14.2 18.2 12 20.5M12 3.5C9.8 5.8 8.7 8.6 8.7 12s1.1 6.2 3.3 8.5" />
+    </svg>
+  );
+}
+
 function StoreButton({ href, store, children }) {
   return (
     <a className="download-store-button" href={href} aria-label={children}>
@@ -71,7 +85,7 @@ export default function Download() {
         <ul className="download-highlights" aria-label="สิ่งที่คุณจะได้รับ">
           <li><span aria-hidden="true">🎁</span>เริ่มเรียนฟรี</li>
           <li><span aria-hidden="true">📖</span>200+ บทเรียน</li>
-          <li><span aria-hidden="true">文</span>มีคำแปลไทย</li>
+          <li><span aria-hidden="true"><TranslationGlobeIcon /></span>มีคำแปลไทย</li>
         </ul>
 
         <ul className="download-benefits" aria-label="จุดเด่นของ Pailin Abroad">
