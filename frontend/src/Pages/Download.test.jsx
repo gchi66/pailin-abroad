@@ -17,6 +17,22 @@ test("renders a QR code linking to the public download page", () => {
   ).toBeInTheDocument();
 });
 
+test("renders a mobile QR handoff below the download card", () => {
+  render(<Download />);
+
+  const mobileQrLink = screen.getByRole("link", {
+    name: "สแกนเพื่อเปิดหน้าดาวน์โหลด Pailin Abroad บนอุปกรณ์อื่น",
+  });
+
+  expect(mobileQrLink).toHaveAttribute(
+    "href",
+    "https://www.pailinabroad.com/download"
+  );
+  expect(
+    screen.getByTitle("QR code สำหรับเปิดหน้าดาวน์โหลดบนอุปกรณ์อื่น")
+  ).toBeInTheDocument();
+});
+
 test("renders the color Pailin character", () => {
   const { container } = render(<Download />);
   const character = container.querySelector(".download-character");

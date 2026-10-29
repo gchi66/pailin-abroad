@@ -228,8 +228,13 @@ a.download-primary-button:hover {
   letter-spacing: 0.5px;
 }
 
+.download-mobile-qr {
+  display: none;
+}
+
 .download-primary-button:focus-visible,
 .download-qr a:focus-visible,
+.download-mobile-qr a:focus-visible,
 .download-store-links a:focus-visible {
   outline: 3px solid #0759d8;
   outline-offset: 4px;
@@ -237,6 +242,9 @@ a.download-primary-button:hover {
 
 @media (max-width: 620px) {
   .download-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     place-items: start center;
     padding: 90px 15px 120px;
   }
@@ -302,6 +310,8 @@ a.download-primary-button:hover {
   }
 
   .download-store-links {
+    position: static;
+    margin-top: 10px;
     font-size: 10px;
   }
 
@@ -338,6 +348,38 @@ a.download-primary-button:hover {
     padding-top: 14px;
     font-size: 7px;
     letter-spacing: 0.35px;
+  }
+
+  .download-mobile-qr {
+    width: min(210px, 75vw);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    padding: 18px 16px 16px;
+    border: 1.5px solid var(--download-ink);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 3px 4px 0 var(--download-ink);
+    text-align: center;
+  }
+
+  .download-mobile-qr strong {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .download-mobile-qr a,
+  .download-mobile-qr svg {
+    display: block;
+  }
+
+  .download-mobile-qr span {
+    color: #5f5f5f;
+    font-size: 9px;
+    line-height: 1.4;
   }
 }
 

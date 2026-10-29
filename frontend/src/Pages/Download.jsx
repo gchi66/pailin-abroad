@@ -134,6 +134,23 @@ export default function Download() {
           Real-world English, made for Thai speakers
         </p>
       </section>
+
+      <aside className="download-mobile-qr" aria-label="เปิดบนอุปกรณ์อื่น">
+        <strong>เปิดหน้านี้บนอุปกรณ์อื่น</strong>
+        <a
+          href={DOWNLOAD_URL}
+          aria-label="สแกนเพื่อเปิดหน้าดาวน์โหลด Pailin Abroad บนอุปกรณ์อื่น"
+        >
+          <QRCodeSVG
+            value={DOWNLOAD_URL}
+            size={144}
+            level="M"
+            marginSize={1}
+            title="QR code สำหรับเปิดหน้าดาวน์โหลดบนอุปกรณ์อื่น"
+          />
+        </a>
+        <span>สแกน QR code เพื่อเปิด /download</span>
+      </aside>
     </main>
   );
 }
