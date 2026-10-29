@@ -245,7 +245,7 @@ a.download-primary-button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    place-items: start center;
+    justify-content: flex-start;
     padding: 90px 15px 120px;
   }
 
