@@ -27,6 +27,19 @@ test("renders the color Pailin character", () => {
   );
 });
 
+test("renders the feature illustrations from the app artwork", () => {
+  const { container } = render(<Download />);
+  const featureSources = Array.from(
+    container.querySelectorAll(".download-features img")
+  ).map((image) => image.getAttribute("src"));
+
+  expect(featureSources).toEqual([
+    "/images/download/ai-speaking.webp",
+    "/images/download/thai-learners.webp",
+    "/images/download/real-conversations.webp",
+  ]);
+});
+
 test("does not offer the retired website learning experience", () => {
   render(<Download />);
 
