@@ -149,7 +149,6 @@ export default function Download() {
             title="QR code สำหรับเปิดหน้าดาวน์โหลดบนอุปกรณ์อื่น"
           />
         </a>
-        <span>สแกน QR code เพื่อเปิด /download</span>
       </aside>
     </main>
   );

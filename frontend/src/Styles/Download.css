@@ -376,11 +376,6 @@ a.download-primary-button:hover {
     display: block;
   }
 
-  .download-mobile-qr span {
-    color: #5f5f5f;
-    font-size: 9px;
-    line-height: 1.4;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
