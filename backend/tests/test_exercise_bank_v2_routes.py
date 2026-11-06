@@ -34,6 +34,28 @@ def test_sentence_transform_matcher_accepts_safe_contraction_variants():
         == "missing_apostrophe"
     )
     assert ai_module.answer_match_kind("Where is your favorite fruit?", expected) is None
+    assert ai_module.answer_match_kind("this", "is") is None
+
+
+def test_fill_blank_matcher_uses_complete_values_and_authored_alternatives():
+    assert ai_module._fill_blank_answer_match_kind("is", "is") == "canonical"
+    assert ai_module._fill_blank_answer_match_kind("this", "is") is None
+    assert (
+        ai_module._fill_blank_answer_match_kind(
+            "has; gone",
+            "has,had; gone,went",
+            [["has", "had"], ["gone", "went"]],
+        )
+        == "canonical"
+    )
+    assert (
+        ai_module._fill_blank_answer_match_kind(
+            "has; going",
+            "has,had; gone,went",
+            [["has", "had"], ["gone", "went"]],
+        )
+        is None
+    )
 
 
 def test_sentence_transform_uses_review_answer_and_keeps_apostrophe_note_advisory():
@@ -98,6 +120,98 @@ def test_practice_route_accepts_missing_apostrophe_with_advisory(monkeypatch):
     assert payload["correct"] is True
     assert payload["advisory"] is True
     assert "apostrophe" in payload["feedback_en"].lower()
+
+
+def test_practice_route_rejects_unchanged_authored_incorrect_sentence(monkeypatch):
+    class PracticeSupabase:
+        def table(self, _name):
+            return self
+
+        def upsert(self, _record):
+            return self
+
+        def execute(self):
+            return SimpleNamespace(error=None)
+
+    captured = {}
+
+    def false_positive_ai(**kwargs):
+        captured.update(kwargs)
+        return {
+            "correct": True,
+            "score": 1.0,
+            "feedback_en": "Nice work!",
+            "feedback_th": "ทำได้ดี!",
+        }
+
+    monkeypatch.setattr(ai_module, "evaluate_with_gpt", false_positive_ai)
+    monkeypatch.setattr(ai_module, "supabase", PracticeSupabase())
+    app = Flask(__name__)
+    app.register_blueprint(ai_module.bp)
+
+    response = app.test_client().post("/api/evaluate_answer", json={
+        "user_id": "learner-1",
+        "source_type": "practice",
+        "practice_exercise_id": "practice-1",
+        "exercise_type": "sentence_transform",
+        "user_answer": "They just have broken up.",
+        "correct_answer": "They have just broken up.",
+        "question_prompt": "They just have broken up.",
+        "exercise_instruction": "Fix the sentence.",
+        "original_marked_incorrect": True,
+    })
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["correct"] is False
+    assert payload["score"] == 0.0
+    assert "unchanged" in payload["feedback_en"].lower()
+    assert captured["original_marked_incorrect"] is True
+
+
+def test_practice_fill_blank_does_not_accept_substring_match(monkeypatch):
+    class PracticeSupabase:
+        def table(self, _name):
+            return self
+
+        def upsert(self, _record):
+            return self
+
+        def execute(self):
+            return SimpleNamespace(error=None)
+
+    captured = {}
+
+    def evaluate_non_match(**kwargs):
+        captured.update(kwargs)
+        return {
+            "correct": False,
+            "score": 0.0,
+            "feedback_en": "Which complete word belongs in the blank?",
+            "feedback_th": "ควรเติมคำใดลงในช่องว่าง?",
+        }
+
+    monkeypatch.setattr(ai_module, "evaluate_with_gpt", evaluate_non_match)
+    monkeypatch.setattr(ai_module, "supabase", PracticeSupabase())
+    app = Flask(__name__)
+    app.register_blueprint(ai_module.bp)
+
+    response = app.test_client().post("/api/evaluate_answer", json={
+        "user_id": "learner-1",
+        "source_type": "practice",
+        "practice_exercise_id": "practice-1",
+        "exercise_type": "fill_blank",
+        "user_answer": "this",
+        "correct_answer": "is",
+        "accepted_answers_v2": [["is"]],
+        "question_prompt": "It ___ raining.",
+        "exercise_instruction": "Fill in the blank.",
+    })
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["correct"] is False
+    assert captured["user_answer"] == "this"
 
 
 def test_practice_route_grades_guest_without_persisting(monkeypatch):
@@ -1100,6 +1214,47 @@ def test_correct_or_incorrect_question_requires_correct_judgment(monkeypatch):
     assert response.status_code == 200
     assert response.get_json()["correct"] is True
     assert response.get_json()["grading_method"] == "deterministic"
+
+
+def test_correct_or_incorrect_question_rejects_unchanged_rewrite(monkeypatch):
+    client, fake_supabase = _client(monkeypatch)
+    fake_supabase.table_rows["exercise_bank_exercises"][0]["exercise_type"] = (
+        "sentence_transform"
+    )
+    fake_supabase.table_rows["exercise_bank_questions"][0]["content"] = {
+        "stem": "They just have broken up.",
+        "is_correct": False,
+        "accepted_answers": ["They just have broken up."],
+        "review_answer": "They have just broken up.",
+    }
+
+    def false_positive_ai(**kwargs):
+        assert kwargs["original_marked_incorrect"] is True
+        return {
+            "correct": True,
+            "score": 1.0,
+            "feedback_en": "Nice work!",
+            "feedback_th": "ทำได้ดี!",
+        }
+
+    monkeypatch.setattr(module, "evaluate_with_gpt", false_positive_ai)
+    response = client.post(
+        "/api/exercise-bank-v2/questions/601/answer",
+        headers=_headers(),
+        json={
+            "user_answer": {
+                "marked_as_correct": False,
+                "rewrite": "They just have broken up.",
+            }
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert payload["correct"] is False
+    assert payload["score"] == 0.0
+    assert payload["grading_method"] == "ai"
+    assert "unchanged" in payload["feedback_en"].lower()
 
 
 def test_correct_incorrect_question_requests_rewrite_before_recording_attempt(monkeypatch):

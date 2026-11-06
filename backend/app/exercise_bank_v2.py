@@ -387,6 +387,7 @@ def _ai_result(
     user_answer: Any,
     accepted_answers: Any,
     review_answer: str,
+    original_marked_incorrect: bool = False,
 ) -> dict[str, Any]:
     user_answer_raw = _serialize_answer(user_answer)
     accepted_raw = _serialize_answer(accepted_answers)
@@ -397,6 +398,7 @@ def _ai_result(
         correct_answer=accepted_raw,
         instruction=instruction,
         review_answer=review_answer,
+        original_marked_incorrect=original_marked_incorrect,
     )
     correct = bool(parsed.get("correct"))
     try:
@@ -406,6 +408,15 @@ def _ai_result(
     score = max(0.0, min(1.0, score))
     feedback_en = parsed.get("feedback_en") or ""
     feedback_th = parsed.get("feedback_th") or ""
+    unchanged_incorrect_source = bool(
+        original_marked_incorrect
+        and _normalized_answer(user_answer_raw) == _normalized_answer(question_text)
+    )
+    if unchanged_incorrect_source and correct:
+        correct = False
+        score = 0.0
+        feedback_en = "Your answer is unchanged. What part of the original sentence needs fixing?"
+        feedback_th = "คำตอบยังเหมือนประโยคเดิม ควรแก้ส่วนไหนของประโยค?"
     if correct:
         feedback_en = _personalize_feedback(feedback_en)
         for private_answer in (accepted_raw, review_answer):
@@ -500,10 +511,13 @@ def _grade_question(
                 "ai_model": None,
                 "requires_rewrite": True,
             }
+        unchanged_incorrect_source = (
+            _normalized_answer(rewrite) == _normalized_answer(question_text)
+        )
         rewrite_match = _accepted_answer_match_kind(
             rewrite, accepted_answers, canonical_answer=review_answer
         )
-        if rewrite_match:
+        if rewrite_match and not unchanged_incorrect_source:
             return _deterministic_result(
                 True, advisory=rewrite_match == "missing_apostrophe"
             )
@@ -514,6 +528,7 @@ def _grade_question(
             user_answer=rewrite,
             accepted_answers=accepted_answers,
             review_answer=review_answer,
+            original_marked_incorrect=True,
         )
 
     if exercise_type == "fill_blank":

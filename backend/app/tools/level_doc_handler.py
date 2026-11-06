@@ -7,7 +7,7 @@ from typing import Dict, Tuple
 # ---- CONFIG: level → (EN_ID, TH_ID) ----
 
 LEVEL_DOC_IDS: Dict[int, Dict[str, str]] = {
-    1: {"en": "1VdXoHKRFd1PGgN317-JLZsusQwZLygaXns4DeA6jBns", "th": "1dpC-DhKJ6OCRNt9GgsmNHw7BD5dcCRRQUg-GMDeAInk"},
+    1: {"en": "1tPghb9I10r1ss7x1ccFotLAA1W_LmTC0fYI1MvUkLFU", "th": "1-7UfbcBBLM684exL6YQqPLCCZoKPkziZcGCPo_Z1Rg0"},
     2: {"en": "1ca6cFOwVsyqrJaagNMz78-2THMFVqy7ZmmAMqdkfVBU", "th": "1IC1xkAQv7LpFY3F9GMCHAzi_x5ZV_n_rNxAxdMq4kcs"},
     3: {"en": "1m2DCqs00sY7iNjP6Wc6UdVn4EaFVWkKEB7j_f8u40IA", "th": "1CwbS5BS1BQssCLC6u3pVKpIe9QJx9F2wqcU3uXfPdt4"},
     4: {"en": "1Wqa5L39_1Z2pFbBTJGng_pl3WO7lR9uUcK0jvys_lZs", "th": "1zwrm-oiQWpSOiyTDBFqIHMvWSdOitCWcxeoBZBRhKxc"},

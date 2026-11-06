@@ -159,11 +159,7 @@ def contractions_equivalent(user_answer: str, correct_answer: str) -> bool:
     expanded_correct = _expand_contractions(correct_answer)
     if not expanded_user or not expanded_correct:
         return False
-    if expanded_correct in expanded_user:
-        return True
-    if expanded_user in expanded_correct:
-        return True
-    return False
+    return expanded_user == expanded_correct
 
 
 def answer_match_kind(user_answer: str, correct_answer: str) -> str | None:
@@ -195,6 +191,56 @@ def answer_match_kind(user_answer: str, correct_answer: str) -> str | None:
     return None
 
 
+def _fill_blank_answer_match_kind(
+    user_answer: str,
+    correct_answer: str,
+    accepted_answers_v2: Any = None,
+) -> str | None:
+    """Match complete blank values against authored alternatives without substrings."""
+    groups: list[list[str]] = []
+    if isinstance(accepted_answers_v2, list):
+        for raw_group in accepted_answers_v2:
+            if isinstance(raw_group, list):
+                group = [
+                    _value_to_string(value)
+                    for value in raw_group
+                    if _value_to_string(value)
+                ]
+            else:
+                serialized = _value_to_string(raw_group)
+                group = [serialized] if serialized else []
+            if group:
+                groups.append(group)
+
+    if not groups:
+        raw_groups = [part.strip() for part in correct_answer.split(";")]
+        groups = [
+            [candidate.strip() for candidate in re.split(r"\s*[|,]\s*", raw) if candidate.strip()]
+            for raw in raw_groups
+            if raw
+        ]
+
+    submitted = [part.strip() for part in user_answer.split(";")]
+    if not groups or len(submitted) != len(groups) or any(not value for value in submitted):
+        return None
+
+    match_kinds: list[str] = []
+    for value, alternatives in zip(submitted, groups):
+        match = next(
+            (kind for expected in alternatives if (kind := answer_match_kind(value, expected))),
+            None,
+        )
+        if not match:
+            return None
+        match_kinds.append(match)
+
+    if "missing_apostrophe" in match_kinds:
+        return "missing_apostrophe"
+    if "expanded_contraction" in match_kinds:
+        return "expanded_contraction"
+    return "canonical"
+
+
 def get_prompt_for_type(
     exercise_type: str,
     question: str,
@@ -203,6 +249,7 @@ def get_prompt_for_type(
     *,
     instruction: str = "",
     review_answer: str = "",
+    original_marked_incorrect: bool = False,
 ) -> Tuple[str, str]:
     base_prompt = SYSTEM_PROMPTS[exercise_type]
     instruction_block = (
@@ -219,11 +266,18 @@ def get_prompt_for_type(
         if review_answer
         else ""
     )
+    authored_judgment_line = (
+        "The source sentence is authored as incorrect. If the learner copies it "
+        "without changing it, the answer must be graded incorrect.\n"
+        if original_marked_incorrect
+        else ""
+    )
     user_prompt = (
         f"{instruction_block}"
         f"{question_block}"
         f"{accepted_line}"
         f"{review_line}"
+        f"{authored_judgment_line}"
         f"Learner answer: {user_answer}\n"
         "Grade against the exercise instruction and question, including meaning and grammar. "
         "For feedback_en and feedback_th, use very simple, everyday language that an English learner can understand. "
@@ -246,6 +300,7 @@ def evaluate_with_gpt(
     *,
     instruction: str = "",
     review_answer: str = "",
+    original_marked_incorrect: bool = False,
 ) -> Dict[str, Any]:
     system_prompt, user_prompt = get_prompt_for_type(
         exercise_type,
@@ -254,6 +309,7 @@ def evaluate_with_gpt(
         correct_answer,
         instruction=instruction,
         review_answer=review_answer,
+        original_marked_incorrect=original_marked_incorrect,
     )
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -477,6 +533,16 @@ def evaluate_answer():
 
     normalized_user = _normalize_for_contains(user_answer_raw)
     normalized_correct = _normalize_for_contains(correct_answer_raw)
+    normalized_question = _normalize_for_contains(_value_to_string(question_text))
+    original_marked_incorrect = (
+        exercise_type == "sentence_transform"
+        and payload.get("original_marked_incorrect") is True
+    )
+    unchanged_incorrect_source = bool(
+        original_marked_incorrect
+        and normalized_user
+        and normalized_user == normalized_question
+    )
 
     used_contains = False
     used_contractions = False
@@ -485,13 +551,17 @@ def evaluate_answer():
     result_payload: Dict[str, Any] = {}
     ai_model_used = "gpt-4o-mini"
 
-    match_kind = (
-        answer_match_kind(user_answer_raw, correct_answer_raw)
-        if exercise_type == "sentence_transform"
-        else None
-    )
+    match_kind = None
+    if exercise_type == "sentence_transform":
+        match_kind = answer_match_kind(user_answer_raw, correct_answer_raw)
+    elif exercise_type == "fill_blank":
+        match_kind = _fill_blank_answer_match_kind(
+            user_answer_raw,
+            correct_answer_raw,
+            payload.get("accepted_answers_v2"),
+        )
 
-    if match_kind:
+    if match_kind and not unchanged_incorrect_source:
         used_contractions = match_kind in {"expanded_contraction", "missing_apostrophe"}
         is_missing_apostrophe = match_kind == "missing_apostrophe"
         result_payload = {
@@ -510,7 +580,13 @@ def evaluate_answer():
             "advisory": is_missing_apostrophe,
         }
         ai_model_used = f"rule:{match_kind}"
-    elif normalized_user and normalized_correct and normalized_correct in normalized_user:
+    elif (
+        not unchanged_incorrect_source
+        and exercise_type == "open"
+        and normalized_user
+        and normalized_correct
+        and normalized_correct in normalized_user
+    ):
         used_contains = True
         result_payload = {
             "correct": True,
@@ -519,7 +595,11 @@ def evaluate_answer():
             "feedback_th": "เยี่ยมมาก! คำตอบของคุณตรงกับที่คาดไว้",
         }
         ai_model_used = "rule:contains"
-    elif contractions_equivalent(user_answer_raw, correct_answer_raw):
+    elif (
+        not unchanged_incorrect_source
+        and exercise_type == "open"
+        and contractions_equivalent(user_answer_raw, correct_answer_raw)
+    ):
         used_contractions = True
         result_payload = {
             "correct": True,
@@ -537,6 +617,7 @@ def evaluate_answer():
                 user_answer=user_answer_raw,
                 correct_answer=correct_answer_raw,
                 instruction=instruction_text,
+                original_marked_incorrect=original_marked_incorrect,
             )
         except ValueError as exc:
             return jsonify({"error": str(exc)}), 500
@@ -557,6 +638,13 @@ def evaluate_answer():
             "feedback_en": parsed.get("feedback_en") or "",
             "feedback_th": parsed.get("feedback_th") or "",
         }
+        if unchanged_incorrect_source and correct:
+            result_payload = {
+                "correct": False,
+                "score": 0.0,
+                "feedback_en": "Your answer is unchanged. What part of the original sentence needs fixing?",
+                "feedback_th": "คำตอบยังเหมือนประโยคเดิม ควรแก้ส่วนไหนของประโยค?",
+            }
 
     correct_flag = bool(result_payload.get("correct"))
     score = result_payload.get("score")
