@@ -6,6 +6,7 @@ from app.revenuecat_membership import (
     is_uuid,
     update_user_membership,
 )
+from app.posthog_events import capture_membership_state
 
 
 revenuecat_webhook = Blueprint("revenuecat_webhook", __name__)
@@ -90,6 +91,26 @@ def revenuecat_webhook_handler():
         f"for user_id={updated_user_id} type={event_type} "
         f"updates={applied_updates} access_sources={access_sources}",
         flush=True,
+    )
+
+    capture_membership_state(
+        updated_user_id,
+        source="revenuecat",
+        event_type=str(event_type or "UNKNOWN"),
+        is_paid=bool(applied_updates.get("is_paid")),
+        subscription_status=applied_updates.get("subscription_status"),
+        billing_provider=applied_updates.get("billing_provider"),
+        current_period_end=applied_updates.get("current_period_end"),
+        cancel_at_period_end=bool(applied_updates.get("cancel_at_period_end")),
+        plan_id=event.get("product_id"),
+        environment=event.get("environment"),
+        event_id=event.get("id"),
+        extra_properties={
+            "period_type": event.get("period_type"),
+            "store": event.get("store"),
+            "currency": event.get("currency"),
+            "price": event.get("price_in_purchased_currency"),
+        },
     )
 
     return (

@@ -22,6 +22,7 @@ import copy
 import hashlib
 from zoneinfo import ZoneInfo
 from app.config import Config
+from app.posthog_events import capture_posthog_event
 from app.pricing_utils import resolve_region_key
 from app.revenuecat_membership import (
     RevenueCatAPIError,
@@ -1101,6 +1102,37 @@ def get_user_profile():
             return jsonify({"error": "User not found"}), 404
 
         user_data = result.data[0]
+
+        created_at = user_data.get("created_at")
+        if created_at:
+            try:
+                created_at_datetime = datetime.fromisoformat(
+                    str(created_at).replace("Z", "+00:00")
+                )
+                if created_at_datetime.tzinfo is None:
+                    created_at_datetime = created_at_datetime.replace(tzinfo=timezone.utc)
+                account_age = datetime.now(timezone.utc) - created_at_datetime
+                if timedelta(0) <= account_age <= timedelta(hours=24):
+                    capture_posthog_event(
+                        user_id,
+                        "sign_up_completed",
+                        timestamp=str(created_at),
+                        properties={
+                            "$insert_id": f"signup:{user_id}",
+                            "method": "authenticated_profile",
+                        },
+                        person_properties={
+                            "email": user_data.get("email"),
+                            "username": user_data.get("username"),
+                            "signed_up_at": str(created_at),
+                            "is_admin": user_data.get("is_admin") is True,
+                        },
+                    )
+            except (TypeError, ValueError):
+                print(
+                    f"[user-profile] invalid created_at for analytics user_id={user_id}",
+                    flush=True,
+                )
 
         # Count completed lessons from user_lesson_progress table
         lessons_complete = 0

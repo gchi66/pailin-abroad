@@ -3,8 +3,41 @@ import stripe
 from datetime import datetime, timezone
 from flask import Blueprint, request, jsonify
 from app.supabase_client import supabase
+from app.posthog_events import capture_membership_state
 
 stripe_webhook = Blueprint('stripe_webhook', __name__)
+
+
+def _stripe_plan_id(subscription):
+    try:
+        items = subscription.get('items', {}) if isinstance(subscription, dict) else subscription.items
+        data = items.get('data', []) if isinstance(items, dict) else items.data
+        if not data:
+            return None
+        price = data[0].get('price') if isinstance(data[0], dict) else data[0].price
+        return price.get('id') if isinstance(price, dict) else getattr(price, 'id', None)
+    except (AttributeError, IndexError, TypeError):
+        return None
+
+
+def _capture_stripe_membership_rows(result, event, subscription, *, is_paid, status, current_period_end, cancel_at_period_end):
+    for row in (getattr(result, 'data', None) or []):
+        user_id = row.get('id') if isinstance(row, dict) else None
+        if not user_id:
+            continue
+        capture_membership_state(
+            user_id,
+            source='stripe',
+            event_type=event.get('type', 'UNKNOWN'),
+            is_paid=is_paid,
+            subscription_status=status,
+            billing_provider='stripe',
+            current_period_end=to_iso_date(current_period_end),
+            cancel_at_period_end=cancel_at_period_end,
+            plan_id=_stripe_plan_id(subscription),
+            environment='production' if event.get('livemode') else 'sandbox',
+            event_id=event.get('id'),
+        )
 
 
 def get_current_period_end(subscription):
@@ -120,6 +153,16 @@ def stripe_webhook_handler():
 
             if not result.data:
                 print(f"⚠️ No user found with email: {customer_email}")
+            else:
+                _capture_stripe_membership_rows(
+                    result,
+                    event,
+                    subscription,
+                    is_paid=True,
+                    status=subscription.status,
+                    current_period_end=current_period_end_value,
+                    cancel_at_period_end=getattr(subscription, 'cancel_at_period_end', False),
+                )
 
         except Exception as e:
             print(f"❌ Error updating user: {e}")
@@ -153,7 +196,7 @@ def stripe_webhook_handler():
                     except Exception as pm_error:
                         print(f"⚠️ Error setting default payment method: {pm_error}")
 
-                supabase.table('users').update({
+                result = supabase.table('users').update({
                     'is_paid': True,
                     'membership_source': 'stripe',
                     'billing_provider': 'stripe',
@@ -162,6 +205,15 @@ def stripe_webhook_handler():
                     'cancel_at_period_end': getattr(subscription, 'cancel_at_period_end', False),
                     'cancel_at': to_iso_date(getattr(subscription, 'cancel_at', None))
                 }).eq('stripe_customer_id', customer_id).execute()
+                _capture_stripe_membership_rows(
+                    result,
+                    event,
+                    subscription,
+                    is_paid=True,
+                    status=subscription.status,
+                    current_period_end=current_period_end_value,
+                    cancel_at_period_end=getattr(subscription, 'cancel_at_period_end', False),
+                )
 
             except Exception as e:
                 print(f"❌ Error updating renewal: {e}")
@@ -177,7 +229,7 @@ def stripe_webhook_handler():
         try:
             current_period_end_value = get_current_period_end(subscription)
 
-            supabase.table('users').update({
+            result = supabase.table('users').update({
                 'membership_source': 'stripe',
                 'billing_provider': 'stripe',
                 'subscription_status': status,
@@ -186,6 +238,15 @@ def stripe_webhook_handler():
                 'cancel_at_period_end': subscription.get('cancel_at_period_end', False),
                 'cancel_at': to_iso_date(subscription.get('cancel_at'))
             }).eq('stripe_customer_id', customer_id).execute()
+            _capture_stripe_membership_rows(
+                result,
+                event,
+                subscription,
+                is_paid=status in ['active', 'trialing'],
+                status=status,
+                current_period_end=current_period_end_value,
+                cancel_at_period_end=subscription.get('cancel_at_period_end', False),
+            )
 
         except Exception as e:
             print(f"❌ Error updating subscription: {e}")
@@ -196,12 +257,21 @@ def stripe_webhook_handler():
         customer_id = subscription.get('customer')
 
         try:
-            supabase.table('users').update({
+            result = supabase.table('users').update({
                 'is_paid': False,
                 'membership_source': 'stripe',
                 'billing_provider': 'stripe',
                 'subscription_status': 'cancelled'
             }).eq('stripe_customer_id', customer_id).execute()
+            _capture_stripe_membership_rows(
+                result,
+                event,
+                subscription,
+                is_paid=False,
+                status='cancelled',
+                current_period_end=get_current_period_end(subscription),
+                cancel_at_period_end=False,
+            )
 
         except Exception as e:
             print(f"❌ Error cancelling subscription: {e}")

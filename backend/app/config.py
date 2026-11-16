@@ -10,6 +10,8 @@ class Config:
     SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     REVENUECAT_WEBHOOK_AUTH_SECRET = os.getenv("REVENUECAT_WEBHOOK_AUTH_SECRET")
     REVENUECAT_SECRET_API_KEY = os.getenv("REVENUECAT_SECRET_API_KEY")
+    POSTHOG_PROJECT_TOKEN = os.getenv("POSTHOG_PROJECT_TOKEN")
+    POSTHOG_HOST = os.getenv("POSTHOG_HOST", "https://eu.i.posthog.com")
     FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
     AUTH_CALLBACK_URL = os.getenv(
         "AUTH_CALLBACK_URL",
